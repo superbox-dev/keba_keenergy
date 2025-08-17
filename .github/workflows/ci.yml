@@ -17,7 +17,7 @@ jobs:
 
   code-analysis:
     name: Code analysis
-    uses: superbox-dev/python-package-workflows/.github/workflows/code-Analysis.yml@main
+    uses: superbox-dev/python-package-workflows/.github/workflows/code-analysis.yml@main
     needs:
       - parameters
     with:
