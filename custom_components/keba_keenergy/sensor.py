@@ -1,28 +1,27 @@
 """Support for the KEBA KeEnergy sensors."""
 
+import logging
 from collections.abc import Callable
 from dataclasses import dataclass
-import logging
 from typing import TYPE_CHECKING
 from typing import cast
 
-from keba_keenergy_api.constants import SectionPrefix
-
-from homeassistant.components.sensor import (
-    DOMAIN as SENSOR_DOMAIN,
-    SensorDeviceClass,
-    SensorEntity,
-    SensorEntityDescription,
-    SensorStateClass,
-)
+from homeassistant.components.sensor import DOMAIN as SENSOR_DOMAIN
+from homeassistant.components.sensor import SensorDeviceClass
+from homeassistant.components.sensor import SensorEntity
+from homeassistant.components.sensor import SensorEntityDescription
+from homeassistant.components.sensor import SensorStateClass
 from homeassistant.config_entries import ConfigEntry
-from homeassistant.const import PERCENTAGE, UnitOfPressure, UnitOfTemperature
+from homeassistant.const import PERCENTAGE
+from homeassistant.const import UnitOfPressure
+from homeassistant.const import UnitOfTemperature
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.typing import StateType
+from keba_keenergy_api.constants import SectionPrefix
 
-from . import KebaKeEnergyDataUpdateCoordinator
 from .const import DOMAIN
+from .coordinator import KebaKeEnergyDataUpdateCoordinator
 from .entity import KebaKeEnergyEntity
 
 if TYPE_CHECKING:
@@ -32,14 +31,14 @@ if TYPE_CHECKING:
 _LOGGER = logging.getLogger(__name__)
 
 
-@dataclass
+@dataclass(frozen=True)
 class KebaKeEnergySensorEntityDescriptionMixin:
     """Required values for KEBA KeEnergy sensors."""
 
     value: Callable[[str | int | float], str | int | float]
 
 
-@dataclass
+@dataclass(frozen=True)
 class KebaKeEnergySensorEntityDescription(
     SensorEntityDescription,
     KebaKeEnergySensorEntityDescriptionMixin,

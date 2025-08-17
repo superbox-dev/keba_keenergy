@@ -11,8 +11,8 @@ from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from keba_keenergy_api.constants import SectionPrefix
 
-from . import KebaKeEnergyDataUpdateCoordinator
 from .const import DOMAIN
+from .coordinator import KebaKeEnergyDataUpdateCoordinator
 from .entity import KebaKeEnergyEntity
 
 _LOGGER = logging.getLogger(__name__)

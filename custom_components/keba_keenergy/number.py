@@ -1,28 +1,27 @@
 """Support for the KEBA KeEnergy numbers."""
 
 import logging
+from typing import TYPE_CHECKING
 
-from keba_keenergy_api.constants import (
-    HeatCircuit,
-    HotWaterTank,
-    Section,
-    SectionPrefix,
-)
-
-from homeassistant.components.number import (
-    DOMAIN as NUMBER_DOMAIN,
-    NumberDeviceClass,
-    NumberEntity,
-    NumberEntityDescription,
-)
+from homeassistant.components.number import DOMAIN as NUMBER_DOMAIN
+from homeassistant.components.number import NumberDeviceClass
+from homeassistant.components.number import NumberEntity
+from homeassistant.components.number import NumberEntityDescription
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import UnitOfTemperature
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
+from keba_keenergy_api.constants import HeatCircuit
+from keba_keenergy_api.constants import HotWaterTank
+from keba_keenergy_api.constants import Section
+from keba_keenergy_api.constants import SectionPrefix
 
 from .const import DOMAIN
 from .coordinator import KebaKeEnergyDataUpdateCoordinator
 from .entity import KebaKeEnergyEntity
+
+if TYPE_CHECKING:
+    from keba_keenergy_api.endpoints import Value
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -120,25 +119,32 @@ class KebaKeEnergyNumberEntity(KebaKeEnergyEntity, NumberEntity):
     @property
     def native_min_value(self) -> float:
         """Return the maximum value."""
-        return float(
-            self.coordinator.data[self.section_id][self.entity_description.key][self.index or 0]["attributes"][
-                "lower_limit"
-            ],
-        )
+        data: list[Value] | Value = self.coordinator.data[self.section_id][self.entity_description.key][self.index or 0]  # type: ignore[literal-required]
+
+        if isinstance(data, list):
+            data = data[0]
+
+        return float(data["attributes"]["lower_limit"])
 
     @property
     def native_max_value(self) -> float:
         """Return the maximum value."""
-        return float(
-            self.coordinator.data[self.section_id][self.entity_description.key][self.index or 0]["attributes"][
-                "upper_limit"
-            ],
-        )
+        data: list[Value] | Value = self.coordinator.data[self.section_id][self.entity_description.key][self.index or 0]  # type: ignore[literal-required]
+
+        if isinstance(data, list):
+            data = data[0]
+
+        return float(data["attributes"]["upper_limit"])
 
     @property
     def native_value(self) -> float:
         """Return the state of the number."""
-        return float(self.coordinator.data[self.section_id][self.entity_description.key][self.index or 0]["value"])
+        data: list[Value] | Value = self.coordinator.data[self.section_id][self.entity_description.key][self.index or 0]  # type: ignore[literal-required]
+
+        if isinstance(data, list):
+            data = data[0]
+
+        return float(data["value"])
 
     async def async_set_native_value(self, value: float) -> None:
         """Set new value."""

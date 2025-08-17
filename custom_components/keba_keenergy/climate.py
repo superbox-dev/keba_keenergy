@@ -1,36 +1,34 @@
 """Support for the KEBA KeEnergy climate."""
 
-from typing import Any, Final
 import logging
+from typing import Any
+from typing import Final
 
-from keba_keenergy_api.constants import (
-    HeatCircuit,
-    HeatCircuitHeatRequest,
-    HeatCircuitOperatingMode,
-    SectionPrefix,
-)
 import voluptuous as vol
-
-from homeassistant.components.climate import (
-    DOMAIN as CLIMATE_DOMAIN,
-    PRESET_AWAY,
-    PRESET_BOOST,
-    PRESET_COMFORT,
-    PRESET_NONE,
-    PRESET_SLEEP,
-    ClimateEntity,
-    ClimateEntityDescription,
-    ClimateEntityFeature,
-    HVACAction,
-    HVACMode,
-)
+from homeassistant.components.climate import ClimateEntity
+from homeassistant.components.climate import ClimateEntityDescription
+from homeassistant.components.climate.const import ClimateEntityFeature
+from homeassistant.components.climate.const import DOMAIN as CLIMATE_DOMAIN
+from homeassistant.components.climate.const import HVACAction
+from homeassistant.components.climate.const import HVACMode
+from homeassistant.components.climate.const import PRESET_AWAY
+from homeassistant.components.climate.const import PRESET_BOOST
+from homeassistant.components.climate.const import PRESET_COMFORT
+from homeassistant.components.climate.const import PRESET_NONE
+from homeassistant.components.climate.const import PRESET_SLEEP
 from homeassistant.config_entries import ConfigEntry
-from homeassistant.const import ATTR_TEMPERATURE, UnitOfTemperature
+from homeassistant.const import ATTR_TEMPERATURE
+from homeassistant.const import UnitOfTemperature
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
+from keba_keenergy_api.constants import HeatCircuit
+from keba_keenergy_api.constants import HeatCircuitHeatRequest
+from keba_keenergy_api.constants import HeatCircuitOperatingMode
+from keba_keenergy_api.constants import SectionPrefix
 
-from . import KebaKeEnergyDataUpdateCoordinator
-from .const import ATTR_OFFSET, DOMAIN
+from .const import ATTR_OFFSET
+from .const import DOMAIN
+from .coordinator import KebaKeEnergyDataUpdateCoordinator
 from .entity import KebaKeEnergyEntity
 
 HEAT_CIRCUIT_PRESET_TO_HA: Final[dict[int, str]] = {
@@ -89,12 +87,12 @@ class KebaKeEnergyClimateEntity(KebaKeEnergyEntity, ClimateEntity):
         | ClimateEntityFeature.TURN_ON
     )
 
-    _attr_hvac_modes: tuple[HVACMode] = (
+    _attr_hvac_modes: list[HVACMode] = [  # noqa: RUF012
         HVACMode.AUTO,
         HVACMode.HEAT,
         HVACMode.OFF,
-    )
-    _attr_preset_modes: tuple[str, ...] = tuple(HEAT_CIRCUIT_PRESET_TO_HA.values())
+    ]
+    _attr_preset_modes: list[str] = list(HEAT_CIRCUIT_PRESET_TO_HA.values())  # noqa: RUF012
 
     _attr_target_temperature_step: float = 0.5
     _attr_temperature_unit: str = UnitOfTemperature.CELSIUS

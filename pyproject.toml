@@ -77,6 +77,10 @@ line-length = 120
 strict = true
 junit_xml = "reports/mypy.xml"
 
+[[tool.mypy.overrides]]
+module = "keba_keenergy_api.*"
+follow_untyped_imports = true
+
 [tool.ruff]
 line-length = 120
 

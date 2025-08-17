@@ -4,20 +4,25 @@ import logging
 from typing import Any
 
 import aiohttp
-from aiohttp import ClientError
-from keba_keenergy_api import KebaKeEnergyAPI
-from keba_keenergy_api.error import APIError
 import voluptuous as vol
-
+from aiohttp import ClientError
 from homeassistant import config_entries
 from homeassistant.components.zeroconf import ZeroconfServiceInfo
-from homeassistant.const import CONF_HOST, CONF_SSL
-from homeassistant.core import HomeAssistant, callback
-from homeassistant.data_entry_flow import FlowResult
+from homeassistant.config_entries import ConfigFlowResult
+from homeassistant.const import CONF_HOST
+from homeassistant.const import CONF_SSL
+from homeassistant.core import HomeAssistant
+from homeassistant.core import callback
 from homeassistant.exceptions import HomeAssistantError
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
+from keba_keenergy_api.api import KebaKeEnergyAPI
+from keba_keenergy_api.error import APIError
 
-from .const import CONFIG_ENTRY_VERSION, DEFAULT_SSL, DOMAIN, MANUFACTURER, NAME
+from .const import CONFIG_ENTRY_VERSION
+from .const import DEFAULT_SSL
+from .const import DOMAIN
+from .const import MANUFACTURER
+from .const import NAME
 
 CONFIG_SCHEMA: vol.Schema = vol.Schema(
     {
@@ -56,7 +61,7 @@ class KebaKeEnergyConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
         self._serial_number: str | None = None
 
     @callback
-    def _async_get_entry(self) -> FlowResult:
+    def _async_get_entry(self) -> ConfigFlowResult:
         return self.async_create_entry(
             title=f"{MANUFACTURER} {NAME} ({self._host})",
             data={
@@ -74,7 +79,7 @@ class KebaKeEnergyConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             },
         )
 
-    async def async_step_user(self, user_input: dict[str, Any] | None = None) -> FlowResult:
+    async def async_step_user(self, user_input: dict[str, Any] | None = None) -> ConfigFlowResult:
         """Handle a flow initialized by the user."""
         errors = {}
 
@@ -105,7 +110,7 @@ class KebaKeEnergyConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             },
         )
 
-    async def async_step_zeroconf(self, discovery_info: ZeroconfServiceInfo) -> FlowResult:
+    async def async_step_zeroconf(self, discovery_info: ZeroconfServiceInfo) -> ConfigFlowResult:
         """Handle zeroconf discovery."""
         _LOGGER.debug("Starting discovery via: %s", discovery_info)
 
@@ -116,7 +121,7 @@ class KebaKeEnergyConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
         await self._set_uid_and_abort()
         return await self.async_step_discovery_confirm()
 
-    async def async_step_discovery_confirm(self, user_input: dict[str, Any] | None = None) -> FlowResult:
+    async def async_step_discovery_confirm(self, user_input: dict[str, Any] | None = None) -> ConfigFlowResult:
         """Handle user-confirmation of discovered node."""
         if user_input is not None:
             try:

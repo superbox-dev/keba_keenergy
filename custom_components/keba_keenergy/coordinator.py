@@ -1,23 +1,24 @@
 """DataUpdateCoordinator for the KEBA KeEnergy integration."""
 
-from datetime import timedelta
 import logging
+from datetime import timedelta
 from typing import Any
 
-from aiohttp import ClientError, ClientSession
-from keba_keenergy_api import KebaKeEnergyAPI
-from keba_keenergy_api.constants import (
-    HeatCircuit,
-    HeatPump,
-    HotWaterTank,
-    SectionPrefix,
-    System,
-)
-from keba_keenergy_api.endpoints import Value, ValueResponse
+from aiohttp import ClientError
+from aiohttp import ClientSession
+from homeassistant.core import DOMAIN
+from homeassistant.core import HomeAssistant
+from homeassistant.helpers.update_coordinator import DataUpdateCoordinator
+from homeassistant.helpers.update_coordinator import UpdateFailed
+from keba_keenergy_api.api import KebaKeEnergyAPI
+from keba_keenergy_api.constants import HeatCircuit
+from keba_keenergy_api.constants import HeatPump
+from keba_keenergy_api.constants import HotWaterTank
+from keba_keenergy_api.constants import SectionPrefix
+from keba_keenergy_api.constants import System
+from keba_keenergy_api.endpoints import Value
+from keba_keenergy_api.endpoints import ValueResponse
 from keba_keenergy_api.error import APIError
-
-from homeassistant.core import DOMAIN, HomeAssistant
-from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
 
 from .const import SCAN_INTERVAL
 
@@ -124,15 +125,25 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
     @property
     def heat_pump_names(self) -> list[Value]:
         """Return heat pump names."""
-        _heat_pump_names: list[Value] = self.data[SectionPrefix.HEAT_PUMP]["name"]
-        return _heat_pump_names
+        _heat_pump_names: list[Value] | Value = self.data[SectionPrefix.HEAT_PUMP]["name"]
+        return _heat_pump_names if isinstance(_heat_pump_names, list) else [_heat_pump_names]
 
     @property
     def heat_circuit_numbers(self) -> int:
         """Return number of heat circuits."""
-        return int(self.data[SectionPrefix.SYSTEM]["heat_circuit_numbers"]["value"])
+        data: list[Value] | Value = self.data[SectionPrefix.SYSTEM]["heat_circuit_numbers"]
+
+        if isinstance(data, list):
+            data = data[0]
+
+        return int(data["value"])
 
     @property
     def hot_water_tank_numbers(self) -> int:
         """Return number of hot water tanks."""
-        return int(self.data[SectionPrefix.SYSTEM]["hot_water_tank_numbers"]["value"])
+        data: list[Value] | Value = self.data[SectionPrefix.SYSTEM]["hot_water_tank_numbers"]
+
+        if isinstance(data, list):
+            data = data[0]
+
+        return int(data["value"])

@@ -1,18 +1,21 @@
 """Entity classes for the KEBA KeEnergy integration."""
 
-from typing import Any, cast
+from typing import Any
 from typing import TYPE_CHECKING
 
 from aiohttp import ClientError
-from keba_keenergy_api.constants import Section, SectionPrefix
-from keba_keenergy_api.error import APIError
-
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.exceptions import HomeAssistantError
 from homeassistant.helpers.device_registry import DeviceInfo
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
+from keba_keenergy_api.constants import Section
+from keba_keenergy_api.constants import SectionPrefix
+from keba_keenergy_api.error import APIError
 
-from .const import DOMAIN, MANUFACTURER, MANUFACTURER_MTEC, NAME
+from .const import DOMAIN
+from .const import MANUFACTURER
+from .const import MANUFACTURER_MTEC
+from .const import NAME
 from .coordinator import KebaKeEnergyDataUpdateCoordinator
 
 if TYPE_CHECKING:
@@ -53,17 +56,17 @@ class KebaKeEnergyEntity(
     @property
     def is_heat_circuit(self) -> bool:
         """Return True if the entity is part of a heat circuit else False."""
-        return cast("bool", self.section_id == SectionPrefix.HEAT_CIRCUIT)
+        return self.section_id == SectionPrefix.HEAT_CIRCUIT
 
     @property
     def is_heat_pump(self) -> bool:
         """Return True if the entity is part of a heat pump else False."""
-        return cast("bool", self.section_id == SectionPrefix.HEAT_PUMP)
+        return self.section_id == SectionPrefix.HEAT_PUMP
 
     @property
     def is_hot_water_tank(self) -> bool:
         """Return True if the entity is part of a hot water tank else False."""
-        return cast("bool", self.section_id == SectionPrefix.HOT_WATER_TANK)
+        return self.section_id == SectionPrefix.HOT_WATER_TANK
 
     @property
     def device_name(self) -> str | None:
@@ -73,7 +76,12 @@ class KebaKeEnergyEntity(
         if self.is_system_device:
             _device_name = f"{self.device_manufacturer} {NAME}"
         elif self.is_heat_circuit:
-            _device_name = self.coordinator.data[self.section_id]["name"][self.index or 0]["value"]
+            data: list[Value] | Value = self.coordinator.data[self.section_id]["name"][self.index or 0]  # type: ignore[literal-required]
+
+            if isinstance(data, list):
+                data = data[0]
+
+            _device_name = data["value"]
         elif self.is_heat_pump:
             _device_name = f"{self.device_manufacturer} {self.device_model}"
         elif self.is_hot_water_tank:
@@ -168,8 +176,18 @@ class KebaKeEnergyEntity(
 
     def get_attribute(self, key: str, attr: str) -> str:
         """Get extra attribute from the API by key."""
-        return str(self.coordinator.data[self.section_id][key][self.index or 0]["attributes"][attr])
+        data: list[Value] | Value = self.coordinator.data[self.section_id][key][self.index or 0]  # type: ignore[literal-required]
+
+        if isinstance(data, list):
+            data = data[0]
+
+        return str(data["attributes"][attr])
 
     def get_value(self, key: str) -> Any:
         """Get value from the API by key."""
-        return self.coordinator.data[self.section_id][key][self.index or 0]["value"]
+        data: list[Value] | Value = self.coordinator.data[self.section_id][key][self.index or 0]  # type: ignore[literal-required]
+
+        if isinstance(data, list):
+            data = data[0]
+
+        return data["value"]

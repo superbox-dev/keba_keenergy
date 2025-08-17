@@ -1,26 +1,26 @@
 """Support for the KEBA KeEnergy water heater."""
 
-from typing import Any, Final
+from typing import Any
+from typing import Final
 
-from keba_keenergy_api.constants import (
-    HotWaterTank,
-    HotWaterTankOperatingMode,
-    SectionPrefix,
-)
-
-from homeassistant.components.water_heater import (
+from homeassistant.components.water_heater import STATE_ECO
+from homeassistant.components.water_heater import STATE_HEAT_PUMP
+from homeassistant.components.water_heater import STATE_PERFORMANCE
+from homeassistant.components.water_heater import WaterHeaterEntity
+from homeassistant.components.water_heater import WaterHeaterEntityEntityDescription
+from homeassistant.components.water_heater import WaterHeaterEntityFeature
+from homeassistant.components.water_heater.const import (
     DOMAIN as WATER_HEATER_DOMAIN,
-    STATE_ECO,
-    STATE_HEAT_PUMP,
-    STATE_PERFORMANCE,
-    WaterHeaterEntity,
-    WaterHeaterEntityEntityDescription,
-    WaterHeaterEntityFeature,
 )
 from homeassistant.config_entries import ConfigEntry
-from homeassistant.const import ATTR_TEMPERATURE, STATE_OFF, UnitOfTemperature
+from homeassistant.const import ATTR_TEMPERATURE
+from homeassistant.const import STATE_OFF
+from homeassistant.const import UnitOfTemperature
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
+from keba_keenergy_api.constants import HotWaterTank
+from keba_keenergy_api.constants import HotWaterTankOperatingMode
+from keba_keenergy_api.constants import SectionPrefix
 
 from .const import DOMAIN
 from .coordinator import KebaKeEnergyDataUpdateCoordinator
@@ -67,7 +67,7 @@ class KebaKeEnergyWaterHeaterEntity(KebaKeEnergyEntity, WaterHeaterEntity):
         | WaterHeaterEntityFeature.TARGET_TEMPERATURE
     )
 
-    _attr_operation_list: tuple[str, ...] = list(HOT_WATER_TANK_STATE_TO_HA.values())
+    _attr_operation_list: list[str] = list(HOT_WATER_TANK_STATE_TO_HA.values())  # noqa: RUF012
     _attr_temperature_unit: str = UnitOfTemperature.CELSIUS
     _attr_name = None
 
