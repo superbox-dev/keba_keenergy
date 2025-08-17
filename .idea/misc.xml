@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="Black">
+    <option name="enabledOnReformat" value="true" />
+    <option name="enabledOnSave" value="true" />
+    <option name="sdkName" value="Python (keba_keenergy)" />
+  </component>
+  <component name="ProjectRootManager" version="2" project-jdk-name="Python (keba_keenergy)" project-jdk-type="Python SDK" />
+</project>
