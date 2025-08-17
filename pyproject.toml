@@ -1,0 +1,87 @@
+[project]
+name = "keba_keenergy"
+description = "Home Assistant integration for heaters with a KEBA KeEnergy control system"
+readme = "README.md"
+authors = [
+    { name = "Michael Hacker", email = "mh@superbox.one" },
+]
+maintainers = [
+    { name = "Michael Hacker", email = "mh@superbox.one" },
+]
+license = {text = "Apache-2.0 license"}
+keywords = [
+    "component",
+    "custom component",
+    "custom integration",
+    "keba",
+    "keenergy",
+    "hacs-component",
+    "hacs-integration",
+    "hacs-repository",
+    "hacs",
+    "hass",
+    "home assistant",
+    "home-assistant",
+    "homeassistant",
+    "integration",
+]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "License :: OSI Approved :: Apache Software License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3 :: Only",
+    "Operating System :: OS Independent",
+]
+requires-python = ">= 3.13"
+dependencies = [
+    "keba_keenergy_api==1.*"
+]
+version = "1.0.0"
+
+[project.urls]
+"Repository" = "https://github.com/superbox-dev/keba_keenergy"
+"Issues" = "https://github.com/superbox-dev/keba_keenergy/issues"
+
+[dependency-groups]
+dev = [
+    {include-group = "build"},
+    {include-group = "audit"},
+    {include-group = "lint"},
+]
+
+build = [
+    "setuptools>=65.5.1",
+    "build==1.1.1",
+]
+audit = [
+    "pip-audit",
+]
+
+lint = [
+    "black",
+    "mypy",
+    "pre-commit",
+    "pre-commit-hooks",
+    "ruff",
+    "types-PyYAML",
+    "yamllint",
+]
+
+[tool.setuptools]
+packages = ["custom_components/keba_keenergy"]
+
+[tool.black]
+line-length = 120
+
+[tool.mypy]
+strict = true
+junit_xml = "reports/mypy.xml"
+
+[tool.ruff]
+line-length = 120
+
+[tool.ruff.lint]
+select = ["ALL"]
+ignore = [
+]

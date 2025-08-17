@@ -1,0 +1,29 @@
+extends: default
+
+rules:
+  document-start: disable
+  truthy:
+    allowed-values: ['True', 'False', 'yes', 'no', 'on', 'off']  # yamllint disable rule:brackets
+  line-length:
+    max: 140
+    allow-non-breakable-words: True
+    allow-non-breakable-inline-mappings: True
+  quoted-strings:
+    quote-type: single
+    required: only-when-needed
+  empty-lines:
+    max: 1
+    max-start: 0
+    max-end: 0
+  braces:
+    forbid: non-empty
+    min-spaces-inside: 0
+    max-spaces-inside: 0
+    min-spaces-inside-empty: -1
+    max-spaces-inside-empty: -1
+  brackets:
+    forbid: non-empty
+    min-spaces-inside: 0
+    max-spaces-inside: 0
+    min-spaces-inside-empty: -1
+    max-spaces-inside-empty: -1

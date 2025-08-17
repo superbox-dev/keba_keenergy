@@ -1,5 +1,6 @@
 # python files
 __pycache__
+.venv
 
 # PyCharm
 .idea
