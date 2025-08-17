@@ -1,10 +1,17 @@
-# python files
-__pycache__
-.venv
-*.pyc
-
-
-
-# macOS
+# OS generated files
 .DS_Store
 ._*
+*.swp
+
+# cache
+*.pyc
+
+# virtualenv
+.venv
+
+# checks
+.ruff_cache
+.mypy_cache
+
+# reports
+reports/
