@@ -7,7 +7,7 @@ from homeassistant.components.water_heater import STATE_ECO
 from homeassistant.components.water_heater import STATE_HEAT_PUMP
 from homeassistant.components.water_heater import STATE_PERFORMANCE
 from homeassistant.components.water_heater import WaterHeaterEntity
-from homeassistant.components.water_heater import WaterHeaterEntityEntityDescription
+from homeassistant.components.water_heater import WaterHeaterEntityDescription
 from homeassistant.components.water_heater import WaterHeaterEntityFeature
 from homeassistant.components.water_heater.const import (
     DOMAIN as WATER_HEATER_DOMAIN,
@@ -44,7 +44,7 @@ async def async_setup_entry(
     water_heaters: list[KebaKeEnergyWaterHeaterEntity] = [
         KebaKeEnergyWaterHeaterEntity(
             coordinator=coordinator,
-            description=WaterHeaterEntityEntityDescription(
+            description=WaterHeaterEntityDescription(
                 key="hot_water_tank",
                 translation_key="hot_water_tank",
             ),
@@ -74,7 +74,7 @@ class KebaKeEnergyWaterHeaterEntity(KebaKeEnergyEntity, WaterHeaterEntity):
     def __init__(
         self,
         coordinator: KebaKeEnergyDataUpdateCoordinator,
-        description: WaterHeaterEntityEntityDescription,
+        description: WaterHeaterEntityDescription,
         entry: ConfigEntry,
         section_id: str,
         index: int | None,
