@@ -1,0 +1,18 @@
+{
+  "domain": "keba_keenergy",
+  "name": "KEBA KeEnergy",
+  "codeowners": ["@mh-superbox"],
+  "config_flow": true,
+  "documentation": "https://www.home-assistant.io/integrations/keba_keenergy",
+  "integration_type": "hub",
+  "iot_class": "local_polling",
+  "loggers": ["keba_keenergy_api"],
+  "requirements": ["keba_keenergy_api==1.*"],
+  "zeroconf": [
+    {
+      "type": "_keba-device._tcp.local.",
+      "name": "ap4400*"
+    }
+  ],
+  "version": "0.0.0"
+}

@@ -1,0 +1,165 @@
+{
+  "config": {
+    "flow_title": "{name}",
+    "step": {
+      "user": {
+        "description": "Configure the IP address or hostname of your {name} device.",
+        "data": {
+          "host": "[%key:common::config_flow::data::host%]",
+          "ssl": "[%key:common::config_flow::data::ssl%]"
+        }
+      },
+      "discovery_confirm": {
+        "title": "Discovered {name}",
+        "description": "Do you want to add {name} ({host}) to Home Assistant?"
+      }
+    },
+    "error": {
+      "cannot_connect": "[%key:common::config_flow::error::cannot_connect%]",
+      "unknown": "[%key:common::config_flow::error::unknown%]"
+    },
+    "abort": {
+      "already_configured": "[%key:common::config_flow::abort::already_configured_device%]"
+    }
+  },
+  "entity": {
+    "binary_sensor": {
+      "heat_request": {
+        "name": "Heat request"
+      }
+    },
+    "climate": {
+      "heat_circuit": {
+        "state": {
+          "heat": "[%key:common::state::on%]"
+        },
+        "state_attributes": {
+          "preset_mode": {
+            "state": {
+              "auto": "Auto",
+              "away": "Holiday",
+              "comfort": "Day",
+              "sleep": "Night",
+              "boost": "Party"
+            }
+          }
+        }
+      }
+    },
+    "number": {
+      "day_temperature": {
+        "name": "Day temperature"
+      },
+      "holiday_temperature": {
+        "name": "Holiday temperature"
+      },
+      "min_temperature": {
+        "name": "Minimum temperature"
+      },
+      "max_temperature": {
+        "name": "Maximum temperature"
+      },
+      "night_temperature": {
+        "name": "Night temperature"
+      }
+    },
+    "sensor": {
+      "outdoor_temperature": {
+        "name": "Outdoor temperature"
+      },
+      "operating_mode": {
+        "name": "Operating mode",
+        "state": {
+          "auto": "Auto",
+          "day": "Day",
+          "night": "Night",
+          "heat_up": "Heat up"
+        }
+      },
+      "min_temperature": {
+        "name": "Minimum temperature"
+      },
+      "max_temperature": {
+        "name": "Maximum temperature"
+      },
+      "state": {
+        "name": "State",
+        "state": {
+          "auto_cool": "Auto cool",
+          "auto_heat": "Auto heat",
+          "defrost": "Defrost",
+          "flow": "Flow",
+          "inflow": "Inflow",
+          "standby": "[%key:common::state::standby%]"
+        }
+      },
+      "circulation_pump": {
+        "name": "Circulation pump"
+      },
+      "inflow_temperature": {
+        "name": "Inflow temperature"
+      },
+      "reflux_temperature": {
+        "name": "Reflux temperature"
+      },
+      "source_input_temperature": {
+        "name": "Source input temperature"
+      },
+      "source_output_temperature": {
+        "name": "Source output temperature"
+      },
+      "compressor_input_temperature": {
+        "name": "Compressor input temperature"
+      },
+      "compressor_output_temperature": {
+        "name": "Compressor output temperature"
+      },
+      "compressor": {
+        "name": "Compressor"
+      },
+      "high_pressure": {
+        "name": "High pressure"
+      },
+      "low_pressure": {
+        "name": "Low pressure"
+      },
+      "day_temperature": {
+        "name": "Day temperature"
+      },
+      "day_temperature_threshold": {
+        "name": "Day temperature threshold"
+      },
+      "night_temperature": {
+        "name": "Night temperature"
+      },
+      "night_temperature_threshold": {
+        "name": "Night temperature threshold"
+      },
+      "holiday_temperature": {
+        "name": "Holiday temperature"
+      },
+      "temperature_offset": {
+        "name": "Temperature offset"
+      },
+      "heat_request": {
+        "name": "Heat request",
+        "state": {
+          "on": "[%key:common::state::on%]",
+          "off": "[%key:common::state::off%]",
+          "outdoor_temperature_off": "Outdoor temperature off",
+          "temporary_off": "Temporary off"
+        }
+      }
+    },
+    "water_heater": {
+      "hot_water_tank": {
+        "state": {
+          "heat_pump": "[%key:common::state::on%]",
+          "off": "[%key:common::state::off%]",
+          "eco": "Auto",
+          "performance": "Heat up"
+        }
+      }
+    }
+  }
+}
