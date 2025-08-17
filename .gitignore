@@ -1,3 +1,9 @@
+# python files
+__pycache__
+
+# PyCharm
 .idea
+
+# macOS
 .DS_Store
 ._*
