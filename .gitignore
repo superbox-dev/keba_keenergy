@@ -3,8 +3,7 @@ __pycache__
 .venv
 *.pyc
 
-# PyCharm
-.idea
+
 
 # macOS
 .DS_Store

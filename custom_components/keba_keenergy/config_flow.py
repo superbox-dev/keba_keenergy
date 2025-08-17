@@ -1,4 +1,5 @@
 """Config flow for KEBA KeEnergy."""
+
 import logging
 from typing import Any
 
@@ -22,13 +23,13 @@ CONFIG_SCHEMA: vol.Schema = vol.Schema(
     {
         vol.Required(CONF_HOST): str,
         vol.Required(CONF_SSL, default=DEFAULT_SSL): bool,
-    }
+    },
 )
 
 _LOGGER = logging.getLogger(__name__)
 
 
-async def validate_input(hass: HomeAssistant, host: str, ssl: bool) -> str:
+async def validate_input(hass: HomeAssistant, /, *, host: str, ssl: bool) -> str:
     """Validate the user input allows us to connect."""
     session: aiohttp.ClientSession = async_get_clientsession(hass)
     _LOGGER.debug("Connecting to %s", host)
@@ -38,7 +39,7 @@ async def validate_input(hass: HomeAssistant, host: str, ssl: bool) -> str:
     try:
         response: dict[str, Any] = await client.system.get_device_info()
     except (APIError, ClientError) as error:
-        raise CannotConnect from error
+        raise CannotConnectError from error
 
     return str(response["serNo"])
 
@@ -70,12 +71,10 @@ class KebaKeEnergyConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             updates={
                 CONF_HOST: self._host,
                 CONF_SSL: self._ssl,
-            }
+            },
         )
 
-    async def async_step_user(
-        self, user_input: dict[str, Any] | None = None
-    ) -> FlowResult:
+    async def async_step_user(self, user_input: dict[str, Any] | None = None) -> FlowResult:
         """Handle a flow initialized by the user."""
         errors = {}
 
@@ -84,13 +83,11 @@ class KebaKeEnergyConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             self._ssl = user_input[CONF_SSL]
 
             try:
-                self._serial_number = await validate_input(
-                    hass=self.hass, host=self._host, ssl=self._ssl
-                )
-            except CannotConnect:
+                self._serial_number = await validate_input(self.hass, host=self._host, ssl=self._ssl)
+            except CannotConnectError:
                 _LOGGER.debug("Keba KeEnergy Error", exc_info=True)
                 errors["base"] = "cannot_connect"
-            except Exception:  # pylint: disable=broad-except
+            except Exception:  # noqa: BLE001
                 _LOGGER.debug("Unknown error trying to connect")
                 errors["base"] = "unknown"
 
@@ -108,9 +105,7 @@ class KebaKeEnergyConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             },
         )
 
-    async def async_step_zeroconf(
-        self, discovery_info: ZeroconfServiceInfo
-    ) -> FlowResult:
+    async def async_step_zeroconf(self, discovery_info: ZeroconfServiceInfo) -> FlowResult:
         """Handle zeroconf discovery."""
         _LOGGER.debug("Starting discovery via: %s", discovery_info)
 
@@ -121,15 +116,13 @@ class KebaKeEnergyConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
         await self._set_uid_and_abort()
         return await self.async_step_discovery_confirm()
 
-    async def async_step_discovery_confirm(
-        self, user_input: dict[str, Any] | None = None
-    ) -> FlowResult:
+    async def async_step_discovery_confirm(self, user_input: dict[str, Any] | None = None) -> FlowResult:
         """Handle user-confirmation of discovered node."""
         if user_input is not None:
             try:
-                await validate_input(hass=self.hass, host=self._host, ssl=self._ssl)
+                await validate_input(self.hass, host=self._host, ssl=self._ssl)
                 return self._async_get_entry()
-            except CannotConnect:
+            except CannotConnectError:
                 _LOGGER.debug("Keba KeEnergy Error", exc_info=True)
                 return self.async_abort(reason="cannot_connect")
 
@@ -142,5 +135,5 @@ class KebaKeEnergyConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
         )
 
 
-class CannotConnect(HomeAssistantError):
+class CannotConnectError(HomeAssistantError):
     """Error to indicate we cannot connect."""

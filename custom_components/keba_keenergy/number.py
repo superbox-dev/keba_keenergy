@@ -67,9 +67,7 @@ NUMBER_TYPES: dict[str, tuple[NumberEntityDescription, ...]] = {
 }
 
 
-async def async_setup_entry(
-    hass: HomeAssistant, entry: ConfigEntry, async_add_entities: AddEntitiesCallback
-) -> None:
+async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry, async_add_entities: AddEntitiesCallback) -> None:
     """Set up KEBA KeEnergy numbers from a config entry."""
     coordinator: KebaKeEnergyDataUpdateCoordinator = hass.data[DOMAIN][entry.entry_id]
     numbers: list[KebaKeEnergyNumberEntity] = []
@@ -82,16 +80,16 @@ async def async_setup_entry(
             for key, values in section_data.items():
                 if key == description.key:
                     device_numbers: int = len(values) if isinstance(values, list) else 1
-                    for index in range(device_numbers):
-                        numbers.append(
-                            KebaKeEnergyNumberEntity(
-                                coordinator=coordinator,
-                                description=description,
-                                entry=entry,
-                                section_id=section_id,
-                                index=index if device_numbers > 1 else None,
-                            )
+                    numbers += [
+                        KebaKeEnergyNumberEntity(
+                            coordinator=coordinator,
+                            description=description,
+                            entry=entry,
+                            section_id=section_id,
+                            index=index if device_numbers > 1 else None,
                         )
+                        for index in range(device_numbers)
+                    ]
 
     async_add_entities(numbers)
 
@@ -123,28 +121,24 @@ class KebaKeEnergyNumberEntity(KebaKeEnergyEntity, NumberEntity):
     def native_min_value(self) -> float:
         """Return the maximum value."""
         return float(
-            self.coordinator.data[self.section_id][self.entity_description.key][
-                self.index or 0
-            ]["attributes"]["lower_limit"]
+            self.coordinator.data[self.section_id][self.entity_description.key][self.index or 0]["attributes"][
+                "lower_limit"
+            ],
         )
 
     @property
     def native_max_value(self) -> float:
         """Return the maximum value."""
         return float(
-            self.coordinator.data[self.section_id][self.entity_description.key][
-                self.index or 0
-            ]["attributes"]["upper_limit"]
+            self.coordinator.data[self.section_id][self.entity_description.key][self.index or 0]["attributes"][
+                "upper_limit"
+            ],
         )
 
     @property
     def native_value(self) -> float:
         """Return the state of the number."""
-        return float(
-            self.coordinator.data[self.section_id][self.entity_description.key][
-                self.index or 0
-            ]["value"]
-        )
+        return float(self.coordinator.data[self.section_id][self.entity_description.key][self.index or 0]["value"])
 
     async def async_set_native_value(self, value: float) -> None:
         """Set new value."""

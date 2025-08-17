@@ -1,17 +1,15 @@
 """Support for KEBA KeEnergy binary sensors."""
+
 import logging
 from typing import cast
 
-from keba_keenergy_api.constants import SectionPrefix
-
-from homeassistant.components.binary_sensor import (
-    DOMAIN as BINARY_SENSOR_DOMAIN,
-    BinarySensorEntity,
-    BinarySensorEntityDescription,
-)
+from homeassistant.components.binary_sensor import BinarySensorEntity
+from homeassistant.components.binary_sensor import BinarySensorEntityDescription
+from homeassistant.components.binary_sensor import DOMAIN as BINARY_SENSOR_DOMAIN
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
+from keba_keenergy_api.constants import SectionPrefix
 
 from . import KebaKeEnergyDataUpdateCoordinator
 from .const import DOMAIN
@@ -37,9 +35,7 @@ BINARY_SENSOR_TYPES: dict[str, tuple[BinarySensorEntityDescription, ...]] = {
 }
 
 
-async def async_setup_entry(
-    hass: HomeAssistant, entry: ConfigEntry, async_add_entities: AddEntitiesCallback
-) -> None:
+async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry, async_add_entities: AddEntitiesCallback) -> None:
     """Set up KEBA KeEnergy binary sensors from a config entry."""
     coordinator: KebaKeEnergyDataUpdateCoordinator = hass.data[DOMAIN][entry.entry_id]
     binary_sensors: list[KebaKeEnergyBinarySensorEntity] = []
@@ -52,16 +48,16 @@ async def async_setup_entry(
             for key, values in section_data.items():
                 if key == description.key:
                     device_numbers: int = len(values) if isinstance(values, list) else 1
-                    for index in range(device_numbers):
-                        binary_sensors.append(
-                            KebaKeEnergyBinarySensorEntity(
-                                coordinator=coordinator,
-                                description=description,
-                                entry=entry,
-                                section_id=section_id,
-                                index=index if device_numbers > 1 else None,
-                            )
+                    binary_sensors += [
+                        KebaKeEnergyBinarySensorEntity(
+                            coordinator=coordinator,
+                            description=description,
+                            entry=entry,
+                            section_id=section_id,
+                            index=index if device_numbers > 1 else None,
                         )
+                        for index in range(device_numbers)
+                    ]
 
     async_add_entities(binary_sensors)
 
@@ -90,4 +86,4 @@ class KebaKeEnergyBinarySensorEntity(KebaKeEnergyEntity, BinarySensorEntity):
     @property
     def is_on(self) -> bool:
         """Return true if the binary sensor is on."""
-        return cast(bool, (self.get_value(self.entity_description.key) == "on"))
+        return cast("bool", (self.get_value(self.entity_description.key) == "on"))

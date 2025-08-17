@@ -1,4 +1,5 @@
 """DataUpdateCoordinator for the KEBA KeEnergy integration."""
+
 from datetime import timedelta
 import logging
 from typing import Any
@@ -23,9 +24,7 @@ from .const import SCAN_INTERVAL
 _LOGGER = logging.getLogger(__name__)
 
 
-class KebaKeEnergyDataUpdateCoordinator(
-    DataUpdateCoordinator[dict[str, ValueResponse]]
-):
+class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueResponse]]):
     """Class to manage fetching KEBA KeEnergy data API."""
 
     _attr_has_entity_name = True
@@ -33,18 +32,18 @@ class KebaKeEnergyDataUpdateCoordinator(
     def __init__(
         self,
         hass: HomeAssistant,
-        session: ClientSession,
+        /,
+        *,
         host: str,
         ssl: bool,
+        session: ClientSession,
     ) -> None:
         """Initialize."""
         self.api: KebaKeEnergyAPI = KebaKeEnergyAPI(host, ssl=ssl, session=session)
         self._api_device_info: dict[str, Any] = {}
         self._api_system_info: dict[str, Any] = {}
 
-        super().__init__(
-            hass, _LOGGER, name=DOMAIN, update_interval=timedelta(seconds=SCAN_INTERVAL)
-        )
+        super().__init__(hass, _LOGGER, name=DOMAIN, update_interval=timedelta(seconds=SCAN_INTERVAL))
 
     async def _async_update_data(self) -> dict[str, ValueResponse]:
         """Update coordinator data.

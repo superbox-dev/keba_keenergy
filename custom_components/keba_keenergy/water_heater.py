@@ -41,21 +41,19 @@ async def async_setup_entry(
 ) -> None:
     """Set up KEBA KeEnergy water heaters from a config entry."""
     coordinator: KebaKeEnergyDataUpdateCoordinator = hass.data[DOMAIN][entry.entry_id]
-    water_heaters: list[KebaKeEnergyWaterHeaterEntity] = []
-
-    for index in range(coordinator.hot_water_tank_numbers):
-        water_heaters.append(
-            KebaKeEnergyWaterHeaterEntity(
-                coordinator=coordinator,
-                description=WaterHeaterEntityEntityDescription(
-                    key="hot_water_tank",
-                    translation_key="hot_water_tank",
-                ),
-                entry=entry,
-                section_id=SectionPrefix.HOT_WATER_TANK.value,
-                index=index if coordinator.hot_water_tank_numbers > 1 else None,
-            )
+    water_heaters: list[KebaKeEnergyWaterHeaterEntity] = [
+        KebaKeEnergyWaterHeaterEntity(
+            coordinator=coordinator,
+            description=WaterHeaterEntityEntityDescription(
+                key="hot_water_tank",
+                translation_key="hot_water_tank",
+            ),
+            entry=entry,
+            section_id=SectionPrefix.HOT_WATER_TANK.value,
+            index=index if coordinator.hot_water_tank_numbers > 1 else None,
         )
+        for index in range(coordinator.hot_water_tank_numbers)
+    ]
 
     async_add_entities(water_heaters)
 
@@ -69,7 +67,7 @@ class KebaKeEnergyWaterHeaterEntity(KebaKeEnergyEntity, WaterHeaterEntity):
         | WaterHeaterEntityFeature.TARGET_TEMPERATURE
     )
 
-    _attr_operation_list: list[str] = list(HOT_WATER_TANK_STATE_TO_HA.values())
+    _attr_operation_list: tuple[str, ...] = list(HOT_WATER_TANK_STATE_TO_HA.values())
     _attr_temperature_unit: str = UnitOfTemperature.CELSIUS
     _attr_name = None
 
@@ -134,7 +132,7 @@ class KebaKeEnergyWaterHeaterEntity(KebaKeEnergyEntity, WaterHeaterEntity):
         """Return the highbound target temperature we try to reach."""
         return float(self.get_attribute("max_temperature", "upper_limit"))
 
-    async def async_turn_off(self, **kwargs: Any) -> None:
+    async def async_turn_off(self, **kwargs: Any) -> None:  # noqa: ARG002
         """Turn the hot water tank off."""
         await self._async_update_data(
             section=HotWaterTank.OPERATING_MODE,
@@ -142,7 +140,7 @@ class KebaKeEnergyWaterHeaterEntity(KebaKeEnergyEntity, WaterHeaterEntity):
             device_numbers=self.coordinator.hot_water_tank_numbers,
         )
 
-    async def async_turn_on(self, **kwargs: Any) -> None:
+    async def async_turn_on(self, **kwargs: Any) -> None:  # noqa: ARG002
         """Turn the hot water tank on (heat up mode)."""
         await self._async_update_data(
             section=HotWaterTank.OPERATING_MODE,

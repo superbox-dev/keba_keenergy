@@ -1,9 +1,10 @@
 """Entity classes for the KEBA KeEnergy integration."""
+
 from typing import Any, cast
+from typing import TYPE_CHECKING
 
 from aiohttp import ClientError
 from keba_keenergy_api.constants import Section, SectionPrefix
-from keba_keenergy_api.endpoints import Value
 from keba_keenergy_api.error import APIError
 
 from homeassistant.config_entries import ConfigEntry
@@ -13,6 +14,9 @@ from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
 from .const import DOMAIN, MANUFACTURER, MANUFACTURER_MTEC, NAME
 from .coordinator import KebaKeEnergyDataUpdateCoordinator
+
+if TYPE_CHECKING:
+    from keba_keenergy_api.endpoints import Value
 
 
 class KebaKeEnergyEntity(
@@ -49,17 +53,17 @@ class KebaKeEnergyEntity(
     @property
     def is_heat_circuit(self) -> bool:
         """Return True if the entity is part of a heat circuit else False."""
-        return cast(bool, self.section_id == SectionPrefix.HEAT_CIRCUIT)
+        return cast("bool", self.section_id == SectionPrefix.HEAT_CIRCUIT)
 
     @property
     def is_heat_pump(self) -> bool:
         """Return True if the entity is part of a heat pump else False."""
-        return cast(bool, self.section_id == SectionPrefix.HEAT_PUMP)
+        return cast("bool", self.section_id == SectionPrefix.HEAT_PUMP)
 
     @property
     def is_hot_water_tank(self) -> bool:
         """Return True if the entity is part of a hot water tank else False."""
-        return cast(bool, self.section_id == SectionPrefix.HOT_WATER_TANK)
+        return cast("bool", self.section_id == SectionPrefix.HOT_WATER_TANK)
 
     @property
     def device_name(self) -> str | None:
@@ -69,9 +73,7 @@ class KebaKeEnergyEntity(
         if self.is_system_device:
             _device_name = f"{self.device_manufacturer} {NAME}"
         elif self.is_heat_circuit:
-            _device_name = self.coordinator.data[self.section_id]["name"][
-                self.index or 0
-            ]["value"]
+            _device_name = self.coordinator.data[self.section_id]["name"][self.index or 0]["value"]
         elif self.is_heat_pump:
             _device_name = f"{self.device_manufacturer} {self.device_model}"
         elif self.is_hot_water_tank:
@@ -131,15 +133,9 @@ class KebaKeEnergyEntity(
             "name": self.device_name,
             "manufacturer": self.device_manufacturer,
             "model": self.device_model,
-            "sw_version": (
-                self.coordinator.device_sw_version if self.is_system_device else None
-            ),
+            "sw_version": (self.coordinator.device_sw_version if self.is_system_device else None),
             # Added via_device if the device is not the KEBA KeEnergy control device.
-            "via_device": (
-                None
-                if self.is_system_device
-                else (DOMAIN, f"{self.entry.unique_id}_{DOMAIN}")
-            ),
+            "via_device": (None if self.is_system_device else (DOMAIN, f"{self.entry.unique_id}_{DOMAIN}")),
         }
 
         _device_info: DeviceInfo = DeviceInfo(
@@ -161,26 +157,18 @@ class KebaKeEnergyEntity(
 
             await self.coordinator.api.write_data(
                 request={
-                    section: [
-                        value if index == _current_index else None
-                        for index in range(device_numbers)
-                    ],
+                    section: [value if index == _current_index else None for index in range(device_numbers)],
                 },
             )
         except (APIError, ClientError) as error:
-            raise HomeAssistantError(
-                f"Failed to update {section} to {value}: {error}"
-            ) from error
+            msg: str = f"Failed to update {section} to {value}: {error}"
+            raise HomeAssistantError(msg) from error
 
         await self.coordinator.async_refresh()
 
     def get_attribute(self, key: str, attr: str) -> str:
         """Get extra attribute from the API by key."""
-        return str(
-            self.coordinator.data[self.section_id][key][self.index or 0]["attributes"][
-                attr
-            ]
-        )
+        return str(self.coordinator.data[self.section_id][key][self.index or 0]["attributes"][attr])
 
     def get_value(self, key: str) -> Any:
         """Get value from the API by key."""

@@ -1,4 +1,5 @@
 """Support for the KEBA KeEnergy climate."""
+
 from typing import Any, Final
 import logging
 
@@ -58,26 +59,22 @@ TEMPERATURE_SCHEMA = {
 _LOGGER = logging.getLogger(__name__)
 
 
-async def async_setup_entry(
-    hass: HomeAssistant, entry: ConfigEntry, async_add_entities: AddEntitiesCallback
-) -> None:
+async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry, async_add_entities: AddEntitiesCallback) -> None:
     """Set up KEBA KeEnergy climates from a config entry."""
     coordinator: KebaKeEnergyDataUpdateCoordinator = hass.data[DOMAIN][entry.entry_id]
-    climates: list[KebaKeEnergyClimateEntity] = []
-
-    for index in range(coordinator.heat_circuit_numbers):
-        climates.append(
-            KebaKeEnergyClimateEntity(
-                coordinator=coordinator,
-                description=ClimateEntityDescription(
-                    key="heat_circuit",
-                    translation_key="heat_circuit",
-                ),
-                entry=entry,
-                section_id=SectionPrefix.HEAT_CIRCUIT.value,
-                index=index if coordinator.heat_circuit_numbers > 1 else None,
-            )
+    climates: list[KebaKeEnergyClimateEntity] = [
+        KebaKeEnergyClimateEntity(
+            coordinator=coordinator,
+            description=ClimateEntityDescription(
+                key="heat_circuit",
+                translation_key="heat_circuit",
+            ),
+            entry=entry,
+            section_id=SectionPrefix.HEAT_CIRCUIT.value,
+            index=index if coordinator.heat_circuit_numbers > 1 else None,
         )
+        for index in range(coordinator.heat_circuit_numbers)
+    ]
 
     async_add_entities(climates)
 
@@ -92,12 +89,12 @@ class KebaKeEnergyClimateEntity(KebaKeEnergyEntity, ClimateEntity):
         | ClimateEntityFeature.TURN_ON
     )
 
-    _attr_hvac_modes: list[HVACMode] = [
+    _attr_hvac_modes: tuple[HVACMode] = (
         HVACMode.AUTO,
         HVACMode.HEAT,
         HVACMode.OFF,
-    ]
-    _attr_preset_modes: list[str] = list(HEAT_CIRCUIT_PRESET_TO_HA.values())
+    )
+    _attr_preset_modes: tuple[str, ...] = tuple(HEAT_CIRCUIT_PRESET_TO_HA.values())
 
     _attr_target_temperature_step: float = 0.5
     _attr_temperature_unit: str = UnitOfTemperature.CELSIUS
@@ -143,33 +140,24 @@ class KebaKeEnergyClimateEntity(KebaKeEnergyEntity, ClimateEntity):
     @property
     def target_temperature(self) -> float:
         """Return the temperature we try to reach."""
-        return self.target_temperature_for_preset + float(
-            self.get_value("temperature_offset")
-        )
+        return self.target_temperature_for_preset + float(self.get_value("temperature_offset"))
 
     @property
     def min_temp(self) -> float:
         """Return the minimum temperature."""
-        return self.target_temperature_for_preset + float(
-            self.get_attribute("temperature_offset", "lower_limit")
-        )
+        return self.target_temperature_for_preset + float(self.get_attribute("temperature_offset", "lower_limit"))
 
     @property
     def max_temp(self) -> float:
         """Return the maximum temperature."""
-        return self.target_temperature_for_preset + float(
-            self.get_attribute("temperature_offset", "upper_limit")
-        )
+        return self.target_temperature_for_preset + float(self.get_attribute("temperature_offset", "upper_limit"))
 
     @property
     def hvac_mode(self) -> HVACMode:
         """Return hvac operation."""
         operating_mode: str = self.get_value("operating_mode")
 
-        if (
-            HeatCircuitOperatingMode[operating_mode.upper()].value
-            == HeatCircuitOperatingMode.AUTO
-        ):
+        if HeatCircuitOperatingMode[operating_mode.upper()].value == HeatCircuitOperatingMode.AUTO:
             return HVACMode.AUTO
 
         if HeatCircuitOperatingMode[operating_mode.upper()].value in [
@@ -190,9 +178,7 @@ class KebaKeEnergyClimateEntity(KebaKeEnergyEntity, ClimateEntity):
 
         heat_request: str = self.get_value("heat_request")
 
-        return HEAT_CIRCUIT_HVAC_ACTION_TO_HA[
-            HeatCircuitHeatRequest[heat_request.upper()].value
-        ]
+        return HEAT_CIRCUIT_HVAC_ACTION_TO_HA[HeatCircuitHeatRequest[heat_request.upper()].value]
 
     @property
     def preset_mode(self) -> str:
@@ -200,13 +186,8 @@ class KebaKeEnergyClimateEntity(KebaKeEnergyEntity, ClimateEntity):
         self._attr_preset_mode = PRESET_NONE
         operating_mode: str = self.get_value("operating_mode")
 
-        if (
-            HeatCircuitOperatingMode[operating_mode.upper()].value
-            != HeatCircuitOperatingMode.OFF
-        ):
-            self._attr_preset_mode = HEAT_CIRCUIT_PRESET_TO_HA[
-                HeatCircuitOperatingMode[operating_mode.upper()].value
-            ]
+        if HeatCircuitOperatingMode[operating_mode.upper()].value != HeatCircuitOperatingMode.OFF:
+            self._attr_preset_mode = HEAT_CIRCUIT_PRESET_TO_HA[HeatCircuitOperatingMode[operating_mode.upper()].value]
 
         _LOGGER.debug("preset_mode %s", self._attr_preset_mode)
         return self._attr_preset_mode

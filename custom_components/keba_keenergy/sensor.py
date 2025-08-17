@@ -3,10 +3,10 @@
 from collections.abc import Callable
 from dataclasses import dataclass
 import logging
+from typing import TYPE_CHECKING
 from typing import cast
 
 from keba_keenergy_api.constants import SectionPrefix
-from keba_keenergy_api.endpoints import Value
 
 from homeassistant.components.sensor import (
     DOMAIN as SENSOR_DOMAIN,
@@ -24,6 +24,10 @@ from homeassistant.helpers.typing import StateType
 from . import KebaKeEnergyDataUpdateCoordinator
 from .const import DOMAIN
 from .entity import KebaKeEnergyEntity
+
+if TYPE_CHECKING:
+    from keba_keenergy_api.endpoints import Value
+
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -51,7 +55,7 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription, ...]] = {
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             state_class=SensorStateClass.MEASUREMENT,
             translation_key="temperature",
-            value=lambda data: cast(float, data),
+            value=lambda data: cast("float", data),
         ),
         KebaKeEnergySensorEntityDescription(
             device_class=SensorDeviceClass.TEMPERATURE,
@@ -59,7 +63,7 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription, ...]] = {
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             state_class=SensorStateClass.MEASUREMENT,
             translation_key="day_temperature",
-            value=lambda data: cast(float, data),
+            value=lambda data: cast("float", data),
         ),
         KebaKeEnergySensorEntityDescription(
             device_class=SensorDeviceClass.TEMPERATURE,
@@ -68,7 +72,7 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription, ...]] = {
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             state_class=SensorStateClass.MEASUREMENT,
             translation_key="day_temperature_threshold",
-            value=lambda data: cast(float, data),
+            value=lambda data: cast("float", data),
         ),
         KebaKeEnergySensorEntityDescription(
             device_class=SensorDeviceClass.TEMPERATURE,
@@ -76,7 +80,7 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription, ...]] = {
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             state_class=SensorStateClass.MEASUREMENT,
             translation_key="night_temperature",
-            value=lambda data: cast(float, data),
+            value=lambda data: cast("float", data),
         ),
         KebaKeEnergySensorEntityDescription(
             device_class=SensorDeviceClass.TEMPERATURE,
@@ -85,7 +89,7 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription, ...]] = {
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             state_class=SensorStateClass.MEASUREMENT,
             translation_key="night_temperature_threshold",
-            value=lambda data: cast(float, data),
+            value=lambda data: cast("float", data),
         ),
         KebaKeEnergySensorEntityDescription(
             device_class=SensorDeviceClass.TEMPERATURE,
@@ -93,7 +97,7 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription, ...]] = {
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             state_class=SensorStateClass.MEASUREMENT,
             translation_key="holiday_temperature",
-            value=lambda data: cast(float, data),
+            value=lambda data: cast("float", data),
         ),
         KebaKeEnergySensorEntityDescription(
             device_class=SensorDeviceClass.TEMPERATURE,
@@ -101,14 +105,14 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription, ...]] = {
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             state_class=SensorStateClass.MEASUREMENT,
             translation_key="temperature_offset",
-            value=lambda data: cast(float, data),
+            value=lambda data: cast("float", data),
         ),
         KebaKeEnergySensorEntityDescription(
             device_class=SensorDeviceClass.ENUM,
             key="operating_mode",
             options=["off", "auto", "day", "night", "holiday", "party"],
             translation_key="operating_mode",
-            value=lambda data: cast(str, data),
+            value=lambda data: cast("str", data),
         ),
         KebaKeEnergySensorEntityDescription(
             device_class=SensorDeviceClass.ENUM,
@@ -116,7 +120,7 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription, ...]] = {
             options=["off", "on", "temporary_off", "outdoor_temperature_off"],
             translation_key="heat_request",
             icon="mdi:fire",
-            value=lambda data: cast(str, data),
+            value=lambda data: cast("str", data),
         ),
     ),
     SectionPrefix.HEAT_PUMP: (
@@ -125,7 +129,7 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription, ...]] = {
             key="state",
             options=["standby", "flow", "auto_heat", "defrost", "auto_cool", "inflow"],
             translation_key="state",
-            value=lambda data: cast(str, data),
+            value=lambda data: cast("str", data),
         ),
         KebaKeEnergySensorEntityDescription(
             entity_registry_enabled_default=False,
@@ -134,7 +138,7 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription, ...]] = {
             state_class=SensorStateClass.MEASUREMENT,
             translation_key="circulation_pump",
             icon="mdi:heat-pump",
-            value=lambda data: cast(float, data * 100),
+            value=lambda data: cast("float", data * 100),
         ),
         KebaKeEnergySensorEntityDescription(
             device_class=SensorDeviceClass.TEMPERATURE,
@@ -142,7 +146,7 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription, ...]] = {
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             state_class=SensorStateClass.MEASUREMENT,
             translation_key="inflow_temperature",
-            value=lambda data: cast(float, data),
+            value=lambda data: cast("float", data),
         ),
         KebaKeEnergySensorEntityDescription(
             device_class=SensorDeviceClass.TEMPERATURE,
@@ -150,7 +154,7 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription, ...]] = {
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             state_class=SensorStateClass.MEASUREMENT,
             translation_key="reflux_temperature",
-            value=lambda data: cast(float, data),
+            value=lambda data: cast("float", data),
         ),
         KebaKeEnergySensorEntityDescription(
             device_class=SensorDeviceClass.TEMPERATURE,
@@ -158,7 +162,7 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription, ...]] = {
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             state_class=SensorStateClass.MEASUREMENT,
             translation_key="source_input_temperature",
-            value=lambda data: cast(float, data),
+            value=lambda data: cast("float", data),
         ),
         KebaKeEnergySensorEntityDescription(
             device_class=SensorDeviceClass.TEMPERATURE,
@@ -166,7 +170,7 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription, ...]] = {
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             state_class=SensorStateClass.MEASUREMENT,
             translation_key="source_output_temperature",
-            value=lambda data: cast(float, data),
+            value=lambda data: cast("float", data),
         ),
         KebaKeEnergySensorEntityDescription(
             device_class=SensorDeviceClass.TEMPERATURE,
@@ -175,7 +179,7 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription, ...]] = {
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             state_class=SensorStateClass.MEASUREMENT,
             translation_key="compressor_input_temperature",
-            value=lambda data: cast(float, data),
+            value=lambda data: cast("float", data),
         ),
         KebaKeEnergySensorEntityDescription(
             device_class=SensorDeviceClass.TEMPERATURE,
@@ -184,7 +188,7 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription, ...]] = {
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             state_class=SensorStateClass.MEASUREMENT,
             translation_key="compressor_output_temperature",
-            value=lambda data: cast(float, data),
+            value=lambda data: cast("float", data),
         ),
         KebaKeEnergySensorEntityDescription(
             entity_registry_enabled_default=False,
@@ -192,7 +196,7 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription, ...]] = {
             native_unit_of_measurement=PERCENTAGE,
             state_class=SensorStateClass.MEASUREMENT,
             translation_key="compressor",
-            value=lambda data: cast(float, data * 100),
+            value=lambda data: cast("float", data * 100),
         ),
         KebaKeEnergySensorEntityDescription(
             device_class=SensorDeviceClass.PRESSURE,
@@ -201,7 +205,7 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription, ...]] = {
             native_unit_of_measurement=UnitOfPressure.BAR,
             state_class=SensorStateClass.MEASUREMENT,
             translation_key="high_pressure",
-            value=lambda data: cast(float, data),
+            value=lambda data: cast("float", data),
         ),
         KebaKeEnergySensorEntityDescription(
             device_class=SensorDeviceClass.PRESSURE,
@@ -210,7 +214,7 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription, ...]] = {
             native_unit_of_measurement=UnitOfPressure.BAR,
             state_class=SensorStateClass.MEASUREMENT,
             translation_key="low_pressure",
-            value=lambda data: cast(float, data),
+            value=lambda data: cast("float", data),
         ),
     ),
     SectionPrefix.HOT_WATER_TANK: (
@@ -221,14 +225,14 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription, ...]] = {
             state_class=SensorStateClass.MEASUREMENT,
             translation_key="temperature",
             icon="mdi:thermometer-water",
-            value=lambda data: cast(float, data),
+            value=lambda data: cast("float", data),
         ),
         KebaKeEnergySensorEntityDescription(
             device_class=SensorDeviceClass.ENUM,
             key="operating_mode",
             options=["auto", "heat_up", "off", "on"],
             translation_key="operating_mode",
-            value=lambda data: cast(str, data),
+            value=lambda data: cast("str", data),
         ),
         KebaKeEnergySensorEntityDescription(
             device_class=SensorDeviceClass.TEMPERATURE,
@@ -237,7 +241,7 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription, ...]] = {
             state_class=SensorStateClass.MEASUREMENT,
             translation_key="min_temperature",
             icon="mdi:thermometer-chevron-down",
-            value=lambda data: cast(float, data),
+            value=lambda data: cast("float", data),
         ),
         KebaKeEnergySensorEntityDescription(
             device_class=SensorDeviceClass.TEMPERATURE,
@@ -246,7 +250,7 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription, ...]] = {
             state_class=SensorStateClass.MEASUREMENT,
             translation_key="max_temperature",
             icon="mdi:thermometer-chevron-up",
-            value=lambda data: cast(float, data),
+            value=lambda data: cast("float", data),
         ),
     ),
     SectionPrefix.SYSTEM: (
@@ -257,7 +261,7 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription, ...]] = {
             state_class=SensorStateClass.MEASUREMENT,
             translation_key="outdoor_temperature",
             icon="mdi:sun-thermometer",
-            value=lambda data: cast(float, data),
+            value=lambda data: cast("float", data),
         ),
     ),
 }
@@ -280,16 +284,16 @@ async def async_setup_entry(
             for key, values in section_data.items():
                 if key == description.key:
                     device_numbers: int = len(values) if isinstance(values, list) else 1
-                    for index in range(device_numbers):
-                        sensors.append(
-                            KebaKeEnergySensorEntity(
-                                coordinator=coordinator,
-                                description=description,
-                                entry=entry,
-                                section_id=section_id,
-                                index=index if device_numbers > 1 else None,
-                            )
+                    sensors += [
+                        KebaKeEnergySensorEntity(
+                            coordinator=coordinator,
+                            description=description,
+                            entry=entry,
+                            section_id=section_id,
+                            index=index if device_numbers > 1 else None,
                         )
+                        for index in range(device_numbers)
+                    ]
 
     async_add_entities(sensors)
 
@@ -322,9 +326,7 @@ class KebaKeEnergySensorEntity(KebaKeEnergyEntity, SensorEntity):
     @property
     def native_value(self) -> StateType:
         """Return the state of the sensor."""
-        data: list[Value] | Value = self.coordinator.data[self.section_id][
-            self.entity_description.key
-        ]
+        data: list[Value] | Value = self.coordinator.data[self.section_id][self.entity_description.key]
 
         if isinstance(data, list):
             data = data[self.index or 0]

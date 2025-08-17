@@ -1,5 +1,6 @@
 """The KEBA KeEnergy integration."""
-from aiohttp import ClientSession
+
+from typing import TYPE_CHECKING
 
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import CONF_HOST, CONF_SSL, Platform
@@ -8,6 +9,9 @@ from homeassistant.helpers.aiohttp_client import async_get_clientsession
 
 from .const import DOMAIN
 from .coordinator import KebaKeEnergyDataUpdateCoordinator
+
+if TYPE_CHECKING:
+    from aiohttp import ClientSession
 
 PLATFORMS: list[Platform] = [
     Platform.BINARY_SENSOR,
@@ -25,7 +29,10 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
 
     session: ClientSession = async_get_clientsession(hass)
     coordinator: KebaKeEnergyDataUpdateCoordinator = KebaKeEnergyDataUpdateCoordinator(
-        hass, host=host, ssl=ssl, session=session
+        hass,
+        host=host,
+        ssl=ssl,
+        session=session,
     )
 
     await coordinator.async_config_entry_first_refresh()

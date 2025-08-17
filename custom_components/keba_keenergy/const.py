@@ -1,4 +1,5 @@
 """Constants for the KEBA KeEnergy integration."""
+
 from typing import Final
 
 ATTR_OFFSET: Final[str] = "offset"
