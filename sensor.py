@@ -21,7 +21,7 @@ from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.typing import StateType
 
-from custom_components import KebaKeEnergyDataUpdateCoordinator
+from . import KebaKeEnergyDataUpdateCoordinator
 from .const import DOMAIN
 from .entity import KebaKeEnergyEntity
 

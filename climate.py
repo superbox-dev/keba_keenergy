@@ -28,7 +28,7 @@ from homeassistant.const import ATTR_TEMPERATURE, UnitOfTemperature
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
-from custom_components import KebaKeEnergyDataUpdateCoordinator
+from . import KebaKeEnergyDataUpdateCoordinator
 from .const import ATTR_OFFSET, DOMAIN
 from .entity import KebaKeEnergyEntity
 
