@@ -1,6 +1,7 @@
 # python files
 __pycache__
 .venv
+*.pyc
 
 # PyCharm
 .idea

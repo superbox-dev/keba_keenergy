@@ -1,3 +1,9 @@
+[build-system]
+requires = [
+    "uv_build >= 0.8.11",
+]
+build-backend = "uv_build"
+
 [project]
 name = "keba_keenergy"
 description = "Home Assistant integration for heaters with a KEBA KeEnergy control system"
@@ -8,7 +14,7 @@ authors = [
 maintainers = [
     { name = "Michael Hacker", email = "mh@superbox.one" },
 ]
-license = {text = "Apache-2.0 license"}
+license = { text = "Apache-2.0 license" }
 keywords = [
     "component",
     "custom component",
@@ -45,31 +51,23 @@ version = "1.0.0"
 
 [dependency-groups]
 dev = [
-    {include-group = "build"},
-    {include-group = "audit"},
-    {include-group = "lint"},
-]
-
-build = [
-    "setuptools>=65.5.1",
-    "build==1.1.1",
+    { include-group = "audit" },
+    { include-group = "lint" },
 ]
 audit = [
-    "pip-audit",
+    "pip-audit>=2.9.0",
 ]
-
 lint = [
-    "black",
-    "mypy",
-    "pre-commit",
-    "pre-commit-hooks",
-    "ruff",
-    "types-PyYAML",
-    "yamllint",
+    "black>=25.1.0",
+    "mypy>=1.17.1",
+    "ruff>=0.12.9",
+    "types-PyYAML>=6.0.12.20250809",
+    "yamllint>=1.37.1",
 ]
 
-[tool.setuptools]
-packages = ["custom_components/keba_keenergy"]
+[tool.uv.build-backend]
+module-name = "custom_components.keba_keenergy"
+module-root = ""
 
 [tool.black]
 line-length = 120
