@@ -1,0 +1,42 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+    tags:
+      - v*
+
+jobs:
+  parameters:
+    name: Parameters
+    uses: superbox-dev/python-package-workflows/.github/workflows/parameters.yml@main
+    with:
+      json: ./.github/workflows/parameters.json
+
+  code-analysis:
+    name: Code analysis
+    uses: superbox-dev/python-package-workflows/.github/workflows/code-Analysis.yml@main
+    needs:
+      - parameters
+    with:
+      python-versions: ${{ needs.parameters.outputs.python-versions }}
+
+  security:
+    name: Security
+    uses: superbox-dev/python-package-workflows/.github/workflows/security.yml@main
+    needs:
+      - parameters
+    with:
+      latest-python-version: ${{ needs.parameters.outputs.latest-python-version }}
+
+  release:
+    name: Release on GitHub
+    if: github.ref_type == 'tag'
+    uses: superbox-dev/python-package-workflows/.github/workflows/release.yml@main
+    needs:
+      - parameters
+    with:
+      package-name: ${{ needs.parameters.outputs.package-name }}
+      package-version: ${{ needs.parameters.outputs.package-version }}
