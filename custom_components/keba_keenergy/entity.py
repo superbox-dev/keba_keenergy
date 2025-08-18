@@ -76,12 +76,8 @@ class KebaKeEnergyEntity(
         if self.is_system_device:
             _device_name = f"{self.device_manufacturer} {NAME}"
         elif self.is_heat_circuit:
-            data: list[Value] | Value = self.coordinator.data[self.section_id]["name"][self.index or 0]  # type: ignore[literal-required]
-
-            if isinstance(data, list):
-                data = data[0]
-
-            _device_name = data["value"]
+            data: list[Value] | Value = self.coordinator.data[self.section_id]["name"]
+            _device_name = data[self.index or 0]["value"] if isinstance(data, list) else data["value"]
         elif self.is_heat_pump:
             _device_name = f"{self.device_manufacturer} {self.device_model}"
         elif self.is_hot_water_tank:
@@ -176,18 +172,10 @@ class KebaKeEnergyEntity(
 
     def get_attribute(self, key: str, attr: str) -> str:
         """Get extra attribute from the API by key."""
-        data: list[Value] | Value = self.coordinator.data[self.section_id][key][self.index or 0]  # type: ignore[literal-required]
-
-        if isinstance(data, list):
-            data = data[0]
-
-        return str(data["attributes"][attr])
+        data: list[Value] | Value = self.coordinator.data[self.section_id][key]
+        return str(data[0]["attributes"][attr] if isinstance(data, list) else data["attributes"][attr])
 
     def get_value(self, key: str) -> Any:
         """Get value from the API by key."""
-        data: list[Value] | Value = self.coordinator.data[self.section_id][key][self.index or 0]  # type: ignore[literal-required]
-
-        if isinstance(data, list):
-            data = data[0]
-
-        return data["value"]
+        data: list[Value] | Value = self.coordinator.data[self.section_id][key]
+        return int(data[0]["value"] if isinstance(data, list) else data["value"])

@@ -125,25 +125,17 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
     @property
     def heat_pump_names(self) -> list[Value]:
         """Return heat pump names."""
-        _heat_pump_names: list[Value] | Value = self.data[SectionPrefix.HEAT_PUMP]["name"]
-        return _heat_pump_names if isinstance(_heat_pump_names, list) else [_heat_pump_names]
+        data: list[Value] | Value = self.data[SectionPrefix.HEAT_PUMP]["name"]
+        return data if isinstance(data, list) else [data]
 
     @property
     def heat_circuit_numbers(self) -> int:
         """Return number of heat circuits."""
         data: list[Value] | Value = self.data[SectionPrefix.SYSTEM]["heat_circuit_numbers"]
-
-        if isinstance(data, list):
-            data = data[0]
-
-        return int(data["value"])
+        return int(data[0]["value"] if isinstance(data, list) else data["value"])
 
     @property
     def hot_water_tank_numbers(self) -> int:
         """Return number of hot water tanks."""
         data: list[Value] | Value = self.data[SectionPrefix.SYSTEM]["hot_water_tank_numbers"]
-
-        if isinstance(data, list):
-            data = data[0]
-
-        return int(data["value"])
+        return int(data[0]["value"] if isinstance(data, list) else data["value"])
