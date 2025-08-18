@@ -43,5 +43,17 @@ jobs:
       - name: Install the project
         run: uv sync --locked --all-extras --dev
 
+      - name: Check python files with black
+        run: uv run black --diff --check $(git ls-files '*.py')
+
+      - name: Check python files with mypy
+        run: uv run mypy $(git ls-files '*.py')
+
+      - name: Check python files with ruff
+        run: uv run ruff check $(git ls-files '*.py')
+
+      - name: Check YAML files with yamllint
+        run: uv run yamllint $(git ls-files '*.yml' '*.yaml)
+
       - name: Minimize uv cache
         run: uv cache prune --ci
