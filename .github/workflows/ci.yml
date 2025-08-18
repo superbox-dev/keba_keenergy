@@ -9,10 +9,6 @@ on:
     tags:
       - v*
 
-defaults:
-  run:
-    shell: bash
-
 jobs:
   code-analysis:
     name: Code analysis
