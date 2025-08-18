@@ -5,6 +5,10 @@ on:
   schedule:
     - cron: 30 5 * * *
 
+defaults:
+  run:
+    shell: bash
+
 jobs:
   security:
     name: Audit packages
