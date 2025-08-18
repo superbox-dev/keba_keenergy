@@ -42,4 +42,5 @@ jobs:
         run: uv run yamllint $(git ls-files '*.yml' '*.yaml')
 
   security:
+    name: Security
     uses: ./.github/workflows/security.yml
