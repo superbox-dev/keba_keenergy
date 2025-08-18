@@ -8,16 +8,11 @@ on:
       - main
     tags:
       - v*
-  schedule:
-    - cron: 30 5 * * *
 
 jobs:
   code-analysis:
     name: Code analysis
     runs-on: ubuntu-latest
-
-    env:
-      UV_CACHE_DIR: /tmp/.uv-cache
 
     steps:
       - name: Check out repository
@@ -28,19 +23,8 @@ jobs:
         with:
           python-version-file: pyproject.toml
 
-      - name: Restore uv cache
-        uses: actions/cache@v4
-        with:
-          path: /tmp/.uv-cache
-          key: uv-${{ runner.os }}-${{ hashFiles('uv.lock') }}
-          restore-keys: |
-            uv-${{ runner.os }}-${{ hashFiles('uv.lock') }}
-            uv-${{ runner.os }}
-
       - name: Install uv
         uses: astral-sh/setup-uv@v6
-        with:
-          enable-cache: True
 
       - name: Install the project
         run: uv sync --locked --all-extras --dev
@@ -57,42 +41,5 @@ jobs:
       - name: Lint YAML files with yamllint
         run: uv run yamllint $(git ls-files '*.yml' '*.yaml')
 
-      - name: Minimize uv cache
-        run: uv cache prune --ci
-
   security:
-    name: Audit packages
-    runs-on: ubuntu-latest
-    continue-on-error: True
-
-    steps:
-      - name: Check out repository
-        uses: actions/checkout@v5
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version-file: pyproject.toml
-
-      - name: Restore uv cache
-        uses: actions/cache@v4
-        with:
-          path: /tmp/.uv-cache
-          key: uv-${{ runner.os }}-${{ hashFiles('uv.lock') }}
-          restore-keys: |
-            uv-${{ runner.os }}-${{ hashFiles('uv.lock') }}
-            uv-${{ runner.os }}
-
-      - name: Install uv
-        uses: astral-sh/setup-uv@v6
-        with:
-          enable-cache: True
-
-      - name: Install the project
-        run: uv sync --locked --all-extras --dev
-
-      - name: Audit python packages
-        run: uv run pip-audit
-
-      - name: Minimize uv cache
-        run: uv cache prune --ci
+    uses: ./.github/workflows/security.yml
