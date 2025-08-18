@@ -1,6 +1,7 @@
 name: Security
 
 on:
+  workflow_call:
   schedule:
     - cron: 30 5 * * *
 
