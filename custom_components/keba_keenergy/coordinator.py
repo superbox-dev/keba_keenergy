@@ -3,6 +3,7 @@
 import logging
 from datetime import timedelta
 from typing import Any
+from typing import cast
 
 from aiohttp import ClientError
 from aiohttp import ClientSession
@@ -125,17 +126,16 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
     @property
     def heat_pump_names(self) -> list[Value]:
         """Return heat pump names."""
-        data: list[Value] | Value = self.data[SectionPrefix.HEAT_PUMP]["name"]
-        return data if isinstance(data, list) else [data]
+        return cast("list[Value]", self.data[SectionPrefix.HEAT_PUMP]["name"])
 
     @property
     def heat_circuit_numbers(self) -> int:
         """Return number of heat circuits."""
-        data: list[Value] | Value = self.data[SectionPrefix.SYSTEM]["heat_circuit_numbers"]
-        return int(data[0]["value"] if isinstance(data, list) else data["value"])
+        data: Value = cast("Value", self.data[SectionPrefix.SYSTEM]["heat_circuit_numbers"])
+        return int(data["value"])
 
     @property
     def hot_water_tank_numbers(self) -> int:
         """Return number of hot water tanks."""
-        data: list[Value] | Value = self.data[SectionPrefix.SYSTEM]["hot_water_tank_numbers"]
-        return int(data[0]["value"] if isinstance(data, list) else data["value"])
+        data: Value = cast("Value", self.data[SectionPrefix.SYSTEM]["hot_water_tank_numbers"])
+        return int(data["value"])

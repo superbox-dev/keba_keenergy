@@ -2,6 +2,7 @@
 
 import logging
 from typing import TYPE_CHECKING
+from typing import cast
 
 from homeassistant.components.number import DOMAIN as NUMBER_DOMAIN
 from homeassistant.components.number import NumberDeviceClass
@@ -119,32 +120,20 @@ class KebaKeEnergyNumberEntity(KebaKeEnergyEntity, NumberEntity):
     @property
     def native_min_value(self) -> float:
         """Return the maximum value."""
-        data: list[Value] | Value = self.coordinator.data[self.section_id][self.entity_description.key]
-        return float(
-            (
-                data[self.index or 0]["attributes"]["upper_limit"]
-                if isinstance(data, list)
-                else data["attributes"]["lower_limit"]
-            ),
-        )
+        data: list[Value] = cast("list[Value]", self.coordinator.data[self.section_id][self.entity_description.key])
+        return float(data[self.index or 0]["attributes"]["upper_limit"])
 
     @property
     def native_max_value(self) -> float:
         """Return the maximum value."""
-        data: list[Value] | Value = self.coordinator.data[self.section_id][self.entity_description.key]
-        return float(
-            (
-                data[self.index or 0]["attributes"]["upper_limit"]
-                if isinstance(data, list)
-                else data["attributes"]["upper_limit"]
-            ),
-        )
+        data: list[Value] = cast("list[Value]", self.coordinator.data[self.section_id][self.entity_description.key])
+        return float(data[self.index or 0]["attributes"]["upper_limit"])
 
     @property
     def native_value(self) -> float:
         """Return the state of the number."""
-        data: list[Value] | Value = self.coordinator.data[self.section_id][self.entity_description.key]
-        return float(data[self.index or 0]["value"] if isinstance(data, list) else data["value"])
+        data: list[Value] = cast("list[Value]", self.coordinator.data[self.section_id][self.entity_description.key])
+        return float(data[self.index or 0]["value"])
 
     async def async_set_native_value(self, value: float) -> None:
         """Set new value."""
