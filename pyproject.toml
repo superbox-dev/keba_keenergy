@@ -41,7 +41,7 @@ classifiers = [
 ]
 requires-python = ">= 3.13.2"
 dependencies = [
-    "keba_keenergy_api==1.*",
+    "keba_keenergy_api>=1.12.10",
     "homeassistant>=2025.8.2",
 ]
 version = "1.0.0"
@@ -62,6 +62,7 @@ lint = [
     "black>=25.1.0",
     "mypy>=1.17.1",
     "ruff>=0.12.9",
+    "rumdl>=0.0.120",
     "types-PyYAML>=6.0.12.20250809",
     "yamllint>=1.37.1",
 ]
@@ -77,10 +78,6 @@ line-length = 120
 strict = true
 junit_xml = "reports/mypy.xml"
 
-[[tool.mypy.overrides]]
-module = "keba_keenergy_api.*"
-follow_untyped_imports = true
-
 [tool.ruff]
 line-length = 120
 
@@ -93,3 +90,13 @@ ignore = [
     "I001",    # unsorted-imports
     "TRY003",  # raise-vanilla-args
 ]
+
+[tool.rumdl]
+line-length = 120
+disable = [
+    "MD052",   # Fix broken reference links and images
+]
+respect-gitignore = true
+
+[tool.rumdl.MD024]
+siblings_only = true

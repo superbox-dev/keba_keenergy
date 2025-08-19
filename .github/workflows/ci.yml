@@ -17,25 +17,21 @@ jobs:
   code-analysis:
     name: Code analysis
     runs-on: ubuntu-latest
-
     steps:
       - name: Check out repository
         uses: actions/checkout@v5
-
       - name: Set up project
         uses: ./.github/actions/setup-project
-
       - name: Lint python files with black
         run: uv run black --diff --check $(git ls-files '*.py')
-
       - name: Lint python files with mypy
         run: uv run mypy $(git ls-files '*.py')
-
       - name: Lint python files with ruff
         run: uv run ruff check $(git ls-files '*.py')
-
-      - name: Lint YAML files with yamllint
+      - name: Lint YAML files
         run: uv run yamllint $(git ls-files '*.yml' '*.yaml')
+      - name: Lint Markdown files
+        run: uv run rumdl check $(git ls-files '*.md')
 
   security:
     name: Security
