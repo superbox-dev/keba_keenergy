@@ -1,7 +1,6 @@
 extends: default
 
-ignore: |
-  .venv/
+ignore-from-file: .gitignore
 
 rules:
   document-start: disable
