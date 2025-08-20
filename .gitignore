@@ -7,11 +7,11 @@
 *.pyc
 
 # virtualenv
-.venv
+.venv/
 
 # checks
-.ruff_cache
-.mypy_cache
+.ruff_cache/
+.mypy_cache/
 
 # reports
 reports/
