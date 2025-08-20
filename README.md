@@ -1,5 +1,11 @@
 # KEBA KeEnergy integration
 
+[![CI](https://github.com/superbox-dev/keba_keenergy/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/superbox-dev/keba_keenergy_api/actions/workflows/ci.yml)
+
+![Typing: strict](https://img.shields.io/badge/typing-strict-green.svg)
+![Code style: black](https://img.shields.io/badge/code%20style-black-black)
+![Code style: Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/charliermarsh/ruff/main/assets/badge/v1.json)
+
 A Home Assistant integration for heaters with a KEBA KeEnergy control system.
 
 This integration supports the following manufacturers and devices:
