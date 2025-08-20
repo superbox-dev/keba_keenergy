@@ -11,6 +11,28 @@ This integration supports the following manufacturers and devices:
  
 *1) KEBA AP 440/H-A controller has no activated Web GUI
 
+## Screenshots
+
+### Climate card
+
+![Inverter Sensors](images/climate_card.png)
+
+### KEBA AP 440/H-A controller sensors
+
+![Inverter Sensors](images/keba_cpntroller.png)
+
+### Heat circuit controls and sensors
+
+![Inverter Sensors](images/heat_circuit.png)
+
+### Heat pump sensors
+
+![Inverter Sensors](images/heat_pump.png)
+
+### Hot water tank controls and sensors
+
+![Inverter Sensors](images/hot_water_tank.png)
+
 ## Changelog
 
 The changelog lives in the [CHANGELOG.md](CHANGELOG.md) document. The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
