@@ -8,7 +8,7 @@ This integration supports the following manufacturers and devices:
 |--------------------------------------------------------|-----------|----------------|
 | [M-TEC Energie.Innovativ GmbH](https://m-tec.at/)      | ✅        | WPS26          |
 | [ÖkoFEN](https://www.oekofen.com/) *1)                 | ❌        |                |
- 
+
 *1) KEBA AP 440/H-A controller has no activated Web GUI
 
 ## Table of Contents
@@ -45,11 +45,11 @@ This integration supports the following manufacturers and devices:
 
 1. Install this integration with HACS, or copy the contents of this repository into the
    `custom_components/keba_keenery` directory.
-3. Restart Home Assistant.
-4. Start the configuration flow: go to `Configuration` -> `Integrations`, click the `+ Add Integration` and select
+2. Restart Home Assistant.
+3. Start the configuration flow: go to `Configuration` -> `Integrations`, click the `+ Add Integration` and select
    `KEBA KeEnergy` from the list.
-5. Add IP address or hostname of your KEBA KeEnergy device.
-6. Enjoy :-)
+4. Add IP address or hostname of your KEBA KeEnergy device.
+5. Enjoy :-)
 
 ## Changelog
 
