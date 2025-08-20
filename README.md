@@ -49,7 +49,7 @@ This integration supports the following manufacturers and devices:
 ## Installation
 
 1. Install this integration with HACS, or copy the contents of this repository into the
-   `custom_components/keba_keenery` directory.
+   `custom_components/keba_keenergy` directory.
 2. Restart Home Assistant.
 3. Start the configuration flow: go to `Configuration` -> `Integrations`, click the `+ Add Integration` and select
    `KEBA KeEnergy` from the list.
