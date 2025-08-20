@@ -70,4 +70,3 @@ You can get started by reading the [CONTRIBUTING.md](CONTRIBUTING.md).
 We put a lot of time into this project. If you like it, you can support us with a donation.
 
 [![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/F2F0KXO6D)
-✓
