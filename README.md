@@ -2,6 +2,15 @@
 
 A Home Assistant integration for heaters with a KEBA KeEnergy control system.
 
+This integration supports the following manufacturers and devices:
+
+| Manufacturer                                      | Device                                      |
+|---------------------------------------------------|---------------------------------------------|
+| [M-TEC Energie.Innovativ GmbH](https://m-tec.at/) | WPS26 (Maybe other devices but not tested!) |
+
+> At the moment, I can only confirm my own heat pump, but all heat pumps with a KEBA AP 440/H-A controller with 
+> activated Web GUI should work. Try out your heat pump and let me know if it works.
+
 ## Changelog
 
 The changelog lives in the [CHANGELOG.md](CHANGELOG.md) document. The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
