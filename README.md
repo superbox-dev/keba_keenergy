@@ -9,10 +9,10 @@ A Home Assistant integration for heaters with a KEBA KeEnergy control system.
 
 This integration supports the following manufacturers and devices:
 
-| Manufacturer                                           | Supported | Tested devices |
-|--------------------------------------------------------|-----------|----------------|
-| [M-TEC Energie.Innovativ GmbH](https://m-tec.at/)      | ✅        | WPS26          |
-| [ÖkoFEN](https://www.oekofen.com/) *1)                 | ❌        |                |
+| Manufacturer                           | Supported | Tested devices |
+|----------------------------------------|-----------|----------------|
+| [M-TEC](https://m-tec.at/)             | ✅        | WPS26          |
+| [ÖkoFEN](https://www.oekofen.com/) *1) | ❌        |                |
 
 *1) KEBA AP 440/H-A controller has no activated Web GUI
 
