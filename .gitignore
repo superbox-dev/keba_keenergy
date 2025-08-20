@@ -15,3 +15,7 @@
 
 # reports
 reports/
+
+# Home Assistant configuration
+config/*
+!config/configuration.yaml

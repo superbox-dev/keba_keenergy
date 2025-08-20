@@ -15,24 +15,10 @@ Pull requests are the best way to propose changes to the codebase.
 
 1. Fork the repo and create your branch from `main`
 2. If you've changed something, update the documentation.
-3. Make sure your code lints.
-4. Test you contribution.
-5. Issue that pull request!
-
-### Create a virtual environment
-
-```bash
-uv sync --locked --all-extras --dev
-```
-
-### Lint your code
-
-```bash
-uv run ruff check .
-uv run mypy .
-uv run yamllint .
-uv run rumdl check .
-```
+3. Set up the project with `./scripts/setup.sh`.
+4. Make sure your code lints with `./scripts/lint.sh`.
+5. Test you contribution.
+6. Issue that pull request!
 
 ## Report bugs using Github's [issues](../../issues)
 
@@ -56,10 +42,6 @@ People *love* thorough bug reports. I'm not even kidding.
 ## Use a Consistent Coding Style
 
 Use [black](https://github.com/ambv/black) to make sure the code follows the style.
-
-```bash
-uv run black .
-```
 
 ## Test your code modification
 
