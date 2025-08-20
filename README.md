@@ -11,6 +11,14 @@ This integration supports the following manufacturers and devices:
  
 *1) KEBA AP 440/H-A controller has no activated Web GUI
 
+## Table of Contents
+
+- [Screenshots](#screenshots)
+- [Installation](#installation)
+- [Changelog](#changelog)
+- [Contributing](#contributing)
+- [Donation](#donation)
+
 ## Screenshots
 
 ### Climate card
@@ -32,6 +40,16 @@ This integration supports the following manufacturers and devices:
 ### Hot water tank controls and sensors
 
 ![Inverter Sensors](images/hot_water_tank.png)
+
+## Installation
+
+1. Install this integration with HACS, or copy the contents of this repository into the
+   `custom_components/keba_keenery` directory.
+3. Restart Home Assistant.
+4. Start the configuration flow: go to `Configuration` -> `Integrations`, click the `+ Add Integration` and select
+   `KEBA KeEnergy` from the list.
+5. Add IP address or hostname of your KEBA KeEnergy device.
+6. Enjoy :-)
 
 ## Changelog
 
