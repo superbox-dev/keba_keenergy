@@ -4,12 +4,12 @@ A Home Assistant integration for heaters with a KEBA KeEnergy control system.
 
 This integration supports the following manufacturers and devices:
 
-| Manufacturer                                      | Device                                      |
-|---------------------------------------------------|---------------------------------------------|
-| [M-TEC Energie.Innovativ GmbH](https://m-tec.at/) | WPS26 (Maybe other devices but not tested!) |
-
-> At the moment, I can only confirm my own heat pump, but all heat pumps with a KEBA AP 440/H-A controller with 
-> activated Web GUI should work. Try out your heat pump and let me know if it works.
+| Manufacturer                                           | Supported | Tested devices |
+|--------------------------------------------------------|-----------|----------------|
+| [M-TEC Energie.Innovativ GmbH](https://m-tec.at/)      | ✅        | WPS26          |
+| [ÖkoFEN](https://www.oekofen.com/) *1)                 | ❌        | WPS26          |
+ 
+*1) KEBA AP 440/H-A controller has no activated Web GUI
 
 ## Changelog
 
@@ -18,7 +18,6 @@ The changelog lives in the [CHANGELOG.md](CHANGELOG.md) document. The format is 
 ## Contributing
 
 We're happy about your contributions to the project!
-
 You can get started by reading the [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## Donation
@@ -26,3 +25,4 @@ You can get started by reading the [CONTRIBUTING.md](CONTRIBUTING.md).
 We put a lot of time into this project. If you like it, you can support us with a donation.
 
 [![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/F2F0KXO6D)
+✓
