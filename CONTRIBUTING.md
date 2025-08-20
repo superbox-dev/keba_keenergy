@@ -7,20 +7,19 @@ Contributing to this project should be as easy and transparent as possible, whet
 - Submitting a fix
 - Proposing new features
 
-## Github is used for everything
+## GitHub is used for everything
 
-Github is used to host code, to track issues and feature requests, as well as accept pull requests.
+GitHub is used to host code, to track issues and feature requests, as well as accept pull requests.
 
 Pull requests are the best way to propose changes to the codebase.
 
 1. Fork the repo and create your branch from `main`
 2. If you've changed something, update the documentation.
-3. Set up the project with `./scripts/setup.sh`.
-4. Make sure your code lints with `./scripts/lint.sh`.
-5. Test you contribution.
-6. Issue that pull request!
+3. Make sure your code lints with `./scripts/lint.sh`.
+4. Test you contribution.
+5. Issue that pull request!
 
-## Report bugs using Github's [issues](../../issues)
+## Report bugs using GitHub's [issues](../../issues)
 
 GitHub issues are used to track public bugs.
 Report a bug by [opening a new issue](../../issues/new/choose); it's that easy!
@@ -42,6 +41,12 @@ People *love* thorough bug reports. I'm not even kidding.
 ## Use a Consistent Coding Style
 
 Use [black](https://github.com/ambv/black) to make sure the code follows the style.
+
+## Run development server
+
+1. Set up the project with `./scripts/setup.sh`.
+2. Run `./scripts/develop.sh`.
+3. Open <http://127.0.0.1:8123> in your browser.
 
 ## Test your code modification
 
