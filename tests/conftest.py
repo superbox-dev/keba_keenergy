@@ -2,16 +2,18 @@ import json
 from typing import Any
 
 import pytest
+from pytest_homeassistant_custom_component.common import MockConfigEntry
 from pytest_homeassistant_custom_component.syrupy import HomeAssistantSnapshotExtension
 from pytest_homeassistant_custom_component.test_util.aiohttp import AiohttpClientMockResponse
 from pytest_homeassistant_custom_component.test_util.aiohttp import AiohttpClientMocker
 from syrupy.assertion import SnapshotAssertion
 from yarl import URL
 
-from tests.api_data import data_response
-from tests.api_data import device_info_response
-from tests.api_data import positions_response
-from tests.api_data import system_response
+from custom_components.keba_keenergy.const import DOMAIN
+from tests.api_data import DATA_RESPONSE
+from tests.api_data import DEVICE_INFO_RESPONSE
+from tests.api_data import POSITIONS_RESPONSE
+from tests.api_data import SYSTEM_RESPONSE
 
 
 @pytest.fixture
@@ -28,23 +30,23 @@ def auto_enable_custom_integrations(enable_custom_integrations: None) -> None:  
 class FakeKebaKeEnergyAPI:
     def __init__(self, aioclient_mock: AiohttpClientMocker) -> None:
         self._aioclient_mock: AiohttpClientMocker = aioclient_mock
-        self._responses: list[list[dict[str, Any]]] = [positions_response, data_response]
+        self._responses: list[list[dict[str, Any]]] = [POSITIONS_RESPONSE, DATA_RESPONSE]
 
-    def register_requests(self) -> None:
+    def register_requests(self, host: str, /) -> None:
         self._aioclient_mock.post(
-            "http://ap4400.local/deviceControl?action=getDeviceInfo",
-            text=json.dumps(device_info_response),
+            f"http://{host}/deviceControl?action=getDeviceInfo",
+            text=json.dumps(DEVICE_INFO_RESPONSE),
             headers={"Content-Type": "application/json;charset=utf-8"},
         )
 
         self._aioclient_mock.post(
-            "http://ap4400.local/swupdate?action=getSystemInstalled",
-            text=json.dumps(system_response),
+            f"http://{host}/swupdate?action=getSystemInstalled",
+            text=json.dumps(SYSTEM_RESPONSE),
             headers={"Content-Type": "application/json;charset=utf-8"},
         )
 
         self._aioclient_mock.post(
-            "http://ap4400.local/var/readWriteVars",
+            f"http://{host}/var/readWriteVars",
             side_effect=self.request,
         )
 
@@ -64,3 +66,11 @@ async def fake_api(
     aioclient_mock: AiohttpClientMocker,
 ) -> FakeKebaKeEnergyAPI:
     return FakeKebaKeEnergyAPI(aioclient_mock)
+
+
+@pytest.fixture
+def config_entry() -> MockConfigEntry:
+    return MockConfigEntry(
+        domain=DOMAIN,
+        unique_id="12345678",
+    )
