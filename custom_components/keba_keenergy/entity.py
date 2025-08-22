@@ -179,4 +179,4 @@ class KebaKeEnergyEntity(
     def get_value(self, key: str) -> Any:
         """Get value from the API by key."""
         data: list[Value] = cast("list[Value]", self.coordinator.data[self.section_id][key])
-        return int(data[self.index or 0]["value"])
+        return data[self.index or 0]["value"]
