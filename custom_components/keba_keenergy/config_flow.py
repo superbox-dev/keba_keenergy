@@ -90,7 +90,7 @@ class KebaKeEnergyConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             try:
                 self._serial_number = await validate_input(self.hass, host=self._host, ssl=self._ssl)
             except CannotConnectError:
-                _LOGGER.debug("Keba KeEnergy Error", exc_info=True)
+                _LOGGER.debug("Can't connect to KEBA KeEnergy API", exc_info=True)
                 errors["base"] = "cannot_connect"
             except Exception:  # noqa: BLE001
                 _LOGGER.debug("Unknown error trying to connect")
@@ -128,7 +128,7 @@ class KebaKeEnergyConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                 await validate_input(self.hass, host=self._host, ssl=self._ssl)
                 return self._async_get_entry()
             except CannotConnectError:
-                _LOGGER.debug("Keba KeEnergy Error", exc_info=True)
+                _LOGGER.debug("Can't connect to KEBA KeEnergy API", exc_info=True)
                 return self.async_abort(reason="cannot_connect")
 
         return self.async_show_form(
