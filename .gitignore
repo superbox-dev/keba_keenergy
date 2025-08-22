@@ -15,6 +15,11 @@
 
 # reports
 reports/
+.coverage
+
+# build package
+*.egg-info
+dist/
 
 # Home Assistant configuration
 config/*
