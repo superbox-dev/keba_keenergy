@@ -1,6 +1,6 @@
 from typing import Any
 
-device_info_response: dict[str, Any] = {
+DEVICE_INFO_RESPONSE: dict[str, Any] = {
     "ret": "OK",
     "revNo": 2,
     "orderNo": 000000,
@@ -9,13 +9,13 @@ device_info_response: dict[str, Any] = {
     "variantNo": 0,
 }
 
-system_response: dict[str, str] = {
+SYSTEM_RESPONSE: dict[str, str] = {
     "ret": "OK",
     "name": "KeEnergy.MTec",
     "version": "2.2.2",
 }
 
-positions_response: list[dict[str, Any]] = [
+POSITIONS_RESPONSE: list[dict[str, Any]] = [
     {
         "name": "APPL.CtrlAppl.sParam.options.systemNumberOfHeatPumps",
         "attributes": {
@@ -54,7 +54,7 @@ positions_response: list[dict[str, Any]] = [
     },
 ]
 
-data_response: list[dict[str, Any]] = [
+DATA_RESPONSE: list[dict[str, Any]] = [
     {
         "name": "APPL.CtrlAppl.sParam.heatCircuit[0].param.normalSetTemp",
         "attributes": {
