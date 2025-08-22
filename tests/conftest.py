@@ -2,6 +2,9 @@ import json
 from typing import Any
 
 import pytest
+from _pytest.fixtures import SubRequest
+from homeassistant.const import CONF_HOST
+from homeassistant.const import CONF_SSL
 from pytest_homeassistant_custom_component.common import MockConfigEntry
 from pytest_homeassistant_custom_component.syrupy import HomeAssistantSnapshotExtension
 from pytest_homeassistant_custom_component.test_util.aiohttp import AiohttpClientMockResponse
@@ -69,8 +72,20 @@ async def fake_api(
 
 
 @pytest.fixture
-def config_entry() -> MockConfigEntry:
+def config_entry(request: SubRequest) -> MockConfigEntry:
+    mock_config_entry_data: dict[str, Any] = {
+        "title": "KEBA KeEnergy (ap4400.local)",
+        "data": {
+            CONF_HOST: "10.0.0.100",
+            CONF_SSL: False,
+        },
+        "unique_id": "12345678",
+    }
+
+    if hasattr(request, "param"):
+        mock_config_entry_data.update(request.param)
+
     return MockConfigEntry(
         domain=DOMAIN,
-        unique_id="12345678",
+        **mock_config_entry_data,
     )
