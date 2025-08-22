@@ -868,6 +868,26 @@ wheels = [
 ]
 
 [[package]]
+name = "genbadge"
+version = "1.1.2"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "click" },
+    { name = "pillow" },
+    { name = "requests" },
+    { name = "setuptools" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/e8/2b/75c50383f951f36334635715819f89d1b4dae1de0ff7d510970bbf137994/genbadge-1.1.2.tar.gz", hash = "sha256:987ed2feaf6e9cc2850fc3883320d8706b3849eb6c9f436156254dcac438515c", size = 137188, upload-time = "2025-03-27T09:59:04.956Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/43/5e/91f2340d7a51ce0b7a59e5caa1cccd61131d8d5163cc02f3563c819cb49c/genbadge-1.1.2-py2.py3-none-any.whl", hash = "sha256:4e3073cb56c2745fbef4b7da97eb85b28a18a22af519b66acb6706b6546279f1", size = 100945, upload-time = "2025-03-27T09:59:03.965Z" },
+]
+
+[package.optional-dependencies]
+coverage = [
+    { name = "defusedxml" },
+]
+
+[[package]]
 name = "go2rtc-client"
 version = "0.2.1"
 source = { registry = "https://pypi.org/simple" }
@@ -1162,6 +1182,8 @@ audit = [
 ]
 dev = [
     { name = "black" },
+    { name = "coverage" },
+    { name = "genbadge", extra = ["coverage"] },
     { name = "mypy" },
     { name = "pip-audit" },
     { name = "pytest" },
@@ -1180,6 +1202,8 @@ lint = [
     { name = "yamllint" },
 ]
 test = [
+    { name = "coverage" },
+    { name = "genbadge", extra = ["coverage"] },
     { name = "pytest" },
     { name = "pytest-homeassistant-custom-component" },
 ]
@@ -1194,6 +1218,8 @@ requires-dist = [
 audit = [{ name = "pip-audit", specifier = ">=2.9.0" }]
 dev = [
     { name = "black", specifier = ">=25.1.0" },
+    { name = "coverage", specifier = ">=7.10.0" },
+    { name = "genbadge", extras = ["coverage"], specifier = ">=1.1.2" },
     { name = "mypy", specifier = ">=1.17.1" },
     { name = "pip-audit", specifier = ">=2.9.0" },
     { name = "pytest", specifier = ">=8.4.1" },
@@ -1212,6 +1238,8 @@ lint = [
     { name = "yamllint", specifier = ">=1.37.1" },
 ]
 test = [
+    { name = "coverage", specifier = ">=7.10.0" },
+    { name = "genbadge", extras = ["coverage"], specifier = ">=1.1.2" },
     { name = "pytest", specifier = ">=8.4.1" },
     { name = "pytest-homeassistant-custom-component", specifier = ">=0.13.272" },
 ]
@@ -2366,6 +2394,15 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/20/61/51918209769d7373c9bcaecac6222fb494b1d1f272e818e515e5129ef89c/sentence_stream-1.1.0.tar.gz", hash = "sha256:a512604a9f43d4132e29ad04664e8b1778f4a20265799ac86e8d62d181009483", size = 9262, upload-time = "2025-07-24T15:37:37.831Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/72/c8/8e39ad90b52372ed3bd1254450ef69f55f7920a838f906e29a414ffcf4b2/sentence_stream-1.1.0-py3-none-any.whl", hash = "sha256:3fceb47673ff16f5e301d7d0935db18413f8f1143ba4aea7ea2d9f808c5f1436", size = 7989, upload-time = "2025-07-24T15:37:36.606Z" },
+]
+
+[[package]]
+name = "setuptools"
+version = "80.9.0"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/18/5d/3bf57dcd21979b887f014ea83c24ae194cfcd12b9e0fda66b957c69d1fca/setuptools-80.9.0.tar.gz", hash = "sha256:f36b47402ecde768dbfafc46e8e4207b4360c654f1f3bb84475f0a28628fb19c", size = 1319958, upload-time = "2025-05-27T00:56:51.443Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/a3/dc/17031897dae0efacfea57dfd3a82fdd2a2aeb58e0ff71b77b87e44edc772/setuptools-80.9.0-py3-none-any.whl", hash = "sha256:062d34222ad13e0cc312a4c02d73f059e86a4acbfbdea8f8f76b28c99f306922", size = 1201486, upload-time = "2025-05-27T00:56:49.664Z" },
 ]
 
 [[package]]
