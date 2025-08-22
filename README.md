@@ -1,5 +1,8 @@
 # KEBA KeEnergy integration
 
+![coverage-badge](https://raw.githubusercontent.com/superbox-dev/keba_keenergy/main/coverage-badge.svg)
+[![CI](https://github.com/superbox-dev/KEBA-KeEnergy-API/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/superbox-dev/keba_keenergy/actions/workflows/ci.yml)
+
 [![CI](https://github.com/superbox-dev/keba_keenergy/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/superbox-dev/keba_keenergy_api/actions/workflows/ci.yml)
 ![Typing: strict](https://img.shields.io/badge/typing-strict-green.svg)
 ![Code style: black](https://img.shields.io/badge/code%20style-black-black)
