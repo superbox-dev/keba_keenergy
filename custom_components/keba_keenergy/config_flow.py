@@ -6,7 +6,7 @@ from typing import Any
 import aiohttp
 import voluptuous as vol
 from aiohttp import ClientError
-from homeassistant import config_entries
+from homeassistant.config_entries import ConfigFlow
 from homeassistant.config_entries import ConfigFlowResult
 from homeassistant.const import CONF_HOST
 from homeassistant.const import CONF_SSL
@@ -49,7 +49,7 @@ async def validate_input(hass: HomeAssistant, /, *, host: str, ssl: bool) -> str
     return str(response["serNo"])
 
 
-class KebaKeEnergyConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
+class KebaKeEnergyConfigFlow(ConfigFlow, domain=DOMAIN):
     """Config flow for KEBA KeEnergy."""
 
     VERSION: int = CONFIG_ENTRY_VERSION
