@@ -36,7 +36,7 @@ async def test_binary_sensors(
     assert hot_water_tank_heat_request_2.attributes[ATTR_FRIENDLY_NAME] == "Hot Water Tank (2) Heat request"
 
     heat_pump_heat_request: State | None = hass.states.get(
-        "binary_sensor.keba_keenergy_12345678_heat_pump_heat_request"
+        "binary_sensor.keba_keenergy_12345678_heat_pump_heat_request",
     )
     assert isinstance(heat_pump_heat_request, State)
     assert heat_pump_heat_request.state == STATE_OFF

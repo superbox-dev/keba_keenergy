@@ -104,6 +104,8 @@ ignore = [
 [tool.ruff.lint.per-file-ignores]
 "tests/*" = [
     "D",
+    "PLR0915", # too-many-statements
+    "PLR2004", # magic-value-comparison
     "S101",    # assert
 ]
 

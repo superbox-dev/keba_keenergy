@@ -38,7 +38,7 @@ async def test_sensors(
     assert outdoor_temperature.attributes[ATTR_FRIENDLY_NAME] == "KEBA KeEnergy Outdoor temperature"
 
     hot_water_tank_temperature_1: State | None = hass.states.get(
-        "sensor.keba_keenergy_12345678_hot_water_tank_temperature_1"
+        "sensor.keba_keenergy_12345678_hot_water_tank_temperature_1",
     )
     assert isinstance(hot_water_tank_temperature_1, State)
     assert hot_water_tank_temperature_1.attributes[CONF_UNIT_OF_MEASUREMENT] == UnitOfTemperature.CELSIUS
@@ -55,7 +55,7 @@ async def test_sensors(
     assert hot_water_tank_operating_mode_1.attributes[ATTR_FRIENDLY_NAME] == "Hot Water Tank (1) Operating mode"
 
     hot_water_tank_min_temperature_1: State | None = hass.states.get(
-        "sensor.keba_keenergy_12345678_hot_water_tank_min_temperature_1"
+        "sensor.keba_keenergy_12345678_hot_water_tank_min_temperature_1",
     )
     assert isinstance(hot_water_tank_min_temperature_1, State)
     assert hot_water_tank_min_temperature_1.attributes[CONF_UNIT_OF_MEASUREMENT] == UnitOfTemperature.CELSIUS
@@ -86,7 +86,7 @@ async def test_sensors(
     assert heat_pump_state.attributes[ATTR_FRIENDLY_NAME] == "M-TEC WPS26 State"
 
     heat_pump_circulation_pump: State | None = hass.states.get(
-        "sensor.keba_keenergy_12345678_heat_pump_circulation_pump"
+        "sensor.keba_keenergy_12345678_heat_pump_circulation_pump",
     )
     assert isinstance(heat_pump_circulation_pump, State)
     assert heat_pump_circulation_pump.attributes[CONF_UNIT_OF_MEASUREMENT] == PERCENTAGE
@@ -94,7 +94,7 @@ async def test_sensors(
     assert heat_pump_circulation_pump.attributes[ATTR_FRIENDLY_NAME] == "M-TEC WPS26 Circulation pump"
 
     heat_pump_inflow_temperature: State | None = hass.states.get(
-        "sensor.keba_keenergy_12345678_heat_pump_inflow_temperature"
+        "sensor.keba_keenergy_12345678_heat_pump_inflow_temperature",
     )
     assert isinstance(heat_pump_inflow_temperature, State)
     assert heat_pump_inflow_temperature.attributes[CONF_UNIT_OF_MEASUREMENT] == UnitOfTemperature.CELSIUS
@@ -103,7 +103,7 @@ async def test_sensors(
     assert heat_pump_inflow_temperature.attributes[ATTR_FRIENDLY_NAME] == "M-TEC WPS26 Inflow temperature"
 
     heat_pump_reflux_temperature: State | None = hass.states.get(
-        "sensor.keba_keenergy_12345678_heat_pump_reflux_temperature"
+        "sensor.keba_keenergy_12345678_heat_pump_reflux_temperature",
     )
     assert isinstance(heat_pump_reflux_temperature, State)
     assert heat_pump_reflux_temperature.attributes[CONF_UNIT_OF_MEASUREMENT] == UnitOfTemperature.CELSIUS
@@ -174,7 +174,7 @@ async def test_sensors(
     assert heat_pump_low_pressure.attributes[ATTR_FRIENDLY_NAME] == "M-TEC WPS26 Low pressure"
 
     heat_circuit_temperature_1: State | None = hass.states.get(
-        "sensor.keba_keenergy_12345678_heat_circuit_temperature_1"
+        "sensor.keba_keenergy_12345678_heat_circuit_temperature_1",
     )
     assert isinstance(heat_circuit_temperature_1, State)
     assert heat_circuit_temperature_1.attributes[CONF_UNIT_OF_MEASUREMENT] == UnitOfTemperature.CELSIUS
@@ -250,7 +250,7 @@ async def test_sensors(
     assert heat_circuit_operating_mode_1.attributes[ATTR_FRIENDLY_NAME] == "FBH1 (1) Operating mode"
 
     heat_circuit_heat_request_1: State | None = hass.states.get(
-        "sensor.keba_keenergy_12345678_heat_circuit_heat_request_1"
+        "sensor.keba_keenergy_12345678_heat_circuit_heat_request_1",
     )
     assert isinstance(heat_circuit_heat_request_1, State)
     assert heat_circuit_heat_request_1.attributes[CONF_DEVICE_CLASS] == SensorDeviceClass.ENUM
