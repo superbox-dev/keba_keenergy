@@ -38,7 +38,7 @@ POSITIONS_RESPONSE: list[dict[str, Any]] = [
             "dynLowerLimit": 1,
             "dynUpperLimit": 1,
         },
-        "value": "1",
+        "value": "2",
     },
     {
         "name": "APPL.CtrlAppl.sParam.options.systemNumberOfHotWaterTanks",
@@ -50,13 +50,24 @@ POSITIONS_RESPONSE: list[dict[str, Any]] = [
             "dynLowerLimit": 1,
             "dynUpperLimit": 1,
         },
-        "value": "1",
+        "value": "2",
     },
 ]
 
 DATA_RESPONSE: list[dict[str, Any]] = [
     {
         "name": "APPL.CtrlAppl.sParam.heatCircuit[0].param.normalSetTemp",
+        "attributes": {
+            "formatId": "fmtTemp",
+            "longText": "Room temp. Day",
+            "unitId": "Temp",
+            "upperLimit": "30",
+            "lowerLimit": "10",
+        },
+        "value": "20.5",
+    },
+    {
+        "name": "APPL.CtrlAppl.sParam.heatCircuit[1].param.normalSetTemp",
         "attributes": {
             "formatId": "fmtTemp",
             "longText": "Room temp. Day",
@@ -78,7 +89,29 @@ DATA_RESPONSE: list[dict[str, Any]] = [
         "value": "20",
     },
     {
+        "name": "APPL.CtrlAppl.sParam.heatCircuit[1].param.thresholdDayTemp.value",
+        "attributes": {
+            "formatId": "fmtTemp",
+            "longText": "Heating limit Day",
+            "unitId": "Temp",
+            "upperLimit": "100",
+            "lowerLimit": "-20",
+        },
+        "value": "20",
+    },
+    {
         "name": "APPL.CtrlAppl.sParam.heatCircuit[0].values.heatRequest",
+        "attributes": {
+            "formatId": "fmtReqInfo",
+            "longText": "Heat request",
+            "unitId": "Enum",
+            "upperLimit": "6",
+            "lowerLimit": "0",
+        },
+        "value": "0",
+    },
+    {
+        "name": "APPL.CtrlAppl.sParam.heatCircuit[1].values.heatRequest",
         "attributes": {
             "formatId": "fmtReqInfo",
             "longText": "Heat request",
@@ -100,12 +133,39 @@ DATA_RESPONSE: list[dict[str, Any]] = [
         "value": "18",
     },
     {
+        "name": "APPL.CtrlAppl.sParam.heatCircuit[1].param.holidaySetTemp",
+        "attributes": {
+            "formatId": "fmtTemp",
+            "longText": "Room temp. Vacation",
+            "unitId": "Temp",
+            "upperLimit": "30",
+            "lowerLimit": "10",
+        },
+        "value": "18",
+    },
+    {
         "name": "APPL.CtrlAppl.sParam.heatCircuit[0].param.name",
         "attributes": {"longText": "Designation"},
-        "value": "FBH",
+        "value": "FBH1",
+    },
+    {
+        "name": "APPL.CtrlAppl.sParam.heatCircuit[1].param.name",
+        "attributes": {"longText": "Designation"},
+        "value": "FBH2",
     },
     {
         "name": "APPL.CtrlAppl.sParam.heatCircuit[0].param.reducedSetTemp",
+        "attributes": {
+            "formatId": "fmtTemp",
+            "longText": "Room temp. night",
+            "unitId": "Temp",
+            "upperLimit": "30",
+            "lowerLimit": "10",
+        },
+        "value": "20",
+    },
+    {
+        "name": "APPL.CtrlAppl.sParam.heatCircuit[1].param.reducedSetTemp",
         "attributes": {
             "formatId": "fmtTemp",
             "longText": "Room temp. night",
@@ -127,7 +187,29 @@ DATA_RESPONSE: list[dict[str, Any]] = [
         "value": "18",
     },
     {
+        "name": "APPL.CtrlAppl.sParam.heatCircuit[1].param.thresholdNightTemp.value",
+        "attributes": {
+            "formatId": "fmtTemp",
+            "longText": "Heat limit Night",
+            "unitId": "Temp",
+            "upperLimit": "100",
+            "lowerLimit": "-20",
+        },
+        "value": "18",
+    },
+    {
         "name": "APPL.CtrlAppl.sParam.heatCircuit[0].param.operatingMode",
+        "attributes": {
+            "formatId": "fmtHcMode",
+            "longText": "Operating mode",
+            "unitId": "Enum",
+            "upperLimit": "32767",
+            "lowerLimit": "0",
+        },
+        "value": "0",
+    },
+    {
+        "name": "APPL.CtrlAppl.sParam.heatCircuit[1].param.operatingMode",
         "attributes": {
             "formatId": "fmtHcMode",
             "longText": "Operating mode",
@@ -149,7 +231,29 @@ DATA_RESPONSE: list[dict[str, Any]] = [
         "value": "20.5",
     },
     {
+        "name": "APPL.CtrlAppl.sParam.heatCircuit[1].values.setValue",
+        "attributes": {
+            "formatId": "fmtTemp",
+            "longText": "Room temp. Nom.",
+            "unitId": "Temp",
+            "upperLimit": "90",
+            "lowerLimit": "10",
+        },
+        "value": "20.5",
+    },
+    {
         "name": "APPL.CtrlAppl.sParam.heatCircuit[0].param.offsetRoomTemp",
+        "attributes": {
+            "formatId": "fmtTemp",
+            "longText": "Room temp. Offset",
+            "unitId": "TempRel",
+            "upperLimit": "2.5",
+            "lowerLimit": "-2.5",
+        },
+        "value": "0",
+    },
+    {
+        "name": "APPL.CtrlAppl.sParam.heatCircuit[1].param.offsetRoomTemp",
         "attributes": {
             "formatId": "fmtTemp",
             "longText": "Room temp. Offset",
@@ -248,7 +352,24 @@ DATA_RESPONSE: list[dict[str, Any]] = [
         "value": "false",
     },
     {
+        "name": "APPL.CtrlAppl.sParam.hotWaterTank[1].values.heatRequestTop",
+        "attributes": {"longText": "Heat requirement"},
+        "value": "true",
+    },
+    {
         "name": "APPL.CtrlAppl.sParam.hotWaterTank[0].param.normalSetTempMax.value",
+        "attributes": {
+            "formatId": "fmtTemp",
+            "longText": "Temp. nom.",
+            "unitId": "Temp",
+            "upperLimit": "52",
+            "lowerLimit": "0",
+            "dynUpperLimit": 1,
+        },
+        "value": "52",
+    },
+    {
+        "name": "APPL.CtrlAppl.sParam.hotWaterTank[1].param.normalSetTempMax.value",
         "attributes": {
             "formatId": "fmtTemp",
             "longText": "Temp. nom.",
@@ -272,7 +393,30 @@ DATA_RESPONSE: list[dict[str, Any]] = [
         "value": "32.5",
     },
     {
+        "name": "APPL.CtrlAppl.sParam.hotWaterTank[1].param.reducedSetTempMax.value",
+        "attributes": {
+            "formatId": "fmtTemp",
+            "longText": "Sup.temp.",
+            "unitId": "Temp",
+            "upperLimit": "52",
+            "lowerLimit": "0",
+            "dynUpperLimit": 1,
+        },
+        "value": "32.5",
+    },
+    {
         "name": "APPL.CtrlAppl.sParam.hotWaterTank[0].param.operatingMode",
+        "attributes": {
+            "formatId": "fmtHotWaterTank",
+            "longText": "Op.mode",
+            "unitId": "Enum",
+            "upperLimit": "32767",
+            "lowerLimit": "0",
+        },
+        "value": "0",
+    },
+    {
+        "name": "APPL.CtrlAppl.sParam.hotWaterTank[1].param.operatingMode",
         "attributes": {
             "formatId": "fmtHotWaterTank",
             "longText": "Op.mode",
@@ -294,6 +438,17 @@ DATA_RESPONSE: list[dict[str, Any]] = [
         "value": "47.700001",
     },
     {
+        "name": "APPL.CtrlAppl.sParam.hotWaterTank[1].topTemp.values.actValue",
+        "attributes": {
+            "formatId": "fmtTemp",
+            "longText": "Temp. act.",
+            "unitId": "Temp",
+            "upperLimit": "90",
+            "lowerLimit": "20",
+        },
+        "value": "47.700001",
+    },
+    {
         "name": "APPL.CtrlAppl.sParam.options.systemNumberOfHeatingCircuits",
         "attributes": {
             "formatId": "fmt2p0",
@@ -303,7 +458,7 @@ DATA_RESPONSE: list[dict[str, Any]] = [
             "dynLowerLimit": 1,
             "dynUpperLimit": 1,
         },
-        "value": "1",
+        "value": "2",
     },
     {
         "name": "APPL.CtrlAppl.sParam.options.systemNumberOfHeatPumps",
@@ -327,7 +482,7 @@ DATA_RESPONSE: list[dict[str, Any]] = [
             "dynLowerLimit": 1,
             "dynUpperLimit": 1,
         },
-        "value": "1",
+        "value": "2",
     },
     {
         "name": "APPL.CtrlAppl.sParam.outdoorTemp.values.actValue",

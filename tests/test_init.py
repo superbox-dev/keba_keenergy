@@ -8,6 +8,7 @@ from pytest_homeassistant_custom_component.common import MockConfigEntry
 from tests.conftest import FakeKebaKeEnergyAPI
 
 
+@pytest.mark.usefixtures("entity_registry_enabled_by_default")
 async def test_load_entry(
     hass: HomeAssistant,
     config_entry: MockConfigEntry,
@@ -21,35 +22,64 @@ async def test_load_entry(
     await hass.async_block_till_done()
     assert config_entry.state is ConfigEntryState.LOADED
 
-    assert hass.states.async_entity_ids_count() == 26
+    assert hass.states.async_entity_ids_count() == 55
 
     assert set(hass.states.async_entity_ids()) == {
-        "binary_sensor.keba_keenergy_12345678_hot_water_tank_heat_request",
-        "binary_sensor.keba_keenergy_12345678_heat_pump_heat_request",
-        "climate.keba_keenergy_12345678",
-        "water_heater.keba_keenergy_12345678",
+        "number.keba_keenergy_12345678_hot_water_tank_min_temperature_1",
+        "number.keba_keenergy_12345678_hot_water_tank_min_temperature_2",
+        "number.keba_keenergy_12345678_hot_water_tank_max_temperature_1",
+        "number.keba_keenergy_12345678_hot_water_tank_max_temperature_2",
+        "number.keba_keenergy_12345678_heat_circuit_day_temperature_1",
+        "number.keba_keenergy_12345678_heat_circuit_day_temperature_2",
+        "number.keba_keenergy_12345678_heat_circuit_night_temperature_1",
+        "number.keba_keenergy_12345678_heat_circuit_night_temperature_2",
+        "number.keba_keenergy_12345678_heat_circuit_holiday_temperature_1",
+        "number.keba_keenergy_12345678_heat_circuit_holiday_temperature_2",
         "sensor.keba_keenergy_12345678_outdoor_temperature",
-        "sensor.keba_keenergy_12345678_hot_water_tank_temperature",
-        "sensor.keba_keenergy_12345678_hot_water_tank_operating_mode",
-        "sensor.keba_keenergy_12345678_hot_water_tank_min_temperature",
-        "sensor.keba_keenergy_12345678_hot_water_tank_max_temperature",
+        "sensor.keba_keenergy_12345678_hot_water_tank_temperature_1",
+        "sensor.keba_keenergy_12345678_hot_water_tank_temperature_2",
+        "sensor.keba_keenergy_12345678_hot_water_tank_operating_mode_1",
+        "sensor.keba_keenergy_12345678_hot_water_tank_operating_mode_2",
+        "sensor.keba_keenergy_12345678_hot_water_tank_min_temperature_1",
+        "sensor.keba_keenergy_12345678_hot_water_tank_min_temperature_2",
+        "sensor.keba_keenergy_12345678_hot_water_tank_max_temperature_1",
+        "sensor.keba_keenergy_12345678_hot_water_tank_max_temperature_2",
         "sensor.keba_keenergy_12345678_heat_pump_state",
+        "sensor.keba_keenergy_12345678_heat_pump_circulation_pump",
         "sensor.keba_keenergy_12345678_heat_pump_inflow_temperature",
         "sensor.keba_keenergy_12345678_heat_pump_reflux_temperature",
         "sensor.keba_keenergy_12345678_heat_pump_source_input_temperature",
         "sensor.keba_keenergy_12345678_heat_pump_source_output_temperature",
-        "sensor.keba_keenergy_12345678_heat_circuit_temperature",
-        "sensor.keba_keenergy_12345678_heat_circuit_day_temperature",
-        "sensor.keba_keenergy_12345678_heat_circuit_night_temperature",
-        "sensor.keba_keenergy_12345678_heat_circuit_holiday_temperature",
-        "sensor.keba_keenergy_12345678_heat_circuit_temperature_offset",
-        "sensor.keba_keenergy_12345678_heat_circuit_operating_mode",
-        "sensor.keba_keenergy_12345678_heat_circuit_heat_request",
-        "number.keba_keenergy_12345678_hot_water_tank_min_temperature",
-        "number.keba_keenergy_12345678_hot_water_tank_max_temperature",
-        "number.keba_keenergy_12345678_heat_circuit_day_temperature",
-        "number.keba_keenergy_12345678_heat_circuit_night_temperature",
-        "number.keba_keenergy_12345678_heat_circuit_holiday_temperature",
+        "sensor.keba_keenergy_12345678_heat_pump_compressor_input_temperature",
+        "sensor.keba_keenergy_12345678_heat_pump_compressor_output_temperature",
+        "sensor.keba_keenergy_12345678_heat_pump_compressor",
+        "sensor.keba_keenergy_12345678_heat_pump_high_pressure",
+        "sensor.keba_keenergy_12345678_heat_pump_low_pressure",
+        "sensor.keba_keenergy_12345678_heat_circuit_temperature_1",
+        "sensor.keba_keenergy_12345678_heat_circuit_temperature_2",
+        "sensor.keba_keenergy_12345678_heat_circuit_day_temperature_1",
+        "sensor.keba_keenergy_12345678_heat_circuit_day_temperature_2",
+        "sensor.keba_keenergy_12345678_heat_circuit_day_temperature_threshold_1",
+        "sensor.keba_keenergy_12345678_heat_circuit_day_temperature_threshold_2",
+        "sensor.keba_keenergy_12345678_heat_circuit_night_temperature_1",
+        "sensor.keba_keenergy_12345678_heat_circuit_night_temperature_2",
+        "sensor.keba_keenergy_12345678_heat_circuit_night_temperature_threshold_1",
+        "sensor.keba_keenergy_12345678_heat_circuit_night_temperature_threshold_2",
+        "sensor.keba_keenergy_12345678_heat_circuit_holiday_temperature_1",
+        "sensor.keba_keenergy_12345678_heat_circuit_holiday_temperature_2",
+        "sensor.keba_keenergy_12345678_heat_circuit_temperature_offset_1",
+        "sensor.keba_keenergy_12345678_heat_circuit_temperature_offset_2",
+        "sensor.keba_keenergy_12345678_heat_circuit_operating_mode_1",
+        "sensor.keba_keenergy_12345678_heat_circuit_operating_mode_2",
+        "sensor.keba_keenergy_12345678_heat_circuit_heat_request_1",
+        "sensor.keba_keenergy_12345678_heat_circuit_heat_request_2",
+        "climate.keba_keenergy_12345678_1",
+        "climate.keba_keenergy_12345678_2",
+        "binary_sensor.keba_keenergy_12345678_hot_water_tank_heat_request_1",
+        "binary_sensor.keba_keenergy_12345678_hot_water_tank_heat_request_2",
+        "binary_sensor.keba_keenergy_12345678_heat_pump_heat_request",
+        "water_heater.keba_keenergy_12345678_1",
+        "water_heater.keba_keenergy_12345678_2",
     }
 
 
@@ -80,8 +110,8 @@ async def test_unload_entry(
 
     assert await hass.config_entries.async_setup(config_entry.entry_id)
     await hass.async_block_till_done()
-    assert config_entry.state is ConfigEntryState.LOADED
+    assert config_entry.state == ConfigEntryState.LOADED
 
     await hass.config_entries.async_unload(config_entry.entry_id)
     await hass.async_block_till_done()
-    assert config_entry.state is ConfigEntryState.NOT_LOADED
+    assert config_entry.state == ConfigEntryState.NOT_LOADED

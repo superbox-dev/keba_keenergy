@@ -37,7 +37,7 @@ ZERO_CONF_SERVICE_INFO: ZeroconfServiceInfo = ZeroconfServiceInfo(
 )
 
 
-async def test_user_cannot_connect(
+async def test_user_flow(
     hass: HomeAssistant,
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
@@ -76,7 +76,7 @@ async def test_user_cannot_connect(
         (Exception("mocked client error"), "unknown"),
     ],
 )
-async def test_user_flow_abort_cannot_connect(hass: HomeAssistant, side_effect: Exception, expected_error: str) -> None:
+async def test_user_flow_cannot_connect(hass: HomeAssistant, side_effect: Exception, expected_error: str) -> None:
     """Test when zeroconf gets an exception from the API."""
     assert await setup.async_setup_component(hass, DOMAIN, {})
 

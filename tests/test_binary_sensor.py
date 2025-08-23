@@ -1,0 +1,43 @@
+from homeassistant.const import ATTR_FRIENDLY_NAME
+from homeassistant.const import CONF_HOST
+from homeassistant.const import STATE_OFF
+from homeassistant.const import STATE_ON
+from homeassistant.core import HomeAssistant
+from homeassistant.core import State
+from pytest_homeassistant_custom_component.common import MockConfigEntry
+
+from tests.conftest import FakeKebaKeEnergyAPI
+
+
+async def test_binary_sensors(
+    hass: HomeAssistant,
+    config_entry: MockConfigEntry,
+    fake_api: FakeKebaKeEnergyAPI,
+) -> None:
+    """Test binary sensors."""
+    fake_api.register_requests(config_entry.data[CONF_HOST])
+    config_entry.add_to_hass(hass)
+
+    assert await hass.config_entries.async_setup(config_entry.entry_id)
+    await hass.async_block_till_done()
+
+    hot_water_tank_heat_request_1: State | None = hass.states.get(
+        "binary_sensor.keba_keenergy_12345678_hot_water_tank_heat_request_1",
+    )
+    assert isinstance(hot_water_tank_heat_request_1, State)
+    assert hot_water_tank_heat_request_1.state == STATE_OFF
+    assert hot_water_tank_heat_request_1.attributes[ATTR_FRIENDLY_NAME] == "Hot Water Tank (1) Heat request"
+
+    hot_water_tank_heat_request_2: State | None = hass.states.get(
+        "binary_sensor.keba_keenergy_12345678_hot_water_tank_heat_request_2",
+    )
+    assert isinstance(hot_water_tank_heat_request_2, State)
+    assert hot_water_tank_heat_request_2.state == STATE_ON
+    assert hot_water_tank_heat_request_2.attributes[ATTR_FRIENDLY_NAME] == "Hot Water Tank (2) Heat request"
+
+    heat_pump_heat_request: State | None = hass.states.get(
+        "binary_sensor.keba_keenergy_12345678_heat_pump_heat_request"
+    )
+    assert isinstance(heat_pump_heat_request, State)
+    assert heat_pump_heat_request.state == STATE_OFF
+    assert heat_pump_heat_request.attributes[ATTR_FRIENDLY_NAME] == "M-TEC WPS26 Heat request"

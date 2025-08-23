@@ -1,5 +1,7 @@
 import json
 from typing import Any
+from collections.abc import Generator
+from unittest.mock import patch
 
 import pytest
 from _pytest.fixtures import SubRequest
@@ -89,3 +91,15 @@ def config_entry(request: SubRequest) -> MockConfigEntry:
         domain=DOMAIN,
         **mock_config_entry_data,
     )
+
+
+@pytest.fixture
+def entity_registry_enabled_by_default() -> Generator[None]:
+    """Test fixture that ensures all entities are enabled in the registry."""
+    with (
+        patch(
+            "homeassistant.helpers.entity.Entity.entity_registry_enabled_default",
+            return_value=True,
+        ),
+    ):
+        yield
