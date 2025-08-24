@@ -81,7 +81,7 @@ class KebaKeEnergyEntity(
             _device_name = data[self.index or 0]["value"]
         elif self.is_heat_pump:
             _device_name = f"{self.device_manufacturer} {self.device_model}"
-        elif self.is_hot_water_tank:
+        elif self.is_hot_water_tank:  # pragma: no branch
             _device_name = "Hot Water Tank"
 
         # Add position number to device name if there is more than one device
