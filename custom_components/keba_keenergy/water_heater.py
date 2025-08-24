@@ -141,10 +141,10 @@ class KebaKeEnergyWaterHeaterEntity(KebaKeEnergyEntity, WaterHeaterEntity):
         )
 
     async def async_turn_on(self, **kwargs: Any) -> None:  # noqa: ARG002
-        """Turn the hot water tank on (heat up mode)."""
+        """Turn the hot water tank on."""
         await self._async_update_data(
             section=HotWaterTank.OPERATING_MODE,
-            value=HotWaterTankOperatingMode.HEAT_UP.value,
+            value=HotWaterTankOperatingMode.ON.value,
             device_numbers=self.coordinator.hot_water_tank_numbers,
         )
 
