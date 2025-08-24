@@ -15,9 +15,7 @@ from syrupy.assertion import SnapshotAssertion
 from yarl import URL
 
 from custom_components.keba_keenergy.const import DOMAIN
-from tests.api_data import DATA_RESPONSE
 from tests.api_data import DEVICE_INFO_RESPONSE
-from tests.api_data import POSITIONS_RESPONSE
 from tests.api_data import SYSTEM_RESPONSE
 
 
@@ -35,7 +33,15 @@ def auto_enable_custom_integrations(enable_custom_integrations: None) -> None:  
 class FakeKebaKeEnergyAPI:
     def __init__(self, aioclient_mock: AiohttpClientMocker) -> None:
         self.aioclient_mock: AiohttpClientMocker = aioclient_mock
-        self._responses: list[list[dict[str, Any]]] = [POSITIONS_RESPONSE, DATA_RESPONSE]
+        self._responses: list[list[dict[str, Any]]] = []
+
+    @property
+    def responses(self) -> list[list[dict[str, Any]]]:
+        return self._responses
+
+    @responses.setter
+    def responses(self, value: list[list[dict[str, Any]]]) -> None:
+        self._responses = value
 
     def register_requests(self, host: str, /) -> None:
         self.aioclient_mock.post(
@@ -74,6 +80,14 @@ class FakeKebaKeEnergyAPI:
             )
 
         return AiohttpClientMockResponse(method, url=url)
+
+    def assert_called_write_with(self, data: str, /) -> None:
+        assert (
+            "POST",
+            URL("http://10.0.0.100/var/readWriteVars?action=set"),
+            data,
+            None,
+        ) in self.aioclient_mock.mock_calls
 
 
 @pytest.fixture
