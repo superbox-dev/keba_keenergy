@@ -110,7 +110,7 @@ class KebaKeEnergyWaterHeaterEntity(KebaKeEnergyEntity, WaterHeaterEntity):
         _current_operation: str = STATE_OFF
         operating_mode: str = self.get_value("operating_mode")
 
-        for key, value in HOT_WATER_TANK_STATE_TO_HA.items():
+        for key, value in HOT_WATER_TANK_STATE_TO_HA.items():  # pragma: no branch
             if HotWaterTankOperatingMode(key).name.lower() == operating_mode:
                 _current_operation = value
                 break
