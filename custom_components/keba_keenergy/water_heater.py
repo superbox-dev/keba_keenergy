@@ -128,7 +128,7 @@ class KebaKeEnergyWaterHeaterEntity(KebaKeEnergyEntity, WaterHeaterEntity):
         return float(self.get_value("min_temperature"))
 
     @property
-    def target_temperature_high(self) -> float | None:
+    def target_temperature_high(self) -> float:
         """Return the highbound target temperature we try to reach."""
         return float(self.get_attribute("max_temperature", "upper_limit"))
 
