@@ -5,6 +5,8 @@ from homeassistant.const import CONF_SSL
 from homeassistant.core import HomeAssistant
 from pytest_homeassistant_custom_component.common import MockConfigEntry
 
+from tests.api_data import MULTIPLE_POSITIONS_DATA_RESPONSE
+from tests.api_data import MULTIPLE_POSITIONS_RESPONSE
 from tests.conftest import FakeKebaKeEnergyAPI
 
 
@@ -15,15 +17,14 @@ async def test_load_entry(
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
     """Test initial load."""
+    fake_api.responses = [MULTIPLE_POSITIONS_RESPONSE, MULTIPLE_POSITIONS_DATA_RESPONSE]
     fake_api.register_requests(config_entry.data[CONF_HOST])
+
     config_entry.add_to_hass(hass)
-
     assert await hass.config_entries.async_setup(config_entry.entry_id)
-    await hass.async_block_till_done()
+
     assert config_entry.state is ConfigEntryState.LOADED
-
     assert hass.states.async_entity_ids_count() == 55
-
     assert set(hass.states.async_entity_ids()) == {
         "number.keba_keenergy_12345678_hot_water_tank_min_temperature_1",
         "number.keba_keenergy_12345678_hot_water_tank_min_temperature_2",
@@ -105,13 +106,13 @@ async def test_unload_entry(
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
     """Test unload."""
+    fake_api.responses = [MULTIPLE_POSITIONS_RESPONSE, MULTIPLE_POSITIONS_DATA_RESPONSE]
     fake_api.register_requests(config_entry.data[CONF_HOST])
+
     config_entry.add_to_hass(hass)
 
     assert await hass.config_entries.async_setup(config_entry.entry_id)
-    await hass.async_block_till_done()
     assert config_entry.state == ConfigEntryState.LOADED
 
     await hass.config_entries.async_unload(config_entry.entry_id)
-    await hass.async_block_till_done()
     assert config_entry.state == ConfigEntryState.NOT_LOADED

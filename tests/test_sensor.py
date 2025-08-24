@@ -16,6 +16,8 @@ from homeassistant.core import HomeAssistant
 from homeassistant.core import State
 from pytest_homeassistant_custom_component.common import MockConfigEntry
 
+from tests.api_data import MULTIPLE_POSITIONS_DATA_RESPONSE
+from tests.api_data import MULTIPLE_POSITIONS_RESPONSE
 from tests.conftest import FakeKebaKeEnergyAPI
 
 
@@ -26,11 +28,11 @@ async def test_sensors(
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
     """Test binary sensors."""
+    fake_api.responses = [MULTIPLE_POSITIONS_RESPONSE, MULTIPLE_POSITIONS_DATA_RESPONSE]
     fake_api.register_requests(config_entry.data[CONF_HOST])
-    config_entry.add_to_hass(hass)
 
+    config_entry.add_to_hass(hass)
     assert await hass.config_entries.async_setup(config_entry.entry_id)
-    await hass.async_block_till_done()
 
     outdoor_temperature: State | None = hass.states.get("sensor.keba_keenergy_12345678_outdoor_temperature")
     assert isinstance(outdoor_temperature, State)
@@ -54,7 +56,7 @@ async def test_sensors(
         "sensor.keba_keenergy_12345678_hot_water_tank_operating_mode_1",
     )
     assert isinstance(hot_water_tank_operating_mode_1, State)
-    assert hot_water_tank_operating_mode_1.state == STATE_OFF
+    assert hot_water_tank_operating_mode_1.state == "heat_up"
     assert hot_water_tank_operating_mode_1.attributes[CONF_DEVICE_CLASS] == SensorDeviceClass.ENUM
     assert hot_water_tank_operating_mode_1.attributes[ATTR_OPTIONS] == ["auto", "heat_up", "off", "on"]
     assert hot_water_tank_operating_mode_1.attributes[ATTR_FRIENDLY_NAME] == "Hot Water Tank (1) Operating mode"
@@ -73,7 +75,7 @@ async def test_sensors(
         "sensor.keba_keenergy_12345678_hot_water_tank_max_temperature_1",
     )
     assert isinstance(hot_water_tank_max_temperature_1, State)
-    assert hot_water_tank_max_temperature_1.state == "52.0"
+    assert hot_water_tank_max_temperature_1.state == "51.0"
     assert hot_water_tank_max_temperature_1.attributes[CONF_UNIT_OF_MEASUREMENT] == UnitOfTemperature.CELSIUS
     assert hot_water_tank_max_temperature_1.attributes[ATTR_STATE_CLASS] == SensorStateClass.MEASUREMENT
     assert hot_water_tank_max_temperature_1.attributes[CONF_DEVICE_CLASS] == SensorDeviceClass.TEMPERATURE

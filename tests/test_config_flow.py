@@ -18,6 +18,8 @@ from pytest_homeassistant_custom_component.common import MockConfigEntry
 
 from custom_components.keba_keenergy.const import DEFAULT_SSL
 from custom_components.keba_keenergy.const import DOMAIN
+from tests.api_data import MULTIPLE_POSITIONS_DATA_RESPONSE
+from tests.api_data import MULTIPLE_POSITIONS_RESPONSE
 from tests.conftest import FakeKebaKeEnergyAPI
 
 if TYPE_CHECKING:
@@ -42,6 +44,7 @@ async def test_user_flow(
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
     """Test user happy flow from start to finish."""
+    fake_api.responses = [MULTIPLE_POSITIONS_RESPONSE, MULTIPLE_POSITIONS_DATA_RESPONSE]
     fake_api.register_requests("10.0.0.100")
 
     assert await setup.async_setup_component(hass, DOMAIN, {})
@@ -78,8 +81,6 @@ async def test_user_flow(
 )
 async def test_user_flow_cannot_connect(hass: HomeAssistant, side_effect: Exception, expected_error: str) -> None:
     """Test when zeroconf gets an exception from the API."""
-    assert await setup.async_setup_component(hass, DOMAIN, {})
-
     result_1: ConfigFlowResult = await hass.config_entries.flow.async_init(
         DOMAIN,
         context={"source": SOURCE_USER},
@@ -103,9 +104,8 @@ async def test_zeroconf_flow(
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
     """Test the zeroconf happy flow from start to finish."""
+    fake_api.responses = [MULTIPLE_POSITIONS_RESPONSE, MULTIPLE_POSITIONS_DATA_RESPONSE]
     fake_api.register_requests("ap4400.local")
-
-    assert await setup.async_setup_component(hass, DOMAIN, {})
 
     result_1: ConfigFlowResult = await hass.config_entries.flow.async_init(
         DOMAIN,
@@ -148,8 +148,6 @@ async def test_zeroconf_flow_already_setup(
 @pytest.mark.parametrize("side_effect", [APIError("mocked api error"), ClientError("mocked client error")])
 async def test_zeroconf_cannot_connect(hass: HomeAssistant, side_effect: Exception) -> None:
     """Test when zeroconf gets an exception from the API."""
-    assert await setup.async_setup_component(hass, DOMAIN, {})
-
     result_1: ConfigFlowResult = await hass.config_entries.flow.async_init(
         DOMAIN,
         context={"source": SOURCE_ZEROCONF},
