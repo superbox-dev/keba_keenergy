@@ -166,7 +166,7 @@ class KebaKeEnergyEntity(
                 },
             )
         except (APIError, ClientError) as error:
-            msg: str = f"Failed to update {section} to {value}: {error}"
+            msg: str = f"Failed to update {self.entity_id} to {value}: {error}"
             raise HomeAssistantError(msg) from error
 
         await self.coordinator.async_refresh()

@@ -6,6 +6,7 @@ from homeassistant.core import HomeAssistant
 from homeassistant.core import State
 from pytest_homeassistant_custom_component.common import MockConfigEntry
 
+from tests import setup_integration
 from tests.api_data import MULTIPLE_POSITIONS_DATA_RESPONSE
 from tests.api_data import MULTIPLE_POSITIONS_RESPONSE
 from tests.conftest import FakeKebaKeEnergyAPI
@@ -20,8 +21,7 @@ async def test_binary_sensors(
     fake_api.responses = [MULTIPLE_POSITIONS_RESPONSE, MULTIPLE_POSITIONS_DATA_RESPONSE]
     fake_api.register_requests(config_entry.data[CONF_HOST])
 
-    config_entry.add_to_hass(hass)
-    assert await hass.config_entries.async_setup(config_entry.entry_id)
+    await setup_integration(hass, config_entry)
 
     hot_water_tank_heat_request_1: State | None = hass.states.get(
         "binary_sensor.keba_keenergy_12345678_hot_water_tank_heat_request_1",

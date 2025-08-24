@@ -145,7 +145,13 @@ async def test_zeroconf_flow_already_setup(
     assert result["reason"] == "already_configured"
 
 
-@pytest.mark.parametrize("side_effect", [APIError("mocked api error"), ClientError("mocked client error")])
+@pytest.mark.parametrize(
+    "side_effect",
+    [
+        APIError("mocked api error"),
+        ClientError("mocked client error"),
+    ],
+)
 async def test_zeroconf_cannot_connect(hass: HomeAssistant, side_effect: Exception) -> None:
     """Test when zeroconf gets an exception from the API."""
     result_1: ConfigFlowResult = await hass.config_entries.flow.async_init(

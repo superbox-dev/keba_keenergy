@@ -9,5 +9,4 @@ DOMAIN: Final[str] = "keba_keenergy"
 MANUFACTURER: Final = "KEBA"
 MANUFACTURER_MTEC: Final = "M-TEC"
 NAME: Final = "KeEnergy"
-PRESET_AUTO: Final[str] = "auto"
 SCAN_INTERVAL: Final[int] = 20

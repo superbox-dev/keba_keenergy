@@ -23,6 +23,7 @@ from homeassistant.core import State
 from keba_keenergy_api.constants import HotWaterTankOperatingMode
 from pytest_homeassistant_custom_component.common import MockConfigEntry
 
+from tests import setup_integration
 from tests.api_data import MULTIPLE_POSITIONS_DATA_RESPONSE
 from tests.api_data import MULTIPLE_POSITIONS_RESPONSE
 from tests.api_data import SINGLE_POSITION_DATA_RESPONSE
@@ -52,8 +53,7 @@ async def test_water_heater_entities(
     fake_api.responses = response
     fake_api.register_requests("10.0.0.100")
 
-    config_entry.add_to_hass(hass)
-    assert await hass.config_entries.async_setup(config_entry.entry_id)
+    await setup_integration(hass, config_entry)
 
     for entity in entities:
         assert isinstance(hass.states.get(entity), State)
@@ -68,8 +68,7 @@ async def test_water_heater(
     fake_api.responses = [MULTIPLE_POSITIONS_RESPONSE, MULTIPLE_POSITIONS_DATA_RESPONSE]
     fake_api.register_requests("10.0.0.100")
 
-    config_entry.add_to_hass(hass)
-    assert await hass.config_entries.async_setup(config_entry.entry_id)
+    await setup_integration(hass, config_entry)
 
     state: State | None = hass.states.get(ENTITY_ID_1)
     assert isinstance(state, State)
@@ -163,8 +162,7 @@ async def test_set_operation_mode(
     ]
     fake_api.register_requests("10.0.0.100")
 
-    config_entry.add_to_hass(hass)
-    assert await hass.config_entries.async_setup(config_entry.entry_id)
+    await setup_integration(hass, config_entry)
 
     await hass.services.async_call(
         WATER_HEATER_DOMAIN,
@@ -197,8 +195,7 @@ async def test_set_temperature(
     ]
     fake_api.register_requests("10.0.0.100")
 
-    config_entry.add_to_hass(hass)
-    assert await hass.config_entries.async_setup(config_entry.entry_id)
+    await setup_integration(hass, config_entry)
 
     await hass.services.async_call(
         domain=WATER_HEATER_DOMAIN,
