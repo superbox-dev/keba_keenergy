@@ -121,7 +121,7 @@ class KebaKeEnergyNumberEntity(KebaKeEnergyEntity, NumberEntity):
     def native_min_value(self) -> float:
         """Return the maximum value."""
         data: list[Value] = cast("list[Value]", self.coordinator.data[self.section_id][self.entity_description.key])
-        return float(data[self.index or 0]["attributes"]["upper_limit"])
+        return float(data[self.index or 0]["attributes"]["lower_limit"])
 
     @property
     def native_max_value(self) -> float:
@@ -143,11 +143,11 @@ class KebaKeEnergyNumberEntity(KebaKeEnergyEntity, NumberEntity):
         if self.section_id == SectionPrefix.HEAT_CIRCUIT:
             section = HeatCircuit[self.entity_description.key.upper()]
             device_numbers = self.coordinator.heat_circuit_numbers
-        elif self.section_id == SectionPrefix.HOT_WATER_TANK:
+        elif self.section_id == SectionPrefix.HOT_WATER_TANK:  # pragma: no branch
             section = HotWaterTank[self.entity_description.key.upper()]
             device_numbers = self.coordinator.hot_water_tank_numbers
 
-        if section and device_numbers:
+        if section and device_numbers:  # pragma: no branch
             await self._async_update_data(
                 section=section,
                 value=value,
