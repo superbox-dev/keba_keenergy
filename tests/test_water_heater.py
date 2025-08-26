@@ -24,10 +24,10 @@ from keba_keenergy_api.constants import HotWaterTankOperatingMode
 from pytest_homeassistant_custom_component.common import MockConfigEntry
 
 from tests import setup_integration
+from tests.api_data import DEFAULT_POSITION_DATA_RESPONSE
+from tests.api_data import DEFAULT_POSITION_RESPONSE
 from tests.api_data import MULTIPLE_POSITIONS_DATA_RESPONSE
 from tests.api_data import MULTIPLE_POSITIONS_RESPONSE
-from tests.api_data import SINGLE_POSITION_DATA_RESPONSE
-from tests.api_data import SINGLE_POSITION_RESPONSE
 from tests.conftest import FakeKebaKeEnergyAPI
 
 ENTITY_ID: str = "water_heater.keba_keenergy_12345678"
@@ -38,7 +38,7 @@ ENTITY_ID_2: str = "water_heater.keba_keenergy_12345678_2"
 @pytest.mark.parametrize(
     ("response", "entities"),
     [
-        ([SINGLE_POSITION_RESPONSE, SINGLE_POSITION_DATA_RESPONSE], [ENTITY_ID]),
+        ([DEFAULT_POSITION_RESPONSE, DEFAULT_POSITION_DATA_RESPONSE], [ENTITY_ID]),
         ([MULTIPLE_POSITIONS_RESPONSE, MULTIPLE_POSITIONS_DATA_RESPONSE], [ENTITY_ID_1, ENTITY_ID_2]),
     ],
 )
@@ -65,7 +65,10 @@ async def test_water_heater(
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
     """Test water heater."""
-    fake_api.responses = [MULTIPLE_POSITIONS_RESPONSE, MULTIPLE_POSITIONS_DATA_RESPONSE]
+    fake_api.responses = [
+        MULTIPLE_POSITIONS_RESPONSE,
+        MULTIPLE_POSITIONS_DATA_RESPONSE,
+    ]
     fake_api.register_requests("10.0.0.100")
 
     await setup_integration(hass, config_entry)
@@ -88,16 +91,22 @@ async def test_turn_off(
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
     """Test turn on water heater."""
-    fake_api.responses = [MULTIPLE_POSITIONS_RESPONSE, MULTIPLE_POSITIONS_DATA_RESPONSE]
+    fake_api.responses = [
+        MULTIPLE_POSITIONS_RESPONSE,
+        MULTIPLE_POSITIONS_DATA_RESPONSE,
+        # Read API after services call
+        MULTIPLE_POSITIONS_RESPONSE,
+        MULTIPLE_POSITIONS_DATA_RESPONSE,
+    ]
     fake_api.register_requests("10.0.0.100")
 
     config_entry.add_to_hass(hass)
     assert await hass.config_entries.async_setup(config_entry.entry_id)
 
     await hass.services.async_call(
-        WATER_HEATER_DOMAIN,
-        SERVICE_TURN_OFF,
-        {
+        domain=WATER_HEATER_DOMAIN,
+        service=SERVICE_TURN_OFF,
+        service_data={
             ATTR_ENTITY_ID: ENTITY_ID_1,
         },
         blocking=True,
@@ -115,16 +124,22 @@ async def test_turn_on(
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
     """Test turn on water heater."""
-    fake_api.responses = [MULTIPLE_POSITIONS_RESPONSE, MULTIPLE_POSITIONS_DATA_RESPONSE]
+    fake_api.responses = [
+        MULTIPLE_POSITIONS_RESPONSE,
+        MULTIPLE_POSITIONS_DATA_RESPONSE,
+        # Read API after services call
+        MULTIPLE_POSITIONS_RESPONSE,
+        MULTIPLE_POSITIONS_DATA_RESPONSE,
+    ]
     fake_api.register_requests("10.0.0.100")
 
     config_entry.add_to_hass(hass)
     assert await hass.config_entries.async_setup(config_entry.entry_id)
 
     await hass.services.async_call(
-        WATER_HEATER_DOMAIN,
-        SERVICE_TURN_ON,
-        {
+        domain=WATER_HEATER_DOMAIN,
+        service=SERVICE_TURN_ON,
+        service_data={
             ATTR_ENTITY_ID: ENTITY_ID_1,
         },
         blocking=True,
@@ -165,9 +180,9 @@ async def test_set_operation_mode(
     await setup_integration(hass, config_entry)
 
     await hass.services.async_call(
-        WATER_HEATER_DOMAIN,
-        SERVICE_SET_OPERATION_MODE,
-        {
+        domain=WATER_HEATER_DOMAIN,
+        service=SERVICE_SET_OPERATION_MODE,
+        service_data={
             ATTR_ENTITY_ID: ENTITY_ID_1,
             ATTR_OPERATION_MODE: operation_mode,
         },

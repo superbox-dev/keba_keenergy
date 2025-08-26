@@ -8,7 +8,7 @@ from homeassistant.const import CONF_DEVICE_CLASS
 from homeassistant.const import CONF_HOST
 from homeassistant.const import CONF_UNIT_OF_MEASUREMENT
 from homeassistant.const import PERCENTAGE
-from homeassistant.const import STATE_OFF
+from homeassistant.const import STATE_ON
 from homeassistant.const import STATE_STANDBY
 from homeassistant.const import UnitOfPressure
 from homeassistant.const import UnitOfTemperature
@@ -262,7 +262,7 @@ async def test_sensors(
         "sensor.keba_keenergy_12345678_heat_circuit_temperature_offset_1",
     )
     assert isinstance(heat_circuit_temperature_offset_1, State)
-    assert heat_circuit_temperature_offset_1.state == "0.0"
+    assert heat_circuit_temperature_offset_1.state == "1.5"
     assert heat_circuit_temperature_offset_1.attributes[CONF_UNIT_OF_MEASUREMENT] == UnitOfTemperature.CELSIUS
     assert heat_circuit_temperature_offset_1.attributes[ATTR_STATE_CLASS] == SensorStateClass.MEASUREMENT
     assert heat_circuit_temperature_offset_1.attributes[CONF_DEVICE_CLASS] == SensorDeviceClass.TEMPERATURE
@@ -272,7 +272,7 @@ async def test_sensors(
         "sensor.keba_keenergy_12345678_heat_circuit_operating_mode_1",
     )
     assert isinstance(heat_circuit_operating_mode_1, State)
-    assert heat_circuit_operating_mode_1.state == STATE_OFF
+    assert heat_circuit_operating_mode_1.state == "day"
     assert heat_circuit_operating_mode_1.attributes[CONF_DEVICE_CLASS] == SensorDeviceClass.ENUM
     assert heat_circuit_operating_mode_1.attributes[ATTR_OPTIONS] == ["off", "auto", "day", "night", "holiday", "party"]
     assert heat_circuit_operating_mode_1.attributes[ATTR_FRIENDLY_NAME] == "FBH1 (1) Operating mode"
@@ -281,7 +281,7 @@ async def test_sensors(
         "sensor.keba_keenergy_12345678_heat_circuit_heat_request_1",
     )
     assert isinstance(heat_circuit_heat_request_1, State)
-    assert heat_circuit_heat_request_1.state == STATE_OFF
+    assert heat_circuit_heat_request_1.state == STATE_ON
     assert heat_circuit_heat_request_1.attributes[CONF_DEVICE_CLASS] == SensorDeviceClass.ENUM
     assert heat_circuit_heat_request_1.attributes[ATTR_OPTIONS] == [
         "off",

@@ -18,8 +18,8 @@ from keba_keenergy_api.error import APIError
 from pytest_homeassistant_custom_component.common import MockConfigEntry
 
 from tests import setup_integration
+from tests.api_data import ENTITY_UPDATED_DATA_RESPONSE
 from tests.api_data import MULTIPLE_POSITIONS_DATA_RESPONSE
-from tests.api_data import MULTIPLE_POSITIONS_DATA_UPDATED_RESPONSE
 from tests.api_data import MULTIPLE_POSITIONS_RESPONSE
 from tests.conftest import FakeKebaKeEnergyAPI
 
@@ -35,22 +35,22 @@ async def test_entity_update(
         MULTIPLE_POSITIONS_DATA_RESPONSE,
         # Read API after services call
         MULTIPLE_POSITIONS_RESPONSE,
-        MULTIPLE_POSITIONS_DATA_UPDATED_RESPONSE,
+        ENTITY_UPDATED_DATA_RESPONSE,
     ]
     fake_api.register_requests("10.0.0.100")
 
     await async_setup_component(hass, HA_DOMAIN, {})
     await setup_integration(hass, config_entry)
 
-    entity_id: str = "sensor.keba_keenergy_12345678_heat_circuit_operating_mode_1"
+    entity_id: str = "sensor.keba_keenergy_12345678_heat_circuit_operating_mode_2"
     heat_circuit_operating_mode_1: State | None = hass.states.get(entity_id)
     assert isinstance(heat_circuit_operating_mode_1, State)
     assert heat_circuit_operating_mode_1.state == STATE_OFF
 
     await hass.services.async_call(
-        HA_DOMAIN,
-        SERVICE_UPDATE_ENTITY,
-        {
+        domain=HA_DOMAIN,
+        service=SERVICE_UPDATE_ENTITY,
+        service_data={
             ATTR_ENTITY_ID: entity_id,
         },
         blocking=True,
@@ -60,7 +60,7 @@ async def test_entity_update(
         "sensor.keba_keenergy_12345678_heat_circuit_operating_mode_1",
     )
     assert isinstance(heat_circuit_operating_mode_1, State)
-    assert heat_circuit_operating_mode_1.state == "auto"
+    assert heat_circuit_operating_mode_1.state == "night"
 
 
 @pytest.mark.parametrize(
@@ -104,9 +104,9 @@ async def test_entity_update_failed(
     with patch.object(KebaKeEnergyAPI, "write_data", side_effect=side_effect):
         with pytest.raises(HomeAssistantError) as error:
             await hass.services.async_call(
-                NUMBER_DOMAIN,
-                SERVICE_SET_VALUE,
-                {
+                domain=NUMBER_DOMAIN,
+                service=SERVICE_SET_VALUE,
+                service_data={
                     ATTR_ENTITY_ID: entity_id,
                     ATTR_VALUE: 10,
                 },

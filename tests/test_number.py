@@ -71,9 +71,9 @@ async def test_set_value(
     assert isinstance(state, State)
 
     await hass.services.async_call(
-        NUMBER_DOMAIN,
-        SERVICE_SET_VALUE,
-        {
+        domain=NUMBER_DOMAIN,
+        service=SERVICE_SET_VALUE,
+        service_data={
             ATTR_ENTITY_ID: entity_id,
             ATTR_VALUE: value,
         },
@@ -122,9 +122,9 @@ async def test_set_value_bad_range(
 
     with pytest.raises(ServiceValidationError) as error:
         await hass.services.async_call(
-            NUMBER_DOMAIN,
-            SERVICE_SET_VALUE,
-            {
+            domain=NUMBER_DOMAIN,
+            service=SERVICE_SET_VALUE,
+            service_data={
                 ATTR_ENTITY_ID: entity_id,
                 ATTR_VALUE: value,
             },
@@ -171,9 +171,9 @@ async def test_set_value_bad_attr(
 
     with pytest.raises(vol.Invalid) as error:
         await hass.services.async_call(
-            NUMBER_DOMAIN,
-            SERVICE_SET_VALUE,
-            {
+            domain=NUMBER_DOMAIN,
+            service=SERVICE_SET_VALUE,
+            service_data={
                 ATTR_ENTITY_ID: entity_id,
                 ATTR_VALUE: value,
             },

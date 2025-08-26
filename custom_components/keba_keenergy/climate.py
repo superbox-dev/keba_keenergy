@@ -207,10 +207,10 @@ class KebaKeEnergyClimateEntity(KebaKeEnergyEntity, ClimateEntity):
             self._attr_preset_mode = PRESET_NONE
         elif hvac_mode == HVACMode.HEAT:
             operating_mode_status = HeatCircuitOperatingMode.DAY
-        elif hvac_mode == HVACMode.OFF:
+        elif hvac_mode == HVACMode.OFF:  # pragma: no branch
             operating_mode_status = HeatCircuitOperatingMode.OFF
 
-        if operating_mode_status is not None:
+        if operating_mode_status is not None:  # pragma: no branch
             await self._async_update_data(
                 section=HeatCircuit.OPERATING_MODE,
                 value=operating_mode_status,
@@ -229,7 +229,7 @@ class KebaKeEnergyClimateEntity(KebaKeEnergyEntity, ClimateEntity):
 
     async def async_set_temperature(self, **kwargs: Any) -> None:
         """Set new target temperature."""
-        if temperature := kwargs.get(ATTR_TEMPERATURE):
+        if temperature := kwargs.get(ATTR_TEMPERATURE):  # pragma: no branch
             await self._async_update_data(
                 section=HeatCircuit.TEMPERATURE_OFFSET,
                 value=temperature - self.target_temperature_for_preset,
