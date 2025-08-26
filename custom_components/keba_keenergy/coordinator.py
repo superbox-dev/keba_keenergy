@@ -127,6 +127,11 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
         return str(self._api_system_info["version"])
 
     @property
+    def device_serial_number(self) -> str:
+        """Return serial number."""
+        return str(self._api_device_info["serNo"])
+
+    @property
     def heat_pump_names(self) -> list[Value]:
         """Return heat pump names."""
         return cast("list[Value]", self.data[SectionPrefix.HEAT_PUMP]["name"])

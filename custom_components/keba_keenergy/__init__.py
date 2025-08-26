@@ -1,5 +1,6 @@
 """The KEBA KeEnergy integration."""
 
+from collections.abc import coroutine
 from typing import TYPE_CHECKING
 
 from homeassistant.config_entries import ConfigEntry
@@ -7,9 +8,11 @@ from homeassistant.const import CONF_HOST
 from homeassistant.const import CONF_SSL
 from homeassistant.const import Platform
 from homeassistant.core import HomeAssistant
+from homeassistant.helpers import device_registry as dr
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 
 from .const import DOMAIN
+from .const import MANUFACTURER
 from .coordinator import KebaKeEnergyDataUpdateCoordinator
 
 if TYPE_CHECKING:
@@ -41,6 +44,19 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
 
     hass.data.setdefault(DOMAIN, {})
     hass.data[DOMAIN][entry.entry_id] = coordinator
+
+    # register keba_keenergy before via_device is used
+    device_registry = dr.async_get(hass)
+
+    device_registry.async_get_or_create(
+        config_entry_id=entry.entry_id,
+        identifiers={(DOMAIN, f"{entry.unique_id}_{DOMAIN}")},
+        manufacturer=MANUFACTURER,
+        name=coordinator.name,
+        model=coordinator.device_model,
+        sw_version=coordinator.device_sw_version,
+        serial_number=coordinator.device_serial_number,
+    )
 
     await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
 
