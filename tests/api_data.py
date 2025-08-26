@@ -1,6 +1,48 @@
 import json
 from typing import Any
 
+HEAT_CIRCUIT_ROOM_TEMPERATURE: str = """
+    {
+        "name": "APPL.CtrlAppl.sParam.heatCircuit[%s].tempRoom.values.actValue",
+        "attributes": {
+            "formatId": "fmtTemp",
+            "longText": "Room temp. act.",
+            "unitId": "Temp",
+            "upperLimit": "80",
+            "lowerLimit": "0"
+        },
+        "value": "%s"
+    }
+"""
+
+HEAT_CIRCUIT_ROOM_HUMIDITY: str = """
+    {
+        "name": "APPL.CtrlAppl.sParam.heatCircuit[%s].humidityRoom.values.actValue",
+        "attributes": {
+            "formatId": "fmt3p0",
+            "longText": "Room humidity act.",
+            "unitId": "Pct",
+            "upperLimit": "100",
+            "lowerLimit": "0"
+        },
+        "value": "%s"
+    }
+"""
+
+HEAT_CIRCUIT_DEW_POINT: str = """
+    {
+        "name": "APPL.CtrlAppl.sParam.heatCircuit[%s].dewPoint.values.actValue",
+        "attributes": {
+            "formatId": "fmtTemp",
+            "longText": "Dew Point",
+            "unitId": "Temp",
+            "upperLimit": "50.0",
+            "lowerLimit": "-20.0"
+        },
+        "value": "%s"
+    }
+"""
+
 HEAT_CIRCUIT_DAY_TEMPERATURE: str = """
     {
         "name": "APPL.CtrlAppl.sParam.heatCircuit[%s].param.normalSetTemp",
@@ -213,7 +255,6 @@ HEAT_PUMP_SOURCE_INPUT_TEMPERATURE: dict[str, Any] = {
     "value": "25.700001",
 }
 
-
 HEAT_PUMP_SOURCE_OUTPUT_TEMPERATURE: dict[str, Any] = {
     "name": "APPL.CtrlAppl.sParam.heatpump[0].TempSourceOut.values.actValue",
     "attributes": {"formatId": "fmtTemp", "longText": "Source out temp.", "unitId": "Temp"},
@@ -400,6 +441,9 @@ HEAT_PUMP_DATA: list[dict[str, Any]] = [
 ]
 
 DEFAULT_POSITION_DATA_RESPONSE: list[dict[str, Any]] = [
+    json.loads(HEAT_CIRCUIT_ROOM_TEMPERATURE % ("0", "22.42")),
+    json.loads(HEAT_CIRCUIT_ROOM_HUMIDITY % ("0", "53")),
+    json.loads(HEAT_CIRCUIT_DEW_POINT % ("0", "13.1")),
     json.loads(HEAT_CIRCUIT_DAY_TEMPERATURE % ("0", "20.5")),
     json.loads(HEAT_CIRCUIT_DAY_TEMPERATURE_THRESHOLD % ("0", "20")),
     json.loads(HEAT_CIRCUIT_HEAT_REQUEST % ("0", "1")),
@@ -423,6 +467,12 @@ DEFAULT_POSITION_DATA_RESPONSE: list[dict[str, Any]] = [
 ]
 
 MULTIPLE_POSITIONS_DATA_RESPONSE: list[dict[str, Any]] = [
+    json.loads(HEAT_CIRCUIT_ROOM_TEMPERATURE % ("0", "22.42")),
+    json.loads(HEAT_CIRCUIT_ROOM_TEMPERATURE % ("1", "22.42")),
+    json.loads(HEAT_CIRCUIT_ROOM_HUMIDITY % ("0", "53")),
+    json.loads(HEAT_CIRCUIT_ROOM_HUMIDITY % ("1", "53")),
+    json.loads(HEAT_CIRCUIT_DEW_POINT % ("0", "13.1")),
+    json.loads(HEAT_CIRCUIT_DEW_POINT % ("1", "13.1")),
     json.loads(HEAT_CIRCUIT_DAY_TEMPERATURE % ("0", "20.5")),
     json.loads(HEAT_CIRCUIT_DAY_TEMPERATURE % ("1", "20.5")),
     json.loads(HEAT_CIRCUIT_DAY_TEMPERATURE_THRESHOLD % ("0", "20")),
@@ -461,6 +511,12 @@ MULTIPLE_POSITIONS_DATA_RESPONSE: list[dict[str, Any]] = [
 ]
 
 ENTITY_UPDATED_DATA_RESPONSE: list[dict[str, Any]] = [
+    json.loads(HEAT_CIRCUIT_ROOM_TEMPERATURE % ("0", "22.42")),
+    json.loads(HEAT_CIRCUIT_ROOM_TEMPERATURE % ("1", "22.42")),
+    json.loads(HEAT_CIRCUIT_ROOM_HUMIDITY % ("0", "53")),
+    json.loads(HEAT_CIRCUIT_ROOM_HUMIDITY % ("1", "53")),
+    json.loads(HEAT_CIRCUIT_DEW_POINT % ("0", "13.1")),
+    json.loads(HEAT_CIRCUIT_DEW_POINT % ("1", "13.1")),
     json.loads(HEAT_CIRCUIT_DAY_TEMPERATURE % ("0", "20.5")),
     json.loads(HEAT_CIRCUIT_DAY_TEMPERATURE % ("1", "20.5")),
     json.loads(HEAT_CIRCUIT_DAY_TEMPERATURE_THRESHOLD % ("0", "20")),
@@ -499,6 +555,9 @@ ENTITY_UPDATED_DATA_RESPONSE: list[dict[str, Any]] = [
 ]
 
 HEAT_CIRCUIT_OPERATION_MODE_3_DATA_RESPONSE: list[dict[str, Any]] = [
+    json.loads(HEAT_CIRCUIT_ROOM_TEMPERATURE % ("0", "22.42")),
+    json.loads(HEAT_CIRCUIT_ROOM_HUMIDITY % ("0", "53")),
+    json.loads(HEAT_CIRCUIT_DEW_POINT % ("0", "13.1")),
     json.loads(HEAT_CIRCUIT_DAY_TEMPERATURE % ("0", "20.5")),
     json.loads(HEAT_CIRCUIT_DAY_TEMPERATURE_THRESHOLD % ("0", "20")),
     json.loads(HEAT_CIRCUIT_HEAT_REQUEST % ("0", "1")),
@@ -522,6 +581,9 @@ HEAT_CIRCUIT_OPERATION_MODE_3_DATA_RESPONSE: list[dict[str, Any]] = [
 ]
 
 HEAT_CIRCUIT_OPERATION_MODE_4_DATA_RESPONSE: list[dict[str, Any]] = [
+    json.loads(HEAT_CIRCUIT_ROOM_TEMPERATURE % ("0", "22.42")),
+    json.loads(HEAT_CIRCUIT_ROOM_HUMIDITY % ("0", "53")),
+    json.loads(HEAT_CIRCUIT_DEW_POINT % ("0", "13.1")),
     json.loads(HEAT_CIRCUIT_DAY_TEMPERATURE % ("0", "20.5")),
     json.loads(HEAT_CIRCUIT_DAY_TEMPERATURE_THRESHOLD % ("0", "20")),
     json.loads(HEAT_CIRCUIT_HEAT_REQUEST % ("0", "1")),

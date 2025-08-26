@@ -24,7 +24,7 @@ async def test_load_entry(
     await setup_integration(hass, config_entry)
 
     assert config_entry.state is ConfigEntryState.LOADED
-    assert hass.states.async_entity_ids_count() == 55
+    assert hass.states.async_entity_ids_count() == 61
     assert set(hass.states.async_entity_ids()) == {
         "number.keba_keenergy_12345678_hot_water_tank_min_temperature_1",
         "number.keba_keenergy_12345678_hot_water_tank_min_temperature_2",
@@ -62,6 +62,8 @@ async def test_load_entry(
         "sensor.keba_keenergy_12345678_heat_circuit_day_temperature_2",
         "sensor.keba_keenergy_12345678_heat_circuit_day_temperature_threshold_1",
         "sensor.keba_keenergy_12345678_heat_circuit_day_temperature_threshold_2",
+        "sensor.keba_keenergy_12345678_heat_circuit_dew_point_1",
+        "sensor.keba_keenergy_12345678_heat_circuit_dew_point_2",
         "sensor.keba_keenergy_12345678_heat_circuit_night_temperature_1",
         "sensor.keba_keenergy_12345678_heat_circuit_night_temperature_2",
         "sensor.keba_keenergy_12345678_heat_circuit_night_temperature_threshold_1",
@@ -72,6 +74,10 @@ async def test_load_entry(
         "sensor.keba_keenergy_12345678_heat_circuit_temperature_offset_2",
         "sensor.keba_keenergy_12345678_heat_circuit_operating_mode_1",
         "sensor.keba_keenergy_12345678_heat_circuit_operating_mode_2",
+        "sensor.keba_keenergy_12345678_heat_circuit_room_humidity_1",
+        "sensor.keba_keenergy_12345678_heat_circuit_room_humidity_2",
+        "sensor.keba_keenergy_12345678_heat_circuit_room_temperature_1",
+        "sensor.keba_keenergy_12345678_heat_circuit_room_temperature_2",
         "sensor.keba_keenergy_12345678_heat_circuit_heat_request_1",
         "sensor.keba_keenergy_12345678_heat_circuit_heat_request_2",
         "climate.keba_keenergy_12345678_1",

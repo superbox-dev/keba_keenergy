@@ -63,6 +63,9 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
 
             response: dict[str, ValueResponse] = await self.api.read_data(
                 request=[
+                    HeatCircuit.ROOM_TEMPERATURE,
+                    HeatCircuit.ROOM_HUMIDITY,
+                    HeatCircuit.DEW_POINT,
                     HeatCircuit.DAY_TEMPERATURE,
                     HeatCircuit.DAY_TEMPERATURE_THRESHOLD,
                     HeatCircuit.HEAT_REQUEST,

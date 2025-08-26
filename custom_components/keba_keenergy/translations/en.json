@@ -82,6 +82,9 @@
             "day_temperature_threshold": {
                 "name": "Day temperature threshold"
             },
+            "dew_point": {
+                "name": "Dew point"
+            },
             "heat_request": {
                 "name": "Heat request",
                 "state": {
@@ -129,6 +132,12 @@
             },
             "reflux_temperature": {
                 "name": "Reflux temperature"
+            },
+            "room_humidity": {
+                "name": "Room humidity"
+            },
+            "room_temperature": {
+                "name": "Room temperature"
             },
             "source_input_temperature": {
                 "name": "Source input temperature"
