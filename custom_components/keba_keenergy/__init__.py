@@ -1,6 +1,5 @@
 """The KEBA KeEnergy integration."""
 
-from collections.abc import coroutine
 from typing import TYPE_CHECKING
 
 from homeassistant.config_entries import ConfigEntry
