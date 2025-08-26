@@ -124,6 +124,11 @@ class KebaKeEnergyClimateEntity(KebaKeEnergyEntity, ClimateEntity):
         return "mdi:hvac" if self.hvac_mode == HVACMode.HEAT else "mdi:hvac-off"
 
     @property
+    def current_temperature(self) -> float | None:
+        """Return the current temperature."""
+        return float(self.get_value("room_temperature"))
+
+    @property
     def target_temperature_for_preset(self) -> float:
         """Return the temperature for the current preset."""
         target_temperature = float(self.get_value("day_temperature"))
@@ -149,6 +154,11 @@ class KebaKeEnergyClimateEntity(KebaKeEnergyEntity, ClimateEntity):
     def max_temp(self) -> float:
         """Return the maximum temperature."""
         return self.target_temperature_for_preset + float(self.get_attribute("temperature_offset", "upper_limit"))
+
+    @property
+    def current_humidity(self) -> float:
+        """Return the current humidity."""
+        return float(self.get_value("room_humidity"))
 
     @property
     def hvac_mode(self) -> HVACMode:

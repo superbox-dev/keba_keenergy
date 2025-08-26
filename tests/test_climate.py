@@ -1,6 +1,8 @@
 from typing import Any
 
 import pytest
+from homeassistant.components.climate.const import ATTR_CURRENT_HUMIDITY
+from homeassistant.components.climate.const import ATTR_CURRENT_TEMPERATURE
 from homeassistant.components.climate.const import ATTR_HVAC_ACTION
 from homeassistant.components.climate.const import ATTR_HVAC_MODE
 from homeassistant.components.climate.const import ATTR_HVAC_MODES
@@ -88,6 +90,8 @@ async def test_climate(
     assert state.attributes[ATTR_TARGET_TEMP_STEP] == 0.5
     assert state.attributes[ATTR_PRESET_MODES] == ["none", "away", "comfort", "sleep", "boost"]
     assert state.attributes[ATTR_TEMPERATURE] == 20.5
+    assert state.attributes[ATTR_CURRENT_TEMPERATURE] == 22.4
+    assert state.attributes[ATTR_CURRENT_HUMIDITY] == 53.0
     assert state.attributes[ATTR_HVAC_ACTION] == HVACAction.OFF
     assert state.attributes[ATTR_PRESET_MODE] == "none"
     assert state.attributes[ATTR_FRIENDLY_NAME] == "FBH2 (2)"
