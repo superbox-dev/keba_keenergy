@@ -63,6 +63,8 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
 
             response: dict[str, ValueResponse] = await self.api.read_data(
                 request=[
+                    HeatCircuit.HAS_ROOM_TEMPERATURE,
+                    HeatCircuit.HAS_ROOM_HUMIDITY,
                     HeatCircuit.ROOM_TEMPERATURE,
                     HeatCircuit.ROOM_HUMIDITY,
                     HeatCircuit.DEW_POINT,
@@ -147,3 +149,13 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
         """Return number of hot water tanks."""
         data: Value = cast("Value", self.data[SectionPrefix.SYSTEM]["hot_water_tank_numbers"])
         return int(data["value"])
+
+    def has_room_temperature(self, *, index: int) -> str:
+        """Check if room temperature sensor is available."""
+        data: list[Value] = cast("list[Value]", self.data[SectionPrefix.HEAT_CIRCUIT]["has_room_temperature"])
+        return str(data[index]["value"])
+
+    def has_room_humidity(self, *, index: int) -> str:
+        """Check if room humidity sensor is available."""
+        data: list[Value] = cast("list[Value]", self.data[SectionPrefix.HEAT_CIRCUIT]["has_room_humidity"])
+        return str(data[index]["value"])

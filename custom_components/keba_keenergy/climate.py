@@ -18,6 +18,7 @@ from homeassistant.components.climate.const import PRESET_NONE
 from homeassistant.components.climate.const import PRESET_SLEEP
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import ATTR_TEMPERATURE
+from homeassistant.const import STATE_ON
 from homeassistant.const import UnitOfTemperature
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
@@ -126,7 +127,11 @@ class KebaKeEnergyClimateEntity(KebaKeEnergyEntity, ClimateEntity):
     @property
     def current_temperature(self) -> float | None:
         """Return the current temperature."""
-        return float(self.get_value("room_temperature"))
+        return (
+            float(self.get_value("room_temperature"))
+            if self.coordinator.has_room_temperature(index=self.index or 0) == STATE_ON
+            else None
+        )
 
     @property
     def target_temperature_for_preset(self) -> float:
@@ -156,9 +161,13 @@ class KebaKeEnergyClimateEntity(KebaKeEnergyEntity, ClimateEntity):
         return self.target_temperature_for_preset + float(self.get_attribute("temperature_offset", "upper_limit"))
 
     @property
-    def current_humidity(self) -> float:
+    def current_humidity(self) -> float | None:
         """Return the current humidity."""
-        return float(self.get_value("room_humidity"))
+        return (
+            float(self.get_value("room_humidity"))
+            if self.coordinator.has_room_humidity(index=self.index or 0) == STATE_ON
+            else None
+        )
 
     @property
     def hvac_mode(self) -> HVACMode:

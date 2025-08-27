@@ -81,20 +81,26 @@ async def test_climate(
 
     await setup_integration(hass, config_entry)
 
-    state: State | None = hass.states.get(ENTITY_ID_2)
-    assert isinstance(state, State)
+    state_1: State | None = hass.states.get(ENTITY_ID_1)
+    assert isinstance(state_1, State)
 
-    assert state.attributes[ATTR_HVAC_MODES] == [HVACMode.AUTO, HVACMode.HEAT, HVACMode.OFF]
-    assert state.attributes[ATTR_MIN_TEMP] == 18.0
-    assert state.attributes[ATTR_MAX_TEMP] == 23.0
-    assert state.attributes[ATTR_TARGET_TEMP_STEP] == 0.5
-    assert state.attributes[ATTR_PRESET_MODES] == ["none", "away", "comfort", "sleep", "boost"]
-    assert state.attributes[ATTR_TEMPERATURE] == 20.5
-    assert state.attributes[ATTR_CURRENT_TEMPERATURE] == 22.4
-    assert state.attributes[ATTR_CURRENT_HUMIDITY] == 53.0
-    assert state.attributes[ATTR_HVAC_ACTION] == HVACAction.OFF
-    assert state.attributes[ATTR_PRESET_MODE] == "none"
-    assert state.attributes[ATTR_FRIENDLY_NAME] == "FBH2 (2)"
+    assert state_1.attributes[ATTR_CURRENT_TEMPERATURE] == 22.4
+    assert state_1.attributes[ATTR_CURRENT_HUMIDITY] == 53.0
+
+    state_2: State | None = hass.states.get(ENTITY_ID_2)
+    assert isinstance(state_2, State)
+
+    assert state_2.attributes[ATTR_HVAC_MODES] == [HVACMode.AUTO, HVACMode.HEAT, HVACMode.OFF]
+    assert state_2.attributes[ATTR_MIN_TEMP] == 18.0
+    assert state_2.attributes[ATTR_MAX_TEMP] == 23.0
+    assert state_2.attributes[ATTR_TARGET_TEMP_STEP] == 0.5
+    assert state_2.attributes[ATTR_PRESET_MODES] == ["none", "away", "comfort", "sleep", "boost"]
+    assert state_2.attributes[ATTR_TEMPERATURE] == 20.5
+    assert not state_2.attributes.get(ATTR_CURRENT_TEMPERATURE)
+    assert not state_2.attributes.get(ATTR_CURRENT_HUMIDITY)
+    assert state_2.attributes[ATTR_HVAC_ACTION] == HVACAction.OFF
+    assert state_2.attributes[ATTR_PRESET_MODE] == "none"
+    assert state_2.attributes[ATTR_FRIENDLY_NAME] == "FBH2 (2)"
 
 
 @pytest.mark.parametrize(
