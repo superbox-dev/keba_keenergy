@@ -32,6 +32,13 @@ jobs:
         run: uv run yamllint $(git ls-files '*.yml' '*.yaml')
       - name: Lint Markdown files
         run: uv run rumdl check $(git ls-files '*.md')
+
+  validation:
+    name: Validation
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v5
       - name: Run hassfest validation
         uses: home-assistant/actions/hassfest@master
       - name: Run HACS validation
