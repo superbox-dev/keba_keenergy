@@ -32,6 +32,12 @@ jobs:
         run: uv run yamllint $(git ls-files '*.yml' '*.yaml')
       - name: Lint Markdown files
         run: uv run rumdl check $(git ls-files '*.md')
+      - name: Run hassfest validation
+        uses: home-assistant/actions/hassfest@master
+      - name: Run HACS validation
+        uses: hacs/action@22.5.0
+        with:
+          category: integration
 
   security:
     name: Security
