@@ -1,0 +1,174 @@
+{
+    "config": {
+        "abort": {
+            "already_configured": "Gerät ist bereits konfiguriert"
+        },
+        "error": {
+            "cannot_connect": "Verbindung fehlgeschlagen",
+            "unknown": "Unerwarteter Fehler"
+        },
+        "flow_title": "{name}",
+        "step": {
+            "discovery_confirm": {
+                "description": "Möchtest du {name} ({host}) zu Home Assistant hinzufügen?",
+                "title": "Discovered {name}"
+            },
+            "user": {
+                "data": {
+                    "host": "Host",
+                    "ssl": "SSL-Zertifikat verwenden"
+                },
+                "description": "Konfiguriere die IP-Adresse oder den Hostnamen deines {name}-Geräts."
+            }
+        }
+    },
+    "entity": {
+        "binary_sensor": {
+            "heat_request": {
+                "name": "Heizanforderung"
+            }
+        },
+        "climate": {
+            "heat_circuit": {
+                "state": {
+                    "heat": "Ein"
+                },
+                "state_attributes": {
+                    "preset_mode": {
+                        "state": {
+                            "eco": "Auto",
+                            "away": "Urlaub",
+                            "boost": "Party",
+                            "comfort": "Tag",
+                            "sleep": "Nacht"
+                        }
+                    }
+                }
+            }
+        },
+        "number": {
+            "day_temperature": {
+                "name": "Temperatur Tag"
+            },
+            "holiday_temperature": {
+                "name": "Temperatur Urlaub"
+            },
+            "max_temperature": {
+                "name": "Maximale Temperatur"
+            },
+            "min_temperature": {
+                "name": "Minimale Temperatur"
+            },
+            "night_temperature": {
+                "name": "Temperatur Nacht"
+            }
+        },
+        "sensor": {
+            "circulation_pump": {
+                "name": "Umwälzpumpe"
+            },
+            "compressor": {
+                "name": "Kompressor"
+            },
+            "compressor_input_temperature": {
+                "name": "Kompressor Eingangstemperatur"
+            },
+            "compressor_output_temperature": {
+                "name": "Kompressor Ausgangstemperatur"
+            },
+            "day_temperature": {
+                "name": "Temperatur Tag"
+            },
+            "day_temperature_threshold": {
+                "name": "Heizgrenze Tag"
+            },
+            "dew_point": {
+                "name": "Taupunkt"
+            },
+            "heat_request": {
+                "name": "Heizanforderung",
+                "state": {
+                    "off": "Aus",
+                    "on": "Ein",
+                    "outdoor_temperature_off": "Aus (Hohe Außentemperatur)",
+                    "temporary_off": "Aus (Vorübergehend)"
+                }
+            },
+            "high_pressure": {
+                "name": "Hochdruck"
+            },
+            "holiday_temperature": {
+                "name": "Temperature Urlaub"
+            },
+            "inflow_temperature": {
+                "name": "Vorlauftemperatur"
+            },
+            "low_pressure": {
+                "name": "Niederdruck"
+            },
+            "max_temperature": {
+                "name": "Maximale Temperatur"
+            },
+            "min_temperature": {
+                "name": "Minimale Temperatur"
+            },
+            "night_temperature": {
+                "name": "Temperatur Nacht"
+            },
+            "night_temperature_threshold": {
+                "name": "Heizgrenze Nacht"
+            },
+            "operating_mode": {
+                "name": "Betriebsart",
+                "state": {
+                    "auto": "Auto",
+                    "day": "Tag",
+                    "heat_up": "Aufheizen",
+                    "night": "Nacht"
+                }
+            },
+            "outdoor_temperature": {
+                "name": "Außentemperatur"
+            },
+            "reflux_temperature": {
+                "name": "Rücklauftemperatur"
+            },
+            "room_humidity": {
+                "name": "Raumluftfeuchtigkeit"
+            },
+            "room_temperature": {
+                "name": "Raumtemperatur"
+            },
+            "source_input_temperature": {
+                "name": "Temperatur Quelle Eingang"
+            },
+            "source_output_temperature": {
+                "name": "Temperatur Quelle Ausgang"
+            },
+            "state": {
+                "name": "State",
+                "state": {
+                    "auto_cool": "Automatisch kühlen",
+                    "auto_heat": "Automatisch heizen",
+                    "defrost": "Auftauen",
+                    "flow": "Rücklauf",
+                    "inflow": "Vorlauf",
+                    "standby": "Standby"
+                }
+            },
+            "temperature_offset": {
+                "name": "Temperatur Offset"
+            }
+        },
+        "water_heater": {
+            "hot_water_tank": {
+                "state": {
+                    "eco": "Auto",
+                    "heat_pump": "Ein",
+                    "off": "Aus",
+                    "performance": "Aufheizen"
+                }
+            }
+        }
+    }
+}
