@@ -51,6 +51,8 @@ This integration supports the following manufacturers and devices:
 
 ## Installation
 
+[![Open your Home Assistant instance and open a repository inside the Home Assistant Community Store.](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=superbox-dev&repository=keba_keenergy)
+
 1. Install this integration with HACS, or copy the contents of this repository into the
    `custom_components/keba_keenergy` directory.
 2. Restart Home Assistant.
