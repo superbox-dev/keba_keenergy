@@ -170,5 +170,13 @@
                 }
             }
         }
+    },
+    "device": {
+        "heat_circuit": {
+            "name": "Heating circuit{position}"
+        },
+        "hot_water_tank": {
+            "name": "Hot Water Tank{position}"
+        }
     }
 }

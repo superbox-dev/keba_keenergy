@@ -100,7 +100,7 @@ async def test_climate(
     assert not state_2.attributes.get(ATTR_CURRENT_HUMIDITY)
     assert state_2.attributes[ATTR_HVAC_ACTION] == HVACAction.OFF
     assert state_2.attributes[ATTR_PRESET_MODE] == "none"
-    assert state_2.attributes[ATTR_FRIENDLY_NAME] == "FBH2 (2)"
+    assert state_2.attributes[ATTR_FRIENDLY_NAME] == "Heating circuit (2)"
 
 
 @pytest.mark.parametrize(
