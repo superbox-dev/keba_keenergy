@@ -59,8 +59,6 @@ This integration supports the following manufacturers and devices:
 4. Add IP address or hostname of your KEBA KeEnergy device.
 5. Enjoy :-)
 
-[![Open your Home Assistant instance and open a repository inside the Home Assistant Community Store.](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=mh-superbox&repository=keba_keenergy) [![Open your Home Assistant instance and start setting up a new integration.](https://my.home-assistant.io/badges/config_flow_start.svg)](https://my.home-assistant.io/redirect/config_flow_start/?domain=keba_keenergy)
-
 ## Changelog
 
 The changelog lives in the [CHANGELOG.md](CHANGELOG.md) document. The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
