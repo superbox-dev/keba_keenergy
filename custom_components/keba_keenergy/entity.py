@@ -1,6 +1,7 @@
 """Entity classes for the KEBA KeEnergy integration."""
 
 from typing import Any
+from typing import Mapping
 from typing import TYPE_CHECKING
 from typing import cast
 
@@ -80,7 +81,9 @@ class KebaKeEnergyEntity(
             data: list[Value] = cast("list[Value]", self.coordinator.data[self.section_id]["name"])
             _device_name = data[self.index or 0]["value"]
         elif self.is_heat_pump:
-            _device_name = f"{self.device_manufacturer} {self.device_model}"
+            _device_name = (
+                f"{self.device_manufacturer} {self.device_model}" if self.device_manufacturer else self.device_model
+            )
         elif self.is_hot_water_tank:  # pragma: no branch
             _device_name = "Hot Water Tank"
 
@@ -132,6 +135,23 @@ class KebaKeEnergyEntity(
         return _device_model
 
     @property
+    def _translation_key(self) -> str | None:
+        translation_key: str | None = None
+
+        if self.is_heat_circuit:
+            translation_key = "heat_circuit"
+        if self.is_hot_water_tank:
+            translation_key = "hot_water_tank"
+
+        return translation_key
+
+    @property
+    def _translation_placeholders(self) -> Mapping[str, str] | None:
+        return {
+            "position": f" ({self.position})" if self.position else "",
+        }
+
+    @property
     def device_info(self) -> DeviceInfo:
         """Return updated device specific attributes."""
         data: dict[str, Any] = {
@@ -139,6 +159,8 @@ class KebaKeEnergyEntity(
             "manufacturer": self.device_manufacturer,
             "model": self.device_model,
             "sw_version": (self.coordinator.device_sw_version if self.is_system_device else None),
+            "translation_key": self._translation_key,
+            "translation_placeholders": self._translation_placeholders,
             # Added via_device if the device is not the KEBA KeEnergy control device.
             "via_device": (None if self.is_system_device else (DOMAIN, f"{self.entry.unique_id}_{DOMAIN}")),
         }
@@ -150,6 +172,8 @@ class KebaKeEnergyEntity(
             model=data["model"],
             manufacturer=data["manufacturer"],
             sw_version=data["sw_version"],
+            translation_key=data["translation_key"],
+            translation_placeholders=data["translation_placeholders"],
             via_device=data["via_device"],
         )
 

@@ -170,5 +170,13 @@
                 }
             }
         }
+    },
+    "device": {
+        "heat_circuit": {
+            "name": "Heizkreis{position}"
+        },
+        "hot_water_tank": {
+            "name": "Warmwasserspeicher{position}"
+        }
     }
 }
