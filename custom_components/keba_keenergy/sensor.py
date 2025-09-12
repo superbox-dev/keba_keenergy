@@ -57,9 +57,9 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription, ...]] = {
             value=lambda data: cast("float", data),
         ),
         KebaKeEnergySensorEntityDescription(
-            device_class=SensorDeviceClass.TEMPERATURE,
+            device_class=SensorDeviceClass.HUMIDITY,
             key="room_humidity",
-            native_unit_of_measurement=UnitOfTemperature.CELSIUS,
+            native_unit_of_measurement=PERCENTAGE,
             state_class=SensorStateClass.MEASUREMENT,
             translation_key="room_humidity",
             value=lambda data: cast("float", data),

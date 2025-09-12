@@ -193,6 +193,26 @@ async def test_sensors(
     assert heat_pump_low_pressure.attributes[CONF_DEVICE_CLASS] == SensorDeviceClass.PRESSURE
     assert heat_pump_low_pressure.attributes[ATTR_FRIENDLY_NAME] == "M-TEC WPS26 Low pressure"
 
+    heat_circuit_room_temperature_1: State | None = hass.states.get(
+        "sensor.keba_keenergy_12345678_heat_circuit_room_temperature_1",
+    )
+    assert isinstance(heat_circuit_room_temperature_1, State)
+    assert heat_circuit_room_temperature_1.state == "22.42"
+    assert heat_circuit_room_temperature_1.attributes[CONF_UNIT_OF_MEASUREMENT] == UnitOfTemperature.CELSIUS
+    assert heat_circuit_room_temperature_1.attributes[ATTR_STATE_CLASS] == SensorStateClass.MEASUREMENT
+    assert heat_circuit_room_temperature_1.attributes[CONF_DEVICE_CLASS] == SensorDeviceClass.TEMPERATURE
+    assert heat_circuit_room_temperature_1.attributes[ATTR_FRIENDLY_NAME] == "Heating circuit (1) Room temperature"
+
+    heat_circuit_room_humidity_1: State | None = hass.states.get(
+        "sensor.keba_keenergy_12345678_heat_circuit_room_humidity_1",
+    )
+    assert isinstance(heat_circuit_room_humidity_1, State)
+    assert heat_circuit_room_humidity_1.state == "53.0"
+    assert heat_circuit_room_humidity_1.attributes[CONF_UNIT_OF_MEASUREMENT] == PERCENTAGE
+    assert heat_circuit_room_humidity_1.attributes[ATTR_STATE_CLASS] == SensorStateClass.MEASUREMENT
+    assert heat_circuit_room_humidity_1.attributes[CONF_DEVICE_CLASS] == SensorDeviceClass.HUMIDITY
+    assert heat_circuit_room_humidity_1.attributes[ATTR_FRIENDLY_NAME] == "Heating circuit (1) Room humidity"
+
     heat_circuit_temperature_1: State | None = hass.states.get(
         "sensor.keba_keenergy_12345678_heat_circuit_temperature_1",
     )
