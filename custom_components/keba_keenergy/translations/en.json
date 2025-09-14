@@ -176,7 +176,7 @@
             "name": "Heating circuit{position}"
         },
         "hot_water_tank": {
-            "name": "Hot Water Tank{position}"
+            "name": "Hot water tank{position}"
         }
     }
 }
