@@ -7,15 +7,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.1.0] - 2025-08-14
+
+### Added
+
+- Energy management sensors for the head pump device
+
+### Changed
+
+- Removed the manufacturer and model name from the head pump device translation
+
 ## [1.0.1] - 2025-08-12
 
 ### Added
 
-- Add german translations
+- German translations
 
 ### Fixed
 
-- Fix wrong unit for room humidity sensor
+- Wrong unit for room humidity sensor
 
 ## [1.0.0] - 2025-08-1
 
