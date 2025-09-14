@@ -81,11 +81,9 @@ class KebaKeEnergyEntity(
             data: list[Value] = cast("list[Value]", self.coordinator.data[self.section_id]["name"])
             _device_name = data[self.index or 0]["value"]
         elif self.is_heat_pump:
-            _device_name = (
-                f"{self.device_manufacturer} {self.device_model}" if self.device_manufacturer else self.device_model
-            )
+            _device_name = "Heat pump"
         elif self.is_hot_water_tank:  # pragma: no branch
-            _device_name = "Hot Water Tank"
+            _device_name = "Hot water tank"
 
         # Add position number to device name if there is more than one device
         # e.g. hot water tank, heat circuit or heat pump.
@@ -140,7 +138,9 @@ class KebaKeEnergyEntity(
 
         if self.is_heat_circuit:
             translation_key = "heat_circuit"
-        if self.is_hot_water_tank:
+        elif self.is_heat_pump:
+            translation_key = "heat_pump"
+        elif self.is_hot_water_tank:
             translation_key = "hot_water_tank"
 
         return translation_key
