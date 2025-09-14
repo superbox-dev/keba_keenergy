@@ -1272,14 +1272,14 @@ test = [
 
 [[package]]
 name = "keba-keenergy-api"
-version = "1.14.0"
+version = "1.15.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "aiohttp" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/04/ea/9a328adaa504fddc1b591de98c9dc233694ad21131ad5e19f351915a8b2a/keba_keenergy_api-1.14.0.tar.gz", hash = "sha256:76ef74b646a29e424b3f1c275aa9672e19d63d227cdfd5874b131b3a8915c9f0", size = 129701, upload-time = "2025-08-27T18:33:00.128Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/2c/df/ed40879ca57fbac9f66e2b72755132054019d417e5e60f93e8ca9f9b5e16/keba_keenergy_api-1.15.0.tar.gz", hash = "sha256:8ae2cc50e910e83f63c36c2466279946b2f9f5cc4b609b24afcc8588ac83b24f", size = 132091, upload-time = "2025-09-14T19:20:15.534Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/22/7b/8c8c18343d9b4fd73c8f0b0cdf78051f30247ab91556028edfbd35ecacc2/keba_keenergy_api-1.14.0-py3-none-any.whl", hash = "sha256:8abc5a394c0412afb46e211b250e9352f13a4f40ef63964a1965b6e4536dc64e", size = 16745, upload-time = "2025-08-27T18:32:58.165Z" },
+    { url = "https://files.pythonhosted.org/packages/63/35/87ce6ac9e1f0073acc033fdb23dfa66da61e4f5296f1810b0fc10e57489b/keba_keenergy_api-1.15.0-py3-none-any.whl", hash = "sha256:c37daa1d097ad81ad37ce0383f5924082c056500a4237775b9583c922b33448e", size = 17585, upload-time = "2025-09-14T19:20:14.04Z" },
 ]
 
 [[package]]
