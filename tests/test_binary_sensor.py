@@ -43,3 +43,31 @@ async def test_binary_sensors(
     assert isinstance(heat_pump_heat_request, State)
     assert heat_pump_heat_request.state == STATE_OFF
     assert heat_pump_heat_request.attributes[ATTR_FRIENDLY_NAME] == "Heat pump Heat request"
+
+
+async def test_binary_sensors_translations(
+    hass: HomeAssistant,
+    config_entry: MockConfigEntry,
+    fake_api: FakeKebaKeEnergyAPI,
+) -> None:
+    """Test binary sensors."""
+    fake_api.responses = [MULTIPLE_POSITIONS_RESPONSE, MULTIPLE_POSITIONS_DATA_RESPONSE]
+    fake_api.register_requests(config_entry.data[CONF_HOST])
+
+    hass.config.language = "de"
+    await setup_integration(hass, config_entry)
+
+    hot_water_tank_heat_request_1: State | None = hass.states.get(
+        "binary_sensor.keba_keenergy_12345678_hot_water_tank_heat_request_1",
+    )
+    assert hot_water_tank_heat_request_1.attributes[ATTR_FRIENDLY_NAME] == "Warmwasserspeicher (1) Heizanforderung"
+
+    hot_water_tank_heat_request_2: State | None = hass.states.get(
+        "binary_sensor.keba_keenergy_12345678_hot_water_tank_heat_request_2",
+    )
+    assert hot_water_tank_heat_request_2.attributes[ATTR_FRIENDLY_NAME] == "Warmwasserspeicher (2) Heizanforderung"
+
+    heat_pump_heat_request: State | None = hass.states.get(
+        "binary_sensor.keba_keenergy_12345678_heat_pump_heat_request",
+    )
+    assert heat_pump_heat_request.attributes[ATTR_FRIENDLY_NAME] == "Wärmepumpe Heizanforderung"

@@ -188,7 +188,7 @@
                 "name": "JAZ"
             },
             "state": {
-                "name": "State",
+                "name": "Status",
                 "state": {
                     "auto_cool": "Automatisch kühlen",
                     "auto_heat": "Automatisch heizen",

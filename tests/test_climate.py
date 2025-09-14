@@ -103,6 +103,25 @@ async def test_climate(
     assert state_2.attributes[ATTR_FRIENDLY_NAME] == "Heating circuit (2)"
 
 
+async def test_climate_translations(
+    hass: HomeAssistant,
+    config_entry: MockConfigEntry,
+    fake_api: FakeKebaKeEnergyAPI,
+) -> None:
+    """Test climate."""
+    fake_api.responses = [MULTIPLE_POSITIONS_RESPONSE, MULTIPLE_POSITIONS_DATA_RESPONSE]
+    fake_api.register_requests("10.0.0.100")
+
+    hass.config.language = "de"
+    await setup_integration(hass, config_entry)
+
+    state_1: State | None = hass.states.get(ENTITY_ID_1)
+    assert state_1.attributes[ATTR_FRIENDLY_NAME] == "Heizkreis (1)"
+
+    state_2: State | None = hass.states.get(ENTITY_ID_2)
+    assert state_2.attributes[ATTR_FRIENDLY_NAME] == "Heizkreis (2)"
+
+
 @pytest.mark.parametrize(
     ("responses", "expected_target_temperature"),
     [

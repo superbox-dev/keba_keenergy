@@ -14,6 +14,7 @@ from homeassistant.components.water_heater.const import STATE_ECO
 from homeassistant.components.water_heater.const import STATE_HEAT_PUMP
 from homeassistant.components.water_heater.const import STATE_PERFORMANCE
 from homeassistant.const import ATTR_ENTITY_ID
+from homeassistant.const import ATTR_FRIENDLY_NAME
 from homeassistant.const import ATTR_TEMPERATURE
 from homeassistant.const import SERVICE_TURN_OFF
 from homeassistant.const import SERVICE_TURN_ON
@@ -83,6 +84,26 @@ async def test_water_heater(
     assert state.attributes[ATTR_TEMPERATURE] == 51.0
     assert state.attributes[ATTR_TARGET_TEMP_LOW] == 32.5
     assert state.attributes[ATTR_TARGET_TEMP_HIGH] == 52.0
+    assert state.attributes[ATTR_FRIENDLY_NAME] == "Hot water tank (1)"
+
+
+async def test_water_heater_translations(
+    hass: HomeAssistant,
+    config_entry: MockConfigEntry,
+    fake_api: FakeKebaKeEnergyAPI,
+) -> None:
+    """Test water heater translations."""
+    fake_api.responses = [
+        MULTIPLE_POSITIONS_RESPONSE,
+        MULTIPLE_POSITIONS_DATA_RESPONSE,
+    ]
+    fake_api.register_requests("10.0.0.100")
+
+    hass.config.language = "de"
+    await setup_integration(hass, config_entry)
+
+    state: State | None = hass.states.get(ENTITY_ID_1)
+    assert state.attributes[ATTR_FRIENDLY_NAME] == "Warmwasserspeicher (1)"
 
 
 async def test_turn_off(
