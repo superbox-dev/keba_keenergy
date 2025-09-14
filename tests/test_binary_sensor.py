@@ -42,4 +42,4 @@ async def test_binary_sensors(
     )
     assert isinstance(heat_pump_heat_request, State)
     assert heat_pump_heat_request.state == STATE_OFF
-    assert heat_pump_heat_request.attributes[ATTR_FRIENDLY_NAME] == "M-TEC WPS26 Heat request"
+    assert heat_pump_heat_request.attributes[ATTR_FRIENDLY_NAME] == "Heat pump Heat request"
