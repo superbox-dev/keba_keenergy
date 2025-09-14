@@ -60,14 +60,17 @@ async def test_binary_sensors_translations(
     hot_water_tank_heat_request_1: State | None = hass.states.get(
         "binary_sensor.keba_keenergy_12345678_hot_water_tank_heat_request_1",
     )
+    assert isinstance(hot_water_tank_heat_request_1, State)
     assert hot_water_tank_heat_request_1.attributes[ATTR_FRIENDLY_NAME] == "Warmwasserspeicher (1) Heizanforderung"
 
     hot_water_tank_heat_request_2: State | None = hass.states.get(
         "binary_sensor.keba_keenergy_12345678_hot_water_tank_heat_request_2",
     )
+    assert isinstance(hot_water_tank_heat_request_2, State)
     assert hot_water_tank_heat_request_2.attributes[ATTR_FRIENDLY_NAME] == "Warmwasserspeicher (2) Heizanforderung"
 
     heat_pump_heat_request: State | None = hass.states.get(
         "binary_sensor.keba_keenergy_12345678_heat_pump_heat_request",
     )
+    assert isinstance(heat_pump_heat_request, State)
     assert heat_pump_heat_request.attributes[ATTR_FRIENDLY_NAME] == "Wärmepumpe Heizanforderung"

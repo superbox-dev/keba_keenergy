@@ -103,6 +103,7 @@ async def test_water_heater_translations(
     await setup_integration(hass, config_entry)
 
     state: State | None = hass.states.get(ENTITY_ID_1)
+    assert isinstance(state, State)
     assert state.attributes[ATTR_FRIENDLY_NAME] == "Warmwasserspeicher (1)"
 
 

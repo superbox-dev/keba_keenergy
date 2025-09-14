@@ -116,9 +116,11 @@ async def test_climate_translations(
     await setup_integration(hass, config_entry)
 
     state_1: State | None = hass.states.get(ENTITY_ID_1)
+    assert isinstance(state_1, State)
     assert state_1.attributes[ATTR_FRIENDLY_NAME] == "Heizkreis (1)"
 
     state_2: State | None = hass.states.get(ENTITY_ID_2)
+    assert isinstance(state_2, State)
     assert state_2.attributes[ATTR_FRIENDLY_NAME] == "Heizkreis (2)"
 
 
