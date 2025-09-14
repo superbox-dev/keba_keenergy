@@ -281,7 +281,7 @@ HEAT_PUMP_SOURCE_OUTPUT_TEMPERATURE: dict[str, Any] = {
     "value": "24.9",
 }
 
-HEAT_PUMP_STATUS: dict[str, Any] = {
+HEAT_PUMP_STATE: dict[str, Any] = {
     "name": "APPL.CtrlAppl.sParam.heatpump[0].values.heatpumpState",
     "attributes": {
         "formatId": "fmtHPState",
@@ -292,6 +292,160 @@ HEAT_PUMP_STATUS: dict[str, Any] = {
     },
     "value": "0",
 }
+
+HEAT_PUMP_ELECTRICAL_ENERGY_METER: dict[str, Any] = {
+    "name": "APPL.CtrlAppl.sParam.heatpump[0].ElectricEnergyMeter.values.power",
+    "attributes": {
+        "formatId": "fmt3p2",
+        "longText": "Power input",
+        "unitId": "Pwr",
+    },
+    "value": "5.52",
+}
+
+HEAT_PUMP_HEAT_METER: dict[str, Any] = {
+    "name": "APPL.CtrlAppl.sParam.heatpump[0].HeatMeter.values.power",
+    "attributes": {
+        "formatId": "fmt3p2",
+        "longText": "Heating power",
+        "unitId": "Pwr",
+    },
+    "value": "3.22",
+}
+
+HEAT_PUMP_HOT_WATER_METER: dict[str, Any] = {
+    "name": "APPL.CtrlAppl.sParam.heatpump[0].HotWaterMeter.values.power",
+    "attributes": {
+        "formatId": "fmt3p2",
+        "longText": "Hot water power",
+        "unitId": "Pwr",
+    },
+    "value": "2.77",
+}
+
+HEAT_PUMP_COP: dict[str, Any] = {
+    "name": "APPL.CtrlAppl.sParam.heatpump[0].values.COP",
+    "attributes": {
+        "formatId": "fmt3p2",
+        "longText": "COP",
+    },
+    "value": "2.55",
+}
+
+HEAT_PUMP_CONSUMPTION_HEATING_ENERGY: dict[str, Any] = {
+    "name": "APPL.CtrlAppl.sStatisticalData.heatpump[0].consumption.heating.energy",
+    "attributes": {
+        "formatId": "fmt4p0",
+        "longText": "Heating energy",
+        "unitId": "kWhwithoutConv",
+    },
+    "value": "8.43",
+}
+
+HEAT_PUMP_CONSUMPTION_HEATING_ELECTRICAL_ENERGY: dict[str, Any] = {
+    "name": "APPL.CtrlAppl.sStatisticalData.heatpump[0].consumption.heating.electricalenergy",
+    "attributes": {
+        "formatId": "fmt4p0",
+        "longText": "Heat el. energy",
+        "unitId": "kWhwithoutConv",
+    },
+    "value": "7.33",
+}
+
+HEAT_PUMP_ENERGY_EFFICIENCY_RATIO_HEAT: dict[str, Any] = {
+    "name": "APPL.CtrlAppl.sStatisticalData.heatpump[0].EnergyEfficiencyRatioHeat",
+    "attributes": {
+        "longText": "SPF heating",
+    },
+    "value": "3.32",
+}
+
+HEAT_PUMP_CONSUMPTION_COOLING_ENERGY: dict[str, Any] = {
+    "name": "APPL.CtrlAppl.sStatisticalData.heatpump[0].consumption.cooling.energy",
+    "attributes": {
+        "formatId": "fmt4p0",
+        "longText": "Cooling energy",
+        "unitId": "kWhwithoutConv",
+    },
+    "value": "7.21",
+}
+
+HEAT_PUMP_CONSUMPTION_COOLING_ELECTRICAL_ENERGY: dict[str, Any] = {
+    "name": "APPL.CtrlAppl.sStatisticalData.heatpump[0].consumption.cooling.electricalenergy",
+    "attributes": {
+        "formatId": "fmt4p0",
+        "longText": "Cool el. energy",
+        "unitId": "kWhwithoutConv",
+    },
+    "value": "8.72",
+}
+
+HEAT_PUMP_ENERGY_EFFICIENCY_RATIO_COOL: dict[str, Any] = {
+    "name": "APPL.CtrlAppl.sStatisticalData.heatpump[0].EnergyEfficiencyRatioCool",
+    "attributes": {
+        "formatId": "fmt3p2",
+        "longText": "SPF cooling",
+    },
+    "value": "4.22",
+}
+
+HEAT_PUMP_CONSUMPTION_DOM_HOT_WATER_ENERGY: dict[str, Any] = {
+    "name": "APPL.CtrlAppl.sStatisticalData.heatpump[0].consumption.domHotWater.energy",
+    "attributes": {
+        "formatId": "fmt4p0",
+        "longText": "Dom. HW energy",
+        "unitId": "kWhwithoutConv",
+    },
+    "value": "7.86",
+}
+
+HEAT_PUMP_CONSUMPTION_DOM_HOT_WATER_ELECTRICAL_ENERGY: dict[str, Any] = {
+    "name": "APPL.CtrlAppl.sStatisticalData.heatpump[0].consumption.domHotWater.electricalenergy",
+    "attributes": {
+        "formatId": "fmt4p0",
+        "longText": "Dom.HW el. energy",
+        "unitId": "kWhwithoutConv",
+    },
+    "value": "2.77",
+}
+
+HEAT_PUMP_ENERGY_EFFICIENCY_RATIO_DOM_HOT_WATER: dict[str, Any] = {
+    "name": "APPL.CtrlAppl.sStatisticalData.heatpump[0].EnergyEfficiencyRatioDomHotWater",
+    "attributes": {
+        "longText": "SPF DHW",
+    },
+    "value": "2.50",
+}
+
+HEAT_PUMP_CONSUMPTION_ENERGY: dict[str, Any] = {
+    "name": "APPL.CtrlAppl.sStatisticalData.heatpump[0].consumption.energy",
+    "attributes": {
+        "formatId": "fmt4p0",
+        "longText": "Energy",
+        "unitId": "kWhwithoutConv",
+    },
+    "value": "8.22",
+}
+
+HEAT_PUMP_CONSUMPTION_ELECTRICAL_ENERGY: dict[str, Any] = {
+    "name": "APPL.CtrlAppl.sStatisticalData.heatpump[0].consumption.electricalenergy",
+    "attributes": {
+        "formatId": "fmt4p0",
+        "longText": "El. energy",
+        "unitId": "kWhwithoutConv",
+    },
+    "value": "5.21",
+}
+
+HEAT_PUMP_ENERGY_EFFICIENCY_RATIO: dict[str, Any] = {
+    "name": "APPL.CtrlAppl.sStatisticalData.heatpump[0].EnergyEfficiencyRatio",
+    "attributes": {
+        "formatId": "fmt3p2",
+        "longText": "SPF general",
+    },
+    "value": "2.43",
+}
+
 
 HOT_WATER_TANK_HEAT_REQUEST: str = """
     {
@@ -457,8 +611,25 @@ HEAT_PUMP_DATA: list[dict[str, Any]] = [
     HEAT_PUMP_REFLUX_TEMPERATURE,
     HEAT_PUMP_SOURCE_INPUT_TEMPERATURE,
     HEAT_PUMP_SOURCE_OUTPUT_TEMPERATURE,
-    HEAT_PUMP_STATUS,
+    HEAT_PUMP_STATE,
+    HEAT_PUMP_ELECTRICAL_ENERGY_METER,
+    HEAT_PUMP_HEAT_METER,
+    HEAT_PUMP_HOT_WATER_METER,
+    HEAT_PUMP_COP,
+    HEAT_PUMP_CONSUMPTION_HEATING_ENERGY,
+    HEAT_PUMP_CONSUMPTION_HEATING_ELECTRICAL_ENERGY,
+    HEAT_PUMP_ENERGY_EFFICIENCY_RATIO_HEAT,
+    HEAT_PUMP_CONSUMPTION_COOLING_ENERGY,
+    HEAT_PUMP_CONSUMPTION_COOLING_ELECTRICAL_ENERGY,
+    HEAT_PUMP_ENERGY_EFFICIENCY_RATIO_COOL,
+    HEAT_PUMP_CONSUMPTION_DOM_HOT_WATER_ENERGY,
+    HEAT_PUMP_CONSUMPTION_DOM_HOT_WATER_ELECTRICAL_ENERGY,
+    HEAT_PUMP_ENERGY_EFFICIENCY_RATIO_DOM_HOT_WATER,
+    HEAT_PUMP_CONSUMPTION_ENERGY,
+    HEAT_PUMP_CONSUMPTION_ELECTRICAL_ENERGY,
+    HEAT_PUMP_ENERGY_EFFICIENCY_RATIO,
 ]
+
 
 DEFAULT_POSITION_DATA_RESPONSE: list[dict[str, Any]] = [
     json.loads(HEAT_CIRCUIT_HAS_ROOM_TEMPERATURE % ("0", "true")),
