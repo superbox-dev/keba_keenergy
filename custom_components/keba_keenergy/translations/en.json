@@ -67,6 +67,15 @@
             "circulation_pump": {
                 "name": "Circulation pump"
             },
+            "cooling_electrical_energy": {
+                "name": "Cooling electrical energy"
+            },
+            "cooling_energy": {
+                "name": "Cooling energy"
+            },
+            "cooling_spf": {
+                "name": "Cooling SPF"
+            },
             "compressor": {
                 "name": "Compressor"
             },
@@ -75,6 +84,9 @@
             },
             "compressor_output_temperature": {
                 "name": "Compressor output temperature"
+            },
+            "cop": {
+                "name": "Coefficient of performance"
             },
             "day_temperature": {
                 "name": "Day temperature"
@@ -85,6 +97,18 @@
             "dew_point": {
                 "name": "Dew point"
             },
+            "domestic_hot_water_electrical_energy": {
+                "name": "Hot water electrical energy"
+            },
+            "domestic_hot_water_energy": {
+                "name": "Hot water energy"
+            },
+            "domestic_hot_water_spf": {
+                "name": "Hot water SPF"
+            },
+            "electrical_power": {
+                "name": "Electrical power"
+            },
             "heat_request": {
                 "name": "Heat request",
                 "state": {
@@ -94,11 +118,26 @@
                     "temporary_off": "Temporary off"
                 }
             },
+            "heating_electrical_energy": {
+                "name": "Heating electrical energy"
+            },
+            "heating_energy": {
+                "name": "Heating energy"
+            },
+            "heating_power": {
+                "name": "Heating power"
+            },
+            "heating_spf": {
+                "name": "Heating SPF"
+            },
             "high_pressure": {
                 "name": "High pressure"
             },
             "holiday_temperature": {
                 "name": "Holiday temperature"
+            },
+            "hot_water_power": {
+                "name": "Hot water power"
             },
             "inflow_temperature": {
                 "name": "Inflow temperature"
@@ -145,6 +184,9 @@
             "source_output_temperature": {
                 "name": "Source output temperature"
             },
+            "spf": {
+                "name": "SPF"
+            },
             "state": {
                 "name": "State",
                 "state": {
@@ -158,6 +200,12 @@
             },
             "temperature_offset": {
                 "name": "Temperature offset"
+            },
+            "total_electrical_energy": {
+                "name": "Total electrical energy"
+            },
+            "total_energy": {
+                "name": "Total energy"
             }
         },
         "water_heater": {
@@ -174,6 +222,9 @@
     "device": {
         "heat_circuit": {
             "name": "Heating circuit{position}"
+        },
+        "heat_pump": {
+            "name": "Heat pump{position}"
         },
         "hot_water_tank": {
             "name": "Hot water tank{position}"
