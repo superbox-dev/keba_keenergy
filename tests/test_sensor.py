@@ -50,7 +50,7 @@ async def test_sensors(
     assert hot_water_tank_temperature_1.attributes[CONF_UNIT_OF_MEASUREMENT] == UnitOfTemperature.CELSIUS
     assert hot_water_tank_temperature_1.attributes[ATTR_STATE_CLASS] == SensorStateClass.MEASUREMENT
     assert hot_water_tank_temperature_1.attributes[CONF_DEVICE_CLASS] == SensorDeviceClass.TEMPERATURE
-    assert hot_water_tank_temperature_1.attributes[ATTR_FRIENDLY_NAME] == "Hot Water Tank (1) Temperature"
+    assert hot_water_tank_temperature_1.attributes[ATTR_FRIENDLY_NAME] == "Hot water tank (1) Temperature"
 
     hot_water_tank_operating_mode_1: State | None = hass.states.get(
         "sensor.keba_keenergy_12345678_hot_water_tank_operating_mode_1",
@@ -59,7 +59,7 @@ async def test_sensors(
     assert hot_water_tank_operating_mode_1.state == "heat_up"
     assert hot_water_tank_operating_mode_1.attributes[CONF_DEVICE_CLASS] == SensorDeviceClass.ENUM
     assert hot_water_tank_operating_mode_1.attributes[ATTR_OPTIONS] == ["auto", "heat_up", "off", "on"]
-    assert hot_water_tank_operating_mode_1.attributes[ATTR_FRIENDLY_NAME] == "Hot Water Tank (1) Operating mode"
+    assert hot_water_tank_operating_mode_1.attributes[ATTR_FRIENDLY_NAME] == "Hot water tank (1) Operating mode"
 
     hot_water_tank_min_temperature_1: State | None = hass.states.get(
         "sensor.keba_keenergy_12345678_hot_water_tank_min_temperature_1",
@@ -69,7 +69,7 @@ async def test_sensors(
     assert hot_water_tank_min_temperature_1.attributes[CONF_UNIT_OF_MEASUREMENT] == UnitOfTemperature.CELSIUS
     assert hot_water_tank_min_temperature_1.attributes[ATTR_STATE_CLASS] == SensorStateClass.MEASUREMENT
     assert hot_water_tank_min_temperature_1.attributes[CONF_DEVICE_CLASS] == SensorDeviceClass.TEMPERATURE
-    assert hot_water_tank_min_temperature_1.attributes[ATTR_FRIENDLY_NAME] == "Hot Water Tank (1) Minimum temperature"
+    assert hot_water_tank_min_temperature_1.attributes[ATTR_FRIENDLY_NAME] == "Hot water tank (1) Minimum temperature"
 
     hot_water_tank_max_temperature_1: State | None = hass.states.get(
         "sensor.keba_keenergy_12345678_hot_water_tank_max_temperature_1",
@@ -79,7 +79,7 @@ async def test_sensors(
     assert hot_water_tank_max_temperature_1.attributes[CONF_UNIT_OF_MEASUREMENT] == UnitOfTemperature.CELSIUS
     assert hot_water_tank_max_temperature_1.attributes[ATTR_STATE_CLASS] == SensorStateClass.MEASUREMENT
     assert hot_water_tank_max_temperature_1.attributes[CONF_DEVICE_CLASS] == SensorDeviceClass.TEMPERATURE
-    assert hot_water_tank_max_temperature_1.attributes[ATTR_FRIENDLY_NAME] == "Hot Water Tank (1) Maximum temperature"
+    assert hot_water_tank_max_temperature_1.attributes[ATTR_FRIENDLY_NAME] == "Hot water tank (1) Maximum temperature"
 
     heat_pump_state: State | None = hass.states.get("sensor.keba_keenergy_12345678_heat_pump_state")
     assert isinstance(heat_pump_state, State)
