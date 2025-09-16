@@ -128,7 +128,7 @@ jobs:
         run: |
           TAG_NAME="${GITHUB_REF#refs/tags/}"
           echo "Tag: $TAG_NAME"
-          
+
           if [[ "$TAG_NAME" =~ ^v[0-9]+\.[0-9]+\.[0-9]+b[0-9]+$ ]]; then
             echo "🟡 Pre-release detected"
             echo "prerelease=true" >> "$GITHUB_OUTPUT"
