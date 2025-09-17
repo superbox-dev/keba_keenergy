@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.1.0b2] - 2025-08-17
+
+### Changed
+
+- German and english translations
+
 ## [1.1.0b1] - 2025-08-16
 
 ### Added
@@ -15,7 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Removed the manufacturer and model name from the head pump device translation
+- The manufacturer and model name from the head pump device translation
 
 ## [1.0.1] - 2025-08-12
 
