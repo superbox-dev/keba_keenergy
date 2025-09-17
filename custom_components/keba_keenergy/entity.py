@@ -148,7 +148,7 @@ class KebaKeEnergyEntity(
     @property
     def _translation_placeholders(self) -> Mapping[str, str] | None:
         return {
-            "position": f" ({self.position})" if self.position else "",
+            "position": f" {self.position}" if self.position else "",
         }
 
     @property

@@ -48,19 +48,19 @@
         },
         "number": {
             "day_temperature": {
-                "name": "Temperatur Tag"
+                "name": "Solltemperatur (Tag)"
             },
             "holiday_temperature": {
-                "name": "Temperatur Urlaub"
-            },
-            "max_temperature": {
-                "name": "Maximale Temperatur"
-            },
-            "min_temperature": {
-                "name": "Minimale Temperatur"
+                "name": "Solltemperatur (Urlaub)"
             },
             "night_temperature": {
-                "name": "Temperatur Nacht"
+                "name": "Solltemperatur (Nacht)"
+            },
+            "standby_temperature": {
+                "name": "Stütztemperatur"
+            },
+            "target_temperature": {
+                "name": "Solltemperatur"
             }
         },
         "sensor": {
@@ -68,7 +68,7 @@
                 "name": "Umwälzpumpe"
             },
             "cooling_electrical_energy": {
-                "name": "Elektrische Kühlenergie"
+                "name": "elektrische Kühlenergie"
             },
             "cooling_energy": {
                 "name": "Kühlmenge"
@@ -88,17 +88,20 @@
             "cop": {
                 "name": "Leistungszahl"
             },
+            "current_temperature": {
+                "name": "Ist-Temperatur"
+            },
             "day_temperature": {
-                "name": "Temperatur Tag"
+                "name": "Solltemperatur (Tag)"
             },
             "day_temperature_threshold": {
-                "name": "Heizgrenze Tag"
+                "name": "Heizgrenze (Tag)"
             },
             "dew_point": {
                 "name": "Taupunkt"
             },
             "domestic_hot_water_electrical_energy": {
-                "name": "Elektrische Warmwasserenergie"
+                "name": "elektrische Warmwasserenergie"
             },
             "domestic_hot_water_energy": {
                 "name": "Warmwasserenergie"
@@ -107,7 +110,7 @@
                 "name": "JAZ Warmwasser"
             },
             "electrical_power": {
-                "name": "Elektrische Leistung"
+                "name": "Stromverbrauch"
             },
             "heat_request": {
                 "name": "Heizanforderung",
@@ -119,7 +122,7 @@
                 }
             },
             "heating_electrical_energy": {
-                "name": "Elektrische Heizenergie"
+                "name": "elektrische Heizenergie"
             },
             "heating_energy": {
                 "name": "Wärmemenge"
@@ -134,7 +137,7 @@
                 "name": "Hochdruck"
             },
             "holiday_temperature": {
-                "name": "Temperature Urlaub"
+                "name": "Solltemperatur (Urlaub)"
             },
             "hot_water_power": {
                 "name": "Warmwasserleistung"
@@ -145,17 +148,11 @@
             "low_pressure": {
                 "name": "Niederdruck"
             },
-            "max_temperature": {
-                "name": "Maximale Temperatur"
-            },
-            "min_temperature": {
-                "name": "Minimale Temperatur"
-            },
             "night_temperature": {
-                "name": "Temperatur Nacht"
+                "name": "Solltemperatur (Nacht)"
             },
             "night_temperature_threshold": {
-                "name": "Heizgrenze Nacht"
+                "name": "Heizgrenze (Nacht)"
             },
             "operating_mode": {
                 "name": "Betriebsart",
@@ -178,14 +175,17 @@
             "room_temperature": {
                 "name": "Raumtemperatur"
             },
+            "standby_temperature": {
+                "name": "Stütztemperatur"
+            },
             "source_input_temperature": {
-                "name": "Temperatur Quelle Eingang"
+                "name": "Quelle-Eingangstemperatur"
             },
             "source_output_temperature": {
-                "name": "Temperatur Quelle Ausgang"
+                "name": "Quelle-Ausgangstemperatur"
             },
             "spf": {
-                "name": "JAZ"
+                "name": "JAZ gesamt"
             },
             "state": {
                 "name": "Status",
@@ -198,14 +198,17 @@
                     "standby": "Standby"
                 }
             },
+            "target_temperature": {
+                "name": "Solltemperatur"
+            },
             "temperature_offset": {
-                "name": "Temperatur Offset"
+                "name": "Solltemperatur (Offset)"
             },
             "total_electrical_energy": {
-                "name": "Gesamte elektrische Energie"
+                "name": "elektrische Energie gesamt"
             },
             "total_energy": {
-                "name": "Gesamte Energie"
+                "name": "Energie gesamt"
             }
         },
         "water_heater": {

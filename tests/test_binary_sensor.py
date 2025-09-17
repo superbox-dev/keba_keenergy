@@ -28,14 +28,14 @@ async def test_binary_sensors(
     )
     assert isinstance(hot_water_tank_heat_request_1, State)
     assert hot_water_tank_heat_request_1.state == STATE_OFF
-    assert hot_water_tank_heat_request_1.attributes[ATTR_FRIENDLY_NAME] == "Hot water tank (1) Heat request"
+    assert hot_water_tank_heat_request_1.attributes[ATTR_FRIENDLY_NAME] == "Hot water tank 1 Heat request"
 
     hot_water_tank_heat_request_2: State | None = hass.states.get(
         "binary_sensor.keba_keenergy_12345678_hot_water_tank_heat_request_2",
     )
     assert isinstance(hot_water_tank_heat_request_2, State)
     assert hot_water_tank_heat_request_2.state == STATE_ON
-    assert hot_water_tank_heat_request_2.attributes[ATTR_FRIENDLY_NAME] == "Hot water tank (2) Heat request"
+    assert hot_water_tank_heat_request_2.attributes[ATTR_FRIENDLY_NAME] == "Hot water tank 2 Heat request"
 
     heat_pump_heat_request: State | None = hass.states.get(
         "binary_sensor.keba_keenergy_12345678_heat_pump_heat_request",
@@ -61,13 +61,13 @@ async def test_binary_sensors_translations(
         "binary_sensor.keba_keenergy_12345678_hot_water_tank_heat_request_1",
     )
     assert isinstance(hot_water_tank_heat_request_1, State)
-    assert hot_water_tank_heat_request_1.attributes[ATTR_FRIENDLY_NAME] == "Warmwasserspeicher (1) Heizanforderung"
+    assert hot_water_tank_heat_request_1.attributes[ATTR_FRIENDLY_NAME] == "Warmwasserspeicher 1 Heizanforderung"
 
     hot_water_tank_heat_request_2: State | None = hass.states.get(
         "binary_sensor.keba_keenergy_12345678_hot_water_tank_heat_request_2",
     )
     assert isinstance(hot_water_tank_heat_request_2, State)
-    assert hot_water_tank_heat_request_2.attributes[ATTR_FRIENDLY_NAME] == "Warmwasserspeicher (2) Heizanforderung"
+    assert hot_water_tank_heat_request_2.attributes[ATTR_FRIENDLY_NAME] == "Warmwasserspeicher 2 Heizanforderung"
 
     heat_pump_heat_request: State | None = hass.states.get(
         "binary_sensor.keba_keenergy_12345678_heat_pump_heat_request",

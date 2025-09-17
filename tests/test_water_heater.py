@@ -84,7 +84,7 @@ async def test_water_heater(
     assert state.attributes[ATTR_TEMPERATURE] == 51.0
     assert state.attributes[ATTR_TARGET_TEMP_LOW] == 32.5
     assert state.attributes[ATTR_TARGET_TEMP_HIGH] == 52.0
-    assert state.attributes[ATTR_FRIENDLY_NAME] == "Hot water tank (1)"
+    assert state.attributes[ATTR_FRIENDLY_NAME] == "Hot water tank 1"
 
 
 async def test_water_heater_translations(
@@ -104,7 +104,7 @@ async def test_water_heater_translations(
 
     state: State | None = hass.states.get(ENTITY_ID_1)
     assert isinstance(state, State)
-    assert state.attributes[ATTR_FRIENDLY_NAME] == "Warmwasserspeicher (1)"
+    assert state.attributes[ATTR_FRIENDLY_NAME] == "Warmwasserspeicher 1"
 
 
 async def test_turn_off(

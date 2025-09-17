@@ -48,19 +48,19 @@
         },
         "number": {
             "day_temperature": {
-                "name": "Day temperature"
+                "name": "Target temperature (day)"
             },
             "holiday_temperature": {
-                "name": "Holiday temperature"
-            },
-            "max_temperature": {
-                "name": "Maximum temperature"
-            },
-            "min_temperature": {
-                "name": "Minimum temperature"
+                "name": "Target temperature (holiday)"
             },
             "night_temperature": {
-                "name": "Night temperature"
+                "name": "Target temperature (night)"
+            },
+            "standby_temperature": {
+                "name": "Standby temperature"
+            },
+            "target_temperature": {
+                "name": "Target temperature"
             }
         },
         "sensor": {
@@ -88,11 +88,14 @@
             "cop": {
                 "name": "Coefficient of performance"
             },
+            "current_temperature": {
+                "name": "Current temperature"
+            },
             "day_temperature": {
                 "name": "Day temperature"
             },
             "day_temperature_threshold": {
-                "name": "Day temperature threshold"
+                "name": "Heating limit (day)"
             },
             "dew_point": {
                 "name": "Dew point"
@@ -107,7 +110,7 @@
                 "name": "Hot water SPF"
             },
             "electrical_power": {
-                "name": "Electrical power"
+                "name": "Power consumption"
             },
             "heat_request": {
                 "name": "Heat request",
@@ -145,17 +148,11 @@
             "low_pressure": {
                 "name": "Low pressure"
             },
-            "max_temperature": {
-                "name": "Maximum temperature"
-            },
-            "min_temperature": {
-                "name": "Minimum temperature"
-            },
             "night_temperature": {
                 "name": "Night temperature"
             },
             "night_temperature_threshold": {
-                "name": "Night temperature threshold"
+                "name": "Heating limit (night)"
             },
             "operating_mode": {
                 "name": "Operating mode",
@@ -178,6 +175,9 @@
             "room_temperature": {
                 "name": "Room temperature"
             },
+            "standby_temperature": {
+                "name": "Standby temperature"
+            },
             "source_input_temperature": {
                 "name": "Source input temperature"
             },
@@ -198,8 +198,11 @@
                     "standby": "Standby"
                 }
             },
+            "target_temperature": {
+                "name": "Target temperature"
+            },
             "temperature_offset": {
-                "name": "Temperature offset"
+                "name": "Target temperature offset"
             },
             "total_electrical_energy": {
                 "name": "Total electrical energy"

@@ -100,7 +100,7 @@ async def test_climate(
     assert not state_2.attributes.get(ATTR_CURRENT_HUMIDITY)
     assert state_2.attributes[ATTR_HVAC_ACTION] == HVACAction.OFF
     assert state_2.attributes[ATTR_PRESET_MODE] == "none"
-    assert state_2.attributes[ATTR_FRIENDLY_NAME] == "Heating circuit (2)"
+    assert state_2.attributes[ATTR_FRIENDLY_NAME] == "Heating circuit 2"
 
 
 async def test_climate_translations(
@@ -117,11 +117,11 @@ async def test_climate_translations(
 
     state_1: State | None = hass.states.get(ENTITY_ID_1)
     assert isinstance(state_1, State)
-    assert state_1.attributes[ATTR_FRIENDLY_NAME] == "Heizkreis (1)"
+    assert state_1.attributes[ATTR_FRIENDLY_NAME] == "Heizkreis 1"
 
     state_2: State | None = hass.states.get(ENTITY_ID_2)
     assert isinstance(state_2, State)
-    assert state_2.attributes[ATTR_FRIENDLY_NAME] == "Heizkreis (2)"
+    assert state_2.attributes[ATTR_FRIENDLY_NAME] == "Heizkreis 2"
 
 
 @pytest.mark.parametrize(
