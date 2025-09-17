@@ -675,7 +675,7 @@ async def test_heat_circuit_sensors(
     assert heat_circuit_temperature_offset_1.attributes[CONF_DEVICE_CLASS] == SensorDeviceClass.TEMPERATURE
     assert (
         heat_circuit_temperature_offset_1.attributes[ATTR_FRIENDLY_NAME]
-        == "Heating circuit 1 Target temperature offset"
+        == "Heating circuit 1 Target temperature (offset)"
     )
 
     heat_circuit_operating_mode_1: State | None = hass.states.get(

@@ -202,7 +202,7 @@
                 "name": "Target temperature"
             },
             "temperature_offset": {
-                "name": "Target temperature offset"
+                "name": "Target temperature (offset)"
             },
             "total_electrical_energy": {
                 "name": "Total electrical energy"
