@@ -130,7 +130,7 @@ class KebaKeEnergyWaterHeaterEntity(KebaKeEnergyEntity, WaterHeaterEntity):
     @property
     def target_temperature_high(self) -> float:
         """Return the highbound target temperature we try to reach."""
-        return float(self.get_attribute("target_temperature", "upper_limit"))
+        return float(self.get_value("target_temperature"))
 
     async def async_turn_off(self, **kwargs: Any) -> None:  # noqa: ARG002
         """Turn the hot water tank off."""
