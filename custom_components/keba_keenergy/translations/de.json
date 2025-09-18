@@ -22,6 +22,17 @@
             }
         }
     },
+    "device": {
+        "heat_circuit": {
+            "name": "Heizkreis{position}"
+        },
+        "heat_pump": {
+            "name": "Wärmepumpe{position}"
+        },
+        "hot_water_tank": {
+            "name": "Warmwasserspeicher{position}"
+        }
+    },
     "entity": {
         "binary_sensor": {
             "heat_request": {
@@ -36,10 +47,10 @@
                 "state_attributes": {
                     "preset_mode": {
                         "state": {
-                            "eco": "Auto",
                             "away": "Urlaub",
                             "boost": "Party",
                             "comfort": "Tag",
+                            "eco": "Auto",
                             "sleep": "Nacht"
                         }
                     }
@@ -47,34 +58,25 @@
             }
         },
         "number": {
-            "target_temperature_away": {
-                "name": "Solltemperatur (Urlaub)"
-            },
-            "target_temperature_night": {
-                "name": "Solltemperatur (Nacht)"
-            },
             "standby_temperature": {
                 "name": "Stütztemperatur"
             },
             "target_temperature": {
                 "name": "Solltemperatur"
             },
+            "target_temperature_away": {
+                "name": "Solltemperatur (Urlaub)"
+            },
             "target_temperature_day": {
                 "name": "Solltemperatur (Tag)"
+            },
+            "target_temperature_night": {
+                "name": "Solltemperatur (Nacht)"
             }
         },
         "sensor": {
             "circulation_pump": {
                 "name": "Umwälzpumpe"
-            },
-            "cooling_energy_consumption": {
-                "name": "Energieverbrauch Kühlen"
-            },
-            "cooling_energy": {
-                "name": "Kühlmenge"
-            },
-            "cooling_spf": {
-                "name": "JAZ Kühlen"
             },
             "compressor": {
                 "name": "Kompressor"
@@ -85,29 +87,29 @@
             "compressor_output_temperature": {
                 "name": "Kompressor Ausgangstemperatur"
             },
+            "compressor_power": {
+                "name": "Leistung Kompressor"
+            },
+            "cooling_energy": {
+                "name": "Kühlmenge"
+            },
+            "cooling_energy_consumption": {
+                "name": "Energieverbrauch Kühlen"
+            },
+            "cooling_spf": {
+                "name": "JAZ Kühlen"
+            },
             "cop": {
                 "name": "Leistungszahl"
             },
             "current_temperature": {
                 "name": "Ist-Temperatur"
             },
-            "heating_limit_day": {
-                "name": "Heizgrenze (Tag)"
-            },
             "dew_point": {
                 "name": "Taupunkt"
             },
-            "hot_water_energy_consumption": {
-                "name": "Energieverbrauch Warmwasser"
-            },
-            "hot_water_energy": {
-                "name": "Warmwasserwärmemenge"
-            },
-            "hot_water_spf": {
-                "name": "JAZ Warmwasser"
-            },
-            "compressor_power": {
-                "name": "Leistung Kompressor"
+            "flow_temperature": {
+                "name": "Vorlauftemperatur"
             },
             "heat_request": {
                 "name": "Heizanforderung",
@@ -118,11 +120,17 @@
                     "temporary_off": "Aus (Vorübergehend)"
                 }
             },
+            "heating_energy": {
+                "name": "Wärmemenge"
+            },
             "heating_energy_consumption": {
                 "name": "Energieverbrauch Heizen"
             },
-            "heating_energy": {
-                "name": "Wärmemenge"
+            "heating_limit_day": {
+                "name": "Heizgrenze (Tag)"
+            },
+            "heating_limit_night": {
+                "name": "Heizgrenze (Nacht)"
             },
             "heating_power": {
                 "name": "Leistung Heizen"
@@ -133,23 +141,20 @@
             "high_pressure": {
                 "name": "Hochdruck"
             },
-            "target_temperature_away": {
-                "name": "Solltemperatur (Urlaub)"
+            "hot_water_energy": {
+                "name": "Warmwasserwärmemenge"
+            },
+            "hot_water_energy_consumption": {
+                "name": "Energieverbrauch Warmwasser"
             },
             "hot_water_power": {
                 "name": "Leistung Warmwasser"
             },
-            "flow_temperature": {
-                "name": "Vorlauftemperatur"
+            "hot_water_spf": {
+                "name": "JAZ Warmwasser"
             },
             "low_pressure": {
                 "name": "Niederdruck"
-            },
-            "target_temperature_night": {
-                "name": "Solltemperatur (Nacht)"
-            },
-            "heating_limit_night": {
-                "name": "Heizgrenze (Nacht)"
             },
             "operating_mode": {
                 "name": "Betriebsart",
@@ -172,17 +177,14 @@
             "room_temperature": {
                 "name": "Raumtemperatur"
             },
-            "standby_temperature": {
-                "name": "Stütztemperatur"
-            },
             "source_input_temperature": {
                 "name": "Quelle-Eingangstemperatur"
             },
             "source_output_temperature": {
                 "name": "Quelle-Ausgangstemperatur"
             },
-            "total_spf": {
-                "name": "JAZ gesamt"
+            "standby_temperature": {
+                "name": "Stütztemperatur"
             },
             "state": {
                 "name": "Status",
@@ -198,14 +200,23 @@
             "target_temperature": {
                 "name": "Solltemperatur"
             },
+            "target_temperature_away": {
+                "name": "Solltemperatur (Urlaub)"
+            },
             "target_temperature_day": {
                 "name": "Solltemperatur (Tag)"
+            },
+            "target_temperature_night": {
+                "name": "Solltemperatur (Nacht)"
             },
             "target_temperature_offset": {
                 "name": "Solltemperatur (Offset)"
             },
             "total_energy_consumption": {
                 "name": "Stromverbrauch gesamt"
+            },
+            "total_spf": {
+                "name": "JAZ gesamt"
             },
             "total_thermal_energy": {
                 "name": "Gesamtwärmemenge"
@@ -220,17 +231,6 @@
                     "performance": "Aufheizen"
                 }
             }
-        }
-    },
-    "device": {
-        "heat_circuit": {
-            "name": "Heizkreis{position}"
-        },
-        "heat_pump": {
-            "name": "Wärmepumpe{position}"
-        },
-        "hot_water_tank": {
-            "name": "Warmwasserspeicher{position}"
         }
     }
 }

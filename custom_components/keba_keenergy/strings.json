@@ -22,6 +22,17 @@
             }
         }
     },
+    "device": {
+        "heat_circuit": {
+            "name": "Heating circuit{position}"
+        },
+        "heat_pump": {
+            "name": "Heat pump{position}"
+        },
+        "hot_water_tank": {
+            "name": "Hot water tank{position}"
+        }
+    },
     "entity": {
         "binary_sensor": {
             "heat_request": {
@@ -31,15 +42,15 @@
         "climate": {
             "heat_circuit": {
                 "state": {
-                    "heat": "[%key:common::state::on%]"
+                    "heat": "On"
                 },
                 "state_attributes": {
                     "preset_mode": {
                         "state": {
-                            "eco": "Auto",
                             "away": "Holiday",
                             "boost": "Party",
                             "comfort": "Day",
+                            "eco": "Auto",
                             "sleep": "Night"
                         }
                     }
@@ -47,34 +58,25 @@
             }
         },
         "number": {
-            "target_temperature_away": {
-                "name": "Target temperature (away)"
-            },
-            "target_temperature_night": {
-                "name": "Target temperature (night)"
-            },
             "standby_temperature": {
                 "name": "Standby temperature"
             },
             "target_temperature": {
                 "name": "Target temperature"
             },
+            "target_temperature_away": {
+                "name": "Target temperature (away)"
+            },
             "target_temperature_day": {
                 "name": "Target temperature (day)"
+            },
+            "target_temperature_night": {
+                "name": "Target temperature (night)"
             }
         },
         "sensor": {
             "circulation_pump": {
                 "name": "Circulation pump"
-            },
-            "cooling_energy_consumption": {
-                "name": "Cooling electrical energy"
-            },
-            "cooling_energy": {
-                "name": "Cooling energy"
-            },
-            "cooling_spf": {
-                "name": "Cooling SPF"
             },
             "compressor": {
                 "name": "Compressor"
@@ -85,44 +87,50 @@
             "compressor_output_temperature": {
                 "name": "Compressor output temperature"
             },
+            "compressor_power": {
+                "name": "Compressor power"
+            },
+            "cooling_energy": {
+                "name": "Cooling energy"
+            },
+            "cooling_energy_consumption": {
+                "name": "Cooling energy consumption"
+            },
+            "cooling_spf": {
+                "name": "Cooling SPF"
+            },
             "cop": {
                 "name": "Coefficient of performance"
             },
             "current_temperature": {
                 "name": "Current temperature"
             },
-            "heating_limit_day": {
-                "name": "Heating limit (day)"
-            },
             "dew_point": {
                 "name": "Dew point"
             },
-            "hot_water_energy_consumption": {
-                "name": "Hot water electrical energy"
-            },
-            "hot_water_energy": {
-                "name": "Hot water energy"
-            },
-            "hot_water_spf": {
-                "name": "Hot water SPF"
-            },
-            "compressor_power": {
-                "name": "Power consumption"
+            "flow_temperature": {
+                "name": "Flow temperature"
             },
             "heat_request": {
                 "name": "Heat request",
                 "state": {
-                    "off": "[%key:common::state::off%]",
-                    "on": "[%key:common::state::on%]",
+                    "off": "Off",
+                    "on": "On",
                     "outdoor_temperature_off": "Outdoor temperature off",
                     "temporary_off": "Temporary off"
                 }
             },
-            "_heating": {
-                "name": "Heating electrical energy"
-            },
             "heating_energy": {
                 "name": "Heating energy"
+            },
+            "heating_energy_consumption": {
+                "name": "Heating energy consumption"
+            },
+            "heating_limit_day": {
+                "name": "Heating limit (day)"
+            },
+            "heating_limit_night": {
+                "name": "Heating limit (night)"
             },
             "heating_power": {
                 "name": "Heating power"
@@ -133,23 +141,20 @@
             "high_pressure": {
                 "name": "High pressure"
             },
-            "target_temperature_away": {
-                "name": "Target temperature (away)"
+            "hot_water_energy": {
+                "name": "Hot water energy"
+            },
+            "hot_water_energy_consumption": {
+                "name": "Hot water energy consumption"
             },
             "hot_water_power": {
                 "name": "Hot water power"
             },
-            "flow_temperature": {
-                "name": "Inflow temperature"
+            "hot_water_spf": {
+                "name": "Hot water SPF"
             },
             "low_pressure": {
                 "name": "Low pressure"
-            },
-            "target_temperature_night": {
-                "name": "Target temperature (night)"
-            },
-            "heating_limit_night": {
-                "name": "Heating limit (night)"
             },
             "operating_mode": {
                 "name": "Operating mode",
@@ -164,7 +169,7 @@
                 "name": "Outdoor temperature"
             },
             "return_flow_temperature": {
-                "name": "Reflux temperature"
+                "name": "Return temperature"
             },
             "room_humidity": {
                 "name": "Room humidity"
@@ -172,65 +177,60 @@
             "room_temperature": {
                 "name": "Room temperature"
             },
-            "standby_temperature": {
-                "name": "Standby temperature"
-            },
             "source_input_temperature": {
                 "name": "Source input temperature"
             },
             "source_output_temperature": {
                 "name": "Source output temperature"
             },
-            "total_spf": {
-                "name": "SPF"
+            "standby_temperature": {
+                "name": "Standby temperature"
             },
             "state": {
                 "name": "State",
                 "state": {
-                    "auto_cool": "Auto cool",
-                    "auto_heat": "Auto heat",
+                    "auto_cool": "Cooling",
+                    "auto_heat": "Heating",
                     "defrost": "Defrost",
                     "flow": "Flow",
-                    "inflow": "Inflow",
-                    "standby": "[%key:common::state::standby%]"
+                    "inflow": "Return flow",
+                    "standby": "Standby"
                 }
             },
             "target_temperature": {
                 "name": "Target temperature"
             },
+            "target_temperature_away": {
+                "name": "Target temperature (away)"
+            },
             "target_temperature_day": {
                 "name": "Target temperature (day)"
+            },
+            "target_temperature_night": {
+                "name": "Target temperature (night)"
             },
             "target_temperature_offset": {
                 "name": "Target temperature (offset)"
             },
             "total_energy_consumption": {
-                "name": "Total electrical energy"
+                "name": "Total energy consumption"
+            },
+            "total_spf": {
+                "name": "Total SPF"
             },
             "total_thermal_energy": {
-                "name": "Total energy"
+                "name": "Total thermal energy"
             }
         },
         "water_heater": {
             "hot_water_tank": {
                 "state": {
                     "eco": "Auto",
-                    "heat_pump": "[%key:common::state::on%]",
-                    "off": "[%key:common::state::off%]",
+                    "heat_pump": "On",
+                    "off": "Off",
                     "performance": "Heat up"
                 }
             }
-        }
-    },
-    "device": {
-        "heat_circuit": {
-            "name": "Heating circuit{position}"
-        },
-        "heat_pump": {
-            "name": "Heat pump{position}"
-        },
-        "hot_water_tank": {
-            "name": "Hot water tank{position}"
         }
     }
 }
