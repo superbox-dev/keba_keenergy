@@ -83,7 +83,7 @@ async def test_water_heater(
     assert state.attributes[ATTR_OPERATION_MODE] == STATE_PERFORMANCE
     assert state.attributes[ATTR_TEMPERATURE] == 51.0
     assert state.attributes[ATTR_TARGET_TEMP_LOW] == 32.5
-    assert state.attributes[ATTR_TARGET_TEMP_HIGH] == 52.0
+    assert state.attributes[ATTR_TARGET_TEMP_HIGH] == 51.0
     assert state.attributes[ATTR_FRIENDLY_NAME] == "Hot water tank 1"
 
 
