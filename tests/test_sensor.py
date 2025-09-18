@@ -371,7 +371,7 @@ async def test_heat_pump_sensors(
     assert heat_pump_hot_water_spf.attributes[ATTR_FRIENDLY_NAME] == "Heat pump Hot water SPF"
 
     heat_pump_total_thermal_energy: State | None = hass.states.get(
-        "sensor.keba_keenergy_12345678_heat_pump_total_thermal_energy"
+        "sensor.keba_keenergy_12345678_heat_pump_total_thermal_energy",
     )
     assert isinstance(heat_pump_total_thermal_energy, State)
     assert heat_pump_total_thermal_energy.state == "8.22"
@@ -550,7 +550,7 @@ async def test_heat_pump_sensors_translations(
     assert heat_pump_hot_water_spf.attributes[ATTR_FRIENDLY_NAME] == "Wärmepumpe JAZ Warmwasser"
 
     heat_pump_total_thermal_energy: State | None = hass.states.get(
-        "sensor.keba_keenergy_12345678_heat_pump_total_thermal_energy"
+        "sensor.keba_keenergy_12345678_heat_pump_total_thermal_energy",
     )
     assert isinstance(heat_pump_total_thermal_energy, State)
     assert heat_pump_total_thermal_energy.attributes[ATTR_FRIENDLY_NAME] == "Wärmepumpe Gesamtwärmemenge"
