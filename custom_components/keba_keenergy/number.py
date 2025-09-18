@@ -31,34 +31,34 @@ NUMBER_TYPES: dict[str, tuple[NumberEntityDescription, ...]] = {
     SectionPrefix.HEAT_CIRCUIT: (
         NumberEntityDescription(
             device_class=NumberDeviceClass.TEMPERATURE,
-            key="day_temperature",
+            key="target_temperature_day",
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
-            translation_key="day_temperature",
+            translation_key="target_temperature_day",
         ),
         NumberEntityDescription(
             device_class=NumberDeviceClass.TEMPERATURE,
-            key="night_temperature",
+            key="target_temperature_night",
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
-            translation_key="night_temperature",
+            translation_key="target_temperature_night",
         ),
         NumberEntityDescription(
             device_class=NumberDeviceClass.TEMPERATURE,
-            key="holiday_temperature",
+            key="target_temperature_away",
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
-            translation_key="holiday_temperature",
+            translation_key="target_temperature_away",
         ),
     ),
     SectionPrefix.HOT_WATER_TANK: (
         NumberEntityDescription(
             device_class=NumberDeviceClass.TEMPERATURE,
-            key="min_temperature",
+            key="standby_temperature",
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             translation_key="standby_temperature",
             icon="mdi:thermometer-chevron-down",
         ),
         NumberEntityDescription(
             device_class=NumberDeviceClass.TEMPERATURE,
-            key="max_temperature",
+            key="target_temperature",
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             translation_key="target_temperature",
             icon="mdi:thermometer-chevron-up",

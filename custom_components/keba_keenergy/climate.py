@@ -136,29 +136,33 @@ class KebaKeEnergyClimateEntity(KebaKeEnergyEntity, ClimateEntity):
     @property
     def target_temperature_for_preset(self) -> float:
         """Return the temperature for the current preset."""
-        target_temperature = float(self.get_value("day_temperature"))
+        target_temperature = float(self.get_value("target_temperature_day"))
 
         if self.preset_mode == PRESET_SLEEP:
-            target_temperature = float(self.get_value("night_temperature"))
+            target_temperature = float(self.get_value("target_temperature_night"))
         elif self.preset_mode == PRESET_AWAY:
-            target_temperature = float(self.get_value("holiday_temperature"))
+            target_temperature = float(self.get_value("target_temperature_away"))
 
         return target_temperature
 
     @property
     def target_temperature(self) -> float:
         """Return the temperature we try to reach."""
-        return self.target_temperature_for_preset + float(self.get_value("temperature_offset"))
+        return self.target_temperature_for_preset + float(self.get_value("target_temperature_offset"))
 
     @property
     def min_temp(self) -> float:
         """Return the minimum temperature."""
-        return self.target_temperature_for_preset + float(self.get_attribute("temperature_offset", "lower_limit"))
+        return self.target_temperature_for_preset + float(
+            self.get_attribute("target_temperature_offset", "lower_limit"),
+        )
 
     @property
     def max_temp(self) -> float:
         """Return the maximum temperature."""
-        return self.target_temperature_for_preset + float(self.get_attribute("temperature_offset", "upper_limit"))
+        return self.target_temperature_for_preset + float(
+            self.get_attribute("target_temperature_offset", "upper_limit"),
+        )
 
     @property
     def current_humidity(self) -> float | None:
@@ -250,7 +254,7 @@ class KebaKeEnergyClimateEntity(KebaKeEnergyEntity, ClimateEntity):
         """Set new target temperature."""
         if temperature := kwargs.get(ATTR_TEMPERATURE):  # pragma: no branch
             await self._async_update_data(
-                section=HeatCircuit.TEMPERATURE_OFFSET,
+                section=HeatCircuit.TARGET_TEMPERATURE_OFFSET,
                 value=temperature - self.target_temperature_for_preset,
                 device_numbers=self.coordinator.heat_circuit_numbers,
             )

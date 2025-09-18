@@ -47,13 +47,10 @@
             }
         },
         "number": {
-            "day_temperature": {
-                "name": "Target temperature (day)"
+            "target_temperature_away": {
+                "name": "Target temperature (away)"
             },
-            "holiday_temperature": {
-                "name": "Target temperature (holiday)"
-            },
-            "night_temperature": {
+            "target_temperature_night": {
                 "name": "Target temperature (night)"
             },
             "standby_temperature": {
@@ -61,14 +58,17 @@
             },
             "target_temperature": {
                 "name": "Target temperature"
+            },
+            "target_temperature_day": {
+                "name": "Target temperature (day)"
             }
         },
         "sensor": {
             "circulation_pump": {
                 "name": "Circulation pump"
             },
-            "cooling_electrical_energy": {
-                "name": "Cooling electrical energy"
+            "cooling_energy_consumption": {
+                "name": "Cooling energy consumption"
             },
             "cooling_energy": {
                 "name": "Cooling energy"
@@ -91,26 +91,23 @@
             "current_temperature": {
                 "name": "Current temperature"
             },
-            "day_temperature": {
-                "name": "Day temperature"
-            },
-            "day_temperature_threshold": {
+            "heating_limit_day": {
                 "name": "Heating limit (day)"
             },
             "dew_point": {
                 "name": "Dew point"
             },
-            "domestic_hot_water_electrical_energy": {
-                "name": "Hot water electrical energy"
+            "hot_water_energy_consumption": {
+                "name": "Hot water energy consumption"
             },
-            "domestic_hot_water_energy": {
+            "hot_water_energy": {
                 "name": "Hot water energy"
             },
-            "domestic_hot_water_spf": {
+            "hot_water_spf": {
                 "name": "Hot water SPF"
             },
-            "electrical_power": {
-                "name": "Power consumption"
+            "compressor_power": {
+                "name": "Compressor power"
             },
             "heat_request": {
                 "name": "Heat request",
@@ -121,8 +118,8 @@
                     "temporary_off": "Temporary off"
                 }
             },
-            "heating_electrical_energy": {
-                "name": "Heating electrical energy"
+            "heating_energy_consumption": {
+                "name": "Heating energy consumption"
             },
             "heating_energy": {
                 "name": "Heating energy"
@@ -136,22 +133,22 @@
             "high_pressure": {
                 "name": "High pressure"
             },
-            "holiday_temperature": {
-                "name": "Holiday temperature"
+            "target_temperature_away": {
+                "name": "Target temperature (away)"
             },
             "hot_water_power": {
                 "name": "Hot water power"
             },
-            "inflow_temperature": {
-                "name": "Inflow temperature"
+            "flow_temperature": {
+                "name": "Flow temperature"
             },
             "low_pressure": {
                 "name": "Low pressure"
             },
-            "night_temperature": {
-                "name": "Night temperature"
+            "target_temperature_night": {
+                "name": "Target temperature (night)"
             },
-            "night_temperature_threshold": {
+            "heating_limit_night": {
                 "name": "Heating limit (night)"
             },
             "operating_mode": {
@@ -166,8 +163,8 @@
             "outdoor_temperature": {
                 "name": "Outdoor temperature"
             },
-            "reflux_temperature": {
-                "name": "Reflux temperature"
+            "return_flow_temperature": {
+                "name": "Return temperature"
             },
             "room_humidity": {
                 "name": "Room humidity"
@@ -184,31 +181,34 @@
             "source_output_temperature": {
                 "name": "Source output temperature"
             },
-            "spf": {
-                "name": "SPF"
+            "total_spf": {
+                "name": "Total SPF"
             },
             "state": {
                 "name": "State",
                 "state": {
-                    "auto_cool": "Auto cool",
-                    "auto_heat": "Auto heat",
+                    "auto_cool": "Cooling",
+                    "auto_heat": "Heating",
                     "defrost": "Defrost",
                     "flow": "Flow",
-                    "inflow": "Inflow",
+                    "inflow": "Return flow",
                     "standby": "Standby"
                 }
             },
             "target_temperature": {
                 "name": "Target temperature"
             },
-            "temperature_offset": {
+            "target_temperature_day": {
+                "name": "Target temperature (day)"
+            },
+            "target_temperature_offset": {
                 "name": "Target temperature (offset)"
             },
-            "total_electrical_energy": {
-                "name": "Total electrical energy"
+            "total_energy_consumption": {
+                "name": "Total energy consumption"
             },
-            "total_energy": {
-                "name": "Total energy"
+            "total_thermal_energy": {
+                "name": "Total thermal energy"
             }
         },
         "water_heater": {

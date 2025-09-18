@@ -92,17 +92,17 @@ class KebaKeEnergyWaterHeaterEntity(KebaKeEnergyEntity, WaterHeaterEntity):
     @property
     def current_temperature(self) -> float:
         """Return the current temperature."""
-        return float(self.get_value("temperature"))
+        return float(self.get_value("current_temperature"))
 
     @property
     def min_temp(self) -> float:
         """Return the minimum temperature."""
-        return float(self.get_attribute("min_temperature", "lower_limit"))
+        return float(self.get_attribute("target_temperature", "lower_limit"))
 
     @property
     def max_temp(self) -> float:
         """Return the maximum temperature."""
-        return float(self.get_attribute("max_temperature", "upper_limit"))
+        return float(self.get_attribute("target_temperature", "upper_limit"))
 
     @property
     def current_operation(self) -> str:
@@ -120,17 +120,17 @@ class KebaKeEnergyWaterHeaterEntity(KebaKeEnergyEntity, WaterHeaterEntity):
     @property
     def target_temperature(self) -> float:
         """Return the temperature we try to reach."""
-        return float(self.get_value("max_temperature"))
+        return float(self.get_value("target_temperature"))
 
     @property
     def target_temperature_low(self) -> float:
         """Return the lowbound target temperature we try to reach."""
-        return float(self.get_value("min_temperature"))
+        return float(self.get_value("standby_temperature"))
 
     @property
     def target_temperature_high(self) -> float:
         """Return the highbound target temperature we try to reach."""
-        return float(self.get_attribute("max_temperature", "upper_limit"))
+        return float(self.get_attribute("target_temperature", "upper_limit"))
 
     async def async_turn_off(self, **kwargs: Any) -> None:  # noqa: ARG002
         """Turn the hot water tank off."""
@@ -161,7 +161,7 @@ class KebaKeEnergyWaterHeaterEntity(KebaKeEnergyEntity, WaterHeaterEntity):
     async def async_set_temperature(self, **kwargs: Any) -> None:
         """Set temperature for hot water tank."""
         await self._async_update_data(
-            section=HotWaterTank.MAX_TEMPERATURE,
+            section=HotWaterTank.TARGET_TEMPERATURE,
             value=kwargs[ATTR_TEMPERATURE],
             device_numbers=self.coordinator.hot_water_tank_numbers,
         )

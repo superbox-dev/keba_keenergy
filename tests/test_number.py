@@ -21,27 +21,27 @@ from tests.conftest import FakeKebaKeEnergyAPI
     ("entity_id", "value", "expected"),
     [
         (
-            "number.keba_keenergy_12345678_hot_water_tank_min_temperature_2",
+            "number.keba_keenergy_12345678_hot_water_tank_standby_temperature_2",
             18,
             '[{"name": "APPL.CtrlAppl.sParam.hotWaterTank[1].param.reducedSetTempMax.value", "value": "18.0"}]',
         ),
         (
-            "number.keba_keenergy_12345678_hot_water_tank_max_temperature_1",
+            "number.keba_keenergy_12345678_hot_water_tank_target_temperature_1",
             44,
             '[{"name": "APPL.CtrlAppl.sParam.hotWaterTank[0].param.normalSetTempMax.value", "value": "44.0"}]',
         ),
         (
-            "number.keba_keenergy_12345678_heat_circuit_day_temperature_1",
+            "number.keba_keenergy_12345678_heat_circuit_target_temperature_day_1",
             22,
             '[{"name": "APPL.CtrlAppl.sParam.heatCircuit[0].param.normalSetTemp", "value": "22.0"}]',
         ),
         (
-            "number.keba_keenergy_12345678_heat_circuit_night_temperature_1",
+            "number.keba_keenergy_12345678_heat_circuit_target_temperature_night_1",
             16,
             '[{"name": "APPL.CtrlAppl.sParam.heatCircuit[0].param.reducedSetTemp", "value": "16.0"}]',
         ),
         (
-            "number.keba_keenergy_12345678_heat_circuit_holiday_temperature_1",
+            "number.keba_keenergy_12345678_heat_circuit_target_temperature_away_1",
             14,
             '[{"name": "APPL.CtrlAppl.sParam.heatCircuit[0].param.holidaySetTemp", "value": "14.0"}]',
         ),
@@ -87,15 +87,15 @@ async def test_set_value(
     ("entity_id", "value", "expected"),
     [
         (
-            "number.keba_keenergy_12345678_hot_water_tank_max_temperature_1",
+            "number.keba_keenergy_12345678_hot_water_tank_target_temperature_1",
             100,
-            "Value 100.0 for number.keba_keenergy_12345678_hot_water_tank_max_temperature_1 "
+            "Value 100.0 for number.keba_keenergy_12345678_hot_water_tank_target_temperature_1 "
             "is outside valid range 0.0 - 52.0",
         ),
         (
-            "number.keba_keenergy_12345678_heat_circuit_day_temperature_1",
+            "number.keba_keenergy_12345678_heat_circuit_target_temperature_day_1",
             -10,
-            "Value -10.0 for number.keba_keenergy_12345678_heat_circuit_day_temperature_1 "
+            "Value -10.0 for number.keba_keenergy_12345678_heat_circuit_target_temperature_day_1 "
             "is outside valid range 10.0 - 30.0",
         ),
     ],

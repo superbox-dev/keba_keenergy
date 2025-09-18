@@ -68,12 +68,12 @@ async def test_entity_update(
     [
         (
             APIError("mocked api error"),
-            "Failed to update number.keba_keenergy_12345678_hot_water_tank_min_temperature_1 to 10.0: "
+            "Failed to update number.keba_keenergy_12345678_hot_water_tank_standby_temperature_1 to 10.0: "
             "mocked api error",
         ),
         (
             ClientError("mocked client error"),
-            "Failed to update number.keba_keenergy_12345678_hot_water_tank_min_temperature_1 to 10.0: "
+            "Failed to update number.keba_keenergy_12345678_hot_water_tank_standby_temperature_1 to 10.0: "
             "mocked client error",
         ),
     ],
@@ -97,7 +97,7 @@ async def test_entity_update_failed(
 
     await setup_integration(hass, config_entry)
 
-    entity_id: str = "number.keba_keenergy_12345678_hot_water_tank_min_temperature_1"
+    entity_id: str = "number.keba_keenergy_12345678_hot_water_tank_standby_temperature_1"
     state: State | None = hass.states.get(entity_id)
     assert isinstance(state, State)
 

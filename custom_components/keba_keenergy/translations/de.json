@@ -1,10 +1,10 @@
 {
     "config": {
         "abort": {
-            "already_configured": "Gerät ist bereits konfiguriert"
+            "already_configured": "Das Gerät ist bereits konfiguriert"
         },
         "error": {
-            "cannot_connect": "Verbindung fehlgeschlagen",
+            "cannot_connect": "Verbindungsversuch fehlgeschlagen",
             "unknown": "Unerwarteter Fehler"
         },
         "flow_title": "{name}",
@@ -47,13 +47,10 @@
             }
         },
         "number": {
-            "day_temperature": {
-                "name": "Solltemperatur (Tag)"
-            },
-            "holiday_temperature": {
+            "target_temperature_away": {
                 "name": "Solltemperatur (Urlaub)"
             },
-            "night_temperature": {
+            "target_temperature_night": {
                 "name": "Solltemperatur (Nacht)"
             },
             "standby_temperature": {
@@ -61,14 +58,17 @@
             },
             "target_temperature": {
                 "name": "Solltemperatur"
+            },
+            "target_temperature_day": {
+                "name": "Solltemperatur (Tag)"
             }
         },
         "sensor": {
             "circulation_pump": {
                 "name": "Umwälzpumpe"
             },
-            "cooling_electrical_energy": {
-                "name": "elektrische Kühlenergie"
+            "cooling_energy_consumption": {
+                "name": "Energieverbrauch Kühlen"
             },
             "cooling_energy": {
                 "name": "Kühlmenge"
@@ -91,26 +91,23 @@
             "current_temperature": {
                 "name": "Ist-Temperatur"
             },
-            "day_temperature": {
-                "name": "Solltemperatur (Tag)"
-            },
-            "day_temperature_threshold": {
+            "heating_limit_day": {
                 "name": "Heizgrenze (Tag)"
             },
             "dew_point": {
                 "name": "Taupunkt"
             },
-            "domestic_hot_water_electrical_energy": {
-                "name": "elektrische Warmwasserenergie"
+            "hot_water_energy_consumption": {
+                "name": "Energieverbrauch Warmwasser"
             },
-            "domestic_hot_water_energy": {
-                "name": "Warmwasserenergie"
+            "hot_water_energy": {
+                "name": "Warmwasserwärmemenge"
             },
-            "domestic_hot_water_spf": {
+            "hot_water_spf": {
                 "name": "JAZ Warmwasser"
             },
-            "electrical_power": {
-                "name": "Stromverbrauch"
+            "compressor_power": {
+                "name": "Leistung Kompressor"
             },
             "heat_request": {
                 "name": "Heizanforderung",
@@ -121,14 +118,14 @@
                     "temporary_off": "Aus (Vorübergehend)"
                 }
             },
-            "heating_electrical_energy": {
-                "name": "elektrische Heizenergie"
+            "heating_energy_consumption": {
+                "name": "Energieverbrauch Heizen"
             },
             "heating_energy": {
                 "name": "Wärmemenge"
             },
             "heating_power": {
-                "name": "Heizleistung"
+                "name": "Leistung Heizen"
             },
             "heating_spf": {
                 "name": "JAZ Heizen"
@@ -136,22 +133,22 @@
             "high_pressure": {
                 "name": "Hochdruck"
             },
-            "holiday_temperature": {
+            "target_temperature_away": {
                 "name": "Solltemperatur (Urlaub)"
             },
             "hot_water_power": {
-                "name": "Warmwasserleistung"
+                "name": "Leistung Warmwasser"
             },
-            "inflow_temperature": {
+            "flow_temperature": {
                 "name": "Vorlauftemperatur"
             },
             "low_pressure": {
                 "name": "Niederdruck"
             },
-            "night_temperature": {
+            "target_temperature_night": {
                 "name": "Solltemperatur (Nacht)"
             },
-            "night_temperature_threshold": {
+            "heating_limit_night": {
                 "name": "Heizgrenze (Nacht)"
             },
             "operating_mode": {
@@ -166,7 +163,7 @@
             "outdoor_temperature": {
                 "name": "Außentemperatur"
             },
-            "reflux_temperature": {
+            "return_flow_temperature": {
                 "name": "Rücklauftemperatur"
             },
             "room_humidity": {
@@ -184,14 +181,14 @@
             "source_output_temperature": {
                 "name": "Quelle-Ausgangstemperatur"
             },
-            "spf": {
+            "total_spf": {
                 "name": "JAZ gesamt"
             },
             "state": {
                 "name": "Status",
                 "state": {
-                    "auto_cool": "Automatisch kühlen",
-                    "auto_heat": "Automatisch heizen",
+                    "auto_cool": "Kühlen",
+                    "auto_heat": "Heizen",
                     "defrost": "Auftauen",
                     "flow": "Rücklauf",
                     "inflow": "Vorlauf",
@@ -201,14 +198,17 @@
             "target_temperature": {
                 "name": "Solltemperatur"
             },
-            "temperature_offset": {
+            "target_temperature_day": {
+                "name": "Solltemperatur (Tag)"
+            },
+            "target_temperature_offset": {
                 "name": "Solltemperatur (Offset)"
             },
-            "total_electrical_energy": {
-                "name": "elektrische Energie gesamt"
+            "total_energy_consumption": {
+                "name": "Stromverbrauch gesamt"
             },
-            "total_energy": {
-                "name": "Energie gesamt"
+            "total_thermal_energy": {
+                "name": "Gesamtwärmemenge"
             }
         },
         "water_heater": {
