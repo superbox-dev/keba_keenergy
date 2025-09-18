@@ -179,7 +179,7 @@ class KebaKeEnergyEntity(
 
         return _device_info
 
-    async def _async_update_data(self, section: Section, value: Any, device_numbers: int) -> None:
+    async def _async_write_data(self, section: Section, value: Any, device_numbers: int) -> None:
         """Write data to the KEBA KeEnergy API."""
         try:
             _current_index: int = self.index or 0

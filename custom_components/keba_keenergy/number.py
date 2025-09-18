@@ -148,7 +148,7 @@ class KebaKeEnergyNumberEntity(KebaKeEnergyEntity, NumberEntity):
             device_numbers = self.coordinator.hot_water_tank_numbers
 
         if section and device_numbers:  # pragma: no branch
-            await self._async_update_data(
+            await self._async_write_data(
                 section=section,
                 value=value,
                 device_numbers=device_numbers,

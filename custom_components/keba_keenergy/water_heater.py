@@ -134,7 +134,7 @@ class KebaKeEnergyWaterHeaterEntity(KebaKeEnergyEntity, WaterHeaterEntity):
 
     async def async_turn_off(self, **kwargs: Any) -> None:  # noqa: ARG002
         """Turn the hot water tank off."""
-        await self._async_update_data(
+        await self._async_write_data(
             section=HotWaterTank.OPERATING_MODE,
             value=HotWaterTankOperatingMode.OFF.value,
             device_numbers=self.coordinator.hot_water_tank_numbers,
@@ -142,7 +142,7 @@ class KebaKeEnergyWaterHeaterEntity(KebaKeEnergyEntity, WaterHeaterEntity):
 
     async def async_turn_on(self, **kwargs: Any) -> None:  # noqa: ARG002
         """Turn the hot water tank on."""
-        await self._async_update_data(
+        await self._async_write_data(
             section=HotWaterTank.OPERATING_MODE,
             value=HotWaterTankOperatingMode.ON.value,
             device_numbers=self.coordinator.hot_water_tank_numbers,
@@ -152,7 +152,7 @@ class KebaKeEnergyWaterHeaterEntity(KebaKeEnergyEntity, WaterHeaterEntity):
         """Set operation mode for hot water tank."""
         for key, value in HOT_WATER_TANK_STATE_TO_HA.items():
             if value == operation_mode:
-                await self._async_update_data(
+                await self._async_write_data(
                     section=HotWaterTank.OPERATING_MODE,
                     value=key,
                     device_numbers=self.coordinator.hot_water_tank_numbers,
@@ -160,7 +160,7 @@ class KebaKeEnergyWaterHeaterEntity(KebaKeEnergyEntity, WaterHeaterEntity):
 
     async def async_set_temperature(self, **kwargs: Any) -> None:
         """Set temperature for hot water tank."""
-        await self._async_update_data(
+        await self._async_write_data(
             section=HotWaterTank.TARGET_TEMPERATURE,
             value=kwargs[ATTR_TEMPERATURE],
             device_numbers=self.coordinator.hot_water_tank_numbers,

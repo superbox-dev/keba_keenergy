@@ -234,7 +234,7 @@ class KebaKeEnergyClimateEntity(KebaKeEnergyEntity, ClimateEntity):
             operating_mode_status = HeatCircuitOperatingMode.OFF
 
         if operating_mode_status is not None:  # pragma: no branch
-            await self._async_update_data(
+            await self._async_write_data(
                 section=HeatCircuit.OPERATING_MODE,
                 value=operating_mode_status,
                 device_numbers=self.coordinator.heat_circuit_numbers,
@@ -244,7 +244,7 @@ class KebaKeEnergyClimateEntity(KebaKeEnergyEntity, ClimateEntity):
         """Set preset mode for heat circuit."""
         for key, value in HEAT_CIRCUIT_PRESET_TO_HA.items():
             if value == preset_mode:
-                await self._async_update_data(
+                await self._async_write_data(
                     section=HeatCircuit.OPERATING_MODE,
                     value=key,
                     device_numbers=self.coordinator.heat_circuit_numbers,
@@ -253,7 +253,7 @@ class KebaKeEnergyClimateEntity(KebaKeEnergyEntity, ClimateEntity):
     async def async_set_temperature(self, **kwargs: Any) -> None:
         """Set new target temperature."""
         if temperature := kwargs.get(ATTR_TEMPERATURE):  # pragma: no branch
-            await self._async_update_data(
+            await self._async_write_data(
                 section=HeatCircuit.TARGET_TEMPERATURE_OFFSET,
                 value=temperature - self.target_temperature_for_preset,
                 device_numbers=self.coordinator.heat_circuit_numbers,
