@@ -208,19 +208,19 @@
                 }
             },
             "target_temperature": {
-                "name": "Solltemperatur"
+                "name": "Soll-Raumtemperatur"
             },
             "target_temperature_away": {
-                "name": "Solltemperatur (Urlaub)"
+                "name": "Soll-Raumtemperatur (Urlaub)"
             },
             "target_temperature_day": {
-                "name": "Solltemperatur (Tag)"
+                "name": "Soll-Raumtemperatur (Tag)"
             },
             "target_temperature_night": {
-                "name": "Solltemperatur (Nacht)"
+                "name": "Soll-Raumtemperatur (Nacht)"
             },
             "target_temperature_offset": {
-                "name": "Solltemperatur (Offset)"
+                "name": "Soll-Raumtemperatur (Offset)"
             },
             "total_energy_consumption": {
                 "name": "Stromverbrauch gesamt"
