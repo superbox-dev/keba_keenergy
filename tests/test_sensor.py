@@ -701,6 +701,7 @@ async def test_heat_circuit_sensors(
         "off",
         "on",
         "temporary_off",
+        "room_off",
         "outdoor_temperature_off",
     ]
     assert heat_circuit_heat_request_1.attributes[ATTR_FRIENDLY_NAME] == "Heating circuit 1 Heat request"
@@ -793,6 +794,7 @@ async def test_heat_circuit_sensors_translations(
         "off",
         "on",
         "temporary_off",
+        "room_off",
         "outdoor_temperature_off",
     ]
     assert heat_circuit_heat_request_1.attributes.get(ATTR_FRIENDLY_NAME) == "Heizkreis 1 Heizanforderung"
