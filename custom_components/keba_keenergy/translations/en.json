@@ -116,8 +116,9 @@
                 "state": {
                     "off": "Off",
                     "on": "On",
-                    "outdoor_temperature_off": "Outdoor temperature off",
-                    "temporary_off": "Temporary off"
+                    "outdoor_temperature_off": "Off (high outside temperature)",
+                    "room_off": "Off (room temperature reached)",
+                    "temporary_off": "Off (temporary)"
                 }
             },
             "heating_energy": {

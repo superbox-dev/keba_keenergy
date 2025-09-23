@@ -117,6 +117,7 @@
                     "off": "Aus",
                     "on": "Ein",
                     "outdoor_temperature_off": "Aus (Hohe Außentemperatur)",
+                    "room_off": "Aus (Raumtemperatur erreicht)",
                     "temporary_off": "Aus (Vorübergehend)"
                 }
             },
