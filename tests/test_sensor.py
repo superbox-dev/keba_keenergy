@@ -160,7 +160,7 @@ async def test_hot_water_tank_sensors_translations(
         "sensor.keba_keenergy_12345678_hot_water_tank_target_temperature_1",
     )
     assert isinstance(hot_water_tank_target_temperature_1, State)
-    assert hot_water_tank_target_temperature_1.attributes[ATTR_FRIENDLY_NAME] == "Warmwasserspeicher 1 Solltemperatur"
+    assert hot_water_tank_target_temperature_1.attributes[ATTR_FRIENDLY_NAME] == "Warmwasserspeicher 1 Soll-Temperatur"
 
 
 @pytest.mark.usefixtures("entity_registry_enabled_by_default")
@@ -801,13 +801,15 @@ async def test_heat_circuit_sensors_translations(
         "sensor.keba_keenergy_12345678_heat_circuit_target_temperature_1",
     )
     assert isinstance(heat_circuit_target_temperature_1, State)
-    assert heat_circuit_target_temperature_1.attributes[ATTR_FRIENDLY_NAME] == "Heizkreis 1 Solltemperatur"
+    assert heat_circuit_target_temperature_1.attributes[ATTR_FRIENDLY_NAME] == "Heizkreis 1 Soll-Raumtemperatur"
 
     heat_circuit_target_temperature_day_1: State | None = hass.states.get(
         "sensor.keba_keenergy_12345678_heat_circuit_target_temperature_day_1",
     )
     assert isinstance(heat_circuit_target_temperature_day_1, State)
-    assert heat_circuit_target_temperature_day_1.attributes[ATTR_FRIENDLY_NAME] == "Heizkreis 1 Solltemperatur (Tag)"
+    assert (
+        heat_circuit_target_temperature_day_1.attributes[ATTR_FRIENDLY_NAME] == "Heizkreis 1 Soll-Raumtemperatur (Tag)"
+    )
 
     heat_circuit_heating_limit_day_1: State | None = hass.states.get(
         "sensor.keba_keenergy_12345678_heat_circuit_heating_limit_day_1",
@@ -820,7 +822,8 @@ async def test_heat_circuit_sensors_translations(
     )
     assert isinstance(heat_circuit_target_temperature_night_1, State)
     assert (
-        heat_circuit_target_temperature_night_1.attributes[ATTR_FRIENDLY_NAME] == "Heizkreis 1 Solltemperatur (Nacht)"
+        heat_circuit_target_temperature_night_1.attributes[ATTR_FRIENDLY_NAME]
+        == "Heizkreis 1 Soll-Raumtemperatur (Nacht)"
     )
 
     heat_circuit_heating_limit_night_1: State | None = hass.states.get(
@@ -834,7 +837,8 @@ async def test_heat_circuit_sensors_translations(
     )
     assert isinstance(heat_circuit_target_temperature_away_1, State)
     assert (
-        heat_circuit_target_temperature_away_1.attributes[ATTR_FRIENDLY_NAME] == "Heizkreis 1 Solltemperatur (Urlaub)"
+        heat_circuit_target_temperature_away_1.attributes[ATTR_FRIENDLY_NAME]
+        == "Heizkreis 1 Soll-Raumtemperatur (Urlaub)"
     )
 
     heat_circuit_target_temperature_offset_1: State | None = hass.states.get(
@@ -842,7 +846,8 @@ async def test_heat_circuit_sensors_translations(
     )
     assert isinstance(heat_circuit_target_temperature_offset_1, State)
     assert (
-        heat_circuit_target_temperature_offset_1.attributes[ATTR_FRIENDLY_NAME] == "Heizkreis 1 Solltemperatur (Offset)"
+        heat_circuit_target_temperature_offset_1.attributes[ATTR_FRIENDLY_NAME]
+        == "Heizkreis 1 Soll-Raumtemperatur (Offset)"
     )
 
     heat_circuit_operating_mode_1: State | None = hass.states.get(

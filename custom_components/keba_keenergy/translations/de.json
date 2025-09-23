@@ -126,7 +126,7 @@
                     "off": "Aus",
                     "on": "Ein",
                     "outdoor_temperature_off": "Aus (Hohe Außentemperatur)",
-                    "room_off": "Aus (Raumtemperatur erreicht)",
+                    "room_off": "Aus (Hohe Raumtemperatur)",
                     "temporary_off": "Aus (Vorübergehend)"
                 }
             },
@@ -208,18 +208,21 @@
                 }
             },
             "target_temperature": {
+                "name": "Soll-Temperatur"
+            },
+            "target_room_temperature": {
                 "name": "Soll-Raumtemperatur"
             },
-            "target_temperature_away": {
+            "target_room_temperature_away": {
                 "name": "Soll-Raumtemperatur (Urlaub)"
             },
-            "target_temperature_day": {
+            "target_room_temperature_day": {
                 "name": "Soll-Raumtemperatur (Tag)"
             },
-            "target_temperature_night": {
+            "target_room_temperature_night": {
                 "name": "Soll-Raumtemperatur (Nacht)"
             },
-            "target_temperature_offset": {
+            "target_room_temperature_offset": {
                 "name": "Soll-Raumtemperatur (Offset)"
             },
             "total_energy_consumption": {

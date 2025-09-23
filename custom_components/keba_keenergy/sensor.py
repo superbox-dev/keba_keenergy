@@ -87,7 +87,7 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription, ...]] = {
             key="target_temperature",
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             state_class=SensorStateClass.MEASUREMENT,
-            translation_key="target_temperature",
+            translation_key="target_room_temperature",
             value=lambda data: cast("float", data),
         ),
         KebaKeEnergySensorEntityDescription(
@@ -95,7 +95,7 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription, ...]] = {
             key="target_temperature_day",
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             state_class=SensorStateClass.MEASUREMENT,
-            translation_key="target_temperature_day",
+            translation_key="target_room_temperature_day",
             value=lambda data: cast("float", data),
         ),
         KebaKeEnergySensorEntityDescription(
@@ -112,7 +112,7 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription, ...]] = {
             key="target_temperature_night",
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             state_class=SensorStateClass.MEASUREMENT,
-            translation_key="target_temperature_night",
+            translation_key="target_room_temperature_night",
             value=lambda data: cast("float", data),
         ),
         KebaKeEnergySensorEntityDescription(
@@ -129,7 +129,7 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription, ...]] = {
             key="target_temperature_away",
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             state_class=SensorStateClass.MEASUREMENT,
-            translation_key="target_temperature_away",
+            translation_key="target_room_temperature_away",
             value=lambda data: cast("float", data),
         ),
         KebaKeEnergySensorEntityDescription(
@@ -137,7 +137,7 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription, ...]] = {
             key="target_temperature_offset",
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             state_class=SensorStateClass.MEASUREMENT,
-            translation_key="target_temperature_offset",
+            translation_key="target_room_temperature_offset",
             value=lambda data: cast("float", data),
         ),
         KebaKeEnergySensorEntityDescription(
