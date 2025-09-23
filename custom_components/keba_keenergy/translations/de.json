@@ -37,6 +37,9 @@
         "binary_sensor": {
             "heat_request": {
                 "name": "Heizanforderung"
+            },
+            "hot_water_flow": {
+                "name": "Warmwasser läuft"
             }
         },
         "climate": {
@@ -108,8 +111,14 @@
             "dew_point": {
                 "name": "Taupunkt"
             },
+            "fresh_water_module_temperature": {
+                "name": "Frischwassermodul-Temperatur"
+            },
             "flow_temperature": {
                 "name": "Vorlauftemperatur"
+            },
+            "flow_temperature_setpoint": {
+                "name": "Soll-Vorlauftemperatur"
             },
             "heat_request": {
                 "name": "Heizanforderung",

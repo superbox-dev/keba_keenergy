@@ -76,6 +76,14 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription, ...]] = {
         ),
         KebaKeEnergySensorEntityDescription(
             device_class=SensorDeviceClass.TEMPERATURE,
+            key="flow_temperature_setpoint",
+            native_unit_of_measurement=UnitOfTemperature.CELSIUS,
+            state_class=SensorStateClass.MEASUREMENT,
+            translation_key="flow_temperature_setpoint",
+            value=lambda data: cast("float", data),
+        ),
+        KebaKeEnergySensorEntityDescription(
+            device_class=SensorDeviceClass.TEMPERATURE,
             key="target_temperature",
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             state_class=SensorStateClass.MEASUREMENT,
@@ -400,6 +408,15 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription, ...]] = {
             state_class=SensorStateClass.MEASUREMENT,
             translation_key="standby_temperature",
             icon="mdi:thermometer-chevron-down",
+            value=lambda data: cast("float", data),
+        ),
+        KebaKeEnergySensorEntityDescription(
+            device_class=SensorDeviceClass.TEMPERATURE,
+            key="fresh_water_module_temperature",
+            native_unit_of_measurement=UnitOfTemperature.CELSIUS,
+            state_class=SensorStateClass.MEASUREMENT,
+            translation_key="fresh_water_module_temperature",
+            icon="mdi:thermometer-water",
             value=lambda data: cast("float", data),
         ),
         KebaKeEnergySensorEntityDescription(

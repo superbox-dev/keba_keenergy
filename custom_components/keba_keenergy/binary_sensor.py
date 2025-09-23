@@ -24,6 +24,11 @@ BINARY_SENSOR_TYPES: dict[str, tuple[BinarySensorEntityDescription, ...]] = {
             translation_key="heat_request",
             icon="mdi:fire",
         ),
+        BinarySensorEntityDescription(
+            key="hot_water_flow",
+            translation_key="hot_water_flow",
+            icon="mdi:water",
+        ),
     ),
     SectionPrefix.HEAT_PUMP: (
         BinarySensorEntityDescription(
