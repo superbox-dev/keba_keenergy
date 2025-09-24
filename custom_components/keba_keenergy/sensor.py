@@ -150,7 +150,7 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription, ...]] = {
         KebaKeEnergySensorEntityDescription(
             device_class=SensorDeviceClass.ENUM,
             key="heat_request",
-            options=["off", "on", "temporary_off", "room_off", "outdoor_temperature_off"],
+            options=["off", "on", "temporary_off", "room_off", "outdoor_off"],
             translation_key="heat_request",
             icon="mdi:fire",
             value=lambda data: cast("str", data),

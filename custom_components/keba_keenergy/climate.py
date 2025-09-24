@@ -45,7 +45,7 @@ HEAT_CIRCUIT_HVAC_ACTION_TO_HA: Final[dict[str, HVACAction]] = {
     HeatCircuitHeatRequest.ON: HVACAction.HEATING,
     HeatCircuitHeatRequest.TEMPORARY_OFF: HVACAction.IDLE,
     HeatCircuitHeatRequest.ROOM_OFF: HVACAction.IDLE,
-    HeatCircuitHeatRequest.OUTDOOR_TEMPERATURE_OFF: HVACAction.IDLE,
+    HeatCircuitHeatRequest.OUTDOOR_OFF: HVACAction.IDLE,
 }
 
 TEMPERATURE_OFFSET_SCHEMA = {

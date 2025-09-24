@@ -123,9 +123,11 @@
             "heat_request": {
                 "name": "Heizanforderung",
                 "state": {
+                    "flow_off": "Aus (Niedrige Vorlauftemperatur)",
+                    "inflow_off": "Aus (Hohe Rücklauftemperatur)",
                     "off": "Aus",
                     "on": "Ein",
-                    "outdoor_temperature_off": "Aus (Hohe Außentemperatur)",
+                    "outdoor_off": "Aus (Hohe Außentemperatur)",
                     "room_off": "Aus (Hohe Raumtemperatur)",
                     "temporary_off": "Aus (Vorübergehend)"
                 }
