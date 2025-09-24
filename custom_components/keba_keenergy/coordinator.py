@@ -122,7 +122,7 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
                 ],
             )
         except (APIError, ClientError) as error:
-            _LOGGER.error(error)
+            _LOGGER.error(error)  # noqa: TRY400
             raise UpdateFailed(error) from error
 
         return response
