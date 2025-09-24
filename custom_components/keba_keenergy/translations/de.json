@@ -65,16 +65,16 @@
                 "name": "Stütztemperatur"
             },
             "target_temperature": {
-                "name": "Solltemperatur"
+                "name": "Soll-Temperatur"
             },
             "target_temperature_away": {
-                "name": "Solltemperatur (Urlaub)"
+                "name": "Soll-Raumtemperatur (Urlaub)"
             },
             "target_temperature_day": {
-                "name": "Solltemperatur (Tag)"
+                "name": "Soll-Raumtemperatur (Tag)"
             },
             "target_temperature_night": {
-                "name": "Solltemperatur (Nacht)"
+                "name": "Soll-Raumtemperatur (Nacht)"
             }
         },
         "sensor": {
