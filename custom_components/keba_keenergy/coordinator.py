@@ -122,7 +122,7 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
                 ],
             )
         except (APIError, ClientError) as error:
-            _LOGGER.debug(error)
+            _LOGGER.error(error)
             raise UpdateFailed(error) from error
 
         return response
