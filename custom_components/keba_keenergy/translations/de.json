@@ -201,9 +201,9 @@
                 "state": {
                     "auto_cool": "Kühlen",
                     "auto_heat": "Heizen",
-                    "defrost": "Enteisen",
-                    "flow": "Rücklauf",
-                    "inflow": "Vorlauf",
+                    "defrost": "Abdauen",
+                    "flow": "Vorlauf",
+                    "inflow": "Nachlauf",
                     "standby": "Standby"
                 }
             },

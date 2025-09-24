@@ -203,7 +203,7 @@
                     "auto_heat": "Heating",
                     "defrost": "Defrost",
                     "flow": "Flow",
-                    "inflow": "Return flow",
+                    "inflow": "Inflow",
                     "standby": "Standby"
                 }
             },
