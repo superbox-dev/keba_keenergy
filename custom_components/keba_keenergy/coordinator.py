@@ -81,8 +81,10 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
                     HeatCircuit.TARGET_TEMPERATURE_OFFSET,
                     HeatPump.CIRCULATION_PUMP,
                     HeatPump.COMPRESSOR,
+                    HeatPump.COMPRESSOR_NIGHT_SPEED,
                     HeatPump.COMPRESSOR_INPUT_TEMPERATURE,
                     HeatPump.COMPRESSOR_OUTPUT_TEMPERATURE,
+                    HeatPump.COMPRESSOR_USE_NIGHT_SPEED,
                     HeatPump.HEAT_REQUEST,
                     HeatPump.HIGH_PRESSURE,
                     HeatPump.FLOW_TEMPERATURE,
@@ -161,6 +163,12 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
     def heat_circuit_numbers(self) -> int:
         """Return number of heat circuits."""
         data: Value = cast("Value", self.data[SectionPrefix.SYSTEM]["heat_circuit_numbers"])
+        return int(data["value"])
+
+    @property
+    def heat_pump_numbers(self) -> int:
+        """Return number of heat pumps."""
+        data: Value = cast("Value", self.data[SectionPrefix.SYSTEM]["heat_pump_numbers"])
         return int(data["value"])
 
     @property

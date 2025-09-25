@@ -237,6 +237,11 @@
                 "name": "Gesamtwärmemenge"
             }
         },
+                "switch" : {
+            "compressor_use_night_speed": {
+                "name": "Kompressor-Drehzahlbegrenzung (Nacht)"
+            }
+        },
         "water_heater": {
             "hot_water_tank": {
                 "state": {

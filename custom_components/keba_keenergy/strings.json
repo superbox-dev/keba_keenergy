@@ -237,6 +237,11 @@
                 "name": "Total thermal energy"
             }
         },
+        "switch" : {
+            "compressor_use_night_speed": {
+                "name": "Compressor speed limit (night)"
+            }
+        },
         "water_heater": {
             "hot_water_tank": {
                 "state": {

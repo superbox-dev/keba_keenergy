@@ -235,6 +235,18 @@ HEAT_PUMP_COMPRESSOR: dict[str, Any] = {
     "value": "0",
 }
 
+HEAT_PUMP_COMPRESSOR_NIGHT_SPEED: dict[str, Any] = {
+    "name": "APPL.CtrlAppl.sParam.heatpump[0].HeatPumpPowerCtrl.param.maxPowerScaledNight",
+    "attributes": {
+        "formatId": "fmt3p0",
+        "longText": "Max. pwr. limit night",
+        "unitId": "Pct100",
+        "upperLimit": "1",
+        "lowerLimit": "0.5",
+    },
+    "value": "0.5",
+}
+
 HEAT_PUMP_COMPRESSOR_INPUT_TEMPERATURE: dict[str, Any] = {
     "name": "APPL.CtrlAppl.sParam.heatpump[0].TempCompressorIn.values.actValue",
     "attributes": {"formatId": "fmtTemp", "longText": "Comp. in temp.", "unitId": "Temp"},
@@ -245,6 +257,14 @@ HEAT_PUMP_COMPRESSOR_OUTPUT_TEMPERATURE: dict[str, Any] = {
     "name": "APPL.CtrlAppl.sParam.heatpump[0].TempCompressorOut.values.actValue",
     "attributes": {"formatId": "fmtTemp", "longText": "Comp. out temp.", "unitId": "Temp"},
     "value": "27.200001",
+}
+
+HEAT_PUMP_COMPRESSOR_USE_NIGHT_SPEED: dict[str, Any] = {
+    "name": "APPL.CtrlAppl.sParam.heatpump[0].HeatPumpPowerCtrl.param.useDayNightSpeed",
+    "attributes": {
+        "longText": "Day/Night switch",
+    },
+    "value": "true",
 }
 
 HEAT_PUMP_HEAT_REQUEST: dict[str, Any] = {
@@ -639,8 +659,10 @@ MULTIPLE_POSITIONS_RESPONSE: list[dict[str, Any]] = [
 HEAT_PUMP_DATA: list[dict[str, Any]] = [
     HEAT_PUMP_CIRCULATION_PUMP,
     HEAT_PUMP_COMPRESSOR,
+    HEAT_PUMP_COMPRESSOR_NIGHT_SPEED,
     HEAT_PUMP_COMPRESSOR_INPUT_TEMPERATURE,
     HEAT_PUMP_COMPRESSOR_OUTPUT_TEMPERATURE,
+    HEAT_PUMP_COMPRESSOR_USE_NIGHT_SPEED,
     HEAT_PUMP_HEAT_REQUEST,
     HEAT_PUMP_HIGH_PRESSURE,
     HEAT_PUMP_FLOW_TEMPERATURE,
