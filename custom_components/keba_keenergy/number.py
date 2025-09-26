@@ -1,6 +1,7 @@
 """Support for the KEBA KeEnergy numbers."""
 
 import logging
+from dataclasses import dataclass
 from typing import TYPE_CHECKING
 
 from homeassistant.components.number import DOMAIN as NUMBER_DOMAIN
@@ -8,10 +9,12 @@ from homeassistant.components.number import NumberDeviceClass
 from homeassistant.components.number import NumberEntity
 from homeassistant.components.number import NumberEntityDescription
 from homeassistant.config_entries import ConfigEntry
+from homeassistant.const import PERCENTAGE
 from homeassistant.const import UnitOfTemperature
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from keba_keenergy_api.constants import HeatCircuit
+from keba_keenergy_api.constants import HeatPump
 from keba_keenergy_api.constants import HotWaterTank
 from keba_keenergy_api.constants import Section
 from keba_keenergy_api.constants import SectionPrefix
@@ -26,41 +29,76 @@ if TYPE_CHECKING:
 _LOGGER = logging.getLogger(__name__)
 
 
-NUMBER_TYPES: dict[str, tuple[NumberEntityDescription, ...]] = {
+@dataclass(frozen=True)
+class KebaKeEnergyNumberEntityDescriptionMixin:
+    """Required values for KEBA KeEnergy sensors."""
+
+    scale: int
+
+
+@dataclass(frozen=True)
+class KebaKeEnergyNumberEntityDescription(
+    NumberEntityDescription,
+    KebaKeEnergyNumberEntityDescriptionMixin,
+):
+    """Class describing KEBA KeEnergy number entities."""
+
+
+NUMBER_TYPES: dict[str, tuple[KebaKeEnergyNumberEntityDescription, ...]] = {
     SectionPrefix.HEAT_CIRCUIT: (
-        NumberEntityDescription(
+        KebaKeEnergyNumberEntityDescription(
             device_class=NumberDeviceClass.TEMPERATURE,
             key="target_temperature_day",
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
+            native_step=0.5,
             translation_key="target_temperature_day",
+            scale=1,
         ),
-        NumberEntityDescription(
+        KebaKeEnergyNumberEntityDescription(
             device_class=NumberDeviceClass.TEMPERATURE,
             key="target_temperature_night",
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
+            native_step=0.5,
             translation_key="target_temperature_night",
+            scale=1,
         ),
-        NumberEntityDescription(
+        KebaKeEnergyNumberEntityDescription(
             device_class=NumberDeviceClass.TEMPERATURE,
             key="target_temperature_away",
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
+            native_step=0.5,
             translation_key="target_temperature_away",
+            scale=1,
+        ),
+    ),
+    SectionPrefix.HEAT_PUMP: (
+        KebaKeEnergyNumberEntityDescription(
+            device_class=NumberDeviceClass.SPEED,
+            key="compressor_night_speed",
+            native_unit_of_measurement=PERCENTAGE,
+            native_step=1,
+            translation_key="compressor_night_speed",
+            scale=100,
         ),
     ),
     SectionPrefix.HOT_WATER_TANK: (
-        NumberEntityDescription(
+        KebaKeEnergyNumberEntityDescription(
             device_class=NumberDeviceClass.TEMPERATURE,
             key="standby_temperature",
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
+            native_step=0.5,
             translation_key="standby_temperature",
             icon="mdi:thermometer-chevron-down",
+            scale=1,
         ),
-        NumberEntityDescription(
+        KebaKeEnergyNumberEntityDescription(
             device_class=NumberDeviceClass.TEMPERATURE,
             key="target_temperature",
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
+            native_step=0.5,
             translation_key="target_temperature",
             icon="mdi:thermometer-chevron-up",
+            scale=1,
         ),
     ),
 }
@@ -96,19 +134,17 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry, async_add_e
 class KebaKeEnergyNumberEntity(KebaKeEnergyEntity, NumberEntity):
     """KEBA KeEnergy number entity."""
 
-    _attr_native_step: float = 0.5
-
     def __init__(
         self,
         coordinator: KebaKeEnergyDataUpdateCoordinator,
-        description: NumberEntityDescription,
+        description: KebaKeEnergyNumberEntityDescription,
         entry: ConfigEntry,
         section_id: str,
         index: int | None,
     ) -> None:
         """Initialize the entity."""
         super().__init__(coordinator, entry, section_id, index)
-        self.entity_description: NumberEntityDescription = description
+        self.entity_description: KebaKeEnergyNumberEntityDescription = description
 
         self._attr_unique_id = f"{entry.unique_id}_{section_id}_{description.key}"
         if self.position is not None:
@@ -119,17 +155,17 @@ class KebaKeEnergyNumberEntity(KebaKeEnergyEntity, NumberEntity):
     @property
     def native_min_value(self) -> float:
         """Return the maximum value."""
-        return float(self.get_attribute(self.entity_description.key, "lower_limit"))
+        return float(self.get_attribute(self.entity_description.key, "lower_limit")) * self.entity_description.scale
 
     @property
     def native_max_value(self) -> float:
         """Return the maximum value."""
-        return float(self.get_attribute(self.entity_description.key, "upper_limit"))
+        return float(self.get_attribute(self.entity_description.key, "upper_limit")) * self.entity_description.scale
 
     @property
     def native_value(self) -> float:
         """Return the state of the number."""
-        return float(self.get_value(self.entity_description.key))
+        return float(self.get_value(self.entity_description.key)) * self.entity_description.scale
 
     async def async_set_native_value(self, value: float) -> None:
         """Set new value."""
@@ -139,6 +175,9 @@ class KebaKeEnergyNumberEntity(KebaKeEnergyEntity, NumberEntity):
         if self.section_id == SectionPrefix.HEAT_CIRCUIT:
             section = HeatCircuit[self.entity_description.key.upper()]
             device_numbers = self.coordinator.heat_circuit_numbers
+        elif self.section_id == SectionPrefix.HEAT_PUMP:  # pragma: no branch
+            section = HeatPump[self.entity_description.key.upper()]
+            device_numbers = self.coordinator.heat_pump_numbers
         elif self.section_id == SectionPrefix.HOT_WATER_TANK:  # pragma: no branch
             section = HotWaterTank[self.entity_description.key.upper()]
             device_numbers = self.coordinator.hot_water_tank_numbers
@@ -146,6 +185,6 @@ class KebaKeEnergyNumberEntity(KebaKeEnergyEntity, NumberEntity):
         if section and device_numbers:  # pragma: no branch
             await self._async_write_data(
                 section=section,
-                value=value,
+                value=value / self.entity_description.scale,
                 device_numbers=device_numbers,
             )

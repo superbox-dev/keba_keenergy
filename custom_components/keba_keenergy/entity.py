@@ -1,5 +1,6 @@
 """Entity classes for the KEBA KeEnergy integration."""
 
+import logging
 from collections.abc import Mapping
 from typing import Any
 from typing import TYPE_CHECKING
@@ -22,6 +23,7 @@ from .coordinator import KebaKeEnergyDataUpdateCoordinator
 
 if TYPE_CHECKING:
     from keba_keenergy_api.endpoints import Value
+_LOGGER = logging.getLogger(__name__)
 
 
 class KebaKeEnergyEntity(
@@ -184,10 +186,14 @@ class KebaKeEnergyEntity(
         try:
             _current_index: int = self.index or 0
 
+            request: dict[Section, Any] = {
+                section: [value if index == _current_index else None for index in range(device_numbers)],
+            }
+
+            _LOGGER.debug("API write request %s", request)
+
             await self.coordinator.api.write_data(
-                request={
-                    section: [value if index == _current_index else None for index in range(device_numbers)],
-                },
+                request=request,
             )
         except (APIError, ClientError) as error:
             msg: str = f"Failed to update {self.entity_id} to {value}: {error}"

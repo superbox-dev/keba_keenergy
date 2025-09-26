@@ -211,7 +211,6 @@ class KebaKeEnergyClimateEntity(KebaKeEnergyEntity, ClimateEntity):
         if HeatCircuitOperatingMode[operating_mode.upper()].value != HeatCircuitOperatingMode.OFF:
             self._attr_preset_mode = HEAT_CIRCUIT_PRESET_TO_HA[HeatCircuitOperatingMode[operating_mode.upper()].value]
 
-        _LOGGER.debug("preset_mode %s", self._attr_preset_mode)
         return self._attr_preset_mode
 
     async def async_turn_off(self) -> None:

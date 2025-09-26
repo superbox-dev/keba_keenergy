@@ -61,6 +61,9 @@
             }
         },
         "number": {
+            "compressor_night_speed": {
+                "name": "Kompressor-Drehzahl (Nacht)"
+            },
             "standby_temperature": {
                 "name": "Stütztemperatur"
             },
