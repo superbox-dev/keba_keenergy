@@ -80,6 +80,19 @@
                 "name": "Target temperature (night)"
             }
         },
+        "select": {
+            "operating_mode_3": {
+                "name": "Operating mode",
+                "state": {
+                    "setup": "Setup",
+                    "standby": "Standby",
+                    "summer": "Hot water only",
+                    "auto_heat": "Heating",
+                    "auto_cool": "Cooling",
+                    "auto": "Automatic"
+                }
+            }
+        },
         "sensor": {
             "circulation_pump": {
                 "name": "Circulation pump"
@@ -171,13 +184,36 @@
             "low_pressure": {
                 "name": "Low pressure"
             },
-            "operating_mode": {
+            "operating_mode_1": {
                 "name": "Operating mode",
                 "state": {
                     "auto": "Auto",
                     "day": "Day",
+                    "night": "Night",
+                    "holiday": "Holiday",
+                    "off": "Off",
+                    "party": "Party",
+                    "room_control": "Room control"
+                }
+            },
+            "operating_mode_2": {
+                "name": "Operating mode",
+                "state": {
+                    "auto": "Auto",
                     "heat_up": "Heat up",
-                    "night": "Night"
+                    "off": "Off",
+                    "on": "On"
+                }
+            },
+            "operating_mode_3": {
+                "name": "Operating mode",
+                "state": {
+                    "setup": "Setup",
+                    "standby": "Standby",
+                    "summer": "Summer mode (hot water only)",
+                    "auto_heat": "Heating",
+                    "auto_cool": "Cooling",
+                    "auto": "Automatic"
                 }
             },
             "outdoor_temperature": {
@@ -207,9 +243,12 @@
                     "auto_cool": "Cooling",
                     "auto_heat": "Heating",
                     "defrost": "Defrost",
+                    "error": "Error",
                     "flow": "Flow",
                     "inflow": "Inflow",
-                    "standby": "Standby"
+                    "shutdown": "Shutdown",
+                    "standby": "Standby",
+                    "pump_down": "Pump down"
                 }
             },
             "target_temperature": {

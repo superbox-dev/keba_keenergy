@@ -80,6 +80,19 @@
                 "name": "Soll-Raumtemperatur (Nacht)"
             }
         },
+        "select": {
+            "operating_mode_3": {
+                "name": "Betriebsart",
+                "state": {
+                    "setup": "Einrichtung",
+                    "standby": "Standby",
+                    "summer": "nur Warmwasser",
+                    "auto_heat": "Heizen",
+                    "auto_cool": "Kühlen",
+                    "auto": "Automatik"
+                }
+            }
+        },
         "sensor": {
             "circulation_pump": {
                 "name": "Umwälzpumpe"
@@ -171,13 +184,36 @@
             "low_pressure": {
                 "name": "Niederdruck"
             },
-            "operating_mode": {
+            "operating_mode_1": {
                 "name": "Betriebsart",
                 "state": {
                     "auto": "Auto",
                     "day": "Tag",
+                    "night": "Nacht",
+                    "holiday": "Urlaub",
+                    "off": "Aus",
+                    "party": "Party",
+                    "room_control": "Raumregelung"
+                }
+            },
+            "operating_mode_2": {
+                "name": "Betriebsart",
+                "state": {
+                    "auto": "Auto",
                     "heat_up": "Aufheizen",
-                    "night": "Nacht"
+                    "off": "Aus",
+                    "on": "An"
+                }
+            },
+            "operating_mode_3": {
+                "name": "Betriebsart",
+                "state": {
+                    "setup": "Einrichtung",
+                    "standby": "Standby",
+                    "summer": "Sommerbetrieb (nur Warmwasser)",
+                    "auto_heat": "Heizen",
+                    "auto_cool": "Kühlen",
+                    "auto": "Automatik"
                 }
             },
             "outdoor_temperature": {
@@ -207,9 +243,12 @@
                     "auto_cool": "Kühlen",
                     "auto_heat": "Heizen",
                     "defrost": "Abdauen",
+                    "error": "Fehler",
                     "flow": "Vorlauf",
                     "inflow": "Nachlauf",
-                    "standby": "Standby"
+                    "shutdown": "Herunterfahren",
+                    "standby": "Standby",
+                    "pump_down": "Pump-Down-Vorgang"
                 }
             },
             "target_temperature": {
@@ -240,7 +279,7 @@
                 "name": "Gesamtwärmemenge"
             }
         },
-                "switch" : {
+        "switch" : {
             "compressor_use_night_speed": {
                 "name": "Kompressor-Drehzahlbegrenzung (Nacht)"
             }
