@@ -2,6 +2,7 @@
 
 import logging
 from collections.abc import Mapping
+from functools import cached_property
 from typing import Any
 from typing import TYPE_CHECKING
 from typing import cast
@@ -83,7 +84,7 @@ class KebaKeEnergyEntity(
         """Return True if the entity is part of a hot water tank else False."""
         return self.section_id == SectionPrefix.HOT_WATER_TANK
 
-    @property
+    @cached_property
     def device_name(self) -> str | None:
         """Return the device name and number."""
         _device_name: str | None = None
@@ -105,7 +106,7 @@ class KebaKeEnergyEntity(
 
         return _device_name
 
-    @property
+    @cached_property
     def device_identifier(self) -> str:
         """Return the device identifier."""
         _identifier: str = f"{self.entry.unique_id}_{DOMAIN if self.is_system_device else self.section_id}"
@@ -117,7 +118,7 @@ class KebaKeEnergyEntity(
 
         return _identifier
 
-    @property
+    @cached_property
     def device_manufacturer(self) -> str | None:
         """Return the device manufacturer."""
         _manufacturer: str | None = None
@@ -129,7 +130,7 @@ class KebaKeEnergyEntity(
 
         return _manufacturer
 
-    @property
+    @cached_property
     def device_model(self) -> str | None:
         """Return the device model."""
         _device_model: str | None = None
@@ -145,7 +146,7 @@ class KebaKeEnergyEntity(
 
         return _device_model
 
-    @property
+    @cached_property
     def _translation_key(self) -> str | None:
         translation_key: str | None = None
 

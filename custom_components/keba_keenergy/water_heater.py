@@ -1,5 +1,5 @@
 """Support for the KEBA KeEnergy water heater."""
-
+from functools import cached_property
 from typing import Any
 from typing import Final
 
@@ -89,12 +89,12 @@ class KebaKeEnergyWaterHeaterEntity(KebaKeEnergyEntity, WaterHeaterEntity):
         """Return the current temperature."""
         return float(self.get_value("current_temperature"))
 
-    @property
+    @cached_property
     def min_temp(self) -> float:
         """Return the minimum temperature."""
         return float(self.get_attribute(key="target_temperature", attr="lower_limit"))
 
-    @property
+    @cached_property
     def max_temp(self) -> float:
         """Return the maximum temperature."""
         return float(self.get_attribute(key="target_temperature", attr="upper_limit"))

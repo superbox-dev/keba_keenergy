@@ -1,6 +1,7 @@
 """Support for the KEBA KeEnergy climate."""
 
 import logging
+from functools import cached_property
 from typing import Any
 from typing import Final
 
@@ -146,14 +147,14 @@ class KebaKeEnergyClimateEntity(KebaKeEnergyEntity, ClimateEntity):
         """Return the temperature we try to reach."""
         return self.target_temperature_for_preset + float(self.get_value("target_temperature_offset"))
 
-    @property
+    @cached_property
     def min_temp(self) -> float:
         """Return the minimum temperature."""
         return self.target_temperature_for_preset + float(
             self.get_attribute(key="target_temperature_offset", attr="lower_limit"),
         )
 
-    @property
+    @cached_property
     def max_temp(self) -> float:
         """Return the maximum temperature."""
         return self.target_temperature_for_preset + float(

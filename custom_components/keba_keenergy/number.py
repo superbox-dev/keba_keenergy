@@ -2,6 +2,7 @@
 
 import logging
 from dataclasses import dataclass
+from functools import cached_property
 
 from homeassistant.components.number import DOMAIN as NUMBER_DOMAIN
 from homeassistant.components.number import NumberDeviceClass
@@ -139,7 +140,7 @@ class KebaKeEnergyNumberEntity(KebaKeEnergyExtendedEntity, NumberEntity):
         super().__init__(coordinator, entry=entry, section_id=section_id, index=index)
         self.entity_id: str = f"{NUMBER_DOMAIN}.{DOMAIN}_{self._attr_unique_id}"
 
-    @property
+    @cached_property
     def native_min_value(self) -> float:
         """Return the maximum value."""
         return (
@@ -147,7 +148,7 @@ class KebaKeEnergyNumberEntity(KebaKeEnergyExtendedEntity, NumberEntity):
             * self.entity_description.scale
         )
 
-    @property
+    @cached_property
     def native_max_value(self) -> float:
         """Return the maximum value."""
         return (

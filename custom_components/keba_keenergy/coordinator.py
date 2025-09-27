@@ -2,6 +2,7 @@
 
 import logging
 from datetime import timedelta
+from functools import cached_property
 from typing import Any
 from typing import cast
 
@@ -131,17 +132,17 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
 
         return response
 
-    @property
+    @cached_property
     def configuration_url(self) -> str:
         """Return web gui url."""
         return str(self.api.device_url)
 
-    @property
+    @cached_property
     def device_model(self) -> str:
         """Return device model name."""
         return str(self._api_device_info["name"])
 
-    @property
+    @cached_property
     def device_name(self) -> str:
         """Return device name."""
         return str(self._api_system_info["name"])
@@ -151,7 +152,7 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
         """Return software version."""
         return str(self._api_system_info["version"])
 
-    @property
+    @cached_property
     def device_serial_number(self) -> str:
         """Return serial number."""
         return str(self._api_device_info["serNo"])
