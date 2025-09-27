@@ -27,8 +27,8 @@ from pytest_homeassistant_custom_component.common import MockConfigEntry
 from tests import setup_integration
 from tests.api_data import DEFAULT_POSITION_DATA_RESPONSE
 from tests.api_data import DEFAULT_POSITION_RESPONSE
-from tests.api_data import MULTIPLE_POSITIONS_DATA_RESPONSE
 from tests.api_data import MULTIPLE_POSITIONS_RESPONSE
+from tests.api_data import get_multi_positions_data_response
 from tests.conftest import FakeKebaKeEnergyAPI
 
 ENTITY_ID: str = "water_heater.keba_keenergy_12345678"
@@ -40,7 +40,7 @@ ENTITY_ID_2: str = "water_heater.keba_keenergy_12345678_2"
     ("response", "entities"),
     [
         ([DEFAULT_POSITION_RESPONSE, DEFAULT_POSITION_DATA_RESPONSE], [ENTITY_ID]),
-        ([MULTIPLE_POSITIONS_RESPONSE, MULTIPLE_POSITIONS_DATA_RESPONSE], [ENTITY_ID_1, ENTITY_ID_2]),
+        ([MULTIPLE_POSITIONS_RESPONSE, get_multi_positions_data_response()], [ENTITY_ID_1, ENTITY_ID_2]),
     ],
 )
 async def test_water_heater_entities(
@@ -68,7 +68,7 @@ async def test_water_heater(
     """Test water heater."""
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
-        MULTIPLE_POSITIONS_DATA_RESPONSE,
+        get_multi_positions_data_response(),
     ]
     fake_api.register_requests("10.0.0.100")
 
@@ -95,7 +95,7 @@ async def test_water_heater_translations(
     """Test water heater translations."""
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
-        MULTIPLE_POSITIONS_DATA_RESPONSE,
+        get_multi_positions_data_response(),
     ]
     fake_api.register_requests("10.0.0.100")
 
@@ -115,10 +115,10 @@ async def test_turn_off(
     """Test turn on water heater."""
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
-        MULTIPLE_POSITIONS_DATA_RESPONSE,
+        get_multi_positions_data_response(),
         # Read API after services call
         MULTIPLE_POSITIONS_RESPONSE,
-        MULTIPLE_POSITIONS_DATA_RESPONSE,
+        get_multi_positions_data_response(),
     ]
     fake_api.register_requests("10.0.0.100")
 
@@ -148,10 +148,10 @@ async def test_turn_on(
     """Test turn on water heater."""
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
-        MULTIPLE_POSITIONS_DATA_RESPONSE,
+        get_multi_positions_data_response(),
         # Read API after services call
         MULTIPLE_POSITIONS_RESPONSE,
-        MULTIPLE_POSITIONS_DATA_RESPONSE,
+        get_multi_positions_data_response(),
     ]
     fake_api.register_requests("10.0.0.100")
 
@@ -192,10 +192,10 @@ async def test_set_operation_mode(
     """Test set operation mode."""
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
-        MULTIPLE_POSITIONS_DATA_RESPONSE,
+        get_multi_positions_data_response(),
         # Read API after services call
         MULTIPLE_POSITIONS_RESPONSE,
-        MULTIPLE_POSITIONS_DATA_RESPONSE,
+        get_multi_positions_data_response(),
     ]
     fake_api.register_requests("10.0.0.100")
 
@@ -225,10 +225,10 @@ async def test_set_temperature(
     """Test setting temperature."""
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
-        MULTIPLE_POSITIONS_DATA_RESPONSE,
+        get_multi_positions_data_response(),
         # Read API after services call
         MULTIPLE_POSITIONS_RESPONSE,
-        MULTIPLE_POSITIONS_DATA_RESPONSE,
+        get_multi_positions_data_response(),
     ]
     fake_api.register_requests("10.0.0.100")
 

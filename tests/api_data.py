@@ -480,11 +480,22 @@ HEAT_PUMP_TOTAL_SPF: dict[str, Any] = {
     "value": "2.43",
 }
 
+HEAT_PUMP_HAS_PASSIVE_COOLING: str = """
+    {
+        "name": "APPL.CtrlAppl.sParam.options.heatpump[0].hasPassiveCooling",
+        "attributes": {
+            "longText": "With passive cooling"
+        },
+        "value": "%s"
+    }
+"""
 
 HOT_WATER_TANK_HEAT_REQUEST: str = """
     {
         "name": "APPL.CtrlAppl.sParam.hotWaterTank[%s].values.heatRequestTop",
-        "attributes": {"longText": "Heat requirement"},
+        "attributes": {
+            "longText": "Heat requirement"
+        },
         "value": "%s"
     }
 """
@@ -628,6 +639,17 @@ SYSTEM_OUTDOOR_TEMPERATURE: dict[str, Any] = {
     "value": "20.504164",
 }
 
+SYSTEM_OPERATING_MODE: dict[str, Any] = {
+    "name": "APPL.CtrlAppl.sParam.param.operatingMode",
+    "attributes": {
+        "formatId": "fmtOperatingMode",
+        "longText": "Operating mode",
+        "lowerLimit": "-1",
+        "unitId": "Enum",
+        "upperLimit": "4",
+    },
+    "value": "2",
+}
 
 DEVICE_INFO_RESPONSE: dict[str, Any] = {
     "ret": "OK",
@@ -690,7 +712,6 @@ HEAT_PUMP_DATA: list[dict[str, Any]] = [
     HEAT_PUMP_TOTAL_SPF,
 ]
 
-
 DEFAULT_POSITION_DATA_RESPONSE: list[dict[str, Any]] = [
     json.loads(HEAT_CIRCUIT_HAS_ROOM_TEMPERATURE % ("0", "true")),
     json.loads(HEAT_CIRCUIT_HAS_ROOM_HUMIDITY % ("0", "true")),
@@ -709,6 +730,7 @@ DEFAULT_POSITION_DATA_RESPONSE: list[dict[str, Any]] = [
     json.loads(HEAT_CIRCUIT_TARGET_TEMPERATURE % ("0", "20.5")),
     json.loads(HEAT_CIRCUIT_TARGET_TEMPERATURE_OFFSET % ("0", "1.5")),
     *HEAT_PUMP_DATA,
+    json.loads(HEAT_PUMP_HAS_PASSIVE_COOLING % "true"),
     json.loads(HOT_WATER_TANK_HEAT_REQUEST % ("0", "false")),
     json.loads(HOT_WATER_TANK_HOT_WATER_FLOW % ("0", "false")),
     json.loads(HOT_WATER_TANK_FRESH_WATER_MODULE_TEMPERATURE % ("0", "51")),
@@ -720,60 +742,7 @@ DEFAULT_POSITION_DATA_RESPONSE: list[dict[str, Any]] = [
     json.loads(SYSTEM_HEAT_PUMP_NUMBERS % "1"),
     json.loads(SYSTEM_HOT_WATER_TANK_NUMBERS % "1"),
     SYSTEM_OUTDOOR_TEMPERATURE,
-]
-
-MULTIPLE_POSITIONS_DATA_RESPONSE: list[dict[str, Any]] = [
-    json.loads(HEAT_CIRCUIT_HAS_ROOM_TEMPERATURE % ("0", "true")),
-    json.loads(HEAT_CIRCUIT_HAS_ROOM_TEMPERATURE % ("1", "false")),
-    json.loads(HEAT_CIRCUIT_HAS_ROOM_HUMIDITY % ("0", "true")),
-    json.loads(HEAT_CIRCUIT_HAS_ROOM_HUMIDITY % ("1", "false")),
-    json.loads(HEAT_CIRCUIT_ROOM_TEMPERATURE % ("0", "22.42")),
-    json.loads(HEAT_CIRCUIT_ROOM_TEMPERATURE % ("1", "22.42")),
-    json.loads(HEAT_CIRCUIT_ROOM_HUMIDITY % ("0", "53")),
-    json.loads(HEAT_CIRCUIT_ROOM_HUMIDITY % ("1", "53")),
-    json.loads(HEAT_CIRCUIT_DEW_POINT % ("0", "13.1")),
-    json.loads(HEAT_CIRCUIT_DEW_POINT % ("1", "13.1")),
-    json.loads(HEAT_CIRCUIT_FLOW_TEMPERATURE_SETPOINT % ("0", "26.5543")),
-    json.loads(HEAT_CIRCUIT_FLOW_TEMPERATURE_SETPOINT % ("1", "26.5543")),
-    json.loads(HEAT_CIRCUIT_TARGET_TEMPERATURE_DAY % ("0", "20.5")),
-    json.loads(HEAT_CIRCUIT_TARGET_TEMPERATURE_DAY % ("1", "20.5")),
-    json.loads(HEAT_CIRCUIT_HEATING_LIMIT_DAY % ("0", "20")),
-    json.loads(HEAT_CIRCUIT_HEATING_LIMIT_DAY % ("1", "20")),
-    json.loads(HEAT_CIRCUIT_HEAT_REQUEST % ("0", "1")),
-    json.loads(HEAT_CIRCUIT_HEAT_REQUEST % ("1", "0")),
-    json.loads(HEAT_CIRCUIT_TARGET_TEMPERATURE_AWAY % ("0", "18")),
-    json.loads(HEAT_CIRCUIT_TARGET_TEMPERATURE_AWAY % ("1", "18")),
-    json.loads(HEAT_CIRCUIT_NAME % ("0", "FBH1")),
-    json.loads(HEAT_CIRCUIT_NAME % ("1", "FBH2")),
-    json.loads(HEAT_CIRCUIT_TARGET_TEMPERATURE_NIGHT % ("0", "20")),
-    json.loads(HEAT_CIRCUIT_TARGET_TEMPERATURE_NIGHT % ("1", "20")),
-    json.loads(HEAT_CIRCUIT_HEATING_LIMIT_NIGHT % ("0", "18")),
-    json.loads(HEAT_CIRCUIT_HEATING_LIMIT_NIGHT % ("1", "18")),
-    json.loads(HEAT_CIRCUIT_OPERATION_MODE % ("0", "2")),
-    json.loads(HEAT_CIRCUIT_OPERATION_MODE % ("1", "0")),
-    json.loads(HEAT_CIRCUIT_TARGET_TEMPERATURE % ("0", "20.5")),
-    json.loads(HEAT_CIRCUIT_TARGET_TEMPERATURE % ("1", "20.5")),
-    json.loads(HEAT_CIRCUIT_TARGET_TEMPERATURE_OFFSET % ("0", "1.5")),
-    json.loads(HEAT_CIRCUIT_TARGET_TEMPERATURE_OFFSET % ("1", "0")),
-    *HEAT_PUMP_DATA,
-    json.loads(HOT_WATER_TANK_HEAT_REQUEST % ("0", "false")),
-    json.loads(HOT_WATER_TANK_HEAT_REQUEST % ("1", "true")),
-    json.loads(HOT_WATER_TANK_HOT_WATER_FLOW % ("0", "false")),
-    json.loads(HOT_WATER_TANK_HOT_WATER_FLOW % ("1", "true")),
-    json.loads(HOT_WATER_TANK_FRESH_WATER_MODULE_TEMPERATURE % ("0", "51.23")),
-    json.loads(HOT_WATER_TANK_FRESH_WATER_MODULE_TEMPERATURE % ("1", "51.23")),
-    json.loads(HOT_WATER_TANK_TARGET_TEMPERATURE % ("0", "51")),
-    json.loads(HOT_WATER_TANK_TARGET_TEMPERATURE % ("1", "51")),
-    json.loads(HOT_WATER_TANK_STANDBY_TEMPERATURE % ("0", "32.5")),
-    json.loads(HOT_WATER_TANK_STANDBY_TEMPERATURE % ("1", "32.5")),
-    json.loads(HOT_WATER_TANK_OPERATION_MODE % ("0", "3")),
-    json.loads(HOT_WATER_TANK_OPERATION_MODE % ("0", "0")),
-    json.loads(HOT_WATER_CURRENT_TEMPERATURE % ("0", "47.700001")),
-    json.loads(HOT_WATER_CURRENT_TEMPERATURE % ("1", "47.700001")),
-    json.loads(SYSTEM_HEAT_CIRCUIT_NUMBERS % "2"),
-    json.loads(SYSTEM_HEAT_PUMP_NUMBERS % "1"),
-    json.loads(SYSTEM_HOT_WATER_TANK_NUMBERS % "2"),
-    SYSTEM_OUTDOOR_TEMPERATURE,
+    SYSTEM_OPERATING_MODE,
 ]
 
 ENTITY_UPDATED_DATA_RESPONSE: list[dict[str, Any]] = [
@@ -810,6 +779,7 @@ ENTITY_UPDATED_DATA_RESPONSE: list[dict[str, Any]] = [
     json.loads(HEAT_CIRCUIT_TARGET_TEMPERATURE_OFFSET % ("0", "1.5")),
     json.loads(HEAT_CIRCUIT_TARGET_TEMPERATURE_OFFSET % ("1", "0")),
     *HEAT_PUMP_DATA,
+    json.loads(HEAT_PUMP_HAS_PASSIVE_COOLING % "true"),
     json.loads(HOT_WATER_TANK_HEAT_REQUEST % ("0", "false")),
     json.loads(HOT_WATER_TANK_HEAT_REQUEST % ("1", "true")),
     json.loads(HOT_WATER_TANK_HOT_WATER_FLOW % ("0", "false")),
@@ -828,6 +798,7 @@ ENTITY_UPDATED_DATA_RESPONSE: list[dict[str, Any]] = [
     json.loads(SYSTEM_HEAT_PUMP_NUMBERS % "1"),
     json.loads(SYSTEM_HOT_WATER_TANK_NUMBERS % "2"),
     SYSTEM_OUTDOOR_TEMPERATURE,
+    SYSTEM_OPERATING_MODE,
 ]
 
 HEAT_CIRCUIT_OPERATION_MODE_3_DATA_RESPONSE: list[dict[str, Any]] = [
@@ -848,6 +819,7 @@ HEAT_CIRCUIT_OPERATION_MODE_3_DATA_RESPONSE: list[dict[str, Any]] = [
     json.loads(HEAT_CIRCUIT_TARGET_TEMPERATURE % ("0", "20.5")),
     json.loads(HEAT_CIRCUIT_TARGET_TEMPERATURE_OFFSET % ("0", "1.5")),
     *HEAT_PUMP_DATA,
+    json.loads(HEAT_PUMP_HAS_PASSIVE_COOLING % "true"),
     json.loads(HOT_WATER_TANK_HEAT_REQUEST % ("0", "false")),
     json.loads(HOT_WATER_TANK_HOT_WATER_FLOW % ("0", "true")),
     json.loads(HOT_WATER_TANK_FRESH_WATER_MODULE_TEMPERATURE % ("0", "51")),
@@ -859,6 +831,7 @@ HEAT_CIRCUIT_OPERATION_MODE_3_DATA_RESPONSE: list[dict[str, Any]] = [
     json.loads(SYSTEM_HEAT_PUMP_NUMBERS % "1"),
     json.loads(SYSTEM_HOT_WATER_TANK_NUMBERS % "1"),
     SYSTEM_OUTDOOR_TEMPERATURE,
+    SYSTEM_OPERATING_MODE,
 ]
 
 HEAT_CIRCUIT_OPERATION_MODE_4_DATA_RESPONSE: list[dict[str, Any]] = [
@@ -879,6 +852,7 @@ HEAT_CIRCUIT_OPERATION_MODE_4_DATA_RESPONSE: list[dict[str, Any]] = [
     json.loads(HEAT_CIRCUIT_TARGET_TEMPERATURE % ("0", "20.5")),
     json.loads(HEAT_CIRCUIT_TARGET_TEMPERATURE_OFFSET % ("0", "1.5")),
     *HEAT_PUMP_DATA,
+    json.loads(HEAT_PUMP_HAS_PASSIVE_COOLING % "true"),
     json.loads(HOT_WATER_TANK_HEAT_REQUEST % ("0", "false")),
     json.loads(HOT_WATER_TANK_HOT_WATER_FLOW % ("0", "true")),
     json.loads(HOT_WATER_TANK_FRESH_WATER_MODULE_TEMPERATURE % ("0", "51")),
@@ -890,4 +864,63 @@ HEAT_CIRCUIT_OPERATION_MODE_4_DATA_RESPONSE: list[dict[str, Any]] = [
     json.loads(SYSTEM_HEAT_PUMP_NUMBERS % "1"),
     json.loads(SYSTEM_HOT_WATER_TANK_NUMBERS % "1"),
     SYSTEM_OUTDOOR_TEMPERATURE,
+    SYSTEM_OPERATING_MODE,
 ]
+
+
+def get_multi_positions_data_response(has_passive_cooling: str = "false") -> list[dict[str, Any]]:
+    return [
+        json.loads(HEAT_CIRCUIT_HAS_ROOM_TEMPERATURE % ("0", "true")),
+        json.loads(HEAT_CIRCUIT_HAS_ROOM_TEMPERATURE % ("1", "false")),
+        json.loads(HEAT_CIRCUIT_HAS_ROOM_HUMIDITY % ("0", "true")),
+        json.loads(HEAT_CIRCUIT_HAS_ROOM_HUMIDITY % ("1", "false")),
+        json.loads(HEAT_CIRCUIT_ROOM_TEMPERATURE % ("0", "22.42")),
+        json.loads(HEAT_CIRCUIT_ROOM_TEMPERATURE % ("1", "22.42")),
+        json.loads(HEAT_CIRCUIT_ROOM_HUMIDITY % ("0", "53")),
+        json.loads(HEAT_CIRCUIT_ROOM_HUMIDITY % ("1", "53")),
+        json.loads(HEAT_CIRCUIT_DEW_POINT % ("0", "13.1")),
+        json.loads(HEAT_CIRCUIT_DEW_POINT % ("1", "13.1")),
+        json.loads(HEAT_CIRCUIT_FLOW_TEMPERATURE_SETPOINT % ("0", "26.5543")),
+        json.loads(HEAT_CIRCUIT_FLOW_TEMPERATURE_SETPOINT % ("1", "26.5543")),
+        json.loads(HEAT_CIRCUIT_TARGET_TEMPERATURE_DAY % ("0", "20.5")),
+        json.loads(HEAT_CIRCUIT_TARGET_TEMPERATURE_DAY % ("1", "20.5")),
+        json.loads(HEAT_CIRCUIT_HEATING_LIMIT_DAY % ("0", "20")),
+        json.loads(HEAT_CIRCUIT_HEATING_LIMIT_DAY % ("1", "20")),
+        json.loads(HEAT_CIRCUIT_HEAT_REQUEST % ("0", "1")),
+        json.loads(HEAT_CIRCUIT_HEAT_REQUEST % ("1", "0")),
+        json.loads(HEAT_CIRCUIT_TARGET_TEMPERATURE_AWAY % ("0", "18")),
+        json.loads(HEAT_CIRCUIT_TARGET_TEMPERATURE_AWAY % ("1", "18")),
+        json.loads(HEAT_CIRCUIT_NAME % ("0", "FBH1")),
+        json.loads(HEAT_CIRCUIT_NAME % ("1", "FBH2")),
+        json.loads(HEAT_CIRCUIT_TARGET_TEMPERATURE_NIGHT % ("0", "20")),
+        json.loads(HEAT_CIRCUIT_TARGET_TEMPERATURE_NIGHT % ("1", "20")),
+        json.loads(HEAT_CIRCUIT_HEATING_LIMIT_NIGHT % ("0", "18")),
+        json.loads(HEAT_CIRCUIT_HEATING_LIMIT_NIGHT % ("1", "18")),
+        json.loads(HEAT_CIRCUIT_OPERATION_MODE % ("0", "2")),
+        json.loads(HEAT_CIRCUIT_OPERATION_MODE % ("1", "0")),
+        json.loads(HEAT_CIRCUIT_TARGET_TEMPERATURE % ("0", "20.5")),
+        json.loads(HEAT_CIRCUIT_TARGET_TEMPERATURE % ("1", "20.5")),
+        json.loads(HEAT_CIRCUIT_TARGET_TEMPERATURE_OFFSET % ("0", "1.5")),
+        json.loads(HEAT_CIRCUIT_TARGET_TEMPERATURE_OFFSET % ("1", "0")),
+        *HEAT_PUMP_DATA,
+        json.loads(HEAT_PUMP_HAS_PASSIVE_COOLING % f"{has_passive_cooling}"),
+        json.loads(HOT_WATER_TANK_HEAT_REQUEST % ("0", "false")),
+        json.loads(HOT_WATER_TANK_HEAT_REQUEST % ("1", "true")),
+        json.loads(HOT_WATER_TANK_HOT_WATER_FLOW % ("0", "false")),
+        json.loads(HOT_WATER_TANK_HOT_WATER_FLOW % ("1", "true")),
+        json.loads(HOT_WATER_TANK_FRESH_WATER_MODULE_TEMPERATURE % ("0", "51.23")),
+        json.loads(HOT_WATER_TANK_FRESH_WATER_MODULE_TEMPERATURE % ("1", "51.23")),
+        json.loads(HOT_WATER_TANK_TARGET_TEMPERATURE % ("0", "51")),
+        json.loads(HOT_WATER_TANK_TARGET_TEMPERATURE % ("1", "51")),
+        json.loads(HOT_WATER_TANK_STANDBY_TEMPERATURE % ("0", "32.5")),
+        json.loads(HOT_WATER_TANK_STANDBY_TEMPERATURE % ("1", "32.5")),
+        json.loads(HOT_WATER_TANK_OPERATION_MODE % ("0", "3")),
+        json.loads(HOT_WATER_TANK_OPERATION_MODE % ("0", "0")),
+        json.loads(HOT_WATER_CURRENT_TEMPERATURE % ("0", "47.700001")),
+        json.loads(HOT_WATER_CURRENT_TEMPERATURE % ("1", "47.700001")),
+        json.loads(SYSTEM_HEAT_CIRCUIT_NUMBERS % "2"),
+        json.loads(SYSTEM_HEAT_PUMP_NUMBERS % "1"),
+        json.loads(SYSTEM_HOT_WATER_TANK_NUMBERS % "2"),
+        SYSTEM_OUTDOOR_TEMPERATURE,
+        SYSTEM_OPERATING_MODE,
+    ]

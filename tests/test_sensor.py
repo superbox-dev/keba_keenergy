@@ -19,19 +19,19 @@ from homeassistant.core import State
 from pytest_homeassistant_custom_component.common import MockConfigEntry
 
 from tests import setup_integration
-from tests.api_data import MULTIPLE_POSITIONS_DATA_RESPONSE
 from tests.api_data import MULTIPLE_POSITIONS_RESPONSE
+from tests.api_data import get_multi_positions_data_response
 from tests.conftest import FakeKebaKeEnergyAPI
 
 
 @pytest.mark.usefixtures("entity_registry_enabled_by_default")
-async def test_sensors(
+async def test_system_sensors(
     hass: HomeAssistant,
     config_entry: MockConfigEntry,
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
-    """Test sensors."""
-    fake_api.responses = [MULTIPLE_POSITIONS_RESPONSE, MULTIPLE_POSITIONS_DATA_RESPONSE]
+    """Test system sensors."""
+    fake_api.responses = [MULTIPLE_POSITIONS_RESPONSE, get_multi_positions_data_response()]
     fake_api.register_requests(config_entry.data[CONF_HOST])
 
     await setup_integration(hass, config_entry)
@@ -46,13 +46,31 @@ async def test_sensors(
 
 
 @pytest.mark.usefixtures("entity_registry_enabled_by_default")
+async def test_system_sensors_translated(
+    hass: HomeAssistant,
+    config_entry: MockConfigEntry,
+    fake_api: FakeKebaKeEnergyAPI,
+) -> None:
+    """Test system sensors translations."""
+    fake_api.responses = [MULTIPLE_POSITIONS_RESPONSE, get_multi_positions_data_response()]
+    fake_api.register_requests(config_entry.data[CONF_HOST])
+
+    hass.config.language = "de"
+    await setup_integration(hass, config_entry)
+
+    outdoor_temperature: State | None = hass.states.get("sensor.keba_keenergy_12345678_outdoor_temperature")
+    assert isinstance(outdoor_temperature, State)
+    assert outdoor_temperature.attributes[ATTR_FRIENDLY_NAME] == "KEBA KeEnergy Außentemperatur"
+
+
+@pytest.mark.usefixtures("entity_registry_enabled_by_default")
 async def test_hot_water_tank_sensors(
     hass: HomeAssistant,
     config_entry: MockConfigEntry,
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
     """Test hot water tank sensors."""
-    fake_api.responses = [MULTIPLE_POSITIONS_RESPONSE, MULTIPLE_POSITIONS_DATA_RESPONSE]
+    fake_api.responses = [MULTIPLE_POSITIONS_RESPONSE, get_multi_positions_data_response()]
     fake_api.register_requests(config_entry.data[CONF_HOST])
 
     await setup_integration(hass, config_entry)
@@ -73,7 +91,7 @@ async def test_hot_water_tank_sensors(
     assert isinstance(hot_water_tank_operating_mode_1, State)
     assert hot_water_tank_operating_mode_1.state == "heat_up"
     assert hot_water_tank_operating_mode_1.attributes[CONF_DEVICE_CLASS] == SensorDeviceClass.ENUM
-    assert hot_water_tank_operating_mode_1.attributes[ATTR_OPTIONS] == ["auto", "heat_up", "off", "on"]
+    assert hot_water_tank_operating_mode_1.attributes[ATTR_OPTIONS] == ["off", "auto", "on", "heat_up"]
     assert hot_water_tank_operating_mode_1.attributes[ATTR_FRIENDLY_NAME] == "Hot water tank 1 Operating mode"
 
     hot_water_tank_min_temperature_1: State | None = hass.states.get(
@@ -122,7 +140,7 @@ async def test_hot_water_tank_sensors_translations(
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
     """Test hot water tank sensors translations."""
-    fake_api.responses = [MULTIPLE_POSITIONS_RESPONSE, MULTIPLE_POSITIONS_DATA_RESPONSE]
+    fake_api.responses = [MULTIPLE_POSITIONS_RESPONSE, get_multi_positions_data_response()]
     fake_api.register_requests(config_entry.data[CONF_HOST])
 
     hass.config.language = "de"
@@ -170,7 +188,7 @@ async def test_heat_pump_sensors(
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
     """Test sensors."""
-    fake_api.responses = [MULTIPLE_POSITIONS_RESPONSE, MULTIPLE_POSITIONS_DATA_RESPONSE]
+    fake_api.responses = [MULTIPLE_POSITIONS_RESPONSE, get_multi_positions_data_response()]
     fake_api.register_requests(config_entry.data[CONF_HOST])
 
     await setup_integration(hass, config_entry)
@@ -186,6 +204,9 @@ async def test_heat_pump_sensors(
         "defrost",
         "auto_cool",
         "inflow",
+        "pump_down",
+        "shutdown",
+        "error",
     ]
     assert heat_pump_state.attributes[ATTR_FRIENDLY_NAME] == "Heat pump State"
 
@@ -432,7 +453,7 @@ async def test_heat_pump_sensors_translations(
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
     """Test heat pump sensors translations."""
-    fake_api.responses = [MULTIPLE_POSITIONS_RESPONSE, MULTIPLE_POSITIONS_DATA_RESPONSE]
+    fake_api.responses = [MULTIPLE_POSITIONS_RESPONSE, get_multi_positions_data_response()]
     fake_api.register_requests(config_entry.data[CONF_HOST])
 
     hass.config.language = "de"
@@ -447,6 +468,9 @@ async def test_heat_pump_sensors_translations(
         "defrost",
         "auto_cool",
         "inflow",
+        "pump_down",
+        "shutdown",
+        "error",
     ]
     assert heat_pump_state.attributes[ATTR_FRIENDLY_NAME] == "Wärmepumpe Status"
 
@@ -601,7 +625,7 @@ async def test_heat_circuit_sensors(
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
     """Test heat circuit sensors."""
-    fake_api.responses = [MULTIPLE_POSITIONS_RESPONSE, MULTIPLE_POSITIONS_DATA_RESPONSE]
+    fake_api.responses = [MULTIPLE_POSITIONS_RESPONSE, get_multi_positions_data_response()]
     fake_api.register_requests(config_entry.data[CONF_HOST])
 
     await setup_integration(hass, config_entry)
@@ -739,7 +763,16 @@ async def test_heat_circuit_sensors(
     assert isinstance(heat_circuit_operating_mode_1, State)
     assert heat_circuit_operating_mode_1.state == "day"
     assert heat_circuit_operating_mode_1.attributes[CONF_DEVICE_CLASS] == SensorDeviceClass.ENUM
-    assert heat_circuit_operating_mode_1.attributes[ATTR_OPTIONS] == ["off", "auto", "day", "night", "holiday", "party"]
+    assert heat_circuit_operating_mode_1.attributes[ATTR_OPTIONS] == [
+        "off",
+        "auto",
+        "day",
+        "night",
+        "holiday",
+        "party",
+        "external",
+        "room_control",
+    ]
     assert heat_circuit_operating_mode_1.attributes[ATTR_FRIENDLY_NAME] == "Heating circuit 1 Operating mode"
 
     heat_circuit_heat_request_1: State | None = hass.states.get(
@@ -751,9 +784,11 @@ async def test_heat_circuit_sensors(
     assert heat_circuit_heat_request_1.attributes[ATTR_OPTIONS] == [
         "off",
         "on",
+        "flow_off",
         "temporary_off",
         "room_off",
         "outdoor_off",
+        "inflow_off",
     ]
     assert heat_circuit_heat_request_1.attributes[ATTR_FRIENDLY_NAME] == "Heating circuit 1 Heat request"
 
@@ -765,7 +800,7 @@ async def test_heat_circuit_sensors_translations(
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
     """Test heat circuit sensors translations."""
-    fake_api.responses = [MULTIPLE_POSITIONS_RESPONSE, MULTIPLE_POSITIONS_DATA_RESPONSE]
+    fake_api.responses = [MULTIPLE_POSITIONS_RESPONSE, get_multi_positions_data_response()]
     fake_api.register_requests(config_entry.data[CONF_HOST])
 
     hass.config.language = "de"
@@ -860,11 +895,4 @@ async def test_heat_circuit_sensors_translations(
         "sensor.keba_keenergy_12345678_heat_circuit_heat_request_1",
     )
     assert isinstance(heat_circuit_heat_request_1, State)
-    assert heat_circuit_heat_request_1.attributes[ATTR_OPTIONS] == [
-        "off",
-        "on",
-        "temporary_off",
-        "room_off",
-        "outdoor_off",
-    ]
     assert heat_circuit_heat_request_1.attributes.get(ATTR_FRIENDLY_NAME) == "Heizkreis 1 Heizanforderung"

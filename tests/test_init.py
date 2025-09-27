@@ -6,8 +6,8 @@ from homeassistant.core import HomeAssistant
 from pytest_homeassistant_custom_component.common import MockConfigEntry
 
 from tests import setup_integration
-from tests.api_data import MULTIPLE_POSITIONS_DATA_RESPONSE
 from tests.api_data import MULTIPLE_POSITIONS_RESPONSE
+from tests.api_data import get_multi_positions_data_response
 from tests.conftest import FakeKebaKeEnergyAPI
 
 
@@ -18,13 +18,13 @@ async def test_load_entry(
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
     """Test initial load."""
-    fake_api.responses = [MULTIPLE_POSITIONS_RESPONSE, MULTIPLE_POSITIONS_DATA_RESPONSE]
+    fake_api.responses = [MULTIPLE_POSITIONS_RESPONSE, get_multi_positions_data_response()]
     fake_api.register_requests(config_entry.data[CONF_HOST])
 
     await setup_integration(hass, config_entry)
 
     assert config_entry.state is ConfigEntryState.LOADED
-    assert hass.states.async_entity_ids_count() == 84
+    assert hass.states.async_entity_ids_count() == 86
 
     assert set(hass.states.async_entity_ids()) == {
         "binary_sensor.keba_keenergy_12345678_heat_pump_heat_request",
@@ -34,12 +34,14 @@ async def test_load_entry(
         "binary_sensor.keba_keenergy_12345678_hot_water_tank_hot_water_flow_2",
         "climate.keba_keenergy_12345678_1",
         "climate.keba_keenergy_12345678_2",
+        "select.keba_keenergy_12345678_operating_mode",
         "number.keba_keenergy_12345678_heat_circuit_target_temperature_away_1",
         "number.keba_keenergy_12345678_heat_circuit_target_temperature_away_2",
         "number.keba_keenergy_12345678_heat_circuit_target_temperature_day_1",
         "number.keba_keenergy_12345678_heat_circuit_target_temperature_day_2",
         "number.keba_keenergy_12345678_heat_circuit_target_temperature_night_1",
         "number.keba_keenergy_12345678_heat_circuit_target_temperature_night_2",
+        "number.keba_keenergy_12345678_heat_pump_compressor_night_speed",
         "number.keba_keenergy_12345678_hot_water_tank_standby_temperature_1",
         "number.keba_keenergy_12345678_hot_water_tank_standby_temperature_2",
         "number.keba_keenergy_12345678_hot_water_tank_target_temperature_1",
@@ -136,7 +138,7 @@ async def test_unload_entry(
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
     """Test unload."""
-    fake_api.responses = [MULTIPLE_POSITIONS_RESPONSE, MULTIPLE_POSITIONS_DATA_RESPONSE]
+    fake_api.responses = [MULTIPLE_POSITIONS_RESPONSE, get_multi_positions_data_response()]
     fake_api.register_requests(config_entry.data[CONF_HOST])
 
     await setup_integration(hass, config_entry)

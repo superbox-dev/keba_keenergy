@@ -19,8 +19,8 @@ from pytest_homeassistant_custom_component.common import MockConfigEntry
 
 from tests import setup_integration
 from tests.api_data import ENTITY_UPDATED_DATA_RESPONSE
-from tests.api_data import MULTIPLE_POSITIONS_DATA_RESPONSE
 from tests.api_data import MULTIPLE_POSITIONS_RESPONSE
+from tests.api_data import get_multi_positions_data_response
 from tests.conftest import FakeKebaKeEnergyAPI
 
 
@@ -32,7 +32,7 @@ async def test_entity_update(
     """Test updating entity using homeassistant.update_entity."""
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
-        MULTIPLE_POSITIONS_DATA_RESPONSE,
+        get_multi_positions_data_response(),
         # Read API after services call
         MULTIPLE_POSITIONS_RESPONSE,
         ENTITY_UPDATED_DATA_RESPONSE,
@@ -88,10 +88,10 @@ async def test_entity_update_failed(
     """Test updating entity using homeassistant.update_entity."""
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
-        MULTIPLE_POSITIONS_DATA_RESPONSE,
+        get_multi_positions_data_response(),
         # Read API after services call
         MULTIPLE_POSITIONS_RESPONSE,
-        MULTIPLE_POSITIONS_DATA_RESPONSE,
+        get_multi_positions_data_response(),
     ]
     fake_api.register_requests("10.0.0.100")
 
