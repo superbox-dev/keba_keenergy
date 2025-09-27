@@ -25,6 +25,7 @@ from keba_keenergy_api.constants import HeatCircuitOperatingMode
 from keba_keenergy_api.constants import HeatPumpState
 from keba_keenergy_api.constants import HotWaterTankOperatingMode
 from keba_keenergy_api.constants import SectionPrefix
+from keba_keenergy_api.constants import SystemOperatingMode
 
 from .const import DOMAIN
 from .coordinator import KebaKeEnergyDataUpdateCoordinator
@@ -53,6 +54,24 @@ class KebaKeEnergySensorEntityDescription(
 
 
 SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription, ...]] = {
+    SectionPrefix.SYSTEM: (
+        KebaKeEnergySensorEntityDescription(
+            device_class=SensorDeviceClass.TEMPERATURE,
+            key="outdoor_temperature",
+            native_unit_of_measurement=UnitOfTemperature.CELSIUS,
+            state_class=SensorStateClass.MEASUREMENT,
+            translation_key="outdoor_temperature",
+            icon="mdi:sun-thermometer",
+            value=lambda data: cast("float", data),
+        ),
+        KebaKeEnergySensorEntityDescription(
+            device_class=SensorDeviceClass.ENUM,
+            key="operating_mode",
+            options=[_.name.lower() for _ in SystemOperatingMode],
+            translation_key="operating_mode_3",
+            value=lambda data: cast("str", data),
+        ),
+    ),
     SectionPrefix.HEAT_CIRCUIT: (
         KebaKeEnergySensorEntityDescription(
             device_class=SensorDeviceClass.TEMPERATURE,
@@ -432,18 +451,7 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription, ...]] = {
             icon="mdi:thermometer-chevron-up",
             value=lambda data: cast("float", data),
         ),
-    ),
-    SectionPrefix.SYSTEM: (
-        KebaKeEnergySensorEntityDescription(
-            device_class=SensorDeviceClass.TEMPERATURE,
-            key="outdoor_temperature",
-            native_unit_of_measurement=UnitOfTemperature.CELSIUS,
-            state_class=SensorStateClass.MEASUREMENT,
-            translation_key="outdoor_temperature",
-            icon="mdi:sun-thermometer",
-            value=lambda data: cast("float", data),
-        ),
-    ),
+    )
 }
 
 

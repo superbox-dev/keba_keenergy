@@ -44,6 +44,13 @@ async def test_system_sensors(
     assert outdoor_temperature.attributes[CONF_DEVICE_CLASS] == SensorDeviceClass.TEMPERATURE
     assert outdoor_temperature.attributes[ATTR_FRIENDLY_NAME] == "KEBA KeEnergy Outdoor temperature"
 
+    operating_mode: State | None = hass.states.get("sensor.keba_keenergy_12345678_operating_mode")
+    assert isinstance(operating_mode, State)
+    assert operating_mode.state == "auto_heat"
+    assert operating_mode.attributes[CONF_DEVICE_CLASS] == SensorDeviceClass.ENUM
+    assert operating_mode.attributes[ATTR_OPTIONS] == ["setup", "standby", "summer", "auto_heat", "auto_cool", "auto"]
+    assert operating_mode.attributes[ATTR_FRIENDLY_NAME] == "KEBA KeEnergy Operating mode"
+
 
 @pytest.mark.usefixtures("entity_registry_enabled_by_default")
 async def test_system_sensors_translated(
@@ -61,6 +68,10 @@ async def test_system_sensors_translated(
     outdoor_temperature: State | None = hass.states.get("sensor.keba_keenergy_12345678_outdoor_temperature")
     assert isinstance(outdoor_temperature, State)
     assert outdoor_temperature.attributes[ATTR_FRIENDLY_NAME] == "KEBA KeEnergy Außentemperatur"
+
+    operating_mode: State | None = hass.states.get("sensor.keba_keenergy_12345678_operating_mode")
+    assert isinstance(operating_mode, State)
+    assert operating_mode.attributes[ATTR_FRIENDLY_NAME] == "KEBA KeEnergy Betriebsart"
 
 
 @pytest.mark.usefixtures("entity_registry_enabled_by_default")
