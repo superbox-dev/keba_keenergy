@@ -1,4 +1,5 @@
 """Support for the KEBA KeEnergy water heater."""
+
 from functools import cached_property
 from typing import Any
 from typing import Final

@@ -451,7 +451,7 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription, ...]] = {
             icon="mdi:thermometer-chevron-up",
             value=lambda data: cast("float", data),
         ),
-    )
+    ),
 }
 
 
