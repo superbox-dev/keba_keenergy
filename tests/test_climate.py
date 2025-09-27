@@ -37,8 +37,8 @@ from tests.api_data import DEFAULT_POSITION_DATA_RESPONSE
 from tests.api_data import DEFAULT_POSITION_RESPONSE
 from tests.api_data import HEAT_CIRCUIT_OPERATION_MODE_3_DATA_RESPONSE
 from tests.api_data import HEAT_CIRCUIT_OPERATION_MODE_4_DATA_RESPONSE
-from tests.api_data import MULTIPLE_POSITIONS_DATA_RESPONSE
 from tests.api_data import MULTIPLE_POSITIONS_RESPONSE
+from tests.api_data import get_multi_positions_data_response
 from tests.conftest import FakeKebaKeEnergyAPI
 
 ENTITY_ID: str = "climate.keba_keenergy_12345678"
@@ -50,7 +50,7 @@ ENTITY_ID_2: str = "climate.keba_keenergy_12345678_2"
     ("response", "entities"),
     [
         ([DEFAULT_POSITION_RESPONSE, DEFAULT_POSITION_DATA_RESPONSE], [ENTITY_ID]),
-        ([MULTIPLE_POSITIONS_RESPONSE, MULTIPLE_POSITIONS_DATA_RESPONSE], [ENTITY_ID_1, ENTITY_ID_2]),
+        ([MULTIPLE_POSITIONS_RESPONSE, get_multi_positions_data_response()], [ENTITY_ID_1, ENTITY_ID_2]),
     ],
 )
 async def test_climate_entities(
@@ -76,7 +76,7 @@ async def test_climate(
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
     """Test climate."""
-    fake_api.responses = [MULTIPLE_POSITIONS_RESPONSE, MULTIPLE_POSITIONS_DATA_RESPONSE]
+    fake_api.responses = [MULTIPLE_POSITIONS_RESPONSE, get_multi_positions_data_response()]
     fake_api.register_requests("10.0.0.100")
 
     await setup_integration(hass, config_entry)
@@ -109,7 +109,7 @@ async def test_climate_translations(
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
     """Test climate."""
-    fake_api.responses = [MULTIPLE_POSITIONS_RESPONSE, MULTIPLE_POSITIONS_DATA_RESPONSE]
+    fake_api.responses = [MULTIPLE_POSITIONS_RESPONSE, get_multi_positions_data_response()]
     fake_api.register_requests("10.0.0.100")
 
     hass.config.language = "de"
@@ -161,10 +161,10 @@ async def test_turn_off(
     """Test turn on climate."""
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
-        MULTIPLE_POSITIONS_DATA_RESPONSE,
+        get_multi_positions_data_response(),
         # Read API after services call
         MULTIPLE_POSITIONS_RESPONSE,
-        MULTIPLE_POSITIONS_DATA_RESPONSE,
+        get_multi_positions_data_response(),
     ]
     fake_api.register_requests("10.0.0.100")
 
@@ -192,7 +192,7 @@ async def test_turn_on(
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
     """Test turn on climate."""
-    fake_api.responses = [MULTIPLE_POSITIONS_RESPONSE, MULTIPLE_POSITIONS_DATA_RESPONSE]
+    fake_api.responses = [MULTIPLE_POSITIONS_RESPONSE, get_multi_positions_data_response()]
     fake_api.register_requests("10.0.0.100")
 
     config_entry.add_to_hass(hass)
@@ -231,10 +231,10 @@ async def test_set_hvac_mode(
     """Test set preset mode."""
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
-        MULTIPLE_POSITIONS_DATA_RESPONSE,
+        get_multi_positions_data_response(),
         # Read API after services call
         MULTIPLE_POSITIONS_RESPONSE,
-        MULTIPLE_POSITIONS_DATA_RESPONSE,
+        get_multi_positions_data_response(),
     ]
     fake_api.register_requests("10.0.0.100")
 
@@ -275,10 +275,10 @@ async def test_set_preset_mode(
     """Test set preset mode."""
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
-        MULTIPLE_POSITIONS_DATA_RESPONSE,
+        get_multi_positions_data_response(),
         # Read API after services call
         MULTIPLE_POSITIONS_RESPONSE,
-        MULTIPLE_POSITIONS_DATA_RESPONSE,
+        get_multi_positions_data_response(),
     ]
     fake_api.register_requests("10.0.0.100")
 
@@ -307,10 +307,10 @@ async def test_set_temperature(
     """Test setting temperature."""
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
-        MULTIPLE_POSITIONS_DATA_RESPONSE,
+        get_multi_positions_data_response(),
         # Read API after services call
         MULTIPLE_POSITIONS_RESPONSE,
-        MULTIPLE_POSITIONS_DATA_RESPONSE,
+        get_multi_positions_data_response(),
     ]
     fake_api.register_requests("10.0.0.100")
 
