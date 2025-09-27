@@ -66,6 +66,7 @@ async def test_heat_pump_switches_translated(
     heat_pump_compressor_use_night_speed: State | None = hass.states.get(
         "switch.keba_keenergy_12345678_heat_pump_compressor_use_night_speed",
     )
+    assert isinstance(heat_pump_compressor_use_night_speed, State)
     assert (
         heat_pump_compressor_use_night_speed.attributes[ATTR_FRIENDLY_NAME]
         == "Wärmepumpe Kompressor-Drehzahlbegrenzung (Nacht)"

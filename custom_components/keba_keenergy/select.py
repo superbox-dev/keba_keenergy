@@ -81,7 +81,7 @@ class KebaKeEnergySelectEntity(KebaKeEnergyExtendedEntity, SelectEntity):
     @cached_property
     def options(self) -> list[str]:
         """Return a set of selectable options."""
-        options: list [str] = self.entity_description.options or []
+        options: list[str] = self.entity_description.options or []
 
         if (
             self.is_system_device
