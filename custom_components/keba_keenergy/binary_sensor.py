@@ -13,7 +13,7 @@ from keba_keenergy_api.constants import SectionPrefix
 
 from .const import DOMAIN
 from .coordinator import KebaKeEnergyDataUpdateCoordinator
-from .entity import KebaKeEnergyEntity
+from .entity import KebaKeEnergyExtendedEntity
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -55,7 +55,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry, async_add_e
                     device_numbers: int = len(values) if isinstance(values, list) else 1
                     binary_sensors += [
                         KebaKeEnergyBinarySensorEntity(
-                            coordinator=coordinator,
+                            coordinator,
                             description=description,
                             entry=entry,
                             section_id=section_id,
@@ -67,7 +67,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry, async_add_e
     async_add_entities(binary_sensors)
 
 
-class KebaKeEnergyBinarySensorEntity(KebaKeEnergyEntity, BinarySensorEntity):
+class KebaKeEnergyBinarySensorEntity(KebaKeEnergyExtendedEntity, BinarySensorEntity):
     """KEBA KeEnergy sensor entity."""
 
     def __init__(
@@ -79,14 +79,9 @@ class KebaKeEnergyBinarySensorEntity(KebaKeEnergyEntity, BinarySensorEntity):
         index: int | None,
     ) -> None:
         """Initialize the entity."""
-        super().__init__(coordinator, entry, section_id, index)
         self.entity_description: BinarySensorEntityDescription = description
-
-        self._attr_unique_id = f"{entry.unique_id}_{section_id}_{description.key}"
-        if self.position is not None:
-            self._attr_unique_id = f"{self._attr_unique_id}_{self.position}"
-
-        self.entity_id = f"{BINARY_SENSOR_DOMAIN}.{DOMAIN}_{self._attr_unique_id}"
+        super().__init__(coordinator, entry=entry, section_id=section_id, index=index)
+        self.entity_id: str = f"{BINARY_SENSOR_DOMAIN}.{DOMAIN}_{self.unique_id}"
 
     @property
     def is_on(self) -> bool:

@@ -43,7 +43,7 @@ async def async_setup_entry(
     coordinator: KebaKeEnergyDataUpdateCoordinator = hass.data[DOMAIN][entry.entry_id]
     water_heaters: list[KebaKeEnergyWaterHeaterEntity] = [
         KebaKeEnergyWaterHeaterEntity(
-            coordinator=coordinator,
+            coordinator,
             description=WaterHeaterEntityDescription(
                 key="hot_water_tank",
                 translation_key="hot_water_tank",
@@ -80,14 +80,9 @@ class KebaKeEnergyWaterHeaterEntity(KebaKeEnergyEntity, WaterHeaterEntity):
         index: int | None,
     ) -> None:
         """Initialize the entity."""
-        super().__init__(coordinator, entry, section_id, index)
-        self.entity_description = description
-
-        self._attr_unique_id = entry.unique_id
-        if self.position is not None:
-            self._attr_unique_id = f"{self._attr_unique_id}_{self.position}"
-
-        self.entity_id = f"{WATER_HEATER_DOMAIN}.{DOMAIN}_{self._attr_unique_id}"
+        self.entity_description: WaterHeaterEntityDescription = description
+        super().__init__(coordinator, entry=entry, section_id=section_id, index=index)
+        self.entity_id: str = f"{WATER_HEATER_DOMAIN}.{DOMAIN}_{self._attr_unique_id}"
 
     @property
     def current_temperature(self) -> float:
@@ -97,12 +92,12 @@ class KebaKeEnergyWaterHeaterEntity(KebaKeEnergyEntity, WaterHeaterEntity):
     @property
     def min_temp(self) -> float:
         """Return the minimum temperature."""
-        return float(self.get_attribute("target_temperature", "lower_limit"))
+        return float(self.get_attribute(key="target_temperature", attr="lower_limit"))
 
     @property
     def max_temp(self) -> float:
         """Return the maximum temperature."""
-        return float(self.get_attribute("target_temperature", "upper_limit"))
+        return float(self.get_attribute(key="target_temperature", attr="upper_limit"))
 
     @property
     def current_operation(self) -> str:
@@ -110,7 +105,7 @@ class KebaKeEnergyWaterHeaterEntity(KebaKeEnergyEntity, WaterHeaterEntity):
         _current_operation: str = STATE_OFF
         operating_mode: str = self.get_value("operating_mode")
 
-        for key, value in HOT_WATER_TANK_STATE_TO_HA.items():  # pragma: no branch
+        for key, value in HOT_WATER_TANK_STATE_TO_HA.items():
             if HotWaterTankOperatingMode(key).name.lower() == operating_mode:
                 _current_operation = value
                 break
@@ -135,16 +130,16 @@ class KebaKeEnergyWaterHeaterEntity(KebaKeEnergyEntity, WaterHeaterEntity):
     async def async_turn_off(self, **kwargs: Any) -> None:  # noqa: ARG002
         """Turn the hot water tank off."""
         await self._async_write_data(
+            HotWaterTankOperatingMode.OFF.value,
             section=HotWaterTank.OPERATING_MODE,
-            value=HotWaterTankOperatingMode.OFF.value,
             device_numbers=self.coordinator.hot_water_tank_numbers,
         )
 
     async def async_turn_on(self, **kwargs: Any) -> None:  # noqa: ARG002
         """Turn the hot water tank on."""
         await self._async_write_data(
+            HotWaterTankOperatingMode.ON.value,
             section=HotWaterTank.OPERATING_MODE,
-            value=HotWaterTankOperatingMode.ON.value,
             device_numbers=self.coordinator.hot_water_tank_numbers,
         )
 
@@ -153,15 +148,15 @@ class KebaKeEnergyWaterHeaterEntity(KebaKeEnergyEntity, WaterHeaterEntity):
         for key, value in HOT_WATER_TANK_STATE_TO_HA.items():
             if value == operation_mode:
                 await self._async_write_data(
+                    key,
                     section=HotWaterTank.OPERATING_MODE,
-                    value=key,
                     device_numbers=self.coordinator.hot_water_tank_numbers,
                 )
 
     async def async_set_temperature(self, **kwargs: Any) -> None:
         """Set temperature for hot water tank."""
         await self._async_write_data(
+            kwargs[ATTR_TEMPERATURE],
             section=HotWaterTank.TARGET_TEMPERATURE,
-            value=kwargs[ATTR_TEMPERATURE],
             device_numbers=self.coordinator.hot_water_tank_numbers,
         )

@@ -1,27 +1,21 @@
-"""Support for the KEBA KeEnergy numbers."""
+"""Support for the KEBA KeEnergy switches."""
 
 import logging
 from typing import Any
-from typing import TYPE_CHECKING
 from typing import cast
 
-from homeassistant.components.switch import DOMAIN as SWITCH_DOMAIN
 from homeassistant.components.switch import SwitchDeviceClass
 from homeassistant.components.switch import SwitchEntity
 from homeassistant.components.switch import SwitchEntityDescription
+from homeassistant.components.switch.const import DOMAIN as SWITCH_DOMAIN
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
-from keba_keenergy_api.constants import HeatPump
-from keba_keenergy_api.constants import Section
 from keba_keenergy_api.constants import SectionPrefix
 
 from .const import DOMAIN
 from .coordinator import KebaKeEnergyDataUpdateCoordinator
-from .entity import KebaKeEnergyEntity
-
-if TYPE_CHECKING:
-    pass
+from .entity import KebaKeEnergyExtendedEntity
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -38,7 +32,7 @@ SWITCH_TYPES: dict[str, tuple[SwitchEntityDescription, ...]] = {
 
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry, async_add_entities: AddEntitiesCallback) -> None:
-    """Set up KEBA KeEnergy numbers from a config entry."""
+    """Set up KEBA KeEnergy switches from a config entry."""
     coordinator: KebaKeEnergyDataUpdateCoordinator = hass.data[DOMAIN][entry.entry_id]
     numbers: list[KebaKeEnergySwitchEntity] = []
 
@@ -52,7 +46,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry, async_add_e
                     device_numbers: int = len(values) if isinstance(values, list) else 1
                     numbers += [
                         KebaKeEnergySwitchEntity(
-                            coordinator=coordinator,
+                            coordinator,
                             description=description,
                             entry=entry,
                             section_id=section_id,
@@ -67,10 +61,8 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry, async_add_e
 _LOGGER = logging.getLogger(__name__)
 
 
-class KebaKeEnergySwitchEntity(KebaKeEnergyEntity, SwitchEntity):
+class KebaKeEnergySwitchEntity(KebaKeEnergyExtendedEntity, SwitchEntity):
     """KEBA KeEnergy switch entity."""
-
-    _attr_native_step: float = 0.5
 
     def __init__(
         self,
@@ -81,21 +73,9 @@ class KebaKeEnergySwitchEntity(KebaKeEnergyEntity, SwitchEntity):
         index: int | None,
     ) -> None:
         """Initialize the entity."""
-        super().__init__(coordinator, entry, section_id, index)
         self.entity_description: SwitchEntityDescription = description
-
-        self._attr_unique_id = f"{entry.unique_id}_{section_id}_{description.key}"
-        if self.position is not None:
-            self._attr_unique_id = f"{self._attr_unique_id}_{self.position}"
-
-        self.entity_id = f"{SWITCH_DOMAIN}.{DOMAIN}_{self._attr_unique_id}"
-
-        self.section: Section | None = None
-        self.device_numbers: int | None = None
-
-        if self.section_id == SectionPrefix.HEAT_PUMP:
-            self.section = HeatPump[self.entity_description.key.upper()]
-            self.device_numbers = self.coordinator.heat_pump_numbers
+        super().__init__(coordinator, entry=entry, section_id=section_id, index=index)
+        self.entity_id: str = f"{SWITCH_DOMAIN}.{DOMAIN}_{self._attr_unique_id}"
 
     @property
     def is_on(self) -> bool:
@@ -105,15 +85,15 @@ class KebaKeEnergySwitchEntity(KebaKeEnergyEntity, SwitchEntity):
     async def async_turn_off(self, **kwargs: Any) -> None:  # noqa: ARG002
         """Turn the switch off."""
         await self._async_write_data(
+            0,
             section=self.section,
-            value=0,
             device_numbers=self.device_numbers,
         )
 
     async def async_turn_on(self, **kwargs: Any) -> None:  # noqa: ARG002
         """Turn the switch on."""
         await self._async_write_data(
+            1,
             section=self.section,
-            value=1,
             device_numbers=self.device_numbers,
         )

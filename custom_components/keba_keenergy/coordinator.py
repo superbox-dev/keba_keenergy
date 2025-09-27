@@ -110,6 +110,7 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
                     HeatPump.TOTAL_THERMAL_ENERGY,
                     HeatPump.TOTAL_ENERGY_CONSUMPTION,
                     HeatPump.TOTAL_SPF,
+                    HeatPump.HAS_PASSIVE_COOLING,
                     HotWaterTank.HEAT_REQUEST,
                     HotWaterTank.HOT_WATER_FLOW,
                     HotWaterTank.FRESH_WATER_MODULE_TEMPERATURE,
@@ -121,6 +122,7 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
                     System.HEAT_PUMP_NUMBERS,
                     System.HOT_WATER_TANK_NUMBERS,
                     System.OUTDOOR_TEMPERATURE,
+                    System.OPERATING_MODE,
                 ],
             )
         except (APIError, ClientError) as error:
@@ -185,4 +187,9 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
     def has_room_humidity(self, *, index: int) -> str:
         """Check if room humidity sensor is available."""
         data: list[Value] = cast("list[Value]", self.data[SectionPrefix.HEAT_CIRCUIT]["has_room_humidity"])
+        return str(data[index]["value"])
+
+    def has_passive_cooling(self, *, index: int) -> str:
+        """Check if passive cooling is available."""
+        data: list[Value] = cast("list[Value]", self.data[SectionPrefix.HEAT_PUMP]["has_passive_cooling"])
         return str(data[index]["value"])

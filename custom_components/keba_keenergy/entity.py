@@ -11,8 +11,12 @@ from homeassistant.config_entries import ConfigEntry
 from homeassistant.exceptions import HomeAssistantError
 from homeassistant.helpers.device_registry import DeviceInfo
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
+from keba_keenergy_api.constants import HeatCircuit
+from keba_keenergy_api.constants import HeatPump
+from keba_keenergy_api.constants import HotWaterTank
 from keba_keenergy_api.constants import Section
 from keba_keenergy_api.constants import SectionPrefix
+from keba_keenergy_api.constants import System
 from keba_keenergy_api.error import APIError
 
 from .const import DOMAIN
@@ -45,6 +49,13 @@ class KebaKeEnergyEntity(
         self.entry: ConfigEntry = entry
         self.section_id: str = section_id
         self.index: int | None = index
+
+        _LOGGER.debug("section_id %s", section_id)
+
+        self._attr_unique_id: str | None = entry.unique_id
+
+        if self.position is not None:
+            self._attr_unique_id = f"{self._attr_unique_id}_{self.position}"
 
     @property
     def position(self) -> int | None:
@@ -84,7 +95,7 @@ class KebaKeEnergyEntity(
             _device_name = data[self.index or 0]["value"]
         elif self.is_heat_pump:
             _device_name = "Heat pump"
-        elif self.is_hot_water_tank:  # pragma: no branch
+        elif self.is_hot_water_tank:
             _device_name = "Hot water tank"
 
         # Add position number to device name if there is more than one device
@@ -181,32 +192,82 @@ class KebaKeEnergyEntity(
 
         return _device_info
 
-    async def _async_write_data(self, section: Section, value: Any, device_numbers: int) -> None:
+    async def _async_write_data(
+        self,
+        value: Any,
+        /,
+        *,
+        section: Section | None = None,
+        device_numbers: int | None = None,
+    ) -> None:
         """Write data to the KEBA KeEnergy API."""
-        try:
+        if section:
             _current_index: int = self.index or 0
 
             request: dict[Section, Any] = {
-                section: [value if index == _current_index else None for index in range(device_numbers)],
+                section: (
+                    [value if index == _current_index else None for index in range(device_numbers)]
+                    if device_numbers
+                    else value
+                ),
             }
 
             _LOGGER.debug("API write request %s", request)
 
-            await self.coordinator.api.write_data(
-                request=request,
-            )
-        except (APIError, ClientError) as error:
-            msg: str = f"Failed to update {self.entity_id} to {value}: {error}"
-            raise HomeAssistantError(msg) from error
+            try:
+                await self.coordinator.api.write_data(request=request)
+            except (APIError, ClientError) as error:
+                msg: str = f"Failed to update {self.entity_id} to {value}: {error}"
+                raise HomeAssistantError(msg) from error
 
-        await self.coordinator.async_refresh()
+            await self.coordinator.async_refresh()
 
-    def get_attribute(self, key: str, attr: str) -> str:
+    def get_attribute(self, *, key: str, attr: str) -> str:
         """Get extra attribute from the API by key."""
         data: list[Value] = cast("list[Value]", self.coordinator.data[self.section_id][key])
         return str(data[self.index or 0]["attributes"][attr])
 
     def get_value(self, key: str) -> Any:
         """Get value from the API by key."""
-        data: list[Value] = cast("list[Value]", self.coordinator.data[self.section_id][key])
-        return data[self.index or 0]["value"]
+        data: list[Value] | Value = cast("list[Value]", self.coordinator.data[self.section_id][key])
+
+        if isinstance(data, list):
+            return data[self.index or 0]["value"]
+
+        return data["value"]
+
+
+class KebaKeEnergyExtendedEntity(KebaKeEnergyEntity):
+    """KEBA KeEnergy base extended entity."""
+
+    def __init__(
+        self,
+        coordinator: KebaKeEnergyDataUpdateCoordinator,
+        entry: ConfigEntry,
+        section_id: str,
+        index: int | None,
+    ) -> None:
+        """Initialize the KEBA KeEnergy extended entity."""
+        super().__init__(coordinator, entry=entry, section_id=section_id, index=index)
+        self._attr_unique_id: str | None = f"{self.entry.unique_id}_{self.section_id}_{self.entity_description.key}"
+
+        if self.is_system_device:
+            self._attr_unique_id = f"{self.entry.unique_id}_{self.entity_description.key}"
+
+        if self.position is not None:
+            self._attr_unique_id = f"{self._attr_unique_id}_{self.position}"
+
+        self.section: Section | None = None
+        self.device_numbers: int | None = None
+
+        if self.is_system_device:
+            self.section = System[self.entity_description.key.upper()]
+        if self.is_heat_circuit:
+            self.section = HeatCircuit[self.entity_description.key.upper()]
+            self.device_numbers = self.coordinator.heat_circuit_numbers
+        elif self.is_heat_pump:
+            self.section = HeatPump[self.entity_description.key.upper()]
+            self.device_numbers = self.coordinator.heat_pump_numbers
+        elif self.is_hot_water_tank:
+            self.section = HotWaterTank[self.entity_description.key.upper()]
+            self.device_numbers = self.coordinator.hot_water_tank_numbers

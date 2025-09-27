@@ -20,11 +20,15 @@ from homeassistant.const import UnitOfTemperature
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.typing import StateType
+from keba_keenergy_api.constants import HeatCircuitHeatRequest
+from keba_keenergy_api.constants import HeatCircuitOperatingMode
+from keba_keenergy_api.constants import HeatPumpState
+from keba_keenergy_api.constants import HotWaterTankOperatingMode
 from keba_keenergy_api.constants import SectionPrefix
 
 from .const import DOMAIN
 from .coordinator import KebaKeEnergyDataUpdateCoordinator
-from .entity import KebaKeEnergyEntity
+from .entity import KebaKeEnergyExtendedEntity
 
 if TYPE_CHECKING:
     from keba_keenergy_api.endpoints import Value
@@ -143,14 +147,14 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription, ...]] = {
         KebaKeEnergySensorEntityDescription(
             device_class=SensorDeviceClass.ENUM,
             key="operating_mode",
-            options=["off", "auto", "day", "night", "holiday", "party"],
-            translation_key="operating_mode",
+            options=[_.name.lower() for _ in HeatCircuitOperatingMode],
+            translation_key="operating_mode_1",
             value=lambda data: cast("str", data),
         ),
         KebaKeEnergySensorEntityDescription(
             device_class=SensorDeviceClass.ENUM,
             key="heat_request",
-            options=["off", "on", "temporary_off", "room_off", "outdoor_off"],
+            options=[_.name.lower() for _ in HeatCircuitHeatRequest],
             translation_key="heat_request",
             icon="mdi:fire",
             value=lambda data: cast("str", data),
@@ -160,7 +164,7 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription, ...]] = {
         KebaKeEnergySensorEntityDescription(
             device_class=SensorDeviceClass.ENUM,
             key="state",
-            options=["standby", "flow", "auto_heat", "defrost", "auto_cool", "inflow"],
+            options=[_.name.lower() for _ in HeatPumpState],
             translation_key="state",
             value=lambda data: cast("str", data),
         ),
@@ -397,8 +401,8 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription, ...]] = {
         KebaKeEnergySensorEntityDescription(
             device_class=SensorDeviceClass.ENUM,
             key="operating_mode",
-            options=["auto", "heat_up", "off", "on"],
-            translation_key="operating_mode",
+            options=[_.name.lower() for _ in HotWaterTankOperatingMode],
+            translation_key="operating_mode_2",
             value=lambda data: cast("str", data),
         ),
         KebaKeEnergySensorEntityDescription(
@@ -462,7 +466,7 @@ async def async_setup_entry(
                     device_numbers: int = len(values) if isinstance(values, list) else 1
                     sensors += [
                         KebaKeEnergySensorEntity(
-                            coordinator=coordinator,
+                            coordinator,
                             description=description,
                             entry=entry,
                             section_id=section_id,
@@ -474,7 +478,7 @@ async def async_setup_entry(
     async_add_entities(sensors)
 
 
-class KebaKeEnergySensorEntity(KebaKeEnergyEntity, SensorEntity):
+class KebaKeEnergySensorEntity(KebaKeEnergyExtendedEntity, SensorEntity):
     """KEBA KeEnergy sensor entity."""
 
     def __init__(
@@ -486,17 +490,8 @@ class KebaKeEnergySensorEntity(KebaKeEnergyEntity, SensorEntity):
         index: int | None,
     ) -> None:
         """Initialize the entity."""
-        super().__init__(coordinator, entry, section_id, index)
         self.entity_description: KebaKeEnergySensorEntityDescription = description
-
-        if section_id == SectionPrefix.SYSTEM:
-            self._attr_unique_id = f"{entry.unique_id}_{description.key}"
-        else:
-            self._attr_unique_id = f"{entry.unique_id}_{section_id}_{description.key}"
-
-        if self.position is not None:
-            self._attr_unique_id = f"{self._attr_unique_id}_{self.position}"
-
+        super().__init__(coordinator, entry=entry, section_id=section_id, index=index)
         self.entity_id = f"{SENSOR_DOMAIN}.{DOMAIN}_{self._attr_unique_id}"
 
     @property

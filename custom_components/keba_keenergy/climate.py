@@ -40,7 +40,7 @@ HEAT_CIRCUIT_PRESET_TO_HA: Final[dict[int, str]] = {
     HeatCircuitOperatingMode.PARTY: PRESET_BOOST,
 }
 
-HEAT_CIRCUIT_HVAC_ACTION_TO_HA: Final[dict[str, HVACAction]] = {
+HEAT_CIRCUIT_HVAC_ACTION_TO_HA: Final[dict[int, HVACAction]] = {
     HeatCircuitHeatRequest.OFF: HVACAction.IDLE,
     HeatCircuitHeatRequest.ON: HVACAction.HEATING,
     HeatCircuitHeatRequest.TEMPORARY_OFF: HVACAction.IDLE,
@@ -64,7 +64,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry, async_add_e
     coordinator: KebaKeEnergyDataUpdateCoordinator = hass.data[DOMAIN][entry.entry_id]
     climates: list[KebaKeEnergyClimateEntity] = [
         KebaKeEnergyClimateEntity(
-            coordinator=coordinator,
+            coordinator,
             description=ClimateEntityDescription(
                 key="heat_circuit",
                 translation_key="heat_circuit",
@@ -111,13 +111,8 @@ class KebaKeEnergyClimateEntity(KebaKeEnergyEntity, ClimateEntity):
         index: int | None,
     ) -> None:
         """Initialize KEBA KeEnergy climate entity."""
-        super().__init__(coordinator, entry, section_id, index)
         self.entity_description = description
-
-        self._attr_unique_id = entry.unique_id
-        if self.position is not None:
-            self._attr_unique_id = f"{self._attr_unique_id}_{self.position}"
-
+        super().__init__(coordinator, entry, section_id, index)
         self.entity_id = f"{CLIMATE_DOMAIN}.{DOMAIN}_{self._attr_unique_id}"
 
     @property
@@ -155,14 +150,14 @@ class KebaKeEnergyClimateEntity(KebaKeEnergyEntity, ClimateEntity):
     def min_temp(self) -> float:
         """Return the minimum temperature."""
         return self.target_temperature_for_preset + float(
-            self.get_attribute("target_temperature_offset", "lower_limit"),
+            self.get_attribute(key="target_temperature_offset", attr="lower_limit"),
         )
 
     @property
     def max_temp(self) -> float:
         """Return the maximum temperature."""
         return self.target_temperature_for_preset + float(
-            self.get_attribute("target_temperature_offset", "upper_limit"),
+            self.get_attribute(key="target_temperature_offset", attr="upper_limit"),
         )
 
     @property
@@ -230,13 +225,13 @@ class KebaKeEnergyClimateEntity(KebaKeEnergyEntity, ClimateEntity):
             self._attr_preset_mode = PRESET_NONE
         elif hvac_mode == HVACMode.HEAT:
             operating_mode_status = HeatCircuitOperatingMode.DAY
-        elif hvac_mode == HVACMode.OFF:  # pragma: no branch
+        elif hvac_mode == HVACMode.OFF:
             operating_mode_status = HeatCircuitOperatingMode.OFF
 
-        if operating_mode_status is not None:  # pragma: no branch
+        if operating_mode_status is not None:
             await self._async_write_data(
+                operating_mode_status,
                 section=HeatCircuit.OPERATING_MODE,
-                value=operating_mode_status,
                 device_numbers=self.coordinator.heat_circuit_numbers,
             )
 
@@ -245,16 +240,16 @@ class KebaKeEnergyClimateEntity(KebaKeEnergyEntity, ClimateEntity):
         for key, value in HEAT_CIRCUIT_PRESET_TO_HA.items():
             if value == preset_mode:
                 await self._async_write_data(
+                    key,
                     section=HeatCircuit.OPERATING_MODE,
-                    value=key,
                     device_numbers=self.coordinator.heat_circuit_numbers,
                 )
 
     async def async_set_temperature(self, **kwargs: Any) -> None:
         """Set new target temperature."""
-        if temperature := kwargs.get(ATTR_TEMPERATURE):  # pragma: no branch
+        if temperature := kwargs.get(ATTR_TEMPERATURE):
             await self._async_write_data(
+                temperature - self.target_temperature_for_preset,
                 section=HeatCircuit.TARGET_TEMPERATURE_OFFSET,
-                value=temperature - self.target_temperature_for_preset,
                 device_numbers=self.coordinator.heat_circuit_numbers,
             )

@@ -2,7 +2,6 @@
 
 import logging
 from dataclasses import dataclass
-from typing import TYPE_CHECKING
 
 from homeassistant.components.number import DOMAIN as NUMBER_DOMAIN
 from homeassistant.components.number import NumberDeviceClass
@@ -13,18 +12,11 @@ from homeassistant.const import PERCENTAGE
 from homeassistant.const import UnitOfTemperature
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
-from keba_keenergy_api.constants import HeatCircuit
-from keba_keenergy_api.constants import HeatPump
-from keba_keenergy_api.constants import HotWaterTank
-from keba_keenergy_api.constants import Section
 from keba_keenergy_api.constants import SectionPrefix
 
 from .const import DOMAIN
 from .coordinator import KebaKeEnergyDataUpdateCoordinator
-from .entity import KebaKeEnergyEntity
-
-if TYPE_CHECKING:
-    pass
+from .entity import KebaKeEnergyExtendedEntity
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -119,7 +111,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry, async_add_e
                     device_numbers: int = len(values) if isinstance(values, list) else 1
                     numbers += [
                         KebaKeEnergyNumberEntity(
-                            coordinator=coordinator,
+                            coordinator,
                             description=description,
                             entry=entry,
                             section_id=section_id,
@@ -131,7 +123,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry, async_add_e
     async_add_entities(numbers)
 
 
-class KebaKeEnergyNumberEntity(KebaKeEnergyEntity, NumberEntity):
+class KebaKeEnergyNumberEntity(KebaKeEnergyExtendedEntity, NumberEntity):
     """KEBA KeEnergy number entity."""
 
     def __init__(
@@ -143,24 +135,25 @@ class KebaKeEnergyNumberEntity(KebaKeEnergyEntity, NumberEntity):
         index: int | None,
     ) -> None:
         """Initialize the entity."""
-        super().__init__(coordinator, entry, section_id, index)
         self.entity_description: KebaKeEnergyNumberEntityDescription = description
-
-        self._attr_unique_id = f"{entry.unique_id}_{section_id}_{description.key}"
-        if self.position is not None:
-            self._attr_unique_id = f"{self._attr_unique_id}_{self.position}"
-
-        self.entity_id = f"{NUMBER_DOMAIN}.{DOMAIN}_{self._attr_unique_id}"
+        super().__init__(coordinator, entry=entry, section_id=section_id, index=index)
+        self.entity_id: str = f"{NUMBER_DOMAIN}.{DOMAIN}_{self._attr_unique_id}"
 
     @property
     def native_min_value(self) -> float:
         """Return the maximum value."""
-        return float(self.get_attribute(self.entity_description.key, "lower_limit")) * self.entity_description.scale
+        return (
+            float(self.get_attribute(key=self.entity_description.key, attr="lower_limit"))
+            * self.entity_description.scale
+        )
 
     @property
     def native_max_value(self) -> float:
         """Return the maximum value."""
-        return float(self.get_attribute(self.entity_description.key, "upper_limit")) * self.entity_description.scale
+        return (
+            float(self.get_attribute(key=self.entity_description.key, attr="upper_limit"))
+            * self.entity_description.scale
+        )
 
     @property
     def native_value(self) -> float:
@@ -169,22 +162,8 @@ class KebaKeEnergyNumberEntity(KebaKeEnergyEntity, NumberEntity):
 
     async def async_set_native_value(self, value: float) -> None:
         """Set new value."""
-        section: Section | None = None
-        device_numbers: int | None = None
-
-        if self.section_id == SectionPrefix.HEAT_CIRCUIT:
-            section = HeatCircuit[self.entity_description.key.upper()]
-            device_numbers = self.coordinator.heat_circuit_numbers
-        elif self.section_id == SectionPrefix.HEAT_PUMP:  # pragma: no branch
-            section = HeatPump[self.entity_description.key.upper()]
-            device_numbers = self.coordinator.heat_pump_numbers
-        elif self.section_id == SectionPrefix.HOT_WATER_TANK:  # pragma: no branch
-            section = HotWaterTank[self.entity_description.key.upper()]
-            device_numbers = self.coordinator.hot_water_tank_numbers
-
-        if section and device_numbers:  # pragma: no branch
-            await self._async_write_data(
-                section=section,
-                value=value / self.entity_description.scale,
-                device_numbers=device_numbers,
-            )
+        await self._async_write_data(
+            value / self.entity_description.scale,
+            section=self.section,
+            device_numbers=self.device_numbers,
+        )
