@@ -42,7 +42,7 @@ classifiers = [
 ]
 requires-python = ">= 3.13.2"
 dependencies = [
-    "keba_keenergy_api>=2.0.0b5",
+    "keba_keenergy_api>=2.0.0b7",
     "homeassistant>=2025.8.2",
 ]
 version = "1.0.0"
@@ -133,7 +133,7 @@ asyncio_mode = "auto"
 asyncio_default_fixture_loop_scope = "function"
 
 [tool.coverage.run] # https://coverage.readthedocs.io/en/latest/config.html#run
-branch = true
+branch = false
 
 [tool.coverage.report] # https://coverage.readthedocs.io/en/latest/config.html#report
 show_missing = true
