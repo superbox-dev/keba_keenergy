@@ -39,7 +39,7 @@ async def test_system_selects(
     response: list[list[dict[str, Any]]],
     expected_attr_options: list[str],
 ) -> None:
-    """Test sensors."""
+    """Test system selects."""
     fake_api.responses = response
     fake_api.register_requests(config_entry.data[CONF_HOST])
 
@@ -69,6 +69,89 @@ async def test_system_selects_translations(
     assert operating_mode.attributes[ATTR_FRIENDLY_NAME] == "KEBA KeEnergy Betriebsart"
 
 
+async def test_heat_circuit_selects(
+    hass: HomeAssistant,
+    config_entry: MockConfigEntry,
+    fake_api: FakeKebaKeEnergyAPI,
+) -> None:
+    """Test heat circuit selects."""
+    fake_api.responses = [MULTIPLE_POSITIONS_RESPONSE, get_multi_positions_data_response()]
+    fake_api.register_requests(config_entry.data[CONF_HOST])
+
+    await setup_integration(hass, config_entry)
+
+    heat_circuit_operating_mode_1: State | None = hass.states.get(
+        "select.keba_keenergy_12345678_heat_circuit_operating_mode_1"
+    )
+    assert isinstance(heat_circuit_operating_mode_1, State)
+    assert heat_circuit_operating_mode_1.state == "day"
+    assert heat_circuit_operating_mode_1.attributes[ATTR_FRIENDLY_NAME] == "Heating circuit 1 Operating mode"
+    assert heat_circuit_operating_mode_1.attributes[ATTR_OPTIONS] == ["off", "auto", "day", "night", "holiday", "party"]
+
+
+async def test_heat_circuit_selects_translated(
+    hass: HomeAssistant,
+    config_entry: MockConfigEntry,
+    fake_api: FakeKebaKeEnergyAPI,
+) -> None:
+    """Test heat circuit selects translated."""
+    fake_api.responses = [MULTIPLE_POSITIONS_RESPONSE, get_multi_positions_data_response()]
+    fake_api.register_requests(config_entry.data[CONF_HOST])
+
+    hass.config.language = "de"
+    await setup_integration(hass, config_entry)
+
+    heat_circuit_operating_mode_1: State | None = hass.states.get(
+        "select.keba_keenergy_12345678_heat_circuit_operating_mode_1"
+    )
+    assert isinstance(heat_circuit_operating_mode_1, State)
+    assert heat_circuit_operating_mode_1.attributes[ATTR_FRIENDLY_NAME] == "Heizkreis 1 Betriebsart"
+
+
+async def test_hot_water_tank_selects(
+    hass: HomeAssistant,
+    config_entry: MockConfigEntry,
+    fake_api: FakeKebaKeEnergyAPI,
+) -> None:
+    """Test hot water tank selects."""
+    fake_api.responses = [MULTIPLE_POSITIONS_RESPONSE, get_multi_positions_data_response()]
+    fake_api.register_requests(config_entry.data[CONF_HOST])
+
+    await setup_integration(hass, config_entry)
+
+    hot_water_tank_operating_mode_2: State | None = hass.states.get(
+        "select.keba_keenergy_12345678_hot_water_tank_operating_mode_2"
+    )
+    assert isinstance(hot_water_tank_operating_mode_2, State)
+    assert hot_water_tank_operating_mode_2.state == "off"
+    assert hot_water_tank_operating_mode_2.attributes[ATTR_FRIENDLY_NAME] == "Hot water tank 2 Operating mode"
+    assert hot_water_tank_operating_mode_2.attributes[ATTR_OPTIONS] == [
+        "off",
+        "auto",
+        "on",
+        "heat_up",
+    ]
+
+
+async def test_hot_water_tank_selects_translated(
+    hass: HomeAssistant,
+    config_entry: MockConfigEntry,
+    fake_api: FakeKebaKeEnergyAPI,
+) -> None:
+    """Test hot water tank selects translated."""
+    fake_api.responses = [MULTIPLE_POSITIONS_RESPONSE, get_multi_positions_data_response()]
+    fake_api.register_requests(config_entry.data[CONF_HOST])
+
+    hass.config.language = "de"
+    await setup_integration(hass, config_entry)
+
+    hot_water_tank_operating_mode_2: State | None = hass.states.get(
+        "select.keba_keenergy_12345678_hot_water_tank_operating_mode_2"
+    )
+    assert isinstance(hot_water_tank_operating_mode_2, State)
+    assert hot_water_tank_operating_mode_2.attributes[ATTR_FRIENDLY_NAME] == "Warmwasserspeicher 2 Betriebsart"
+
+
 @pytest.mark.parametrize(
     ("entity_id", "option", "expected"),
     [
@@ -81,6 +164,16 @@ async def test_system_selects_translations(
             "select.keba_keenergy_12345678_operating_mode",
             "auto_cool",
             '[{"name": "APPL.CtrlAppl.sParam.param.operatingMode", "value": "3"}]',
+        ),
+        (
+            "select.keba_keenergy_12345678_heat_circuit_operating_mode_1",
+            "off",
+            '[{"name": "APPL.CtrlAppl.sParam.heatCircuit[0].param.operatingMode", "value": "0"}]',
+        ),
+        (
+            "select.keba_keenergy_12345678_hot_water_tank_operating_mode_2",
+            "heat_up",
+            '[{"name": "APPL.CtrlAppl.sParam.hotWaterTank[1].param.operatingMode", "value": "3"}]',
         ),
     ],
 )

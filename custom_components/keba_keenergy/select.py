@@ -1,6 +1,8 @@
 """Support for the KEBA KeEnergy selects."""
 
 import logging
+from dataclasses import dataclass
+from enum import Enum
 from functools import cached_property
 
 from homeassistant.components.select import DOMAIN as SELECT_DOMAIN
@@ -10,6 +12,8 @@ from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import STATE_ON
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
+from keba_keenergy_api.constants import HeatCircuitOperatingMode
+from keba_keenergy_api.constants import HotWaterTankOperatingMode
 from keba_keenergy_api.constants import SectionPrefix
 from keba_keenergy_api.constants import SystemOperatingMode
 
@@ -20,9 +24,24 @@ from .entity import KebaKeEnergyExtendedEntity
 _LOGGER = logging.getLogger(__name__)
 
 
+@dataclass(frozen=True)
+class KebaKeEnergySelectEntityDescriptionMixin:
+    """Required values for KEBA KeEnergy selects."""
+
+    values: type[Enum]
+
+@dataclass(frozen=True)
+class KebaKeEnergySelectEntityDescription(
+    SelectEntityDescription,
+    KebaKeEnergySelectEntityDescriptionMixin,
+):
+    """Class describing KEBA KeEnergy select entities."""
+
+
+
 SELECT_TYPES: dict[str, tuple[SelectEntityDescription, ...]] = {
     SectionPrefix.SYSTEM: (
-        SelectEntityDescription(
+        KebaKeEnergySelectEntityDescription(
             key="operating_mode",
             options=[
                 SystemOperatingMode.STANDBY.name.lower(),
@@ -30,8 +49,32 @@ SELECT_TYPES: dict[str, tuple[SelectEntityDescription, ...]] = {
                 SystemOperatingMode.AUTO_HEAT.name.lower(),
             ],
             translation_key="operating_mode_3",
+            values=SystemOperatingMode,
         ),
     ),
+    SectionPrefix.HEAT_CIRCUIT: (
+        KebaKeEnergySelectEntityDescription(
+            key="operating_mode",
+            options=[
+                HeatCircuitOperatingMode.OFF.name.lower(),
+                HeatCircuitOperatingMode.AUTO.name.lower(),
+                HeatCircuitOperatingMode.DAY.name.lower(),
+                HeatCircuitOperatingMode.NIGHT.name.lower(),
+                HeatCircuitOperatingMode.HOLIDAY.name.lower(),
+                HeatCircuitOperatingMode.PARTY.name.lower(),
+            ],
+            translation_key="operating_mode_1",
+            values=HeatCircuitOperatingMode,
+        ),
+    ),
+    SectionPrefix.HOT_WATER_TANK: (
+        KebaKeEnergySelectEntityDescription(
+            key="operating_mode",
+            options=[_.name.lower() for _ in HotWaterTankOperatingMode],
+            translation_key="operating_mode_2",
+            values=HotWaterTankOperatingMode,
+        ),
+    )
 }
 
 
@@ -68,13 +111,13 @@ class KebaKeEnergySelectEntity(KebaKeEnergyExtendedEntity, SelectEntity):
     def __init__(
         self,
         coordinator: KebaKeEnergyDataUpdateCoordinator,
-        description: SelectEntityDescription,
+        description: KebaKeEnergySelectEntityDescription,
         entry: ConfigEntry,
         section_id: str,
         index: int | None,
     ) -> None:
         """Initialize the entity."""
-        self.entity_description: SelectEntityDescription = description
+        self.entity_description: KebaKeEnergySelectEntityDescription = description
         super().__init__(coordinator, entry=entry, section_id=section_id, index=index)
         self.entity_id: str = f"{SELECT_DOMAIN}.{DOMAIN}_{self._attr_unique_id}"
 
@@ -104,7 +147,7 @@ class KebaKeEnergySelectEntity(KebaKeEnergyExtendedEntity, SelectEntity):
     async def async_select_option(self, option: str) -> None:
         """Select new option."""
         await self._async_write_data(
-            SystemOperatingMode[option.upper()].value,
+            self.entity_description.values[option.upper()].value,
             section=self.section,
             device_numbers=self.device_numbers,
         )
