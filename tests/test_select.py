@@ -81,7 +81,7 @@ async def test_heat_circuit_selects(
     await setup_integration(hass, config_entry)
 
     heat_circuit_operating_mode_1: State | None = hass.states.get(
-        "select.keba_keenergy_12345678_heat_circuit_operating_mode_1"
+        "select.keba_keenergy_12345678_heat_circuit_operating_mode_1",
     )
     assert isinstance(heat_circuit_operating_mode_1, State)
     assert heat_circuit_operating_mode_1.state == "day"
@@ -102,7 +102,7 @@ async def test_heat_circuit_selects_translated(
     await setup_integration(hass, config_entry)
 
     heat_circuit_operating_mode_1: State | None = hass.states.get(
-        "select.keba_keenergy_12345678_heat_circuit_operating_mode_1"
+        "select.keba_keenergy_12345678_heat_circuit_operating_mode_1",
     )
     assert isinstance(heat_circuit_operating_mode_1, State)
     assert heat_circuit_operating_mode_1.attributes[ATTR_FRIENDLY_NAME] == "Heizkreis 1 Betriebsart"
@@ -120,7 +120,7 @@ async def test_hot_water_tank_selects(
     await setup_integration(hass, config_entry)
 
     hot_water_tank_operating_mode_2: State | None = hass.states.get(
-        "select.keba_keenergy_12345678_hot_water_tank_operating_mode_2"
+        "select.keba_keenergy_12345678_hot_water_tank_operating_mode_2",
     )
     assert isinstance(hot_water_tank_operating_mode_2, State)
     assert hot_water_tank_operating_mode_2.state == "off"
@@ -146,7 +146,7 @@ async def test_hot_water_tank_selects_translated(
     await setup_integration(hass, config_entry)
 
     hot_water_tank_operating_mode_2: State | None = hass.states.get(
-        "select.keba_keenergy_12345678_hot_water_tank_operating_mode_2"
+        "select.keba_keenergy_12345678_hot_water_tank_operating_mode_2",
     )
     assert isinstance(hot_water_tank_operating_mode_2, State)
     assert hot_water_tank_operating_mode_2.attributes[ATTR_FRIENDLY_NAME] == "Warmwasserspeicher 2 Betriebsart"

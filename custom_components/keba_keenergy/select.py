@@ -30,6 +30,7 @@ class KebaKeEnergySelectEntityDescriptionMixin:
 
     values: type[Enum]
 
+
 @dataclass(frozen=True)
 class KebaKeEnergySelectEntityDescription(
     SelectEntityDescription,
@@ -38,8 +39,7 @@ class KebaKeEnergySelectEntityDescription(
     """Class describing KEBA KeEnergy select entities."""
 
 
-
-SELECT_TYPES: dict[str, tuple[SelectEntityDescription, ...]] = {
+SELECT_TYPES: dict[str, tuple[KebaKeEnergySelectEntityDescription, ...]] = {
     SectionPrefix.SYSTEM: (
         KebaKeEnergySelectEntityDescription(
             key="operating_mode",
@@ -74,7 +74,7 @@ SELECT_TYPES: dict[str, tuple[SelectEntityDescription, ...]] = {
             translation_key="operating_mode_2",
             values=HotWaterTankOperatingMode,
         ),
-    )
+    ),
 }
 
 
