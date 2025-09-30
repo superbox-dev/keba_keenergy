@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [1.1.0] - 2025-08-18
+## [1.1.0] - 2025-09-30
 
 ### Added
 
@@ -18,7 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - German and english translations
 - The manufacturer and model name from the head pump device translation
 
-## [1.0.1] - 2025-08-12
+## [1.0.1] - 2025-09-12
 
 ### Added
 
@@ -28,6 +28,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Wrong unit for room humidity sensor
 
-## [1.0.0] - 2025-08-1
+## [1.0.0] - 2025-09-1
 
 Initial release
