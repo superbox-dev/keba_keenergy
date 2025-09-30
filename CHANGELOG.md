@@ -12,6 +12,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Energy management sensors for the head pump device
+- Select entities for all operation modes
+- Switch entity to control the compressor speed at night
 
 ### Changed
 
