@@ -19,5 +19,7 @@ jobs:
         uses: actions/checkout@v5
       - name: Set up project
         uses: ./.github/actions/setup-project
+      - name: Create requirements.txt
+        run: uv export --quiet --locked --all-extras --dev --no-hashes --no-editable --output-file=requirements.txt
       - name: Audit python packages
-        run: uv run pip-audit
+        run: uv run pip-audit --requirement=requirements.txt
