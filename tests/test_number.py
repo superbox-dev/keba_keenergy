@@ -256,6 +256,15 @@ async def test_heat_circuit_numbers_translated(
         == "Heizkreis 1 Soll-Raumtemperatur (Nacht)"
     )
 
+    heat_circuit_target_temperature_offset_1: State | None = hass.states.get(
+        "number.keba_keenergy_12345678_heat_circuit_target_temperature_offset_1",
+    )
+    assert isinstance(heat_circuit_target_temperature_offset_1, State)
+    assert (
+        heat_circuit_target_temperature_offset_1.attributes[ATTR_FRIENDLY_NAME]
+        == "Heizkreis 1 Soll-Raumtemperatur (Offset)"
+    )
+
 
 @pytest.mark.parametrize(
     ("entity_id", "value", "expected"),
@@ -289,6 +298,11 @@ async def test_heat_circuit_numbers_translated(
             "number.keba_keenergy_12345678_heat_pump_compressor_night_speed",
             50,
             '[{"name": "APPL.CtrlAppl.sParam.heatpump[0].HeatPumpPowerCtrl.param.maxPowerScaledNight", "value": "0.5"}]',  # noqa: E501
+        ),
+        (
+            "number.keba_keenergy_12345678_heat_circuit_target_temperature_offset_1",
+            0.5,
+            '[{"name": "APPL.CtrlAppl.sParam.heatCircuit[0].param.offsetRoomTemp", "value": "0.5"}]',  # noqa: E501
         ),
     ],
 )
@@ -342,6 +356,12 @@ async def test_set_value(
             -10,
             "Value -10.0 for number.keba_keenergy_12345678_heat_circuit_target_temperature_day_1 "
             "is outside valid range 10.0 - 30.0",
+        ),
+        (
+            "number.keba_keenergy_12345678_heat_circuit_target_temperature_offset_1",
+            -3,
+            "Value -3.0 for number.keba_keenergy_12345678_heat_circuit_target_temperature_offset_1 "
+            "is outside valid range -2.5 - 2.5",
         ),
     ],
 )

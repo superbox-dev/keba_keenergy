@@ -24,7 +24,7 @@ async def test_load_entry(
     await setup_integration(hass, config_entry)
 
     assert config_entry.state is ConfigEntryState.LOADED
-    assert hass.states.async_entity_ids_count() == 91
+    assert hass.states.async_entity_ids_count() == 93
 
     assert set(hass.states.async_entity_ids()) == {
         "binary_sensor.keba_keenergy_12345678_heat_pump_heat_request",
@@ -45,6 +45,8 @@ async def test_load_entry(
         "number.keba_keenergy_12345678_heat_circuit_target_temperature_day_2",
         "number.keba_keenergy_12345678_heat_circuit_target_temperature_night_1",
         "number.keba_keenergy_12345678_heat_circuit_target_temperature_night_2",
+        "number.keba_keenergy_12345678_heat_circuit_target_temperature_offset_1",
+        "number.keba_keenergy_12345678_heat_circuit_target_temperature_offset_2",
         "number.keba_keenergy_12345678_heat_pump_compressor_night_speed",
         "number.keba_keenergy_12345678_hot_water_tank_standby_temperature_1",
         "number.keba_keenergy_12345678_hot_water_tank_standby_temperature_2",
