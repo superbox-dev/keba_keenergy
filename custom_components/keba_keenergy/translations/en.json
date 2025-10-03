@@ -159,8 +159,8 @@
             "heat_request": {
                 "name": "Heat request",
                 "state": {
-                    "flow_off": "Aus (low flow temperature)",
-                    "inflow_off": "Aus (high return temperature)",
+                    "flow_off": "Off (low flow temperature)",
+                    "inflow_off": "Off (high return temperature)",
                     "off": "Off",
                     "on": "On",
                     "outdoor_off": "Off (high outside temperature)",
