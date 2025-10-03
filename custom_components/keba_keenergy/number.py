@@ -44,7 +44,7 @@ NUMBER_TYPES: dict[str, tuple[KebaKeEnergyNumberEntityDescription, ...]] = {
             key="target_temperature_day",
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             native_step=0.5,
-            translation_key="target_temperature_day",
+            translation_key="target_room_temperature_day",
             scale=1,
         ),
         KebaKeEnergyNumberEntityDescription(
@@ -52,7 +52,7 @@ NUMBER_TYPES: dict[str, tuple[KebaKeEnergyNumberEntityDescription, ...]] = {
             key="target_temperature_night",
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             native_step=0.5,
-            translation_key="target_temperature_night",
+            translation_key="target_room_temperature_night",
             scale=1,
         ),
         KebaKeEnergyNumberEntityDescription(
@@ -60,7 +60,16 @@ NUMBER_TYPES: dict[str, tuple[KebaKeEnergyNumberEntityDescription, ...]] = {
             key="target_temperature_away",
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             native_step=0.5,
-            translation_key="target_temperature_away",
+            translation_key="target_room_temperature_away",
+            scale=1,
+
+        ),
+        KebaKeEnergyNumberEntityDescription(
+            device_class=NumberDeviceClass.TEMPERATURE,
+            key="target_temperature_offset",
+            native_unit_of_measurement=UnitOfTemperature.CELSIUS,
+            native_step=0.5,
+            translation_key="target_room_temperature_offset",
             scale=1,
         ),
     ),
