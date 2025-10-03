@@ -67,6 +67,9 @@
             "standby_temperature": {
                 "name": "Standby temperature"
             },
+            "target_temperature": {
+                "name": "Target temperature"
+            },
             "target_room_temperature": {
                 "name": "Target temperature"
             },

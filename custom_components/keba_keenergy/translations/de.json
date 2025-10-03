@@ -70,6 +70,9 @@
             "target_temperature": {
                 "name": "Soll-Temperatur"
             },
+            "target_room_temperature": {
+                "name": "Soll-Raumtemperatur"
+            },
             "target_room_temperature_away": {
                 "name": "Soll-Raumtemperatur (Urlaub)"
             },
