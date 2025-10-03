@@ -70,14 +70,17 @@
             "target_temperature": {
                 "name": "Soll-Temperatur"
             },
-            "target_temperature_away": {
+            "target_room_temperature_away": {
                 "name": "Soll-Raumtemperatur (Urlaub)"
             },
-            "target_temperature_day": {
+            "target_room_temperature_day": {
                 "name": "Soll-Raumtemperatur (Tag)"
             },
-            "target_temperature_night": {
+            "target_room_temperature_night": {
                 "name": "Soll-Raumtemperatur (Nacht)"
+            },
+            "target_room_temperature_offset": {
+                "name": "Soll-Raumtemperatur (Offset)"
             }
         },
         "select": {
