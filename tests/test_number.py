@@ -302,7 +302,7 @@ async def test_heat_circuit_numbers_translated(
         (
             "number.keba_keenergy_12345678_heat_circuit_target_temperature_offset_1",
             0.5,
-            '[{"name": "APPL.CtrlAppl.sParam.heatCircuit[0].param.offsetRoomTemp", "value": "0.5"}]',  # noqa: E501
+            '[{"name": "APPL.CtrlAppl.sParam.heatCircuit[0].param.offsetRoomTemp", "value": "0.5"}]',
         ),
     ],
 )

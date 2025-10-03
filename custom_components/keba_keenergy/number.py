@@ -62,7 +62,6 @@ NUMBER_TYPES: dict[str, tuple[KebaKeEnergyNumberEntityDescription, ...]] = {
             native_step=0.5,
             translation_key="target_room_temperature_away",
             scale=1,
-
         ),
         KebaKeEnergyNumberEntityDescription(
             device_class=NumberDeviceClass.TEMPERATURE,
