@@ -84,7 +84,7 @@ class KebaKeEnergyEntity(
         """Return True if the entity is part of a hot water tank else False."""
         return self.section_id == SectionPrefix.HOT_WATER_TANK
 
-    @cached_property
+    @property
     def device_name(self) -> str | None:
         """Return the device name and number."""
         _device_name: str | None = None

@@ -61,9 +61,6 @@
             }
         },
         "number": {
-            "compressor_night_speed": {
-                "name": "Compressor speed (night)"
-            },
             "standby_temperature": {
                 "name": "Standby temperature"
             },
@@ -304,11 +301,6 @@
             },
             "total_thermal_energy": {
                 "name": "Total thermal energy"
-            }
-        },
-        "switch" : {
-            "compressor_use_night_speed": {
-                "name": "Compressor speed limit (night)"
             }
         },
         "water_heater": {

@@ -61,9 +61,6 @@
             }
         },
         "number": {
-            "compressor_night_speed": {
-                "name": "Kompressor-Drehzahl (Nacht)"
-            },
             "standby_temperature": {
                 "name": "Stütztemperatur"
             },
@@ -304,11 +301,6 @@
             },
             "total_thermal_energy": {
                 "name": "Gesamtwärmemenge"
-            }
-        },
-        "switch" : {
-            "compressor_use_night_speed": {
-                "name": "Kompressor-Drehzahlbegrenzung (Nacht)"
             }
         },
         "water_heater": {

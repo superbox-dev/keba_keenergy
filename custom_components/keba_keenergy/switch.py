@@ -4,14 +4,12 @@ import logging
 from typing import Any
 from typing import cast
 
-from homeassistant.components.switch import SwitchDeviceClass
 from homeassistant.components.switch import SwitchEntity
 from homeassistant.components.switch import SwitchEntityDescription
 from homeassistant.components.switch.const import DOMAIN as SWITCH_DOMAIN
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
-from keba_keenergy_api.constants import SectionPrefix
 
 from .const import DOMAIN
 from .coordinator import KebaKeEnergyDataUpdateCoordinator
@@ -20,15 +18,7 @@ from .entity import KebaKeEnergyExtendedEntity
 _LOGGER = logging.getLogger(__name__)
 
 
-SWITCH_TYPES: dict[str, tuple[SwitchEntityDescription, ...]] = {
-    SectionPrefix.HEAT_PUMP: (
-        SwitchEntityDescription(
-            device_class=SwitchDeviceClass.SWITCH,
-            key="compressor_use_night_speed",
-            translation_key="compressor_use_night_speed",
-        ),
-    ),
-}
+SWITCH_TYPES: dict[str, tuple[SwitchEntityDescription, ...]] = {}
 
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry, async_add_entities: AddEntitiesCallback) -> None:

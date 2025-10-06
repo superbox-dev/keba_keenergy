@@ -82,10 +82,8 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
                     HeatCircuit.TARGET_TEMPERATURE_OFFSET,
                     HeatPump.CIRCULATION_PUMP,
                     HeatPump.COMPRESSOR,
-                    HeatPump.COMPRESSOR_NIGHT_SPEED,
                     HeatPump.COMPRESSOR_INPUT_TEMPERATURE,
                     HeatPump.COMPRESSOR_OUTPUT_TEMPERATURE,
-                    HeatPump.COMPRESSOR_USE_NIGHT_SPEED,
                     HeatPump.HEAT_REQUEST,
                     HeatPump.HIGH_PRESSURE,
                     HeatPump.FLOW_TEMPERATURE,
@@ -137,12 +135,12 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
         """Return web gui url."""
         return str(self.api.device_url)
 
-    @cached_property
+    @property
     def device_model(self) -> str:
         """Return device model name."""
         return str(self._api_device_info["name"])
 
-    @cached_property
+    @property
     def device_name(self) -> str:
         """Return device name."""
         return str(self._api_system_info["name"])
@@ -152,7 +150,7 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
         """Return software version."""
         return str(self._api_system_info["version"])
 
-    @cached_property
+    @property
     def device_serial_number(self) -> str:
         """Return serial number."""
         return str(self._api_device_info["serNo"])

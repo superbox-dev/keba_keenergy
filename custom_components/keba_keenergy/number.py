@@ -9,7 +9,6 @@ from homeassistant.components.number import NumberDeviceClass
 from homeassistant.components.number import NumberEntity
 from homeassistant.components.number import NumberEntityDescription
 from homeassistant.config_entries import ConfigEntry
-from homeassistant.const import PERCENTAGE
 from homeassistant.const import UnitOfTemperature
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
@@ -70,16 +69,6 @@ NUMBER_TYPES: dict[str, tuple[KebaKeEnergyNumberEntityDescription, ...]] = {
             native_step=0.5,
             translation_key="target_room_temperature_offset",
             scale=1,
-        ),
-    ),
-    SectionPrefix.HEAT_PUMP: (
-        KebaKeEnergyNumberEntityDescription(
-            device_class=NumberDeviceClass.SPEED,
-            key="compressor_night_speed",
-            native_unit_of_measurement=PERCENTAGE,
-            native_step=1,
-            translation_key="compressor_night_speed",
-            scale=100,
         ),
     ),
     SectionPrefix.HOT_WATER_TANK: (

@@ -24,7 +24,7 @@ async def test_load_entry(
     await setup_integration(hass, config_entry)
 
     assert config_entry.state is ConfigEntryState.LOADED
-    assert hass.states.async_entity_ids_count() == 93
+    assert hass.states.async_entity_ids_count() == 91
 
     assert set(hass.states.async_entity_ids()) == {
         "binary_sensor.keba_keenergy_12345678_heat_pump_heat_request",
@@ -47,7 +47,6 @@ async def test_load_entry(
         "number.keba_keenergy_12345678_heat_circuit_target_temperature_night_2",
         "number.keba_keenergy_12345678_heat_circuit_target_temperature_offset_1",
         "number.keba_keenergy_12345678_heat_circuit_target_temperature_offset_2",
-        "number.keba_keenergy_12345678_heat_pump_compressor_night_speed",
         "number.keba_keenergy_12345678_hot_water_tank_standby_temperature_1",
         "number.keba_keenergy_12345678_hot_water_tank_standby_temperature_2",
         "number.keba_keenergy_12345678_hot_water_tank_target_temperature_1",
@@ -117,7 +116,6 @@ async def test_load_entry(
         "sensor.keba_keenergy_12345678_hot_water_tank_fresh_water_module_temperature_2",
         "sensor.keba_keenergy_12345678_operating_mode",
         "sensor.keba_keenergy_12345678_outdoor_temperature",
-        "switch.keba_keenergy_12345678_heat_pump_compressor_use_night_speed",
         "water_heater.keba_keenergy_12345678_1",
         "water_heater.keba_keenergy_12345678_2",
     }
