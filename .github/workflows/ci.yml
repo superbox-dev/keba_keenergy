@@ -116,6 +116,7 @@ jobs:
       - validation
       - security
       - tests
+      - coverage
     permissions:
       contents: write
     steps:
