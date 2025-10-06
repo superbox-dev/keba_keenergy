@@ -72,6 +72,7 @@ jobs:
   coverage:
     name: Generate coverage badge
     runs-on: ubuntu-latest
+    if: github.ref_type != 'tag'
     needs:
       - tests
     permissions:
@@ -116,7 +117,6 @@ jobs:
       - validation
       - security
       - tests
-      - coverage
     permissions:
       contents: write
     steps:
