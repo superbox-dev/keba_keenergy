@@ -1,3 +1,4 @@
+import pytest
 from homeassistant.const import ATTR_FRIENDLY_NAME
 from homeassistant.const import CONF_HOST
 from homeassistant.const import STATE_OFF
@@ -12,6 +13,7 @@ from tests.api_data import get_multi_positions_data_response
 from tests.conftest import FakeKebaKeEnergyAPI
 
 
+@pytest.mark.usefixtures("entity_registry_enabled_by_default")
 async def test_binary_sensors(
     hass: HomeAssistant,
     config_entry: MockConfigEntry,
@@ -59,6 +61,7 @@ async def test_binary_sensors(
     assert heat_pump_heat_request.attributes[ATTR_FRIENDLY_NAME] == "Heat pump Heat request"
 
 
+@pytest.mark.usefixtures("entity_registry_enabled_by_default")
 async def test_binary_sensors_translations(
     hass: HomeAssistant,
     config_entry: MockConfigEntry,
