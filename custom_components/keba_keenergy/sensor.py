@@ -75,6 +75,7 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription, ...]] = {
     SectionPrefix.HEAT_CIRCUIT: (
         KebaKeEnergySensorEntityDescription(
             device_class=SensorDeviceClass.TEMPERATURE,
+            entity_registry_enabled_default=False,
             key="room_temperature",
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             state_class=SensorStateClass.MEASUREMENT,
@@ -83,6 +84,7 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription, ...]] = {
         ),
         KebaKeEnergySensorEntityDescription(
             device_class=SensorDeviceClass.HUMIDITY,
+            entity_registry_enabled_default=False,
             key="room_humidity",
             native_unit_of_measurement=PERCENTAGE,
             state_class=SensorStateClass.MEASUREMENT,
@@ -91,6 +93,7 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription, ...]] = {
         ),
         KebaKeEnergySensorEntityDescription(
             device_class=SensorDeviceClass.TEMPERATURE,
+            entity_registry_enabled_default=False,
             key="dew_point",
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             state_class=SensorStateClass.MEASUREMENT,
@@ -99,6 +102,7 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription, ...]] = {
         ),
         KebaKeEnergySensorEntityDescription(
             device_class=SensorDeviceClass.TEMPERATURE,
+            entity_registry_enabled_default=False,
             key="flow_temperature_setpoint",
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             state_class=SensorStateClass.MEASUREMENT,
@@ -214,6 +218,7 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription, ...]] = {
         ),
         KebaKeEnergySensorEntityDescription(
             device_class=SensorDeviceClass.TEMPERATURE,
+            entity_registry_enabled_default=False,
             key="flow_temperature",
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             state_class=SensorStateClass.MEASUREMENT,
@@ -222,6 +227,7 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription, ...]] = {
         ),
         KebaKeEnergySensorEntityDescription(
             device_class=SensorDeviceClass.TEMPERATURE,
+            entity_registry_enabled_default=False,
             key="return_flow_temperature",
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             state_class=SensorStateClass.MEASUREMENT,
