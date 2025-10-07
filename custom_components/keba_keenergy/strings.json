@@ -166,7 +166,7 @@
                 "name": "Heat request",
                 "state": {
                     "flow_off": "Off (low flow temperature)",
-                    "inflow_off": "Off (high return temperature)",
+                    "inflow_off": "Off (high return flow temperature)",
                     "off": "Off",
                     "on": "On",
                     "outdoor_off": "Off (high outside temperature)",
@@ -247,7 +247,7 @@
                 "name": "Outdoor temperature"
             },
             "return_flow_temperature": {
-                "name": "Return temperature"
+                "name": "Return flow temperature"
             },
             "room_humidity": {
                 "name": "Room humidity"

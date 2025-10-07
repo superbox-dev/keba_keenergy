@@ -70,6 +70,8 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
                     HeatCircuit.ROOM_HUMIDITY,
                     HeatCircuit.DEW_POINT,
                     HeatCircuit.FLOW_TEMPERATURE_SETPOINT,
+                    HeatCircuit.FLOW_TEMPERATURE,
+                    HeatCircuit.RETURN_FLOW_TEMPERATURE,
                     HeatCircuit.TARGET_TEMPERATURE_DAY,
                     HeatCircuit.HEATING_LIMIT_DAY,
                     HeatCircuit.HEAT_REQUEST,

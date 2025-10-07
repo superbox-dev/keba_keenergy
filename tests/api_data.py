@@ -77,6 +77,34 @@ HEAT_CIRCUIT_FLOW_TEMPERATURE_SETPOINT: str = """
     }
 """
 
+HEAT_CIRCUIT_FLOW_TEMPERATURE: str = """
+    {
+        "name": "APPL.CtrlAppl.sParam.heatCircuit[%s].values.flowSetTemp",
+        "attributes": {
+            "formatId": "fmtTemp",
+            "longText": "Nominal temp.",
+            "unitId": "Temp",
+            "upperLimit": "100",
+            "lowerLimit": "0"
+        },
+        "value": "%s"
+    }
+"""
+
+HEAT_CIRCUIT_RETURN_FLOW_TEMPERATURE: str = """
+    {
+        "name": "APPL.CtrlAppl.sParam.heatCircuit[%s].heatCircuitMixer.flowTemp.values.actValue",
+        "attributes": {
+            "formatId": "fmtTemp",
+            "longText": "Inflow temp. act.",
+            "unitId": "Temp",
+            "upperLimit": "100",
+            "lowerLimit": "0"
+        },
+        "value": "%s"
+    }
+"""
+
 HEAT_CIRCUIT_TARGET_TEMPERATURE_DAY: str = """
     {
         "name": "APPL.CtrlAppl.sParam.heatCircuit[%s].param.normalSetTemp",
@@ -697,6 +725,8 @@ DEFAULT_POSITION_DATA_RESPONSE: list[dict[str, Any]] = [
     json.loads(HEAT_CIRCUIT_ROOM_HUMIDITY % ("0", "53")),
     json.loads(HEAT_CIRCUIT_DEW_POINT % ("0", "13.1")),
     json.loads(HEAT_CIRCUIT_FLOW_TEMPERATURE_SETPOINT % ("0", "26.5543")),
+    json.loads(HEAT_CIRCUIT_FLOW_TEMPERATURE % ("0", "24.33543")),
+    json.loads(HEAT_CIRCUIT_RETURN_FLOW_TEMPERATURE % ("0", "22.2143")),
     json.loads(HEAT_CIRCUIT_TARGET_TEMPERATURE_DAY % ("0", "20.5")),
     json.loads(HEAT_CIRCUIT_HEATING_LIMIT_DAY % ("0", "20")),
     json.loads(HEAT_CIRCUIT_HEAT_REQUEST % ("0", "1")),
@@ -736,6 +766,10 @@ ENTITY_UPDATED_DATA_RESPONSE: list[dict[str, Any]] = [
     json.loads(HEAT_CIRCUIT_DEW_POINT % ("1", "13.1")),
     json.loads(HEAT_CIRCUIT_FLOW_TEMPERATURE_SETPOINT % ("0", "26.5543")),
     json.loads(HEAT_CIRCUIT_FLOW_TEMPERATURE_SETPOINT % ("1", "26.5543")),
+    json.loads(HEAT_CIRCUIT_FLOW_TEMPERATURE % ("0", "24.33543")),
+    json.loads(HEAT_CIRCUIT_FLOW_TEMPERATURE % ("1", "24.33543")),
+    json.loads(HEAT_CIRCUIT_RETURN_FLOW_TEMPERATURE % ("0", "22.2143")),
+    json.loads(HEAT_CIRCUIT_RETURN_FLOW_TEMPERATURE % ("1", "22.2143")),
     json.loads(HEAT_CIRCUIT_TARGET_TEMPERATURE_DAY % ("0", "20.5")),
     json.loads(HEAT_CIRCUIT_TARGET_TEMPERATURE_DAY % ("1", "20.5")),
     json.loads(HEAT_CIRCUIT_HEATING_LIMIT_DAY % ("0", "20")),
@@ -786,6 +820,8 @@ HEAT_CIRCUIT_OPERATION_MODE_3_DATA_RESPONSE: list[dict[str, Any]] = [
     json.loads(HEAT_CIRCUIT_ROOM_HUMIDITY % ("0", "53")),
     json.loads(HEAT_CIRCUIT_DEW_POINT % ("0", "13.1")),
     json.loads(HEAT_CIRCUIT_FLOW_TEMPERATURE_SETPOINT % ("0", "26.5543")),
+    json.loads(HEAT_CIRCUIT_FLOW_TEMPERATURE % ("0", "24.33543")),
+    json.loads(HEAT_CIRCUIT_RETURN_FLOW_TEMPERATURE % ("0", "22.2143")),
     json.loads(HEAT_CIRCUIT_TARGET_TEMPERATURE_DAY % ("0", "20.5")),
     json.loads(HEAT_CIRCUIT_HEATING_LIMIT_DAY % ("0", "20")),
     json.loads(HEAT_CIRCUIT_HEAT_REQUEST % ("0", "1")),
@@ -819,6 +855,8 @@ HEAT_CIRCUIT_OPERATION_MODE_4_DATA_RESPONSE: list[dict[str, Any]] = [
     json.loads(HEAT_CIRCUIT_ROOM_HUMIDITY % ("0", "53")),
     json.loads(HEAT_CIRCUIT_DEW_POINT % ("0", "13.1")),
     json.loads(HEAT_CIRCUIT_FLOW_TEMPERATURE_SETPOINT % ("0", "26.5543")),
+    json.loads(HEAT_CIRCUIT_FLOW_TEMPERATURE % ("0", "24.33543")),
+    json.loads(HEAT_CIRCUIT_RETURN_FLOW_TEMPERATURE % ("0", "22.2143")),
     json.loads(HEAT_CIRCUIT_TARGET_TEMPERATURE_DAY % ("0", "20.5")),
     json.loads(HEAT_CIRCUIT_HEATING_LIMIT_DAY % ("0", "20")),
     json.loads(HEAT_CIRCUIT_HEAT_REQUEST % ("0", "1")),
@@ -860,6 +898,10 @@ def get_multi_positions_data_response(has_passive_cooling: str = "false") -> lis
         json.loads(HEAT_CIRCUIT_DEW_POINT % ("1", "13.1")),
         json.loads(HEAT_CIRCUIT_FLOW_TEMPERATURE_SETPOINT % ("0", "26.5543")),
         json.loads(HEAT_CIRCUIT_FLOW_TEMPERATURE_SETPOINT % ("1", "26.5543")),
+        json.loads(HEAT_CIRCUIT_FLOW_TEMPERATURE % ("0", "24.33543")),
+        json.loads(HEAT_CIRCUIT_FLOW_TEMPERATURE % ("1", "24.33543")),
+        json.loads(HEAT_CIRCUIT_RETURN_FLOW_TEMPERATURE % ("0", "22.2143")),
+        json.loads(HEAT_CIRCUIT_RETURN_FLOW_TEMPERATURE % ("1", "22.2143")),
         json.loads(HEAT_CIRCUIT_TARGET_TEMPERATURE_DAY % ("0", "20.5")),
         json.loads(HEAT_CIRCUIT_TARGET_TEMPERATURE_DAY % ("1", "20.5")),
         json.loads(HEAT_CIRCUIT_HEATING_LIMIT_DAY % ("0", "20")),

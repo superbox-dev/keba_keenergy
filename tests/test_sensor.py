@@ -248,7 +248,7 @@ async def test_heat_pump_sensors(
     assert heat_pump_return_flow_temperature.attributes[CONF_UNIT_OF_MEASUREMENT] == UnitOfTemperature.CELSIUS
     assert heat_pump_return_flow_temperature.attributes[ATTR_STATE_CLASS] == SensorStateClass.MEASUREMENT
     assert heat_pump_return_flow_temperature.attributes[CONF_DEVICE_CLASS] == SensorDeviceClass.TEMPERATURE
-    assert heat_pump_return_flow_temperature.attributes[ATTR_FRIENDLY_NAME] == "Heat pump Return temperature"
+    assert heat_pump_return_flow_temperature.attributes[ATTR_FRIENDLY_NAME] == "Heat pump Return flow temperature"
 
     heat_pump_source_input_temperature: State | None = hass.states.get(
         "sensor.keba_keenergy_12345678_heat_pump_source_input_temperature",
@@ -684,6 +684,29 @@ async def test_heat_circuit_sensors(
         == "Heating circuit 1 Flow temperature setpoint"
     )
 
+    heat_circuit_flow_temperature_1: State | None = hass.states.get(
+        "sensor.keba_keenergy_12345678_heat_circuit_flow_temperature_1",
+    )
+    assert isinstance(heat_circuit_flow_temperature_1, State)
+    assert heat_circuit_flow_temperature_1.state == "24.34"
+    assert heat_circuit_flow_temperature_1.attributes[CONF_UNIT_OF_MEASUREMENT] == UnitOfTemperature.CELSIUS
+    assert heat_circuit_flow_temperature_1.attributes[ATTR_STATE_CLASS] == SensorStateClass.MEASUREMENT
+    assert heat_circuit_flow_temperature_1.attributes[CONF_DEVICE_CLASS] == SensorDeviceClass.TEMPERATURE
+    assert heat_circuit_flow_temperature_1.attributes[ATTR_FRIENDLY_NAME] == "Heating circuit 1 Flow temperature"
+
+    heat_circuit_return_flow_temperature_1: State | None = hass.states.get(
+        "sensor.keba_keenergy_12345678_heat_circuit_return_flow_temperature_1",
+    )
+    assert isinstance(heat_circuit_return_flow_temperature_1, State)
+    assert heat_circuit_return_flow_temperature_1.state == "22.21"
+    assert heat_circuit_return_flow_temperature_1.attributes[CONF_UNIT_OF_MEASUREMENT] == UnitOfTemperature.CELSIUS
+    assert heat_circuit_return_flow_temperature_1.attributes[ATTR_STATE_CLASS] == SensorStateClass.MEASUREMENT
+    assert heat_circuit_return_flow_temperature_1.attributes[CONF_DEVICE_CLASS] == SensorDeviceClass.TEMPERATURE
+    assert (
+        heat_circuit_return_flow_temperature_1.attributes[ATTR_FRIENDLY_NAME]
+        == "Heating circuit 1 Return flow temperature"
+    )
+
     heat_circuit_target_temperature_1: State | None = hass.states.get(
         "sensor.keba_keenergy_12345678_heat_circuit_target_temperature_1",
     )
@@ -842,6 +865,18 @@ async def test_heat_circuit_sensors_translations(
     assert (
         heat_circuit_flow_temperature_setpoint_1.attributes[ATTR_FRIENDLY_NAME] == "Heizkreis 1 Soll-Vorlauftemperatur"
     )
+
+    heat_circuit_flow_temperature_1: State | None = hass.states.get(
+        "sensor.keba_keenergy_12345678_heat_circuit_flow_temperature_1",
+    )
+    assert isinstance(heat_circuit_flow_temperature_1, State)
+    assert heat_circuit_flow_temperature_1.attributes[ATTR_FRIENDLY_NAME] == "Heizkreis 1 Vorlauftemperatur"
+
+    heat_circuit_return_flow_temperature_1: State | None = hass.states.get(
+        "sensor.keba_keenergy_12345678_heat_circuit_return_flow_temperature_1",
+    )
+    assert isinstance(heat_circuit_return_flow_temperature_1, State)
+    assert heat_circuit_return_flow_temperature_1.attributes[ATTR_FRIENDLY_NAME] == "Heizkreis 1 Rücklauftemperatur"
 
     heat_circuit_target_temperature_1: State | None = hass.states.get(
         "sensor.keba_keenergy_12345678_heat_circuit_target_temperature_1",
