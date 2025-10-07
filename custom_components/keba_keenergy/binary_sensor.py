@@ -25,6 +25,7 @@ BINARY_SENSOR_TYPES: dict[str, tuple[BinarySensorEntityDescription, ...]] = {
             icon="mdi:fire",
         ),
         BinarySensorEntityDescription(
+            entity_registry_enabled_default=False,
             key="hot_water_flow",
             translation_key="hot_water_flow",
             icon="mdi:water",
