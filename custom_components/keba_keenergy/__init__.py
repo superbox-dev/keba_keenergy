@@ -4,7 +4,9 @@ from typing import TYPE_CHECKING
 
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import CONF_HOST
+from homeassistant.const import CONF_PASSWORD
 from homeassistant.const import CONF_SSL
+from homeassistant.const import CONF_USERNAME
 from homeassistant.const import Platform
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers import device_registry as dr
@@ -16,6 +18,7 @@ from .coordinator import KebaKeEnergyDataUpdateCoordinator
 
 if TYPE_CHECKING:
     from aiohttp import ClientSession
+import logging
 
 PLATFORMS: list[Platform] = [
     Platform.BINARY_SENSOR,
@@ -27,16 +30,22 @@ PLATFORMS: list[Platform] = [
     Platform.WATER_HEATER,
 ]
 
+_LOGGER = logging.getLogger(__name__)
+
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     """Set up KEBA KeEnergy platform."""
     host: str = entry.data[CONF_HOST]
+    username: str | None = entry.data.get(CONF_USERNAME)
+    password: str | None = entry.data.get(CONF_PASSWORD)
     ssl: bool = entry.data[CONF_SSL]
 
     session: ClientSession = async_get_clientsession(hass)
     coordinator: KebaKeEnergyDataUpdateCoordinator = KebaKeEnergyDataUpdateCoordinator(
         hass,
         host=host,
+        username=username,
+        password=password,
         ssl=ssl,
         session=session,
     )

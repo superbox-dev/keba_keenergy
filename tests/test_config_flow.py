@@ -1,9 +1,9 @@
+from http import HTTPStatus
 from ipaddress import ip_address
 from typing import TYPE_CHECKING
 from unittest.mock import patch
 
 import pytest
-from aiohttp import ClientError
 from homeassistant import setup
 from homeassistant.config_entries import SOURCE_USER
 from homeassistant.config_entries import SOURCE_ZEROCONF
@@ -75,7 +75,7 @@ async def test_user_flow(
     ("side_effect", "expected_error"),
     [
         (APIError("mocked api error"), "cannot_connect"),
-        (ClientError("mocked client error"), "cannot_connect"),
+        (APIError("mocked api error", status=HTTPStatus.UNAUTHORIZED), "invalid_auth"),
         (Exception("mocked client error"), "unknown"),
     ],
 )
@@ -146,13 +146,14 @@ async def test_zeroconf_flow_already_setup(
 
 
 @pytest.mark.parametrize(
-    "side_effect",
+    ("side_effect", "expected_error"),
     [
-        APIError("mocked api error"),
-        ClientError("mocked client error"),
+        (APIError("mocked api error"), "cannot_connect"),
+        (APIError("mocked api error", status=HTTPStatus.UNAUTHORIZED), "invalid_auth"),
+        (Exception("mocked client error"), "unknown"),
     ],
 )
-async def test_zeroconf_cannot_connect(hass: HomeAssistant, side_effect: Exception) -> None:
+async def test_zeroconf_cannot_connect(hass: HomeAssistant, side_effect: Exception, expected_error: str) -> None:
     """Test when zeroconf gets an exception from the API."""
     result_1: ConfigFlowResult = await hass.config_entries.flow.async_init(
         DOMAIN,
@@ -163,5 +164,5 @@ async def test_zeroconf_cannot_connect(hass: HomeAssistant, side_effect: Excepti
     with patch.object(SystemEndpoints, "get_device_info", side_effect=side_effect):
         result_2: ConfigFlowResult = await hass.config_entries.flow.async_configure(result_1["flow_id"], user_input={})
 
-    assert result_2["type"] == FlowResultType.ABORT
-    assert result_2["reason"] == "cannot_connect"
+    assert result_2["type"] == FlowResultType.FORM
+    assert result_2["errors"] == {"base": expected_error}

@@ -6,7 +6,6 @@ from functools import cached_property
 from typing import Any
 from typing import cast
 
-from aiohttp import ClientError
 from aiohttp import ClientSession
 from homeassistant.core import DOMAIN
 from homeassistant.core import HomeAssistant
@@ -38,11 +37,20 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
         /,
         *,
         host: str,
+        username: str | None,
+        password: str | None,
         ssl: bool,
         session: ClientSession,
     ) -> None:
         """Initialize."""
-        self.api: KebaKeEnergyAPI = KebaKeEnergyAPI(host, ssl=ssl, session=session)
+        self.api: KebaKeEnergyAPI = KebaKeEnergyAPI(
+            host,
+            username=username,
+            password=password,
+            ssl=ssl,
+            skip_ssl_verification=True,
+            session=session,
+        )
         self._api_device_info: dict[str, Any] = {}
         self._api_system_info: dict[str, Any] = {}
 
@@ -126,7 +134,7 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
                     System.OPERATING_MODE,
                 ],
             )
-        except (APIError, ClientError) as error:
+        except APIError as error:
             _LOGGER.error(error)  # noqa: TRY400
             raise UpdateFailed(error) from error
 

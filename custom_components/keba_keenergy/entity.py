@@ -51,8 +51,6 @@ class KebaKeEnergyEntity(
         self.section_id: str = section_id
         self.index: int | None = index
 
-        _LOGGER.debug("section_id %s", section_id)
-
         self._attr_unique_id: str | None = entry.unique_id
 
         if self.position is not None:

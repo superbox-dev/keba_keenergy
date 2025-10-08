@@ -42,7 +42,7 @@ classifiers = [
 ]
 requires-python = ">= 3.13.2"
 dependencies = [
-    "keba_keenergy_api>=2.0.1b2",
+    "keba_keenergy_api>=2.0.1b5",
     "homeassistant>=2025.8.2",
 ]
 version = "1.0.0"
@@ -98,6 +98,7 @@ ignore = [
     "D203",    # one-blank-line-before-class
     "D213",    # multi-line-summary-second-line
     "I001",    # unsorted-imports
+    "PLR0913", # too-many-arguments
     "TRY003",  # raise-vanilla-args
 ]
 

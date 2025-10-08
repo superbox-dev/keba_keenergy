@@ -5,18 +5,26 @@
         },
         "error": {
             "cannot_connect": "Failed to connect",
+            "invalid_auth": "Invalid authentication",
             "unknown": "Unexpected error"
         },
         "flow_title": "{name}",
         "step": {
             "discovery_confirm": {
+                "data": {
+                    "password": "Password",
+                    "ssl": "Uses an SSL certificate",
+                    "username": "Username"
+                },
                 "description": "Do you want to add {name} ({host}) to Home Assistant?",
                 "title": "Discovered {name}"
             },
             "user": {
                 "data": {
                     "host": "Host",
-                    "ssl": "Uses an SSL certificate"
+                    "password": "Passwort",
+                    "ssl": "Uses an SSL certificate",
+                    "username": "Username"
                 },
                 "description": "Configure the IP address or hostname of your {name} device."
             }
