@@ -10,21 +10,21 @@
         },
         "flow_title": "{name}",
         "step": {
-            "discovery_confirm": {
+            "auth": {
                 "data": {
                     "password": "Password",
-                    "ssl": "Uses an SSL certificate",
                     "username": "Username"
                 },
+                "description": "Please enter the username and password."
+            },
+            "discovery_confirm": {
                 "description": "Do you want to add {name} ({host}) to Home Assistant?",
                 "title": "Discovered {name}"
             },
             "user": {
                 "data": {
                     "host": "Host",
-                    "password": "Passwort",
-                    "ssl": "Uses an SSL certificate",
-                    "username": "Username"
+                    "ssl": "Uses an SSL certificate"
                 },
                 "description": "Configure the IP address or hostname of your {name} device."
             }
