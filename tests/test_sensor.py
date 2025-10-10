@@ -942,3 +942,72 @@ async def test_heat_circuit_sensors_translations(
     )
     assert isinstance(heat_circuit_heat_request_1, State)
     assert heat_circuit_heat_request_1.attributes.get(ATTR_FRIENDLY_NAME) == "Heizkreis 1 Heizanforderung"
+
+
+@pytest.mark.usefixtures("entity_registry_enabled_by_default")
+async def test_external_heat_source_sensors(
+    hass: HomeAssistant,
+    config_entry: MockConfigEntry,
+    fake_api: FakeKebaKeEnergyAPI,
+) -> None:
+    """Test external heat source sensors."""
+    fake_api.responses = [MULTIPLE_POSITIONS_RESPONSE, get_multi_positions_data_response()]
+    fake_api.register_requests(config_entry.data[CONF_HOST])
+
+    await setup_integration(hass, config_entry)
+
+    external_heat_source_operating_mode_1: State | None = hass.states.get(
+        "sensor.keba_keenergy_12345678_external_heat_source_operating_mode_1",
+    )
+    assert isinstance(external_heat_source_operating_mode_1, State)
+    assert external_heat_source_operating_mode_1.state == "off"
+    assert external_heat_source_operating_mode_1.attributes[CONF_DEVICE_CLASS] == SensorDeviceClass.ENUM
+    assert external_heat_source_operating_mode_1.attributes[ATTR_OPTIONS] == [
+        "off",
+        "on",
+    ]
+    assert (
+        external_heat_source_operating_mode_1.attributes[ATTR_FRIENDLY_NAME] == "External heat source 1 Operating mode"
+    )
+
+    external_heat_source_target_temperature_1: State | None = hass.states.get(
+        "sensor.keba_keenergy_12345678_external_heat_source_target_temperature_1",
+    )
+    assert isinstance(external_heat_source_target_temperature_1, State)
+    assert external_heat_source_target_temperature_1.state == "17.23"
+    assert external_heat_source_target_temperature_1.attributes[CONF_UNIT_OF_MEASUREMENT] == UnitOfTemperature.CELSIUS
+    assert external_heat_source_target_temperature_1.attributes[ATTR_STATE_CLASS] == SensorStateClass.MEASUREMENT
+    assert external_heat_source_target_temperature_1.attributes[CONF_DEVICE_CLASS] == SensorDeviceClass.TEMPERATURE
+    assert (
+        external_heat_source_target_temperature_1.attributes[ATTR_FRIENDLY_NAME]
+        == "External heat source 1 Target temperature"
+    )
+
+
+@pytest.mark.usefixtures("entity_registry_enabled_by_default")
+async def test_external_heat_source_sensors_translated(
+    hass: HomeAssistant,
+    config_entry: MockConfigEntry,
+    fake_api: FakeKebaKeEnergyAPI,
+) -> None:
+    """Test external heat source sensors translations."""
+    fake_api.responses = [MULTIPLE_POSITIONS_RESPONSE, get_multi_positions_data_response()]
+    fake_api.register_requests(config_entry.data[CONF_HOST])
+
+    hass.config.language = "de"
+    await setup_integration(hass, config_entry)
+
+    external_heat_source_operating_mode_1: State | None = hass.states.get(
+        "sensor.keba_keenergy_12345678_external_heat_source_operating_mode_1",
+    )
+    assert isinstance(external_heat_source_operating_mode_1, State)
+    assert external_heat_source_operating_mode_1.attributes[ATTR_FRIENDLY_NAME] == "Externe Wärmequelle 1 Betriebsart"
+
+    external_heat_source_target_temperature_1: State | None = hass.states.get(
+        "sensor.keba_keenergy_12345678_external_heat_source_target_temperature_1",
+    )
+    assert isinstance(external_heat_source_target_temperature_1, State)
+    assert (
+        external_heat_source_target_temperature_1.attributes[ATTR_FRIENDLY_NAME]
+        == "Externe Wärmequelle 1 Soll-Temperatur"
+    )

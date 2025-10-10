@@ -12,6 +12,7 @@ from homeassistant.core import HomeAssistant
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator
 from homeassistant.helpers.update_coordinator import UpdateFailed
 from keba_keenergy_api.api import KebaKeEnergyAPI
+from keba_keenergy_api.constants import ExternalHeatSource
 from keba_keenergy_api.constants import HeatCircuit
 from keba_keenergy_api.constants import HeatPump
 from keba_keenergy_api.constants import HotWaterTank
@@ -72,6 +73,8 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
 
             response: dict[str, ValueResponse] = await self.api.read_data(
                 request=[
+                    ExternalHeatSource.OPERATING_MODE,
+                    ExternalHeatSource.TARGET_TEMPERATURE,
                     HeatCircuit.HAS_ROOM_TEMPERATURE,
                     HeatCircuit.HAS_ROOM_HUMIDITY,
                     HeatCircuit.ROOM_TEMPERATURE,
@@ -130,7 +133,7 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
                     System.HEAT_CIRCUIT_NUMBERS,
                     System.HEAT_PUMP_NUMBERS,
                     System.HOT_WATER_TANK_NUMBERS,
-                    System.EXTERNAL_HEAT_SOURCES_NUMBERS,
+                    System.EXTERNAL_HEAT_SOURCE_NUMBERS,
                     System.OUTDOOR_TEMPERATURE,
                     System.OPERATING_MODE,
                 ],
@@ -187,6 +190,12 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
     def hot_water_tank_numbers(self) -> int:
         """Return number of hot water tanks."""
         data: Value = cast("Value", self.data[SectionPrefix.SYSTEM]["hot_water_tank_numbers"])
+        return int(data["value"])
+
+    @property
+    def external_heat_source_numbers(self) -> int:
+        """Return number of external heat sources."""
+        data: Value = cast("Value", self.data[SectionPrefix.SYSTEM]["external_heat_source_numbers"])
         return int(data["value"])
 
     def has_room_temperature(self, *, index: int) -> str:

@@ -152,6 +152,48 @@ async def test_hot_water_tank_selects_translated(
     assert hot_water_tank_operating_mode_2.attributes[ATTR_FRIENDLY_NAME] == "Warmwasserspeicher 2 Betriebsart"
 
 
+async def test_external_heat_source_selects(
+    hass: HomeAssistant,
+    config_entry: MockConfigEntry,
+    fake_api: FakeKebaKeEnergyAPI,
+) -> None:
+    """Test external heat source selects."""
+    fake_api.responses = [MULTIPLE_POSITIONS_RESPONSE, get_multi_positions_data_response()]
+    fake_api.register_requests(config_entry.data[CONF_HOST])
+
+    await setup_integration(hass, config_entry)
+
+    heat_source_operating_mode_1: State | None = hass.states.get(
+        "select.keba_keenergy_12345678_external_heat_source_operating_mode_1",
+    )
+    assert isinstance(heat_source_operating_mode_1, State)
+    assert heat_source_operating_mode_1.state == "off"
+    assert heat_source_operating_mode_1.attributes[ATTR_FRIENDLY_NAME] == "External heat source 1 Operating mode"
+    assert heat_source_operating_mode_1.attributes[ATTR_OPTIONS] == [
+        "off",
+        "on",
+    ]
+
+
+async def test_external_heat_source_translated(
+    hass: HomeAssistant,
+    config_entry: MockConfigEntry,
+    fake_api: FakeKebaKeEnergyAPI,
+) -> None:
+    """Test external heat source selects translated."""
+    fake_api.responses = [MULTIPLE_POSITIONS_RESPONSE, get_multi_positions_data_response()]
+    fake_api.register_requests(config_entry.data[CONF_HOST])
+
+    hass.config.language = "de"
+    await setup_integration(hass, config_entry)
+
+    external_heat_source_operating_mode_1: State | None = hass.states.get(
+        "select.keba_keenergy_12345678_external_heat_source_operating_mode_1",
+    )
+    assert isinstance(external_heat_source_operating_mode_1, State)
+    assert external_heat_source_operating_mode_1.attributes[ATTR_FRIENDLY_NAME] == "Externe Wärmequelle 1 Betriebsart"
+
+
 @pytest.mark.parametrize(
     ("entity_id", "option", "expected"),
     [
@@ -174,6 +216,11 @@ async def test_hot_water_tank_selects_translated(
             "select.keba_keenergy_12345678_hot_water_tank_operating_mode_2",
             "heat_up",
             '[{"name": "APPL.CtrlAppl.sParam.hotWaterTank[1].param.operatingMode", "value": "3"}]',
+        ),
+        (
+            "select.keba_keenergy_12345678_external_heat_source_operating_mode_1",
+            "on",
+            '[{"name": "APPL.CtrlAppl.sParam.extHeatSource[0].param.operatingMode", "value": "1"}]',
         ),
     ],
 )

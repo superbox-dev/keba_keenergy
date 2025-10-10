@@ -1,6 +1,34 @@
 import json
 from typing import Any
 
+EXTERNAL_HEAT_SOURCE_OPERATING_MODE: str = """
+    {
+        "name": "APPL.CtrlAppl.sParam.extHeatSource[%s].param.operatingMode",
+        "attributes": {
+            "formatId": "fmtExternalSourceType",
+            "longText": "Oper. mode",
+            "unitId": "Enum",
+            "upperLimit": "2",
+            "lowerLimit": "0"
+        },
+        "value": "%s"
+    }
+"""
+
+EXTERNAL_HEAT_SOURCE_TARGET_TEMPERATURE: str = """
+    {
+        "name": "APPL.CtrlAppl.sParam.extHeatSource[%s].values.setTemp",
+        "attributes": {
+            "formatId": "fmtTemp",
+            "longText": "Temp. nom.",
+            "unitId": "Temp",
+            "upperLimit": "90",
+            "lowerLimit": "20"
+        },
+        "value": "%s"
+    }
+"""
+
 HEAT_CIRCUIT_HAS_ROOM_TEMPERATURE: str = """
     {
         "name": "APPL.CtrlAppl.sParam.options.heatCircuit[%s].hasRoomTemp",
@@ -635,7 +663,7 @@ SYSTEM_HOT_WATER_TANK_NUMBERS: str = """
     }
 """
 
-SYSTEM_EXTERNAL_HEAT_SOURCES_NUMBERS: str = """
+SYSTEM_EXTERNAL_HEAT_SOURCE_NUMBERS: str = """
     {
         "name": "APPL.CtrlAppl.sParam.options.systemNumberOfExtHeatSources",
         "attributes": {
@@ -691,14 +719,14 @@ DEFAULT_POSITION_RESPONSE: list[dict[str, Any]] = [
     json.loads(SYSTEM_HEAT_PUMP_NUMBERS % "1"),
     json.loads(SYSTEM_HEAT_CIRCUIT_NUMBERS % "1"),
     json.loads(SYSTEM_HOT_WATER_TANK_NUMBERS % "1"),
-    json.loads(SYSTEM_EXTERNAL_HEAT_SOURCES_NUMBERS % "1"),
+    json.loads(SYSTEM_EXTERNAL_HEAT_SOURCE_NUMBERS % "1"),
 ]
 
 MULTIPLE_POSITIONS_RESPONSE: list[dict[str, Any]] = [
     json.loads(SYSTEM_HEAT_PUMP_NUMBERS % "1"),
     json.loads(SYSTEM_HEAT_CIRCUIT_NUMBERS % "2"),
     json.loads(SYSTEM_HOT_WATER_TANK_NUMBERS % "2"),
-    json.loads(SYSTEM_EXTERNAL_HEAT_SOURCES_NUMBERS % "1"),
+    json.loads(SYSTEM_EXTERNAL_HEAT_SOURCE_NUMBERS % "2"),
 ]
 
 HEAT_PUMP_DATA: list[dict[str, Any]] = [
@@ -734,6 +762,8 @@ HEAT_PUMP_DATA: list[dict[str, Any]] = [
 ]
 
 DEFAULT_POSITION_DATA_RESPONSE: list[dict[str, Any]] = [
+    json.loads(EXTERNAL_HEAT_SOURCE_OPERATING_MODE % ("0", "1")),
+    json.loads(EXTERNAL_HEAT_SOURCE_TARGET_TEMPERATURE % ("0", "1")),
     json.loads(HEAT_CIRCUIT_HAS_ROOM_TEMPERATURE % ("0", "true")),
     json.loads(HEAT_CIRCUIT_HAS_ROOM_HUMIDITY % ("0", "true")),
     json.loads(HEAT_CIRCUIT_ROOM_TEMPERATURE % ("0", "22.42")),
@@ -764,12 +794,16 @@ DEFAULT_POSITION_DATA_RESPONSE: list[dict[str, Any]] = [
     json.loads(SYSTEM_HEAT_CIRCUIT_NUMBERS % "1"),
     json.loads(SYSTEM_HEAT_PUMP_NUMBERS % "1"),
     json.loads(SYSTEM_HOT_WATER_TANK_NUMBERS % "1"),
-    json.loads(SYSTEM_EXTERNAL_HEAT_SOURCES_NUMBERS % "1"),
+    json.loads(SYSTEM_EXTERNAL_HEAT_SOURCE_NUMBERS % "1"),
     SYSTEM_OUTDOOR_TEMPERATURE,
     SYSTEM_OPERATING_MODE,
 ]
 
 ENTITY_UPDATED_DATA_RESPONSE: list[dict[str, Any]] = [
+    json.loads(EXTERNAL_HEAT_SOURCE_OPERATING_MODE % ("0", "1")),
+    json.loads(EXTERNAL_HEAT_SOURCE_OPERATING_MODE % ("1", "0")),
+    json.loads(EXTERNAL_HEAT_SOURCE_TARGET_TEMPERATURE % ("0", "13")),
+    json.loads(EXTERNAL_HEAT_SOURCE_TARGET_TEMPERATURE % ("1", "12")),
     json.loads(HEAT_CIRCUIT_HAS_ROOM_TEMPERATURE % ("0", "true")),
     json.loads(HEAT_CIRCUIT_HAS_ROOM_TEMPERATURE % ("1", "false")),
     json.loads(HEAT_CIRCUIT_HAS_ROOM_HUMIDITY % ("0", "true")),
@@ -825,12 +859,14 @@ ENTITY_UPDATED_DATA_RESPONSE: list[dict[str, Any]] = [
     json.loads(SYSTEM_HEAT_CIRCUIT_NUMBERS % "2"),
     json.loads(SYSTEM_HEAT_PUMP_NUMBERS % "1"),
     json.loads(SYSTEM_HOT_WATER_TANK_NUMBERS % "2"),
-    json.loads(SYSTEM_EXTERNAL_HEAT_SOURCES_NUMBERS % "1"),
+    json.loads(SYSTEM_EXTERNAL_HEAT_SOURCE_NUMBERS % "1"),
     SYSTEM_OUTDOOR_TEMPERATURE,
     SYSTEM_OPERATING_MODE,
 ]
 
 HEAT_CIRCUIT_OPERATION_MODE_3_DATA_RESPONSE: list[dict[str, Any]] = [
+    json.loads(EXTERNAL_HEAT_SOURCE_OPERATING_MODE % ("0", "1")),
+    json.loads(EXTERNAL_HEAT_SOURCE_TARGET_TEMPERATURE % ("0", "23")),
     json.loads(HEAT_CIRCUIT_HAS_ROOM_TEMPERATURE % ("0", "true")),
     json.loads(HEAT_CIRCUIT_HAS_ROOM_HUMIDITY % ("0", "true")),
     json.loads(HEAT_CIRCUIT_ROOM_TEMPERATURE % ("0", "22.42")),
@@ -861,12 +897,14 @@ HEAT_CIRCUIT_OPERATION_MODE_3_DATA_RESPONSE: list[dict[str, Any]] = [
     json.loads(SYSTEM_HEAT_CIRCUIT_NUMBERS % "1"),
     json.loads(SYSTEM_HEAT_PUMP_NUMBERS % "1"),
     json.loads(SYSTEM_HOT_WATER_TANK_NUMBERS % "1"),
-    json.loads(SYSTEM_EXTERNAL_HEAT_SOURCES_NUMBERS % "1"),
+    json.loads(SYSTEM_EXTERNAL_HEAT_SOURCE_NUMBERS % "1"),
     SYSTEM_OUTDOOR_TEMPERATURE,
     SYSTEM_OPERATING_MODE,
 ]
 
 HEAT_CIRCUIT_OPERATION_MODE_4_DATA_RESPONSE: list[dict[str, Any]] = [
+    json.loads(EXTERNAL_HEAT_SOURCE_OPERATING_MODE % ("0", "1")),
+    json.loads(EXTERNAL_HEAT_SOURCE_TARGET_TEMPERATURE % ("0", "12.22")),
     json.loads(HEAT_CIRCUIT_HAS_ROOM_TEMPERATURE % ("0", "true")),
     json.loads(HEAT_CIRCUIT_HAS_ROOM_HUMIDITY % ("0", "true")),
     json.loads(HEAT_CIRCUIT_ROOM_TEMPERATURE % ("0", "22.42")),
@@ -897,7 +935,7 @@ HEAT_CIRCUIT_OPERATION_MODE_4_DATA_RESPONSE: list[dict[str, Any]] = [
     json.loads(SYSTEM_HEAT_CIRCUIT_NUMBERS % "1"),
     json.loads(SYSTEM_HEAT_PUMP_NUMBERS % "1"),
     json.loads(SYSTEM_HOT_WATER_TANK_NUMBERS % "1"),
-    json.loads(SYSTEM_EXTERNAL_HEAT_SOURCES_NUMBERS % "1"),
+    json.loads(SYSTEM_EXTERNAL_HEAT_SOURCE_NUMBERS % "1"),
     SYSTEM_OUTDOOR_TEMPERATURE,
     SYSTEM_OPERATING_MODE,
 ]
@@ -905,6 +943,10 @@ HEAT_CIRCUIT_OPERATION_MODE_4_DATA_RESPONSE: list[dict[str, Any]] = [
 
 def get_multi_positions_data_response(has_passive_cooling: str = "false") -> list[dict[str, Any]]:
     return [
+        json.loads(EXTERNAL_HEAT_SOURCE_OPERATING_MODE % ("0", "0")),
+        json.loads(EXTERNAL_HEAT_SOURCE_OPERATING_MODE % ("1", "1")),
+        json.loads(EXTERNAL_HEAT_SOURCE_TARGET_TEMPERATURE % ("0", "17.23")),
+        json.loads(EXTERNAL_HEAT_SOURCE_TARGET_TEMPERATURE % ("1", "17.23")),
         json.loads(HEAT_CIRCUIT_HAS_ROOM_TEMPERATURE % ("0", "true")),
         json.loads(HEAT_CIRCUIT_HAS_ROOM_TEMPERATURE % ("1", "false")),
         json.loads(HEAT_CIRCUIT_HAS_ROOM_HUMIDITY % ("0", "true")),
@@ -960,7 +1002,7 @@ def get_multi_positions_data_response(has_passive_cooling: str = "false") -> lis
         json.loads(SYSTEM_HEAT_CIRCUIT_NUMBERS % "2"),
         json.loads(SYSTEM_HEAT_PUMP_NUMBERS % "1"),
         json.loads(SYSTEM_HOT_WATER_TANK_NUMBERS % "2"),
-        json.loads(SYSTEM_EXTERNAL_HEAT_SOURCES_NUMBERS % "1"),
+        json.loads(SYSTEM_EXTERNAL_HEAT_SOURCE_NUMBERS % "1"),
         SYSTEM_OUTDOOR_TEMPERATURE,
         SYSTEM_OPERATING_MODE,
     ]

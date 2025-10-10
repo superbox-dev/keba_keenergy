@@ -20,6 +20,7 @@ from homeassistant.const import UnitOfTemperature
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.typing import StateType
+from keba_keenergy_api.constants import ExternalHeatSourceOperatingMode
 from keba_keenergy_api.constants import HeatCircuitHeatRequest
 from keba_keenergy_api.constants import HeatCircuitOperatingMode
 from keba_keenergy_api.constants import HeatPumpState
@@ -474,6 +475,23 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription, ...]] = {
             state_class=SensorStateClass.MEASUREMENT,
             translation_key="target_temperature",
             icon="mdi:thermometer-chevron-up",
+            value=lambda data: cast("float", data),
+        ),
+    ),
+    SectionPrefix.EXTERNAL_HEAT_SOURCE: (
+        KebaKeEnergySensorEntityDescription(
+            device_class=SensorDeviceClass.ENUM,
+            key="operating_mode",
+            options=[_.name.lower() for _ in ExternalHeatSourceOperatingMode],
+            translation_key="operating_mode_4",
+            value=lambda data: cast("str", data),
+        ),
+        KebaKeEnergySensorEntityDescription(
+            device_class=SensorDeviceClass.TEMPERATURE,
+            key="target_temperature",
+            native_unit_of_measurement=UnitOfTemperature.CELSIUS,
+            state_class=SensorStateClass.MEASUREMENT,
+            translation_key="target_temperature",
             value=lambda data: cast("float", data),
         ),
     ),

@@ -31,6 +31,9 @@
         }
     },
     "device": {
+        "external_heat_source": {
+            "name": "External heat source{position}"
+        },
         "heat_circuit": {
             "name": "Heating circuit{position}"
         },
@@ -121,6 +124,13 @@
                     "auto_heat": "Heating",
                     "auto_cool": "Cooling",
                     "auto": "Automatic"
+                }
+            },
+            "operating_mode_4": {
+                "name": "Operating mode",
+                "state": {
+                    "off": "Off",
+                    "on": "On"
                 }
             }
         },
@@ -246,6 +256,13 @@
                     "auto_heat": "Heating",
                     "auto_cool": "Cooling",
                     "auto": "Automatic"
+                }
+            },
+            "operating_mode_4": {
+                "name": "Operating mode",
+                "state": {
+                    "off": "Off",
+                    "on": "On"
                 }
             },
             "outdoor_temperature": {

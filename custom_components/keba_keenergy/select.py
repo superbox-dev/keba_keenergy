@@ -12,6 +12,7 @@ from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import STATE_ON
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
+from keba_keenergy_api.constants import ExternalHeatSourceOperatingMode
 from keba_keenergy_api.constants import HeatCircuitOperatingMode
 from keba_keenergy_api.constants import HotWaterTankOperatingMode
 from keba_keenergy_api.constants import SectionPrefix
@@ -73,6 +74,14 @@ SELECT_TYPES: dict[str, tuple[KebaKeEnergySelectEntityDescription, ...]] = {
             options=[_.name.lower() for _ in HotWaterTankOperatingMode],
             translation_key="operating_mode_2",
             values=HotWaterTankOperatingMode,
+        ),
+    ),
+    SectionPrefix.EXTERNAL_HEAT_SOURCE: (
+        KebaKeEnergySelectEntityDescription(
+            key="operating_mode",
+            options=[_.name.lower() for _ in ExternalHeatSourceOperatingMode],
+            translation_key="operating_mode_4",
+            values=ExternalHeatSourceOperatingMode,
         ),
     ),
 }

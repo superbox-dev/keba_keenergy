@@ -12,6 +12,7 @@ from homeassistant.config_entries import ConfigEntry
 from homeassistant.exceptions import HomeAssistantError
 from homeassistant.helpers.device_registry import DeviceInfo
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
+from keba_keenergy_api.constants import ExternalHeatSource
 from keba_keenergy_api.constants import HeatCircuit
 from keba_keenergy_api.constants import HeatPump
 from keba_keenergy_api.constants import HotWaterTank
@@ -83,6 +84,11 @@ class KebaKeEnergyEntity(
         return self.section_id == SectionPrefix.HOT_WATER_TANK
 
     @property
+    def is_external_heat_source(self) -> bool:
+        """Return True if the entity is part of an external heat sources else False."""
+        return self.section_id == SectionPrefix.EXTERNAL_HEAT_SOURCE
+
+    @property
     def device_name(self) -> str | None:
         """Return the device name and number."""
         _device_name: str | None = None
@@ -96,6 +102,8 @@ class KebaKeEnergyEntity(
             _device_name = "Heat pump"
         elif self.is_hot_water_tank:
             _device_name = "Hot water tank"
+        elif self.is_external_heat_source:
+            _device_name = "External heat source"
 
         # Add position number to device name if there is more than one device
         # e.g. hot water tank, heat circuit or heat pump.
@@ -154,6 +162,8 @@ class KebaKeEnergyEntity(
             translation_key = "heat_pump"
         elif self.is_hot_water_tank:
             translation_key = "hot_water_tank"
+        elif self.is_external_heat_source:
+            translation_key = "external_heat_source"
 
         return translation_key
 
@@ -270,3 +280,6 @@ class KebaKeEnergyExtendedEntity(KebaKeEnergyEntity):
         elif self.is_hot_water_tank:
             self.section = HotWaterTank[self.entity_description.key.upper()]
             self.device_numbers = self.coordinator.hot_water_tank_numbers
+        elif self.is_external_heat_source:
+            self.section = ExternalHeatSource[self.entity_description.key.upper()]
+            self.device_numbers = self.coordinator.external_heat_source_numbers

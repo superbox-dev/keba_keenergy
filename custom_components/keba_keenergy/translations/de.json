@@ -31,6 +31,9 @@
         }
     },
     "device": {
+        "external_heat_source": {
+            "name": "Externe Wärmequelle{position}"
+        },
         "heat_circuit": {
             "name": "Heizkreis{position}"
         },
@@ -121,6 +124,20 @@
                     "auto_heat": "Heizen",
                     "auto_cool": "Kühlen",
                     "auto": "Automatik"
+                }
+            },
+            "operating_mode_4": {
+                "name": "Betriebsart",
+                "state": {
+                    "off": "Aus",
+                    "on": "An"
+                }
+            },
+            "operating_mode_4": {
+                "name": "Betriebsart",
+                "state": {
+                    "off": "Aus",
+                    "on": "An"
                 }
             }
         },
@@ -246,6 +263,13 @@
                     "auto_heat": "Heizen",
                     "auto_cool": "Kühlen",
                     "auto": "Automatik"
+                }
+            },
+            "operating_mode_4": {
+                "name": "Betriebsart",
+                "state": {
+                    "off": "Aus",
+                    "on": "An"
                 }
             },
             "outdoor_temperature": {
