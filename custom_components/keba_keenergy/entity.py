@@ -16,6 +16,7 @@ from keba_keenergy_api.constants import ExternalHeatSource
 from keba_keenergy_api.constants import HeatCircuit
 from keba_keenergy_api.constants import HeatPump
 from keba_keenergy_api.constants import HotWaterTank
+from keba_keenergy_api.constants import Photovoltaic
 from keba_keenergy_api.constants import Section
 from keba_keenergy_api.constants import SectionPrefix
 from keba_keenergy_api.constants import System
@@ -89,6 +90,11 @@ class KebaKeEnergyEntity(
         return self.section_id == SectionPrefix.EXTERNAL_HEAT_SOURCE
 
     @property
+    def is_photovoltaic(self) -> bool:
+        """Return True if the entity is part of a photovoltaic else False."""
+        return self.section_id == SectionPrefix.PHOTOVOLTAIC
+
+    @property
     def device_name(self) -> str | None:
         """Return the device name and number."""
         _device_name: str | None = None
@@ -104,6 +110,8 @@ class KebaKeEnergyEntity(
             _device_name = "Hot water tank"
         elif self.is_external_heat_source:
             _device_name = "External heat source"
+        elif self.is_photovoltaic:
+            _device_name = "Photovoltaic"
 
         # Add position number to device name if there is more than one device
         # e.g. hot water tank, heat circuit or heat pump.
@@ -164,6 +172,8 @@ class KebaKeEnergyEntity(
             translation_key = "hot_water_tank"
         elif self.is_external_heat_source:
             translation_key = "external_heat_source"
+        elif self.is_photovoltaic:
+            translation_key = "photovoltaic"
 
         return translation_key
 
@@ -283,3 +293,5 @@ class KebaKeEnergyExtendedEntity(KebaKeEnergyEntity):
         elif self.is_external_heat_source:
             self.section = ExternalHeatSource[self.entity_description.key.upper()]
             self.device_numbers = self.coordinator.external_heat_source_numbers
+        elif self.is_photovoltaic:
+            self.section = Photovoltaic[self.entity_description.key.upper()]

@@ -16,6 +16,7 @@ from keba_keenergy_api.constants import ExternalHeatSource
 from keba_keenergy_api.constants import HeatCircuit
 from keba_keenergy_api.constants import HeatPump
 from keba_keenergy_api.constants import HotWaterTank
+from keba_keenergy_api.constants import Photovoltaic
 from keba_keenergy_api.constants import SectionPrefix
 from keba_keenergy_api.constants import System
 from keba_keenergy_api.endpoints import Value
@@ -130,6 +131,9 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
                     HotWaterTank.STANDBY_TEMPERATURE,
                     HotWaterTank.OPERATING_MODE,
                     HotWaterTank.CURRENT_TEMPERATURE,
+                    Photovoltaic.EXCESS_POWER,
+                    Photovoltaic.DAILY_ENERGY,
+                    Photovoltaic.TOTAL_ENERGY,
                     System.HEAT_CIRCUIT_NUMBERS,
                     System.HEAT_PUMP_NUMBERS,
                     System.HOT_WATER_TANK_NUMBERS,

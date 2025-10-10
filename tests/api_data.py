@@ -618,6 +618,42 @@ HOT_WATER_CURRENT_TEMPERATURE: str = """
     }
 """
 
+PHOTOVOLTAIC_EXCESS_POWER: str = """
+    {
+        "name": "APPL.CtrlAppl.sParam.photovoltaics.ElectricEnergyMeter.values.power",
+        "attributes": {
+            "formatId": "fmt3p2",
+            "longText": "Actual excess power",
+            "unitId": "Pwr"
+        },
+        "value": "%s"
+    }
+"""
+
+PHOTOVOLTAIC_DAILY_ENERGY: str = """
+    {
+        "name": "APPL.CtrlAppl.sParam.photovoltaics.ElectricEnergyMeter.values.heatDay",
+        "attributes": {
+            "formatId": "fmt6p1",
+            "longText": "Energy per day",
+            "unitId": "kWh"
+        },
+        "value": "%s"
+    }
+"""
+
+PHOTOVOLTAIC_TOTAL_ENERGY: str = """
+    {
+        "name": "APPL.CtrlAppl.sParam.photovoltaics.ElectricEnergyMeter.values.accumulatedHeat",
+        "attributes": {
+            "formatId": "fmt6p0",
+            "longText": "Acc. energy",
+            "unitId": "kWh"
+        },
+        "value": "%s"
+    }
+"""
+
 SYSTEM_HEAT_CIRCUIT_NUMBERS: str = """
     {
         "name": "APPL.CtrlAppl.sParam.options.systemNumberOfHeatingCircuits",
@@ -791,6 +827,9 @@ DEFAULT_POSITION_DATA_RESPONSE: list[dict[str, Any]] = [
     json.loads(HOT_WATER_TANK_STANDBY_TEMPERATURE % ("0", "32.5")),
     json.loads(HOT_WATER_TANK_OPERATION_MODE % ("0", "3")),
     json.loads(HOT_WATER_CURRENT_TEMPERATURE % ("0", "47.700001")),
+    json.loads(PHOTOVOLTAIC_EXCESS_POWER % "437.700001"),
+    json.loads(PHOTOVOLTAIC_DAILY_ENERGY % "437.700001"),
+    json.loads(PHOTOVOLTAIC_TOTAL_ENERGY % "437.700001"),
     json.loads(SYSTEM_HEAT_CIRCUIT_NUMBERS % "1"),
     json.loads(SYSTEM_HEAT_PUMP_NUMBERS % "1"),
     json.loads(SYSTEM_HOT_WATER_TANK_NUMBERS % "1"),
@@ -856,6 +895,9 @@ ENTITY_UPDATED_DATA_RESPONSE: list[dict[str, Any]] = [
     json.loads(HOT_WATER_TANK_OPERATION_MODE % ("0", "0")),
     json.loads(HOT_WATER_CURRENT_TEMPERATURE % ("0", "47.700001")),
     json.loads(HOT_WATER_CURRENT_TEMPERATURE % ("1", "47.700001")),
+    json.loads(PHOTOVOLTAIC_EXCESS_POWER % "437.700001"),
+    json.loads(PHOTOVOLTAIC_DAILY_ENERGY % "437.700001"),
+    json.loads(PHOTOVOLTAIC_TOTAL_ENERGY % "437.700001"),
     json.loads(SYSTEM_HEAT_CIRCUIT_NUMBERS % "2"),
     json.loads(SYSTEM_HEAT_PUMP_NUMBERS % "1"),
     json.loads(SYSTEM_HOT_WATER_TANK_NUMBERS % "2"),
@@ -894,6 +936,9 @@ HEAT_CIRCUIT_OPERATION_MODE_3_DATA_RESPONSE: list[dict[str, Any]] = [
     json.loads(HOT_WATER_TANK_STANDBY_TEMPERATURE % ("0", "32.5")),
     json.loads(HOT_WATER_TANK_OPERATION_MODE % ("0", "3")),
     json.loads(HOT_WATER_CURRENT_TEMPERATURE % ("0", "47.700001")),
+    json.loads(PHOTOVOLTAIC_EXCESS_POWER % "437.700001"),
+    json.loads(PHOTOVOLTAIC_DAILY_ENERGY % "437.700001"),
+    json.loads(PHOTOVOLTAIC_TOTAL_ENERGY % "437.700001"),
     json.loads(SYSTEM_HEAT_CIRCUIT_NUMBERS % "1"),
     json.loads(SYSTEM_HEAT_PUMP_NUMBERS % "1"),
     json.loads(SYSTEM_HOT_WATER_TANK_NUMBERS % "1"),
@@ -932,6 +977,9 @@ HEAT_CIRCUIT_OPERATION_MODE_4_DATA_RESPONSE: list[dict[str, Any]] = [
     json.loads(HOT_WATER_TANK_STANDBY_TEMPERATURE % ("0", "32.5")),
     json.loads(HOT_WATER_TANK_OPERATION_MODE % ("0", "3")),
     json.loads(HOT_WATER_CURRENT_TEMPERATURE % ("0", "47.700001")),
+    json.loads(PHOTOVOLTAIC_EXCESS_POWER % "437.700001"),
+    json.loads(PHOTOVOLTAIC_DAILY_ENERGY % "437.700001"),
+    json.loads(PHOTOVOLTAIC_TOTAL_ENERGY % "437.700001"),
     json.loads(SYSTEM_HEAT_CIRCUIT_NUMBERS % "1"),
     json.loads(SYSTEM_HEAT_PUMP_NUMBERS % "1"),
     json.loads(SYSTEM_HOT_WATER_TANK_NUMBERS % "1"),
@@ -999,6 +1047,9 @@ def get_multi_positions_data_response(has_passive_cooling: str = "false") -> lis
         json.loads(HOT_WATER_TANK_OPERATION_MODE % ("0", "0")),
         json.loads(HOT_WATER_CURRENT_TEMPERATURE % ("0", "47.700001")),
         json.loads(HOT_WATER_CURRENT_TEMPERATURE % ("1", "47.700001")),
+        json.loads(PHOTOVOLTAIC_EXCESS_POWER % "437.700001"),
+        json.loads(PHOTOVOLTAIC_DAILY_ENERGY % "437.700001"),
+        json.loads(PHOTOVOLTAIC_TOTAL_ENERGY % "437.700001"),
         json.loads(SYSTEM_HEAT_CIRCUIT_NUMBERS % "2"),
         json.loads(SYSTEM_HEAT_PUMP_NUMBERS % "1"),
         json.loads(SYSTEM_HOT_WATER_TANK_NUMBERS % "2"),

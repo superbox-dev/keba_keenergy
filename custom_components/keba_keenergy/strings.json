@@ -42,6 +42,9 @@
         },
         "hot_water_tank": {
             "name": "Hot water tank{position}"
+        },
+        "photovoltaic": {
+            "name": "Photovoltaic{position}"
         }
     },
     "entity": {
@@ -267,6 +270,15 @@
             },
             "outdoor_temperature": {
                 "name": "Outdoor temperature"
+            },
+            "pv_daily_energy": {
+                "name": "Daily energy"
+            },
+            "pv_excess_power": {
+                "name": "Excess power"
+            },
+            "pv_total_energy": {
+                "name": "Total energy"
             },
             "return_flow_temperature": {
                 "name": "Return flow temperature"

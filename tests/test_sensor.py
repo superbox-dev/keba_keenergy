@@ -1011,3 +1011,80 @@ async def test_external_heat_source_sensors_translated(
         external_heat_source_target_temperature_1.attributes[ATTR_FRIENDLY_NAME]
         == "Externe Wärmequelle 1 Soll-Temperatur"
     )
+
+
+@pytest.mark.usefixtures("entity_registry_enabled_by_default")
+async def test_photovoltaic_sensors(
+    hass: HomeAssistant,
+    config_entry: MockConfigEntry,
+    fake_api: FakeKebaKeEnergyAPI,
+) -> None:
+    """Test external heat source sensors."""
+    fake_api.responses = [MULTIPLE_POSITIONS_RESPONSE, get_multi_positions_data_response()]
+    fake_api.register_requests(config_entry.data[CONF_HOST])
+
+    await setup_integration(hass, config_entry)
+
+    photovoltaic_excess_power: State | None = hass.states.get(
+        "sensor.keba_keenergy_12345678_photovoltaic_excess_power",
+    )
+    assert isinstance(photovoltaic_excess_power, State)
+    assert photovoltaic_excess_power.state == "437.7"
+    assert photovoltaic_excess_power.attributes[CONF_UNIT_OF_MEASUREMENT] == UnitOfPower.WATT
+    assert photovoltaic_excess_power.attributes[ATTR_STATE_CLASS] == SensorStateClass.MEASUREMENT
+    assert photovoltaic_excess_power.attributes[CONF_DEVICE_CLASS] == SensorDeviceClass.POWER
+    assert photovoltaic_excess_power.attributes[ATTR_FRIENDLY_NAME] == "Photovoltaic Excess power"
+
+    photovoltaic_daily_energy: State | None = hass.states.get(
+        "sensor.keba_keenergy_12345678_photovoltaic_daily_energy",
+    )
+    assert isinstance(photovoltaic_daily_energy, State)
+    assert photovoltaic_daily_energy.state == "437.7"
+    assert photovoltaic_daily_energy.attributes[CONF_UNIT_OF_MEASUREMENT] == UnitOfEnergy.KILO_WATT_HOUR
+    assert photovoltaic_daily_energy.attributes[ATTR_STATE_CLASS] == SensorStateClass.MEASUREMENT
+    assert photovoltaic_daily_energy.attributes[CONF_DEVICE_CLASS] == SensorDeviceClass.ENERGY
+    assert photovoltaic_daily_energy.attributes[ATTR_FRIENDLY_NAME] == "Photovoltaic Daily energy"
+
+    photovoltaic_total_energy: State | None = hass.states.get(
+        "sensor.keba_keenergy_12345678_photovoltaic_total_energy",
+    )
+    assert isinstance(photovoltaic_total_energy, State)
+    assert photovoltaic_total_energy.state == "437.7"
+    assert photovoltaic_total_energy.attributes[CONF_UNIT_OF_MEASUREMENT] == UnitOfEnergy.KILO_WATT_HOUR
+    assert photovoltaic_total_energy.attributes[ATTR_STATE_CLASS] == SensorStateClass.TOTAL_INCREASING
+    assert photovoltaic_total_energy.attributes[CONF_DEVICE_CLASS] == SensorDeviceClass.ENERGY
+    assert photovoltaic_total_energy.attributes[ATTR_FRIENDLY_NAME] == "Photovoltaic Total energy"
+
+
+@pytest.mark.usefixtures("entity_registry_enabled_by_default")
+async def test_photovoltaic_sensors_translated(
+    hass: HomeAssistant,
+    config_entry: MockConfigEntry,
+    fake_api: FakeKebaKeEnergyAPI,
+) -> None:
+    """Test photovoltaic sensors translations."""
+    fake_api.responses = [MULTIPLE_POSITIONS_RESPONSE, get_multi_positions_data_response()]
+    fake_api.register_requests(config_entry.data[CONF_HOST])
+
+    hass.config.language = "de"
+    await setup_integration(hass, config_entry)
+
+    photovoltaic_excess_power: State | None = hass.states.get(
+        "sensor.keba_keenergy_12345678_photovoltaic_excess_power",
+    )
+    assert isinstance(photovoltaic_excess_power, State)
+    assert photovoltaic_excess_power.attributes[ATTR_FRIENDLY_NAME] == "Photovoltaik Überschussleistung"
+
+    photovoltaic_daily_energy: State | None = hass.states.get(
+        "sensor.keba_keenergy_12345678_photovoltaic_daily_energy",
+    )
+    assert isinstance(photovoltaic_daily_energy, State)
+    assert photovoltaic_daily_energy.attributes[ATTR_FRIENDLY_NAME] == "Photovoltaik Tagesenergie"
+
+    photovoltaic_total_energy: State | None = hass.states.get(
+        "sensor.keba_keenergy_12345678_photovoltaic_total_energy",
+    )
+    assert isinstance(photovoltaic_total_energy, State)
+    assert photovoltaic_total_energy.state == "437.7"
+    assert photovoltaic_total_energy.attributes[CONF_DEVICE_CLASS] == SensorDeviceClass.ENERGY
+    assert photovoltaic_total_energy.attributes[ATTR_FRIENDLY_NAME] == "Photovoltaik Gesamtenergie"

@@ -42,6 +42,9 @@
         },
         "hot_water_tank": {
             "name": "Warmwasserspeicher{position}"
+        },
+        "photovoltaic": {
+            "name": "Photovoltaik{position}"
         }
     },
     "entity": {
@@ -274,6 +277,15 @@
             },
             "outdoor_temperature": {
                 "name": "Außentemperatur"
+            },
+            "pv_daily_energy": {
+                "name": "Tagesenergie"
+            },
+            "pv_excess_power": {
+                "name": "Überschussleistung"
+            },
+            "pv_total_energy": {
+                "name": "Gesamtenergie"
             },
             "return_flow_temperature": {
                 "name": "Rücklauftemperatur"
