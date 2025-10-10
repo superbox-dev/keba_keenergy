@@ -43,28 +43,33 @@ class FakeKebaKeEnergyAPI:
     def responses(self, value: list[list[dict[str, Any]]]) -> None:
         self._responses = value
 
-    def register_requests(self, host: str, /) -> None:
+    def register_auth_request(self, host: str, /, *, status: int = 200, exc: Exception | None = None):
+        self.aioclient_mock.get(f"http://{host}", status=status, exc=exc)
+
+    def register_requests(self, host: str, /, *, ssl: bool = False) -> None:
+        schema: str = "https" if ssl else "http"
+
         self.aioclient_mock.post(
-            f"http://{host}/deviceControl?action=getDeviceInfo",
+            f"{schema}://{host}/deviceControl?action=getDeviceInfo",
             text=json.dumps(DEVICE_INFO_RESPONSE),
             headers={"Content-Type": "application/json;charset=utf-8"},
         )
 
         self.aioclient_mock.post(
-            f"http://{host}/swupdate?action=getSystemInstalled",
+            f"{schema}://{host}/swupdate?action=getSystemInstalled",
             text=json.dumps(SYSTEM_RESPONSE),
             headers={"Content-Type": "application/json;charset=utf-8"},
         )
 
         self.aioclient_mock.post(
-            f"http://{host}/var/readWriteVars",
+            f"{schema}://{host}/var/readWriteVars",
             text="[{}]",
             params={"action": "set"},
             headers={"Content-Type": "application/json;charset=utf-8"},
         )
 
         self.aioclient_mock.post(
-            f"http://{host}/var/readWriteVars",
+            f"{schema}://{host}/var/readWriteVars",
             side_effect=self._add_sideeffect,
         )
 
