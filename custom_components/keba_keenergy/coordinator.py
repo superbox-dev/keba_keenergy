@@ -130,6 +130,7 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
                     System.HEAT_CIRCUIT_NUMBERS,
                     System.HEAT_PUMP_NUMBERS,
                     System.HOT_WATER_TANK_NUMBERS,
+                    System.EXTERNAL_HEAT_SOURCES_NUMBERS,
                     System.OUTDOOR_TEMPERATURE,
                     System.OPERATING_MODE,
                 ],
