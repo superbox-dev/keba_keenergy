@@ -751,6 +751,14 @@ SYSTEM_RESPONSE: dict[str, str] = {
     "version": "2.2.2",
 }
 
+SYSTEM_HAS_PHOTOVOLTAIC: str = """
+    {
+        "name": "APPL.CtrlAppl.sParam.options.hasPhotovoltaics",
+        "attributes": {"longText": "With photovoltaics"},
+        "value": "%s"
+    }
+"""
+
 DEFAULT_POSITION_RESPONSE: list[dict[str, Any]] = [
     json.loads(SYSTEM_HEAT_PUMP_NUMBERS % "1"),
     json.loads(SYSTEM_HEAT_CIRCUIT_NUMBERS % "1"),
@@ -836,6 +844,7 @@ DEFAULT_POSITION_DATA_RESPONSE: list[dict[str, Any]] = [
     json.loads(SYSTEM_EXTERNAL_HEAT_SOURCE_NUMBERS % "1"),
     SYSTEM_OUTDOOR_TEMPERATURE,
     SYSTEM_OPERATING_MODE,
+    json.loads(SYSTEM_HAS_PHOTOVOLTAIC % "true"),
 ]
 
 ENTITY_UPDATED_DATA_RESPONSE: list[dict[str, Any]] = [
@@ -904,6 +913,7 @@ ENTITY_UPDATED_DATA_RESPONSE: list[dict[str, Any]] = [
     json.loads(SYSTEM_EXTERNAL_HEAT_SOURCE_NUMBERS % "1"),
     SYSTEM_OUTDOOR_TEMPERATURE,
     SYSTEM_OPERATING_MODE,
+    json.loads(SYSTEM_HAS_PHOTOVOLTAIC % "true"),
 ]
 
 HEAT_CIRCUIT_OPERATION_MODE_3_DATA_RESPONSE: list[dict[str, Any]] = [
@@ -945,6 +955,7 @@ HEAT_CIRCUIT_OPERATION_MODE_3_DATA_RESPONSE: list[dict[str, Any]] = [
     json.loads(SYSTEM_EXTERNAL_HEAT_SOURCE_NUMBERS % "1"),
     SYSTEM_OUTDOOR_TEMPERATURE,
     SYSTEM_OPERATING_MODE,
+    json.loads(SYSTEM_HAS_PHOTOVOLTAIC % "true"),
 ]
 
 HEAT_CIRCUIT_OPERATION_MODE_4_DATA_RESPONSE: list[dict[str, Any]] = [
@@ -986,6 +997,7 @@ HEAT_CIRCUIT_OPERATION_MODE_4_DATA_RESPONSE: list[dict[str, Any]] = [
     json.loads(SYSTEM_EXTERNAL_HEAT_SOURCE_NUMBERS % "1"),
     SYSTEM_OUTDOOR_TEMPERATURE,
     SYSTEM_OPERATING_MODE,
+    json.loads(SYSTEM_HAS_PHOTOVOLTAIC % "false"),
 ]
 
 
@@ -1056,4 +1068,5 @@ def get_multi_positions_data_response(has_passive_cooling: str = "false") -> lis
         json.loads(SYSTEM_EXTERNAL_HEAT_SOURCE_NUMBERS % "1"),
         SYSTEM_OUTDOOR_TEMPERATURE,
         SYSTEM_OPERATING_MODE,
+        json.loads(SYSTEM_HAS_PHOTOVOLTAIC % "true"),
     ]

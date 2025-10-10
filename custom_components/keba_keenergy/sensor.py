@@ -13,6 +13,7 @@ from homeassistant.components.sensor import SensorEntityDescription
 from homeassistant.components.sensor import SensorStateClass
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import PERCENTAGE
+from homeassistant.const import STATE_OFF
 from homeassistant.const import UnitOfEnergy
 from homeassistant.const import UnitOfPower
 from homeassistant.const import UnitOfPressure
@@ -536,7 +537,11 @@ async def async_setup_entry(
     # Loop over all device data and add an index to the sensor
     # if there is more than one device of the same type
     # e.g. hot water tank, heat circuit or heat pump.
+
     for section_id, section_data in coordinator.data.items():
+        if section_id == SectionPrefix.PHOTOVOLTAIC and coordinator.has_photovoltaics() == STATE_OFF:
+            continue
+
         for description in SENSOR_TYPES.get(section_id, {}):
             for key, values in section_data.items():
                 if key == description.key:

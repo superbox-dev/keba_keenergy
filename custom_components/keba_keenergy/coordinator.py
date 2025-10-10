@@ -140,6 +140,7 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
                     System.EXTERNAL_HEAT_SOURCE_NUMBERS,
                     System.OUTDOOR_TEMPERATURE,
                     System.OPERATING_MODE,
+                    System.HAS_PHOTOVOLTAICS,
                 ],
             )
         except APIError as error:
@@ -201,6 +202,11 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
         """Return number of external heat sources."""
         data: Value = cast("Value", self.data[SectionPrefix.SYSTEM]["external_heat_source_numbers"])
         return int(data["value"])
+
+    def has_photovoltaics(self) -> str:
+        """Check if photovoltaics is available."""
+        data: Value = cast("Value", self.data[SectionPrefix.SYSTEM]["has_photovoltaics"])
+        return str(data["value"])
 
     def has_room_temperature(self, *, index: int) -> str:
         """Check if room temperature sensor is available."""
