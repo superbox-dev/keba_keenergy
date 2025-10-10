@@ -43,7 +43,7 @@ class FakeKebaKeEnergyAPI:
     def responses(self, value: list[list[dict[str, Any]]]) -> None:
         self._responses = value
 
-    def register_auth_request(self, host: str, /, *, status: int = 200, exc: Exception | None = None):
+    def register_auth_request(self, host: str, /, *, status: int = 200, exc: Exception | None = None) -> None:
         self.aioclient_mock.get(f"http://{host}", status=status, exc=exc)
 
     def register_requests(self, host: str, /, *, ssl: bool = False) -> None:

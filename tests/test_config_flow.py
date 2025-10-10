@@ -165,7 +165,10 @@ async def test_user_flow_authentication_cannot_connect(
     ],
 )
 async def test_user_flow_cannot_connect(
-    hass: HomeAssistant, fake_api: FakeKebaKeEnergyAPI, side_effect: Exception, expected_error: str
+    hass: HomeAssistant,
+    fake_api: FakeKebaKeEnergyAPI,
+    side_effect: Exception,
+    expected_error: str,
 ) -> None:
     """Test when zeroconf gets an exception from the API."""
     fake_api.register_auth_request("10.0.0.100")
@@ -208,7 +211,8 @@ async def test_zeroconf_flow(
     assert not result_discovery_confirm["errors"]
 
     result_create_entry: ConfigFlowResult = await hass.config_entries.flow.async_configure(
-        result_discovery_confirm["flow_id"], user_input={}
+        result_discovery_confirm["flow_id"],
+        user_input={},
     )
 
     assert result_create_entry["type"] == FlowResultType.CREATE_ENTRY
@@ -233,7 +237,7 @@ async def test_zeroconf_flow_authentication(
     )
     assert result_auth_step["step_id"] == "auth"
     assert result_auth_step["type"] == FlowResultType.FORM
-    assert result_auth_step["description_placeholders"] == None
+    assert result_auth_step["description_placeholders"] is None
     assert not result_auth_step["errors"]
 
     result_create_entry: ConfigFlowResult = await hass.config_entries.flow.async_configure(
@@ -294,7 +298,10 @@ async def test_zeroconf_flow_already_setup(
     ],
 )
 async def test_zeroconf_cannot_connect(
-    hass: HomeAssistant, fake_api: FakeKebaKeEnergyAPI, side_effect: Exception, expected_error: str
+    hass: HomeAssistant,
+    fake_api: FakeKebaKeEnergyAPI,
+    side_effect: Exception,
+    expected_error: str,
 ) -> None:
     """Test when zeroconf gets an exception from the API."""
     fake_api.register_auth_request("ap4400.local")
@@ -307,7 +314,8 @@ async def test_zeroconf_cannot_connect(
 
     with patch.object(SystemEndpoints, "get_device_info", side_effect=side_effect):
         result_discovery_confirm_2: ConfigFlowResult = await hass.config_entries.flow.async_configure(
-            result_discovery_confirm_1["flow_id"], user_input={}
+            result_discovery_confirm_1["flow_id"],
+            user_input={},
         )
 
     assert result_discovery_confirm_2["type"] == FlowResultType.FORM
