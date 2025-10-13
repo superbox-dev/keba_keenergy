@@ -436,6 +436,7 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription, ...]] = {
         KebaKeEnergySensorEntityDescription(
             key="operating_time",
             native_unit_of_measurement=UnitOfTime.HOURS,
+            device_class=SensorDeviceClass.DURATION,
             state_class=SensorStateClass.TOTAL_INCREASING,
             translation_key="operating_hours",
             value=lambda data: round(int(data) / 3600, 2),
@@ -522,6 +523,7 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription, ...]] = {
         KebaKeEnergySensorEntityDescription(
             key="operating_time",
             native_unit_of_measurement=UnitOfTime.HOURS,
+            device_class=SensorDeviceClass.DURATION,
             state_class=SensorStateClass.TOTAL_INCREASING,
             translation_key="operating_hours",
             value=lambda data: round(int(data) / 3600, 2),

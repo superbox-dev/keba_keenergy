@@ -464,6 +464,7 @@ async def test_heat_pump_sensors(
     assert heat_pump_operating_time.state == "1058.06"
     assert heat_pump_operating_time.attributes[CONF_UNIT_OF_MEASUREMENT] == UnitOfTime.HOURS
     assert heat_pump_operating_time.attributes[ATTR_STATE_CLASS] == SensorStateClass.TOTAL_INCREASING
+    assert heat_pump_operating_time.attributes[CONF_DEVICE_CLASS] == SensorDeviceClass.DURATION
     assert heat_pump_operating_time.attributes[ATTR_FRIENDLY_NAME] == "Heat pump Operating time"
 
     heat_pump_max_runtime: State | None = hass.states.get(
@@ -1035,6 +1036,7 @@ async def test_external_heat_source_sensors(
     assert isinstance(external_heat_source_operating_time_2, State)
     assert external_heat_source_operating_time_2.state == "225.83"
     assert external_heat_source_operating_time_2.attributes[CONF_UNIT_OF_MEASUREMENT] == UnitOfTime.HOURS
+    assert external_heat_source_operating_time_2.attributes[CONF_DEVICE_CLASS] == SensorDeviceClass.DURATION
     assert external_heat_source_operating_time_2.attributes[ATTR_STATE_CLASS] == SensorStateClass.TOTAL_INCREASING
     assert (
         external_heat_source_operating_time_2.attributes[ATTR_FRIENDLY_NAME] == "External heat source 2 Operating time"
