@@ -38,6 +38,13 @@ BINARY_SENSOR_TYPES: dict[str, tuple[BinarySensorEntityDescription, ...]] = {
             icon="mdi:fire",
         ),
     ),
+    SectionPrefix.EXTERNAL_HEAT_SOURCE: (
+        BinarySensorEntityDescription(
+            key="heat_request",
+            translation_key="heat_request",
+            icon="mdi:fire",
+        ),
+    ),
 }
 
 

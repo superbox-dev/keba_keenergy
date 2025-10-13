@@ -24,7 +24,7 @@ async def test_load_entry(
     await setup_integration(hass, config_entry)
 
     assert config_entry.state is ConfigEntryState.LOADED
-    assert hass.states.async_entity_ids_count() == 104
+    assert hass.states.async_entity_ids_count() == 115
 
     assert set(hass.states.async_entity_ids()) == {
         "binary_sensor.keba_keenergy_12345678_heat_pump_heat_request",
@@ -32,6 +32,8 @@ async def test_load_entry(
         "binary_sensor.keba_keenergy_12345678_hot_water_tank_heat_request_2",
         "binary_sensor.keba_keenergy_12345678_hot_water_tank_hot_water_flow_1",
         "binary_sensor.keba_keenergy_12345678_hot_water_tank_hot_water_flow_2",
+        "binary_sensor.keba_keenergy_12345678_external_heat_source_heat_request_1",
+        "binary_sensor.keba_keenergy_12345678_external_heat_source_heat_request_2",
         "climate.keba_keenergy_12345678_1",
         "climate.keba_keenergy_12345678_2",
         "select.keba_keenergy_12345678_external_heat_source_operating_mode_1",
@@ -57,6 +59,12 @@ async def test_load_entry(
         "sensor.keba_keenergy_12345678_external_heat_source_operating_mode_2",
         "sensor.keba_keenergy_12345678_external_heat_source_target_temperature_1",
         "sensor.keba_keenergy_12345678_external_heat_source_target_temperature_2",
+        "sensor.keba_keenergy_12345678_external_heat_source_operating_time_1",
+        "sensor.keba_keenergy_12345678_external_heat_source_operating_time_2",
+        "sensor.keba_keenergy_12345678_external_heat_source_max_runtime_1",
+        "sensor.keba_keenergy_12345678_external_heat_source_max_runtime_2",
+        "sensor.keba_keenergy_12345678_external_heat_source_activation_counter_1",
+        "sensor.keba_keenergy_12345678_external_heat_source_activation_counter_2",
         "sensor.keba_keenergy_12345678_heat_circuit_dew_point_1",
         "sensor.keba_keenergy_12345678_heat_circuit_dew_point_2",
         "sensor.keba_keenergy_12345678_heat_circuit_flow_temperature_1",
@@ -114,6 +122,9 @@ async def test_load_entry(
         "sensor.keba_keenergy_12345678_heat_pump_total_energy_consumption",
         "sensor.keba_keenergy_12345678_heat_pump_total_spf",
         "sensor.keba_keenergy_12345678_heat_pump_total_thermal_energy",
+        "sensor.keba_keenergy_12345678_heat_pump_operating_time",
+        "sensor.keba_keenergy_12345678_heat_pump_max_runtime",
+        "sensor.keba_keenergy_12345678_heat_pump_activation_counter",
         "sensor.keba_keenergy_12345678_hot_water_tank_current_temperature_1",
         "sensor.keba_keenergy_12345678_hot_water_tank_current_temperature_2",
         "sensor.keba_keenergy_12345678_hot_water_tank_operating_mode_1",

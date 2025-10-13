@@ -14,6 +14,7 @@ from homeassistant.const import UnitOfEnergy
 from homeassistant.const import UnitOfPower
 from homeassistant.const import UnitOfPressure
 from homeassistant.const import UnitOfTemperature
+from homeassistant.const import UnitOfTime
 from homeassistant.core import HomeAssistant
 from homeassistant.core import State
 from pytest_homeassistant_custom_component.common import MockConfigEntry
@@ -456,6 +457,33 @@ async def test_heat_pump_sensors(
     assert heat_pump_total_spf.attributes[ATTR_STATE_CLASS] == SensorStateClass.MEASUREMENT
     assert heat_pump_total_spf.attributes[ATTR_FRIENDLY_NAME] == "Heat pump Total SPF"
 
+    heat_pump_operating_time: State | None = hass.states.get(
+        "sensor.keba_keenergy_12345678_heat_pump_operating_time",
+    )
+    assert isinstance(heat_pump_operating_time, State)
+    assert heat_pump_operating_time.state == "1058.06"
+    assert heat_pump_operating_time.attributes[CONF_UNIT_OF_MEASUREMENT] == UnitOfTime.HOURS
+    assert heat_pump_operating_time.attributes[ATTR_STATE_CLASS] == SensorStateClass.TOTAL_INCREASING
+    assert heat_pump_operating_time.attributes[ATTR_FRIENDLY_NAME] == "Heat pump Operating time"
+
+    heat_pump_max_runtime: State | None = hass.states.get(
+        "sensor.keba_keenergy_12345678_heat_pump_max_runtime",
+    )
+    assert isinstance(heat_pump_max_runtime, State)
+    assert heat_pump_max_runtime.state == "167.33"
+    assert heat_pump_max_runtime.attributes[CONF_UNIT_OF_MEASUREMENT] == UnitOfTime.HOURS
+    assert heat_pump_max_runtime.attributes[ATTR_STATE_CLASS] == SensorStateClass.MEASUREMENT
+    assert heat_pump_max_runtime.attributes[CONF_DEVICE_CLASS] == SensorDeviceClass.DURATION
+    assert heat_pump_max_runtime.attributes[ATTR_FRIENDLY_NAME] == "Heat pump Maximum runtime"
+
+    heat_pump_activation_counter: State | None = hass.states.get(
+        "sensor.keba_keenergy_12345678_heat_pump_activation_counter",
+    )
+    assert isinstance(heat_pump_activation_counter, State)
+    assert heat_pump_activation_counter.state == "477"
+    assert heat_pump_activation_counter.attributes[ATTR_STATE_CLASS] == SensorStateClass.TOTAL_INCREASING
+    assert heat_pump_activation_counter.attributes[ATTR_FRIENDLY_NAME] == "Heat pump Activation counter"
+
 
 @pytest.mark.usefixtures("entity_registry_enabled_by_default")
 async def test_heat_pump_sensors_translations(
@@ -627,6 +655,24 @@ async def test_heat_pump_sensors_translations(
     heat_pump_total_spf: State | None = hass.states.get("sensor.keba_keenergy_12345678_heat_pump_total_spf")
     assert isinstance(heat_pump_total_spf, State)
     assert heat_pump_total_spf.attributes[ATTR_FRIENDLY_NAME] == "Wärmepumpe JAZ gesamt"
+
+    heat_pump_operating_time: State | None = hass.states.get(
+        "sensor.keba_keenergy_12345678_heat_pump_operating_time",
+    )
+    assert isinstance(heat_pump_operating_time, State)
+    assert heat_pump_operating_time.attributes[ATTR_FRIENDLY_NAME] == "Wärmepumpe Betriebsstunden"
+
+    heat_pump_max_runtime: State | None = hass.states.get(
+        "sensor.keba_keenergy_12345678_heat_pump_max_runtime",
+    )
+    assert isinstance(heat_pump_max_runtime, State)
+    assert heat_pump_max_runtime.attributes[ATTR_FRIENDLY_NAME] == "Wärmepumpe Maximale Laufzeit"
+
+    heat_pump_activation_counter: State | None = hass.states.get(
+        "sensor.keba_keenergy_12345678_heat_pump_activation_counter",
+    )
+    assert isinstance(heat_pump_activation_counter, State)
+    assert heat_pump_activation_counter.attributes[ATTR_FRIENDLY_NAME] == "Wärmepumpe Einschaltvorgänge"
 
 
 @pytest.mark.usefixtures("entity_registry_enabled_by_default")
@@ -983,6 +1029,38 @@ async def test_external_heat_source_sensors(
         == "External heat source 1 Target temperature"
     )
 
+    external_heat_source_operating_time_2: State | None = hass.states.get(
+        "sensor.keba_keenergy_12345678_external_heat_source_operating_time_2",
+    )
+    assert isinstance(external_heat_source_operating_time_2, State)
+    assert external_heat_source_operating_time_2.state == "225.83"
+    assert external_heat_source_operating_time_2.attributes[CONF_UNIT_OF_MEASUREMENT] == UnitOfTime.HOURS
+    assert external_heat_source_operating_time_2.attributes[ATTR_STATE_CLASS] == SensorStateClass.TOTAL_INCREASING
+    assert (
+        external_heat_source_operating_time_2.attributes[ATTR_FRIENDLY_NAME] == "External heat source 2 Operating time"
+    )
+
+    external_heat_source_max_runtime_1: State | None = hass.states.get(
+        "sensor.keba_keenergy_12345678_external_heat_source_max_runtime_1",
+    )
+    assert isinstance(external_heat_source_max_runtime_1, State)
+    assert external_heat_source_max_runtime_1.state == "2.26"
+    assert external_heat_source_max_runtime_1.attributes[CONF_UNIT_OF_MEASUREMENT] == UnitOfTime.HOURS
+    assert external_heat_source_max_runtime_1.attributes[ATTR_STATE_CLASS] == SensorStateClass.MEASUREMENT
+    assert external_heat_source_max_runtime_1.attributes[CONF_DEVICE_CLASS] == SensorDeviceClass.DURATION
+    assert external_heat_source_max_runtime_1.attributes[ATTR_FRIENDLY_NAME] == "External heat source 1 Maximum runtime"
+
+    external_heat_source_activation_counter_1: State | None = hass.states.get(
+        "sensor.keba_keenergy_12345678_external_heat_source_activation_counter_1",
+    )
+    assert isinstance(external_heat_source_activation_counter_1, State)
+    assert external_heat_source_activation_counter_1.state == "812"
+    assert external_heat_source_activation_counter_1.attributes[ATTR_STATE_CLASS] == SensorStateClass.TOTAL_INCREASING
+    assert (
+        external_heat_source_activation_counter_1.attributes[ATTR_FRIENDLY_NAME]
+        == "External heat source 1 Activation counter"
+    )
+
 
 @pytest.mark.usefixtures("entity_registry_enabled_by_default")
 async def test_external_heat_source_sensors_translated(
@@ -1010,6 +1088,31 @@ async def test_external_heat_source_sensors_translated(
     assert (
         external_heat_source_target_temperature_1.attributes[ATTR_FRIENDLY_NAME]
         == "Externe Wärmequelle 1 Soll-Temperatur"
+    )
+
+    external_heat_source_operating_time_1: State | None = hass.states.get(
+        "sensor.keba_keenergy_12345678_external_heat_source_operating_time_1",
+    )
+    assert isinstance(external_heat_source_operating_time_1, State)
+    assert (
+        external_heat_source_operating_time_1.attributes[ATTR_FRIENDLY_NAME] == "Externe Wärmequelle 1 Betriebsstunden"
+    )
+
+    external_heat_source_max_runtime_1: State | None = hass.states.get(
+        "sensor.keba_keenergy_12345678_external_heat_source_max_runtime_1",
+    )
+    assert isinstance(external_heat_source_max_runtime_1, State)
+    assert (
+        external_heat_source_max_runtime_1.attributes[ATTR_FRIENDLY_NAME] == "Externe Wärmequelle 1 Maximale Laufzeit"
+    )
+
+    external_heat_source_activation_counter_1: State | None = hass.states.get(
+        "sensor.keba_keenergy_12345678_external_heat_source_activation_counter_1",
+    )
+    assert isinstance(external_heat_source_activation_counter_1, State)
+    assert (
+        external_heat_source_activation_counter_1.attributes[ATTR_FRIENDLY_NAME]
+        == "Externe Wärmequelle 1 Einschaltvorgänge"
     )
 
 

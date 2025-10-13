@@ -18,6 +18,7 @@ from homeassistant.const import UnitOfEnergy
 from homeassistant.const import UnitOfPower
 from homeassistant.const import UnitOfPressure
 from homeassistant.const import UnitOfTemperature
+from homeassistant.const import UnitOfTime
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.typing import StateType
@@ -432,6 +433,29 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription, ...]] = {
             translation_key="total_spf",
             value=lambda data: cast("float", data),
         ),
+        KebaKeEnergySensorEntityDescription(
+            key="operating_time",
+            native_unit_of_measurement=UnitOfTime.HOURS,
+            state_class=SensorStateClass.TOTAL_INCREASING,
+            translation_key="operating_hours",
+            value=lambda data: round(int(data) / 3600, 2),
+        ),
+        KebaKeEnergySensorEntityDescription(
+            entity_registry_enabled_default=False,
+            key="max_runtime",
+            native_unit_of_measurement=UnitOfTime.HOURS,
+            device_class=SensorDeviceClass.DURATION,
+            state_class=SensorStateClass.MEASUREMENT,
+            translation_key="max_runtime",
+            value=lambda data: round(int(data) / 3600, 2),
+        ),
+        KebaKeEnergySensorEntityDescription(
+            entity_registry_enabled_default=False,
+            key="activation_counter",
+            state_class=SensorStateClass.TOTAL_INCREASING,
+            translation_key="activation_counter",
+            value=lambda data: cast("int", data),
+        ),
     ),
     SectionPrefix.HOT_WATER_TANK: (
         KebaKeEnergySensorEntityDescription(
@@ -494,6 +518,29 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription, ...]] = {
             state_class=SensorStateClass.MEASUREMENT,
             translation_key="target_temperature",
             value=lambda data: cast("float", data),
+        ),
+        KebaKeEnergySensorEntityDescription(
+            key="operating_time",
+            native_unit_of_measurement=UnitOfTime.HOURS,
+            state_class=SensorStateClass.TOTAL_INCREASING,
+            translation_key="operating_hours",
+            value=lambda data: round(int(data) / 3600, 2),
+        ),
+        KebaKeEnergySensorEntityDescription(
+            entity_registry_enabled_default=False,
+            key="max_runtime",
+            native_unit_of_measurement=UnitOfTime.HOURS,
+            device_class=SensorDeviceClass.DURATION,
+            state_class=SensorStateClass.MEASUREMENT,
+            translation_key="max_runtime",
+            value=lambda data: round(int(data) / 3600, 2),
+        ),
+        KebaKeEnergySensorEntityDescription(
+            entity_registry_enabled_default=False,
+            key="activation_counter",
+            state_class=SensorStateClass.TOTAL_INCREASING,
+            translation_key="activation_counter",
+            value=lambda data: cast("int", data),
         ),
     ),
     SectionPrefix.PHOTOVOLTAIC: (

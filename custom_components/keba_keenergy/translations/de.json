@@ -145,6 +145,9 @@
             }
         },
         "sensor": {
+            "activation_counter": {
+                "name": "Einschaltvorgänge"
+            },
             "circulation_pump": {
                 "name": "Umwälzpumpe"
             },
@@ -234,6 +237,12 @@
             },
             "low_pressure": {
                 "name": "Niederdruck"
+            },
+            "max_runtime": {
+                "name": "Maximale Laufzeit"
+            },
+            "operating_hours": {
+                "name": "Betriebsstunden"
             },
             "operating_mode_1": {
                 "name": "Betriebsart",

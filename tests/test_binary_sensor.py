@@ -60,6 +60,13 @@ async def test_binary_sensors(
     assert heat_pump_heat_request.state == STATE_OFF
     assert heat_pump_heat_request.attributes[ATTR_FRIENDLY_NAME] == "Heat pump Heat request"
 
+    external_heat_source_heat_request_1: State | None = hass.states.get(
+        "binary_sensor.keba_keenergy_12345678_external_heat_source_heat_request_1",
+    )
+    assert isinstance(external_heat_source_heat_request_1, State)
+    assert external_heat_source_heat_request_1.state == STATE_ON
+    assert external_heat_source_heat_request_1.attributes[ATTR_FRIENDLY_NAME] == "External heat source 1 Heat request"
+
 
 @pytest.mark.usefixtures("entity_registry_enabled_by_default")
 async def test_binary_sensors_translations(
@@ -103,3 +110,9 @@ async def test_binary_sensors_translations(
     )
     assert isinstance(heat_pump_heat_request, State)
     assert heat_pump_heat_request.attributes[ATTR_FRIENDLY_NAME] == "Wärmepumpe Heizanforderung"
+
+    external_heat_source_heat_request_1: State | None = hass.states.get(
+        "binary_sensor.keba_keenergy_12345678_external_heat_source_heat_request_1",
+    )
+    assert isinstance(external_heat_source_heat_request_1, State)
+    assert external_heat_source_heat_request_1.attributes[ATTR_FRIENDLY_NAME] == "Externe Wärmequelle 1 Heizanforderung"

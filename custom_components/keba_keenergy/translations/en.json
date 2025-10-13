@@ -138,6 +138,9 @@
             }
         },
         "sensor": {
+            "activation_counter": {
+                "name": "Activation counter"
+            },
             "circulation_pump": {
                 "name": "Circulation pump"
             },
@@ -227,6 +230,12 @@
             },
             "low_pressure": {
                 "name": "Low pressure"
+            },
+            "max_runtime": {
+                "name": "Maximum runtime"
+            },
+            "operating_hours": {
+                "name": "Operating time"
             },
             "operating_mode_1": {
                 "name": "Operating mode",

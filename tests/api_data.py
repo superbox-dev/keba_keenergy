@@ -29,6 +29,51 @@ EXTERNAL_HEAT_SOURCE_TARGET_TEMPERATURE: str = """
     }
 """
 
+EXTERNAL_HEAT_SOURCE_HEAT_REQUEST: str = """
+    {
+        "name": "APPL.CtrlAppl.sParam.extHeatSource[%s].DO.values.setValueB",
+        "attributes": {
+            "longText": "Dig. request"
+        },
+        "value": "%s"
+    }
+"""
+
+EXTERNAL_HEAT_SOURCE_OPERATING_TIME: str = """
+    {
+        "name": "APPL.CtrlAppl.sParam.extHeatSource[%s].DO.operationalData.operationalTimeS",
+        "attributes": {
+            "formatId": "fmt6p0",
+            "longText": "Operational hrs.",
+            "unitId": "TimeHour"
+        },
+        "value": "%s"
+    }
+"""
+
+EXTERNAL_HEAT_SOURCE_MAX_RUNTIME: str = """
+    {
+        "name": "APPL.CtrlAppl.sParam.extHeatSource[%s].DO.operationalData.maxRunTimeS",
+        "attributes": {
+            "formatId": "fmt6p1",
+            "longText": "Max run-time",
+            "unitId": "TimeHour"
+        },
+        "value": "%s"
+    }
+"""
+
+EXTERNAL_HEAT_SOURCE_ACTIVATION_COUNTER: str = """
+    {
+        "name": "APPL.CtrlAppl.sParam.extHeatSource[%s].DO.operationalData.activationCounter",
+        "attributes": {
+            "formatId": "fmt6p0",
+            "longText": "Turn-on cycles"
+        },
+        "value": "%s"
+    }
+"""
+
 HEAT_CIRCUIT_HAS_ROOM_TEMPERATURE: str = """
     {
         "name": "APPL.CtrlAppl.sParam.options.heatCircuit[%s].hasRoomTemp",
@@ -516,6 +561,39 @@ HEAT_PUMP_TOTAL_SPF: dict[str, Any] = {
     "value": "2.43",
 }
 
+
+HEAT_PUMP_OPERATING_TIME: dict[str, Any] = {
+    "name": "APPL.CtrlAppl.sParam.heatpump[0].operationalData.operationalTimeS",
+    "attributes": {
+        "formatId": "fmt6p0",
+        "longText": "Operational hrs.",
+        "unitId": "TimeHour",
+    },
+    "value": "3809028",
+}
+
+
+HEAT_PUMP_MAX_RUNTIME: dict[str, Any] = {
+    "name": "APPL.CtrlAppl.sParam.heatpump[0].operationalData.maxRunTimeS",
+    "attributes": {
+        "formatId": "fmt6p1",
+        "longText": "Max run-time",
+        "unitId": "TimeHour",
+    },
+    "value": "602403",
+}
+
+
+HEAT_PUMP_ACTIVATION_COUNTER: dict[str, Any] = {
+    "name": "APPL.CtrlAppl.sParam.heatpump[0].operationalData.activationCounter",
+    "attributes": {
+        "formatId": "fmt6p0",
+        "longText": "Turn-on cycles",
+    },
+    "value": "477",
+}
+
+
 HEAT_PUMP_HAS_PASSIVE_COOLING: str = """
     {
         "name": "APPL.CtrlAppl.sParam.options.heatpump[0].hasPassiveCooling",
@@ -525,6 +603,7 @@ HEAT_PUMP_HAS_PASSIVE_COOLING: str = """
         "value": "%s"
     }
 """
+
 
 HOT_WATER_TANK_HEAT_REQUEST: str = """
     {
@@ -803,11 +882,18 @@ HEAT_PUMP_DATA: list[dict[str, Any]] = [
     HEAT_PUMP_TOTAL_THERMAL_ENERGY,
     HEAT_PUMP_TOTAL_ENERGY_CONSUMPTION,
     HEAT_PUMP_TOTAL_SPF,
+    HEAT_PUMP_OPERATING_TIME,
+    HEAT_PUMP_MAX_RUNTIME,
+    HEAT_PUMP_ACTIVATION_COUNTER,
 ]
 
 DEFAULT_POSITION_DATA_RESPONSE: list[dict[str, Any]] = [
     json.loads(EXTERNAL_HEAT_SOURCE_OPERATING_MODE % ("0", "1")),
     json.loads(EXTERNAL_HEAT_SOURCE_TARGET_TEMPERATURE % ("0", "1")),
+    json.loads(EXTERNAL_HEAT_SOURCE_HEAT_REQUEST % ("0", "true")),
+    json.loads(EXTERNAL_HEAT_SOURCE_OPERATING_TIME % ("0", "812999")),
+    json.loads(EXTERNAL_HEAT_SOURCE_MAX_RUNTIME % ("0", "8129")),
+    json.loads(EXTERNAL_HEAT_SOURCE_ACTIVATION_COUNTER % ("0", "812")),
     json.loads(HEAT_CIRCUIT_HAS_ROOM_TEMPERATURE % ("0", "true")),
     json.loads(HEAT_CIRCUIT_HAS_ROOM_HUMIDITY % ("0", "true")),
     json.loads(HEAT_CIRCUIT_ROOM_TEMPERATURE % ("0", "22.42")),
@@ -852,6 +938,14 @@ ENTITY_UPDATED_DATA_RESPONSE: list[dict[str, Any]] = [
     json.loads(EXTERNAL_HEAT_SOURCE_OPERATING_MODE % ("1", "0")),
     json.loads(EXTERNAL_HEAT_SOURCE_TARGET_TEMPERATURE % ("0", "13")),
     json.loads(EXTERNAL_HEAT_SOURCE_TARGET_TEMPERATURE % ("1", "12")),
+    json.loads(EXTERNAL_HEAT_SOURCE_HEAT_REQUEST % ("0", "true")),
+    json.loads(EXTERNAL_HEAT_SOURCE_HEAT_REQUEST % ("1", "true")),
+    json.loads(EXTERNAL_HEAT_SOURCE_OPERATING_TIME % ("0", "812999")),
+    json.loads(EXTERNAL_HEAT_SOURCE_OPERATING_TIME % ("1", "812999")),
+    json.loads(EXTERNAL_HEAT_SOURCE_MAX_RUNTIME % ("0", "8129")),
+    json.loads(EXTERNAL_HEAT_SOURCE_MAX_RUNTIME % ("1", "8129")),
+    json.loads(EXTERNAL_HEAT_SOURCE_ACTIVATION_COUNTER % ("0", "812")),
+    json.loads(EXTERNAL_HEAT_SOURCE_ACTIVATION_COUNTER % ("1", "812")),
     json.loads(HEAT_CIRCUIT_HAS_ROOM_TEMPERATURE % ("0", "true")),
     json.loads(HEAT_CIRCUIT_HAS_ROOM_TEMPERATURE % ("1", "false")),
     json.loads(HEAT_CIRCUIT_HAS_ROOM_HUMIDITY % ("0", "true")),
@@ -919,6 +1013,10 @@ ENTITY_UPDATED_DATA_RESPONSE: list[dict[str, Any]] = [
 HEAT_CIRCUIT_OPERATION_MODE_3_DATA_RESPONSE: list[dict[str, Any]] = [
     json.loads(EXTERNAL_HEAT_SOURCE_OPERATING_MODE % ("0", "1")),
     json.loads(EXTERNAL_HEAT_SOURCE_TARGET_TEMPERATURE % ("0", "23")),
+    json.loads(EXTERNAL_HEAT_SOURCE_HEAT_REQUEST % ("0", "true")),
+    json.loads(EXTERNAL_HEAT_SOURCE_OPERATING_TIME % ("0", "812999")),
+    json.loads(EXTERNAL_HEAT_SOURCE_MAX_RUNTIME % ("0", "8129")),
+    json.loads(EXTERNAL_HEAT_SOURCE_ACTIVATION_COUNTER % ("0", "812")),
     json.loads(HEAT_CIRCUIT_HAS_ROOM_TEMPERATURE % ("0", "true")),
     json.loads(HEAT_CIRCUIT_HAS_ROOM_HUMIDITY % ("0", "true")),
     json.loads(HEAT_CIRCUIT_ROOM_TEMPERATURE % ("0", "22.42")),
@@ -961,6 +1059,10 @@ HEAT_CIRCUIT_OPERATION_MODE_3_DATA_RESPONSE: list[dict[str, Any]] = [
 HEAT_CIRCUIT_OPERATION_MODE_4_DATA_RESPONSE: list[dict[str, Any]] = [
     json.loads(EXTERNAL_HEAT_SOURCE_OPERATING_MODE % ("0", "1")),
     json.loads(EXTERNAL_HEAT_SOURCE_TARGET_TEMPERATURE % ("0", "12.22")),
+    json.loads(EXTERNAL_HEAT_SOURCE_HEAT_REQUEST % ("0", "true")),
+    json.loads(EXTERNAL_HEAT_SOURCE_OPERATING_TIME % ("0", "812999")),
+    json.loads(EXTERNAL_HEAT_SOURCE_MAX_RUNTIME % ("0", "8129")),
+    json.loads(EXTERNAL_HEAT_SOURCE_ACTIVATION_COUNTER % ("0", "812")),
     json.loads(HEAT_CIRCUIT_HAS_ROOM_TEMPERATURE % ("0", "true")),
     json.loads(HEAT_CIRCUIT_HAS_ROOM_HUMIDITY % ("0", "true")),
     json.loads(HEAT_CIRCUIT_ROOM_TEMPERATURE % ("0", "22.42")),
@@ -1007,6 +1109,14 @@ def get_multi_positions_data_response(has_passive_cooling: str = "false") -> lis
         json.loads(EXTERNAL_HEAT_SOURCE_OPERATING_MODE % ("1", "1")),
         json.loads(EXTERNAL_HEAT_SOURCE_TARGET_TEMPERATURE % ("0", "17.23")),
         json.loads(EXTERNAL_HEAT_SOURCE_TARGET_TEMPERATURE % ("1", "17.23")),
+        json.loads(EXTERNAL_HEAT_SOURCE_HEAT_REQUEST % ("0", "true")),
+        json.loads(EXTERNAL_HEAT_SOURCE_HEAT_REQUEST % ("1", "true")),
+        json.loads(EXTERNAL_HEAT_SOURCE_OPERATING_TIME % ("0", "812999")),
+        json.loads(EXTERNAL_HEAT_SOURCE_OPERATING_TIME % ("1", "812999")),
+        json.loads(EXTERNAL_HEAT_SOURCE_MAX_RUNTIME % ("0", "8129")),
+        json.loads(EXTERNAL_HEAT_SOURCE_MAX_RUNTIME % ("1", "8129")),
+        json.loads(EXTERNAL_HEAT_SOURCE_ACTIVATION_COUNTER % ("0", "812")),
+        json.loads(EXTERNAL_HEAT_SOURCE_ACTIVATION_COUNTER % ("1", "812")),
         json.loads(HEAT_CIRCUIT_HAS_ROOM_TEMPERATURE % ("0", "true")),
         json.loads(HEAT_CIRCUIT_HAS_ROOM_TEMPERATURE % ("1", "false")),
         json.loads(HEAT_CIRCUIT_HAS_ROOM_HUMIDITY % ("0", "true")),
