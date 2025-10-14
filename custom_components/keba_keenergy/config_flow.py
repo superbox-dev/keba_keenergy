@@ -97,7 +97,7 @@ class KebaKeEnergyConfigFlow(ConfigFlow, domain=DOMAIN):
                     self.ssl = True
                     has_authentication = True
         except ClientError as error:
-            _LOGGER.error("Client error %s", error)
+            _LOGGER.exception("Client error %s", error)
             return None
 
         return has_authentication
@@ -203,8 +203,8 @@ class KebaKeEnergyConfigFlow(ConfigFlow, domain=DOMAIN):
         except InvalidAuthError:
             errors["base"] = "invalid_auth"
         except Exception:
-            _LOGGER.exception("Unexpected exception")
             errors["base"] = "unknown"
+            _LOGGER.exception("Unexpected exception")
 
         return errors
 
