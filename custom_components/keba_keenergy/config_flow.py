@@ -96,8 +96,8 @@ class KebaKeEnergyConfigFlow(ConfigFlow, domain=DOMAIN):
                 if response.status == HTTPStatus.UNAUTHORIZED:
                     self.ssl = True
                     has_authentication = True
-        except ClientError as error:
-            _LOGGER.exception("Client error %s", error)
+        except ClientError:
+            _LOGGER.exception("Client error")
             return None
 
         return has_authentication
