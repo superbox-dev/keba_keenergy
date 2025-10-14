@@ -92,7 +92,7 @@ class KebaKeEnergyConfigFlow(ConfigFlow, domain=DOMAIN):
         has_authentication: bool = False
 
         try:
-            async with session.get(f"http://{self.host}", allow_redirects=True) as response:
+            async with session.get(f"http://{self.host}", allow_redirects=True, ssl=False) as response:
                 if response.status == HTTPStatus.UNAUTHORIZED:
                     self.ssl = True
                     has_authentication = True
