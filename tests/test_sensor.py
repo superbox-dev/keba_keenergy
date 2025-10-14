@@ -356,7 +356,7 @@ async def test_heat_pump_sensors(
     assert isinstance(heat_pump_heating_energy, State)
     assert heat_pump_heating_energy.state == "8.43"
     assert heat_pump_heating_energy.attributes[CONF_UNIT_OF_MEASUREMENT] == UnitOfEnergy.KILO_WATT_HOUR
-    assert heat_pump_heating_energy.attributes[ATTR_STATE_CLASS] == SensorStateClass.TOTAL_INCREASING
+    assert heat_pump_heating_energy.attributes[ATTR_STATE_CLASS] == SensorStateClass.TOTAL
     assert heat_pump_heating_energy.attributes[CONF_DEVICE_CLASS] == SensorDeviceClass.ENERGY
     assert heat_pump_heating_energy.attributes[ATTR_FRIENDLY_NAME] == "Heat pump Heating energy"
 
@@ -366,7 +366,7 @@ async def test_heat_pump_sensors(
     assert isinstance(heat_pump_heating_energy_consumption, State)
     assert heat_pump_heating_energy_consumption.state == "7.33"
     assert heat_pump_heating_energy_consumption.attributes[CONF_UNIT_OF_MEASUREMENT] == UnitOfEnergy.KILO_WATT_HOUR
-    assert heat_pump_heating_energy_consumption.attributes[ATTR_STATE_CLASS] == SensorStateClass.TOTAL_INCREASING
+    assert heat_pump_heating_energy_consumption.attributes[ATTR_STATE_CLASS] == SensorStateClass.TOTAL
     assert heat_pump_heating_energy_consumption.attributes[CONF_DEVICE_CLASS] == SensorDeviceClass.ENERGY
     assert heat_pump_heating_energy_consumption.attributes[ATTR_FRIENDLY_NAME] == "Heat pump Heating energy consumption"
 
@@ -380,7 +380,7 @@ async def test_heat_pump_sensors(
     assert isinstance(heat_pump_cooling_energy, State)
     assert heat_pump_cooling_energy.state == "7.21"
     assert heat_pump_cooling_energy.attributes[CONF_UNIT_OF_MEASUREMENT] == UnitOfEnergy.KILO_WATT_HOUR
-    assert heat_pump_cooling_energy.attributes[ATTR_STATE_CLASS] == SensorStateClass.TOTAL_INCREASING
+    assert heat_pump_cooling_energy.attributes[ATTR_STATE_CLASS] == SensorStateClass.TOTAL
     assert heat_pump_cooling_energy.attributes[CONF_DEVICE_CLASS] == SensorDeviceClass.ENERGY
     assert heat_pump_cooling_energy.attributes[ATTR_FRIENDLY_NAME] == "Heat pump Cooling energy"
 
@@ -390,7 +390,7 @@ async def test_heat_pump_sensors(
     assert isinstance(heat_pump_cooling_energy_consumption, State)
     assert heat_pump_cooling_energy_consumption.state == "8.72"
     assert heat_pump_cooling_energy_consumption.attributes[CONF_UNIT_OF_MEASUREMENT] == UnitOfEnergy.KILO_WATT_HOUR
-    assert heat_pump_cooling_energy_consumption.attributes[ATTR_STATE_CLASS] == SensorStateClass.TOTAL_INCREASING
+    assert heat_pump_cooling_energy_consumption.attributes[ATTR_STATE_CLASS] == SensorStateClass.TOTAL
     assert heat_pump_cooling_energy_consumption.attributes[CONF_DEVICE_CLASS] == SensorDeviceClass.ENERGY
     assert heat_pump_cooling_energy_consumption.attributes[ATTR_FRIENDLY_NAME] == "Heat pump Cooling energy consumption"
 
@@ -406,7 +406,7 @@ async def test_heat_pump_sensors(
     assert isinstance(heat_pump_hot_water_energy, State)
     assert heat_pump_hot_water_energy.state == "7.86"
     assert heat_pump_hot_water_energy.attributes[CONF_UNIT_OF_MEASUREMENT] == UnitOfEnergy.KILO_WATT_HOUR
-    assert heat_pump_hot_water_energy.attributes[ATTR_STATE_CLASS] == SensorStateClass.TOTAL_INCREASING
+    assert heat_pump_hot_water_energy.attributes[ATTR_STATE_CLASS] == SensorStateClass.TOTAL
     assert heat_pump_hot_water_energy.attributes[CONF_DEVICE_CLASS] == SensorDeviceClass.ENERGY
     assert heat_pump_hot_water_energy.attributes[ATTR_FRIENDLY_NAME] == "Heat pump Hot water energy"
 
@@ -416,7 +416,7 @@ async def test_heat_pump_sensors(
     assert isinstance(heat_pump_hot_water_energy_consumption, State)
     assert heat_pump_hot_water_energy_consumption.state == "2.77"
     assert heat_pump_hot_water_energy_consumption.attributes[CONF_UNIT_OF_MEASUREMENT] == UnitOfEnergy.KILO_WATT_HOUR
-    assert heat_pump_hot_water_energy_consumption.attributes[ATTR_STATE_CLASS] == SensorStateClass.TOTAL_INCREASING
+    assert heat_pump_hot_water_energy_consumption.attributes[ATTR_STATE_CLASS] == SensorStateClass.TOTAL
     assert heat_pump_hot_water_energy_consumption.attributes[CONF_DEVICE_CLASS] == SensorDeviceClass.ENERGY
     assert (
         heat_pump_hot_water_energy_consumption.attributes[ATTR_FRIENDLY_NAME]
@@ -437,7 +437,7 @@ async def test_heat_pump_sensors(
     assert isinstance(heat_pump_total_thermal_energy, State)
     assert heat_pump_total_thermal_energy.state == "8.22"
     assert heat_pump_total_thermal_energy.attributes[CONF_UNIT_OF_MEASUREMENT] == UnitOfEnergy.KILO_WATT_HOUR
-    assert heat_pump_total_thermal_energy.attributes[ATTR_STATE_CLASS] == SensorStateClass.TOTAL_INCREASING
+    assert heat_pump_total_thermal_energy.attributes[ATTR_STATE_CLASS] == SensorStateClass.TOTAL
     assert heat_pump_total_thermal_energy.attributes[CONF_DEVICE_CLASS] == SensorDeviceClass.ENERGY
     assert heat_pump_total_thermal_energy.attributes[ATTR_FRIENDLY_NAME] == "Heat pump Total thermal energy"
 
@@ -447,7 +447,7 @@ async def test_heat_pump_sensors(
     assert isinstance(heat_pump_total_energy_consumption, State)
     assert heat_pump_total_energy_consumption.state == "5.21"
     assert heat_pump_total_energy_consumption.attributes[CONF_UNIT_OF_MEASUREMENT] == UnitOfEnergy.KILO_WATT_HOUR
-    assert heat_pump_total_energy_consumption.attributes[ATTR_STATE_CLASS] == SensorStateClass.TOTAL_INCREASING
+    assert heat_pump_total_energy_consumption.attributes[ATTR_STATE_CLASS] == SensorStateClass.TOTAL
     assert heat_pump_total_energy_consumption.attributes[CONF_DEVICE_CLASS] == SensorDeviceClass.ENERGY
     assert heat_pump_total_energy_consumption.attributes[ATTR_FRIENDLY_NAME] == "Heat pump Total energy consumption"
 
@@ -1146,7 +1146,7 @@ async def test_external_heat_source_sensors_translated(
 #     assert isinstance(photovoltaic_daily_energy, State)
 #     assert photovoltaic_daily_energy.state == "437.7"
 #     assert photovoltaic_daily_energy.attributes[CONF_UNIT_OF_MEASUREMENT] == UnitOfEnergy.KILO_WATT_HOUR
-#     assert photovoltaic_daily_energy.attributes[ATTR_STATE_CLASS] == SensorStateClass.MEASUREMENT
+#     assert photovoltaic_daily_energy.attributes[ATTR_STATE_CLASS] == SensorStateClass.TOTAL
 #     assert photovoltaic_daily_energy.attributes[CONF_DEVICE_CLASS] == SensorDeviceClass.ENERGY
 #     assert photovoltaic_daily_energy.attributes[ATTR_FRIENDLY_NAME] == "Photovoltaic Daily energy"
 #
@@ -1156,7 +1156,7 @@ async def test_external_heat_source_sensors_translated(
 #     assert isinstance(photovoltaic_total_energy, State)
 #     assert photovoltaic_total_energy.state == "437.7"
 #     assert photovoltaic_total_energy.attributes[CONF_UNIT_OF_MEASUREMENT] == UnitOfEnergy.KILO_WATT_HOUR
-#     assert photovoltaic_total_energy.attributes[ATTR_STATE_CLASS] == SensorStateClass.TOTAL_INCREASING
+#     assert photovoltaic_total_energy.attributes[ATTR_STATE_CLASS] == SensorStateClass.TOTAL
 #     assert photovoltaic_total_energy.attributes[CONF_DEVICE_CLASS] == SensorDeviceClass.ENERGY
 #     assert photovoltaic_total_energy.attributes[ATTR_FRIENDLY_NAME] == "Photovoltaic Total energy"
 #
