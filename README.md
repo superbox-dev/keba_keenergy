@@ -14,7 +14,7 @@ This integration supports the following manufacturers and devices:
 
 | Manufacturer                           | Supported | Tested devices |
 |----------------------------------------|-----------|----------------|
-| [M-TEC](https://m-tec.at/)             | ✅        | WPS26          |
+| [M-TEC](https://m-tec.at/)             | ✅        | WPS26, WPS412  |
 | [ÖkoFEN](https://www.oekofen.com/) *1) | ❌        |                |
 
 *1) KEBA AP 440/H-A controller has no activated Web GUI
