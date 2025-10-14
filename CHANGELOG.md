@@ -7,6 +7,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.2.0] - 2025-10-15
+
+### Added
+
+- Number entities to control the target temperature offset
+- Support username and password for basic auth (newer software versions now required basic auth)
+- External heat source device and entities
+- Entity "Operating hours", "Maximum runtime" and "Activation counter" to the head pump
+- Entity "Heat request", "Operating hours", "Maximum runtime" and "Activation counter" to the external heat source
+
+### Changed
+
+- Updated german and english translations
+- Removed entities to control the night speed of the compressor (for backward compatibility with older software versions)
+
 ## [1.1.0] - 2025-09-30
 
 ### Added
