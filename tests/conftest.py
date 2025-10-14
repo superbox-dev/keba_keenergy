@@ -44,7 +44,7 @@ class FakeKebaKeEnergyAPI:
         self._responses = value
 
     def register_auth_request(self, host: str, /, *, status: int = 200, exc: Exception | None = None) -> None:
-        self.aioclient_mock.get(f"http://{host}", status=status, exc=exc)
+        self.aioclient_mock.get(f"https://{host}", status=status, exc=exc)
 
     def register_requests(self, host: str, /, *, ssl: bool = False) -> None:
         schema: str = "https" if ssl else "http"

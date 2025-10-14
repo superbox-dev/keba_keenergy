@@ -269,8 +269,8 @@ async def test_zeroconf_flow_authentication_cannot_connect(
         data=ZERO_CONF_SERVICE_INFO,
     )
 
-    assert result_auth_step["type"] == FlowResultType.ABORT
-    assert result_auth_step["reason"] == "cannot_connect"
+    assert result_auth_step["type"] == FlowResultType.FORM
+    assert result_auth_step["step_id"] == "discovery_confirm"
 
 
 async def test_zeroconf_flow_already_setup(
