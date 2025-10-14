@@ -140,7 +140,7 @@ class KebaKeEnergyEntity(
 
         if self.is_system_device:
             _manufacturer = MANUFACTURER
-        elif self.is_heat_pump :
+        elif self.is_heat_pump:
             if self.coordinator.device_name.endswith("MTec"):
                 _manufacturer = MANUFACTURER_MTEC
             elif self.coordinator.device_name.startswith("Bartl"):
