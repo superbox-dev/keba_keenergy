@@ -1,5 +1,6 @@
 """The KEBA KeEnergy integration."""
 
+import logging
 from typing import TYPE_CHECKING
 
 from homeassistant.config_entries import ConfigEntry
@@ -18,7 +19,6 @@ from .coordinator import KebaKeEnergyDataUpdateCoordinator
 
 if TYPE_CHECKING:
     from aiohttp import ClientSession
-import logging
 
 PLATFORMS: list[Platform] = [
     Platform.BINARY_SENSOR,
@@ -39,7 +39,9 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     password: str | None = entry.data.get(CONF_PASSWORD)
     ssl: bool = entry.data[CONF_SSL]
 
-    session: ClientSession = async_get_clientsession(hass)
+    # Newer software versions of the Web HMI comes with self-signed SSL certificates
+    session: ClientSession = async_get_clientsession(hass, verify_ssl=False)
+
     coordinator: KebaKeEnergyDataUpdateCoordinator = KebaKeEnergyDataUpdateCoordinator(
         hass,
         host=host,
