@@ -86,19 +86,18 @@ class KebaKeEnergyConfigFlow(ConfigFlow, domain=DOMAIN):
         self.ssl: bool = False
         self.serial_number: str | None = None
 
-    async def _async_check_authentication_required(self) -> bool | None:
+    async def _async_check_authentication_required(self) -> bool:
         """Check if authentication required."""
         session: ClientSession = async_get_clientsession(self.hass)
         has_authentication: bool = False
 
         try:
-            async with session.get(f"http://{self.host}", allow_redirects=True, ssl=False) as response:
+            async with session.get(f"https://{self.host}", ssl=False) as response:
                 if response.status == HTTPStatus.UNAUTHORIZED:
                     self.ssl = True
                     has_authentication = True
-        except ClientError:
-            _LOGGER.exception("Client error")
-            return None
+        except ClientError as error:
+            _LOGGER.error(error)  # noqa: TRY400
 
         return has_authentication
 
@@ -108,10 +107,7 @@ class KebaKeEnergyConfigFlow(ConfigFlow, domain=DOMAIN):
 
         if user_input is not None:
             self.host = user_input[CONF_HOST]
-            has_authentication: bool | None = await self._async_check_authentication_required()
-
-            if has_authentication is None:
-                return self.async_abort(reason="cannot_connect")
+            has_authentication: bool = await self._async_check_authentication_required()
 
             if has_authentication:
                 return await self.async_step_auth(user_input)
@@ -165,10 +161,7 @@ class KebaKeEnergyConfigFlow(ConfigFlow, domain=DOMAIN):
     async def async_step_discovery_confirm(self, user_input: dict[str, Any] | None = None) -> ConfigFlowResult:
         """Handle user-confirmation of discovered node."""
         errors: dict[str, str] = {}
-        has_authentication: bool | None = await self._async_check_authentication_required()
-
-        if has_authentication is None:
-            return self.async_abort(reason="cannot_connect")
+        has_authentication: bool = await self._async_check_authentication_required()
 
         if has_authentication:
             return await self.async_step_auth(user_input)
