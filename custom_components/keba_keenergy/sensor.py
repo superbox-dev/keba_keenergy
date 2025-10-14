@@ -545,32 +545,32 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription, ...]] = {
             value=lambda data: cast("int", data),
         ),
     ),
-    SectionPrefix.PHOTOVOLTAIC: (
-        KebaKeEnergySensorEntityDescription(
-            device_class=SensorDeviceClass.POWER,
-            key="excess_power",
-            native_unit_of_measurement=UnitOfPower.WATT,
-            state_class=SensorStateClass.MEASUREMENT,
-            translation_key="pv_excess_power",
-            value=lambda data: cast("float", data),
-        ),
-        KebaKeEnergySensorEntityDescription(
-            device_class=SensorDeviceClass.ENERGY,
-            key="daily_energy",
-            native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
-            state_class=SensorStateClass.MEASUREMENT,
-            translation_key="pv_daily_energy",
-            value=lambda data: cast("float", data),
-        ),
-        KebaKeEnergySensorEntityDescription(
-            device_class=SensorDeviceClass.ENERGY,
-            key="total_energy",
-            native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
-            state_class=SensorStateClass.TOTAL_INCREASING,
-            translation_key="pv_total_energy",
-            value=lambda data: cast("float", data),
-        ),
-    ),
+    # SectionPrefix.PHOTOVOLTAIC: (
+    #     KebaKeEnergySensorEntityDescription(
+    #         device_class=SensorDeviceClass.POWER,
+    #         key="excess_power",
+    #         native_unit_of_measurement=UnitOfPower.WATT,
+    #         state_class=SensorStateClass.MEASUREMENT,
+    #         translation_key="pv_excess_power",
+    #         value=lambda data: cast("float", data),
+    #     ),
+    #     KebaKeEnergySensorEntityDescription(
+    #         device_class=SensorDeviceClass.ENERGY,
+    #         key="daily_energy",
+    #         native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
+    #         state_class=SensorStateClass.MEASUREMENT,
+    #         translation_key="pv_daily_energy",
+    #         value=lambda data: cast("float", data),
+    #     ),
+    #     KebaKeEnergySensorEntityDescription(
+    #         device_class=SensorDeviceClass.ENERGY,
+    #         key="total_energy",
+    #         native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
+    #         state_class=SensorStateClass.TOTAL_INCREASING,
+    #         translation_key="pv_total_energy",
+    #         value=lambda data: cast("float", data),
+    #     ),
+    # ),
 }
 
 

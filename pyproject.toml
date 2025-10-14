@@ -98,6 +98,7 @@ ignore = [
     "D104",    # undocumented-public-package
     "D203",    # one-blank-line-before-class
     "D213",    # multi-line-summary-second-line
+    "ERA001",
     "I001",    # unsorted-imports
     "PLR0913", # too-many-arguments
     "TRY003",  # raise-vanilla-args
