@@ -131,7 +131,7 @@ async def test_user_flow_authentication_cannot_connect(
 ) -> None:
     """Test user flow authentication with cannot connect error."""
     fake_api.responses = [MULTIPLE_POSITIONS_RESPONSE, get_multi_positions_data_response()]
-    fake_api.register_auth_request("10.0.0.100", status=401, exc=ClientError())
+    fake_api.register_auth_request("10.0.0.100", exc=ClientError())
     fake_api.register_requests("10.0.0.100", ssl=True)
 
     assert await setup.async_setup_component(hass, DOMAIN, {})
@@ -152,8 +152,10 @@ async def test_user_flow_authentication_cannot_connect(
         },
     )
 
-    assert result_auth_step["type"] == FlowResultType.ABORT
-    assert result_auth_step["reason"] == "cannot_connect"
+    assert result_auth_step["type"] == FlowResultType.CREATE_ENTRY
+    assert result_auth_step["result"].title == "KEBA KeEnergy (10.0.0.100)"
+
+    assert hass.config_entries.async_entry_for_domain_unique_id(DOMAIN, "12345678")
 
 
 @pytest.mark.parametrize(
@@ -260,7 +262,7 @@ async def test_zeroconf_flow_authentication_cannot_connect(
 ) -> None:
     """Test the zeroconf happy flow from start to finish with authentication."""
     fake_api.responses = [MULTIPLE_POSITIONS_RESPONSE, get_multi_positions_data_response()]
-    fake_api.register_auth_request("ap4400.local", status=401, exc=ClientError())
+    fake_api.register_auth_request("ap4400.local", exc=ClientError())
     fake_api.register_requests("ap4400.local", ssl=True)
 
     result_auth_step: ConfigFlowResult = await hass.config_entries.flow.async_init(
