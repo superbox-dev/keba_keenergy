@@ -20,7 +20,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Updated german and english translations
-- Removed entities to control the night speed of the compressor (for backward compatibility with older software versions)
+- Removed entities to control the night speed of the compressor (for backward compatibility with older software
+  versions)
 
 ## [1.1.0] - 2025-09-30
 
