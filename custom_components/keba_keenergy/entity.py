@@ -24,6 +24,7 @@ from keba_keenergy_api.error import APIError
 
 from .const import DOMAIN
 from .const import MANUFACTURER
+from .const import MANUFACTURER_INO
 from .const import MANUFACTURER_MTEC
 from .const import NAME
 from .coordinator import KebaKeEnergyDataUpdateCoordinator
@@ -139,8 +140,11 @@ class KebaKeEnergyEntity(
 
         if self.is_system_device:
             _manufacturer = MANUFACTURER
-        elif self.is_heat_pump and self.coordinator.device_name.endswith("MTec"):
-            _manufacturer = MANUFACTURER_MTEC
+        elif self.is_heat_pump :
+            if self.coordinator.device_name.endswith("MTec"):
+                _manufacturer = MANUFACTURER_MTEC
+            elif self.coordinator.device_name.startswith("Bartl"):
+                _manufacturer = MANUFACTURER_INO
 
         return _manufacturer
 

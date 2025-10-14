@@ -8,5 +8,6 @@ DEFAULT_SSL: Final[bool] = False
 DOMAIN: Final[str] = "keba_keenergy"
 MANUFACTURER: Final = "KEBA"
 MANUFACTURER_MTEC: Final = "M-TEC"
+MANUFACTURER_INO: Final = "ino"
 NAME: Final = "KeEnergy"
 SCAN_INTERVAL: Final[int] = 20
