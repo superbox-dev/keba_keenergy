@@ -97,7 +97,7 @@ class KebaKeEnergyConfigFlow(ConfigFlow, domain=DOMAIN):
                     self.ssl = True
                     has_authentication = True
         except ClientError as error:
-            _LOGGER.error(error)  # noqa: TRY400
+            _LOGGER.debug(error)
 
         return has_authentication
 
@@ -148,7 +148,7 @@ class KebaKeEnergyConfigFlow(ConfigFlow, domain=DOMAIN):
 
     async def async_step_zeroconf(self, discovery_info: ZeroconfServiceInfo) -> ConfigFlowResult:
         """Handle zeroconf discovery."""
-        _LOGGER.debug("Discovery info: %s", discovery_info)
+        _LOGGER.info("Discovery info: %s", discovery_info)
 
         self.host = discovery_info.hostname[0:-1]
         self.serial_number = discovery_info.properties["serialnumber"]
