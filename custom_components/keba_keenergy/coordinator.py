@@ -68,7 +68,7 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
             self._api_device_info = await self.api.system.get_device_info()
             self._api_system_info = await self.api.system.get_info()
 
-            request: list[Section] = SUPPORTED_API_ENDPOINTS[self.device_model] + SUPPORTED_API_ENDPOINTS["ALL"]
+            request: list[Section] = SUPPORTED_API_ENDPOINTS.get(self.device_model, []) + SUPPORTED_API_ENDPOINTS["ALL"]
 
             response: dict[str, ValueResponse] = await self.api.read_data(request=request)
         except APIError as error:
