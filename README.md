@@ -10,22 +10,17 @@
 
 A Home Assistant integration for heaters with a KEBA KeEnergy control system.
 
-This integration supports the following manufacturers and devices:
+Looking for more information? The [Wiki](https://github.com/superbox-dev/keba_keenergy/wiki) contains in-depth documentation.
 
-| Manufacturer                           | Supported | Tested devices |
-|----------------------------------------|-----------|----------------|
-| [M-TEC](https://m-tec.at/)             | ✅        | WPS26, WPS412  |
-| [ÖkoFEN](https://www.oekofen.com/) *1) | ❌        |                |
+## Geting started
 
-*1) KEBA AP 440/H-A controller has no activated Web GUI
-
-## Table of Contents
-
-- [Screenshots](#screenshots)
-- [Installation](#installation)
-- [Changelog](#changelog)
-- [Contributing](#contributing)
-- [Donation](#donation)
+1. Install this integration with HACS, or copy the contents of this repository into the
+   `custom_components/keba_keenergy` directory.
+2. Restart Home Assistant.
+3. Start the configuration flow: go to `Configuration` -> `Integrations`, click the `+ Add Integration` and select
+   `KEBA KeEnergy` from the list.
+4. Add IP address or hostname of your KEBA KeEnergy device.
+5. Enjoy :-)
 
 ## Screenshots
 
@@ -48,16 +43,6 @@ This integration supports the following manufacturers and devices:
 ### Hot water tank controls and sensors
 
 ![Inverter Sensors](images/hot_water_tank.png)
-
-## Installation
-
-1. Install this integration with HACS, or copy the contents of this repository into the
-   `custom_components/keba_keenergy` directory.
-2. Restart Home Assistant.
-3. Start the configuration flow: go to `Configuration` -> `Integrations`, click the `+ Add Integration` and select
-   `KEBA KeEnergy` from the list.
-4. Add IP address or hostname of your KEBA KeEnergy device.
-5. Enjoy :-)
 
 ## Changelog
 
