@@ -1,7 +1,8 @@
 {
     "config": {
         "abort": {
-            "already_configured": "Das Gerät ist bereits konfiguriert"
+            "already_configured": "Das Gerät ist bereits konfiguriert",
+            "already_in_progress": "Konfigurationsvorgang läuft bereits"
         },
         "error": {
             "cannot_connect": "Verbindung fehlgeschlagen",

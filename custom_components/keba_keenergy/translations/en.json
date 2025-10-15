@@ -1,7 +1,8 @@
 {
     "config": {
         "abort": {
-            "cannot_connect": "Failed to connect"
+            "already_configured": "Failed to connect",
+            "already_in_progress": "Configuration flow is already in progress"
         },
         "error": {
             "cannot_connect": "Failed to connect",
