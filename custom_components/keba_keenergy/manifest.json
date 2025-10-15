@@ -14,10 +14,6 @@
     {
       "type": "_keba-device._tcp.local.",
       "name": "ap440*"
-    },
-    {
-      "type": "_keba-device._tcp.local.",
-      "name": "ap420*"
     }
   ]
 }
