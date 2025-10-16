@@ -43,7 +43,7 @@ async def test_system_sensors(
     assert outdoor_temperature.attributes[CONF_UNIT_OF_MEASUREMENT] == UnitOfTemperature.CELSIUS
     assert outdoor_temperature.attributes[ATTR_STATE_CLASS] == SensorStateClass.MEASUREMENT
     assert outdoor_temperature.attributes[CONF_DEVICE_CLASS] == SensorDeviceClass.TEMPERATURE
-    assert outdoor_temperature.attributes[ATTR_FRIENDLY_NAME] == "KEBA KeEnergy Outdoor temperature"
+    assert outdoor_temperature.attributes[ATTR_FRIENDLY_NAME] == "Control unit Outdoor temperature"
 
     operating_mode: State | None = hass.states.get("sensor.keba_keenergy_12345678_operating_mode")
     assert isinstance(operating_mode, State)
@@ -68,7 +68,7 @@ async def test_system_sensors_translated(
 
     outdoor_temperature: State | None = hass.states.get("sensor.keba_keenergy_12345678_outdoor_temperature")
     assert isinstance(outdoor_temperature, State)
-    assert outdoor_temperature.attributes[ATTR_FRIENDLY_NAME] == "KEBA KeEnergy Außentemperatur"
+    assert outdoor_temperature.attributes[ATTR_FRIENDLY_NAME] == "Bedieneinheit Außentemperatur"
 
     operating_mode: State | None = hass.states.get("sensor.keba_keenergy_12345678_operating_mode")
     assert isinstance(operating_mode, State)

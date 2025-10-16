@@ -20,6 +20,7 @@ from keba_keenergy_api.error import APIError
 
 from .const import SCAN_INTERVAL
 from .const import SUPPORTED_API_ENDPOINTS
+from ..helpers import compare_versions
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -55,6 +56,21 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
 
         super().__init__(hass, _LOGGER, name=DOMAIN, update_interval=timedelta(seconds=SCAN_INTERVAL))
 
+    @cached_property
+    def _supported_api_endpoints(self) -> list[Section]:
+        request: list[Section] = []
+
+        for supported_api_endpoint in (
+            SUPPORTED_API_ENDPOINTS.get(self.device_model, []) + SUPPORTED_API_ENDPOINTS["ALL"]
+        ):
+            if supported_api_endpoint.min_version is None or (
+                supported_api_endpoint.min_version
+                and compare_versions(supported_api_endpoint.min_version, self.device_hmi_sw_version) == 1
+            ):
+                request.append(supported_api_endpoint.section)
+
+        return request
+
     async def _async_update_data(self) -> dict[str, ValueResponse]:
         """Update coordinator data.
 
@@ -75,9 +91,7 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
             if not self._api_hmi_info:
                 self._api_hmi_info = await self.api.system.get_hmi_info()
 
-            request: list[Section] = SUPPORTED_API_ENDPOINTS.get(self.device_model, []) + SUPPORTED_API_ENDPOINTS["ALL"]
-
-            response: dict[str, ValueResponse] = await self.api.read_data(request=request)
+            response: dict[str, ValueResponse] = await self.api.read_data(request=self._supported_api_endpoints)
         except APIError as error:
             _LOGGER.error(error)  # noqa: TRY400
             raise UpdateFailed(error) from error
