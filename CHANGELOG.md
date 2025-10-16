@@ -9,6 +9,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [1.2.2] - 2025-10-16
 
+### Fixed
+
+- missing external heat source device in control unit AP420 H/A and Web HMI software versions that support this
+
 ### Changed
 
 - Update translations
