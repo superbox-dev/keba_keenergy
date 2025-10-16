@@ -4,7 +4,7 @@ import re
 
 
 def _normalize_version(version: str) -> list[int]:
-    version= re.sub(r"[^0-9a-zA-Z]+", ".", version)
+    version = re.sub(r"[^0-9a-zA-Z]+", ".", version)
     parts: list[str] = re.findall(r"\d+|[a-zA-Z]+", version)
     normalize: list[int] = []
 
