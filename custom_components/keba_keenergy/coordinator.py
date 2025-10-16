@@ -51,6 +51,7 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
         )
         self._api_device_info: dict[str, Any] = {}
         self._api_system_info: dict[str, Any] = {}
+        self._api_hmi_info: dict[str, Any] = {}
 
         super().__init__(hass, _LOGGER, name=DOMAIN, update_interval=timedelta(seconds=SCAN_INTERVAL))
 
@@ -65,8 +66,14 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
     async def update_data(self) -> dict[str, ValueResponse]:
         """Read all values from API to update coordinator data."""
         try:
-            self._api_device_info = await self.api.system.get_device_info()
-            self._api_system_info = await self.api.system.get_info()
+            if not self._api_device_info:
+                self._api_device_info = await self.api.system.get_device_info()
+
+            if not self._api_system_info:
+                self._api_system_info = await self.api.system.get_info()
+
+            if not self._api_hmi_info:
+                self._api_hmi_info = await self.api.system.get_hmi_info()
 
             request: list[Section] = SUPPORTED_API_ENDPOINTS.get(self.device_model, []) + SUPPORTED_API_ENDPOINTS["ALL"]
 
@@ -93,9 +100,9 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
         return str(self._api_system_info["name"])
 
     @property
-    def device_sw_version(self) -> str:
-        """Return software version."""
-        return str(self._api_system_info["version"])
+    def device_hmi_sw_version(self) -> str:
+        """Return HMI software version."""
+        return str(self._api_hmi_info["name"].replace("KeEnergy.WebHmi_", ""))
 
     @property
     def device_serial_number(self) -> str:

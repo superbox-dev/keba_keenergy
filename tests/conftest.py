@@ -16,6 +16,7 @@ from yarl import URL
 
 from custom_components.keba_keenergy.const import DOMAIN
 from tests.api_data import DEVICE_INFO_RESPONSE
+from tests.api_data import HMI_RESPONSE
 from tests.api_data import SYSTEM_RESPONSE
 
 
@@ -58,6 +59,12 @@ class FakeKebaKeEnergyAPI:
         self.aioclient_mock.post(
             f"{schema}://{host}/swupdate?action=getSystemInstalled",
             text=json.dumps(SYSTEM_RESPONSE),
+            headers={"Content-Type": "application/json;charset=utf-8"},
+        )
+
+        self.aioclient_mock.post(
+            f"{schema}://{host}/swupdate?action=getHmiInstalled",
+            text=json.dumps(HMI_RESPONSE),
             headers={"Content-Type": "application/json;charset=utf-8"},
         )
 

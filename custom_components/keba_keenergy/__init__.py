@@ -65,7 +65,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         manufacturer=MANUFACTURER,
         name=coordinator.name,
         model=coordinator.device_model,
-        sw_version=coordinator.device_sw_version,
+        sw_version=coordinator.device_hmi_sw_version,
         serial_number=coordinator.device_serial_number,
     )
 

@@ -830,6 +830,11 @@ SYSTEM_RESPONSE: dict[str, str] = {
     "version": "2.2.2",
 }
 
+HMI_RESPONSE: dict[str, str] = {
+    "ret": "OK",
+    "name": "KeEnergy.WebHmi_2.2.0.0",
+}
+
 SYSTEM_HAS_PHOTOVOLTAIC: str = """
     {
         "name": "APPL.CtrlAppl.sParam.options.hasPhotovoltaics",
