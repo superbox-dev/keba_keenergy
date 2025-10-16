@@ -26,7 +26,6 @@ from .const import DOMAIN
 from .const import MANUFACTURER
 from .const import MANUFACTURER_INO
 from .const import MANUFACTURER_MTEC
-from .const import NAME
 from .coordinator import KebaKeEnergyDataUpdateCoordinator
 
 if TYPE_CHECKING:
@@ -101,7 +100,7 @@ class KebaKeEnergyEntity(
         _device_name: str | None = None
 
         if self.is_system_device:
-            _device_name = f"{self.device_manufacturer} {NAME}"
+            _device_name = "Control unit"
         elif self.is_heat_circuit:
             data: list[Value] = cast("list[Value]", self.coordinator.data[self.section_id]["name"])
             _device_name = data[self.index or 0]["value"]
@@ -168,6 +167,8 @@ class KebaKeEnergyEntity(
     def _translation_key(self) -> str | None:
         translation_key: str | None = None
 
+        if self.is_system_device:
+            translation_key = "control_unit"
         if self.is_heat_circuit:
             translation_key = "heat_circuit"
         elif self.is_heat_pump:
@@ -194,7 +195,7 @@ class KebaKeEnergyEntity(
             "name": self.device_name,
             "manufacturer": self.device_manufacturer,
             "model": self.device_model,
-            "sw_version": (self.coordinator.device_sw_version if self.is_system_device else None),
+            "sw_version": (self.coordinator.device_hmi_sw_version if self.is_system_device else None),
             "translation_key": self._translation_key,
             "translation_placeholders": self._translation_placeholders,
             # Added via_device if the device is not the KEBA KeEnergy control device.

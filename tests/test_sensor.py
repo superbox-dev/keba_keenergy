@@ -50,7 +50,7 @@ async def test_system_sensors(
     assert operating_mode.state == "auto_heat"
     assert operating_mode.attributes[CONF_DEVICE_CLASS] == SensorDeviceClass.ENUM
     assert operating_mode.attributes[ATTR_OPTIONS] == ["setup", "standby", "summer", "auto_heat", "auto_cool", "auto"]
-    assert operating_mode.attributes[ATTR_FRIENDLY_NAME] == "KEBA KeEnergy Operating mode"
+    assert operating_mode.attributes[ATTR_FRIENDLY_NAME] == "Control unit Operating mode"
 
 
 @pytest.mark.usefixtures("entity_registry_enabled_by_default")
@@ -72,7 +72,7 @@ async def test_system_sensors_translated(
 
     operating_mode: State | None = hass.states.get("sensor.keba_keenergy_12345678_operating_mode")
     assert isinstance(operating_mode, State)
-    assert operating_mode.attributes[ATTR_FRIENDLY_NAME] == "KEBA KeEnergy Betriebsart"
+    assert operating_mode.attributes[ATTR_FRIENDLY_NAME] == "Bedieneinheit Betriebsart"
 
 
 @pytest.mark.usefixtures("entity_registry_enabled_by_default")

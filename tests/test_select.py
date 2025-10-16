@@ -48,7 +48,7 @@ async def test_system_selects(
     operating_mode: State | None = hass.states.get("select.keba_keenergy_12345678_operating_mode")
     assert isinstance(operating_mode, State)
     assert operating_mode.state == "auto_heat"
-    assert operating_mode.attributes[ATTR_FRIENDLY_NAME] == "KEBA KeEnergy Operating mode"
+    assert operating_mode.attributes[ATTR_FRIENDLY_NAME] == "Control unit Operating mode"
     assert operating_mode.attributes[ATTR_OPTIONS] == expected_attr_options
 
 
@@ -66,7 +66,7 @@ async def test_system_selects_translations(
 
     operating_mode: State | None = hass.states.get("select.keba_keenergy_12345678_operating_mode")
     assert isinstance(operating_mode, State)
-    assert operating_mode.attributes[ATTR_FRIENDLY_NAME] == "KEBA KeEnergy Betriebsart"
+    assert operating_mode.attributes[ATTR_FRIENDLY_NAME] == "Bedieneinheit Betriebsart"
 
 
 async def test_heat_circuit_selects(

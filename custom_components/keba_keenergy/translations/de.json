@@ -32,6 +32,9 @@
         }
     },
     "device": {
+        "control_unit":{
+            "name": "Bedieneinheit"
+        },
         "external_heat_source": {
             "name": "Externe Wärmequelle{position}"
         },
