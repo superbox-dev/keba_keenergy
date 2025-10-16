@@ -20,7 +20,7 @@ from keba_keenergy_api.error import APIError
 
 from .const import SCAN_INTERVAL
 from .const import SUPPORTED_API_ENDPOINTS
-from ..helpers import compare_versions
+from .helpers import compare_versions
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -67,7 +67,7 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
                 supported_api_endpoint.min_version
                 and compare_versions(supported_api_endpoint.min_version, self.device_hmi_sw_version) == 1
             ):
-                request.append(supported_api_endpoint.section)
+                request.append(supported_api_endpoint.section)  # noqa: PERF401
 
         return request
 

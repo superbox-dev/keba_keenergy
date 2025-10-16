@@ -31,6 +31,8 @@ class SupportedDevice(Enum):
 
 
 class SupportedApiEndpoint(NamedTuple):
+    """Minimal software version and section mapping."""
+
     section: Section
     min_version: str | None = None
 

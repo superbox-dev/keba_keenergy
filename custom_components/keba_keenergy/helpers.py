@@ -1,8 +1,10 @@
+"""Helpers for the KEBA KeEnergy integration."""
+
 import re
 
 
 def _normalize_version(version: str) -> list[int]:
-    version: str = re.sub(r"[^0-9a-zA-Z]+", ".", version)
+    version= re.sub(r"[^0-9a-zA-Z]+", ".", version)
     parts: list[str] = re.findall(r"\d+|[a-zA-Z]+", version)
     normalize: list[int] = []
 
@@ -16,4 +18,5 @@ def _normalize_version(version: str) -> list[int]:
 
 
 def compare_versions(v1: str, v2: str) -> int:
+    """Compare versions with numbers and letters."""
     return (_normalize_version(v1) > _normalize_version(v2)) - (_normalize_version(v1) < _normalize_version(v2))
