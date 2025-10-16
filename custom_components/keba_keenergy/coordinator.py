@@ -65,7 +65,7 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
         ):
             if supported_api_endpoint.min_version is None or (
                 supported_api_endpoint.min_version
-                and compare_versions(supported_api_endpoint.min_version, self.device_hmi_sw_version) == 1
+                and compare_versions(self.device_hmi_sw_version, supported_api_endpoint.min_version) == 1
             ):
                 request.append(supported_api_endpoint.section)  # noqa: PERF401
 
