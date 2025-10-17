@@ -155,7 +155,7 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
                     System.OUTDOOR_TEMPERATURE,
                     System.OPERATING_MODE,
                     System.HAS_PHOTOVOLTAICS,
-                ]
+                ],
             )
         except APIError as error:
             _LOGGER.error(error)  # noqa: TRY400
