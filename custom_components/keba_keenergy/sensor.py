@@ -12,9 +12,11 @@ from homeassistant.components.sensor import SensorEntity
 from homeassistant.components.sensor import SensorEntityDescription
 from homeassistant.components.sensor import SensorStateClass
 from homeassistant.config_entries import ConfigEntry
+from homeassistant.const import EntityCategory
 from homeassistant.const import PERCENTAGE
 from homeassistant.const import STATE_OFF
 from homeassistant.const import UnitOfEnergy
+from homeassistant.const import UnitOfInformation
 from homeassistant.const import UnitOfPower
 from homeassistant.const import UnitOfPressure
 from homeassistant.const import UnitOfTemperature
@@ -73,6 +75,54 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription, ...]] = {
             options=[_.name.lower() for _ in SystemOperatingMode],
             translation_key="operating_mode_3",
             value=lambda data: cast("str", data),
+        ),
+        KebaKeEnergySensorEntityDescription(
+            entity_category=EntityCategory.DIAGNOSTIC,
+            key="cpu_usage",
+            native_unit_of_measurement=PERCENTAGE,
+            state_class=SensorStateClass.MEASUREMENT,
+            translation_key="cpu_usage",
+            value=lambda data: cast("float", data) / 10,
+        ),
+        KebaKeEnergySensorEntityDescription(
+            entity_category=EntityCategory.DIAGNOSTIC,
+            key="webview_cpu_usage",
+            native_unit_of_measurement=PERCENTAGE,
+            state_class=SensorStateClass.MEASUREMENT,
+            translation_key="webview_cpu_usage",
+            value=lambda data: cast("float", data) / 10,
+        ),
+        KebaKeEnergySensorEntityDescription(
+            entity_category=EntityCategory.DIAGNOSTIC,
+            key="webserver_cpu_usage",
+            native_unit_of_measurement=PERCENTAGE,
+            state_class=SensorStateClass.MEASUREMENT,
+            translation_key="webserver_cpu_usage",
+            value=lambda data: cast("float", data) / 10,
+        ),
+        KebaKeEnergySensorEntityDescription(
+            entity_category=EntityCategory.DIAGNOSTIC,
+            key="control_cpu_usage",
+            native_unit_of_measurement=PERCENTAGE,
+            state_class=SensorStateClass.MEASUREMENT,
+            translation_key="control_cpu_usage",
+            value=lambda data: cast("float", data) / 10,
+        ),
+        KebaKeEnergySensorEntityDescription(
+            entity_category=EntityCategory.DIAGNOSTIC,
+            key="ram_usage",
+            native_unit_of_measurement=UnitOfInformation.KILOBYTES,
+            state_class=SensorStateClass.MEASUREMENT,
+            translation_key="ram_usage",
+            value=lambda data: cast("int", data),
+        ),
+        KebaKeEnergySensorEntityDescription(
+            entity_category=EntityCategory.DIAGNOSTIC,
+            key="free_ram",
+            native_unit_of_measurement=UnitOfInformation.KILOBYTES,
+            state_class=SensorStateClass.MEASUREMENT,
+            translation_key="free_ram",
+            value=lambda data: cast("int", data),
         ),
     ),
     SectionPrefix.HEAT_CIRCUIT: (

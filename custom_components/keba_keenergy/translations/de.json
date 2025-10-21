@@ -155,6 +155,9 @@
             "circulation_pump": {
                 "name": "Umwälzpumpe"
             },
+            "cpu_usage": {
+                "name": "CPU-Auslastung"
+            },
             "compressor": {
                 "name": "Kompressor"
             },
@@ -166,6 +169,9 @@
             },
             "compressor_power": {
                 "name": "Leistung Kompressor"
+            },
+            "control_cpu_usage": {
+                "name": "Ctrl CPU-Auslastung"
             },
             "cooling_energy": {
                 "name": "Kühlmenge"
@@ -184,6 +190,9 @@
             },
             "dew_point": {
                 "name": "Taupunkt"
+            },
+            "free_ram": {
+                "name": "Freier RAM"
             },
             "fresh_water_module_temperature": {
                 "name": "Frischwassermodul-Temperatur"
@@ -300,6 +309,9 @@
             "pv_total_energy": {
                 "name": "Gesamtenergie"
             },
+            "ram_usage": {
+                "name": "RAM-Verbrauch"
+            },
             "return_flow_temperature": {
                 "name": "Rücklauftemperatur"
             },
@@ -358,6 +370,12 @@
             },
             "total_thermal_energy": {
                 "name": "Gesamtwärmemenge"
+            },
+            "webserver_cpu_usage": {
+                "name": "WebServer CPU-Auslastung"
+            },
+            "webview_cpu_usage": {
+                "name": "WebView CPU-Auslastung"
             }
         },
         "water_heater": {

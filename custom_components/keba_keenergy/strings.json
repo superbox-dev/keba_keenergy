@@ -148,6 +148,9 @@
             "circulation_pump": {
                 "name": "Circulation pump"
             },
+            "cpu_usage": {
+                "name": "CPU usage"
+            },
             "compressor": {
                 "name": "Compressor"
             },
@@ -159,6 +162,9 @@
             },
             "compressor_power": {
                 "name": "Compressor power"
+            },
+            "control_cpu_usage": {
+                "name": "Ctrl CPU usage"
             },
             "cooling_energy": {
                 "name": "Cooling energy"
@@ -177,6 +183,9 @@
             },
             "dew_point": {
                 "name": "Dew point"
+            },
+            "free_ram": {
+                "name": "Free RAM"
             },
             "fresh_water_module_temperature": {
                 "name": "Fresh water module temperature"
@@ -293,6 +302,9 @@
             "pv_total_energy": {
                 "name": "Total energy"
             },
+            "ram_usage": {
+                "name": "RAM usage"
+            },
             "return_flow_temperature": {
                 "name": "Return flow temperature"
             },
@@ -351,6 +363,12 @@
             },
             "total_thermal_energy": {
                 "name": "Total thermal energy"
+            },
+            "webserver_cpu_usage": {
+                "name": "WebServer CPU usage"
+            },
+            "webview_cpu_usage": {
+                "name": "WebView CPU usage"
             }
         },
         "water_heater": {

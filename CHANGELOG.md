@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.3.0] - 2025-10-22
+
+### Added
+
+- Diagnostic sensors for CPU usage, RAM usage and free RAM
+
 ## [1.2.2] - 2025-10-19
 
 ### Fixed

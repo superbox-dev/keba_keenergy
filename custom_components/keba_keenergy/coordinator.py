@@ -155,6 +155,12 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
                     System.OUTDOOR_TEMPERATURE,
                     System.OPERATING_MODE,
                     System.HAS_PHOTOVOLTAICS,
+                    System.CPU_USAGE,
+                    System.WEBVIEW_CPU_USAGE,
+                    System.WEBSERVER_CPU_USAGE,
+                    System.CONTROL_CPU_USAGE,
+                    System.RAM_USAGE,
+                    System.FREE_RAM,
                 ],
             )
         except APIError as error:
