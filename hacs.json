@@ -1,5 +1,7 @@
 {
     "name": "KEBA KeEnergy",
+    "filename": "keba_keenergy.zip",
     "render_readme": true,
-    "homeassistant": "2025.1.0"
+    "homeassistant": "2025.1.0",
+    "zip_release": true
 }
