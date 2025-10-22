@@ -78,6 +78,7 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription, ...]] = {
         ),
         KebaKeEnergySensorEntityDescription(
             entity_category=EntityCategory.DIAGNOSTIC,
+            entity_registry_enabled_default=False,
             key="cpu_usage",
             native_unit_of_measurement=PERCENTAGE,
             state_class=SensorStateClass.MEASUREMENT,
@@ -86,6 +87,7 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription, ...]] = {
         ),
         KebaKeEnergySensorEntityDescription(
             entity_category=EntityCategory.DIAGNOSTIC,
+            entity_registry_enabled_default=False,
             key="webview_cpu_usage",
             native_unit_of_measurement=PERCENTAGE,
             state_class=SensorStateClass.MEASUREMENT,
@@ -94,6 +96,7 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription, ...]] = {
         ),
         KebaKeEnergySensorEntityDescription(
             entity_category=EntityCategory.DIAGNOSTIC,
+            entity_registry_enabled_default=False,
             key="webserver_cpu_usage",
             native_unit_of_measurement=PERCENTAGE,
             state_class=SensorStateClass.MEASUREMENT,
@@ -102,6 +105,7 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription, ...]] = {
         ),
         KebaKeEnergySensorEntityDescription(
             entity_category=EntityCategory.DIAGNOSTIC,
+            entity_registry_enabled_default=False,
             key="control_cpu_usage",
             native_unit_of_measurement=PERCENTAGE,
             state_class=SensorStateClass.MEASUREMENT,
@@ -110,6 +114,7 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription, ...]] = {
         ),
         KebaKeEnergySensorEntityDescription(
             entity_category=EntityCategory.DIAGNOSTIC,
+            entity_registry_enabled_default=False,
             key="ram_usage",
             native_unit_of_measurement=UnitOfInformation.KILOBYTES,
             state_class=SensorStateClass.MEASUREMENT,
@@ -118,6 +123,7 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription, ...]] = {
         ),
         KebaKeEnergySensorEntityDescription(
             entity_category=EntityCategory.DIAGNOSTIC,
+            entity_registry_enabled_default=False,
             key="free_ram",
             native_unit_of_measurement=UnitOfInformation.KILOBYTES,
             state_class=SensorStateClass.MEASUREMENT,

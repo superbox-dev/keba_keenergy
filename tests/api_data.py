@@ -835,13 +835,73 @@ HMI_RESPONSE: dict[str, str] = {
     "name": "KeEnergy.WebHmi_2.2.0.0",
 }
 
-SYSTEM_HAS_PHOTOVOLTAIC: str = """
+SYSTEM_HAS_PHOTOVOLTAICS: str = """
     {
         "name": "APPL.CtrlAppl.sParam.options.hasPhotovoltaics",
         "attributes": {"longText": "With photovoltaics"},
         "value": "%s"
     }
 """
+
+SYSTEM_CPU_USAGE: dict[str, Any] = {
+    "name": "APPL.CtrlAppl.sProcData.globalCpuTimePercent",
+    "attributes": {
+        "formatId": "fmt3p1",
+        "longText": "CPU usage",
+        "unitId": "Pct10",
+    },
+    "value": "27",
+}
+
+SYSTEM_WEBVIEW_CPU_USAGE: dict[str, Any] = {
+    "name": "APPL.CtrlAppl.sProcData.processStatus[0].cpuTimePercent",
+    "attributes": {
+        "formatId": "fmt3p1",
+        "longText": "WebView CPU",
+        "unitId": "Pct10",
+    },
+    "value": "34",
+}
+
+SYSTEM_WEBSERVER_CPU_USAGE: dict[str, Any] = {
+    "name": "APPL.CtrlAppl.sProcData.processStatus[1].cpuTimePercent",
+    "attributes": {
+        "formatId": "fmt3p1",
+        "longText": "WebServer CPU",
+        "unitId": "Pct10",
+    },
+    "value": "67",
+}
+
+SYSTEM_CONTROL_CPU_USAGE: dict[str, Any] = {
+    "name": "APPL.CtrlAppl.sProcData.processStatus[2].cpuTimePercent",
+    "attributes": {
+        "formatId": "fmt3p1",
+        "longText": "Ctrl CPU",
+        "unitId": "Pct10",
+    },
+    "value": "7",
+}
+
+SYSTEM_RAM_USAGE: dict[str, Any] = {
+    "name": "APPL.CtrlAppl.sProcData.RAMstatus.tmpfs",
+    "attributes": {
+        "formatId": "fmt6p0",
+        "longText": "Used Temporary Memory",
+        "unitId": "kB",
+    },
+    "value": "6432",
+}
+
+SYSTEM_FREE_RAM: dict[str, Any] = {
+    "name": "APPL.CtrlAppl.sProcData.totFreeRAM",
+    "attributes": {
+        "formatId": "fmt6p0",
+        "longText": "Free RAM",
+        "unitId": "kB",
+    },
+    "value": "100060",
+}
 
 DEFAULT_POSITION_RESPONSE: list[dict[str, Any]] = [
     json.loads(SYSTEM_HEAT_PUMP_NUMBERS % "1"),
@@ -935,7 +995,13 @@ DEFAULT_POSITION_DATA_RESPONSE: list[dict[str, Any]] = [
     json.loads(SYSTEM_EXTERNAL_HEAT_SOURCE_NUMBERS % "1"),
     SYSTEM_OUTDOOR_TEMPERATURE,
     SYSTEM_OPERATING_MODE,
-    json.loads(SYSTEM_HAS_PHOTOVOLTAIC % "true"),
+    json.loads(SYSTEM_HAS_PHOTOVOLTAICS % "true"),
+    SYSTEM_CPU_USAGE,
+    SYSTEM_WEBVIEW_CPU_USAGE,
+    SYSTEM_WEBSERVER_CPU_USAGE,
+    SYSTEM_CONTROL_CPU_USAGE,
+    SYSTEM_RAM_USAGE,
+    SYSTEM_FREE_RAM,
 ]
 
 ENTITY_UPDATED_DATA_RESPONSE: list[dict[str, Any]] = [
@@ -1012,7 +1078,13 @@ ENTITY_UPDATED_DATA_RESPONSE: list[dict[str, Any]] = [
     json.loads(SYSTEM_EXTERNAL_HEAT_SOURCE_NUMBERS % "1"),
     SYSTEM_OUTDOOR_TEMPERATURE,
     SYSTEM_OPERATING_MODE,
-    json.loads(SYSTEM_HAS_PHOTOVOLTAIC % "true"),
+    json.loads(SYSTEM_HAS_PHOTOVOLTAICS % "true"),
+    SYSTEM_CPU_USAGE,
+    SYSTEM_WEBVIEW_CPU_USAGE,
+    SYSTEM_WEBSERVER_CPU_USAGE,
+    SYSTEM_CONTROL_CPU_USAGE,
+    SYSTEM_RAM_USAGE,
+    SYSTEM_FREE_RAM,
 ]
 
 HEAT_CIRCUIT_OPERATION_MODE_3_DATA_RESPONSE: list[dict[str, Any]] = [
@@ -1058,7 +1130,13 @@ HEAT_CIRCUIT_OPERATION_MODE_3_DATA_RESPONSE: list[dict[str, Any]] = [
     json.loads(SYSTEM_EXTERNAL_HEAT_SOURCE_NUMBERS % "1"),
     SYSTEM_OUTDOOR_TEMPERATURE,
     SYSTEM_OPERATING_MODE,
-    json.loads(SYSTEM_HAS_PHOTOVOLTAIC % "true"),
+    json.loads(SYSTEM_HAS_PHOTOVOLTAICS % "true"),
+    SYSTEM_CPU_USAGE,
+    SYSTEM_WEBVIEW_CPU_USAGE,
+    SYSTEM_WEBSERVER_CPU_USAGE,
+    SYSTEM_CONTROL_CPU_USAGE,
+    SYSTEM_RAM_USAGE,
+    SYSTEM_FREE_RAM,
 ]
 
 HEAT_CIRCUIT_OPERATION_MODE_4_DATA_RESPONSE: list[dict[str, Any]] = [
@@ -1104,7 +1182,13 @@ HEAT_CIRCUIT_OPERATION_MODE_4_DATA_RESPONSE: list[dict[str, Any]] = [
     json.loads(SYSTEM_EXTERNAL_HEAT_SOURCE_NUMBERS % "1"),
     SYSTEM_OUTDOOR_TEMPERATURE,
     SYSTEM_OPERATING_MODE,
-    json.loads(SYSTEM_HAS_PHOTOVOLTAIC % "false"),
+    json.loads(SYSTEM_HAS_PHOTOVOLTAICS % "false"),
+    SYSTEM_CPU_USAGE,
+    SYSTEM_WEBVIEW_CPU_USAGE,
+    SYSTEM_WEBSERVER_CPU_USAGE,
+    SYSTEM_CONTROL_CPU_USAGE,
+    SYSTEM_RAM_USAGE,
+    SYSTEM_FREE_RAM,
 ]
 
 
@@ -1183,5 +1267,11 @@ def get_multi_positions_data_response(has_passive_cooling: str = "false") -> lis
         json.loads(SYSTEM_EXTERNAL_HEAT_SOURCE_NUMBERS % "1"),
         SYSTEM_OUTDOOR_TEMPERATURE,
         SYSTEM_OPERATING_MODE,
-        json.loads(SYSTEM_HAS_PHOTOVOLTAIC % "true"),
+        json.loads(SYSTEM_HAS_PHOTOVOLTAICS % "true"),
+        SYSTEM_CPU_USAGE,
+        SYSTEM_WEBVIEW_CPU_USAGE,
+        SYSTEM_WEBSERVER_CPU_USAGE,
+        SYSTEM_CONTROL_CPU_USAGE,
+        SYSTEM_RAM_USAGE,
+        SYSTEM_FREE_RAM,
     ]

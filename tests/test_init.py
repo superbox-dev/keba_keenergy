@@ -24,7 +24,7 @@ async def test_load_entry(
     await setup_integration(hass, config_entry)
 
     assert config_entry.state is ConfigEntryState.LOADED
-    assert hass.states.async_entity_ids_count() == 112
+    assert hass.states.async_entity_ids_count() == 118
 
     assert set(hass.states.async_entity_ids()) == {
         "binary_sensor.keba_keenergy_12345678_heat_pump_heat_request",
@@ -55,6 +55,8 @@ async def test_load_entry(
         "number.keba_keenergy_12345678_hot_water_tank_standby_temperature_2",
         "number.keba_keenergy_12345678_hot_water_tank_target_temperature_1",
         "number.keba_keenergy_12345678_hot_water_tank_target_temperature_2",
+        "sensor.keba_keenergy_12345678_control_cpu_usage",
+        "sensor.keba_keenergy_12345678_cpu_usage",
         "sensor.keba_keenergy_12345678_external_heat_source_operating_mode_1",
         "sensor.keba_keenergy_12345678_external_heat_source_operating_mode_2",
         "sensor.keba_keenergy_12345678_external_heat_source_target_temperature_1",
@@ -65,6 +67,7 @@ async def test_load_entry(
         "sensor.keba_keenergy_12345678_external_heat_source_max_runtime_2",
         "sensor.keba_keenergy_12345678_external_heat_source_activation_counter_1",
         "sensor.keba_keenergy_12345678_external_heat_source_activation_counter_2",
+        "sensor.keba_keenergy_12345678_free_ram",
         "sensor.keba_keenergy_12345678_heat_circuit_dew_point_1",
         "sensor.keba_keenergy_12345678_heat_circuit_dew_point_2",
         "sensor.keba_keenergy_12345678_heat_circuit_flow_temperature_1",
@@ -140,6 +143,9 @@ async def test_load_entry(
         # "sensor.keba_keenergy_12345678_photovoltaic_excess_power",
         # "sensor.keba_keenergy_12345678_photovoltaic_daily_energy",
         # "sensor.keba_keenergy_12345678_photovoltaic_total_energy",
+        "sensor.keba_keenergy_12345678_ram_usage",
+        "sensor.keba_keenergy_12345678_webserver_cpu_usage",
+        "sensor.keba_keenergy_12345678_webview_cpu_usage",
         "water_heater.keba_keenergy_12345678_1",
         "water_heater.keba_keenergy_12345678_2",
     }

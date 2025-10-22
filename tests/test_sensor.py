@@ -11,6 +11,7 @@ from homeassistant.const import PERCENTAGE
 from homeassistant.const import STATE_ON
 from homeassistant.const import STATE_STANDBY
 from homeassistant.const import UnitOfEnergy
+from homeassistant.const import UnitOfInformation
 from homeassistant.const import UnitOfPower
 from homeassistant.const import UnitOfPressure
 from homeassistant.const import UnitOfTemperature
@@ -52,6 +53,48 @@ async def test_system_sensors(
     assert operating_mode.attributes[ATTR_OPTIONS] == ["setup", "standby", "summer", "auto_heat", "auto_cool", "auto"]
     assert operating_mode.attributes[ATTR_FRIENDLY_NAME] == "Control unit Operating mode"
 
+    cpu_usage: State | None = hass.states.get("sensor.keba_keenergy_12345678_cpu_usage")
+    assert isinstance(cpu_usage, State)
+    assert cpu_usage.state == "2.7"
+    assert cpu_usage.attributes[CONF_UNIT_OF_MEASUREMENT] == PERCENTAGE
+    assert cpu_usage.attributes[ATTR_STATE_CLASS] == SensorStateClass.MEASUREMENT
+    assert cpu_usage.attributes[ATTR_FRIENDLY_NAME] == "Control unit CPU usage"
+
+    webview_cpu_usage: State | None = hass.states.get("sensor.keba_keenergy_12345678_webview_cpu_usage")
+    assert isinstance(webview_cpu_usage, State)
+    assert webview_cpu_usage.state == "3.4"
+    assert webview_cpu_usage.attributes[CONF_UNIT_OF_MEASUREMENT] == PERCENTAGE
+    assert webview_cpu_usage.attributes[ATTR_STATE_CLASS] == SensorStateClass.MEASUREMENT
+    assert webview_cpu_usage.attributes[ATTR_FRIENDLY_NAME] == "Control unit WebView CPU usage"
+
+    webserver_cpu_usage: State | None = hass.states.get("sensor.keba_keenergy_12345678_webserver_cpu_usage")
+    assert isinstance(webserver_cpu_usage, State)
+    assert webserver_cpu_usage.state == "6.7"
+    assert webserver_cpu_usage.attributes[CONF_UNIT_OF_MEASUREMENT] == PERCENTAGE
+    assert webserver_cpu_usage.attributes[ATTR_STATE_CLASS] == SensorStateClass.MEASUREMENT
+    assert webserver_cpu_usage.attributes[ATTR_FRIENDLY_NAME] == "Control unit WebServer CPU usage"
+
+    control_cpu_usage: State | None = hass.states.get("sensor.keba_keenergy_12345678_control_cpu_usage")
+    assert isinstance(control_cpu_usage, State)
+    assert control_cpu_usage.state == "0.7"
+    assert control_cpu_usage.attributes[CONF_UNIT_OF_MEASUREMENT] == PERCENTAGE
+    assert control_cpu_usage.attributes[ATTR_STATE_CLASS] == SensorStateClass.MEASUREMENT
+    assert control_cpu_usage.attributes[ATTR_FRIENDLY_NAME] == "Control unit Ctrl CPU usage"
+
+    ram_usage: State | None = hass.states.get("sensor.keba_keenergy_12345678_ram_usage")
+    assert isinstance(ram_usage, State)
+    assert ram_usage.state == "6432"
+    assert ram_usage.attributes[CONF_UNIT_OF_MEASUREMENT] == UnitOfInformation.KILOBYTES
+    assert ram_usage.attributes[ATTR_STATE_CLASS] == SensorStateClass.MEASUREMENT
+    assert ram_usage.attributes[ATTR_FRIENDLY_NAME] == "Control unit RAM usage"
+
+    free_ram: State | None = hass.states.get("sensor.keba_keenergy_12345678_free_ram")
+    assert isinstance(free_ram, State)
+    assert free_ram.state == "100060"
+    assert free_ram.attributes[CONF_UNIT_OF_MEASUREMENT] == UnitOfInformation.KILOBYTES
+    assert free_ram.attributes[ATTR_STATE_CLASS] == SensorStateClass.MEASUREMENT
+    assert free_ram.attributes[ATTR_FRIENDLY_NAME] == "Control unit Free RAM"
+
 
 @pytest.mark.usefixtures("entity_registry_enabled_by_default")
 async def test_system_sensors_translated(
@@ -73,6 +116,30 @@ async def test_system_sensors_translated(
     operating_mode: State | None = hass.states.get("sensor.keba_keenergy_12345678_operating_mode")
     assert isinstance(operating_mode, State)
     assert operating_mode.attributes[ATTR_FRIENDLY_NAME] == "Bedieneinheit Betriebsart"
+
+    cpu_usage: State | None = hass.states.get("sensor.keba_keenergy_12345678_cpu_usage")
+    assert isinstance(cpu_usage, State)
+    assert cpu_usage.attributes[ATTR_FRIENDLY_NAME] == "Bedieneinheit CPU-Auslastung"
+
+    webview_cpu_usage: State | None = hass.states.get("sensor.keba_keenergy_12345678_webview_cpu_usage")
+    assert isinstance(webview_cpu_usage, State)
+    assert webview_cpu_usage.attributes[ATTR_FRIENDLY_NAME] == "Bedieneinheit WebView CPU-Auslastung"
+
+    webserver_cpu_usage: State | None = hass.states.get("sensor.keba_keenergy_12345678_webserver_cpu_usage")
+    assert isinstance(webserver_cpu_usage, State)
+    assert webserver_cpu_usage.attributes[ATTR_FRIENDLY_NAME] == "Bedieneinheit WebServer CPU-Auslastung"
+
+    control_cpu_usage: State | None = hass.states.get("sensor.keba_keenergy_12345678_control_cpu_usage")
+    assert isinstance(control_cpu_usage, State)
+    assert control_cpu_usage.attributes[ATTR_FRIENDLY_NAME] == "Bedieneinheit Ctrl CPU-Auslastung"
+
+    ram_usage: State | None = hass.states.get("sensor.keba_keenergy_12345678_ram_usage")
+    assert isinstance(ram_usage, State)
+    assert ram_usage.attributes[ATTR_FRIENDLY_NAME] == "Bedieneinheit RAM-Verbrauch"
+
+    free_ram: State | None = hass.states.get("sensor.keba_keenergy_12345678_free_ram")
+    assert isinstance(free_ram, State)
+    assert free_ram.attributes[ATTR_FRIENDLY_NAME] == "Bedieneinheit Freier RAM"
 
 
 @pytest.mark.usefixtures("entity_registry_enabled_by_default")
