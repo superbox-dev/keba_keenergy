@@ -140,9 +140,9 @@ jobs:
       - name: Create ZIP file
         run: |
           cd ${{ github.workspace }}/custom_components/keba_keenergy
-          zip -r keba_keenergy.zip ./
+          zip -r ${{ github.workspace }}/keba_keenergy.zip ./
       - name: Release on GitHub
         uses: softprops/action-gh-release@v2
         with:
           prerelease: ${{ steps.check_prerelease.outputs.prerelease }}
-          files: keba_keenergy.zip
+          files: ${{ github.workspace }}/keba_keenergy.zip
