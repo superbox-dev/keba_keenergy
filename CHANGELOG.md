@@ -11,7 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- missing heating circuit heat request modes in the climate entity HAVC action 
+- missing heating circuit heat request modes in the climate entity HAVC action
 
 ## [1.3.0] - 2025-10-29
 
