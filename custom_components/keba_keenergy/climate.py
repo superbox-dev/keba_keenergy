@@ -44,9 +44,11 @@ HEAT_CIRCUIT_PRESET_TO_HA: Final[dict[int, str]] = {
 HEAT_CIRCUIT_HVAC_ACTION_TO_HA: Final[dict[int, HVACAction]] = {
     HeatCircuitHeatRequest.OFF: HVACAction.IDLE,
     HeatCircuitHeatRequest.ON: HVACAction.HEATING,
+    HeatCircuitHeatRequest.FLOW_OFF: HVACAction.IDLE,
     HeatCircuitHeatRequest.TEMPORARY_OFF: HVACAction.IDLE,
     HeatCircuitHeatRequest.ROOM_OFF: HVACAction.IDLE,
     HeatCircuitHeatRequest.OUTDOOR_OFF: HVACAction.IDLE,
+    HeatCircuitHeatRequest.INFLOW_OFF: HVACAction.IDLE,
 }
 
 TEMPERATURE_OFFSET_SCHEMA = {
