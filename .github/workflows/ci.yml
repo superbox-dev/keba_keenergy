@@ -20,7 +20,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
       - name: Set up project
         uses: ./.github/actions/setup-project
       - name: Lint python files with black
@@ -39,7 +39,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
       - name: Run hassfest validation
         uses: home-assistant/actions/hassfest@master
       - name: Run HACS validation
@@ -56,7 +56,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
       - name: Set up project
         uses: ./.github/actions/setup-project
       - name: Run tests
@@ -79,7 +79,7 @@ jobs:
       contents: write
     steps:
       - name: Check out repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
       - name: Set up project
         uses: ./.github/actions/setup-project
       - name: Download coverage
@@ -121,7 +121,7 @@ jobs:
       contents: write
     steps:
       - name: Check out repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
       - name: Set up project
         uses: ./.github/actions/setup-project
       - name: Check if prerelease
