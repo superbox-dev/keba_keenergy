@@ -19,10 +19,11 @@ Pull requests are the best way to propose changes to the codebase.
 4. Test you contribution.
 5. Issue that pull request!
 
-## Report bugs using GitHub's [issues](../../issues)
+## Report bugs using GitHub's [issues](https://github.com/superbox-dev/keba_keenergy/issues)
 
 GitHub issues are used to track public bugs.
-Report a bug by [opening a new issue](../../issues/new/choose); it's that easy!
+Report a bug by [opening a new issue](https://github.com/superbox-dev/keba_keenergy/issues/new/choose);
+it's that easy!
 
 ## Write bug reports with detail, background, and sample code
 
