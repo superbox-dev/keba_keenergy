@@ -149,6 +149,7 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
                     Photovoltaic.DAILY_ENERGY,
                     Photovoltaic.TOTAL_ENERGY,
                     System.HEAT_CIRCUIT_NUMBERS,
+                    System.SOLAR_CIRCUIT_NUMBERS,
                     System.HEAT_PUMP_NUMBERS,
                     System.HOT_WATER_TANK_NUMBERS,
                     System.EXTERNAL_HEAT_SOURCE_NUMBERS,

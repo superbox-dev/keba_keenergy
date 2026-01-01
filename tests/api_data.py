@@ -748,6 +748,21 @@ SYSTEM_HEAT_CIRCUIT_NUMBERS: str = """
     }
 """
 
+SYSTEM_SOLAR_CIRCUIT_NUMBERS: str = """
+    {
+        "name": "APPL.CtrlAppl.sParam.options.systemNumberOfSolarCircuits",
+        "attributes": {
+            "dynLowerLimit": 1,
+            "dynUpperLimit": 1,
+            "formatId": "fmt2p0",
+            "longText": "Qty solar",
+            "upperLimit": "4",
+            "lowerLimit": "0"
+        },
+        "value": "%s"
+    }
+"""
+
 SYSTEM_HEAT_PUMP_NUMBERS: str = """
     {
         "name": "APPL.CtrlAppl.sParam.options.systemNumberOfHeatPumps",
@@ -906,6 +921,7 @@ SYSTEM_FREE_RAM: dict[str, Any] = {
 DEFAULT_POSITION_RESPONSE: list[dict[str, Any]] = [
     json.loads(SYSTEM_HEAT_PUMP_NUMBERS % "1"),
     json.loads(SYSTEM_HEAT_CIRCUIT_NUMBERS % "1"),
+    json.loads(SYSTEM_SOLAR_CIRCUIT_NUMBERS % "1"),
     json.loads(SYSTEM_HOT_WATER_TANK_NUMBERS % "1"),
     json.loads(SYSTEM_EXTERNAL_HEAT_SOURCE_NUMBERS % "1"),
 ]
@@ -913,6 +929,7 @@ DEFAULT_POSITION_RESPONSE: list[dict[str, Any]] = [
 MULTIPLE_POSITIONS_RESPONSE: list[dict[str, Any]] = [
     json.loads(SYSTEM_HEAT_PUMP_NUMBERS % "1"),
     json.loads(SYSTEM_HEAT_CIRCUIT_NUMBERS % "2"),
+    json.loads(SYSTEM_SOLAR_CIRCUIT_NUMBERS % "2"),
     json.loads(SYSTEM_HOT_WATER_TANK_NUMBERS % "2"),
     json.loads(SYSTEM_EXTERNAL_HEAT_SOURCE_NUMBERS % "2"),
 ]
@@ -990,6 +1007,7 @@ DEFAULT_POSITION_DATA_RESPONSE: list[dict[str, Any]] = [
     json.loads(PHOTOVOLTAIC_DAILY_ENERGY % "437.700001"),
     json.loads(PHOTOVOLTAIC_TOTAL_ENERGY % "437.700001"),
     json.loads(SYSTEM_HEAT_CIRCUIT_NUMBERS % "1"),
+    json.loads(SYSTEM_SOLAR_CIRCUIT_NUMBERS % "1"),
     json.loads(SYSTEM_HEAT_PUMP_NUMBERS % "1"),
     json.loads(SYSTEM_HOT_WATER_TANK_NUMBERS % "1"),
     json.loads(SYSTEM_EXTERNAL_HEAT_SOURCE_NUMBERS % "1"),
@@ -1073,6 +1091,7 @@ ENTITY_UPDATED_DATA_RESPONSE: list[dict[str, Any]] = [
     json.loads(PHOTOVOLTAIC_DAILY_ENERGY % "437.700001"),
     json.loads(PHOTOVOLTAIC_TOTAL_ENERGY % "437.700001"),
     json.loads(SYSTEM_HEAT_CIRCUIT_NUMBERS % "2"),
+    json.loads(SYSTEM_SOLAR_CIRCUIT_NUMBERS % "2"),
     json.loads(SYSTEM_HEAT_PUMP_NUMBERS % "1"),
     json.loads(SYSTEM_HOT_WATER_TANK_NUMBERS % "2"),
     json.loads(SYSTEM_EXTERNAL_HEAT_SOURCE_NUMBERS % "1"),
@@ -1125,6 +1144,7 @@ HEAT_CIRCUIT_OPERATION_MODE_3_DATA_RESPONSE: list[dict[str, Any]] = [
     json.loads(PHOTOVOLTAIC_DAILY_ENERGY % "437.700001"),
     json.loads(PHOTOVOLTAIC_TOTAL_ENERGY % "437.700001"),
     json.loads(SYSTEM_HEAT_CIRCUIT_NUMBERS % "1"),
+    json.loads(SYSTEM_SOLAR_CIRCUIT_NUMBERS % "1"),
     json.loads(SYSTEM_HEAT_PUMP_NUMBERS % "1"),
     json.loads(SYSTEM_HOT_WATER_TANK_NUMBERS % "1"),
     json.loads(SYSTEM_EXTERNAL_HEAT_SOURCE_NUMBERS % "1"),
@@ -1177,6 +1197,7 @@ HEAT_CIRCUIT_OPERATION_MODE_4_DATA_RESPONSE: list[dict[str, Any]] = [
     json.loads(PHOTOVOLTAIC_DAILY_ENERGY % "437.700001"),
     json.loads(PHOTOVOLTAIC_TOTAL_ENERGY % "437.700001"),
     json.loads(SYSTEM_HEAT_CIRCUIT_NUMBERS % "1"),
+    json.loads(SYSTEM_SOLAR_CIRCUIT_NUMBERS % "1"),
     json.loads(SYSTEM_HEAT_PUMP_NUMBERS % "1"),
     json.loads(SYSTEM_HOT_WATER_TANK_NUMBERS % "1"),
     json.loads(SYSTEM_EXTERNAL_HEAT_SOURCE_NUMBERS % "1"),
@@ -1262,6 +1283,7 @@ def get_multi_positions_data_response(has_passive_cooling: str = "false") -> lis
         json.loads(PHOTOVOLTAIC_DAILY_ENERGY % "437.700001"),
         json.loads(PHOTOVOLTAIC_TOTAL_ENERGY % "437.700001"),
         json.loads(SYSTEM_HEAT_CIRCUIT_NUMBERS % "2"),
+        json.loads(SYSTEM_SOLAR_CIRCUIT_NUMBERS % "2"),
         json.loads(SYSTEM_HEAT_PUMP_NUMBERS % "1"),
         json.loads(SYSTEM_HOT_WATER_TANK_NUMBERS % "2"),
         json.loads(SYSTEM_EXTERNAL_HEAT_SOURCE_NUMBERS % "1"),
