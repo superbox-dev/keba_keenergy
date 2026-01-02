@@ -5,7 +5,6 @@ from collections.abc import Mapping
 from functools import cached_property
 from typing import Any
 from typing import TYPE_CHECKING
-from typing import cast
 
 from aiohttp import ClientError
 from homeassistant.config_entries import ConfigEntry
@@ -19,6 +18,7 @@ from keba_keenergy_api.constants import HotWaterTank
 from keba_keenergy_api.constants import Photovoltaic
 from keba_keenergy_api.constants import Section
 from keba_keenergy_api.constants import SectionPrefix
+from keba_keenergy_api.constants import SolarCircuit
 from keba_keenergy_api.constants import System
 from keba_keenergy_api.error import APIError
 
@@ -46,14 +46,19 @@ class KebaKeEnergyEntity(
         entry: ConfigEntry,
         section_id: str,
         index: int | None,
+        key_index: int | None = None,
     ) -> None:
         """Initialize the KEBA KeEnergy entity."""
         super().__init__(coordinator)
         self.entry: ConfigEntry = entry
         self.section_id: str = section_id
         self.index: int | None = index
+        self.key_index: int | None = key_index
 
         self._attr_unique_id: str | None = entry.unique_id
+
+        if self.key_index is not None:
+            self._attr_unique_id = f"{self._attr_unique_id}_{self.key_index + 1}"
 
         if self.position is not None:
             self._attr_unique_id = f"{self._attr_unique_id}_{self.position}"
@@ -73,6 +78,11 @@ class KebaKeEnergyEntity(
     def is_heat_circuit(self) -> bool:
         """Return True if the entity is part of a heat circuit else False."""
         return self.section_id == SectionPrefix.HEAT_CIRCUIT
+
+    @property
+    def is_solar_circuit(self) -> bool:
+        """Return True if the entity is part of a solar circuit else False."""
+        return self.section_id == SectionPrefix.SOLAR_CIRCUIT
 
     @property
     def is_heat_pump(self) -> bool:
@@ -97,28 +107,7 @@ class KebaKeEnergyEntity(
     @property
     def device_name(self) -> str | None:
         """Return the device name and number."""
-        _device_name: str | None = None
-
-        if self.is_system_device:
-            _device_name = "Control unit"
-        elif self.is_heat_circuit:
-            data: list[Value] = cast("list[Value]", self.coordinator.data[self.section_id]["name"])
-            _device_name = data[self.index or 0]["value"]
-        elif self.is_heat_pump:
-            _device_name = "Heat pump"
-        elif self.is_hot_water_tank:
-            _device_name = "Hot water tank"
-        elif self.is_external_heat_source:
-            _device_name = "External heat source"
-        elif self.is_photovoltaic:
-            _device_name = "Photovoltaic"
-
-        # Add position number to device name if there is more than one device
-        # e.g. hot water tank, heat circuit or heat pump.
-        if _device_name and self.position is not None:
-            _device_name = f"{_device_name} ({self.position})"
-
-        return _device_name
+        return None
 
     @cached_property
     def device_identifier(self) -> str:
@@ -126,7 +115,8 @@ class KebaKeEnergyEntity(
         _identifier: str = f"{self.entry.unique_id}_{DOMAIN if self.is_system_device else self.section_id}"
 
         # Add position number to identifier if there is more than one device
-        # e.g. hot water tank, heat circuit or heat pump.
+        # e.g. hot water tank, heat circuit, solar circuit or heat pump.
+
         if self.position is not None:
             _identifier = f"{_identifier}_{self.position}"
 
@@ -169,8 +159,10 @@ class KebaKeEnergyEntity(
 
         if self.is_system_device:
             translation_key = "control_unit"
-        if self.is_heat_circuit:
+        elif self.is_heat_circuit:
             translation_key = "heat_circuit"
+        elif self.is_solar_circuit:
+            translation_key = "solar_circuit"
         elif self.is_heat_pump:
             translation_key = "heat_pump"
         elif self.is_hot_water_tank:
@@ -227,11 +219,17 @@ class KebaKeEnergyEntity(
         """Write data to the KEBA KeEnergy API."""
         if section:
             _current_index: int = self.index or 0
+            _range: int | None = device_numbers
+
+            if _range and self.key_index is not None:
+                quantity: int = section.value.quantity
+                _current_index = _current_index * quantity + self.key_index
+                _range = _range * quantity
 
             request: dict[Section, Any] = {
                 section: (
-                    [value if index == _current_index else None for index in range(device_numbers)]
-                    if device_numbers
+                    [value if index == _current_index else None for index in range(_range)]
+                    if isinstance(_range, int)
                     else value
                 ),
             }
@@ -246,19 +244,37 @@ class KebaKeEnergyEntity(
 
             await self.coordinator.async_refresh()
 
-    def get_attribute(self, *, key: str, attr: str) -> str:
+    def get_attribute(self, key: str, /, *, attr: str) -> str:
         """Get extra attribute from the API by key."""
-        data: list[Value] = cast("list[Value]", self.coordinator.data[self.section_id][key])
-        return str(data[self.index or 0]["attributes"][attr])
-
-    def get_value(self, key: str) -> Any:
-        """Get value from the API by key."""
-        data: list[Value] | Value = cast("list[Value]", self.coordinator.data[self.section_id][key])
+        data: list[list[Value]] | list[Value] | Value | None = self.coordinator.data[self.section_id].get(key, None)
+        attributes: dict[str, Any] = {}
 
         if isinstance(data, list):
-            return data[self.index or 0]["value"]
+            data = data[self.index or 0]
 
-        return data["value"]
+        if isinstance(data, list) and self.key_index is not None:
+            data = data[self.key_index]
+
+        if isinstance(data, dict):
+            attributes = data["attributes"]
+
+        return str(attributes.get(attr, ""))
+
+    def get_value(self, key: str, /) -> Any:
+        """Get value from the API by key."""
+        data: list[list[Value]] | list[Value] | Value | None = self.coordinator.data[self.section_id].get(key, None)
+        value: Value | None = None
+
+        if isinstance(data, list):
+            data = data[self.index or 0]
+
+        if isinstance(data, list) and self.key_index is not None:
+            data = data[self.key_index]
+
+        if isinstance(data, dict):
+            value = data["value"]
+
+        return value
 
 
 class KebaKeEnergyExtendedEntity(KebaKeEnergyEntity):
@@ -270,33 +286,46 @@ class KebaKeEnergyExtendedEntity(KebaKeEnergyEntity):
         entry: ConfigEntry,
         section_id: str,
         index: int | None,
+        key_index: int | None = None,
     ) -> None:
         """Initialize the KEBA KeEnergy extended entity."""
-        super().__init__(coordinator, entry=entry, section_id=section_id, index=index)
+        super().__init__(coordinator, entry=entry, section_id=section_id, index=index, key_index=key_index)
         self._attr_unique_id: str | None = f"{self.entry.unique_id}_{self.section_id}_{self.entity_description.key}"
 
         if self.is_system_device:
             self._attr_unique_id = f"{self.entry.unique_id}_{self.entity_description.key}"
 
+        if self.key_index is not None:
+            self._attr_unique_id = f"{self._attr_unique_id}_{self.key_index + 1}"
+
         if self.position is not None:
             self._attr_unique_id = f"{self._attr_unique_id}_{self.position}"
 
-        self.section: Section | None = None
         self.device_numbers: int | None = None
 
+    @property
+    def section(self) -> Section | None:
+        """Get the current section."""
+        section: Section | None = None
+
         if self.is_system_device:
-            self.section = System[self.entity_description.key.upper()]
-        if self.is_heat_circuit:
-            self.section = HeatCircuit[self.entity_description.key.upper()]
+            section = System[self.entity_description.key.upper()]
+        elif self.is_heat_circuit:
+            section = HeatCircuit[self.entity_description.key.upper()]
             self.device_numbers = self.coordinator.heat_circuit_numbers
+        elif self.is_solar_circuit:
+            section = SolarCircuit[self.entity_description.key.upper()]
+            self.device_numbers = self.coordinator.solar_circuit_numbers
         elif self.is_heat_pump:
-            self.section = HeatPump[self.entity_description.key.upper()]
+            section = HeatPump[self.entity_description.key.upper()]
             self.device_numbers = self.coordinator.heat_pump_numbers
         elif self.is_hot_water_tank:
-            self.section = HotWaterTank[self.entity_description.key.upper()]
+            section = HotWaterTank[self.entity_description.key.upper()]
             self.device_numbers = self.coordinator.hot_water_tank_numbers
         elif self.is_external_heat_source:
-            self.section = ExternalHeatSource[self.entity_description.key.upper()]
+            section = ExternalHeatSource[self.entity_description.key.upper()]
             self.device_numbers = self.coordinator.external_heat_source_numbers
         elif self.is_photovoltaic:
-            self.section = Photovoltaic[self.entity_description.key.upper()]
+            section = Photovoltaic[self.entity_description.key.upper()]
+
+        return section

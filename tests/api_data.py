@@ -234,14 +234,6 @@ HEAT_CIRCUIT_TARGET_TEMPERATURE_AWAY: str = """
     }
 """
 
-HEAT_CIRCUIT_NAME: str = """
-    {
-        "name": "APPL.CtrlAppl.sParam.heatCircuit[%s].param.name",
-        "attributes": {"longText": "Designation"},
-        "value": "%s"
-    }
-"""
-
 HEAT_CIRCUIT_TARGET_TEMPERATURE_NIGHT: str = """
     {
         "name": "APPL.CtrlAppl.sParam.heatCircuit[%s].param.reducedSetTemp",
@@ -307,6 +299,164 @@ HEAT_CIRCUIT_TARGET_TEMPERATURE_OFFSET: str = """
             "unitId": "TempRel",
             "upperLimit": "2.5",
             "lowerLimit": "-2.5"
+        },
+        "value": "%s"
+    }
+"""
+
+SOLAR_CIRCUIT_OPERATION_MODE: str = """
+    {
+        "name": "APPL.CtrlAppl.sParam.solarCircuit[%s].param.operatingMode",
+        "attributes": {
+            "formatId": "fmtSolarOpMode",
+            "longText": "Oper. mode",
+            "unitId": "Enum",
+            "upperLimit": "32767",
+            "lowerLimit": "0"
+        },
+        "value": "%s"
+    }
+"""
+
+SOLAR_CIRCUIT_SOURCE_TEMPERATURE: str = """
+    {
+        "name": "APPL.CtrlAppl.sParam.solarCircuit[%s].collectorTemp.values.actValue",
+        "attributes": {
+            "formatId": "fmtTemp",
+            "longText": "Source temp.",
+            "unitId": "Temp",
+            "upperLimit": "90",
+            "lowerLimit": "20"
+        },
+        "value": "%s"
+    }
+"""
+
+SOLAR_CIRCUIT_PUMP_1: str = """
+    {
+        "name": "APPL.CtrlAppl.sParam.solarCircuit[%s].values.pump1",
+        "attributes": {
+            "formatId": "fmt3p0",
+            "longText": "Pump 1",
+            "unitId": "Pct100",
+            "upperLimit": "1",
+            "lowerLimit": "0.0"
+        },
+        "value": "%s"
+    }
+"""
+
+SOLAR_CIRCUIT_PUMP_2: str = """
+    {
+        "name": "APPL.CtrlAppl.sParam.solarCircuit[%s].values.pump2",
+        "attributes": {
+            "formatId": "fmt3p0",
+            "longText": "Pump 2",
+            "unitId": "Pct100",
+            "upperLimit": "1",
+            "lowerLimit": "0.0"
+        },
+        "value": "%s"
+    }
+"""
+
+SOLAR_CIRCUIT_CURRENT_TEMPERATURE_1: str = """
+    {
+        "name": "APPL.CtrlAppl.sParam.genericHeat[%s].referenceTemp.values.actValue",
+        "attributes": {
+            "formatId": "fmtTemp",
+            "longText": "Temp. act.1",
+            "unitId": "Temp"
+        },
+        "value": "%s"
+    }
+"""
+
+SOLAR_CIRCUIT_CURRENT_TEMPERATURE_2: str = """
+    {
+        "name": "APPL.CtrlAppl.sParam.genericHeat[%s].referenceTemp.values.actValue",
+        "attributes": {
+            "formatId": "fmtTemp",
+            "longText": "Temp. act.2",
+            "unitId": "Temp"
+        },
+        "value": "%s"
+    }
+"""
+
+SOLAR_CIRCUIT_TARGET_TEMPERATURE_1: str = """
+    {
+        "name": "APPL.CtrlAppl.sParam.genericHeat[%s].param.setTempMax.value",
+         "attributes": {
+            "formatId": "fmtTemp",
+            "longText": "Temp. nom. 1",
+            "unitId": "Temp",
+            "upperLimit": "90",
+            "lowerLimit": "0"
+        },
+        "value": "%s"
+    }
+"""
+
+SOLAR_CIRCUIT_TARGET_TEMPERATURE_2: str = """
+    {
+        "name": "APPL.CtrlAppl.sParam.genericHeat[%s].param.setTempMax.value",
+         "attributes": {
+            "formatId": "fmtTemp",
+            "longText": "Temp. nom. 2",
+            "unitId": "Temp",
+            "upperLimit": "90",
+            "lowerLimit": "0"
+        },
+        "value": "%s"
+    }
+"""
+
+SOLAR_CIRCUIT_HEAT_REQUEST: str = """
+    {
+        "name": "APPL.CtrlAppl.sParam.genericHeat[%s].values.heatRequest",
+        "attributes": {
+            "unitId": "Enum",
+            "upperLimit": "6",
+            "lowerLimit": "0"
+        },
+        "value": "%s"
+    }
+"""
+
+SOLAR_CIRCUIT_HEATING_ENERGY: str = """
+    {
+        "name": "APPL.CtrlAppl.sParam.solarCircuit[%s].heatMeter.values.accumulatedHeat",
+        "attributes": {
+            "formatId": "fmt6p0",
+            "longText": "Heat quantity",
+            "unitId": "kWh",
+            "upperLimit": "900000",
+            "lowerLimit": "0"
+        },
+        "value": "%s"
+    }
+"""
+
+SOLAR_CIRCUIT_DAILY_ENERGY: str = """
+    {
+        "name": "APPL.CtrlAppl.sParam.solarCircuit[%s].heatMeter.values.heatDay",
+        "attributes": {
+            "formatId": "fmt6p1",
+            "longText": "Energy per day",
+            "unitId": "kWh"
+        },
+        "value": "%s"
+    }
+"""
+
+SOLAR_CIRCUIT_ACTUAL_POWER: str = """
+    {
+        "name": "APPL.CtrlAppl.sParam.solarCircuit[%s].heatMeter.values.power",
+        "attributes": {
+            "formatId": "fmt6p0",
+            "longText": "Act. power",
+            "unitId": "Pwr"
         },
         "value": "%s"
     }
@@ -988,12 +1138,24 @@ DEFAULT_POSITION_DATA_RESPONSE: list[dict[str, Any]] = [
     json.loads(HEAT_CIRCUIT_HEATING_LIMIT_DAY % ("0", "20")),
     json.loads(HEAT_CIRCUIT_HEAT_REQUEST % ("0", "1")),
     json.loads(HEAT_CIRCUIT_TARGET_TEMPERATURE_AWAY % ("0", "18")),
-    json.loads(HEAT_CIRCUIT_NAME % ("0", "FBH1")),
     json.loads(HEAT_CIRCUIT_TARGET_TEMPERATURE_NIGHT % ("0", "20")),
     json.loads(HEAT_CIRCUIT_HEATING_LIMIT_NIGHT % ("0", "18")),
     json.loads(HEAT_CIRCUIT_OPERATION_MODE % ("0", "3")),
     json.loads(HEAT_CIRCUIT_TARGET_TEMPERATURE % ("0", "20.5")),
     json.loads(HEAT_CIRCUIT_TARGET_TEMPERATURE_OFFSET % ("0", "1.5")),
+    json.loads(SOLAR_CIRCUIT_OPERATION_MODE % ("0", "0")),
+    json.loads(SOLAR_CIRCUIT_SOURCE_TEMPERATURE % ("0", "44.43")),
+    json.loads(SOLAR_CIRCUIT_PUMP_1 % ("0", "0.63")),
+    json.loads(SOLAR_CIRCUIT_PUMP_2 % ("0", "0.43")),
+    json.loads(SOLAR_CIRCUIT_CURRENT_TEMPERATURE_1 % ("0", "36.76")),
+    json.loads(SOLAR_CIRCUIT_CURRENT_TEMPERATURE_2 % ("1", "26.76")),
+    json.loads(SOLAR_CIRCUIT_TARGET_TEMPERATURE_1 % ("0", "55")),
+    json.loads(SOLAR_CIRCUIT_TARGET_TEMPERATURE_2 % ("1", "55")),
+    json.loads(SOLAR_CIRCUIT_HEAT_REQUEST % ("0", "true")),
+    json.loads(SOLAR_CIRCUIT_HEAT_REQUEST % ("1", "false")),
+    json.loads(SOLAR_CIRCUIT_HEATING_ENERGY % ("0", "8.73")),
+    json.loads(SOLAR_CIRCUIT_DAILY_ENERGY % ("0", "2.33")),
+    json.loads(SOLAR_CIRCUIT_ACTUAL_POWER % ("0", "3452")),
     *HEAT_PUMP_DATA,
     json.loads(HEAT_PUMP_HAS_PASSIVE_COOLING % "true"),
     json.loads(HOT_WATER_TANK_HEAT_REQUEST % ("0", "false")),
@@ -1059,8 +1221,6 @@ ENTITY_UPDATED_DATA_RESPONSE: list[dict[str, Any]] = [
     json.loads(HEAT_CIRCUIT_HEAT_REQUEST % ("1", "0")),
     json.loads(HEAT_CIRCUIT_TARGET_TEMPERATURE_AWAY % ("0", "18")),
     json.loads(HEAT_CIRCUIT_TARGET_TEMPERATURE_AWAY % ("1", "18")),
-    json.loads(HEAT_CIRCUIT_NAME % ("0", "FBH1")),
-    json.loads(HEAT_CIRCUIT_NAME % ("1", "FBH2")),
     json.loads(HEAT_CIRCUIT_TARGET_TEMPERATURE_NIGHT % ("0", "20")),
     json.loads(HEAT_CIRCUIT_TARGET_TEMPERATURE_NIGHT % ("1", "20")),
     json.loads(HEAT_CIRCUIT_HEATING_LIMIT_NIGHT % ("0", "18")),
@@ -1071,6 +1231,32 @@ ENTITY_UPDATED_DATA_RESPONSE: list[dict[str, Any]] = [
     json.loads(HEAT_CIRCUIT_TARGET_TEMPERATURE % ("1", "20.5")),
     json.loads(HEAT_CIRCUIT_TARGET_TEMPERATURE_OFFSET % ("0", "1.5")),
     json.loads(HEAT_CIRCUIT_TARGET_TEMPERATURE_OFFSET % ("1", "0")),
+    json.loads(SOLAR_CIRCUIT_OPERATION_MODE % ("0", "0")),
+    json.loads(SOLAR_CIRCUIT_OPERATION_MODE % ("1", "1")),
+    json.loads(SOLAR_CIRCUIT_SOURCE_TEMPERATURE % ("0", "44.43")),
+    json.loads(SOLAR_CIRCUIT_SOURCE_TEMPERATURE % ("1", "34.43")),
+    json.loads(SOLAR_CIRCUIT_PUMP_1 % ("0", "0.63")),
+    json.loads(SOLAR_CIRCUIT_PUMP_1 % ("1", "0.67")),
+    json.loads(SOLAR_CIRCUIT_PUMP_2 % ("0", "0.43")),
+    json.loads(SOLAR_CIRCUIT_PUMP_2 % ("1", "0.53")),
+    json.loads(SOLAR_CIRCUIT_CURRENT_TEMPERATURE_1 % ("0", "36.76")),
+    json.loads(SOLAR_CIRCUIT_CURRENT_TEMPERATURE_2 % ("1", "26.76")),
+    json.loads(SOLAR_CIRCUIT_CURRENT_TEMPERATURE_1 % ("2", "36.76")),
+    json.loads(SOLAR_CIRCUIT_CURRENT_TEMPERATURE_2 % ("3", "26.76")),
+    json.loads(SOLAR_CIRCUIT_TARGET_TEMPERATURE_1 % ("0", "55")),
+    json.loads(SOLAR_CIRCUIT_TARGET_TEMPERATURE_2 % ("1", "55")),
+    json.loads(SOLAR_CIRCUIT_TARGET_TEMPERATURE_1 % ("2", "55")),
+    json.loads(SOLAR_CIRCUIT_TARGET_TEMPERATURE_2 % ("3", "55")),
+    json.loads(SOLAR_CIRCUIT_HEAT_REQUEST % ("0", "true")),
+    json.loads(SOLAR_CIRCUIT_HEAT_REQUEST % ("1", "false")),
+    json.loads(SOLAR_CIRCUIT_HEAT_REQUEST % ("2", "true")),
+    json.loads(SOLAR_CIRCUIT_HEAT_REQUEST % ("3", "false")),
+    json.loads(SOLAR_CIRCUIT_HEATING_ENERGY % ("0", "8.73")),
+    json.loads(SOLAR_CIRCUIT_HEATING_ENERGY % ("1", "8.73")),
+    json.loads(SOLAR_CIRCUIT_DAILY_ENERGY % ("0", "2.33")),
+    json.loads(SOLAR_CIRCUIT_DAILY_ENERGY % ("1", "2.33")),
+    json.loads(SOLAR_CIRCUIT_ACTUAL_POWER % ("0", "3452")),
+    json.loads(SOLAR_CIRCUIT_ACTUAL_POWER % ("1", "3452")),
     *HEAT_PUMP_DATA,
     json.loads(HEAT_PUMP_HAS_PASSIVE_COOLING % "true"),
     json.loads(HOT_WATER_TANK_HEAT_REQUEST % ("0", "false")),
@@ -1125,12 +1311,24 @@ HEAT_CIRCUIT_OPERATION_MODE_3_DATA_RESPONSE: list[dict[str, Any]] = [
     json.loads(HEAT_CIRCUIT_HEATING_LIMIT_DAY % ("0", "20")),
     json.loads(HEAT_CIRCUIT_HEAT_REQUEST % ("0", "1")),
     json.loads(HEAT_CIRCUIT_TARGET_TEMPERATURE_AWAY % ("0", "18")),
-    json.loads(HEAT_CIRCUIT_NAME % ("0", "FBH1")),
     json.loads(HEAT_CIRCUIT_TARGET_TEMPERATURE_NIGHT % ("0", "20")),
     json.loads(HEAT_CIRCUIT_HEATING_LIMIT_NIGHT % ("0", "18")),
     json.loads(HEAT_CIRCUIT_OPERATION_MODE % ("0", "3")),
     json.loads(HEAT_CIRCUIT_TARGET_TEMPERATURE % ("0", "20.5")),
     json.loads(HEAT_CIRCUIT_TARGET_TEMPERATURE_OFFSET % ("0", "1.5")),
+    json.loads(SOLAR_CIRCUIT_OPERATION_MODE % ("0", "0")),
+    json.loads(SOLAR_CIRCUIT_SOURCE_TEMPERATURE % ("0", "44.43")),
+    json.loads(SOLAR_CIRCUIT_PUMP_1 % ("0", "0.63")),
+    json.loads(SOLAR_CIRCUIT_PUMP_2 % ("0", "0.43")),
+    json.loads(SOLAR_CIRCUIT_CURRENT_TEMPERATURE_1 % ("0", "36.76")),
+    json.loads(SOLAR_CIRCUIT_CURRENT_TEMPERATURE_2 % ("1", "26.76")),
+    json.loads(SOLAR_CIRCUIT_TARGET_TEMPERATURE_1 % ("0", "55")),
+    json.loads(SOLAR_CIRCUIT_TARGET_TEMPERATURE_2 % ("1", "55")),
+    json.loads(SOLAR_CIRCUIT_HEAT_REQUEST % ("0", "true")),
+    json.loads(SOLAR_CIRCUIT_HEAT_REQUEST % ("1", "false")),
+    json.loads(SOLAR_CIRCUIT_HEATING_ENERGY % ("0", "8.73")),
+    json.loads(SOLAR_CIRCUIT_DAILY_ENERGY % ("0", "2.33")),
+    json.loads(SOLAR_CIRCUIT_ACTUAL_POWER % ("0", "3452")),
     *HEAT_PUMP_DATA,
     json.loads(HEAT_PUMP_HAS_PASSIVE_COOLING % "true"),
     json.loads(HOT_WATER_TANK_HEAT_REQUEST % ("0", "false")),
@@ -1178,12 +1376,24 @@ HEAT_CIRCUIT_OPERATION_MODE_4_DATA_RESPONSE: list[dict[str, Any]] = [
     json.loads(HEAT_CIRCUIT_HEATING_LIMIT_DAY % ("0", "20")),
     json.loads(HEAT_CIRCUIT_HEAT_REQUEST % ("0", "1")),
     json.loads(HEAT_CIRCUIT_TARGET_TEMPERATURE_AWAY % ("0", "18")),
-    json.loads(HEAT_CIRCUIT_NAME % ("0", "FBH1")),
     json.loads(HEAT_CIRCUIT_TARGET_TEMPERATURE_NIGHT % ("0", "20")),
     json.loads(HEAT_CIRCUIT_HEATING_LIMIT_NIGHT % ("0", "18")),
     json.loads(HEAT_CIRCUIT_OPERATION_MODE % ("0", "4")),
     json.loads(HEAT_CIRCUIT_TARGET_TEMPERATURE % ("0", "20.5")),
     json.loads(HEAT_CIRCUIT_TARGET_TEMPERATURE_OFFSET % ("0", "1.5")),
+    json.loads(SOLAR_CIRCUIT_OPERATION_MODE % ("0", "0")),
+    json.loads(SOLAR_CIRCUIT_SOURCE_TEMPERATURE % ("0", "44.43")),
+    json.loads(SOLAR_CIRCUIT_PUMP_1 % ("0", "0.63")),
+    json.loads(SOLAR_CIRCUIT_PUMP_2 % ("0", "0.43")),
+    json.loads(SOLAR_CIRCUIT_CURRENT_TEMPERATURE_1 % ("0", "36.76")),
+    json.loads(SOLAR_CIRCUIT_CURRENT_TEMPERATURE_2 % ("1", "26.76")),
+    json.loads(SOLAR_CIRCUIT_TARGET_TEMPERATURE_1 % ("0", "55")),
+    json.loads(SOLAR_CIRCUIT_TARGET_TEMPERATURE_2 % ("1", "55")),
+    json.loads(SOLAR_CIRCUIT_HEAT_REQUEST % ("0", "true")),
+    json.loads(SOLAR_CIRCUIT_HEAT_REQUEST % ("1", "false")),
+    json.loads(SOLAR_CIRCUIT_HEATING_ENERGY % ("0", "8.73")),
+    json.loads(SOLAR_CIRCUIT_DAILY_ENERGY % ("0", "2.33")),
+    json.loads(SOLAR_CIRCUIT_ACTUAL_POWER % ("0", "3452")),
     *HEAT_PUMP_DATA,
     json.loads(HEAT_PUMP_HAS_PASSIVE_COOLING % "true"),
     json.loads(HOT_WATER_TANK_HEAT_REQUEST % ("0", "false")),
@@ -1251,8 +1461,6 @@ def get_multi_positions_data_response(has_passive_cooling: str = "false") -> lis
         json.loads(HEAT_CIRCUIT_HEAT_REQUEST % ("1", "0")),
         json.loads(HEAT_CIRCUIT_TARGET_TEMPERATURE_AWAY % ("0", "18")),
         json.loads(HEAT_CIRCUIT_TARGET_TEMPERATURE_AWAY % ("1", "18")),
-        json.loads(HEAT_CIRCUIT_NAME % ("0", "FBH1")),
-        json.loads(HEAT_CIRCUIT_NAME % ("1", "FBH2")),
         json.loads(HEAT_CIRCUIT_TARGET_TEMPERATURE_NIGHT % ("0", "20")),
         json.loads(HEAT_CIRCUIT_TARGET_TEMPERATURE_NIGHT % ("1", "20")),
         json.loads(HEAT_CIRCUIT_HEATING_LIMIT_NIGHT % ("0", "18")),
@@ -1263,6 +1471,32 @@ def get_multi_positions_data_response(has_passive_cooling: str = "false") -> lis
         json.loads(HEAT_CIRCUIT_TARGET_TEMPERATURE % ("1", "20.5")),
         json.loads(HEAT_CIRCUIT_TARGET_TEMPERATURE_OFFSET % ("0", "1.5")),
         json.loads(HEAT_CIRCUIT_TARGET_TEMPERATURE_OFFSET % ("1", "0")),
+        json.loads(SOLAR_CIRCUIT_OPERATION_MODE % ("0", "0")),
+        json.loads(SOLAR_CIRCUIT_OPERATION_MODE % ("1", "1")),
+        json.loads(SOLAR_CIRCUIT_SOURCE_TEMPERATURE % ("0", "44.43")),
+        json.loads(SOLAR_CIRCUIT_SOURCE_TEMPERATURE % ("1", "34.43")),
+        json.loads(SOLAR_CIRCUIT_PUMP_1 % ("0", "0.63")),
+        json.loads(SOLAR_CIRCUIT_PUMP_1 % ("1", "0.43")),
+        json.loads(SOLAR_CIRCUIT_PUMP_2 % ("0", "0.73")),
+        json.loads(SOLAR_CIRCUIT_PUMP_2 % ("1", "0.53")),
+        json.loads(SOLAR_CIRCUIT_CURRENT_TEMPERATURE_1 % ("0", "36.76")),
+        json.loads(SOLAR_CIRCUIT_CURRENT_TEMPERATURE_2 % ("1", "26.76")),
+        json.loads(SOLAR_CIRCUIT_CURRENT_TEMPERATURE_1 % ("2", "46.76")),
+        json.loads(SOLAR_CIRCUIT_CURRENT_TEMPERATURE_2 % ("3", "56.76")),
+        json.loads(SOLAR_CIRCUIT_TARGET_TEMPERATURE_1 % ("0", "55")),
+        json.loads(SOLAR_CIRCUIT_TARGET_TEMPERATURE_2 % ("1", "54")),
+        json.loads(SOLAR_CIRCUIT_TARGET_TEMPERATURE_1 % ("2", "53")),
+        json.loads(SOLAR_CIRCUIT_TARGET_TEMPERATURE_2 % ("3", "52")),
+        json.loads(SOLAR_CIRCUIT_HEAT_REQUEST % ("0", "true")),
+        json.loads(SOLAR_CIRCUIT_HEAT_REQUEST % ("1", "false")),
+        json.loads(SOLAR_CIRCUIT_HEAT_REQUEST % ("2", "false")),
+        json.loads(SOLAR_CIRCUIT_HEAT_REQUEST % ("3", "true")),
+        json.loads(SOLAR_CIRCUIT_HEATING_ENERGY % ("0", "8.73")),
+        json.loads(SOLAR_CIRCUIT_HEATING_ENERGY % ("1", "4.73")),
+        json.loads(SOLAR_CIRCUIT_DAILY_ENERGY % ("0", "2.33")),
+        json.loads(SOLAR_CIRCUIT_DAILY_ENERGY % ("1", "3.33")),
+        json.loads(SOLAR_CIRCUIT_ACTUAL_POWER % ("0", "3452")),
+        json.loads(SOLAR_CIRCUIT_ACTUAL_POWER % ("1", "2452")),
         *HEAT_PUMP_DATA,
         json.loads(HEAT_PUMP_HAS_PASSIVE_COOLING % f"{has_passive_cooling}"),
         json.loads(HOT_WATER_TANK_HEAT_REQUEST % ("0", "false")),

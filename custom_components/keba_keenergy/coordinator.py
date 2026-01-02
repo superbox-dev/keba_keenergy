@@ -18,6 +18,7 @@ from keba_keenergy_api.constants import HeatPump
 from keba_keenergy_api.constants import HotWaterTank
 from keba_keenergy_api.constants import Photovoltaic
 from keba_keenergy_api.constants import SectionPrefix
+from keba_keenergy_api.constants import SolarCircuit
 from keba_keenergy_api.constants import System
 from keba_keenergy_api.endpoints import Value
 from keba_keenergy_api.endpoints import ValueResponse
@@ -99,12 +100,21 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
                     HeatCircuit.HEATING_LIMIT_DAY,
                     HeatCircuit.HEAT_REQUEST,
                     HeatCircuit.TARGET_TEMPERATURE_AWAY,
-                    HeatCircuit.NAME,
                     HeatCircuit.TARGET_TEMPERATURE_NIGHT,
                     HeatCircuit.HEATING_LIMIT_NIGHT,
                     HeatCircuit.OPERATING_MODE,
                     HeatCircuit.TARGET_TEMPERATURE,
                     HeatCircuit.TARGET_TEMPERATURE_OFFSET,
+                    SolarCircuit.OPERATING_MODE,
+                    SolarCircuit.SOURCE_TEMPERATURE,
+                    SolarCircuit.PUMP_1,
+                    SolarCircuit.PUMP_2,
+                    SolarCircuit.CURRENT_TEMPERATURE,
+                    SolarCircuit.TARGET_TEMPERATURE,
+                    SolarCircuit.HEAT_REQUEST,
+                    SolarCircuit.HEATING_ENERGY,
+                    SolarCircuit.DAILY_ENERGY,
+                    SolarCircuit.ACTUAL_POWER,
                     HeatPump.CIRCULATION_PUMP,
                     HeatPump.COMPRESSOR,
                     HeatPump.COMPRESSOR_INPUT_TEMPERATURE,
@@ -204,6 +214,12 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
     def heat_circuit_numbers(self) -> int:
         """Return number of heat circuits."""
         data: Value = cast("Value", self.data[SectionPrefix.SYSTEM]["heat_circuit_numbers"])
+        return int(data["value"])
+
+    @property
+    def solar_circuit_numbers(self) -> int:
+        """Return number of solar circuits."""
+        data: Value = cast("Value", self.data[SectionPrefix.SYSTEM]["solar_circuit_numbers"])
         return int(data["value"])
 
     @property

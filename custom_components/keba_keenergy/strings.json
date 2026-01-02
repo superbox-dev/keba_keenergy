@@ -49,12 +49,15 @@
         },
         "photovoltaic": {
             "name": "Photovoltaic{position}"
+        },
+        "solar_circuit": {
+            "name": "Solar circuit{position}"
         }
     },
     "entity": {
         "binary_sensor": {
             "heat_request": {
-                "name": "Heat request"
+                "name": "Heat request{counter}"
             },
             "hot_water_flow": {
                 "name": "Hot water flow"
@@ -83,7 +86,7 @@
                 "name": "Standby temperature"
             },
             "target_temperature": {
-                "name": "Target temperature"
+                "name": "Target temperature{counter}"
             },
             "target_room_temperature": {
                 "name": "Target temperature"
@@ -102,7 +105,14 @@
             }
         },
         "select": {
-            "operating_mode_1": {
+            "operating_mode_external_heat_source": {
+                "name": "Operating mode",
+                "state": {
+                    "off": "Off",
+                    "on": "On"
+                }
+            },
+            "operating_mode_heat_circuit": {
                 "name": "Operating mode",
                 "state": {
                     "auto": "Auto",
@@ -113,7 +123,7 @@
                     "party": "Party"
                 }
             },
-            "operating_mode_2": {
+            "operating_mode_hot_water_tank": {
                 "name": "Operating mode",
                 "state": {
                     "auto": "Auto",
@@ -122,7 +132,14 @@
                     "on": "On"
                 }
             },
-            "operating_mode_3": {
+            "operating_mode_solar_circuit": {
+                "name": "Operating mode",
+                "state": {
+                    "off": "Off",
+                    "on": "On"
+                }
+            },
+            "operating_mode_system": {
                 "name": "Operating mode",
                 "state": {
                     "setup": "Setup",
@@ -132,18 +149,15 @@
                     "auto_cool": "Cooling",
                     "auto": "Automatic"
                 }
-            },
-            "operating_mode_4": {
-                "name": "Operating mode",
-                "state": {
-                    "off": "Off",
-                    "on": "On"
-                }
             }
+
         },
         "sensor": {
             "activation_counter": {
                 "name": "Activation counter"
+            },
+            "actual_power": {
+                "name": "Power"
             },
             "circulation_pump": {
                 "name": "Circulation pump"
@@ -179,7 +193,10 @@
                 "name": "Coefficient of performance"
             },
             "current_temperature": {
-                "name": "Current temperature"
+                "name": "Current temperature{counter}"
+            },
+            "daily_energy": {
+                "name": "Daily energy"
             },
             "dew_point": {
                 "name": "Dew point"
@@ -250,7 +267,14 @@
             "operating_hours": {
                 "name": "Operating time"
             },
-            "operating_mode_1": {
+            "operating_mode_external_heat_source": {
+                "name": "Operating mode",
+                "state": {
+                    "off": "Off",
+                    "on": "On"
+                }
+            },
+            "operating_mode_heat_circuit": {
                 "name": "Operating mode",
                 "state": {
                     "auto": "Auto",
@@ -263,7 +287,7 @@
                     "room_control": "Room control"
                 }
             },
-            "operating_mode_2": {
+            "operating_mode_hot_water_tank": {
                 "name": "Operating mode",
                 "state": {
                     "auto": "Auto",
@@ -272,7 +296,14 @@
                     "on": "On"
                 }
             },
-            "operating_mode_3": {
+            "operating_mode_solar_circuit": {
+                "name": "Operating mode",
+                "state": {
+                    "off": "Off",
+                    "on": "On"
+                }
+            },
+            "operating_mode_system": {
                 "name": "Operating mode",
                 "state": {
                     "setup": "Setup",
@@ -283,18 +314,8 @@
                     "auto": "Automatic"
                 }
             },
-            "operating_mode_4": {
-                "name": "Operating mode",
-                "state": {
-                    "off": "Off",
-                    "on": "On"
-                }
-            },
             "outdoor_temperature": {
                 "name": "Outdoor temperature"
-            },
-            "pv_daily_energy": {
-                "name": "Daily energy"
             },
             "pv_excess_power": {
                 "name": "Excess power"
@@ -314,11 +335,20 @@
             "room_temperature": {
                 "name": "Room temperature"
             },
+            "solar_circuit_pump_1": {
+                "name": "Pump 1"
+            },
+            "solar_circuit_pump_2": {
+                "name": "Pump 2"
+            },
             "source_input_temperature": {
                 "name": "Source input temperature"
             },
             "source_output_temperature": {
                 "name": "Source output temperature"
+            },
+            "source_temperature": {
+                "name": "Collector temperature"
             },
             "standby_temperature": {
                 "name": "Standby temperature"
@@ -338,10 +368,10 @@
                 }
             },
             "target_temperature": {
-                "name": "Target temperature"
+                "name": "Target temperature{counter}"
             },
             "target_room_temperature": {
-                "name": "Target temperature"
+                "name": "Target room temperature"
             },
             "target_room_temperature_away": {
                 "name": "Target temperature (away)"

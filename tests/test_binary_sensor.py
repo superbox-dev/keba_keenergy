@@ -25,6 +25,34 @@ async def test_binary_sensors(
 
     await setup_integration(hass, config_entry)
 
+    solar_circuit_heat_request_1_1: State | None = hass.states.get(
+        "binary_sensor.keba_keenergy_12345678_solar_circuit_heat_request_1_1",
+    )
+    assert isinstance(solar_circuit_heat_request_1_1, State)
+    assert solar_circuit_heat_request_1_1.state == STATE_ON
+    assert solar_circuit_heat_request_1_1.attributes[ATTR_FRIENDLY_NAME] == "Solar circuit 1 Heat request 1"
+
+    solar_circuit_heat_request_1_2: State | None = hass.states.get(
+        "binary_sensor.keba_keenergy_12345678_solar_circuit_heat_request_1_2",
+    )
+    assert isinstance(solar_circuit_heat_request_1_2, State)
+    assert solar_circuit_heat_request_1_2.state == STATE_OFF
+    assert solar_circuit_heat_request_1_2.attributes[ATTR_FRIENDLY_NAME] == "Solar circuit 2 Heat request 1"
+
+    solar_circuit_heat_request_2_1: State | None = hass.states.get(
+        "binary_sensor.keba_keenergy_12345678_solar_circuit_heat_request_2_1",
+    )
+    assert isinstance(solar_circuit_heat_request_2_1, State)
+    assert solar_circuit_heat_request_2_1.state == STATE_OFF
+    assert solar_circuit_heat_request_2_1.attributes[ATTR_FRIENDLY_NAME] == "Solar circuit 1 Heat request 2"
+
+    solar_circuit_heat_request_2_2: State | None = hass.states.get(
+        "binary_sensor.keba_keenergy_12345678_solar_circuit_heat_request_2_2",
+    )
+    assert isinstance(solar_circuit_heat_request_2_2, State)
+    assert solar_circuit_heat_request_2_2.state == STATE_ON
+    assert solar_circuit_heat_request_2_2.attributes[ATTR_FRIENDLY_NAME] == "Solar circuit 2 Heat request 2"
+
     hot_water_tank_heat_request_1: State | None = hass.states.get(
         "binary_sensor.keba_keenergy_12345678_hot_water_tank_heat_request_1",
     )
@@ -80,6 +108,30 @@ async def test_binary_sensors_translations(
 
     hass.config.language = "de"
     await setup_integration(hass, config_entry)
+
+    solar_circuit_heat_request_1_1: State | None = hass.states.get(
+        "binary_sensor.keba_keenergy_12345678_solar_circuit_heat_request_1_1",
+    )
+    assert isinstance(solar_circuit_heat_request_1_1, State)
+    assert solar_circuit_heat_request_1_1.attributes[ATTR_FRIENDLY_NAME] == "Solarkreis 1 Heizanforderung 1"
+
+    solar_circuit_heat_request_1_2: State | None = hass.states.get(
+        "binary_sensor.keba_keenergy_12345678_solar_circuit_heat_request_1_2",
+    )
+    assert isinstance(solar_circuit_heat_request_1_2, State)
+    assert solar_circuit_heat_request_1_2.attributes[ATTR_FRIENDLY_NAME] == "Solarkreis 2 Heizanforderung 1"
+
+    solar_circuit_heat_request_2_1: State | None = hass.states.get(
+        "binary_sensor.keba_keenergy_12345678_solar_circuit_heat_request_2_1",
+    )
+    assert isinstance(solar_circuit_heat_request_2_1, State)
+    assert solar_circuit_heat_request_2_1.attributes[ATTR_FRIENDLY_NAME] == "Solarkreis 1 Heizanforderung 2"
+
+    solar_circuit_heat_request_2_2: State | None = hass.states.get(
+        "binary_sensor.keba_keenergy_12345678_solar_circuit_heat_request_2_2",
+    )
+    assert isinstance(solar_circuit_heat_request_2_2, State)
+    assert solar_circuit_heat_request_2_2.attributes[ATTR_FRIENDLY_NAME] == "Solarkreis 2 Heizanforderung 2"
 
     hot_water_tank_heat_request_1: State | None = hass.states.get(
         "binary_sensor.keba_keenergy_12345678_hot_water_tank_heat_request_1",

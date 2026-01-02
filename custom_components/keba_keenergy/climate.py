@@ -153,14 +153,14 @@ class KebaKeEnergyClimateEntity(KebaKeEnergyEntity, ClimateEntity):
     def min_temp(self) -> float:
         """Return the minimum temperature."""
         return self.target_temperature_for_preset + float(
-            self.get_attribute(key="target_temperature_offset", attr="lower_limit"),
+            self.get_attribute("target_temperature_offset", attr="lower_limit"),
         )
 
     @cached_property
     def max_temp(self) -> float:
         """Return the maximum temperature."""
         return self.target_temperature_for_preset + float(
-            self.get_attribute(key="target_temperature_offset", attr="upper_limit"),
+            self.get_attribute("target_temperature_offset", attr="upper_limit"),
         )
 
     @property

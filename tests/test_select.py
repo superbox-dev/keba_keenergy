@@ -108,6 +108,59 @@ async def test_heat_circuit_selects_translated(
     assert heat_circuit_operating_mode_1.attributes[ATTR_FRIENDLY_NAME] == "Heizkreis 1 Betriebsart"
 
 
+async def test_solar_circuit_selects(
+    hass: HomeAssistant,
+    config_entry: MockConfigEntry,
+    fake_api: FakeKebaKeEnergyAPI,
+) -> None:
+    """Test solar circuit selects."""
+    fake_api.responses = [MULTIPLE_POSITIONS_RESPONSE, get_multi_positions_data_response()]
+    fake_api.register_requests(config_entry.data[CONF_HOST])
+
+    await setup_integration(hass, config_entry)
+
+    solar_circuit_operating_mode_1: State | None = hass.states.get(
+        "select.keba_keenergy_12345678_solar_circuit_operating_mode_1",
+    )
+    assert isinstance(solar_circuit_operating_mode_1, State)
+    assert solar_circuit_operating_mode_1.state == "off"
+    assert solar_circuit_operating_mode_1.attributes[ATTR_FRIENDLY_NAME] == "Solar circuit 1 Operating mode"
+    assert solar_circuit_operating_mode_1.attributes[ATTR_OPTIONS] == ["off", "on"]
+
+    solar_circuit_operating_mode_2: State | None = hass.states.get(
+        "select.keba_keenergy_12345678_solar_circuit_operating_mode_2",
+    )
+    assert isinstance(solar_circuit_operating_mode_2, State)
+    assert solar_circuit_operating_mode_2.state == "on"
+    assert solar_circuit_operating_mode_2.attributes[ATTR_FRIENDLY_NAME] == "Solar circuit 2 Operating mode"
+    assert solar_circuit_operating_mode_2.attributes[ATTR_OPTIONS] == ["off", "on"]
+
+
+async def test_solar_circuit_selects_translated(
+    hass: HomeAssistant,
+    config_entry: MockConfigEntry,
+    fake_api: FakeKebaKeEnergyAPI,
+) -> None:
+    """Test solar circuit selects translated."""
+    fake_api.responses = [MULTIPLE_POSITIONS_RESPONSE, get_multi_positions_data_response()]
+    fake_api.register_requests(config_entry.data[CONF_HOST])
+
+    hass.config.language = "de"
+    await setup_integration(hass, config_entry)
+
+    solar_circuit_operating_mode_1: State | None = hass.states.get(
+        "select.keba_keenergy_12345678_solar_circuit_operating_mode_1",
+    )
+    assert isinstance(solar_circuit_operating_mode_1, State)
+    assert solar_circuit_operating_mode_1.attributes[ATTR_FRIENDLY_NAME] == "Solarkreis 1 Betriebsart"
+
+    solar_circuit_operating_mode_2: State | None = hass.states.get(
+        "select.keba_keenergy_12345678_solar_circuit_operating_mode_2",
+    )
+    assert isinstance(solar_circuit_operating_mode_2, State)
+    assert solar_circuit_operating_mode_2.attributes[ATTR_FRIENDLY_NAME] == "Solarkreis 2 Betriebsart"
+
+
 async def test_hot_water_tank_selects(
     hass: HomeAssistant,
     config_entry: MockConfigEntry,
@@ -211,6 +264,11 @@ async def test_external_heat_source_translated(
             "select.keba_keenergy_12345678_heat_circuit_operating_mode_1",
             "off",
             '[{"name": "APPL.CtrlAppl.sParam.heatCircuit[0].param.operatingMode", "value": "0"}]',
+        ),
+        (
+            "select.keba_keenergy_12345678_solar_circuit_operating_mode_1",
+            "off",
+            '[{"name": "APPL.CtrlAppl.sParam.solarCircuit[0].param.operatingMode", "value": "0"}]',
         ),
         (
             "select.keba_keenergy_12345678_hot_water_tank_operating_mode_2",

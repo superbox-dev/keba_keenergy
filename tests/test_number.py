@@ -211,9 +211,128 @@ async def test_heat_circuit_numbers_translated(
     )
 
 
+async def test_solar_circuit_numbers(
+    hass: HomeAssistant,
+    config_entry: MockConfigEntry,
+    fake_api: FakeKebaKeEnergyAPI,
+) -> None:
+    """Test solar circuit numbers."""
+    fake_api.responses = [
+        MULTIPLE_POSITIONS_RESPONSE,
+        get_multi_positions_data_response(),
+        # Read API after services call
+        MULTIPLE_POSITIONS_RESPONSE,
+        get_multi_positions_data_response(),
+    ]
+    fake_api.register_requests(config_entry.data[CONF_HOST])
+
+    await setup_integration(hass, config_entry)
+
+    solar_circuit_target_temperature_1_1: State | None = hass.states.get(
+        "number.keba_keenergy_12345678_solar_circuit_target_temperature_1_1",
+    )
+    assert isinstance(solar_circuit_target_temperature_1_1, State)
+    assert solar_circuit_target_temperature_1_1.state == "55.0"
+    assert solar_circuit_target_temperature_1_1.attributes[ATTR_MIN] == 0.0
+    assert solar_circuit_target_temperature_1_1.attributes[ATTR_MAX] == 90.0
+    assert solar_circuit_target_temperature_1_1.attributes[ATTR_STEP] == 0.5
+    assert solar_circuit_target_temperature_1_1.attributes[CONF_UNIT_OF_MEASUREMENT] == UnitOfTemperature.CELSIUS
+    assert solar_circuit_target_temperature_1_1.attributes[CONF_DEVICE_CLASS] == SensorDeviceClass.TEMPERATURE
+    assert solar_circuit_target_temperature_1_1.attributes[ATTR_FRIENDLY_NAME] == "Solar circuit 1 Target temperature 1"
+
+    solar_circuit_target_temperature_1_2: State | None = hass.states.get(
+        "number.keba_keenergy_12345678_solar_circuit_target_temperature_1_2",
+    )
+    assert isinstance(solar_circuit_target_temperature_1_2, State)
+    assert solar_circuit_target_temperature_1_2.state == "53.0"
+    assert solar_circuit_target_temperature_1_2.attributes[ATTR_MIN] == 0.0
+    assert solar_circuit_target_temperature_1_2.attributes[ATTR_MAX] == 90.0
+    assert solar_circuit_target_temperature_1_2.attributes[ATTR_STEP] == 0.5
+    assert solar_circuit_target_temperature_1_2.attributes[CONF_UNIT_OF_MEASUREMENT] == UnitOfTemperature.CELSIUS
+    assert solar_circuit_target_temperature_1_2.attributes[CONF_DEVICE_CLASS] == SensorDeviceClass.TEMPERATURE
+    assert solar_circuit_target_temperature_1_2.attributes[ATTR_FRIENDLY_NAME] == "Solar circuit 2 Target temperature 1"
+
+    solar_circuit_target_temperature_2_1: State | None = hass.states.get(
+        "number.keba_keenergy_12345678_solar_circuit_target_temperature_2_1",
+    )
+    assert isinstance(solar_circuit_target_temperature_2_1, State)
+    assert solar_circuit_target_temperature_2_1.state == "54.0"
+    assert solar_circuit_target_temperature_2_1.attributes[ATTR_MIN] == 0.0
+    assert solar_circuit_target_temperature_2_1.attributes[ATTR_MAX] == 90.0
+    assert solar_circuit_target_temperature_2_1.attributes[ATTR_STEP] == 0.5
+    assert solar_circuit_target_temperature_2_1.attributes[CONF_UNIT_OF_MEASUREMENT] == UnitOfTemperature.CELSIUS
+    assert solar_circuit_target_temperature_2_1.attributes[CONF_DEVICE_CLASS] == SensorDeviceClass.TEMPERATURE
+    assert solar_circuit_target_temperature_2_1.attributes[ATTR_FRIENDLY_NAME] == "Solar circuit 1 Target temperature 2"
+
+    solar_circuit_target_temperature_2_2: State | None = hass.states.get(
+        "number.keba_keenergy_12345678_solar_circuit_target_temperature_2_2",
+    )
+    assert isinstance(solar_circuit_target_temperature_2_2, State)
+    assert solar_circuit_target_temperature_2_2.state == "52.0"
+    assert solar_circuit_target_temperature_2_2.attributes[ATTR_MIN] == 0.0
+    assert solar_circuit_target_temperature_2_2.attributes[ATTR_MAX] == 90.0
+    assert solar_circuit_target_temperature_2_2.attributes[ATTR_STEP] == 0.5
+    assert solar_circuit_target_temperature_2_2.attributes[CONF_UNIT_OF_MEASUREMENT] == UnitOfTemperature.CELSIUS
+    assert solar_circuit_target_temperature_2_2.attributes[CONF_DEVICE_CLASS] == SensorDeviceClass.TEMPERATURE
+    assert solar_circuit_target_temperature_2_2.attributes[ATTR_FRIENDLY_NAME] == "Solar circuit 2 Target temperature 2"
+
+
+async def test_solar_circuit_numbers_translated(
+    hass: HomeAssistant,
+    config_entry: MockConfigEntry,
+    fake_api: FakeKebaKeEnergyAPI,
+) -> None:
+    """Test solar circuit numbers translated."""
+    fake_api.responses = [
+        MULTIPLE_POSITIONS_RESPONSE,
+        get_multi_positions_data_response(),
+        # Read API after services call
+        MULTIPLE_POSITIONS_RESPONSE,
+        get_multi_positions_data_response(),
+    ]
+    fake_api.register_requests(config_entry.data[CONF_HOST])
+
+    hass.config.language = "de"
+    await setup_integration(hass, config_entry)
+
+    solar_circuit_target_temperature_1_1: State | None = hass.states.get(
+        "number.keba_keenergy_12345678_solar_circuit_target_temperature_1_1",
+    )
+    assert isinstance(solar_circuit_target_temperature_1_1, State)
+    assert solar_circuit_target_temperature_1_1.attributes[ATTR_FRIENDLY_NAME] == "Solarkreis 1 Soll-Temperatur 1"
+
+    solar_circuit_target_temperature_1_2: State | None = hass.states.get(
+        "number.keba_keenergy_12345678_solar_circuit_target_temperature_1_2",
+    )
+    assert isinstance(solar_circuit_target_temperature_1_2, State)
+    assert solar_circuit_target_temperature_1_2.attributes[ATTR_FRIENDLY_NAME] == "Solarkreis 2 Soll-Temperatur 1"
+
+    solar_circuit_target_temperature_2_1: State | None = hass.states.get(
+        "number.keba_keenergy_12345678_solar_circuit_target_temperature_2_1",
+    )
+    assert isinstance(solar_circuit_target_temperature_2_1, State)
+    assert solar_circuit_target_temperature_2_1.attributes[ATTR_FRIENDLY_NAME] == "Solarkreis 1 Soll-Temperatur 2"
+
+    solar_circuit_target_temperature_2_2: State | None = hass.states.get(
+        "number.keba_keenergy_12345678_solar_circuit_target_temperature_2_2",
+    )
+    assert isinstance(solar_circuit_target_temperature_2_2, State)
+    assert solar_circuit_target_temperature_2_2.attributes[ATTR_FRIENDLY_NAME] == "Solarkreis 2 Soll-Temperatur 2"
+
+
 @pytest.mark.parametrize(
     ("entity_id", "value", "expected"),
     [
+        (
+            "number.keba_keenergy_12345678_solar_circuit_target_temperature_1_2",
+            18,
+            '[{"name": "APPL.CtrlAppl.sParam.genericHeat[2].param.setTempMax.value", "value": "18.0"}]',
+        ),
+        (
+            "number.keba_keenergy_12345678_solar_circuit_target_temperature_2_2",
+            22,
+            '[{"name": "APPL.CtrlAppl.sParam.genericHeat[3].param.setTempMax.value", "value": "22.0"}]',
+        ),
         (
             "number.keba_keenergy_12345678_hot_water_tank_standby_temperature_2",
             18,

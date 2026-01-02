@@ -829,7 +829,9 @@ async def test_heat_circuit_sensors(
     assert heat_circuit_target_temperature_1.attributes[CONF_UNIT_OF_MEASUREMENT] == UnitOfTemperature.CELSIUS
     assert heat_circuit_target_temperature_1.attributes[ATTR_STATE_CLASS] == SensorStateClass.MEASUREMENT
     assert heat_circuit_target_temperature_1.attributes[CONF_DEVICE_CLASS] == SensorDeviceClass.TEMPERATURE
-    assert heat_circuit_target_temperature_1.attributes[ATTR_FRIENDLY_NAME] == "Heating circuit 1 Target temperature"
+    assert (
+        heat_circuit_target_temperature_1.attributes[ATTR_FRIENDLY_NAME] == "Heating circuit 1 Target room temperature"
+    )
 
     heat_circuit_target_temperature_day_1: State | None = hass.states.get(
         "sensor.keba_keenergy_12345678_heat_circuit_target_temperature_day_1",
@@ -1056,6 +1058,357 @@ async def test_heat_circuit_sensors_translations(
     )
     assert isinstance(heat_circuit_heat_request_1, State)
     assert heat_circuit_heat_request_1.attributes.get(ATTR_FRIENDLY_NAME) == "Heizkreis 1 Heizanforderung"
+
+
+@pytest.mark.usefixtures("entity_registry_enabled_by_default")
+async def test_solar_circuit_sensors(
+    hass: HomeAssistant,
+    config_entry: MockConfigEntry,
+    fake_api: FakeKebaKeEnergyAPI,
+) -> None:
+    """Test solar circuit sensors."""
+    fake_api.responses = [MULTIPLE_POSITIONS_RESPONSE, get_multi_positions_data_response()]
+    fake_api.register_requests(config_entry.data[CONF_HOST])
+
+    await setup_integration(hass, config_entry)
+
+    solar_circuit_source_temperature_1: State | None = hass.states.get(
+        "sensor.keba_keenergy_12345678_solar_circuit_source_temperature_1",
+    )
+    assert isinstance(solar_circuit_source_temperature_1, State)
+    assert solar_circuit_source_temperature_1.state == "44.43"
+    assert solar_circuit_source_temperature_1.attributes[CONF_UNIT_OF_MEASUREMENT] == UnitOfTemperature.CELSIUS
+    assert solar_circuit_source_temperature_1.attributes[ATTR_STATE_CLASS] == SensorStateClass.MEASUREMENT
+    assert solar_circuit_source_temperature_1.attributes[CONF_DEVICE_CLASS] == SensorDeviceClass.TEMPERATURE
+    assert solar_circuit_source_temperature_1.attributes[ATTR_FRIENDLY_NAME] == "Solar circuit 1 Collector temperature"
+
+    solar_circuit_source_temperature_2: State | None = hass.states.get(
+        "sensor.keba_keenergy_12345678_solar_circuit_source_temperature_2",
+    )
+    assert isinstance(solar_circuit_source_temperature_2, State)
+    assert solar_circuit_source_temperature_2.state == "34.43"
+    assert solar_circuit_source_temperature_2.attributes[CONF_UNIT_OF_MEASUREMENT] == UnitOfTemperature.CELSIUS
+    assert solar_circuit_source_temperature_2.attributes[ATTR_STATE_CLASS] == SensorStateClass.MEASUREMENT
+    assert solar_circuit_source_temperature_2.attributes[CONF_DEVICE_CLASS] == SensorDeviceClass.TEMPERATURE
+    assert solar_circuit_source_temperature_2.attributes[ATTR_FRIENDLY_NAME] == "Solar circuit 2 Collector temperature"
+
+    solar_circuit_pump_1_1: State | None = hass.states.get(
+        "sensor.keba_keenergy_12345678_solar_circuit_pump_1_1",
+    )
+    assert isinstance(solar_circuit_pump_1_1, State)
+    assert solar_circuit_pump_1_1.state == "63.0"
+    assert solar_circuit_pump_1_1.attributes[CONF_UNIT_OF_MEASUREMENT] == PERCENTAGE
+    assert solar_circuit_pump_1_1.attributes[ATTR_STATE_CLASS] == SensorStateClass.MEASUREMENT
+    assert solar_circuit_pump_1_1.attributes[ATTR_FRIENDLY_NAME] == "Solar circuit 1 Pump 1"
+
+    solar_circuit_pump_1_2: State | None = hass.states.get(
+        "sensor.keba_keenergy_12345678_solar_circuit_pump_1_2",
+    )
+    assert isinstance(solar_circuit_pump_1_2, State)
+    assert solar_circuit_pump_1_2.state == "43.0"
+    assert solar_circuit_pump_1_2.attributes[CONF_UNIT_OF_MEASUREMENT] == PERCENTAGE
+    assert solar_circuit_pump_1_2.attributes[ATTR_STATE_CLASS] == SensorStateClass.MEASUREMENT
+    assert solar_circuit_pump_1_2.attributes[ATTR_FRIENDLY_NAME] == "Solar circuit 2 Pump 1"
+
+    solar_circuit_pump_2_1: State | None = hass.states.get(
+        "sensor.keba_keenergy_12345678_solar_circuit_pump_2_1",
+    )
+    assert isinstance(solar_circuit_pump_2_1, State)
+    assert solar_circuit_pump_2_1.state == "73.0"
+    assert solar_circuit_pump_2_1.attributes[CONF_UNIT_OF_MEASUREMENT] == PERCENTAGE
+    assert solar_circuit_pump_2_1.attributes[ATTR_STATE_CLASS] == SensorStateClass.MEASUREMENT
+    assert solar_circuit_pump_2_1.attributes[ATTR_FRIENDLY_NAME] == "Solar circuit 1 Pump 2"
+
+    solar_circuit_pump_2_2: State | None = hass.states.get(
+        "sensor.keba_keenergy_12345678_solar_circuit_pump_2_2",
+    )
+    assert isinstance(solar_circuit_pump_2_2, State)
+    assert solar_circuit_pump_2_2.state == "53.0"
+    assert solar_circuit_pump_2_2.attributes[CONF_UNIT_OF_MEASUREMENT] == PERCENTAGE
+    assert solar_circuit_pump_2_2.attributes[ATTR_STATE_CLASS] == SensorStateClass.MEASUREMENT
+    assert solar_circuit_pump_2_2.attributes[ATTR_FRIENDLY_NAME] == "Solar circuit 2 Pump 2"
+
+    solar_circuit_current_temperature_1_1: State | None = hass.states.get(
+        "sensor.keba_keenergy_12345678_solar_circuit_current_temperature_1_1",
+    )
+    assert isinstance(solar_circuit_current_temperature_1_1, State)
+    assert solar_circuit_current_temperature_1_1.state == "36.76"
+    assert solar_circuit_current_temperature_1_1.attributes[CONF_UNIT_OF_MEASUREMENT] == UnitOfTemperature.CELSIUS
+    assert solar_circuit_current_temperature_1_1.attributes[ATTR_STATE_CLASS] == SensorStateClass.MEASUREMENT
+    assert solar_circuit_current_temperature_1_1.attributes[CONF_DEVICE_CLASS] == SensorDeviceClass.TEMPERATURE
+    assert (
+        solar_circuit_current_temperature_1_1.attributes[ATTR_FRIENDLY_NAME] == "Solar circuit 1 Current temperature 1"
+    )
+
+    solar_circuit_current_temperature_1_2: State | None = hass.states.get(
+        "sensor.keba_keenergy_12345678_solar_circuit_current_temperature_1_2",
+    )
+    assert isinstance(solar_circuit_current_temperature_1_2, State)
+    assert solar_circuit_current_temperature_1_2.state == "46.76"
+    assert solar_circuit_current_temperature_1_2.attributes[CONF_UNIT_OF_MEASUREMENT] == UnitOfTemperature.CELSIUS
+    assert solar_circuit_current_temperature_1_2.attributes[ATTR_STATE_CLASS] == SensorStateClass.MEASUREMENT
+    assert solar_circuit_current_temperature_1_2.attributes[CONF_DEVICE_CLASS] == SensorDeviceClass.TEMPERATURE
+    assert (
+        solar_circuit_current_temperature_1_2.attributes[ATTR_FRIENDLY_NAME] == "Solar circuit 2 Current temperature 1"
+    )
+
+    solar_circuit_current_temperature_2_1: State | None = hass.states.get(
+        "sensor.keba_keenergy_12345678_solar_circuit_current_temperature_2_1",
+    )
+    assert isinstance(solar_circuit_current_temperature_2_1, State)
+    assert solar_circuit_current_temperature_2_1.state == "26.76"
+    assert solar_circuit_current_temperature_2_1.attributes[CONF_UNIT_OF_MEASUREMENT] == UnitOfTemperature.CELSIUS
+    assert solar_circuit_current_temperature_2_1.attributes[ATTR_STATE_CLASS] == SensorStateClass.MEASUREMENT
+    assert solar_circuit_current_temperature_2_1.attributes[CONF_DEVICE_CLASS] == SensorDeviceClass.TEMPERATURE
+    assert (
+        solar_circuit_current_temperature_2_1.attributes[ATTR_FRIENDLY_NAME] == "Solar circuit 1 Current temperature 2"
+    )
+
+    solar_circuit_current_temperature_2_2: State | None = hass.states.get(
+        "sensor.keba_keenergy_12345678_solar_circuit_current_temperature_2_2",
+    )
+    assert isinstance(solar_circuit_current_temperature_2_2, State)
+    assert solar_circuit_current_temperature_2_2.state == "56.76"
+    assert solar_circuit_current_temperature_2_2.attributes[CONF_UNIT_OF_MEASUREMENT] == UnitOfTemperature.CELSIUS
+    assert solar_circuit_current_temperature_2_2.attributes[ATTR_STATE_CLASS] == SensorStateClass.MEASUREMENT
+    assert solar_circuit_current_temperature_2_2.attributes[CONF_DEVICE_CLASS] == SensorDeviceClass.TEMPERATURE
+    assert (
+        solar_circuit_current_temperature_2_2.attributes[ATTR_FRIENDLY_NAME] == "Solar circuit 2 Current temperature 2"
+    )
+
+    solar_circuit_target_temperature_1_1: State | None = hass.states.get(
+        "sensor.keba_keenergy_12345678_solar_circuit_target_temperature_1_1",
+    )
+    assert isinstance(solar_circuit_target_temperature_1_1, State)
+    assert solar_circuit_target_temperature_1_1.state == "55.0"
+    assert solar_circuit_target_temperature_1_1.attributes[CONF_UNIT_OF_MEASUREMENT] == UnitOfTemperature.CELSIUS
+    assert solar_circuit_target_temperature_1_1.attributes[ATTR_STATE_CLASS] == SensorStateClass.MEASUREMENT
+    assert solar_circuit_target_temperature_1_1.attributes[CONF_DEVICE_CLASS] == SensorDeviceClass.TEMPERATURE
+    assert solar_circuit_target_temperature_1_1.attributes[ATTR_FRIENDLY_NAME] == "Solar circuit 1 Target temperature 1"
+
+    solar_circuit_target_temperature_1_2: State | None = hass.states.get(
+        "sensor.keba_keenergy_12345678_solar_circuit_target_temperature_1_2",
+    )
+    assert isinstance(solar_circuit_target_temperature_1_2, State)
+    assert solar_circuit_target_temperature_1_2.state == "53.0"
+    assert solar_circuit_target_temperature_1_2.attributes[CONF_UNIT_OF_MEASUREMENT] == UnitOfTemperature.CELSIUS
+    assert solar_circuit_target_temperature_1_2.attributes[ATTR_STATE_CLASS] == SensorStateClass.MEASUREMENT
+    assert solar_circuit_target_temperature_1_2.attributes[CONF_DEVICE_CLASS] == SensorDeviceClass.TEMPERATURE
+    assert solar_circuit_target_temperature_1_2.attributes[ATTR_FRIENDLY_NAME] == "Solar circuit 2 Target temperature 1"
+
+    solar_circuit_target_temperature_2_1: State | None = hass.states.get(
+        "sensor.keba_keenergy_12345678_solar_circuit_target_temperature_2_1",
+    )
+    assert isinstance(solar_circuit_target_temperature_2_1, State)
+    assert solar_circuit_target_temperature_2_1.state == "54.0"
+    assert solar_circuit_target_temperature_2_1.attributes[CONF_UNIT_OF_MEASUREMENT] == UnitOfTemperature.CELSIUS
+    assert solar_circuit_target_temperature_2_1.attributes[ATTR_STATE_CLASS] == SensorStateClass.MEASUREMENT
+    assert solar_circuit_target_temperature_2_1.attributes[CONF_DEVICE_CLASS] == SensorDeviceClass.TEMPERATURE
+    assert solar_circuit_target_temperature_2_1.attributes[ATTR_FRIENDLY_NAME] == "Solar circuit 1 Target temperature 2"
+
+    solar_circuit_target_temperature_2_2: State | None = hass.states.get(
+        "sensor.keba_keenergy_12345678_solar_circuit_target_temperature_2_2",
+    )
+    assert isinstance(solar_circuit_target_temperature_2_2, State)
+    assert solar_circuit_target_temperature_2_2.state == "52.0"
+    assert solar_circuit_target_temperature_2_2.attributes[CONF_UNIT_OF_MEASUREMENT] == UnitOfTemperature.CELSIUS
+    assert solar_circuit_target_temperature_2_2.attributes[ATTR_STATE_CLASS] == SensorStateClass.MEASUREMENT
+    assert solar_circuit_target_temperature_2_2.attributes[CONF_DEVICE_CLASS] == SensorDeviceClass.TEMPERATURE
+    assert solar_circuit_target_temperature_2_2.attributes[ATTR_FRIENDLY_NAME] == "Solar circuit 2 Target temperature 2"
+
+    solar_circuit_heating_energy_1: State | None = hass.states.get(
+        "sensor.keba_keenergy_12345678_solar_circuit_heating_energy_1",
+    )
+    assert isinstance(solar_circuit_heating_energy_1, State)
+    assert solar_circuit_heating_energy_1.state == "8.73"
+    assert solar_circuit_heating_energy_1.attributes[CONF_UNIT_OF_MEASUREMENT] == UnitOfEnergy.KILO_WATT_HOUR
+    assert solar_circuit_heating_energy_1.attributes[ATTR_STATE_CLASS] == SensorStateClass.TOTAL
+    assert solar_circuit_heating_energy_1.attributes[CONF_DEVICE_CLASS] == SensorDeviceClass.ENERGY
+    assert solar_circuit_heating_energy_1.attributes[ATTR_FRIENDLY_NAME] == "Solar circuit 1 Heating energy"
+
+    solar_circuit_heating_energy_2: State | None = hass.states.get(
+        "sensor.keba_keenergy_12345678_solar_circuit_heating_energy_2",
+    )
+    assert isinstance(solar_circuit_heating_energy_2, State)
+    assert solar_circuit_heating_energy_2.state == "4.73"
+    assert solar_circuit_heating_energy_2.attributes[CONF_UNIT_OF_MEASUREMENT] == UnitOfEnergy.KILO_WATT_HOUR
+    assert solar_circuit_heating_energy_2.attributes[ATTR_STATE_CLASS] == SensorStateClass.TOTAL
+    assert solar_circuit_heating_energy_2.attributes[CONF_DEVICE_CLASS] == SensorDeviceClass.ENERGY
+    assert solar_circuit_heating_energy_2.attributes[ATTR_FRIENDLY_NAME] == "Solar circuit 2 Heating energy"
+
+    solar_circuit_daily_energy_1: State | None = hass.states.get(
+        "sensor.keba_keenergy_12345678_solar_circuit_daily_energy_1",
+    )
+    assert isinstance(solar_circuit_daily_energy_1, State)
+    assert solar_circuit_daily_energy_1.state == "2.33"
+    assert solar_circuit_daily_energy_1.attributes[CONF_UNIT_OF_MEASUREMENT] == UnitOfEnergy.KILO_WATT_HOUR
+    assert solar_circuit_daily_energy_1.attributes[ATTR_STATE_CLASS] == SensorStateClass.TOTAL
+    assert solar_circuit_daily_energy_1.attributes[CONF_DEVICE_CLASS] == SensorDeviceClass.ENERGY
+    assert solar_circuit_daily_energy_1.attributes[ATTR_FRIENDLY_NAME] == "Solar circuit 1 Daily energy"
+
+    solar_circuit_daily_energy_2: State | None = hass.states.get(
+        "sensor.keba_keenergy_12345678_solar_circuit_daily_energy_2",
+    )
+    assert isinstance(solar_circuit_daily_energy_2, State)
+    assert solar_circuit_daily_energy_2.state == "3.33"
+    assert solar_circuit_daily_energy_2.attributes[CONF_UNIT_OF_MEASUREMENT] == UnitOfEnergy.KILO_WATT_HOUR
+    assert solar_circuit_daily_energy_2.attributes[ATTR_STATE_CLASS] == SensorStateClass.TOTAL
+    assert solar_circuit_daily_energy_2.attributes[CONF_DEVICE_CLASS] == SensorDeviceClass.ENERGY
+    assert solar_circuit_daily_energy_2.attributes[ATTR_FRIENDLY_NAME] == "Solar circuit 2 Daily energy"
+
+    solar_circuit_actual_power_1: State | None = hass.states.get(
+        "sensor.keba_keenergy_12345678_solar_circuit_actual_power_1",
+    )
+    assert isinstance(solar_circuit_actual_power_1, State)
+    assert solar_circuit_actual_power_1.state == "3452.0"
+    assert solar_circuit_actual_power_1.attributes[CONF_UNIT_OF_MEASUREMENT] == UnitOfPower.WATT
+    assert solar_circuit_actual_power_1.attributes[ATTR_STATE_CLASS] == SensorStateClass.MEASUREMENT
+    assert solar_circuit_actual_power_1.attributes[CONF_DEVICE_CLASS] == SensorDeviceClass.POWER
+    assert solar_circuit_actual_power_1.attributes[ATTR_FRIENDLY_NAME] == "Solar circuit 1 Power"
+
+    solar_circuit_actual_power_2: State | None = hass.states.get(
+        "sensor.keba_keenergy_12345678_solar_circuit_actual_power_2",
+    )
+    assert isinstance(solar_circuit_actual_power_2, State)
+    assert solar_circuit_actual_power_2.state == "2452.0"
+    assert solar_circuit_actual_power_2.attributes[CONF_UNIT_OF_MEASUREMENT] == UnitOfPower.WATT
+    assert solar_circuit_actual_power_2.attributes[ATTR_STATE_CLASS] == SensorStateClass.MEASUREMENT
+    assert solar_circuit_actual_power_2.attributes[CONF_DEVICE_CLASS] == SensorDeviceClass.POWER
+    assert solar_circuit_actual_power_2.attributes[ATTR_FRIENDLY_NAME] == "Solar circuit 2 Power"
+
+
+@pytest.mark.usefixtures("entity_registry_enabled_by_default")
+async def test_solar_circuit_sensors_translations(
+    hass: HomeAssistant,
+    config_entry: MockConfigEntry,
+    fake_api: FakeKebaKeEnergyAPI,
+) -> None:
+    """Test solar circuit sensors translations."""
+    fake_api.responses = [MULTIPLE_POSITIONS_RESPONSE, get_multi_positions_data_response()]
+    fake_api.register_requests(config_entry.data[CONF_HOST])
+
+    hass.config.language = "de"
+    await setup_integration(hass, config_entry)
+
+    solar_circuit_source_temperature_1: State | None = hass.states.get(
+        "sensor.keba_keenergy_12345678_solar_circuit_source_temperature_1",
+    )
+    assert isinstance(solar_circuit_source_temperature_1, State)
+    assert solar_circuit_source_temperature_1.attributes[ATTR_FRIENDLY_NAME] == "Solarkreis 1 Kollektortemperatur"
+
+    solar_circuit_source_temperature_2: State | None = hass.states.get(
+        "sensor.keba_keenergy_12345678_solar_circuit_source_temperature_2",
+    )
+    assert isinstance(solar_circuit_source_temperature_2, State)
+    assert solar_circuit_source_temperature_2.attributes[ATTR_FRIENDLY_NAME] == "Solarkreis 2 Kollektortemperatur"
+
+    solar_circuit_pump_1_1: State | None = hass.states.get(
+        "sensor.keba_keenergy_12345678_solar_circuit_pump_1_1",
+    )
+    assert isinstance(solar_circuit_pump_1_1, State)
+    assert solar_circuit_pump_1_1.attributes[ATTR_FRIENDLY_NAME] == "Solarkreis 1 Pumpe 1"
+
+    solar_circuit_pump_1_2: State | None = hass.states.get(
+        "sensor.keba_keenergy_12345678_solar_circuit_pump_1_2",
+    )
+    assert isinstance(solar_circuit_pump_1_2, State)
+    assert solar_circuit_pump_1_2.attributes[ATTR_FRIENDLY_NAME] == "Solarkreis 2 Pumpe 1"
+
+    solar_circuit_pump_2_1: State | None = hass.states.get(
+        "sensor.keba_keenergy_12345678_solar_circuit_pump_2_1",
+    )
+    assert isinstance(solar_circuit_pump_2_1, State)
+    assert solar_circuit_pump_2_1.attributes[ATTR_FRIENDLY_NAME] == "Solarkreis 1 Pumpe 2"
+
+    solar_circuit_pump_2_2: State | None = hass.states.get(
+        "sensor.keba_keenergy_12345678_solar_circuit_pump_2_2",
+    )
+    assert isinstance(solar_circuit_pump_2_2, State)
+    assert solar_circuit_pump_2_2.attributes[ATTR_FRIENDLY_NAME] == "Solarkreis 2 Pumpe 2"
+
+    solar_circuit_current_temperature_1_1: State | None = hass.states.get(
+        "sensor.keba_keenergy_12345678_solar_circuit_current_temperature_1_1",
+    )
+    assert isinstance(solar_circuit_current_temperature_1_1, State)
+    assert solar_circuit_current_temperature_1_1.attributes[ATTR_FRIENDLY_NAME] == "Solarkreis 1 Ist-Temperatur 1"
+
+    solar_circuit_current_temperature_1_2: State | None = hass.states.get(
+        "sensor.keba_keenergy_12345678_solar_circuit_current_temperature_1_2",
+    )
+    assert isinstance(solar_circuit_current_temperature_1_2, State)
+    assert solar_circuit_current_temperature_1_2.attributes[ATTR_FRIENDLY_NAME] == "Solarkreis 2 Ist-Temperatur 1"
+
+    solar_circuit_current_temperature_2_1: State | None = hass.states.get(
+        "sensor.keba_keenergy_12345678_solar_circuit_current_temperature_2_1",
+    )
+    assert isinstance(solar_circuit_current_temperature_2_1, State)
+    assert solar_circuit_current_temperature_2_1.attributes[ATTR_FRIENDLY_NAME] == "Solarkreis 1 Ist-Temperatur 2"
+
+    solar_circuit_current_temperature_2_2: State | None = hass.states.get(
+        "sensor.keba_keenergy_12345678_solar_circuit_current_temperature_2_2",
+    )
+    assert isinstance(solar_circuit_current_temperature_2_2, State)
+    assert solar_circuit_current_temperature_2_2.attributes[ATTR_FRIENDLY_NAME] == "Solarkreis 2 Ist-Temperatur 2"
+
+    solar_circuit_target_temperature_1_1: State | None = hass.states.get(
+        "sensor.keba_keenergy_12345678_solar_circuit_target_temperature_1_1",
+    )
+    assert isinstance(solar_circuit_target_temperature_1_1, State)
+    assert solar_circuit_target_temperature_1_1.attributes[ATTR_FRIENDLY_NAME] == "Solarkreis 1 Soll-Temperatur 1"
+
+    solar_circuit_target_temperature_1_2: State | None = hass.states.get(
+        "sensor.keba_keenergy_12345678_solar_circuit_target_temperature_1_2",
+    )
+    assert isinstance(solar_circuit_target_temperature_1_2, State)
+    assert solar_circuit_target_temperature_1_2.attributes[ATTR_FRIENDLY_NAME] == "Solarkreis 2 Soll-Temperatur 1"
+
+    solar_circuit_target_temperature_2_1: State | None = hass.states.get(
+        "sensor.keba_keenergy_12345678_solar_circuit_target_temperature_2_1",
+    )
+    assert isinstance(solar_circuit_target_temperature_2_1, State)
+    assert solar_circuit_target_temperature_2_1.attributes[ATTR_FRIENDLY_NAME] == "Solarkreis 1 Soll-Temperatur 2"
+
+    solar_circuit_target_temperature_2_2: State | None = hass.states.get(
+        "sensor.keba_keenergy_12345678_solar_circuit_target_temperature_2_2",
+    )
+    assert isinstance(solar_circuit_target_temperature_2_2, State)
+    assert solar_circuit_target_temperature_2_2.attributes[ATTR_FRIENDLY_NAME] == "Solarkreis 2 Soll-Temperatur 2"
+
+    solar_circuit_heating_energy_1: State | None = hass.states.get(
+        "sensor.keba_keenergy_12345678_solar_circuit_heating_energy_1",
+    )
+    assert isinstance(solar_circuit_heating_energy_1, State)
+    assert solar_circuit_heating_energy_1.attributes[ATTR_FRIENDLY_NAME] == "Solarkreis 1 Wärmemenge"
+
+    solar_circuit_heating_energy_2: State | None = hass.states.get(
+        "sensor.keba_keenergy_12345678_solar_circuit_heating_energy_2",
+    )
+    assert isinstance(solar_circuit_heating_energy_2, State)
+    assert solar_circuit_heating_energy_2.attributes[ATTR_FRIENDLY_NAME] == "Solarkreis 2 Wärmemenge"
+
+    solar_circuit_daily_energy_1: State | None = hass.states.get(
+        "sensor.keba_keenergy_12345678_solar_circuit_daily_energy_1",
+    )
+    assert isinstance(solar_circuit_daily_energy_1, State)
+    assert solar_circuit_daily_energy_1.attributes[ATTR_FRIENDLY_NAME] == "Solarkreis 1 Tagesenergie"
+
+    solar_circuit_daily_energy_2: State | None = hass.states.get(
+        "sensor.keba_keenergy_12345678_solar_circuit_daily_energy_2",
+    )
+    assert isinstance(solar_circuit_daily_energy_2, State)
+    assert solar_circuit_daily_energy_2.attributes[ATTR_FRIENDLY_NAME] == "Solarkreis 2 Tagesenergie"
+
+    solar_circuit_actual_power_1: State | None = hass.states.get(
+        "sensor.keba_keenergy_12345678_solar_circuit_actual_power_1",
+    )
+    assert isinstance(solar_circuit_actual_power_1, State)
+    assert solar_circuit_actual_power_1.attributes[ATTR_FRIENDLY_NAME] == "Solarkreis 1 Leistung"
+
+    solar_circuit_actual_power_2: State | None = hass.states.get(
+        "sensor.keba_keenergy_12345678_solar_circuit_actual_power_2",
+    )
+    assert isinstance(solar_circuit_actual_power_2, State)
+    assert solar_circuit_actual_power_2.attributes[ATTR_FRIENDLY_NAME] == "Solarkreis 2 Leistung"
 
 
 @pytest.mark.usefixtures("entity_registry_enabled_by_default")

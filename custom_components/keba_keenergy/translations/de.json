@@ -49,12 +49,15 @@
         },
         "photovoltaic": {
             "name": "Photovoltaik{position}"
+        },
+        "solar_circuit": {
+            "name": "Solarkreis{position}"
         }
     },
     "entity": {
         "binary_sensor": {
             "heat_request": {
-                "name": "Heizanforderung"
+                "name": "Heizanforderung{counter}"
             },
             "hot_water_flow": {
                 "name": "Warmwasser läuft"
@@ -83,7 +86,7 @@
                 "name": "Stütztemperatur"
             },
             "target_temperature": {
-                "name": "Soll-Temperatur"
+                "name": "Soll-Temperatur{counter}"
             },
             "target_room_temperature": {
                 "name": "Soll-Raumtemperatur"
@@ -102,7 +105,14 @@
             }
         },
         "select": {
-            "operating_mode_1": {
+            "operating_mode_external_heat_source": {
+                "name": "Betriebsart",
+                "state": {
+                    "off": "Aus",
+                    "on": "An"
+                }
+            },
+            "operating_mode_heat_circuit": {
                 "name": "Betriebsart",
                 "state": {
                     "auto": "Auto",
@@ -113,7 +123,7 @@
                     "party": "Party"
                 }
             },
-            "operating_mode_2": {
+            "operating_mode_hot_water_tank": {
                 "name": "Betriebsart",
                 "state": {
                     "auto": "Auto",
@@ -122,7 +132,14 @@
                     "on": "An"
                 }
             },
-            "operating_mode_3": {
+            "operating_mode_solar_circuit": {
+                "name": "Betriebsart",
+                "state": {
+                    "off": "Aus",
+                    "on": "An"
+                }
+            },
+            "operating_mode_system": {
                 "name": "Betriebsart",
                 "state": {
                     "setup": "Einrichtung",
@@ -132,25 +149,14 @@
                     "auto_cool": "Kühlen",
                     "auto": "Automatik"
                 }
-            },
-            "operating_mode_4": {
-                "name": "Betriebsart",
-                "state": {
-                    "off": "Aus",
-                    "on": "An"
-                }
-            },
-            "operating_mode_4": {
-                "name": "Betriebsart",
-                "state": {
-                    "off": "Aus",
-                    "on": "An"
-                }
             }
         },
         "sensor": {
             "activation_counter": {
                 "name": "Einschaltvorgänge"
+            },
+            "actual_power": {
+                "name": "Leistung"
             },
             "circulation_pump": {
                 "name": "Umwälzpumpe"
@@ -186,7 +192,10 @@
                 "name": "Leistungszahl"
             },
             "current_temperature": {
-                "name": "Ist-Temperatur"
+                "name": "Ist-Temperatur{counter}"
+            },
+            "daily_energy": {
+                "name": "Tagesenergie"
             },
             "dew_point": {
                 "name": "Taupunkt"
@@ -257,7 +266,14 @@
             "operating_hours": {
                 "name": "Betriebsstunden"
             },
-            "operating_mode_1": {
+            "operating_mode_external_heat_source": {
+                "name": "Betriebsart",
+                "state": {
+                    "off": "Aus",
+                    "on": "An"
+                }
+            },
+            "operating_mode_heat_circuit": {
                 "name": "Betriebsart",
                 "state": {
                     "auto": "Auto",
@@ -270,7 +286,7 @@
                     "room_control": "Raumregelung"
                 }
             },
-            "operating_mode_2": {
+            "operating_mode_hot_water_tank": {
                 "name": "Betriebsart",
                 "state": {
                     "auto": "Auto",
@@ -279,7 +295,14 @@
                     "on": "An"
                 }
             },
-            "operating_mode_3": {
+            "operating_mode_solar_circuit": {
+                "name": "Betriebsart",
+                "state": {
+                    "off": "Aus",
+                    "on": "An"
+                }
+            },
+            "operating_mode_system": {
                 "name": "Betriebsart",
                 "state": {
                     "setup": "Einrichtung",
@@ -290,18 +313,8 @@
                     "auto": "Automatik"
                 }
             },
-            "operating_mode_4": {
-                "name": "Betriebsart",
-                "state": {
-                    "off": "Aus",
-                    "on": "An"
-                }
-            },
             "outdoor_temperature": {
                 "name": "Außentemperatur"
-            },
-            "pv_daily_energy": {
-                "name": "Tagesenergie"
             },
             "pv_excess_power": {
                 "name": "Überschussleistung"
@@ -321,11 +334,20 @@
             "room_temperature": {
                 "name": "Raumtemperatur"
             },
+            "solar_circuit_pump_1": {
+                "name": "Pumpe 1"
+            },
+            "solar_circuit_pump_2": {
+                "name": "Pumpe 2"
+            },
             "source_input_temperature": {
                 "name": "Quelle-Eingangstemperatur"
             },
             "source_output_temperature": {
                 "name": "Quelle-Ausgangstemperatur"
+            },
+            "source_temperature": {
+                "name": "Kollektortemperatur"
             },
             "standby_temperature": {
                 "name": "Stütztemperatur"
@@ -345,7 +367,7 @@
                 }
             },
             "target_temperature": {
-                "name": "Soll-Temperatur"
+                "name": "Soll-Temperatur{counter}"
             },
             "target_room_temperature": {
                 "name": "Soll-Raumtemperatur"

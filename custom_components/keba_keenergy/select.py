@@ -16,6 +16,7 @@ from keba_keenergy_api.constants import ExternalHeatSourceOperatingMode
 from keba_keenergy_api.constants import HeatCircuitOperatingMode
 from keba_keenergy_api.constants import HotWaterTankOperatingMode
 from keba_keenergy_api.constants import SectionPrefix
+from keba_keenergy_api.constants import SolarCircuitOperatingMode
 from keba_keenergy_api.constants import SystemOperatingMode
 
 from .const import DOMAIN
@@ -49,7 +50,7 @@ SELECT_TYPES: dict[str, tuple[KebaKeEnergySelectEntityDescription, ...]] = {
                 SystemOperatingMode.SUMMER.name.lower(),
                 SystemOperatingMode.AUTO_HEAT.name.lower(),
             ],
-            translation_key="operating_mode_3",
+            translation_key="operating_mode_system",
             values=SystemOperatingMode,
         ),
     ),
@@ -64,15 +65,26 @@ SELECT_TYPES: dict[str, tuple[KebaKeEnergySelectEntityDescription, ...]] = {
                 HeatCircuitOperatingMode.HOLIDAY.name.lower(),
                 HeatCircuitOperatingMode.PARTY.name.lower(),
             ],
-            translation_key="operating_mode_1",
+            translation_key="operating_mode_heat_circuit",
             values=HeatCircuitOperatingMode,
+        ),
+    ),
+    SectionPrefix.SOLAR_CIRCUIT: (
+        KebaKeEnergySelectEntityDescription(
+            key="operating_mode",
+            options=[
+                SolarCircuitOperatingMode.OFF.name.lower(),
+                SolarCircuitOperatingMode.ON.name.lower(),
+            ],
+            translation_key="operating_mode_solar_circuit",
+            values=SolarCircuitOperatingMode,
         ),
     ),
     SectionPrefix.HOT_WATER_TANK: (
         KebaKeEnergySelectEntityDescription(
             key="operating_mode",
             options=[_.name.lower() for _ in HotWaterTankOperatingMode],
-            translation_key="operating_mode_2",
+            translation_key="operating_mode_hot_water_tank",
             values=HotWaterTankOperatingMode,
         ),
     ),
@@ -80,7 +92,7 @@ SELECT_TYPES: dict[str, tuple[KebaKeEnergySelectEntityDescription, ...]] = {
         KebaKeEnergySelectEntityDescription(
             key="operating_mode",
             options=[_.name.lower() for _ in ExternalHeatSourceOperatingMode],
-            translation_key="operating_mode_4",
+            translation_key="operating_mode_external_heat_source",
             values=ExternalHeatSourceOperatingMode,
         ),
     ),
@@ -94,7 +106,8 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry, async_add_e
 
     # Loop over all device data and add an index to the sensor
     # if there is more than one device of the same type
-    # e.g. hot water tank, heat circuit or heat pump.
+    # e.g. hot water tank, heat circuit, solar circuit or heat pump.
+
     for section_id, section_data in coordinator.data.items():
         for description in SELECT_TYPES.get(section_id, {}):
             for key, values in section_data.items():
