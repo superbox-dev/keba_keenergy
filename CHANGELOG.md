@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.4.0b1] - 2025-01-03
+
+### Added
+
+- Support for solar circuits
+
 ## [1.3.1] - 2025-12-09
 
 ### Fixed
