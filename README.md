@@ -26,7 +26,7 @@ Looking for more information? The [Wiki](https://github.com/superbox-dev/keba_ke
 
 I put a lot of time into this project. If you like it, you can support me with a donation.
 
-[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/F2F0KXO6D)
+[![KoFi](https://raw.githubusercontent.com/superbox-dev/.github/refs/heads/main/profile/superbox-kofi.jpg)](https://ko-fi.com/F2F0KXO6D)
 
 ## Screenshots
 
