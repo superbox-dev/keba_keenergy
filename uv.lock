@@ -566,30 +566,30 @@ wheels = [
 
 [[package]]
 name = "boto3"
-version = "1.42.19"
+version = "1.42.21"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "botocore" },
     { name = "jmespath" },
     { name = "s3transfer" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/34/36/045babbc2978fe3bf051a002e9ee492a815e50b90aea514b811d12aa33cb/boto3-1.42.19.tar.gz", hash = "sha256:5933696a28bf8eb62fc54e4de5583f78a0efef59c8164ee1850436aa22f53aa7", size = 112803, upload-time = "2025-12-30T20:29:30.785Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/27/36/999f23a821567334ecdfaec31fad556f5569383006543be63fdd1e17193f/boto3-1.42.21.tar.gz", hash = "sha256:9b92943d253bc837323079fe88460e741cb2eb80abaebcb558b2446bdb4049d6", size = 112775, upload-time = "2026-01-03T00:59:03.241Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/f1/ca/2b46e9fa3953c21a258b06e33f14452d97646ffbe7ace125e6aec62d4d7c/boto3-1.42.19-py3-none-any.whl", hash = "sha256:c55b8b303c64931272536813a476f130b90ea7041d7b79c154d89cf1c18256b4", size = 140576, upload-time = "2025-12-30T20:29:29.319Z" },
+    { url = "https://files.pythonhosted.org/packages/55/96/5df07f4f63ab9e72db86192590d7cef70cb911c6e725c1639d56d054f5cc/boto3-1.42.21-py3-none-any.whl", hash = "sha256:1885f252d715a5810bb4e0c5bbebfa8e9018b025febf5be3d58540626e7b43d2", size = 140573, upload-time = "2026-01-03T00:59:01.483Z" },
 ]
 
 [[package]]
 name = "botocore"
-version = "1.42.19"
+version = "1.42.21"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "jmespath" },
     { name = "python-dateutil" },
     { name = "urllib3" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/39/d6/33565766764492a0a4956ef161498d81a8c48c1e918aeaeb29def52c3367/botocore-1.42.19.tar.gz", hash = "sha256:8d38f30de983720303e95951380a2c9ac515159636ee6b5ba4227d65f14551a4", size = 14874191, upload-time = "2025-12-30T20:29:21.129Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/4c/df/dfd07d75fda643ba07af75e33cfd72472a12bb13901812ca34e47f081507/botocore-1.42.21.tar.gz", hash = "sha256:db8f99d186156da42feb4fd2098017383d9b155097290cc53da7258f6e652c39", size = 14877471, upload-time = "2026-01-03T00:58:51.84Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/a8/f9/f75b8ff225895f26bda4981b04df68b0ece29aa18aaafe4f21a3e4d82139/botocore-1.42.19-py3-none-any.whl", hash = "sha256:30c276e0a96d822826d74e961089b9af16b274ac7ddcf7dcf6440bc90d856d88", size = 14550311, upload-time = "2025-12-30T20:29:18.223Z" },
+    { url = "https://files.pythonhosted.org/packages/6e/a1/78c50c437fdf17369adeae275445f40f51029888911923ace37523db4c02/botocore-1.42.21-py3-none-any.whl", hash = "sha256:6b59973a3ba8c3cfd5123f2656fef2339beee9f6483b8bc12bb00c5453ea2c6d", size = 14550712, upload-time = "2026-01-03T00:58:48.653Z" },
 ]
 
 [[package]]
@@ -1616,7 +1616,7 @@ wheels = [
 
 [[package]]
 name = "keba-keenergy"
-version = "1.4.0b1"
+version = "1.4.0"
 source = { editable = "." }
 dependencies = [
     { name = "homeassistant" },
@@ -1659,7 +1659,7 @@ test = [
 [package.metadata]
 requires-dist = [
     { name = "homeassistant", specifier = ">=2025.8.2" },
-    { name = "keba-keenergy-api", specifier = "~=2.4.0b4" },
+    { name = "keba-keenergy-api", specifier = "~=2.4.0" },
     { name = "requests", specifier = ">=2.32.5" },
 ]
 
@@ -1695,14 +1695,14 @@ test = [
 
 [[package]]
 name = "keba-keenergy-api"
-version = "2.4.0b4"
+version = "2.4.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "aiohttp" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/9e/8e/a39778d203a7e0ad7494a75947af9b535c32d0aef98cbccba38d210a4fce/keba_keenergy_api-2.4.0b4.tar.gz", hash = "sha256:641a77eee11653af3c9ad37a5b09efbd4df8328b0d2497d27c539db34de0f288", size = 176014, upload-time = "2026-01-02T16:11:40.225Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/f2/4f/6eb5be981a9c10b65402faad76b03a05c97023e1fd8b1a9158d6dd746d86/keba_keenergy_api-2.4.0.tar.gz", hash = "sha256:d50a49566e0267c84b9e0219b730217255f1790980b88b57ec7119596b977d07", size = 176673, upload-time = "2026-01-03T18:19:13.328Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/28/21/8a622e5c40583d1055f0824c6fb78e871958813f1f4e6052d39976d7fa46/keba_keenergy_api-2.4.0b4-py3-none-any.whl", hash = "sha256:2897c45c997b443a20b60d367ef91cc60293adeaa3d9e75ec9c692d6fe4f2794", size = 22297, upload-time = "2026-01-02T16:11:38.752Z" },
+    { url = "https://files.pythonhosted.org/packages/cc/44/82c4c288a18fec6c0c2e746a7e13db534d2daf6e1f561d2e6c76d1ef3f79/keba_keenergy_api-2.4.0-py3-none-any.whl", hash = "sha256:7d3e480a4272d42635168d4f3f8908dacc3a70c2090e6882de3e7188a4de1e7a", size = 22296, upload-time = "2026-01-03T18:19:12.157Z" },
 ]
 
 [[package]]
