@@ -161,6 +161,49 @@ async def test_solar_circuit_selects_translated(
     assert solar_circuit_operating_mode_2.attributes[ATTR_FRIENDLY_NAME] == "Solarkreis 2 Betriebsart"
 
 
+async def test_buffer_tank_selects(
+    hass: HomeAssistant,
+    config_entry: MockConfigEntry,
+    fake_api: FakeKebaKeEnergyAPI,
+) -> None:
+    """Test buffer tank selects."""
+    fake_api.responses = [MULTIPLE_POSITIONS_RESPONSE, get_multi_positions_data_response()]
+    fake_api.register_requests(config_entry.data[CONF_HOST])
+
+    await setup_integration(hass, config_entry)
+
+    buffer_tank_operating_mode_2: State | None = hass.states.get(
+        "select.keba_keenergy_12345678_buffer_tank_operating_mode_2",
+    )
+    assert isinstance(buffer_tank_operating_mode_2, State)
+    assert buffer_tank_operating_mode_2.state == "on"
+    assert buffer_tank_operating_mode_2.attributes[ATTR_FRIENDLY_NAME] == "Buffer tank 2 Operating mode"
+    assert buffer_tank_operating_mode_2.attributes[ATTR_OPTIONS] == [
+        "off",
+        "on",
+        "heat_up",
+    ]
+
+
+async def test_buffer_tank_selects_translated(
+    hass: HomeAssistant,
+    config_entry: MockConfigEntry,
+    fake_api: FakeKebaKeEnergyAPI,
+) -> None:
+    """Test buffer tank selects translated."""
+    fake_api.responses = [MULTIPLE_POSITIONS_RESPONSE, get_multi_positions_data_response()]
+    fake_api.register_requests(config_entry.data[CONF_HOST])
+
+    hass.config.language = "de"
+    await setup_integration(hass, config_entry)
+
+    buffer_tank_operating_mode_2: State | None = hass.states.get(
+        "select.keba_keenergy_12345678_buffer_tank_operating_mode_2",
+    )
+    assert isinstance(buffer_tank_operating_mode_2, State)
+    assert buffer_tank_operating_mode_2.attributes[ATTR_FRIENDLY_NAME] == "Pufferspeicher 2 Betriebsart"
+
+
 async def test_hot_water_tank_selects(
     hass: HomeAssistant,
     config_entry: MockConfigEntry,

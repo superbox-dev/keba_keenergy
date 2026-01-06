@@ -754,6 +754,91 @@ HEAT_PUMP_HAS_PASSIVE_COOLING: str = """
     }
 """
 
+BUFFER_TANK_CURRENT_TOP_TEMPERATURE: str = """
+    {
+        "name": "APPL.CtrlAppl.sParam.bufferTank[%s].topTemp.values.actValue",
+        "attributes": {
+            "formatId": "fmtTemp",
+            "longText": "Temp. top act.",
+            "unitId": "Temp",
+            "upperLimit": "90",
+            "lowerLimit": "5"
+        },
+        "value": "%s"
+    }
+"""
+
+BUFFER_TANK_CURRENT_BOTTOM_TEMPERATURE: str = """
+    {
+        "name": "APPL.CtrlAppl.sParam.bufferTank[%s].midTemp.values.actValue",
+        "attributes": {
+            "formatId": "fmtTemp",
+            "longText": "Temp. bottom act.",
+            "unitId": "Temp",
+            "upperLimit": "90",
+            "lowerLimit": "5"
+        },
+        "value": "%s"
+    }
+"""
+
+BUFFER_TANK_OPERATING_MODE: str = """
+    {
+        "name": "APPL.CtrlAppl.sParam.bufferTank[%s].param.operatingMode",
+        "attributes": {
+            "formatId": "fmtBufferMode",
+            "longText": "Oper. mode",
+            "unitId": "Enum",
+            "upperLimit": "32767",
+            "lowerLimit": "0"
+        },
+        "value": "%s"
+    }
+"""
+
+BUFFER_TANK_STANDBY_TEMPERATURE: str = """
+    {
+        "name": "APPL.CtrlAppl.sParam.bufferTank[%s].param.backupTemp",
+        "attributes": {
+            "formatId": "fmtTemp",
+            "longText": "Backup temp.",
+            "unitId": "Temp",
+            "upperLimit": "90",
+            "lowerLimit": "0"
+        },
+        "value": "%s"
+    }
+"""
+
+BUFFER_TANK_TARGET_TEMPERATURE: str = """
+    {
+        "name": "APPL.CtrlAppl.sParam.bufferTank[%s].values.setTemp",
+        "attributes": {
+            "formatId": "fmtTemp",
+            "longText": "Set temp.",
+            "unitId": "Temp",
+            "upperLimit": "100",
+            "lowerLimit": "0"
+        },
+        "value": "%s"
+    }
+"""
+
+BUFFER_TANK_HEAT_REQUEST: str = """
+    {
+        "name": "APPL.CtrlAppl.sParam.bufferTank[%s].values.heatRequestTop",
+        "attributes": {},
+        "value": "%s"
+    }
+"""
+
+BUFFER_TANK_COOL_REQUEST: str = """
+    {
+        "name": "APPL.CtrlAppl.sParam.bufferTank[%s].values.coolRequestBot",
+        "attributes": {},
+        "value": "%s"
+    }
+"""
 
 HOT_WATER_TANK_HEAT_REQUEST: str = """
     {
@@ -928,6 +1013,21 @@ SYSTEM_HEAT_PUMP_NUMBERS: str = """
     }
 """
 
+SYSTEM_BUFFER_TANK_NUMBERS: str = """
+    {
+        "name": "APPL.CtrlAppl.sParam.options.systemNumberOfBuffers",
+        "attributes": {
+            "formatId": "fmt2p0",
+            "longText": "Qty buffers",
+            "upperLimit": "0",
+            "lowerLimit": "0",
+            "dynLowerLimit": 1,
+            "dynUpperLimit": 1
+        },
+        "value": "%s"
+    }
+"""
+
 SYSTEM_HOT_WATER_TANK_NUMBERS: str = """
     {
         "name": "APPL.CtrlAppl.sParam.options.systemNumberOfHotWaterTanks",
@@ -1072,6 +1172,7 @@ DEFAULT_POSITION_RESPONSE: list[dict[str, Any]] = [
     json.loads(SYSTEM_HEAT_PUMP_NUMBERS % "1"),
     json.loads(SYSTEM_HEAT_CIRCUIT_NUMBERS % "1"),
     json.loads(SYSTEM_SOLAR_CIRCUIT_NUMBERS % "1"),
+    json.loads(SYSTEM_BUFFER_TANK_NUMBERS % "1"),
     json.loads(SYSTEM_HOT_WATER_TANK_NUMBERS % "1"),
     json.loads(SYSTEM_EXTERNAL_HEAT_SOURCE_NUMBERS % "1"),
 ]
@@ -1080,6 +1181,7 @@ MULTIPLE_POSITIONS_RESPONSE: list[dict[str, Any]] = [
     json.loads(SYSTEM_HEAT_PUMP_NUMBERS % "1"),
     json.loads(SYSTEM_HEAT_CIRCUIT_NUMBERS % "2"),
     json.loads(SYSTEM_SOLAR_CIRCUIT_NUMBERS % "2"),
+    json.loads(SYSTEM_BUFFER_TANK_NUMBERS % "2"),
     json.loads(SYSTEM_HOT_WATER_TANK_NUMBERS % "2"),
     json.loads(SYSTEM_EXTERNAL_HEAT_SOURCE_NUMBERS % "2"),
 ]
@@ -1158,6 +1260,13 @@ DEFAULT_POSITION_DATA_RESPONSE: list[dict[str, Any]] = [
     json.loads(SOLAR_CIRCUIT_ACTUAL_POWER % ("0", "3452")),
     *HEAT_PUMP_DATA,
     json.loads(HEAT_PUMP_HAS_PASSIVE_COOLING % "true"),
+    json.loads(BUFFER_TANK_CURRENT_TOP_TEMPERATURE % ("0", "45.67")),
+    json.loads(BUFFER_TANK_CURRENT_BOTTOM_TEMPERATURE % ("0", "25.67")),
+    json.loads(BUFFER_TANK_OPERATING_MODE % ("0", "0")),
+    json.loads(BUFFER_TANK_STANDBY_TEMPERATURE % ("0", "10.00")),
+    json.loads(BUFFER_TANK_TARGET_TEMPERATURE % ("0", "44.00")),
+    json.loads(BUFFER_TANK_HEAT_REQUEST % ("0", "false")),
+    json.loads(BUFFER_TANK_COOL_REQUEST % ("0", "true")),
     json.loads(HOT_WATER_TANK_HEAT_REQUEST % ("0", "false")),
     json.loads(HOT_WATER_TANK_HOT_WATER_FLOW % ("0", "false")),
     json.loads(HOT_WATER_TANK_FRESH_WATER_MODULE_TEMPERATURE % ("0", "51")),
@@ -1171,6 +1280,7 @@ DEFAULT_POSITION_DATA_RESPONSE: list[dict[str, Any]] = [
     json.loads(SYSTEM_HEAT_CIRCUIT_NUMBERS % "1"),
     json.loads(SYSTEM_SOLAR_CIRCUIT_NUMBERS % "1"),
     json.loads(SYSTEM_HEAT_PUMP_NUMBERS % "1"),
+    json.loads(SYSTEM_BUFFER_TANK_NUMBERS % "1"),
     json.loads(SYSTEM_HOT_WATER_TANK_NUMBERS % "1"),
     json.loads(SYSTEM_EXTERNAL_HEAT_SOURCE_NUMBERS % "1"),
     SYSTEM_OUTDOOR_TEMPERATURE,
@@ -1259,6 +1369,20 @@ ENTITY_UPDATED_DATA_RESPONSE: list[dict[str, Any]] = [
     json.loads(SOLAR_CIRCUIT_ACTUAL_POWER % ("1", "3452")),
     *HEAT_PUMP_DATA,
     json.loads(HEAT_PUMP_HAS_PASSIVE_COOLING % "true"),
+    json.loads(BUFFER_TANK_CURRENT_TOP_TEMPERATURE % ("0", "45.67")),
+    json.loads(BUFFER_TANK_CURRENT_TOP_TEMPERATURE % ("1", "35.67")),
+    json.loads(BUFFER_TANK_CURRENT_BOTTOM_TEMPERATURE % ("0", "25.67")),
+    json.loads(BUFFER_TANK_CURRENT_BOTTOM_TEMPERATURE % ("1", "15.67")),
+    json.loads(BUFFER_TANK_OPERATING_MODE % ("0", "0")),
+    json.loads(BUFFER_TANK_OPERATING_MODE % ("1", "1")),
+    json.loads(BUFFER_TANK_STANDBY_TEMPERATURE % ("0", "10.00")),
+    json.loads(BUFFER_TANK_STANDBY_TEMPERATURE % ("1", "11.00")),
+    json.loads(BUFFER_TANK_TARGET_TEMPERATURE % ("0", "44.00")),
+    json.loads(BUFFER_TANK_TARGET_TEMPERATURE % ("1", "43.00")),
+    json.loads(BUFFER_TANK_HEAT_REQUEST % ("0", "false")),
+    json.loads(BUFFER_TANK_HEAT_REQUEST % ("1", "true")),
+    json.loads(BUFFER_TANK_COOL_REQUEST % ("0", "true")),
+    json.loads(BUFFER_TANK_COOL_REQUEST % ("1", "false")),
     json.loads(HOT_WATER_TANK_HEAT_REQUEST % ("0", "false")),
     json.loads(HOT_WATER_TANK_HEAT_REQUEST % ("1", "true")),
     json.loads(HOT_WATER_TANK_HOT_WATER_FLOW % ("0", "false")),
@@ -1279,6 +1403,7 @@ ENTITY_UPDATED_DATA_RESPONSE: list[dict[str, Any]] = [
     json.loads(SYSTEM_HEAT_CIRCUIT_NUMBERS % "2"),
     json.loads(SYSTEM_SOLAR_CIRCUIT_NUMBERS % "2"),
     json.loads(SYSTEM_HEAT_PUMP_NUMBERS % "1"),
+    json.loads(SYSTEM_BUFFER_TANK_NUMBERS % "2"),
     json.loads(SYSTEM_HOT_WATER_TANK_NUMBERS % "2"),
     json.loads(SYSTEM_EXTERNAL_HEAT_SOURCE_NUMBERS % "1"),
     SYSTEM_OUTDOOR_TEMPERATURE,
@@ -1331,6 +1456,13 @@ HEAT_CIRCUIT_OPERATION_MODE_3_DATA_RESPONSE: list[dict[str, Any]] = [
     json.loads(SOLAR_CIRCUIT_ACTUAL_POWER % ("0", "3452")),
     *HEAT_PUMP_DATA,
     json.loads(HEAT_PUMP_HAS_PASSIVE_COOLING % "true"),
+    json.loads(BUFFER_TANK_CURRENT_TOP_TEMPERATURE % ("0", "45.67")),
+    json.loads(BUFFER_TANK_CURRENT_BOTTOM_TEMPERATURE % ("0", "25.67")),
+    json.loads(BUFFER_TANK_OPERATING_MODE % ("0", "0")),
+    json.loads(BUFFER_TANK_STANDBY_TEMPERATURE % ("0", "10.00")),
+    json.loads(BUFFER_TANK_TARGET_TEMPERATURE % ("0", "44.00")),
+    json.loads(BUFFER_TANK_HEAT_REQUEST % ("0", "false")),
+    json.loads(BUFFER_TANK_COOL_REQUEST % ("0", "true")),
     json.loads(HOT_WATER_TANK_HEAT_REQUEST % ("0", "false")),
     json.loads(HOT_WATER_TANK_HOT_WATER_FLOW % ("0", "true")),
     json.loads(HOT_WATER_TANK_FRESH_WATER_MODULE_TEMPERATURE % ("0", "51")),
@@ -1344,6 +1476,7 @@ HEAT_CIRCUIT_OPERATION_MODE_3_DATA_RESPONSE: list[dict[str, Any]] = [
     json.loads(SYSTEM_HEAT_CIRCUIT_NUMBERS % "1"),
     json.loads(SYSTEM_SOLAR_CIRCUIT_NUMBERS % "1"),
     json.loads(SYSTEM_HEAT_PUMP_NUMBERS % "1"),
+    json.loads(SYSTEM_BUFFER_TANK_NUMBERS % "1"),
     json.loads(SYSTEM_HOT_WATER_TANK_NUMBERS % "1"),
     json.loads(SYSTEM_EXTERNAL_HEAT_SOURCE_NUMBERS % "1"),
     SYSTEM_OUTDOOR_TEMPERATURE,
@@ -1396,7 +1529,14 @@ HEAT_CIRCUIT_OPERATION_MODE_4_DATA_RESPONSE: list[dict[str, Any]] = [
     json.loads(SOLAR_CIRCUIT_ACTUAL_POWER % ("0", "3452")),
     *HEAT_PUMP_DATA,
     json.loads(HEAT_PUMP_HAS_PASSIVE_COOLING % "true"),
+    json.loads(BUFFER_TANK_CURRENT_TOP_TEMPERATURE % ("0", "45.67")),
+    json.loads(BUFFER_TANK_CURRENT_BOTTOM_TEMPERATURE % ("0", "25.67")),
+    json.loads(BUFFER_TANK_OPERATING_MODE % ("0", "0")),
+    json.loads(BUFFER_TANK_STANDBY_TEMPERATURE % ("0", "10.00")),
+    json.loads(BUFFER_TANK_TARGET_TEMPERATURE % ("0", "44.00")),
+    json.loads(BUFFER_TANK_HEAT_REQUEST % ("0", "false")),
     json.loads(HOT_WATER_TANK_HEAT_REQUEST % ("0", "false")),
+    json.loads(BUFFER_TANK_COOL_REQUEST % ("0", "true")),
     json.loads(HOT_WATER_TANK_HOT_WATER_FLOW % ("0", "true")),
     json.loads(HOT_WATER_TANK_FRESH_WATER_MODULE_TEMPERATURE % ("0", "51")),
     json.loads(HOT_WATER_TANK_TARGET_TEMPERATURE % ("0", "51")),
@@ -1409,6 +1549,7 @@ HEAT_CIRCUIT_OPERATION_MODE_4_DATA_RESPONSE: list[dict[str, Any]] = [
     json.loads(SYSTEM_HEAT_CIRCUIT_NUMBERS % "1"),
     json.loads(SYSTEM_SOLAR_CIRCUIT_NUMBERS % "1"),
     json.loads(SYSTEM_HEAT_PUMP_NUMBERS % "1"),
+    json.loads(SYSTEM_BUFFER_TANK_NUMBERS % "1"),
     json.loads(SYSTEM_HOT_WATER_TANK_NUMBERS % "1"),
     json.loads(SYSTEM_EXTERNAL_HEAT_SOURCE_NUMBERS % "1"),
     SYSTEM_OUTDOOR_TEMPERATURE,
@@ -1499,6 +1640,20 @@ def get_multi_positions_data_response(has_passive_cooling: str = "false") -> lis
         json.loads(SOLAR_CIRCUIT_ACTUAL_POWER % ("1", "2452")),
         *HEAT_PUMP_DATA,
         json.loads(HEAT_PUMP_HAS_PASSIVE_COOLING % f"{has_passive_cooling}"),
+        json.loads(BUFFER_TANK_CURRENT_TOP_TEMPERATURE % ("0", "45.67")),
+        json.loads(BUFFER_TANK_CURRENT_TOP_TEMPERATURE % ("1", "35.67")),
+        json.loads(BUFFER_TANK_CURRENT_BOTTOM_TEMPERATURE % ("0", "15.67")),
+        json.loads(BUFFER_TANK_CURRENT_BOTTOM_TEMPERATURE % ("1", "25.67")),
+        json.loads(BUFFER_TANK_OPERATING_MODE % ("0", "0")),
+        json.loads(BUFFER_TANK_OPERATING_MODE % ("1", "1")),
+        json.loads(BUFFER_TANK_STANDBY_TEMPERATURE % ("0", "10.00")),
+        json.loads(BUFFER_TANK_STANDBY_TEMPERATURE % ("1", "11.00")),
+        json.loads(BUFFER_TANK_TARGET_TEMPERATURE % ("0", "44.00")),
+        json.loads(BUFFER_TANK_TARGET_TEMPERATURE % ("1", "43.00")),
+        json.loads(BUFFER_TANK_HEAT_REQUEST % ("0", "false")),
+        json.loads(BUFFER_TANK_HEAT_REQUEST % ("1", "true")),
+        json.loads(BUFFER_TANK_COOL_REQUEST % ("0", "true")),
+        json.loads(BUFFER_TANK_COOL_REQUEST % ("1", "false")),
         json.loads(HOT_WATER_TANK_HEAT_REQUEST % ("0", "false")),
         json.loads(HOT_WATER_TANK_HEAT_REQUEST % ("1", "true")),
         json.loads(HOT_WATER_TANK_HOT_WATER_FLOW % ("0", "false")),
@@ -1519,6 +1674,7 @@ def get_multi_positions_data_response(has_passive_cooling: str = "false") -> lis
         json.loads(SYSTEM_HEAT_CIRCUIT_NUMBERS % "2"),
         json.loads(SYSTEM_SOLAR_CIRCUIT_NUMBERS % "2"),
         json.loads(SYSTEM_HEAT_PUMP_NUMBERS % "1"),
+        json.loads(SYSTEM_BUFFER_TANK_NUMBERS % "2"),
         json.loads(SYSTEM_HOT_WATER_TANK_NUMBERS % "2"),
         json.loads(SYSTEM_EXTERNAL_HEAT_SOURCE_NUMBERS % "1"),
         SYSTEM_OUTDOOR_TEMPERATURE,

@@ -26,6 +26,60 @@ from tests.api_data import get_multi_positions_data_response
 from tests.conftest import FakeKebaKeEnergyAPI
 
 
+async def test_buffer_tank_numbers(
+    hass: HomeAssistant,
+    config_entry: MockConfigEntry,
+    fake_api: FakeKebaKeEnergyAPI,
+) -> None:
+    """Test buffer tank numbers."""
+    fake_api.responses = [
+        MULTIPLE_POSITIONS_RESPONSE,
+        get_multi_positions_data_response(),
+        # Read API after services call
+        MULTIPLE_POSITIONS_RESPONSE,
+        get_multi_positions_data_response(),
+    ]
+    fake_api.register_requests(config_entry.data[CONF_HOST])
+
+    await setup_integration(hass, config_entry)
+
+    buffer_tank_standby_temperature_1: State | None = hass.states.get(
+        "number.keba_keenergy_12345678_buffer_tank_standby_temperature_1",
+    )
+    assert isinstance(buffer_tank_standby_temperature_1, State)
+    assert buffer_tank_standby_temperature_1.attributes[ATTR_MIN] == 0.0
+    assert buffer_tank_standby_temperature_1.attributes[ATTR_MAX] == 90.0
+    assert buffer_tank_standby_temperature_1.attributes[ATTR_STEP] == 0.5
+    assert buffer_tank_standby_temperature_1.attributes[CONF_UNIT_OF_MEASUREMENT] == UnitOfTemperature.CELSIUS
+    assert buffer_tank_standby_temperature_1.attributes[CONF_DEVICE_CLASS] == SensorDeviceClass.TEMPERATURE
+    assert buffer_tank_standby_temperature_1.attributes[ATTR_FRIENDLY_NAME] == "Buffer tank 1 Standby temperature"
+
+
+async def test_buffer_tank_numbers_translated(
+    hass: HomeAssistant,
+    config_entry: MockConfigEntry,
+    fake_api: FakeKebaKeEnergyAPI,
+) -> None:
+    """Test buffer tank numbers translated."""
+    fake_api.responses = [
+        MULTIPLE_POSITIONS_RESPONSE,
+        get_multi_positions_data_response(),
+        # Read API after services call
+        MULTIPLE_POSITIONS_RESPONSE,
+        get_multi_positions_data_response(),
+    ]
+    fake_api.register_requests(config_entry.data[CONF_HOST])
+
+    hass.config.language = "de"
+    await setup_integration(hass, config_entry)
+
+    buffer_tank_standby_temperature_1: State | None = hass.states.get(
+        "number.keba_keenergy_12345678_buffer_tank_standby_temperature_1",
+    )
+    assert isinstance(buffer_tank_standby_temperature_1, State)
+    assert buffer_tank_standby_temperature_1.attributes[ATTR_FRIENDLY_NAME] == "Pufferspeicher 1 Stütztemperatur"
+
+
 async def test_hot_water_tank_numbers(
     hass: HomeAssistant,
     config_entry: MockConfigEntry,
@@ -332,6 +386,11 @@ async def test_solar_circuit_numbers_translated(
             "number.keba_keenergy_12345678_solar_circuit_target_temperature_2_2",
             22,
             '[{"name": "APPL.CtrlAppl.sParam.genericHeat[3].param.setTempMax.value", "value": "22.0"}]',
+        ),
+        (
+            "number.keba_keenergy_12345678_buffer_tank_standby_temperature_1",
+            11,
+            '[{"name": "APPL.CtrlAppl.sParam.bufferTank[0].param.backupTemp", "value": "11.0"}]',
         ),
         (
             "number.keba_keenergy_12345678_hot_water_tank_standby_temperature_2",

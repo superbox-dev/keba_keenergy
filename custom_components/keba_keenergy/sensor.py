@@ -24,6 +24,7 @@ from homeassistant.const import UnitOfTime
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.typing import StateType
+from keba_keenergy_api.constants import BufferTankOperatingMode
 from keba_keenergy_api.constants import ExternalHeatSourceOperatingMode
 from keba_keenergy_api.constants import HeatCircuitHeatRequest
 from keba_keenergy_api.constants import HeatCircuitOperatingMode
@@ -680,6 +681,65 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription, ...]] = {
             value=lambda data: cast("int", data),
         ),
     ),
+    SectionPrefix.BUFFER_TANK: (
+        KebaKeEnergySensorEntityDescription(
+            device_class=SensorDeviceClass.TEMPERATURE,
+            key="current_top_temperature",
+            key_index=None,
+            native_unit_of_measurement=UnitOfTemperature.CELSIUS,
+            state_class=SensorStateClass.MEASUREMENT,
+            translation_key="current_top_temperature",
+            translation_placeholders={
+                "counter": "",
+            },
+            icon="mdi:thermometer-water",
+            value=lambda data: cast("float", data),
+        ),
+        KebaKeEnergySensorEntityDescription(
+            device_class=SensorDeviceClass.TEMPERATURE,
+            key="current_bottom_temperature",
+            key_index=None,
+            native_unit_of_measurement=UnitOfTemperature.CELSIUS,
+            state_class=SensorStateClass.MEASUREMENT,
+            translation_key="current_bottom_temperature",
+            translation_placeholders={
+                "counter": "",
+            },
+            icon="mdi:thermometer-water",
+            value=lambda data: cast("float", data),
+        ),
+        KebaKeEnergySensorEntityDescription(
+            device_class=SensorDeviceClass.ENUM,
+            key="operating_mode",
+            key_index=None,
+            options=[_.name.lower() for _ in BufferTankOperatingMode],
+            translation_key="operating_mode_buffer_tank",
+            value=lambda data: cast("str", data),
+        ),
+        KebaKeEnergySensorEntityDescription(
+            device_class=SensorDeviceClass.TEMPERATURE,
+            key="standby_temperature",
+            key_index=None,
+            native_unit_of_measurement=UnitOfTemperature.CELSIUS,
+            state_class=SensorStateClass.MEASUREMENT,
+            translation_key="standby_temperature",
+            icon="mdi:thermometer-chevron-down",
+            value=lambda data: cast("float", data),
+        ),
+        KebaKeEnergySensorEntityDescription(
+            device_class=SensorDeviceClass.TEMPERATURE,
+            key="target_temperature",
+            key_index=None,
+            native_unit_of_measurement=UnitOfTemperature.CELSIUS,
+            state_class=SensorStateClass.MEASUREMENT,
+            translation_key="target_temperature",
+            translation_placeholders={
+                "counter": "",
+            },
+            icon="mdi:thermometer-chevron-up",
+            value=lambda data: cast("float", data),
+        ),
+    ),
     SectionPrefix.HOT_WATER_TANK: (
         KebaKeEnergySensorEntityDescription(
             device_class=SensorDeviceClass.TEMPERATURE,
@@ -829,7 +889,7 @@ async def async_setup_entry(
 
     # Loop over all device data and add an index to the sensor
     # if there is more than one device of the same type
-    # e.g. hot water tank, heat circuit, solar circuit or heat pump.
+    # e.g. buffer tank, hot water tank, heat circuit, solar circuit or heat pump.
 
     for section_id, section_data in coordinator.data.items():
         if section_id == SectionPrefix.PHOTOVOLTAIC and coordinator.has_photovoltaics() == STATE_OFF:
@@ -874,7 +934,7 @@ class KebaKeEnergySensorEntity(KebaKeEnergyExtendedEntity, SensorEntity):
             key_index=self.entity_description.key_index,
         )
 
-        self.entity_id = f"{SENSOR_DOMAIN}.{DOMAIN}_{self._attr_unique_id}"
+        self.entity_id: str = f"{SENSOR_DOMAIN}.{DOMAIN}_{self._attr_unique_id}"
 
     @property
     def native_value(self) -> StateType:

@@ -32,6 +32,9 @@
         }
     },
     "device": {
+        "buffer_tank": {
+            "name": "Pufferspeicher{position}"
+        },
         "control_unit":{
             "name": "Bedieneinheit"
         },
@@ -56,6 +59,9 @@
     },
     "entity": {
         "binary_sensor": {
+            "cool_request": {
+                "name": "Kühlanforderung"
+            },
             "heat_request": {
                 "name": "Heizanforderung{counter}"
             },
@@ -105,6 +111,14 @@
             }
         },
         "select": {
+            "operating_mode_buffer_tank": {
+                "name": "Betriebsart",
+                "state": {
+                    "heat_up": "Aufheizen",
+                    "off": "Aus",
+                    "on": "An"
+                }
+            },
             "operating_mode_external_heat_source": {
                 "name": "Betriebsart",
                 "state": {
@@ -191,8 +205,14 @@
             "cop": {
                 "name": "Leistungszahl"
             },
+            "current_bottom_temperature": {
+                "name": "Ist-Temperatur (unten)"
+            },
             "current_temperature": {
                 "name": "Ist-Temperatur{counter}"
+            },
+            "current_top_temperature": {
+                "name": "Ist-Temperatur (oben)"
             },
             "daily_energy": {
                 "name": "Tagesenergie"
@@ -265,6 +285,14 @@
             },
             "operating_hours": {
                 "name": "Betriebsstunden"
+            },
+            "operating_mode_buffer_tank": {
+                "name": "Betriebsart",
+                "state": {
+                    "heat_up": "Aufheizen",
+                    "off": "Aus",
+                    "on": "An"
+                }
             },
             "operating_mode_external_heat_source": {
                 "name": "Betriebsart",
@@ -401,6 +429,13 @@
             }
         },
         "water_heater": {
+            "buffer_tank": {
+                "state": {
+                    "heat_pump": "Ein",
+                    "off": "Aus",
+                    "performance": "Aufheizen"
+                }
+            },
             "hot_water_tank": {
                 "state": {
                     "eco": "Auto",

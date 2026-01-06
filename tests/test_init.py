@@ -24,9 +24,13 @@ async def test_load_entry(
     await setup_integration(hass, config_entry)
 
     assert config_entry.state is ConfigEntryState.LOADED
-    assert hass.states.async_entity_ids_count() == 148
+    assert hass.states.async_entity_ids_count() == 168
 
     assert set(hass.states.async_entity_ids()) == {
+        "binary_sensor.keba_keenergy_12345678_buffer_tank_cool_request_1",
+        "binary_sensor.keba_keenergy_12345678_buffer_tank_cool_request_2",
+        "binary_sensor.keba_keenergy_12345678_buffer_tank_heat_request_1",
+        "binary_sensor.keba_keenergy_12345678_buffer_tank_heat_request_2",
         "binary_sensor.keba_keenergy_12345678_external_heat_source_heat_request_1",
         "binary_sensor.keba_keenergy_12345678_external_heat_source_heat_request_2",
         "binary_sensor.keba_keenergy_12345678_heat_pump_heat_request",
@@ -40,6 +44,8 @@ async def test_load_entry(
         "binary_sensor.keba_keenergy_12345678_solar_circuit_heat_request_2_2",
         "climate.keba_keenergy_12345678_1",
         "climate.keba_keenergy_12345678_2",
+        "select.keba_keenergy_12345678_buffer_tank_operating_mode_1",
+        "select.keba_keenergy_12345678_buffer_tank_operating_mode_2",
         "select.keba_keenergy_12345678_external_heat_source_operating_mode_1",
         "select.keba_keenergy_12345678_external_heat_source_operating_mode_2",
         "select.keba_keenergy_12345678_operating_mode",
@@ -49,6 +55,8 @@ async def test_load_entry(
         "select.keba_keenergy_12345678_hot_water_tank_operating_mode_2",
         "select.keba_keenergy_12345678_solar_circuit_operating_mode_1",
         "select.keba_keenergy_12345678_solar_circuit_operating_mode_2",
+        "number.keba_keenergy_12345678_buffer_tank_standby_temperature_1",
+        "number.keba_keenergy_12345678_buffer_tank_standby_temperature_2",
         "number.keba_keenergy_12345678_heat_circuit_target_temperature_away_1",
         "number.keba_keenergy_12345678_heat_circuit_target_temperature_away_2",
         "number.keba_keenergy_12345678_heat_circuit_target_temperature_day_1",
@@ -65,6 +73,16 @@ async def test_load_entry(
         "number.keba_keenergy_12345678_solar_circuit_target_temperature_1_2",
         "number.keba_keenergy_12345678_solar_circuit_target_temperature_2_1",
         "number.keba_keenergy_12345678_solar_circuit_target_temperature_2_2",
+        "sensor.keba_keenergy_12345678_buffer_tank_current_bottom_temperature_1",
+        "sensor.keba_keenergy_12345678_buffer_tank_current_bottom_temperature_2",
+        "sensor.keba_keenergy_12345678_buffer_tank_current_top_temperature_1",
+        "sensor.keba_keenergy_12345678_buffer_tank_current_top_temperature_2",
+        "sensor.keba_keenergy_12345678_buffer_tank_operating_mode_1",
+        "sensor.keba_keenergy_12345678_buffer_tank_operating_mode_2",
+        "sensor.keba_keenergy_12345678_buffer_tank_standby_temperature_1",
+        "sensor.keba_keenergy_12345678_buffer_tank_standby_temperature_2",
+        "sensor.keba_keenergy_12345678_buffer_tank_target_temperature_1",
+        "sensor.keba_keenergy_12345678_buffer_tank_target_temperature_2",
         "sensor.keba_keenergy_12345678_control_cpu_usage",
         "sensor.keba_keenergy_12345678_cpu_usage",
         "sensor.keba_keenergy_12345678_external_heat_source_operating_mode_1",
@@ -178,6 +196,8 @@ async def test_load_entry(
         "sensor.keba_keenergy_12345678_webview_cpu_usage",
         "water_heater.keba_keenergy_12345678_1",
         "water_heater.keba_keenergy_12345678_2",
+        "water_heater.keba_keenergy_12345678_buffer_tank_1",
+        "water_heater.keba_keenergy_12345678_buffer_tank_2",
     }
 
 

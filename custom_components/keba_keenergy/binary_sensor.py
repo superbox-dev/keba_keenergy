@@ -66,6 +66,27 @@ BINARY_SENSOR_TYPES: dict[str, tuple[KebaKeEnergyBinarySensorEntityDescription, 
             icon="mdi:fire",
         ),
     ),
+    SectionPrefix.BUFFER_TANK: (
+        KebaKeEnergyBinarySensorEntityDescription(
+            key="heat_request",
+            key_index=None,
+            translation_key="heat_request",
+            translation_placeholders={
+                "counter": "",
+            },
+            icon="mdi:fire",
+        ),
+        KebaKeEnergyBinarySensorEntityDescription(
+            entity_registry_enabled_default=False,
+            key="cool_request",
+            key_index=None,
+            translation_key="cool_request",
+            translation_placeholders={
+                "counter": "",
+            },
+            icon="mdi:snowflake",
+        ),
+    ),
     SectionPrefix.HOT_WATER_TANK: (
         KebaKeEnergyBinarySensorEntityDescription(
             key="heat_request",
@@ -105,7 +126,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry, async_add_e
 
     # Loop over all device data and add an index to the binary sensor
     # if there is more than one device of the same type
-    # e.g. hot water tank, heat circuit, solar circuit or heat pump.
+    # e.g. buffer tank, hot water tank, heat circuit, solar circuit or heat pump.
 
     for section_id, section_data in coordinator.data.items():
         for description in BINARY_SENSOR_TYPES.get(section_id, {}):

@@ -53,6 +53,20 @@ async def test_binary_sensors(
     assert solar_circuit_heat_request_2_2.state == STATE_ON
     assert solar_circuit_heat_request_2_2.attributes[ATTR_FRIENDLY_NAME] == "Solar circuit 2 Heat request 2"
 
+    buffer_tank_heat_request_1: State | None = hass.states.get(
+        "binary_sensor.keba_keenergy_12345678_buffer_tank_heat_request_1",
+    )
+    assert isinstance(buffer_tank_heat_request_1, State)
+    assert buffer_tank_heat_request_1.state == STATE_OFF
+    assert buffer_tank_heat_request_1.attributes[ATTR_FRIENDLY_NAME] == "Buffer tank 1 Heat request"
+
+    buffer_tank_cool_request_1: State | None = hass.states.get(
+        "binary_sensor.keba_keenergy_12345678_buffer_tank_cool_request_1",
+    )
+    assert isinstance(buffer_tank_cool_request_1, State)
+    assert buffer_tank_cool_request_1.state == STATE_ON
+    assert buffer_tank_cool_request_1.attributes[ATTR_FRIENDLY_NAME] == "Buffer tank 1 Cool request"
+
     hot_water_tank_heat_request_1: State | None = hass.states.get(
         "binary_sensor.keba_keenergy_12345678_hot_water_tank_heat_request_1",
     )
@@ -132,6 +146,18 @@ async def test_binary_sensors_translations(
     )
     assert isinstance(solar_circuit_heat_request_2_2, State)
     assert solar_circuit_heat_request_2_2.attributes[ATTR_FRIENDLY_NAME] == "Solarkreis 2 Heizanforderung 2"
+
+    buffer_tank_heat_request_1: State | None = hass.states.get(
+        "binary_sensor.keba_keenergy_12345678_buffer_tank_heat_request_1",
+    )
+    assert isinstance(buffer_tank_heat_request_1, State)
+    assert buffer_tank_heat_request_1.attributes[ATTR_FRIENDLY_NAME] == "Pufferspeicher 1 Heizanforderung"
+
+    buffer_tank_cool_request_1: State | None = hass.states.get(
+        "binary_sensor.keba_keenergy_12345678_buffer_tank_cool_request_1",
+    )
+    assert isinstance(buffer_tank_cool_request_1, State)
+    assert buffer_tank_cool_request_1.attributes[ATTR_FRIENDLY_NAME] == "Pufferspeicher 1 Kühlanforderung"
 
     hot_water_tank_heat_request_1: State | None = hass.states.get(
         "binary_sensor.keba_keenergy_12345678_hot_water_tank_heat_request_1",

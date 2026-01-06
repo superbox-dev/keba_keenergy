@@ -143,6 +143,123 @@ async def test_system_sensors_translated(
 
 
 @pytest.mark.usefixtures("entity_registry_enabled_by_default")
+async def test_buffer_tank_sensors(
+    hass: HomeAssistant,
+    config_entry: MockConfigEntry,
+    fake_api: FakeKebaKeEnergyAPI,
+) -> None:
+    """Test buffer tank sensors."""
+    fake_api.responses = [MULTIPLE_POSITIONS_RESPONSE, get_multi_positions_data_response()]
+    fake_api.register_requests(config_entry.data[CONF_HOST])
+
+    await setup_integration(hass, config_entry)
+
+    buffer_tank_current_top_temperature_1: State | None = hass.states.get(
+        "sensor.keba_keenergy_12345678_buffer_tank_current_top_temperature_2",
+    )
+    assert isinstance(buffer_tank_current_top_temperature_1, State)
+    assert buffer_tank_current_top_temperature_1.state == "35.67"
+    assert buffer_tank_current_top_temperature_1.attributes[CONF_UNIT_OF_MEASUREMENT] == UnitOfTemperature.CELSIUS
+    assert buffer_tank_current_top_temperature_1.attributes[ATTR_STATE_CLASS] == SensorStateClass.MEASUREMENT
+    assert buffer_tank_current_top_temperature_1.attributes[CONF_DEVICE_CLASS] == SensorDeviceClass.TEMPERATURE
+    assert (
+        buffer_tank_current_top_temperature_1.attributes[ATTR_FRIENDLY_NAME]
+        == "Buffer tank 2 Current temperature (top)"
+    )
+
+    buffer_tank_current_bottom_temperature_1: State | None = hass.states.get(
+        "sensor.keba_keenergy_12345678_buffer_tank_current_bottom_temperature_1",
+    )
+    assert isinstance(buffer_tank_current_bottom_temperature_1, State)
+    assert buffer_tank_current_bottom_temperature_1.state == "15.67"
+    assert buffer_tank_current_bottom_temperature_1.attributes[CONF_UNIT_OF_MEASUREMENT] == UnitOfTemperature.CELSIUS
+    assert buffer_tank_current_bottom_temperature_1.attributes[ATTR_STATE_CLASS] == SensorStateClass.MEASUREMENT
+    assert buffer_tank_current_bottom_temperature_1.attributes[CONF_DEVICE_CLASS] == SensorDeviceClass.TEMPERATURE
+    assert (
+        buffer_tank_current_bottom_temperature_1.attributes[ATTR_FRIENDLY_NAME]
+        == "Buffer tank 1 Current temperature (bottom)"
+    )
+
+    buffer_tank_operating_mode_1: State | None = hass.states.get(
+        "sensor.keba_keenergy_12345678_buffer_tank_operating_mode_1",
+    )
+    assert isinstance(buffer_tank_operating_mode_1, State)
+    assert buffer_tank_operating_mode_1.state == "off"
+    assert buffer_tank_operating_mode_1.attributes[CONF_DEVICE_CLASS] == SensorDeviceClass.ENUM
+    assert buffer_tank_operating_mode_1.attributes[ATTR_OPTIONS] == ["off", "on", "heat_up"]
+    assert buffer_tank_operating_mode_1.attributes[ATTR_FRIENDLY_NAME] == "Buffer tank 1 Operating mode"
+
+    buffer_tank_standby_temperature_1: State | None = hass.states.get(
+        "sensor.keba_keenergy_12345678_buffer_tank_standby_temperature_1",
+    )
+    assert isinstance(buffer_tank_standby_temperature_1, State)
+    assert buffer_tank_standby_temperature_1.state == "10.0"
+    assert buffer_tank_standby_temperature_1.attributes[CONF_UNIT_OF_MEASUREMENT] == UnitOfTemperature.CELSIUS
+    assert buffer_tank_standby_temperature_1.attributes[ATTR_STATE_CLASS] == SensorStateClass.MEASUREMENT
+    assert buffer_tank_standby_temperature_1.attributes[CONF_DEVICE_CLASS] == SensorDeviceClass.TEMPERATURE
+    assert buffer_tank_standby_temperature_1.attributes[ATTR_FRIENDLY_NAME] == "Buffer tank 1 Standby temperature"
+
+    buffer_tank_target_temperature_1: State | None = hass.states.get(
+        "sensor.keba_keenergy_12345678_buffer_tank_target_temperature_1",
+    )
+    assert isinstance(buffer_tank_target_temperature_1, State)
+    assert buffer_tank_target_temperature_1.state == "44.0"
+    assert buffer_tank_target_temperature_1.attributes[CONF_UNIT_OF_MEASUREMENT] == UnitOfTemperature.CELSIUS
+    assert buffer_tank_target_temperature_1.attributes[ATTR_STATE_CLASS] == SensorStateClass.MEASUREMENT
+    assert buffer_tank_target_temperature_1.attributes[CONF_DEVICE_CLASS] == SensorDeviceClass.TEMPERATURE
+    assert buffer_tank_target_temperature_1.attributes[ATTR_FRIENDLY_NAME] == "Buffer tank 1 Target temperature"
+
+
+@pytest.mark.usefixtures("entity_registry_enabled_by_default")
+async def test_buffer_tank_sensors_translations(
+    hass: HomeAssistant,
+    config_entry: MockConfigEntry,
+    fake_api: FakeKebaKeEnergyAPI,
+) -> None:
+    """Test buffer tank sensors translations."""
+    fake_api.responses = [MULTIPLE_POSITIONS_RESPONSE, get_multi_positions_data_response()]
+    fake_api.register_requests(config_entry.data[CONF_HOST])
+
+    hass.config.language = "de"
+    await setup_integration(hass, config_entry)
+
+    buffer_tank_current_top_temperature_1: State | None = hass.states.get(
+        "sensor.keba_keenergy_12345678_buffer_tank_current_top_temperature_2",
+    )
+    assert isinstance(buffer_tank_current_top_temperature_1, State)
+    assert (
+        buffer_tank_current_top_temperature_1.attributes[ATTR_FRIENDLY_NAME] == "Pufferspeicher 2 Ist-Temperatur (oben)"
+    )
+
+    buffer_tank_current_bottom_temperature_1: State | None = hass.states.get(
+        "sensor.keba_keenergy_12345678_buffer_tank_current_bottom_temperature_1",
+    )
+    assert isinstance(buffer_tank_current_bottom_temperature_1, State)
+    assert (
+        buffer_tank_current_bottom_temperature_1.attributes[ATTR_FRIENDLY_NAME]
+        == "Pufferspeicher 1 Ist-Temperatur (unten)"
+    )
+
+    buffer_tank_operating_mode_1: State | None = hass.states.get(
+        "sensor.keba_keenergy_12345678_buffer_tank_operating_mode_1",
+    )
+    assert isinstance(buffer_tank_operating_mode_1, State)
+    assert buffer_tank_operating_mode_1.attributes[ATTR_FRIENDLY_NAME] == "Pufferspeicher 1 Betriebsart"
+
+    buffer_tank_standby_temperature_1: State | None = hass.states.get(
+        "sensor.keba_keenergy_12345678_buffer_tank_standby_temperature_1",
+    )
+    assert isinstance(buffer_tank_standby_temperature_1, State)
+    assert buffer_tank_standby_temperature_1.attributes[ATTR_FRIENDLY_NAME] == "Pufferspeicher 1 Stütztemperatur"
+
+    buffer_tank_target_temperature_1: State | None = hass.states.get(
+        "sensor.keba_keenergy_12345678_buffer_tank_target_temperature_1",
+    )
+    assert isinstance(buffer_tank_target_temperature_1, State)
+    assert buffer_tank_target_temperature_1.attributes[ATTR_FRIENDLY_NAME] == "Pufferspeicher 1 Soll-Temperatur"
+
+
+@pytest.mark.usefixtures("entity_registry_enabled_by_default")
 async def test_hot_water_tank_sensors(
     hass: HomeAssistant,
     config_entry: MockConfigEntry,

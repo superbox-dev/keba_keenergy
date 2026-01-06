@@ -104,6 +104,18 @@ NUMBER_TYPES: dict[str, tuple[KebaKeEnergyNumberEntityDescription, ...]] = {
             scale=1,
         ),
     ),
+    SectionPrefix.BUFFER_TANK: (
+        KebaKeEnergyNumberEntityDescription(
+            device_class=NumberDeviceClass.TEMPERATURE,
+            key="standby_temperature",
+            key_index=None,
+            native_unit_of_measurement=UnitOfTemperature.CELSIUS,
+            native_step=0.5,
+            translation_key="standby_temperature",
+            icon="mdi:thermometer-chevron-down",
+            scale=1,
+        ),
+    ),
     SectionPrefix.HOT_WATER_TANK: (
         KebaKeEnergyNumberEntityDescription(
             device_class=NumberDeviceClass.TEMPERATURE,
@@ -139,7 +151,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry, async_add_e
 
     # Loop over all device data and add an index to the sensor
     # if there is more than one device of the same type
-    # e.g. hot water tank, heat circuit, solar circuit or heat pump.
+    # e.g. buffer tank, hot water tank, heat circuit, solar circuit or heat pump.
 
     for section_id, section_data in coordinator.data.items():
         for description in NUMBER_TYPES.get(section_id, {}):

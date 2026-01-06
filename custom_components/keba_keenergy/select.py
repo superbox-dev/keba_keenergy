@@ -12,6 +12,7 @@ from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import STATE_ON
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
+from keba_keenergy_api.constants import BufferTankOperatingMode
 from keba_keenergy_api.constants import ExternalHeatSourceOperatingMode
 from keba_keenergy_api.constants import HeatCircuitOperatingMode
 from keba_keenergy_api.constants import HotWaterTankOperatingMode
@@ -80,6 +81,14 @@ SELECT_TYPES: dict[str, tuple[KebaKeEnergySelectEntityDescription, ...]] = {
             values=SolarCircuitOperatingMode,
         ),
     ),
+    SectionPrefix.BUFFER_TANK: (
+        KebaKeEnergySelectEntityDescription(
+            key="operating_mode",
+            options=[_.name.lower() for _ in BufferTankOperatingMode],
+            translation_key="operating_mode_buffer_tank",
+            values=BufferTankOperatingMode,
+        ),
+    ),
     SectionPrefix.HOT_WATER_TANK: (
         KebaKeEnergySelectEntityDescription(
             key="operating_mode",
@@ -106,7 +115,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry, async_add_e
 
     # Loop over all device data and add an index to the sensor
     # if there is more than one device of the same type
-    # e.g. hot water tank, heat circuit, solar circuit or heat pump.
+    # e.g. buffer tank, hot water tank, heat circuit, solar circuit or heat pump.
 
     for section_id, section_data in coordinator.data.items():
         for description in SELECT_TYPES.get(section_id, {}):

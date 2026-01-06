@@ -12,6 +12,7 @@ from homeassistant.core import HomeAssistant
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator
 from homeassistant.helpers.update_coordinator import UpdateFailed
 from keba_keenergy_api.api import KebaKeEnergyAPI
+from keba_keenergy_api.constants import BufferTank
 from keba_keenergy_api.constants import ExternalHeatSource
 from keba_keenergy_api.constants import HeatCircuit
 from keba_keenergy_api.constants import HeatPump
@@ -148,6 +149,13 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
                     HeatPump.MAX_RUNTIME,
                     HeatPump.ACTIVATION_COUNTER,
                     HeatPump.HAS_PASSIVE_COOLING,
+                    BufferTank.CURRENT_TOP_TEMPERATURE,
+                    BufferTank.CURRENT_BOTTOM_TEMPERATURE,
+                    BufferTank.OPERATING_MODE,
+                    BufferTank.STANDBY_TEMPERATURE,
+                    BufferTank.TARGET_TEMPERATURE,
+                    BufferTank.HEAT_REQUEST,
+                    BufferTank.COOL_REQUEST,
                     HotWaterTank.HEAT_REQUEST,
                     HotWaterTank.HOT_WATER_FLOW,
                     HotWaterTank.FRESH_WATER_MODULE_TEMPERATURE,
@@ -161,6 +169,7 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
                     System.HEAT_CIRCUIT_NUMBERS,
                     System.SOLAR_CIRCUIT_NUMBERS,
                     System.HEAT_PUMP_NUMBERS,
+                    System.BUFFER_TANK_NUMBERS,
                     System.HOT_WATER_TANK_NUMBERS,
                     System.EXTERNAL_HEAT_SOURCE_NUMBERS,
                     System.OUTDOOR_TEMPERATURE,
@@ -226,6 +235,12 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
     def heat_pump_numbers(self) -> int:
         """Return number of heat pumps."""
         data: Value = cast("Value", self.data[SectionPrefix.SYSTEM]["heat_pump_numbers"])
+        return int(data["value"])
+
+    @property
+    def buffer_tank_numbers(self) -> int:
+        """Return number of buffer tanks."""
+        data: Value = cast("Value", self.data[SectionPrefix.SYSTEM]["buffer_tank_numbers"])
         return int(data["value"])
 
     @property

@@ -32,6 +32,9 @@
         }
     },
     "device": {
+        "buffer_tank": {
+            "name": "Buffer tank{position}"
+        },
         "control_unit":{
             "name": "Control unit"
         },
@@ -56,6 +59,9 @@
     },
     "entity": {
         "binary_sensor": {
+            "cool_request": {
+                "name": "Cool request"
+            },
             "heat_request": {
                 "name": "Heat request{counter}"
             },
@@ -105,6 +111,14 @@
             }
         },
         "select": {
+            "operating_mode_buffer_tank": {
+                "name": "Operating mode",
+                "state": {
+                    "heat_up": "Heat up",
+                    "off": "Off",
+                    "on": "On"
+                }
+            },
             "operating_mode_external_heat_source": {
                 "name": "Operating mode",
                 "state": {
@@ -192,8 +206,14 @@
             "cop": {
                 "name": "Coefficient of performance"
             },
+            "current_bottom_temperature": {
+                "name": "Current temperature (bottom)"
+            },
             "current_temperature": {
                 "name": "Current temperature{counter}"
+            },
+            "current_top_temperature": {
+                "name": "Current temperature (top)"
             },
             "daily_energy": {
                 "name": "Daily energy"
@@ -266,6 +286,14 @@
             },
             "operating_hours": {
                 "name": "Operating time"
+            },
+            "operating_mode_buffer_tank": {
+                "name": "Operating mode",
+                "state": {
+                    "heat_up": "Heat up",
+                    "off": "Off",
+                    "on": "On"
+                }
             },
             "operating_mode_external_heat_source": {
                 "name": "Operating mode",
@@ -402,6 +430,13 @@
             }
         },
         "water_heater": {
+            "buffer_tank": {
+                "state": {
+                    "heat_pump": "On",
+                    "off": "Off",
+                    "performance": "Heat up"
+                }
+            },
             "hot_water_tank": {
                 "state": {
                     "eco": "Auto",

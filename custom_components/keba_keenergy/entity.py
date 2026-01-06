@@ -11,6 +11,7 @@ from homeassistant.config_entries import ConfigEntry
 from homeassistant.exceptions import HomeAssistantError
 from homeassistant.helpers.device_registry import DeviceInfo
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
+from keba_keenergy_api.constants import BufferTank
 from keba_keenergy_api.constants import ExternalHeatSource
 from keba_keenergy_api.constants import HeatCircuit
 from keba_keenergy_api.constants import HeatPump
@@ -90,6 +91,11 @@ class KebaKeEnergyEntity(
         return self.section_id == SectionPrefix.HEAT_PUMP
 
     @property
+    def is_buffer_tank(self) -> bool:
+        """Return True if the entity is part of a buffer tank else False."""
+        return self.section_id == SectionPrefix.BUFFER_TANK
+
+    @property
     def is_hot_water_tank(self) -> bool:
         """Return True if the entity is part of a hot water tank else False."""
         return self.section_id == SectionPrefix.HOT_WATER_TANK
@@ -165,6 +171,8 @@ class KebaKeEnergyEntity(
             translation_key = "solar_circuit"
         elif self.is_heat_pump:
             translation_key = "heat_pump"
+        elif self.is_buffer_tank:
+            translation_key = "buffer_tank"
         elif self.is_hot_water_tank:
             translation_key = "hot_water_tank"
         elif self.is_external_heat_source:
@@ -319,6 +327,9 @@ class KebaKeEnergyExtendedEntity(KebaKeEnergyEntity):
         elif self.is_heat_pump:
             section = HeatPump[self.entity_description.key.upper()]
             self.device_numbers = self.coordinator.heat_pump_numbers
+        elif self.is_buffer_tank:
+            section = BufferTank[self.entity_description.key.upper()]
+            self.device_numbers = self.coordinator.buffer_tank_numbers
         elif self.is_hot_water_tank:
             section = HotWaterTank[self.entity_description.key.upper()]
             self.device_numbers = self.coordinator.hot_water_tank_numbers
