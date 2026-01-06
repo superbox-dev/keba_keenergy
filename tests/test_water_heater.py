@@ -329,6 +329,4 @@ async def test_set_temperature(
         blocking=True,
     )
 
-    fake_api.assert_called_write_with(
-        '[{"name": "APPL.CtrlAppl.sParam.hotWaterTank[0].param.normalSetTempMax.value", "value": "45.0"}]',
-    )
+    fake_api.assert_called_write_with(expected)
