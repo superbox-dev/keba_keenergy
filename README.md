@@ -12,7 +12,7 @@ A Home Assistant integration for heaters with a KEBA KeEnergy control system.
 
 Looking for more information? The [Wiki](https://github.com/superbox-dev/keba_keenergy/wiki) contains in-depth documentation.
 
-## Geting started
+## Getting started
 
 1. Install this integration with HACS, or copy the contents of this repository into the
    `custom_components/keba_keenergy` directory.
