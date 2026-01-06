@@ -10,6 +10,15 @@
 
 A Home Assistant integration for heaters with a KEBA KeEnergy control system.
 
+This integration support a lot of sensors and control entities for the ...
+
+* heat pump
+* heating circuit
+* solar circuit
+* hot water tank
+* buffer tank
+* external heat source
+
 Looking for more information? The [Wiki](https://github.com/superbox-dev/keba_keenergy/wiki) contains in-depth documentation.
 
 ## Getting started
