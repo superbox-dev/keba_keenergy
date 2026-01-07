@@ -410,7 +410,7 @@ async def test_heat_pump_sensors(
     assert isinstance(heat_pump_sub_state, State)
     assert heat_pump_sub_state.state == "oil_preheating"
     assert heat_pump_sub_state.attributes[CONF_DEVICE_CLASS] == SensorDeviceClass.ENUM
-    assert heat_pump_sub_state.attributes[ATTR_FRIENDLY_NAME] == "Heat pump Sub state"
+    assert heat_pump_sub_state.attributes[ATTR_FRIENDLY_NAME] == "Heat pump Substate"
 
     heat_pump_circulation_pump: State | None = hass.states.get(
         "sensor.keba_keenergy_12345678_heat_pump_circulation_pump",
