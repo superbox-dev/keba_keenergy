@@ -8,7 +8,7 @@
 ![Code style: black](https://img.shields.io/badge/code%20style-black-black)
 ![Code style: Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/charliermarsh/ruff/main/assets/badge/v1.json)
 
-A Home Assistant integration that seamlessly connects to KEBA KeEnergy heat pumps via the Web HMI API, 
+A Home Assistant integration that seamlessly connects to KEBA KeEnergy heat pumps via the Web HMI API,
 turning system data into easy-to-use Home Assistant entities for monitoring and control.
 
 ![Inverter Sensors](images/thermostat.png)
@@ -35,7 +35,7 @@ Looking for more information? The [Wiki](https://github.com/superbox-dev/keba_ke
 
 ## Getting started
 
-[![Open your Home Assistant instance and open a repository inside the Home Assistant Community Store.](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=superbox-dev&repository=keba_keenergy&category=integration)
+[![Open HACS repository on my Home Assistant](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=superbox-dev&repository=keba_keenergy&category=integration)
 
 1. Install this integration with HACS (search for "KEBA KeEnergy"), or copy the contents of this repository into the
    `custom_components/keba_keenergy` directory.
