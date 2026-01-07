@@ -8,7 +8,7 @@
   "iot_class": "local_polling",
   "issue_tracker": "https://github.com/superbox-dev/keba_keenergy/issues",
   "loggers": ["keba_keenergy_api"],
-  "requirements": ["keba_keenergy_api~=2.5.2b2"],
+  "requirements": ["keba_keenergy_api~=2.5.2b3"],
   "version": "1.5.0b3",
   "zeroconf": [
     {

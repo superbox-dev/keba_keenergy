@@ -34,21 +34,21 @@ from .coordinator import KebaKeEnergyDataUpdateCoordinator
 from .entity import KebaKeEnergyEntity
 
 HEAT_CIRCUIT_PRESET_TO_HA: Final[dict[int, str]] = {
-    HeatCircuitOperatingMode.AUTO: PRESET_NONE,
-    HeatCircuitOperatingMode.HOLIDAY: PRESET_AWAY,
-    HeatCircuitOperatingMode.DAY: PRESET_COMFORT,
-    HeatCircuitOperatingMode.NIGHT: PRESET_SLEEP,
-    HeatCircuitOperatingMode.PARTY: PRESET_BOOST,
+    HeatCircuitOperatingMode.AUTO.value: PRESET_NONE,
+    HeatCircuitOperatingMode.HOLIDAY.value: PRESET_AWAY,
+    HeatCircuitOperatingMode.DAY.value: PRESET_COMFORT,
+    HeatCircuitOperatingMode.NIGHT.value: PRESET_SLEEP,
+    HeatCircuitOperatingMode.PARTY.value: PRESET_BOOST,
 }
 
 HEAT_CIRCUIT_HVAC_ACTION_TO_HA: Final[dict[int, HVACAction]] = {
-    HeatCircuitHeatRequest.OFF: HVACAction.IDLE,
-    HeatCircuitHeatRequest.ON: HVACAction.HEATING,
-    HeatCircuitHeatRequest.FLOW_OFF: HVACAction.IDLE,
-    HeatCircuitHeatRequest.TEMPORARY_OFF: HVACAction.IDLE,
-    HeatCircuitHeatRequest.ROOM_OFF: HVACAction.IDLE,
-    HeatCircuitHeatRequest.OUTDOOR_OFF: HVACAction.IDLE,
-    HeatCircuitHeatRequest.INFLOW_OFF: HVACAction.IDLE,
+    HeatCircuitHeatRequest.OFF.value: HVACAction.IDLE,
+    HeatCircuitHeatRequest.ON.value: HVACAction.HEATING,
+    HeatCircuitHeatRequest.FLOW_OFF.value: HVACAction.IDLE,
+    HeatCircuitHeatRequest.TEMPORARY_OFF.value: HVACAction.IDLE,
+    HeatCircuitHeatRequest.ROOM_OFF.value: HVACAction.IDLE,
+    HeatCircuitHeatRequest.OUTDOOR_OFF.value: HVACAction.IDLE,
+    HeatCircuitHeatRequest.INFLOW_OFF.value: HVACAction.IDLE,
 }
 
 TEMPERATURE_OFFSET_SCHEMA = {
@@ -177,14 +177,14 @@ class KebaKeEnergyClimateEntity(KebaKeEnergyEntity, ClimateEntity):
         """Return hvac operation."""
         operating_mode: str = self.get_value("operating_mode")
 
-        if HeatCircuitOperatingMode[operating_mode.upper()].value == HeatCircuitOperatingMode.AUTO:
+        if HeatCircuitOperatingMode[operating_mode.upper()].value == HeatCircuitOperatingMode.AUTO.value:
             return HVACMode.AUTO
 
         if HeatCircuitOperatingMode[operating_mode.upper()].value in [
-            HeatCircuitOperatingMode.HOLIDAY,
-            HeatCircuitOperatingMode.DAY,
-            HeatCircuitOperatingMode.NIGHT,
-            HeatCircuitOperatingMode.PARTY,
+            HeatCircuitOperatingMode.HOLIDAY.value,
+            HeatCircuitOperatingMode.DAY.value,
+            HeatCircuitOperatingMode.NIGHT.value,
+            HeatCircuitOperatingMode.PARTY.value,
         ]:
             return HVACMode.HEAT
 
@@ -206,7 +206,7 @@ class KebaKeEnergyClimateEntity(KebaKeEnergyEntity, ClimateEntity):
         self._attr_preset_mode = PRESET_NONE
         operating_mode: str = self.get_value("operating_mode")
 
-        if HeatCircuitOperatingMode[operating_mode.upper()].value != HeatCircuitOperatingMode.OFF:
+        if HeatCircuitOperatingMode[operating_mode.upper()].value != HeatCircuitOperatingMode.OFF.value:
             self._attr_preset_mode = HEAT_CIRCUIT_PRESET_TO_HA[HeatCircuitOperatingMode[operating_mode.upper()].value]
 
         return self._attr_preset_mode
@@ -224,12 +224,12 @@ class KebaKeEnergyClimateEntity(KebaKeEnergyEntity, ClimateEntity):
         operating_mode_status: int | None = None
 
         if hvac_mode == HVACMode.AUTO:
-            operating_mode_status = HeatCircuitOperatingMode.AUTO
+            operating_mode_status = HeatCircuitOperatingMode.AUTO.value
             self._attr_preset_mode = PRESET_NONE
         elif hvac_mode == HVACMode.HEAT:
-            operating_mode_status = HeatCircuitOperatingMode.DAY
+            operating_mode_status = HeatCircuitOperatingMode.DAY.value
         elif hvac_mode == HVACMode.OFF:
-            operating_mode_status = HeatCircuitOperatingMode.OFF
+            operating_mode_status = HeatCircuitOperatingMode.OFF.value
 
         if operating_mode_status is not None:
             await self._async_write_data(
