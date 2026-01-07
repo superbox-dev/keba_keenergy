@@ -140,7 +140,7 @@
             "operating_mode_hot_water_tank": {
                 "name": "Operating mode",
                 "state": {
-                    "auto": "Auto",
+                    "auto": "Schedule",
                     "heat_up": "Heat up",
                     "off": "Off",
                     "on": "On"
@@ -475,7 +475,7 @@
             },
             "hot_water_tank": {
                 "state": {
-                    "eco": "Auto",
+                    "eco": "Schedule",
                     "heat_pump": "On",
                     "off": "Off",
                     "performance": "Heat up"
