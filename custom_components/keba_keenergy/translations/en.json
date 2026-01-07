@@ -396,7 +396,7 @@
                 }
             },
             "sub_state": {
-                "name": "Sub state",
+                "name": "Substate",
                 "state": {
                     "bivalent_lock": "Bivalent lock",
                     "compressor_delay": "Compressor delay",
