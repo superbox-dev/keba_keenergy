@@ -406,6 +406,12 @@ async def test_heat_pump_sensors(
     ]
     assert heat_pump_state.attributes[ATTR_FRIENDLY_NAME] == "Heat pump State"
 
+    heat_pump_sub_state: State | None = hass.states.get("sensor.keba_keenergy_12345678_heat_pump_sub_state")
+    assert isinstance(heat_pump_sub_state, State)
+    assert heat_pump_sub_state.state == "oil_preheating"
+    assert heat_pump_sub_state.attributes[CONF_DEVICE_CLASS] == SensorDeviceClass.ENUM
+    assert heat_pump_sub_state.attributes[ATTR_FRIENDLY_NAME] == "Heat pump Sub state"
+
     heat_pump_circulation_pump: State | None = hass.states.get(
         "sensor.keba_keenergy_12345678_heat_pump_circulation_pump",
     )
@@ -685,18 +691,11 @@ async def test_heat_pump_sensors_translations(
 
     heat_pump_state: State | None = hass.states.get("sensor.keba_keenergy_12345678_heat_pump_state")
     assert isinstance(heat_pump_state, State)
-    assert heat_pump_state.attributes[ATTR_OPTIONS] == [
-        "standby",
-        "flow",
-        "auto_heat",
-        "defrost",
-        "auto_cool",
-        "inflow",
-        "pump_down",
-        "shutdown",
-        "error",
-    ]
     assert heat_pump_state.attributes[ATTR_FRIENDLY_NAME] == "Wärmepumpe Status"
+
+    heat_pump_sub_state: State | None = hass.states.get("sensor.keba_keenergy_12345678_heat_pump_sub_state")
+    assert isinstance(heat_pump_sub_state, State)
+    assert heat_pump_sub_state.attributes[ATTR_FRIENDLY_NAME] == "Wärmepumpe Unterstatus"
 
     heat_pump_circulation_pump: State | None = hass.states.get(
         "sensor.keba_keenergy_12345678_heat_pump_circulation_pump",

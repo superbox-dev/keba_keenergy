@@ -394,6 +394,42 @@
                     "pump_down": "Pump-Down-Vorgang"
                 }
             },
+            "sub_state": {
+                "name": "Unterstatus",
+                "state": {
+                    "bivalent_lock": "Bivalente Sperre",
+                    "compressor_delay": "Kompressorverzögerung",
+                    "compressor_post_run": "Kompressornachlauf",
+                    "compressor_stop": "Kompressorstopp",
+                    "counterflow_valve": "Gegenstromventil",
+                    "defrost": "Abtauen",
+                    "defrost_end": "Abtauende",
+                    "defrost_initialization": "Abtauinitialisierung",
+                    "defrost_monitoring": "Abtauüberwachung",
+                    "defrost_pre_flow": "Abtauvorlauf",
+                    "defrost_venting": "Abtaulüften",
+                    "drip": "Abtropfen",
+                    "electric_defrost": "Elektrisches Abtauen",
+                    "flushing": "Spülen",
+                    "locked": "Gesperrt",
+                    "lubrication_pulse": "Schmierimpuls",
+                    "mixer_open": "Mischer offen",
+                    "none": "-",
+                    "oil_preheating": "Ölvorwärmung",
+                    "open": "Öffnen",
+                    "pressure_equalization": "Druckausgleich",
+                    "preheat_flow": "Heizvorlauf",
+                    "pump_post_run": "Pumpennachlauf",
+                    "pump_pre_run": "Pumpenvorlauf",
+                    "random_delay": "Zufallsverzögerung",
+                    "reduced_speed": "Reduzierte Geschwindigkeit",
+                    "return_flow_off": "Rücklauf aus",
+                    "snow_detection": "Schneeerkennung",
+                    "switch_heating_cooling": "Umschalten Heizen/Kühlen",
+                    "wait_for_compressor": "Warten auf Kompressor",
+                    "zone_valve": "Zonenventil"
+                }
+            },
             "target_temperature": {
                 "name": "Soll-Temperatur{counter}"
             },

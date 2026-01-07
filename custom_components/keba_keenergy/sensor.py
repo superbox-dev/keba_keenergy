@@ -29,6 +29,7 @@ from keba_keenergy_api.constants import ExternalHeatSourceOperatingMode
 from keba_keenergy_api.constants import HeatCircuitHeatRequest
 from keba_keenergy_api.constants import HeatCircuitOperatingMode
 from keba_keenergy_api.constants import HeatPumpState
+from keba_keenergy_api.constants import HeatPumpSubState
 from keba_keenergy_api.constants import HotWaterTankOperatingMode
 from keba_keenergy_api.constants import SectionPrefix
 from keba_keenergy_api.constants import SystemOperatingMode
@@ -407,7 +408,14 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription, ...]] = {
             value=lambda data: cast("str", data),
         ),
         KebaKeEnergySensorEntityDescription(
-            entity_registry_enabled_default=False,
+            device_class=SensorDeviceClass.ENUM,
+            key="sub_state",
+            key_index=None,
+            options=[_.name.lower() for _ in HeatPumpSubState],
+            translation_key="sub_state",
+            value=lambda data: cast("str", data),
+        ),
+        KebaKeEnergySensorEntityDescription(
             key="circulation_pump",
             key_index=None,
             native_unit_of_measurement=PERCENTAGE,

@@ -395,6 +395,42 @@
                     "pump_down": "Pump down"
                 }
             },
+            "sub_state": {
+                "name": "Sub state",
+                "state": {
+                    "bivalent_lock": "Bivalent lock",
+                    "compressor_delay": "Compressor delay",
+                    "compressor_post_run": "Compressor post-run",
+                    "compressor_stop": "Compressor stop",
+                    "counterflow_valve": "Counterflow valve",
+                    "defrost": "Defrost",
+                    "defrost_end": "Defrost end",
+                    "defrost_initialization": "Defrost initialization",
+                    "defrost_monitoring": "Defrost monitoring",
+                    "defrost_pre_flow": "Defrost pre-flow",
+                    "defrost_venting": "Defrost venting",
+                    "drip": "Drip",
+                    "electric_defrost": "Electric defrost",
+                    "flushing": "Flushing",
+                    "locked": "Locked",
+                    "lubrication_pulse": "Lubrication pulse",
+                    "mixer_open": "Mixer open",
+                    "none": "-",
+                    "oil_preheating": "Oil preheating",
+                    "open": "Open",
+                    "pressure_equalization": "Pressure equalization",
+                    "preheat_flow": "Preheat flow",
+                    "pump_post_run": "Pump post-run",
+                    "pump_pre_run": "Pump pre-run",
+                    "random_delay": "Random delay",
+                    "reduced_speed": "Reduced speed",
+                    "return_flow_off": "Return flow off",
+                    "snow_detection": "Snow detection",
+                    "switch_heating_cooling": "Switch heating/cooling",
+                    "wait_for_compressor": "Waiting for compressor",
+                    "zone_valve": "Zone valve"
+                }
+            },
             "target_temperature": {
                 "name": "Target temperature{counter}"
             },

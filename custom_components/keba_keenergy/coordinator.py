@@ -129,6 +129,7 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
                     HeatPump.SOURCE_INPUT_TEMPERATURE,
                     HeatPump.SOURCE_OUTPUT_TEMPERATURE,
                     HeatPump.STATE,
+                    HeatPump.SUB_STATE,
                     HeatPump.COMPRESSOR_POWER,
                     HeatPump.HEATING_POWER,
                     HeatPump.HOT_WATER_POWER,

@@ -558,6 +558,18 @@ HEAT_PUMP_STATE: dict[str, Any] = {
     "value": "0",
 }
 
+HEAT_PUMP_SUB_STATE: dict[str, Any] = {
+    "name": "APPL.CtrlAppl.sParam.heatpump[0].values.heatpumpSubState",
+    "attributes": {
+        "formatId": "fmtHPSubState",
+        "longText": "Substate",
+        "unitId": "Enum",
+        "upperLimit": "32767",
+        "lowerLimit": "0",
+    },
+    "value": "1",
+}
+
 HEAT_PUMP_COMPRESSOR_POWER: dict[str, Any] = {
     "name": "APPL.CtrlAppl.sParam.heatpump[0].ElectricEnergyMeter.values.power",
     "attributes": {
@@ -1200,6 +1212,7 @@ HEAT_PUMP_DATA: list[dict[str, Any]] = [
     HEAT_PUMP_SOURCE_INPUT_TEMPERATURE,
     HEAT_PUMP_SOURCE_OUTPUT_TEMPERATURE,
     HEAT_PUMP_STATE,
+    HEAT_PUMP_SUB_STATE,
     HEAT_PUMP_COMPRESSOR_POWER,
     HEAT_PUMP_HEATING_POWER,
     HEAT_PUMP_HOT_WATER_POWER,
