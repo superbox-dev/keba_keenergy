@@ -6,7 +6,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "keba_keenergy"
-description = "Home Assistant integration for heaters with a KEBA KeEnergy control system"
+description = "A Home Assistant integration that seamlessly connects to KEBA KeEnergy heat pumps via the Web HMI API, turning system data into easy-to-use Home Assistant entities for monitoring and control"
 readme = "README.md"
 authors = [
     { name = "Michael Hacker", email = "mh@superbox.one" },
@@ -42,11 +42,11 @@ classifiers = [
 ]
 requires-python = ">= 3.13.2"
 dependencies = [
-    "keba_keenergy_api~=2.5.2b1",
+    "keba_keenergy_api~=2.5.2b2",
     "homeassistant>=2025.8.2",
     "requests>=2.32.5"
 ]
-version = "1.5.0b2"
+version = "1.5.0b3"
 
 [project.urls]
 "Repository" = "https://github.com/superbox-dev/keba_keenergy"
