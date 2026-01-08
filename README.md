@@ -35,7 +35,7 @@ Looking for more information? The [Wiki](https://github.com/superbox-dev/keba_ke
 
 ## Getting started
 
-[![Open HACS repository on my Home Assistant](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=superbox-dev&repository=keba_keenergy&category=integration)
+[![Open HACS repository on my Home Assistant](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=mh-superbox&repository=keba_keenergy&category=integration)
 
 1. Install this integration with HACS (search for "KEBA KeEnergy"), or copy the contents of this repository into the
    `custom_components/keba_keenergy` directory.
