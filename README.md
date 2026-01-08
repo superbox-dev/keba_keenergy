@@ -32,7 +32,7 @@ documentation.
 
 ## Supported Systems
 
-The KEBA KeEnergy Integration works with heat pumps that provide a KEBA KeEnergy Web HMI interface. 
+The KEBA KeEnergy Integration works with heat pumps that provide a KEBA KeEnergy Web HMI interface.
 It is successfully used with devices from manufacturers such as M-TEC, Windhager, and ino,
 as well as other systems based on KEBA controls.
 
