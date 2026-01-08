@@ -1,7 +1,3 @@
----
-title: ""
----
-
 # KEBA KeEnergy integration
 
 ![coverage-badge](https://raw.githubusercontent.com/superbox-dev/keba_keenergy/main/coverage-badge.svg)
