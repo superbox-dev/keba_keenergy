@@ -33,7 +33,7 @@ documentation.
 ## Supported Systems
 
 The KEBA KeEnergy Integration works with heat pumps that provide a KEBA KeEnergy Web HMI interface.
-It is successfully used with devices from manufacturers such as M-TEC, Windhager, and ino,
+It is successfully used with devices from manufacturers such as M-TEC, Windhager and ino,
 as well as other systems based on KEBA controls.
 
 ## Requirements
@@ -46,7 +46,7 @@ as well as other systems based on KEBA controls.
 
 [![Open HACS repository on my Home Assistant](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=mh-superbox&repository=keba_keenergy&category=integration)
 
-1. Install this integration with HACS (search for "KEBA KeEnergy"), or copy the contents of this repository into the
+1. Install this integration with HACS (search for "KEBA KeEnergy") or copy the contents of this repository into the
    `custom_components/keba_keenergy` directory.
 2. Restart Home Assistant after installation completes.
 3. Start the configuration flow: go to `Configuration` -> `Integrations`, click the `+ Add Integration` and select
