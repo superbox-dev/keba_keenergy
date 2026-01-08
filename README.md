@@ -57,5 +57,5 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## Contributing
 
-We're happy about your contributions to the project!
+I'm happy about your contributions to the project!
 You can get started by reading the [CONTRIBUTING.md](CONTRIBUTING.md).
