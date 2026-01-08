@@ -8,14 +8,14 @@
 ![Code style: black](https://img.shields.io/badge/code%20style-black-black)
 ![Code style: Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/charliermarsh/ruff/main/assets/badge/v1.json)
 
-A Home Assistant integration that seamlessly connects to KEBA KeEnergy heat pumps via the Web HMI API,
+A **Home Assistant integration** that seamlessly connects to **KEBA KeEnergy** heat pumps via the Web HMI API,
 turning system data into easy-to-use Home Assistant entities for monitoring and control.
 
-![Inverter Sensors](images/thermostat.png)
+![Inverter Sensors](images/dashboard.png)
 
 ## Integration Highlights
 
-* Connects to your KEBA heat pump via the KeEnergy Web HMI API using host and port.
+* Connects to your **KEBA heat pump** via the KeEnergy Web HMI API using host and port.
 * Allows direct control from Home Assistant, including operating modes, temperatures, and system settings.
 * Provides a full set of entities – sensors, binary sensors, number entities, and select entities – for:
   * Heat pump
