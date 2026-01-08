@@ -11,7 +11,7 @@ web interface as Home Assistant entities for monitoring, control, and automation
 * Connects to your **KEBA heat pump** via the KeEnergy Web HMI API using host and port
 * Monitor temperatures, operating states and system settings
 * Control operating modes and parameters directly from Home Assistant
-* Build automations based on heating demand, energy usage, or schedules
+* Build automations based on heating demand, energy usage or schedules
 * This turns your heat pump into a fully integrated smart-home component
 
 ## Features
