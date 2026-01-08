@@ -1,17 +1,25 @@
-# Turn your KEBA heat pump into a smart home device
+# KEBA KeEnergy Integration – Home Assistant Integration for KEBA Heat Pumps
 
-**KEBA KeEnergy integration** is a custom **Home Assistant integration** that seamlessly connects to
-your heat pumps via the KEBA KeEnergy Web HMI API, turning system data into easy-to-use Home Assistant entities
-for monitoring and control.
+**KEBA KeEnergy Integration** is a powerful open-source **Home Assistant integration** that allows you to connect
+and monitor KEBA-based heat pumps directly within your smart home. The integration exposes data from the KEBA KeEnergy
+web interface as Home Assistant entities for monitoring, control, and automation of heating and hot water systems.
 
 [![Dashboard](images/dashboard.png)](images/dashboard.png)
 
-## Integration Highlights
+## With the KEBA KeEnergy Integration, you can:
 
-* Connects to your **KEBA heat pump** via the KeEnergy Web HMI API using host and port.
-* Allows direct control from Home Assistant, including operating modes, temperatures, and system settings.
-* Support many heat pump manufacturers e.g. M-TEC, ino, Windhager, ...
-* Provides a full set of entities – sensors, binary sensors, number entities, and select entities – for:
+* Connects to your **KEBA heat pump** via the KeEnergy Web HMI API using host and port
+* Monitor temperatures, operating states and system settings
+* Control operating modes and parameters directly from Home Assistant
+* Build automations based on heating demand, energy usage, or schedules
+* This turns your heat pump into a fully integrated smart-home component
+
+## Features
+
+* Automatic discovery of KEBA KeEnergy-based systems
+* Compatible with multiple KEBA-controlled heat pumps
+* Works as a Home Assistant custom integration (HACS supported)
+* Provides a full set of entities – sensors, binary sensors, number and select entities for:
   * Heat pump
   * Heating circuit
   * Solar circuit
@@ -19,7 +27,14 @@ for monitoring and control.
   * Buffer tank
   * External heat source
 
-Looking for more information? The [Wiki](https://github.com/superbox-dev/keba_keenergy/wiki) contains in-depth documentation.
+Looking for more information? The [Wiki](https://github.com/superbox-dev/keba_keenergy/wiki) contains in-depth
+documentation.
+
+## Supported Systems
+
+The KEBA KeEnergy Integration works with heat pumps that provide a KEBA KeEnergy Web HMI interface. 
+It is successfully used with devices from manufacturers such as M-TEC, Windhager, and ino,
+as well as other systems based on KEBA controls.
 
 ## Requirements
 
@@ -50,7 +65,14 @@ I put a lot of time into this project. If you like it, you can support me with a
 The changelog lives in the [CHANGELOG.md](CHANGELOG.md) document.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
-## Contributing
+## Get Involved
+
+**The KEBA KeEnergy Integration** is an open-source project and contributions are welcome. You can:
+
+* Report issues or request new features
+* Improve documentation or translations
+* Contribute code
+* Support the project by starring it on GitHub ⭐
 
 I'm happy about your contributions to the project!
 You can get started by reading the [CONTRIBUTING.md](CONTRIBUTING.md).
