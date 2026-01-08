@@ -4,7 +4,7 @@
 your heat pumps via the KEBA KeEnergy Web HMI API, turning system data into easy-to-use Home Assistant entities
 for monitoring and control.
 
-![Inverter Sensors](images/dashboard.png)
+[![Dashboard](images/dashboard.png)](images/dashboard.png)
 
 ## Integration Highlights
 
