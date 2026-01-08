@@ -1,7 +1,8 @@
 # Turn your KEBA heat pump into a smart home device
 
-A **Home Assistant integration** that seamlessly connects to **KEBA KeEnergy** heat pumps via the Web HMI API,
-turning system data into easy-to-use Home Assistant entities for monitoring and control.
+**KEBA KeEnergy integration** is a custom **Home Assistant integration** that seamlessly connects to
+your heat pumps via the KEBA KeEnergy Web HMI API, turning system data into easy-to-use Home Assistant entities
+for monitoring and control.
 
 ![Inverter Sensors](images/dashboard.png)
 
