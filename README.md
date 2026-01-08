@@ -1,12 +1,4 @@
-# KEBA KeEnergy integration
-
-![coverage-badge](https://raw.githubusercontent.com/superbox-dev/keba_keenergy/main/coverage-badge.svg)
-[![CI](https://github.com/superbox-dev/KEBA-KeEnergy-API/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/superbox-dev/keba_keenergy/actions/workflows/ci.yml)
-
-[![CI](https://github.com/superbox-dev/keba_keenergy/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/superbox-dev/keba_keenergy_api/actions/workflows/ci.yml)
-![Typing: strict](https://img.shields.io/badge/typing-strict-green.svg)
-![Code style: black](https://img.shields.io/badge/code%20style-black-black)
-![Code style: Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/charliermarsh/ruff/main/assets/badge/v1.json)
+# Turn your KEBA heat pump into a smart home device
 
 A **Home Assistant integration** that seamlessly connects to **KEBA KeEnergy** heat pumps via the Web HMI API,
 turning system data into easy-to-use Home Assistant entities for monitoring and control.
@@ -17,6 +9,7 @@ turning system data into easy-to-use Home Assistant entities for monitoring and 
 
 * Connects to your **KEBA heat pump** via the KeEnergy Web HMI API using host and port.
 * Allows direct control from Home Assistant, including operating modes, temperatures, and system settings.
+* Support many heat pump manufacturers e.g. M-TEC, ino, Windhager, ...
 * Provides a full set of entities – sensors, binary sensors, number entities, and select entities – for:
   * Heat pump
   * Heating circuit
@@ -60,3 +53,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 I'm happy about your contributions to the project!
 You can get started by reading the [CONTRIBUTING.md](CONTRIBUTING.md).
+
+![coverage-badge](https://raw.githubusercontent.com/superbox-dev/keba_keenergy/main/coverage-badge.svg)
+[![CI](https://github.com/superbox-dev/KEBA-KeEnergy-API/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/superbox-dev/keba_keenergy/actions/workflows/ci.yml)
+
+[![CI](https://github.com/superbox-dev/keba_keenergy/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/superbox-dev/keba_keenergy_api/actions/workflows/ci.yml)
+![Typing: strict](https://img.shields.io/badge/typing-strict-green.svg)
+![Code style: black](https://img.shields.io/badge/code%20style-black-black)
+![Code style: Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/charliermarsh/ruff/main/assets/badge/v1.json)
