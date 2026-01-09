@@ -6,6 +6,9 @@ web interface as Home Assistant entities for monitoring, control, and automation
 
 [![Dashboard](images/dashboard.png)](images/dashboard.png)
 
+> Take a look at the [example page](https://github.com/superbox-dev/keba_keenergy/wiki/Examples)
+in the Wiki to create awesome dashboards in Home Assistant.
+
 ## With the KEBA KeEnergy Home Assistant Integration, you can
 
 * Connects to your **KEBA heat pump** via the KeEnergy Web HMI API using host and port
@@ -63,6 +66,8 @@ I put a lot of time into this project. If you like it, you can support me with a
 ## Related projects
 
 * [KEBA KeEnergy API](https://github.com/superbox-dev/keba_keenergy_api) is a Python wrapper for the KEBA KeEnergy API.
+* [Lovelace Mini Graph Card](https://github.com/kalkih/mini-graph-card) is a minimalistic graph card for
+  Home Assistant Lovelace UI
 
 ## Changelog
 
