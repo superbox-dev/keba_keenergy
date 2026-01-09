@@ -20,6 +20,7 @@ from .entity import KebaKeEnergyExtendedEntity
 
 _LOGGER = logging.getLogger(__name__)
 
+
 @dataclass(frozen=True)
 class KebaKeEnergySwitchEntityDescriptionMixin:
     """Required values for KEBA KeEnergy switches."""
@@ -33,7 +34,6 @@ class KebaKeEnergySwitchEntityDescription(
     KebaKeEnergySwitchEntityDescriptionMixin,
 ):
     """Class describing KEBA KeEnergy number entities."""
-
 
 
 SWITCH_TYPES: dict[str, tuple[KebaKeEnergySwitchEntityDescription, ...]] = {
