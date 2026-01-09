@@ -24,7 +24,7 @@ async def test_load_entry(
     await setup_integration(hass, config_entry)
 
     assert config_entry.state is ConfigEntryState.LOADED
-    assert hass.states.async_entity_ids_count() == 172
+    assert hass.states.async_entity_ids_count() == 176
 
     assert set(hass.states.async_entity_ids()) == {
         "binary_sensor.keba_keenergy_12345678_buffer_tank_cool_request_1",
@@ -65,6 +65,7 @@ async def test_load_entry(
         "number.keba_keenergy_12345678_heat_circuit_target_temperature_night_2",
         "number.keba_keenergy_12345678_heat_circuit_target_temperature_offset_1",
         "number.keba_keenergy_12345678_heat_circuit_target_temperature_offset_2",
+        "number.keba_keenergy_12345678_heat_pump_compressor_night_speed",
         "number.keba_keenergy_12345678_hot_water_tank_standby_temperature_1",
         "number.keba_keenergy_12345678_hot_water_tank_standby_temperature_2",
         "number.keba_keenergy_12345678_hot_water_tank_target_temperature_1",
@@ -198,6 +199,9 @@ async def test_load_entry(
         "sensor.keba_keenergy_12345678_solar_circuit_source_temperature_2",
         "sensor.keba_keenergy_12345678_webserver_cpu_usage",
         "sensor.keba_keenergy_12345678_webview_cpu_usage",
+        "switch.keba_keenergy_12345678_heat_pump_compressor_use_night_speed",
+        "switch.keba_keenergy_12345678_solar_circuit_priority_1_before_2_1",
+        "switch.keba_keenergy_12345678_solar_circuit_priority_1_before_2_2",
         "water_heater.keba_keenergy_12345678_1",
         "water_heater.keba_keenergy_12345678_2",
         "water_heater.keba_keenergy_12345678_buffer_tank_1",

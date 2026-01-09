@@ -1,15 +1,18 @@
 """Support for the KEBA KeEnergy switches."""
 
 import logging
+from dataclasses import dataclass
 from typing import Any
 from typing import cast
 
+from homeassistant.components.switch import SwitchDeviceClass
 from homeassistant.components.switch import SwitchEntity
 from homeassistant.components.switch import SwitchEntityDescription
 from homeassistant.components.switch.const import DOMAIN as SWITCH_DOMAIN
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
+from keba_keenergy_api.constants import SectionPrefix
 
 from .const import DOMAIN
 from .coordinator import KebaKeEnergyDataUpdateCoordinator
@@ -17,18 +20,51 @@ from .entity import KebaKeEnergyExtendedEntity
 
 _LOGGER = logging.getLogger(__name__)
 
+@dataclass(frozen=True)
+class KebaKeEnergySwitchEntityDescriptionMixin:
+    """Required values for KEBA KeEnergy switches."""
 
-SWITCH_TYPES: dict[str, tuple[SwitchEntityDescription, ...]] = {}
+    key_index: int | None
+
+
+@dataclass(frozen=True)
+class KebaKeEnergySwitchEntityDescription(
+    SwitchEntityDescription,
+    KebaKeEnergySwitchEntityDescriptionMixin,
+):
+    """Class describing KEBA KeEnergy number entities."""
+
+
+
+SWITCH_TYPES: dict[str, tuple[KebaKeEnergySwitchEntityDescription, ...]] = {
+    SectionPrefix.SOLAR_CIRCUIT: (
+        KebaKeEnergySwitchEntityDescription(
+            device_class=SwitchDeviceClass.SWITCH,
+            key="priority_1_before_2",
+            key_index=None,
+            translation_key="priority_1_before_2",
+        ),
+    ),
+    SectionPrefix.HEAT_PUMP: (
+        KebaKeEnergySwitchEntityDescription(
+            device_class=SwitchDeviceClass.SWITCH,
+            key="compressor_use_night_speed",
+            key_index=None,
+            translation_key="compressor_use_night_speed",
+        ),
+    ),
+}
 
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry, async_add_entities: AddEntitiesCallback) -> None:
     """Set up KEBA KeEnergy switches from a config entry."""
     coordinator: KebaKeEnergyDataUpdateCoordinator = hass.data[DOMAIN][entry.entry_id]
-    numbers: list[KebaKeEnergySwitchEntity] = []
+    numbers: list[KebaKeEnergySwitchEntityDescription] = []
 
     # Loop over all device data and add an index to the sensor
     # if there is more than one device of the same type
-    # e.g. hot water tank, heat circuit or heat pump.
+    # e.g. buffer tank, hot water tank, heat circuit, solar circuit or heat pump.
+
     for section_id, section_data in coordinator.data.items():
         for description in SWITCH_TYPES.get(section_id, {}):
             for key, values in section_data.items():

@@ -14,6 +14,7 @@ from homeassistant.const import ATTR_FRIENDLY_NAME
 from homeassistant.const import CONF_DEVICE_CLASS
 from homeassistant.const import CONF_HOST
 from homeassistant.const import CONF_UNIT_OF_MEASUREMENT
+from homeassistant.const import PERCENTAGE
 from homeassistant.const import UnitOfTemperature
 from homeassistant.core import HomeAssistant
 from homeassistant.core import State
@@ -149,6 +150,60 @@ async def test_hot_water_tank_numbers_translated(
     )
     assert isinstance(hot_water_tank_target_temperature_1, State)
     assert hot_water_tank_target_temperature_1.attributes[ATTR_FRIENDLY_NAME] == "Warmwasserspeicher 1 Soll-Temperatur"
+
+
+async def test_heat_pump_numbers(
+    hass: HomeAssistant,
+    config_entry: MockConfigEntry,
+    fake_api: FakeKebaKeEnergyAPI,
+) -> None:
+    """Test heat pump numbers."""
+    fake_api.responses = [
+        MULTIPLE_POSITIONS_RESPONSE,
+        get_multi_positions_data_response(),
+        # Read API after services call
+        MULTIPLE_POSITIONS_RESPONSE,
+        get_multi_positions_data_response(),
+    ]
+    fake_api.register_requests(config_entry.data[CONF_HOST])
+
+    await setup_integration(hass, config_entry)
+
+    heat_pump_compressor_night_speed: State | None = hass.states.get(
+        "number.keba_keenergy_12345678_heat_pump_compressor_night_speed",
+    )
+    assert isinstance(heat_pump_compressor_night_speed, State)
+    assert heat_pump_compressor_night_speed.attributes[ATTR_MIN] == 50.0
+    assert heat_pump_compressor_night_speed.attributes[ATTR_MAX] == 100.0
+    assert heat_pump_compressor_night_speed.attributes[ATTR_STEP] == 1
+    assert heat_pump_compressor_night_speed.attributes[CONF_UNIT_OF_MEASUREMENT] == PERCENTAGE
+    assert heat_pump_compressor_night_speed.attributes[CONF_DEVICE_CLASS] == SensorDeviceClass.SPEED
+    assert heat_pump_compressor_night_speed.attributes[ATTR_FRIENDLY_NAME] == "Heat pump Compressor speed (night)"
+
+
+async def test_heat_pump_numbers_translated(
+    hass: HomeAssistant,
+    config_entry: MockConfigEntry,
+    fake_api: FakeKebaKeEnergyAPI,
+) -> None:
+    """Test heat pump numbers translated."""
+    fake_api.responses = [
+        MULTIPLE_POSITIONS_RESPONSE,
+        get_multi_positions_data_response(),
+        # Read API after services call
+        MULTIPLE_POSITIONS_RESPONSE,
+        get_multi_positions_data_response(),
+    ]
+    fake_api.register_requests(config_entry.data[CONF_HOST])
+
+    hass.config.language = "de"
+    await setup_integration(hass, config_entry)
+
+    heat_pump_compressor_night_speed: State | None = hass.states.get(
+        "number.keba_keenergy_12345678_heat_pump_compressor_night_speed",
+    )
+    assert isinstance(heat_pump_compressor_night_speed, State)
+    assert heat_pump_compressor_night_speed.attributes[ATTR_FRIENDLY_NAME] == "Wärmepumpe Kompressordrehzahl (Nacht)"
 
 
 async def test_heat_circuit_numbers(

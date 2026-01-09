@@ -462,6 +462,16 @@ SOLAR_CIRCUIT_ACTUAL_POWER: str = """
     }
 """
 
+SOLAR_CIRCUIT_PRIORITY_1_BEFORE_2: str = """
+    {
+       "name": "APPL.CtrlAppl.sParam.hmiRetainData.consumer1PrioritySolar[%s]",
+        "attributes": {
+            "longText": "Priority 1 bef. 2"
+        },
+        "value": "%s"
+    }
+"""
+
 HEAT_PUMP_CIRCULATION_PUMP: dict[str, Any] = {
     "name": "APPL.CtrlAppl.sParam.heatpump[0].CircPump.values.setValueScaled",
     "attributes": {
@@ -498,6 +508,18 @@ HEAT_PUMP_COMPRESSOR: dict[str, Any] = {
     "value": "0",
 }
 
+HEAT_PUMP_COMPRESSOR_NIGHT_SPEED: dict[str, Any] = {
+    "name": "APPL.CtrlAppl.sParam.heatpump[0].HeatPumpPowerCtrl.param.maxPowerScaledNight",
+    "attributes": {
+        "formatId": "fmt3p0",
+        "longText": "Max. pwr. limit night",
+        "unitId": "Pct100",
+        "upperLimit": "1",
+        "lowerLimit": "0.5",
+    },
+    "value": "0.5",
+}
+
 HEAT_PUMP_COMPRESSOR_INPUT_TEMPERATURE: dict[str, Any] = {
     "name": "APPL.CtrlAppl.sParam.heatpump[0].TempCompressorIn.values.actValue",
     "attributes": {
@@ -516,6 +538,14 @@ HEAT_PUMP_COMPRESSOR_OUTPUT_TEMPERATURE: dict[str, Any] = {
         "unitId": "Temp",
     },
     "value": "27.200001",
+}
+
+HEAT_PUMP_COMPRESSOR_USE_NIGHT_SPEED: dict[str, Any] = {
+    "name": "APPL.CtrlAppl.sParam.heatpump[0].HeatPumpPowerCtrl.param.useDayNightSpeed",
+    "attributes": {
+        "longText": "Day/Night switch",
+    },
+    "value": "true",
 }
 
 HEAT_PUMP_CONDENSER_TEMPERATURE: dict[str, Any] = {
@@ -1270,8 +1300,10 @@ HEAT_PUMP_DATA: list[dict[str, Any]] = [
     HEAT_PUMP_CIRCULATION_PUMP,
     HEAT_PUMP_SOURCE_PUMP_SPEED,
     HEAT_PUMP_COMPRESSOR,
+    HEAT_PUMP_COMPRESSOR_NIGHT_SPEED,
     HEAT_PUMP_COMPRESSOR_INPUT_TEMPERATURE,
     HEAT_PUMP_COMPRESSOR_OUTPUT_TEMPERATURE,
+    HEAT_PUMP_COMPRESSOR_USE_NIGHT_SPEED,
     HEAT_PUMP_CONDENSER_TEMPERATURE,
     HEAT_PUMP_VAPORIZER_TEMPERATURE,
     HEAT_PUMP_HEAT_REQUEST,
@@ -1342,6 +1374,7 @@ DEFAULT_POSITION_DATA_RESPONSE: list[dict[str, Any]] = [
     json.loads(SOLAR_CIRCUIT_HEATING_ENERGY % ("0", "8.73")),
     json.loads(SOLAR_CIRCUIT_DAILY_ENERGY % ("0", "2.33")),
     json.loads(SOLAR_CIRCUIT_ACTUAL_POWER % ("0", "3452")),
+    json.loads(SOLAR_CIRCUIT_PRIORITY_1_BEFORE_2 % ("0", "true")),
     *HEAT_PUMP_DATA,
     json.loads(HEAT_PUMP_HAS_PASSIVE_COOLING % "true"),
     json.loads(BUFFER_TANK_CURRENT_TOP_TEMPERATURE % ("0", "45.67")),
@@ -1451,6 +1484,8 @@ ENTITY_UPDATED_DATA_RESPONSE: list[dict[str, Any]] = [
     json.loads(SOLAR_CIRCUIT_DAILY_ENERGY % ("1", "2.33")),
     json.loads(SOLAR_CIRCUIT_ACTUAL_POWER % ("0", "3452")),
     json.loads(SOLAR_CIRCUIT_ACTUAL_POWER % ("1", "3452")),
+    json.loads(SOLAR_CIRCUIT_PRIORITY_1_BEFORE_2 % ("0", "true")),
+    json.loads(SOLAR_CIRCUIT_PRIORITY_1_BEFORE_2 % ("1", "false")),
     *HEAT_PUMP_DATA,
     json.loads(HEAT_PUMP_HAS_PASSIVE_COOLING % "true"),
     json.loads(BUFFER_TANK_CURRENT_TOP_TEMPERATURE % ("0", "45.67")),
@@ -1538,6 +1573,7 @@ HEAT_CIRCUIT_OPERATION_MODE_3_DATA_RESPONSE: list[dict[str, Any]] = [
     json.loads(SOLAR_CIRCUIT_HEATING_ENERGY % ("0", "8.73")),
     json.loads(SOLAR_CIRCUIT_DAILY_ENERGY % ("0", "2.33")),
     json.loads(SOLAR_CIRCUIT_ACTUAL_POWER % ("0", "3452")),
+    json.loads(SOLAR_CIRCUIT_PRIORITY_1_BEFORE_2 % ("0", "true")),
     *HEAT_PUMP_DATA,
     json.loads(HEAT_PUMP_HAS_PASSIVE_COOLING % "true"),
     json.loads(BUFFER_TANK_CURRENT_TOP_TEMPERATURE % ("0", "45.67")),
@@ -1611,6 +1647,7 @@ HEAT_CIRCUIT_OPERATION_MODE_4_DATA_RESPONSE: list[dict[str, Any]] = [
     json.loads(SOLAR_CIRCUIT_HEATING_ENERGY % ("0", "8.73")),
     json.loads(SOLAR_CIRCUIT_DAILY_ENERGY % ("0", "2.33")),
     json.loads(SOLAR_CIRCUIT_ACTUAL_POWER % ("0", "3452")),
+    json.loads(SOLAR_CIRCUIT_PRIORITY_1_BEFORE_2 % ("0", "true")),
     *HEAT_PUMP_DATA,
     json.loads(HEAT_PUMP_HAS_PASSIVE_COOLING % "true"),
     json.loads(BUFFER_TANK_CURRENT_TOP_TEMPERATURE % ("0", "45.67")),
@@ -1722,6 +1759,8 @@ def get_multi_positions_data_response(has_passive_cooling: str = "false") -> lis
         json.loads(SOLAR_CIRCUIT_DAILY_ENERGY % ("1", "3.33")),
         json.loads(SOLAR_CIRCUIT_ACTUAL_POWER % ("0", "3452")),
         json.loads(SOLAR_CIRCUIT_ACTUAL_POWER % ("1", "2452")),
+        json.loads(SOLAR_CIRCUIT_PRIORITY_1_BEFORE_2 % ("0", "false")),
+        json.loads(SOLAR_CIRCUIT_PRIORITY_1_BEFORE_2 % ("1", "true")),
         *HEAT_PUMP_DATA,
         json.loads(HEAT_PUMP_HAS_PASSIVE_COOLING % f"{has_passive_cooling}"),
         json.loads(BUFFER_TANK_CURRENT_TOP_TEMPERATURE % ("0", "45.67")),

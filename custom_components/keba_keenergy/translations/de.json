@@ -88,6 +88,9 @@
             }
         },
         "number": {
+            "compressor_night_speed": {
+                "name": "Kompressordrehzahl (Nacht)"
+            },
             "standby_temperature": {
                 "name": "Stütztemperatur"
             },
@@ -471,6 +474,14 @@
             },
             "webview_cpu_usage": {
                 "name": "WebView CPU-Auslastung"
+            }
+        },
+        "switch" : {
+            "compressor_use_night_speed": {
+                "name": "Kompressor-Drehzahlbegrenzung (Nacht)"
+            },
+            "priority_1_before_2": {
+                "name": "Vorrang 1 vor 2"
             }
         },
         "water_heater": {

@@ -7,12 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [1.5.0b4] - 2025-01-07
+## [1.5.0b4] - 2025-01-09
 
 ### Added
 
 - Support for buffer tanks
 - Added sensors "Source pump speed", "Vaporizer temperature", "Condenser temperature" and "Substate" to the heat pump
+- Added number control for the "compressor night speed" to the heat pump
+- Added switch control for the "compressor use night speed" to the heat pump
+- Added switch control for the "priority 1 before 2" to the solar circuit
 
 ### Fixed
 
