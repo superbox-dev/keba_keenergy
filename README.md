@@ -27,14 +27,14 @@ web interface as Home Assistant entities for monitoring, control, and automation
   * Buffer tank
   * External heat source
 
-Looking for more information? The [Wiki](https://github.com/superbox-dev/keba_keenergy/wiki) contains in-depth
+> Looking for more information? The [Wiki](https://github.com/superbox-dev/keba_keenergy/wiki) contains in-depth
 documentation.
 
 ## Supported Systems
 
 The KEBA KeEnergy Integration works with heat pumps that provide a KEBA KeEnergy Web HMI interface.
-It is successfully used with devices from manufacturers such as M-TEC, Windhager and ino,
-as well as other systems based on KEBA controls.
+It is successfully used with devices from [manufacturers](https://github.com/superbox-dev/keba_keenergy/wiki/Supported-devices)
+such as M-TEC, Windhager and ino, as well as other systems based on KEBA controls.
 
 ## Requirements
 
@@ -60,6 +60,10 @@ I put a lot of time into this project. If you like it, you can support me with a
 
 [![KoFi](https://raw.githubusercontent.com/superbox-dev/.github/refs/heads/main/profile/superbox-kofi.jpg)](https://ko-fi.com/F2F0KXO6D)
 
+## Related projects
+
+* [KEBA KeEnergy API](https://github.com/superbox-dev/keba_keenergy_api) is a Python wrapper for the KEBA KeEnergy API.
+
 ## Changelog
 
 The changelog lives in the [CHANGELOG.md](CHANGELOG.md) document.
@@ -69,7 +73,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 **The KEBA KeEnergy Integration** is an open-source project and contributions are welcome. You can:
 
-* Report issues or request new features
+* Report [issues](https://github.com/superbox-dev/keba_keenergy_api/issues/new/choose) or request new features
 * Improve documentation or translations
 * Contribute code
 * Support the project by starring it on GitHub ⭐
