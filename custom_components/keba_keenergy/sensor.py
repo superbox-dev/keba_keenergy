@@ -511,6 +511,7 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription, ...]] = {
             native_unit_of_measurement=PERCENTAGE,
             state_class=SensorStateClass.MEASUREMENT,
             translation_key="compressor",
+            icon="mdi:speedometer",
             value=lambda data: cast("float", data * 100),
         ),
         KebaKeEnergySensorEntityDescription(
