@@ -63,6 +63,7 @@ async def test_solar_circuit_switches_translated(
     solar_circuit_priority_1_before_2_1: State | None = hass.states.get(
         "switch.keba_keenergy_12345678_solar_circuit_priority_1_before_2_1",
     )
+    assert isinstance(solar_circuit_priority_1_before_2_1, State)
     assert solar_circuit_priority_1_before_2_1.attributes[ATTR_FRIENDLY_NAME] == "Solarkreis 1 Vorrang 1 vor 2"
 
 
@@ -115,6 +116,7 @@ async def test_heat_pump_switches_translated(
     heat_pump_compressor_use_night_speed: State | None = hass.states.get(
         "switch.keba_keenergy_12345678_heat_pump_compressor_use_night_speed",
     )
+    assert isinstance(heat_pump_compressor_use_night_speed, State)
     assert (
         heat_pump_compressor_use_night_speed.attributes[ATTR_FRIENDLY_NAME]
         == "Wärmepumpe Kompressor-Drehzahlbegrenzung (Nacht)"
