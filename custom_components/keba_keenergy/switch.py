@@ -59,7 +59,7 @@ SWITCH_TYPES: dict[str, tuple[KebaKeEnergySwitchEntityDescription, ...]] = {
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry, async_add_entities: AddEntitiesCallback) -> None:
     """Set up KEBA KeEnergy switches from a config entry."""
     coordinator: KebaKeEnergyDataUpdateCoordinator = hass.data[DOMAIN][entry.entry_id]
-    numbers: list[KebaKeEnergySwitchEntityDescription] = []
+    numbers: list[KebaKeEnergySwitchEntity] = []
 
     # Loop over all device data and add an index to the sensor
     # if there is more than one device of the same type
