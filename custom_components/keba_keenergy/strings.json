@@ -174,13 +174,13 @@
                 "name": "Power"
             },
             "circulation_pump": {
-                "name": "Circulation pump"
+                "name": "Circulation pump speed"
             },
             "cpu_usage": {
                 "name": "CPU usage"
             },
             "compressor": {
-                "name": "Compressor"
+                "name": "Compressor speed"
             },
             "compressor_input_temperature": {
                 "name": "Compressor input temperature"
@@ -205,6 +205,9 @@
             },
             "cop": {
                 "name": "Coefficient of performance"
+            },
+            "condenser_temperature": {
+                "name": "Condenser temperature"
             },
             "current_bottom_temperature": {
                 "name": "Current temperature (bottom)"
@@ -369,6 +372,9 @@
             "solar_circuit_pump_2": {
                 "name": "Pump 2"
             },
+            "source_pump_speed": {
+                "name": "Source pump speed"
+            },
             "source_input_temperature": {
                 "name": "Source input temperature"
             },
@@ -395,7 +401,7 @@
                     "pump_down": "Pump down"
                 }
             },
-            "sub_state": {
+            "substate": {
                 "name": "Substate",
                 "state": {
                     "bivalent_lock": "Bivalent lock",
@@ -457,6 +463,9 @@
             },
             "total_thermal_energy": {
                 "name": "Total thermal energy"
+            },
+            "vaporizer_temperature": {
+                "name": "Vaporizer temperature"
             },
             "webserver_cpu_usage": {
                 "name": "WebServer CPU usage"

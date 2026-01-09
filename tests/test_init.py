@@ -24,7 +24,7 @@ async def test_load_entry(
     await setup_integration(hass, config_entry)
 
     assert config_entry.state is ConfigEntryState.LOADED
-    assert hass.states.async_entity_ids_count() == 169
+    assert hass.states.async_entity_ids_count() == 172
 
     assert set(hass.states.async_entity_ids()) == {
         "binary_sensor.keba_keenergy_12345678_buffer_tank_cool_request_1",
@@ -126,11 +126,13 @@ async def test_load_entry(
         "sensor.keba_keenergy_12345678_heat_circuit_target_temperature_night_2",
         "sensor.keba_keenergy_12345678_heat_circuit_target_temperature_offset_1",
         "sensor.keba_keenergy_12345678_heat_circuit_target_temperature_offset_2",
+        "sensor.keba_keenergy_12345678_heat_pump_activation_counter",
         "sensor.keba_keenergy_12345678_heat_pump_circulation_pump",
         "sensor.keba_keenergy_12345678_heat_pump_compressor",
         "sensor.keba_keenergy_12345678_heat_pump_compressor_input_temperature",
         "sensor.keba_keenergy_12345678_heat_pump_compressor_output_temperature",
         "sensor.keba_keenergy_12345678_heat_pump_compressor_power",
+        "sensor.keba_keenergy_12345678_heat_pump_condenser_temperature",
         "sensor.keba_keenergy_12345678_heat_pump_cooling_energy",
         "sensor.keba_keenergy_12345678_heat_pump_cooling_energy_consumption",
         "sensor.keba_keenergy_12345678_heat_pump_cooling_spf",
@@ -149,14 +151,15 @@ async def test_load_entry(
         "sensor.keba_keenergy_12345678_heat_pump_return_flow_temperature",
         "sensor.keba_keenergy_12345678_heat_pump_source_input_temperature",
         "sensor.keba_keenergy_12345678_heat_pump_source_output_temperature",
+        "sensor.keba_keenergy_12345678_heat_pump_source_pump_speed",
         "sensor.keba_keenergy_12345678_heat_pump_state",
-        "sensor.keba_keenergy_12345678_heat_pump_sub_state",
+        "sensor.keba_keenergy_12345678_heat_pump_substate",
         "sensor.keba_keenergy_12345678_heat_pump_total_energy_consumption",
         "sensor.keba_keenergy_12345678_heat_pump_total_spf",
         "sensor.keba_keenergy_12345678_heat_pump_total_thermal_energy",
         "sensor.keba_keenergy_12345678_heat_pump_operating_time",
         "sensor.keba_keenergy_12345678_heat_pump_max_runtime",
-        "sensor.keba_keenergy_12345678_heat_pump_activation_counter",
+        "sensor.keba_keenergy_12345678_heat_pump_vaporizer_temperature",
         "sensor.keba_keenergy_12345678_hot_water_tank_current_temperature_1",
         "sensor.keba_keenergy_12345678_hot_water_tank_current_temperature_2",
         "sensor.keba_keenergy_12345678_hot_water_tank_operating_mode_1",

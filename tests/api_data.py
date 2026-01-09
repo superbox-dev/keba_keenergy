@@ -474,6 +474,18 @@ HEAT_PUMP_CIRCULATION_PUMP: dict[str, Any] = {
     "value": "0",
 }
 
+HEAT_PUMP_SOURCE_PUMP_SPEED: dict[str, Any] = {
+    "name": "APPL.CtrlAppl.sParam.heatpump[0].Source.values.setValueScaled",
+    "attributes": {
+        "formatId": "fmt3p0",
+        "longText": "Source",
+        "unitId": "Pct100",
+        "upperLimit": "1",
+        "lowerLimit": "0.0",
+    },
+    "value": "0.44875106",
+}
+
 HEAT_PUMP_COMPRESSOR: dict[str, Any] = {
     "name": "APPL.CtrlAppl.sParam.heatpump[0].Compressor.values.setValueScaled",
     "attributes": {
@@ -488,43 +500,91 @@ HEAT_PUMP_COMPRESSOR: dict[str, Any] = {
 
 HEAT_PUMP_COMPRESSOR_INPUT_TEMPERATURE: dict[str, Any] = {
     "name": "APPL.CtrlAppl.sParam.heatpump[0].TempCompressorIn.values.actValue",
-    "attributes": {"formatId": "fmtTemp", "longText": "Comp. in temp.", "unitId": "Temp"},
+    "attributes": {
+        "formatId": "fmtTemp",
+        "longText": "Comp. in temp.",
+        "unitId": "Temp",
+    },
     "value": "27.200001",
 }
 
 HEAT_PUMP_COMPRESSOR_OUTPUT_TEMPERATURE: dict[str, Any] = {
     "name": "APPL.CtrlAppl.sParam.heatpump[0].TempCompressorOut.values.actValue",
-    "attributes": {"formatId": "fmtTemp", "longText": "Comp. out temp.", "unitId": "Temp"},
+    "attributes": {
+        "formatId": "fmtTemp",
+        "longText": "Comp. out temp.",
+        "unitId": "Temp",
+    },
     "value": "27.200001",
+}
+
+HEAT_PUMP_CONDENSER_TEMPERATURE: dict[str, Any] = {
+    "name": "APPL.CtrlAppl.sParam.heatpump[0].OverHeatCtrl.values.tempCond",
+    "attributes": {
+        "formatId": "fmtTemp",
+        "longText": "Cond. temp.",
+        "unitId": "Temp",
+        "upperLimit": "200",
+        "lowerLimit": "0",
+    },
+    "value": "31.514103",
+}
+
+HEAT_PUMP_VAPORIZER_TEMPERATURE: dict[str, Any] = {
+    "name": "APPL.CtrlAppl.sParam.heatpump[0].OverHeatCtrl.values.tempVap",
+    "attributes": {
+        "formatId": "fmtTemp",
+        "longText": "Evap. temp.",
+        "unitId": "Temp",
+    },
+    "value": "-4.5617409",
 }
 
 HEAT_PUMP_HEAT_REQUEST: dict[str, Any] = {
     "name": "APPL.CtrlAppl.sParam.heatpump[0].values.request",
-    "attributes": {"longText": "Heat pump request"},
+    "attributes": {
+        "longText": "Heat pump request",
+    },
     "value": "false",
 }
 
 HEAT_PUMP_HIGH_PRESSURE: dict[str, Any] = {
     "name": "APPL.CtrlAppl.sParam.heatpump[0].HighPressure.values.actValue",
-    "attributes": {"formatId": "fmt3p2", "longText": "High pressure", "unitId": "PressBar"},
+    "attributes": {
+        "formatId": "fmt3p2",
+        "longText": "High pressure",
+        "unitId": "PressBar",
+    },
     "value": "15.61875",
 }
 
 HEAT_PUMP_LOW_PRESSURE: dict[str, Any] = {
     "name": "APPL.CtrlAppl.sParam.heatpump[0].LowPressure.values.actValue",
-    "attributes": {"formatId": "fmt3p2", "longText": "Low pressure", "unitId": "PressBar"},
+    "attributes": {
+        "formatId": "fmt3p2",
+        "longText": "Low pressure",
+        "unitId": "PressBar",
+    },
     "value": "15.354687",
 }
 
 HEAT_PUMP_FLOW_TEMPERATURE: dict[str, Any] = {
     "name": "APPL.CtrlAppl.sParam.heatpump[0].TempHeatFlow.values.actValue",
-    "attributes": {"formatId": "fmtTemp", "longText": "Inflow temp.", "unitId": "Temp"},
+    "attributes": {
+        "formatId": "fmtTemp",
+        "longText": "Inflow temp.",
+        "unitId": "Temp",
+    },
     "value": "24.800001",
 }
 
 HEAT_PUMP_RETURN_FLOW_TEMPERATURE: dict[str, Any] = {
     "name": "APPL.CtrlAppl.sParam.heatpump[0].TempHeatReflux.values.actValue",
-    "attributes": {"formatId": "fmtTemp", "longText": "Reflux temp.", "unitId": "Temp"},
+    "attributes": {
+        "formatId": "fmtTemp",
+        "longText": "Reflux temp.",
+        "unitId": "Temp",
+    },
     "value": "23.9",
 }
 
@@ -536,13 +596,21 @@ HEAT_PUMP_NAME: dict[str, Any] = {
 
 HEAT_PUMP_SOURCE_INPUT_TEMPERATURE: dict[str, Any] = {
     "name": "APPL.CtrlAppl.sParam.heatpump[0].TempSourceIn.values.actValue",
-    "attributes": {"formatId": "fmtTemp", "longText": "Source in temp.", "unitId": "Temp"},
+    "attributes": {
+        "formatId": "fmtTemp",
+        "longText": "Source in temp.",
+        "unitId": "Temp",
+    },
     "value": "25.700001",
 }
 
 HEAT_PUMP_SOURCE_OUTPUT_TEMPERATURE: dict[str, Any] = {
     "name": "APPL.CtrlAppl.sParam.heatpump[0].TempSourceOut.values.actValue",
-    "attributes": {"formatId": "fmtTemp", "longText": "Source out temp.", "unitId": "Temp"},
+    "attributes": {
+        "formatId": "fmtTemp",
+        "longText": "Source out temp.",
+        "unitId": "Temp",
+    },
     "value": "24.9",
 }
 
@@ -558,7 +626,7 @@ HEAT_PUMP_STATE: dict[str, Any] = {
     "value": "0",
 }
 
-HEAT_PUMP_SUB_STATE: dict[str, Any] = {
+HEAT_PUMP_SUBSTATE: dict[str, Any] = {
     "name": "APPL.CtrlAppl.sParam.heatpump[0].values.heatpumpSubState",
     "attributes": {
         "formatId": "fmtHPSubState",
@@ -1200,9 +1268,12 @@ MULTIPLE_POSITIONS_RESPONSE: list[dict[str, Any]] = [
 
 HEAT_PUMP_DATA: list[dict[str, Any]] = [
     HEAT_PUMP_CIRCULATION_PUMP,
+    HEAT_PUMP_SOURCE_PUMP_SPEED,
     HEAT_PUMP_COMPRESSOR,
     HEAT_PUMP_COMPRESSOR_INPUT_TEMPERATURE,
     HEAT_PUMP_COMPRESSOR_OUTPUT_TEMPERATURE,
+    HEAT_PUMP_CONDENSER_TEMPERATURE,
+    HEAT_PUMP_VAPORIZER_TEMPERATURE,
     HEAT_PUMP_HEAT_REQUEST,
     HEAT_PUMP_HIGH_PRESSURE,
     HEAT_PUMP_FLOW_TEMPERATURE,
@@ -1212,7 +1283,7 @@ HEAT_PUMP_DATA: list[dict[str, Any]] = [
     HEAT_PUMP_SOURCE_INPUT_TEMPERATURE,
     HEAT_PUMP_SOURCE_OUTPUT_TEMPERATURE,
     HEAT_PUMP_STATE,
-    HEAT_PUMP_SUB_STATE,
+    HEAT_PUMP_SUBSTATE,
     HEAT_PUMP_COMPRESSOR_POWER,
     HEAT_PUMP_HEATING_POWER,
     HEAT_PUMP_HOT_WATER_POWER,

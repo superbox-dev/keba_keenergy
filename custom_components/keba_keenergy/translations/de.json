@@ -173,13 +173,13 @@
                 "name": "Leistung"
             },
             "circulation_pump": {
-                "name": "Umwälzpumpe"
+                "name": "Umwälzpumpedrehzahl"
             },
             "cpu_usage": {
                 "name": "CPU-Auslastung"
             },
             "compressor": {
-                "name": "Kompressor"
+                "name": "Kompressordrehzahl"
             },
             "compressor_input_temperature": {
                 "name": "Kompressor Eingangstemperatur"
@@ -204,6 +204,9 @@
             },
             "cop": {
                 "name": "Leistungszahl"
+            },
+            "condenser_temperature": {
+                "name": "Kondensatortemperatur"
             },
             "current_bottom_temperature": {
                 "name": "Ist-Temperatur (unten)"
@@ -368,6 +371,9 @@
             "solar_circuit_pump_2": {
                 "name": "Pumpe 2"
             },
+            "source_pump_speed": {
+                "name": "Quellenpumpendrehzahl"
+            },
             "source_input_temperature": {
                 "name": "Quelle-Eingangstemperatur"
             },
@@ -394,7 +400,7 @@
                     "pump_down": "Pump-Down-Vorgang"
                 }
             },
-            "sub_state": {
+            "substate": {
                 "name": "Unterstatus",
                 "state": {
                     "bivalent_lock": "Bivalente Sperre",
@@ -456,6 +462,9 @@
             },
             "total_thermal_energy": {
                 "name": "Gesamtwärmemenge"
+            },
+            "vaporizer_temperature": {
+                "name": "Verdampfertemperatur"
             },
             "webserver_cpu_usage": {
                 "name": "WebServer CPU-Auslastung"
