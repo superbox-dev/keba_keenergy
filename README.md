@@ -30,7 +30,7 @@ web interface as Home Assistant entities for monitoring, control, and automation
 > Looking for more information? The [Wiki](https://github.com/superbox-dev/keba_keenergy/wiki) contains in-depth
 documentation.
 
-## Supported Systems
+## Supported systems
 
 The KEBA KeEnergy Integration works with heat pumps that provide a KEBA KeEnergy Web HMI interface.
 It is successfully used with devices from [manufacturers](https://github.com/superbox-dev/keba_keenergy/wiki/Supported-devices)
