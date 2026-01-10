@@ -1,5 +1,4 @@
 title: superbox
-description: KEBA KeEnergy a custom Home Assistant integration for heat pumps with a KEBA KeEnergy control system.
 remote_theme: jekyll/minima@v2.5.2
 plugins:
   - jekyll-remote-theme
