@@ -3,6 +3,11 @@
 
 @import "{{ site.theme }}";
 
+a {
+  color: #1CB88F;
+}
+
 a:hover {
   font-weight: normal;
+  text-decoration: underline;
 }
