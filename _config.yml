@@ -1,4 +1,4 @@
 title: superbox
-remote_theme: jekyll/minima@v2.5.2
+remote_theme: jekyll/minima@bf9ef98
 plugins:
   - jekyll-remote-theme
