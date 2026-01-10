@@ -15,8 +15,8 @@
   <body>
     <div class="wrapper">
       <header>
-        <a href="{{ "/assets/logo.svg | relative_url }}" title="{{ site.title | default: site.github.repository_name }}">
-          <img src="{{site.logo | relative_url}}" alt="superbox logo" />
+        <a href="{{ "/" | absolute_url }}" title="{{ site.title | default: site.github.repository_name }}">
+          <img src="{{ "/assets/logo.svg" | relative_url }}" alt="superbox logo" />
         </a>
 
         {% if site.github.is_project_page %}
