@@ -1,6 +1,6 @@
 {
-  "name": "MyWebSite",
-  "short_name": "MySite",
+  "name": "superbox",
+  "short_name": "superbox",
   "icons": [
     {
       "src": "/assets/favicons/web-app-manifest-192x192.png",
