@@ -4,7 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/KEBA-KeEnergy.iml" filepath="$PROJECT_DIR$/.idea/KEBA-KeEnergy.iml" />
       <module fileurl="file://$PROJECT_DIR$/../keba_keenergy.wiki/.idea/keba_keenergy.wiki.iml" filepath="$PROJECT_DIR$/../keba_keenergy.wiki/.idea/keba_keenergy.wiki.iml" />
-      <module fileurl="file://$PROJECT_DIR$/../minimal/.idea/minimal.iml" filepath="$PROJECT_DIR$/../minimal/.idea/minimal.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../keba_keenergy_site/.idea/minimal.iml" filepath="$PROJECT_DIR$/../keba_keenergy_site/.idea/minimal.iml" />
     </modules>
   </component>
 </project>
