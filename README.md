@@ -4,7 +4,10 @@
 and monitor KEBA-based heat pumps directly within your smart home. The integration exposes data from the KEBA KeEnergy
 web interface as Home Assistant entities for monitoring, control, and automation of heating and hot water systems.
 
-[![Dashboard](images/dashboard.png)](images/dashboard.png)
+[![Dashboard](assets/img/dashboard.png)](assets/img/dashboard.png)
+
+> Take a look at the [example page](https://github.com/superbox-dev/keba_keenergy/wiki/Examples)
+in the Wiki to create awesome dashboards in Home Assistant.
 
 > Take a look at the [example page](https://github.com/superbox-dev/keba_keenergy/wiki/Examples)
 in the Wiki to create awesome dashboards in Home Assistant.
