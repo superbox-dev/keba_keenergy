@@ -7,7 +7,8 @@
     </content>
     <orderEntry type="jdk" jdkName="keba_keenergy" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="module" module-name="keba_keenergy.wiki" />
+    <orderEntry type="module" module-name="keba_keenergy_site" />
+    <orderEntry type="module" module-name="keba_keenergy_wiki" />
   </component>
   <component name="PyDocumentationSettings">
     <option name="format" value="NUMPY" />
