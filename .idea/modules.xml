@@ -3,7 +3,8 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/keba_keenergy.iml" filepath="$PROJECT_DIR$/.idea/keba_keenergy.iml" />
-      <module fileurl="file://$PROJECT_DIR$/../keba_keenergy.wiki/.idea/keba_keenergy.wiki.iml" filepath="$PROJECT_DIR$/../keba_keenergy.wiki/.idea/keba_keenergy.wiki.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../keba_keenergy_site/.idea/keba_keenergy_site.iml" filepath="$PROJECT_DIR$/../keba_keenergy_site/.idea/keba_keenergy_site.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../keba_keenergy_wiki/.idea/keba_keenergy_wiki.iml" filepath="$PROJECT_DIR$/../keba_keenergy_wiki/.idea/keba_keenergy_wiki.iml" />
     </modules>
   </component>
 </project>
