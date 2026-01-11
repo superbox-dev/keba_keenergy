@@ -9,9 +9,6 @@ web interface as Home Assistant entities for monitoring, control, and automation
 > Take a look at the [example page](https://github.com/superbox-dev/keba_keenergy/wiki/Examples)
 in the Wiki to create awesome dashboards in Home Assistant.
 
-> Take a look at the [example page](https://github.com/superbox-dev/keba_keenergy/wiki/Examples)
-in the Wiki to create awesome dashboards in Home Assistant.
-
 ## With the KEBA KeEnergy Home Assistant Integration, you can
 
 * Connects to your **KEBA heat pump** via the KeEnergy Web HMI API using host and port
