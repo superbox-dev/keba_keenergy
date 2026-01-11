@@ -1,6 +1,6 @@
 # KEBA KeEnergy – Home Assistant Integration for KEBA heat pumps
 
-**KEBA KeEnergy Integration** is a powerful open-source **Home Assistant integration** that allows you to connect
+**KEBA KeEnergy Integration** is a powerful custom **Home Assistant integration** that allows you to connect
 and monitor KEBA-based heat pumps directly within your smart home. The integration exposes data from the KEBA KeEnergy
 web interface as Home Assistant entities for monitoring, control, and automation of heating and hot water systems.
 
