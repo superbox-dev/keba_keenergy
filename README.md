@@ -78,7 +78,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 **The KEBA KeEnergy Integration** is an open-source project and contributions are welcome. You can:
 
-* Report [issues](https://github.com/superbox-dev/keba_keenergy_api/issues/new/choose) or request new features
+* Report [issues](https://github.com/superbox-dev/keba_keenergy/issues/new/choose) or request new features
 * Improve documentation or translations
 * Contribute code
 * Support the project by starring it on GitHub ⭐
