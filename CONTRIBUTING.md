@@ -2,7 +2,7 @@
 
 <!--start-contributing-->
 
-# Guidelines
+## Guidelines
 
 Contributing to this project should be as easy and transparent as possible, whether it's:
 
