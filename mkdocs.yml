@@ -26,9 +26,9 @@ nav:
       - Contributing: keba-keenergy/home-assistant/contributing.md
       - Issues: https://github.com/superbox-dev/keba_keenergy/issues
   - Wiki:
-     - Supported devices: keba-keenergy/home-assistant/wiki/supported-devices.md
-     - Examples: keba-keenergy/home-assistant/wiki/examples.md
-     - FAQ: keba-keenergy/home-assistant/wiki/faq.md
+      - Supported devices: keba-keenergy/home-assistant/wiki/supported-devices.md
+      - Examples: keba-keenergy/home-assistant/wiki/examples.md
+      - FAQ: keba-keenergy/home-assistant/wiki/faq.md
   - Donation: keba-keenergy/home-assistant/donation.md
   - API: https://api.superbox.one
 markdown_extensions:
