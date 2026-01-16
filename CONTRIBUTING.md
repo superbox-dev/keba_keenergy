@@ -1,4 +1,8 @@
-# Contribution guidelines
+# Contributing
+
+<!--start-contributing-->
+
+# Guidelines
 
 Contributing to this project should be as easy and transparent as possible, whether it's:
 
@@ -51,6 +55,10 @@ Use [black](https://github.com/ambv/black) to make sure the code follows the sty
 
 ## Test your code modification
 
+To test the code we use [pytest](https://docs.pytest.org):
+
 ## License
 
-By contributing, you agree that your contributions will be licensed under its [Apache License](LICENSE).
+By contributing, you agree that your contributions will be licensed under its [Apache License](https://github.com/superbox-dev/keba_keenergy/blob/main/LICENSE).
+
+<!--end-contributing-->

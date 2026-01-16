@@ -1,0 +1,32 @@
+/* https://github.com/squidfunk/mkdocs-material/blob/master/src/templates/assets/stylesheets/main/_colors.scss */
+
+:root  > * {
+  --md-primary-fg-color:                hsl(41, 100%, 50%);
+  --md-primary-fg-color--light:         hsl(41, 100%, 50%);
+  --md-primary-fg-color--dark:          hsl(41, 100%, 50%);
+  --md-primary-bg-color:                hsl(0, 0%, 100%);
+  --md-primary-bg-color--light:         hsla(0, 0%, 100%, 0.7);
+
+  --md-accent-fg-color:                 hsl(164, 74%, 22%);
+  --md-accent-fg-color--transparent:    hsla(41, 100%, 60%, 0.2);
+  --md-accent-bg-color:                 hsl(0, 0%, 100%);
+  --md-accent-bg-color--light:          hsla(0, 0%, 100%, 0.7);
+
+  --md-default-fg-color:                hsla(0, 0%, 0%, 0.87);
+  --md-default-fg-color--light:         hsla(0, 0%, 0%, 0.87);
+  --md-default-fg-color--lighter:       hsla(0, 0%, 0%, 0.87);
+  --md-default-fg-color--lightest:      hsla(41, 100%, 60%, 0.5);
+
+  --md-typeset-color:                   hsla(0, 0%, 0%, 0.87);
+  --md-typeset-a-color:                 hsl(164, 74%, 42%);
+
+  --md-footer-fg-color:                 hsla(0, 0%, 0%, 0.87);
+  --md-footer-fg-color--light:          hsl(164, 74%, 42%);
+  --md-footer-fg-color--lighter:        hsla(0, 0%, 0%, 0.87);
+  --md-footer-bg-color:                 transparent;
+  --md-footer-bg-color--dark:           transparent;
+}
+
+.md-typeset .headerlink {
+  display: none!important;
+}

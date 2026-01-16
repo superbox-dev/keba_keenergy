@@ -1,0 +1,57 @@
+site_name: superbox | KEBA KeEnergy | Home Assistant
+site_url: https://superbox.one
+site_author: Michael Hacker
+site_description: A Home Assistant integration for heat pumps with a KEBA KeEnergy control system.
+repo_url: https://github.com/superbox-dev/keba_keenergy
+repo_name: GitHub
+theme:
+  name: material
+  favicon: assets/favicon.ico
+  logo: assets/logo.png
+  features:
+    - navigation.instant
+    - navigation.instant.prefetch
+    - navigation.instant.progress
+    - navigation.tracking
+    - navigation.path
+    - navigation.indexes
+    - toc.follow
+    - navigation.top
+extra_css:
+  - stylesheets/extra.css
+nav:
+  - Home: index.md
+  - Project:
+      - Changelog: keba-keenergy/home-assistant/changelog.md
+      - Contributing: keba-keenergy/home-assistant/contributing.md
+      - Issues: https://github.com/superbox-dev/keba_keenergy/issues
+  - Wiki:
+     - Supported devices: keba-keenergy/home-assistant/wiki/supported-devices.md
+     - Examples: keba-keenergy/home-assistant/wiki/examples.md
+     - FAQ: keba-keenergy/home-assistant/wiki/faq.md
+  - Donation: keba-keenergy/home-assistant/donation.md
+  - API: https://api.superbox.one
+markdown_extensions:
+  - smarty
+  - toc:
+      permalink: True
+  - sane_lists
+  - admonition
+  - pymdownx.highlight
+  - pymdownx.superfences
+plugins:
+  - search
+  - include-markdown
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/mh-superbox
+    - icon: fontawesome/brands/discord
+      link: https://discord.com/users/superbox_dev
+    - icon: fontawesome/brands/python
+      link: https://pypi.org/user/superbox-dev/
+validation:
+  omitted_files: warn
+  absolute_links: warn
+  unrecognized_links: warn
+  anchors: warn

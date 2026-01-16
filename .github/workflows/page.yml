@@ -1,0 +1,25 @@
+name: Deploy MkDocs to GitHub Pages
+
+permissions:
+  contents: write
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - develop
+
+jobs:
+  deploy:
+    name: Deploy API documentation
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+      - name: Set up project
+        uses: ./.github/actions/setup-project
+        with:
+          python-version: 3.14
+      - name: Build and deploy
+        run: uv run mkdocs gh-deploy --strict --force

@@ -1,10 +1,12 @@
 # KEBA KeEnergy – Home Assistant Integration for KEBA heat pumps
 
+<!--start-home-->
+
 **KEBA KeEnergy Integration** is a powerful custom **Home Assistant integration** that allows you to connect
 and monitor KEBA-based heat pumps directly within your smart home. The integration exposes data from the KEBA KeEnergy
 web interface as Home Assistant entities for monitoring, control, and automation of heating and hot water systems.
 
-[![Dashboard](assets/dashboard.png)](assets/dashboard.png)
+[![Dashboard](docs/assets/dashboard.png)](docs/assets/dashboard.png)
 
 > Take a look at the [example page](https://github.com/superbox-dev/keba_keenergy/wiki/Examples)
 in the Wiki to create awesome dashboards in Home Assistant.
@@ -30,7 +32,7 @@ in the Wiki to create awesome dashboards in Home Assistant.
   * Buffer tank
   * External heat source
 
-> Looking for more information? The [Wiki](https://github.com/superbox-dev/keba_keenergy/wiki) contains in-depth
+> Looking for more information? The [Wiki](https://superbox.one) contains in-depth
 documentation.
 
 ## Supported systems
@@ -57,11 +59,17 @@ such as M-TEC, Windhager and ino, as well as other systems based on KEBA control
 4. Add IP address or hostname of your KEBA KeEnergy device.
 5. Enjoy :-)
 
+<!--end-home-->
+
 ## Donation
+
+<!--start-donation-->
 
 I put a lot of time into this project. If you like it, you can support me with a donation.
 
 [![KoFi](https://raw.githubusercontent.com/superbox-dev/.github/refs/heads/main/profile/superbox-kofi.jpg)](https://ko-fi.com/F2F0KXO6D)
+
+<!--end-donation-->
 
 ## Related projects
 
@@ -74,6 +82,8 @@ I put a lot of time into this project. If you like it, you can support me with a
 The changelog lives in the [CHANGELOG.md](CHANGELOG.md) document.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+<!--start-contributing-->
+
 ## Get Involved
 
 **The KEBA KeEnergy Integration** is an open-source project and contributions are welcome. You can:
@@ -82,6 +92,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 * Improve documentation or translations
 * Contribute code
 * Support the project by starring it on GitHub ⭐
+
+<!--end-contributing-->
 
 I'm happy about your contributions to the project!
 You can get started by reading the [CONTRIBUTING.md](CONTRIBUTING.md).
