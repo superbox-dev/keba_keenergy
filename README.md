@@ -8,7 +8,7 @@ web interface as Home Assistant entities for monitoring, control, and automation
 
 [![Dashboard](docs/assets/dashboard.png)](docs/assets/dashboard.png)
 
-> Take a look at the [example page](https://github.com/superbox-dev/keba_keenergy/wiki/Examples)
+> Take a look at the [example page](https://superbox.one/keba-keenergy/home-assistant/wiki/examples/)
 in the Wiki to create awesome dashboards in Home Assistant.
 
 ## With the KEBA KeEnergy Home Assistant Integration, you can
@@ -32,7 +32,7 @@ in the Wiki to create awesome dashboards in Home Assistant.
   * Buffer tank
   * External heat source
 
-> Looking for more information? The [Wiki](https://superbox.one) contains in-depth
+> Looking for more information? The [Wiki](https://superbox.one/keba-keenergy/home-assistant/wiki/supported-devices/) contains in-depth
 documentation.
 
 ## Supported systems
