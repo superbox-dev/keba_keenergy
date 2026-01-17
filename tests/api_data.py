@@ -856,6 +856,53 @@ HEAT_PUMP_ACTIVATION_COUNTER: dict[str, Any] = {
     "value": "477",
 }
 
+HEAT_PUMP_HAS_COMPRESSOR_FAILURE: dict[str, Any] = {
+    "name": "APPL.CtrlAppl.sParam.heatpump[0].FailureCompressor.values.actValue",
+    "attributes": {
+        "longText": "Failure compressor",
+    },
+    "value": "false",
+}
+
+HEAT_PUMP_HAS_SOURCE_FAILURE: dict[str, Any] = {
+    "name": "APPL.CtrlAppl.sParam.heatpump[0].FailureSource.values.actValue",
+    "attributes": {
+        "longText": "Failure Source",
+    },
+    "value": "false",
+}
+
+HEAT_PUMP_HAS_SOURCE_ACTUATOR_FAILURE: dict[str, Any] = {
+    "name": "APPL.CtrlAppl.sParam.heatpump[0].FailureActuatorSource.values.actValue",
+    "attributes": {
+        "longText": "Failure actuator src",
+    },
+    "value": "false",
+}
+
+HEAT_PUMP_HAS_THREE_PHASE_FAILURE: dict[str, Any] = {
+    "name": "APPL.CtrlAppl.sParam.heatpump[0].FailureThreePhase.values.actValue",
+    "attributes": {
+        "longText": "Failure 3-Phase",
+    },
+    "value": "false",
+}
+
+HEAT_PUMP_HAS_SOURCE_PRESSURE_FAILURE: dict[str, Any] = {
+    "name": "APPL.CtrlAppl.sParam.heatpump[0].FailureSrcPressure.values.actValue",
+    "attributes": {
+        "longText": "Failure src pressure",
+    },
+    "value": "false",
+}
+
+HEAT_PUMP_HAS_VFD_FAILURE: dict[str, Any] = {
+    "name": "APPL.CtrlAppl.sParam.heatpump[0].FailureVFD.values.actValue",
+    "attributes": {
+        "longText": "Failure VFD",
+    },
+    "value": "false",
+}
 
 HEAT_PUMP_HAS_PASSIVE_COOLING: str = """
     {
@@ -1369,6 +1416,12 @@ HEAT_PUMP_DATA: list[dict[str, Any]] = [
     HEAT_PUMP_OPERATING_TIME,
     HEAT_PUMP_MAX_RUNTIME,
     HEAT_PUMP_ACTIVATION_COUNTER,
+    HEAT_PUMP_HAS_COMPRESSOR_FAILURE,
+    HEAT_PUMP_HAS_SOURCE_FAILURE,
+    HEAT_PUMP_HAS_SOURCE_ACTUATOR_FAILURE,
+    HEAT_PUMP_HAS_THREE_PHASE_FAILURE,
+    HEAT_PUMP_HAS_SOURCE_PRESSURE_FAILURE,
+    HEAT_PUMP_HAS_VFD_FAILURE,
 ]
 
 DEFAULT_POSITION_FIXED_DATA_RESPONSE: list[dict[str, Any]] = [

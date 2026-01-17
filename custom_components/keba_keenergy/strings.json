@@ -65,11 +65,29 @@
             "cool_request": {
                 "name": "Cool request"
             },
+            "compressor_failure": {
+                "name": "Compressor failure"
+            },
             "heat_request": {
                 "name": "Heat request{counter}"
             },
             "hot_water_flow": {
                 "name": "Hot water flow"
+            },
+            "source_actuator_failure": {
+                "name": "Source actuator failure"
+            },
+            "source_failure": {
+                "name": "Source failure"
+            },
+            "source_pressure_failure": {
+                "name": "Source pressure failure"
+            },
+            "three_phase_failure": {
+                "name": "Three-phase failure"
+            },
+            "vfd_failure": {
+                "name": "VDF failure"
             }
         },
         "climate": {

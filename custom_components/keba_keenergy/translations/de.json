@@ -65,11 +65,29 @@
             "cool_request": {
                 "name": "Kühlanforderung"
             },
+            "compressor_failure": {
+                "name": "Störung Kompressor"
+            },
             "heat_request": {
                 "name": "Heizanforderung{counter}"
             },
             "hot_water_flow": {
                 "name": "Warmwasser läuft"
+            },
+            "source_actuator_failure": {
+                "name": "Störung Quellenaktor"
+            },
+            "source_failure": {
+                "name": "Störung Quelle"
+            },
+            "source_pressure_failure": {
+                "name": "Störung Quellendruck"
+            },
+            "three_phase_failure": {
+                "name": "Störung 3-Phase"
+            },
+            "vfd_failure": {
+                "name": "Störung FU"
             }
         },
         "climate": {

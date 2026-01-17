@@ -29,7 +29,7 @@ async def test_load_entry(
     await setup_integration(hass, config_entry)
 
     assert config_entry.state is ConfigEntryState.LOADED
-    assert hass.states.async_entity_ids_count() == 178
+    assert hass.states.async_entity_ids_count() == 184
 
     assert set(hass.states.async_entity_ids()) == {
         "binary_sensor.keba_keenergy_12345678_buffer_tank_cool_request_1",
@@ -38,6 +38,12 @@ async def test_load_entry(
         "binary_sensor.keba_keenergy_12345678_buffer_tank_heat_request_2",
         "binary_sensor.keba_keenergy_12345678_external_heat_source_heat_request_1",
         "binary_sensor.keba_keenergy_12345678_external_heat_source_heat_request_2",
+        "binary_sensor.keba_keenergy_12345678_heat_pump_has_compressor_failure",
+        "binary_sensor.keba_keenergy_12345678_heat_pump_has_source_failure",
+        "binary_sensor.keba_keenergy_12345678_heat_pump_has_source_actuator_failure",
+        "binary_sensor.keba_keenergy_12345678_heat_pump_has_three_phase_failure",
+        "binary_sensor.keba_keenergy_12345678_heat_pump_has_source_pressure_failure",
+        "binary_sensor.keba_keenergy_12345678_heat_pump_has_vfd_failure",
         "binary_sensor.keba_keenergy_12345678_heat_pump_heat_request",
         "binary_sensor.keba_keenergy_12345678_hot_water_tank_heat_request_1",
         "binary_sensor.keba_keenergy_12345678_hot_water_tank_heat_request_2",

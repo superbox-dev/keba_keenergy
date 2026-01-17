@@ -8,6 +8,7 @@ from homeassistant.components.binary_sensor import BinarySensorEntity
 from homeassistant.components.binary_sensor import BinarySensorEntityDescription
 from homeassistant.components.binary_sensor import DOMAIN as BINARY_SENSOR_DOMAIN
 from homeassistant.config_entries import ConfigEntry
+from homeassistant.const import EntityCategory
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from keba_keenergy_api.constants import SectionPrefix
@@ -64,6 +65,66 @@ BINARY_SENSOR_TYPES: dict[str, tuple[KebaKeEnergyBinarySensorEntityDescription, 
                 "counter": "",
             },
             icon="mdi:fire",
+        ),
+        KebaKeEnergyBinarySensorEntityDescription(
+            entity_category=EntityCategory.DIAGNOSTIC,
+            key="has_compressor_failure",
+            key_index=None,
+            translation_key="compressor_failure",
+            translation_placeholders={
+                "counter": "",
+            },
+            icon="mdi:alert-rhombus",
+        ),
+        KebaKeEnergyBinarySensorEntityDescription(
+            entity_category=EntityCategory.DIAGNOSTIC,
+            key="has_source_failure",
+            key_index=None,
+            translation_key="source_failure",
+            translation_placeholders={
+                "counter": "",
+            },
+            icon="mdi:alert-rhombus",
+        ),
+        KebaKeEnergyBinarySensorEntityDescription(
+            entity_category=EntityCategory.DIAGNOSTIC,
+            key="has_source_actuator_failure",
+            key_index=None,
+            translation_key="source_actuator_failure",
+            translation_placeholders={
+                "counter": "",
+            },
+            icon="mdi:alert-rhombus",
+        ),
+        KebaKeEnergyBinarySensorEntityDescription(
+            entity_category=EntityCategory.DIAGNOSTIC,
+            key="has_three_phase_failure",
+            key_index=None,
+            translation_key="three_phase_failure",
+            translation_placeholders={
+                "counter": "",
+            },
+            icon="mdi:alert-rhombus",
+        ),
+        KebaKeEnergyBinarySensorEntityDescription(
+            entity_category=EntityCategory.DIAGNOSTIC,
+            key="has_source_pressure_failure",
+            key_index=None,
+            translation_key="source_pressure_failure",
+            translation_placeholders={
+                "counter": "",
+            },
+            icon="mdi:alert-rhombus",
+        ),
+        KebaKeEnergyBinarySensorEntityDescription(
+            entity_category=EntityCategory.DIAGNOSTIC,
+            key="has_vfd_failure",
+            key_index=None,
+            translation_key="vfd_failure",
+            translation_placeholders={
+                "counter": "",
+            },
+            icon="mdi:alert-rhombus",
         ),
     ),
     SectionPrefix.BUFFER_TANK: (
