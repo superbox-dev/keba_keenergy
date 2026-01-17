@@ -55,6 +55,9 @@
         },
         "solar_circuit": {
             "name": "Solarkreis{position}"
+        },
+        "switch_valve": {
+            "name": "Umschaltventil{position}"
         }
     },
     "entity": {
@@ -437,6 +440,14 @@
                     "switch_heating_cooling": "Umschalten Heizen/Kühlen",
                     "wait_for_compressor": "Warten auf Kompressor",
                     "zone_valve": "Zonenventil"
+                }
+            },
+            "switch_valve_position": {
+                "name": "Position",
+                "state": {
+                    "neutral": "Neutral",
+                    "open": "Offen",
+                    "closed": "Geschlossen"
                 }
             },
             "target_temperature": {

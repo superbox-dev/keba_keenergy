@@ -32,6 +32,7 @@ from keba_keenergy_api.constants import HeatPumpState
 from keba_keenergy_api.constants import HeatPumpSubState
 from keba_keenergy_api.constants import HotWaterTankOperatingMode
 from keba_keenergy_api.constants import SectionPrefix
+from keba_keenergy_api.constants import SwitchValvePosition
 from keba_keenergy_api.constants import SystemOperatingMode
 
 from .const import DOMAIN
@@ -871,6 +872,16 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription, ...]] = {
             state_class=SensorStateClass.TOTAL_INCREASING,
             translation_key="activation_counter",
             value=lambda data: cast("int", data),
+        ),
+    ),
+    SectionPrefix.SWITCH_VALVE: (
+        KebaKeEnergySensorEntityDescription(
+            device_class=SensorDeviceClass.ENUM,
+            key="position",
+            key_index=None,
+            options=[_.name.lower() for _ in SwitchValvePosition],
+            translation_key="switch_valve_position",
+            value=lambda data: cast("str", data),
         ),
     ),
     # SectionPrefix.PHOTOVOLTAIC: (

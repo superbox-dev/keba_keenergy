@@ -1754,6 +1754,60 @@ async def test_external_heat_source_sensors_translated(
     )
 
 
+@pytest.mark.usefixtures("entity_registry_enabled_by_default")
+async def test_switch_valve_sensors(
+    hass: HomeAssistant,
+    config_entry: MockConfigEntry,
+    fake_api: FakeKebaKeEnergyAPI,
+) -> None:
+    """Test swich valve sensors."""
+    fake_api.responses = [
+        MULTIPLE_POSITIONS_RESPONSE,
+        get_multiple_position_fixed_data_response(),
+        MULTIPLE_POSITIONS_DATA_RESPONSE,
+    ]
+    fake_api.register_requests(config_entry.data[CONF_HOST])
+
+    await setup_integration(hass, config_entry)
+
+    switch_valve_position_1: State | None = hass.states.get(
+        "sensor.keba_keenergy_12345678_switch_valve_position_1",
+    )
+    assert isinstance(switch_valve_position_1, State)
+    assert switch_valve_position_1.state == "neutral"
+    assert switch_valve_position_1.attributes[CONF_DEVICE_CLASS] == SensorDeviceClass.ENUM
+    assert switch_valve_position_1.attributes[ATTR_OPTIONS] == [
+        "neutral",
+        "open",
+        "closed",
+    ]
+    assert switch_valve_position_1.attributes[ATTR_FRIENDLY_NAME] == "Switch valve 1 Position"
+
+
+@pytest.mark.usefixtures("entity_registry_enabled_by_default")
+async def test_switch_valve_sensors_translated(
+    hass: HomeAssistant,
+    config_entry: MockConfigEntry,
+    fake_api: FakeKebaKeEnergyAPI,
+) -> None:
+    """Test switch valve sensors translations."""
+    fake_api.responses = [
+        MULTIPLE_POSITIONS_RESPONSE,
+        get_multiple_position_fixed_data_response(),
+        MULTIPLE_POSITIONS_DATA_RESPONSE,
+    ]
+    fake_api.register_requests(config_entry.data[CONF_HOST])
+
+    hass.config.language = "de"
+    await setup_integration(hass, config_entry)
+
+    switch_valve_position_1: State | None = hass.states.get(
+        "sensor.keba_keenergy_12345678_switch_valve_position_1",
+    )
+    assert isinstance(switch_valve_position_1, State)
+    assert switch_valve_position_1.attributes[ATTR_FRIENDLY_NAME] == "Umschaltventil 1 Position"
+
+
 # @pytest.mark.usefixtures("entity_registry_enabled_by_default")
 # async def test_photovoltaic_sensors(
 #     hass: HomeAssistant,

@@ -20,6 +20,7 @@ from keba_keenergy_api.constants import Photovoltaic
 from keba_keenergy_api.constants import Section
 from keba_keenergy_api.constants import SectionPrefix
 from keba_keenergy_api.constants import SolarCircuit
+from keba_keenergy_api.constants import SwitchValve
 from keba_keenergy_api.constants import System
 from keba_keenergy_api.error import APIError
 
@@ -106,6 +107,11 @@ class KebaKeEnergyEntity(
         return self.section_id == SectionPrefix.EXTERNAL_HEAT_SOURCE
 
     @property
+    def is_switch_valve(self) -> bool:
+        """Return True if the entity is part of a switch valves else False."""
+        return self.section_id == SectionPrefix.SWITCH_VALVE
+
+    @property
     def is_photovoltaic(self) -> bool:
         """Return True if the entity is part of a photovoltaic else False."""
         return self.section_id == SectionPrefix.PHOTOVOLTAIC
@@ -177,6 +183,8 @@ class KebaKeEnergyEntity(
             translation_key = "hot_water_tank"
         elif self.is_external_heat_source:
             translation_key = "external_heat_source"
+        elif self.is_switch_valve:
+            translation_key = "switch_valve"
         elif self.is_photovoltaic:
             translation_key = "photovoltaic"
 
@@ -336,6 +344,9 @@ class KebaKeEnergyExtendedEntity(KebaKeEnergyEntity):
         elif self.is_external_heat_source:
             section = ExternalHeatSource[self.entity_description.key.upper()]
             self.device_numbers = self.coordinator.external_heat_source_numbers
+        elif self.is_switch_valve:
+            section = SwitchValve[self.entity_description.key.upper()]
+            self.device_numbers = self.coordinator.switch_valve_numbers
         elif self.is_photovoltaic:
             section = Photovoltaic[self.entity_description.key.upper()]
 

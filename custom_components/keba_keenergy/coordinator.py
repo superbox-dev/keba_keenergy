@@ -21,6 +21,7 @@ from keba_keenergy_api.constants import Photovoltaic
 from keba_keenergy_api.constants import Section
 from keba_keenergy_api.constants import SectionPrefix
 from keba_keenergy_api.constants import SolarCircuit
+from keba_keenergy_api.constants import SwitchValve
 from keba_keenergy_api.constants import System
 from keba_keenergy_api.endpoints import Position
 from keba_keenergy_api.endpoints import Value
@@ -152,6 +153,7 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
             Photovoltaic.EXCESS_POWER,
             Photovoltaic.DAILY_ENERGY,
             Photovoltaic.TOTAL_ENERGY,
+            SwitchValve.POSITION,
             System.OUTDOOR_TEMPERATURE,
             System.OPERATING_MODE,
             System.CPU_USAGE,
@@ -263,6 +265,11 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
     def external_heat_source_numbers(self) -> int:
         """Return number of external heat sources."""
         return self.position.external_heat_source if self.position else 0
+
+    @cached_property
+    def switch_valve_numbers(self) -> int:
+        """Return number of switch valves."""
+        return self.position.switch_valve if self.position else 0
 
     @cached_property
     def has_photovoltaics(self) -> str:
