@@ -61,7 +61,7 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
         self._api_system_info: dict[str, Any] = {}
         self._api_hmi_info: dict[str, Any] = {}
 
-        self._fixed_data:dict[str, ValueResponse] = {}
+        self._fixed_data: dict[str, ValueResponse] = {}
         self._has_photovoltaics: bool = False
 
         self.request_data: list[Section] = [
@@ -166,6 +166,7 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
         super().__init__(hass, _LOGGER, name=DOMAIN, update_interval=timedelta(seconds=SCAN_INTERVAL))
 
     async def async_initialize(self) -> None:
+        """Initialize values from API that never changed."""
         try:
             self._api_device_info = await self.api.system.get_device_info()
             self._api_system_info = await self.api.system.get_info()
@@ -176,13 +177,12 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
                 position=self.position,
             )
 
-            self._fixed_data: dict[str, ValueResponse] = await self.api.read_data(
+            self._fixed_data = await self.api.read_data(
                 request=[
                     System.HAS_PHOTOVOLTAICS,
                     HeatCircuit.HAS_ROOM_TEMPERATURE,
                     HeatCircuit.HAS_ROOM_HUMIDITY,
                     HeatPump.HAS_PASSIVE_COOLING,
-
                 ],
                 position=self.position,
             )
@@ -237,32 +237,32 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
     @cached_property
     def heat_circuit_numbers(self) -> int:
         """Return number of heat circuits."""
-        return self.position.heat_circuit
+        return self.position.heat_circuit if self.position else 0
 
     @cached_property
     def solar_circuit_numbers(self) -> int:
         """Return number of solar circuits."""
-        return self.position.solar_circuit
+        return self.position.solar_circuit if self.position else 0
 
     @cached_property
     def heat_pump_numbers(self) -> int:
         """Return number of heat pumps."""
-        return self.position.heat_pump
+        return self.position.heat_pump if self.position else 0
 
     @cached_property
     def buffer_tank_numbers(self) -> int:
         """Return number of buffer tanks."""
-        return self.position.buffer_tank
+        return self.position.buffer_tank if self.position else 0
 
     @cached_property
     def hot_water_tank_numbers(self) -> int:
         """Return number of hot water tanks."""
-        return self.position.hot_water_tank
+        return self.position.hot_water_tank if self.position else 0
 
     @cached_property
     def external_heat_source_numbers(self) -> int:
         """Return number of external heat sources."""
-        return self.position.external_heat_source
+        return self.position.external_heat_source if self.position else 0
 
     @cached_property
     def has_photovoltaics(self) -> str:
