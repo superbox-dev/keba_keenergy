@@ -22,8 +22,9 @@ from homeassistant.exceptions import ServiceValidationError
 from pytest_homeassistant_custom_component.common import MockConfigEntry
 
 from tests import setup_integration
+from tests.api_data import MULTIPLE_POSITIONS_DATA_RESPONSE
 from tests.api_data import MULTIPLE_POSITIONS_RESPONSE
-from tests.api_data import get_multi_positions_data_response
+from tests.api_data import get_multiple_position_fixed_data_response
 from tests.conftest import FakeKebaKeEnergyAPI
 
 
@@ -35,10 +36,10 @@ async def test_buffer_tank_numbers(
     """Test buffer tank numbers."""
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
-        get_multi_positions_data_response(),
+        get_multiple_position_fixed_data_response(),
+        MULTIPLE_POSITIONS_DATA_RESPONSE,
         # Read API after services call
-        MULTIPLE_POSITIONS_RESPONSE,
-        get_multi_positions_data_response(),
+        MULTIPLE_POSITIONS_DATA_RESPONSE,
     ]
     fake_api.register_requests(config_entry.data[CONF_HOST])
 
@@ -64,10 +65,10 @@ async def test_buffer_tank_numbers_translated(
     """Test buffer tank numbers translated."""
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
-        get_multi_positions_data_response(),
+        get_multiple_position_fixed_data_response(),
+        MULTIPLE_POSITIONS_DATA_RESPONSE,
         # Read API after services call
-        MULTIPLE_POSITIONS_RESPONSE,
-        get_multi_positions_data_response(),
+        MULTIPLE_POSITIONS_DATA_RESPONSE,
     ]
     fake_api.register_requests(config_entry.data[CONF_HOST])
 
@@ -89,10 +90,10 @@ async def test_hot_water_tank_numbers(
     """Test hot water tank numbers."""
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
-        get_multi_positions_data_response(),
+        get_multiple_position_fixed_data_response(),
+        MULTIPLE_POSITIONS_DATA_RESPONSE,
         # Read API after services call
-        MULTIPLE_POSITIONS_RESPONSE,
-        get_multi_positions_data_response(),
+        MULTIPLE_POSITIONS_DATA_RESPONSE,
     ]
     fake_api.register_requests(config_entry.data[CONF_HOST])
 
@@ -129,10 +130,10 @@ async def test_hot_water_tank_numbers_translated(
     """Test hot water tank numbers translated."""
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
-        get_multi_positions_data_response(),
+        get_multiple_position_fixed_data_response(),
+        MULTIPLE_POSITIONS_DATA_RESPONSE,
         # Read API after services call
-        MULTIPLE_POSITIONS_RESPONSE,
-        get_multi_positions_data_response(),
+        MULTIPLE_POSITIONS_DATA_RESPONSE,
     ]
     fake_api.register_requests(config_entry.data[CONF_HOST])
 
@@ -160,10 +161,10 @@ async def test_heat_pump_numbers(
     """Test heat pump numbers."""
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
-        get_multi_positions_data_response(),
+        get_multiple_position_fixed_data_response(),
+        MULTIPLE_POSITIONS_DATA_RESPONSE,
         # Read API after services call
-        MULTIPLE_POSITIONS_RESPONSE,
-        get_multi_positions_data_response(),
+        MULTIPLE_POSITIONS_DATA_RESPONSE,
     ]
     fake_api.register_requests(config_entry.data[CONF_HOST])
 
@@ -189,10 +190,10 @@ async def test_heat_pump_numbers_translated(
     """Test heat pump numbers translated."""
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
-        get_multi_positions_data_response(),
+        get_multiple_position_fixed_data_response(),
+        MULTIPLE_POSITIONS_DATA_RESPONSE,
         # Read API after services call
-        MULTIPLE_POSITIONS_RESPONSE,
-        get_multi_positions_data_response(),
+        MULTIPLE_POSITIONS_DATA_RESPONSE,
     ]
     fake_api.register_requests(config_entry.data[CONF_HOST])
 
@@ -214,10 +215,10 @@ async def test_heat_circuit_numbers(
     """Test heat circuit numbers."""
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
-        get_multi_positions_data_response(),
+        get_multiple_position_fixed_data_response(),
+        MULTIPLE_POSITIONS_DATA_RESPONSE,
         # Read API after services call
-        MULTIPLE_POSITIONS_RESPONSE,
-        get_multi_positions_data_response(),
+        MULTIPLE_POSITIONS_DATA_RESPONSE,
     ]
     fake_api.register_requests(config_entry.data[CONF_HOST])
 
@@ -274,10 +275,10 @@ async def test_heat_circuit_numbers_translated(
     """Test heat circuit numbers translated."""
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
-        get_multi_positions_data_response(),
+        get_multiple_position_fixed_data_response(),
+        MULTIPLE_POSITIONS_DATA_RESPONSE,
         # Read API after services call
-        MULTIPLE_POSITIONS_RESPONSE,
-        get_multi_positions_data_response(),
+        MULTIPLE_POSITIONS_DATA_RESPONSE,
     ]
     fake_api.register_requests(config_entry.data[CONF_HOST])
 
@@ -328,10 +329,10 @@ async def test_solar_circuit_numbers(
     """Test solar circuit numbers."""
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
-        get_multi_positions_data_response(),
+        get_multiple_position_fixed_data_response(),
+        MULTIPLE_POSITIONS_DATA_RESPONSE,
         # Read API after services call
-        MULTIPLE_POSITIONS_RESPONSE,
-        get_multi_positions_data_response(),
+        MULTIPLE_POSITIONS_DATA_RESPONSE,
     ]
     fake_api.register_requests(config_entry.data[CONF_HOST])
 
@@ -394,10 +395,10 @@ async def test_solar_circuit_numbers_translated(
     """Test solar circuit numbers translated."""
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
-        get_multi_positions_data_response(),
+        get_multiple_position_fixed_data_response(),
+        MULTIPLE_POSITIONS_DATA_RESPONSE,
         # Read API after services call
-        MULTIPLE_POSITIONS_RESPONSE,
-        get_multi_positions_data_response(),
+        MULTIPLE_POSITIONS_DATA_RESPONSE,
     ]
     fake_api.register_requests(config_entry.data[CONF_HOST])
 
@@ -490,10 +491,10 @@ async def test_set_value(
     """Test set the value."""
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
-        get_multi_positions_data_response(),
+        get_multiple_position_fixed_data_response(),
+        MULTIPLE_POSITIONS_DATA_RESPONSE,
         # Read API after services call
-        MULTIPLE_POSITIONS_RESPONSE,
-        get_multi_positions_data_response(),
+        MULTIPLE_POSITIONS_DATA_RESPONSE,
     ]
     fake_api.register_requests("10.0.0.100")
 
@@ -549,10 +550,10 @@ async def test_set_value_bad_range(
     """Test set the value out of range."""
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
-        get_multi_positions_data_response(),
+        get_multiple_position_fixed_data_response(),
+        MULTIPLE_POSITIONS_DATA_RESPONSE,
         # Read API after services call
-        MULTIPLE_POSITIONS_RESPONSE,
-        get_multi_positions_data_response(),
+        MULTIPLE_POSITIONS_DATA_RESPONSE,
     ]
     fake_api.register_requests("10.0.0.100")
 
@@ -598,10 +599,10 @@ async def test_set_value_bad_attr(
     """Test set the value without required attribute."""
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
-        get_multi_positions_data_response(),
+        get_multiple_position_fixed_data_response(),
+        MULTIPLE_POSITIONS_DATA_RESPONSE,
         # Read API after services call
-        MULTIPLE_POSITIONS_RESPONSE,
-        get_multi_positions_data_response(),
+        MULTIPLE_POSITIONS_DATA_RESPONSE,
     ]
     fake_api.register_requests("10.0.0.100")
 

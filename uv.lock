@@ -589,30 +589,30 @@ wheels = [
 
 [[package]]
 name = "boto3"
-version = "1.42.29"
+version = "1.42.30"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "botocore" },
     { name = "jmespath" },
     { name = "s3transfer" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/5c/24/1dd85b64004103c2e60476d0fa8d78435f5fed9db1129cd2cd332784037a/boto3-1.42.29.tar.gz", hash = "sha256:247e54f24116ad6792cfc14b274288383af3ec3433b0547da8a14a8bd6e81950", size = 112810, upload-time = "2026-01-15T20:36:39.404Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/42/79/2dac8b7cb075cfa43908ee9af3f8ee06880d84b86013854c5cca8945afac/boto3-1.42.30.tar.gz", hash = "sha256:ba9cd2f7819637d15bfbeb63af4c567fcc8a7dcd7b93dd12734ec58601169538", size = 112809, upload-time = "2026-01-16T20:37:23.636Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/51/30/2c25d7be8418e7f137ffece6097c68199dbd6996da645ec9b5a5a9647123/boto3-1.42.29-py3-none-any.whl", hash = "sha256:6c9c4dece67bf72d82ba7dff48e33a56a87cdf9b16c8887f88ca7789a95d3317", size = 140574, upload-time = "2026-01-15T20:36:37.206Z" },
+    { url = "https://files.pythonhosted.org/packages/52/b3/2c0d828c9f668292e277ca5232e6160dd5b4b660a3f076f20dd5378baa1e/boto3-1.42.30-py3-none-any.whl", hash = "sha256:d7e548bea65e0ae2c465c77de937bc686b591aee6a352d5a19a16bc751e591c1", size = 140573, upload-time = "2026-01-16T20:37:22.089Z" },
 ]
 
 [[package]]
 name = "botocore"
-version = "1.42.29"
+version = "1.42.30"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "jmespath" },
     { name = "python-dateutil" },
     { name = "urllib3" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/70/08/8a8e0255949845f764c5126f97b1bc09a6484077f124c2177b979ecfbbff/botocore-1.42.29.tar.gz", hash = "sha256:0fe869227a1dfe818f691a31b8c1693e39be8056a6dff5d6d4b3fc5b3a5e7d42", size = 14890916, upload-time = "2026-01-15T20:36:28.241Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/44/38/23862628a0eb044c8b8b3d7a9ad1920b3bfd6bce6d746d5a871e8382c7e4/botocore-1.42.30.tar.gz", hash = "sha256:9bf1662b8273d5cc3828a49f71ca85abf4e021011c1f0a71f41a2ea5769a5116", size = 14891439, upload-time = "2026-01-16T20:37:13.77Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/94/76/cfa6a934ee5a8a87f626b38275193a046da894d2f9021e001587fc2e8c7d/botocore-1.42.29-py3-none-any.whl", hash = "sha256:b45f8dfc1de5106a9d040c5612f267582e68b2b2c5237477dff85c707c1c5d11", size = 14563947, upload-time = "2026-01-15T20:36:23.828Z" },
+    { url = "https://files.pythonhosted.org/packages/3d/8d/6d7b016383b1f74dd93611b1c5078bbaddaca901553ab886dcda87cae365/botocore-1.42.30-py3-none-any.whl", hash = "sha256:97070a438cac92430bb7b65f8ebd7075224f4a289719da4ee293d22d1e98db02", size = 14566340, upload-time = "2026-01-16T20:37:10.94Z" },
 ]
 
 [[package]]
@@ -1383,7 +1383,7 @@ wheels = [
 
 [[package]]
 name = "homeassistant"
-version = "2026.1.1"
+version = "2026.1.2"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "aiodns" },
@@ -1437,9 +1437,9 @@ dependencies = [
     { name = "yarl" },
     { name = "zeroconf" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/a3/ed/e95082e5484045359c4ae94d96622d24916e06a4041d98380a67ae0fbbdc/homeassistant-2026.1.1.tar.gz", hash = "sha256:2e5d70c1c7641ff03637c33566e13546f8cd151bba8a9132bb2e13877e2cfd4a", size = 30193947, upload-time = "2026-01-12T11:03:56.335Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/42/1f/75e3daab30bcc906489010009384f1ac13aed7023b3c5f36830b6c32274b/homeassistant-2026.1.2.tar.gz", hash = "sha256:b967120a66ab3ad7d821560fcfcc0080ef2dc75e4c25c10fd56bf787c613d312", size = 30231243, upload-time = "2026-01-16T21:49:31.533Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/c6/56/83c298242495d1c0e519b6e1f12693fc2d4541f84d177dcf46a9dc58f44c/homeassistant-2026.1.1-py3-none-any.whl", hash = "sha256:4a1f86db4a6b3de2d53a1aa2b0e847b6141e3c7ca66ff4749e759b6e1c747fc3", size = 50143673, upload-time = "2026-01-12T11:03:51.454Z" },
+    { url = "https://files.pythonhosted.org/packages/65/fd/d7eb8fd63de6bd944cd1dc90b4929d1d327280ce68f9f9fe52392333b644/homeassistant-2026.1.2-py3-none-any.whl", hash = "sha256:f9d0b5a7b40153572fdfc1329bf3f3dab493399217498506125f76b092576793", size = 50195006, upload-time = "2026-01-16T21:49:27.314Z" },
 ]
 
 [[package]]
@@ -1643,7 +1643,7 @@ wheels = [
 
 [[package]]
 name = "keba-keenergy"
-version = "1.5.0"
+version = "1.6.0b1"
 source = { editable = "." }
 dependencies = [
     { name = "homeassistant" },
@@ -1694,7 +1694,7 @@ test = [
 [package.metadata]
 requires-dist = [
     { name = "homeassistant", specifier = ">=2025.8.2" },
-    { name = "keba-keenergy-api", specifier = "~=2.6.0" },
+    { name = "keba-keenergy-api", specifier = "~=2.7.0b1" },
     { name = "requests", specifier = ">=2.32.5" },
 ]
 
@@ -1738,14 +1738,14 @@ test = [
 
 [[package]]
 name = "keba-keenergy-api"
-version = "2.6.0"
+version = "2.7.0b1"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "aiohttp" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/62/44/43a6001557d2ee18387bd18302bcb98bbaecbcc995d47e50dc959da4022a/keba_keenergy_api-2.6.0.tar.gz", hash = "sha256:dca6ece948eac14557350a887b0d9f20253d97ed9d6fee9c1f4b7f375bf9c9b3", size = 180907, upload-time = "2026-01-11T12:09:50.59Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/cf/5e/ef29161f925720a71a3566c2e3f80718b5bf06ac2c98f4d37e3bed057187/keba_keenergy_api-2.7.0b1.tar.gz", hash = "sha256:1f12701188424857b1989c142990d4ac2a888d9bee9244b9a8cc4605f837ac8e", size = 214156, upload-time = "2026-01-16T16:52:03.299Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/71/77/a37cbe10e25c60c534d6af77a15ed8ce0d7d0c1b51a9f2e0a393025cb141/keba_keenergy_api-2.6.0-py3-none-any.whl", hash = "sha256:17e000b92560ffd48a747162610ece5b05e4f6bcce442c363ccce0582b9658bd", size = 24269, upload-time = "2026-01-11T12:09:49.573Z" },
+    { url = "https://files.pythonhosted.org/packages/07/89/daa3c08931ddc3cfff861489aea7e6919f6f610dcc17f1b171ae9b5b97aa/keba_keenergy_api-2.7.0b1-py3-none-any.whl", hash = "sha256:33b9260dae786dad7b35c31f9c36bab603c09303caea4e7867f0d1d9020dbabd", size = 26169, upload-time = "2026-01-16T16:52:01.926Z" },
 ]
 
 [[package]]
@@ -1803,7 +1803,7 @@ wheels = [
 
 [[package]]
 name = "litellm"
-version = "1.80.16"
+version = "1.80.17"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "aiohttp" },
@@ -1820,9 +1820,9 @@ dependencies = [
     { name = "tiktoken" },
     { name = "tokenizers" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/ac/cc/03bf7849c62587db0fb7c46f427d6a49290750752d3189a0bd95d4b78587/litellm-1.80.16.tar.gz", hash = "sha256:f96233649f99ab097f7d8a3ff9898680207b9eea7d2e23f438074a3dbcf50cca", size = 13384256, upload-time = "2026-01-13T08:52:23.067Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/06/3d/e066b752d1a9f234e9cb34bb443487e6bbc1bde546bbe1f2a0d18a3d4659/litellm-1.80.17.tar.gz", hash = "sha256:514ae407e488bccbe0c33a280ed88495d6f079c1dbfe745eb374d898c94b0ac3", size = 13413478, upload-time = "2026-01-17T02:08:03.668Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/53/4d/73fdb12223bdb01889134eb75525fcc768b1724255f2b87072dd6743c6e1/litellm-1.80.16-py3-none-any.whl", hash = "sha256:21be641b350561b293b831addb25249676b72ebff973a5a1d73b5d7cf35bcd1d", size = 11682530, upload-time = "2026-01-13T08:52:19.951Z" },
+    { url = "https://files.pythonhosted.org/packages/11/32/6673e1250c6a5fe8b5ebb9b6ad039f4c7ce5b66cb6f94056bdef582fd1af/litellm-1.80.17-py3-none-any.whl", hash = "sha256:52b23a21910a16820e6ea4b982dc81d27c993c1054ce148c56b251e9b89d89df", size = 11708291, upload-time = "2026-01-17T02:08:00.562Z" },
 ]
 
 [[package]]
@@ -2950,7 +2950,7 @@ wheels = [
 
 [[package]]
 name = "pytest-homeassistant-custom-component"
-version = "0.13.306"
+version = "0.13.307"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "coverage" },
@@ -2981,9 +2981,9 @@ dependencies = [
     { name = "syrupy" },
     { name = "tqdm" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/8b/34/4ca7439db707fe25e6cc322fbc0ec324b80048395e8739018ece72fbca7d/pytest_homeassistant_custom_component-0.13.306.tar.gz", hash = "sha256:5c4a4c8233b2821f5e2fc1d3d0cdd17c4616b96d77ad6b500f8483eea80bb373", size = 63907, upload-time = "2026-01-13T05:09:18.548Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/d0/26/e70eb198ed423d4c1d03bf10632021f74f557eb7693dd16f504986b3688b/pytest_homeassistant_custom_component-0.13.307.tar.gz", hash = "sha256:89bb3fae795dec21ac819b74e18bb999a057e2b10d2f2dafed275b884d3a1f64", size = 63957, upload-time = "2026-01-17T05:06:17.907Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/b3/bc/21b76f86611244ce7761c3b4690e3c824f43284a497b8e46629b778f7c87/pytest_homeassistant_custom_component-0.13.306-py3-none-any.whl", hash = "sha256:937942d53eec42e8917ba8fed5f8375a6394af9981787f9d152158cf0d138b50", size = 69780, upload-time = "2026-01-13T05:09:16.653Z" },
+    { url = "https://files.pythonhosted.org/packages/2b/e5/4678eb54e6db84ac1c9d8d5bf9cf5838dbecbbc2fd03673e35247a52d1bb/pytest_homeassistant_custom_component-0.13.307-py3-none-any.whl", hash = "sha256:88a92b422109d7224250a24146ca163519bb856f60f1163cfbff0002365eae25", size = 69781, upload-time = "2026-01-17T05:06:16.121Z" },
 ]
 
 [[package]]

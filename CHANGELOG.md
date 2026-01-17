@@ -9,6 +9,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!--start-->
 
+## [1.5.1b1] - 2025-01-17
+
+### Fixed
+
+- Fixed unnecessary API calls for values that did never change e.g. number of heating circuits
+- Don't execute API calls for KEBA software versions that did not support this API call
+
 ## [1.5.0] - 2025-01-11
 
 ### Added

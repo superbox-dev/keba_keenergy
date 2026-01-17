@@ -19,8 +19,8 @@ from pytest_homeassistant_custom_component.common import MockConfigEntry
 
 from custom_components.keba_keenergy.const import DEFAULT_SSL
 from custom_components.keba_keenergy.const import DOMAIN
+from tests.api_data import MULTIPLE_POSITIONS_DATA_RESPONSE
 from tests.api_data import MULTIPLE_POSITIONS_RESPONSE
-from tests.api_data import get_multi_positions_data_response
 from tests.conftest import FakeKebaKeEnergyAPI
 
 if TYPE_CHECKING:
@@ -45,7 +45,7 @@ async def test_user_flow(
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
     """Test user happy flow from start to finish."""
-    fake_api.responses = [MULTIPLE_POSITIONS_RESPONSE, get_multi_positions_data_response()]
+    fake_api.responses = [MULTIPLE_POSITIONS_RESPONSE, MULTIPLE_POSITIONS_DATA_RESPONSE]
     fake_api.register_auth_request("10.0.0.100")
     fake_api.register_requests("10.0.0.100")
 
@@ -82,7 +82,7 @@ async def test_user_flow_authentication(
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
     """Test user happy flow from start to finish with authentication."""
-    fake_api.responses = [MULTIPLE_POSITIONS_RESPONSE, get_multi_positions_data_response()]
+    fake_api.responses = [MULTIPLE_POSITIONS_RESPONSE, MULTIPLE_POSITIONS_DATA_RESPONSE]
     fake_api.register_auth_request("10.0.0.100", status=401)
     fake_api.register_requests("10.0.0.100", ssl=True)
 
@@ -130,7 +130,7 @@ async def test_user_flow_authentication_cannot_connect(
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
     """Test user flow authentication with cannot connect error."""
-    fake_api.responses = [MULTIPLE_POSITIONS_RESPONSE, get_multi_positions_data_response()]
+    fake_api.responses = [MULTIPLE_POSITIONS_RESPONSE, MULTIPLE_POSITIONS_DATA_RESPONSE]
     fake_api.register_auth_request("10.0.0.100", exc=ClientError())
     fake_api.register_requests("10.0.0.100", ssl=True)
 
@@ -198,7 +198,7 @@ async def test_zeroconf_flow(
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
     """Test the zeroconf happy flow from start to finish."""
-    fake_api.responses = [MULTIPLE_POSITIONS_RESPONSE, get_multi_positions_data_response()]
+    fake_api.responses = [MULTIPLE_POSITIONS_RESPONSE, MULTIPLE_POSITIONS_DATA_RESPONSE]
     fake_api.register_auth_request("ap4400.local")
     fake_api.register_requests("ap4400.local")
 
@@ -228,7 +228,7 @@ async def test_zeroconf_flow_authentication(
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
     """Test the zeroconf happy flow from start to finish with authentication."""
-    fake_api.responses = [MULTIPLE_POSITIONS_RESPONSE, get_multi_positions_data_response()]
+    fake_api.responses = [MULTIPLE_POSITIONS_RESPONSE, MULTIPLE_POSITIONS_DATA_RESPONSE]
     fake_api.register_auth_request("ap4400.local", status=401)
     fake_api.register_requests("ap4400.local", ssl=True)
 
@@ -261,7 +261,7 @@ async def test_zeroconf_flow_authentication_cannot_connect(
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
     """Test the zeroconf happy flow from start to finish with authentication."""
-    fake_api.responses = [MULTIPLE_POSITIONS_RESPONSE, get_multi_positions_data_response()]
+    fake_api.responses = [MULTIPLE_POSITIONS_RESPONSE, MULTIPLE_POSITIONS_DATA_RESPONSE]
     fake_api.register_auth_request("ap4400.local", exc=ClientError())
     fake_api.register_requests("ap4400.local", ssl=True)
 
