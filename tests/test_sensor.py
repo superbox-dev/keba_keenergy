@@ -825,7 +825,7 @@ async def test_heat_pump_sensors_translations(
         "sensor.keba_keenergy_12345678_heat_pump_compressor_power",
     )
     assert isinstance(heat_pump_compressor_power, State)
-    assert heat_pump_compressor_power.attributes[ATTR_FRIENDLY_NAME] == "Wärmepumpe Leistung"
+    assert heat_pump_compressor_power.attributes[ATTR_FRIENDLY_NAME] == "Wärmepumpe Leistung Kompressor"
 
     heat_pump_condenser_temperature: State | None = hass.states.get(
         "sensor.keba_keenergy_12345678_heat_pump_condenser_temperature",
