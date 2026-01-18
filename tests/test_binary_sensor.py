@@ -112,42 +112,42 @@ async def test_binary_sensors(
     )
     assert isinstance(heat_pump_has_compressor_failure, State)
     assert heat_pump_has_compressor_failure.state == STATE_OFF
-    assert heat_pump_has_compressor_failure.attributes[ATTR_FRIENDLY_NAME] == "Heat pump Compressor failure"
+    assert heat_pump_has_compressor_failure.attributes[ATTR_FRIENDLY_NAME] == "Heat pump Compressor"
 
     heat_pump_has_source_failure: State | None = hass.states.get(
         "binary_sensor.keba_keenergy_12345678_heat_pump_has_source_failure",
     )
     assert isinstance(heat_pump_has_source_failure, State)
     assert heat_pump_has_source_failure.state == STATE_OFF
-    assert heat_pump_has_source_failure.attributes[ATTR_FRIENDLY_NAME] == "Heat pump Source failure"
+    assert heat_pump_has_source_failure.attributes[ATTR_FRIENDLY_NAME] == "Heat pump Source"
 
     heat_pump_has_source_actuator_failure: State | None = hass.states.get(
         "binary_sensor.keba_keenergy_12345678_heat_pump_has_source_actuator_failure",
     )
     assert isinstance(heat_pump_has_source_actuator_failure, State)
     assert heat_pump_has_source_actuator_failure.state == STATE_OFF
-    assert heat_pump_has_source_actuator_failure.attributes[ATTR_FRIENDLY_NAME] == "Heat pump Source actuator failure"
+    assert heat_pump_has_source_actuator_failure.attributes[ATTR_FRIENDLY_NAME] == "Heat pump Source actuator"
 
     heat_pump_has_three_phase_failure: State | None = hass.states.get(
         "binary_sensor.keba_keenergy_12345678_heat_pump_has_three_phase_failure",
     )
     assert isinstance(heat_pump_has_three_phase_failure, State)
     assert heat_pump_has_three_phase_failure.state == STATE_OFF
-    assert heat_pump_has_three_phase_failure.attributes[ATTR_FRIENDLY_NAME] == "Heat pump Three-phase failure"
+    assert heat_pump_has_three_phase_failure.attributes[ATTR_FRIENDLY_NAME] == "Heat pump Three-phase"
 
     heat_pump_has_source_pressure_failure: State | None = hass.states.get(
         "binary_sensor.keba_keenergy_12345678_heat_pump_has_source_pressure_failure",
     )
     assert isinstance(heat_pump_has_source_pressure_failure, State)
     assert heat_pump_has_source_pressure_failure.state == STATE_OFF
-    assert heat_pump_has_source_pressure_failure.attributes[ATTR_FRIENDLY_NAME] == "Heat pump Source pressure failure"
+    assert heat_pump_has_source_pressure_failure.attributes[ATTR_FRIENDLY_NAME] == "Heat pump Source pressure"
 
     heat_pump_has_vfd_failure: State | None = hass.states.get(
         "binary_sensor.keba_keenergy_12345678_heat_pump_has_vfd_failure",
     )
     assert isinstance(heat_pump_has_vfd_failure, State)
     assert heat_pump_has_vfd_failure.state == STATE_OFF
-    assert heat_pump_has_vfd_failure.attributes[ATTR_FRIENDLY_NAME] == "Heat pump VDF failure"
+    assert heat_pump_has_vfd_failure.attributes[ATTR_FRIENDLY_NAME] == "Heat pump Variable drive frequency"
 
     external_heat_source_heat_request_1: State | None = hass.states.get(
         "binary_sensor.keba_keenergy_12345678_external_heat_source_heat_request_1",
