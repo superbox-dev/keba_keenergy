@@ -4,6 +4,7 @@ import logging
 from dataclasses import dataclass
 from typing import cast
 
+from homeassistant.components.binary_sensor import BinarySensorDeviceClass
 from homeassistant.components.binary_sensor import BinarySensorEntity
 from homeassistant.components.binary_sensor import BinarySensorEntityDescription
 from homeassistant.components.binary_sensor import DOMAIN as BINARY_SENSOR_DOMAIN
@@ -67,6 +68,7 @@ BINARY_SENSOR_TYPES: dict[str, tuple[KebaKeEnergyBinarySensorEntityDescription, 
             icon="mdi:fire",
         ),
         KebaKeEnergyBinarySensorEntityDescription(
+            device_class=BinarySensorDeviceClass.PROBLEM,
             entity_category=EntityCategory.DIAGNOSTIC,
             key="has_compressor_failure",
             key_index=None,
@@ -77,6 +79,7 @@ BINARY_SENSOR_TYPES: dict[str, tuple[KebaKeEnergyBinarySensorEntityDescription, 
             icon="mdi:alert-rhombus",
         ),
         KebaKeEnergyBinarySensorEntityDescription(
+            device_class=BinarySensorDeviceClass.PROBLEM,
             entity_category=EntityCategory.DIAGNOSTIC,
             key="has_source_failure",
             key_index=None,
@@ -87,6 +90,7 @@ BINARY_SENSOR_TYPES: dict[str, tuple[KebaKeEnergyBinarySensorEntityDescription, 
             icon="mdi:alert-rhombus",
         ),
         KebaKeEnergyBinarySensorEntityDescription(
+            device_class=BinarySensorDeviceClass.PROBLEM,
             entity_category=EntityCategory.DIAGNOSTIC,
             key="has_source_actuator_failure",
             key_index=None,
@@ -97,6 +101,7 @@ BINARY_SENSOR_TYPES: dict[str, tuple[KebaKeEnergyBinarySensorEntityDescription, 
             icon="mdi:alert-rhombus",
         ),
         KebaKeEnergyBinarySensorEntityDescription(
+            device_class=BinarySensorDeviceClass.PROBLEM,
             entity_category=EntityCategory.DIAGNOSTIC,
             key="has_three_phase_failure",
             key_index=None,
@@ -107,6 +112,7 @@ BINARY_SENSOR_TYPES: dict[str, tuple[KebaKeEnergyBinarySensorEntityDescription, 
             icon="mdi:alert-rhombus",
         ),
         KebaKeEnergyBinarySensorEntityDescription(
+            device_class=BinarySensorDeviceClass.PROBLEM,
             entity_category=EntityCategory.DIAGNOSTIC,
             key="has_source_pressure_failure",
             key_index=None,
@@ -117,6 +123,7 @@ BINARY_SENSOR_TYPES: dict[str, tuple[KebaKeEnergyBinarySensorEntityDescription, 
             icon="mdi:alert-rhombus",
         ),
         KebaKeEnergyBinarySensorEntityDescription(
+            device_class=BinarySensorDeviceClass.PROBLEM,
             entity_category=EntityCategory.DIAGNOSTIC,
             key="has_vfd_failure",
             key_index=None,

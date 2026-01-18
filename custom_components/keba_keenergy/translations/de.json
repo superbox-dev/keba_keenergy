@@ -66,7 +66,7 @@
                 "name": "Kühlanforderung"
             },
             "compressor_failure": {
-                "name": "Störung Kompressor"
+                "name": "Kompressor"
             },
             "heat_request": {
                 "name": "Heizanforderung{counter}"
@@ -75,19 +75,19 @@
                 "name": "Warmwasser läuft"
             },
             "source_actuator_failure": {
-                "name": "Störung Quellenaktor"
+                "name": "Quellenaktor"
             },
             "source_failure": {
-                "name": "Störung Quelle"
+                "name": "Quelle"
             },
             "source_pressure_failure": {
-                "name": "Störung Quellendruck"
+                "name": "Quellendruck"
             },
             "three_phase_failure": {
-                "name": "Störung 3-Phase"
+                "name": "3-Phase"
             },
             "vfd_failure": {
-                "name": "Störung FU"
+                "name": "Frequenzumrichter"
             }
         },
         "climate": {

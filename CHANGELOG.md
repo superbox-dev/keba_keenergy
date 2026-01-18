@@ -14,8 +14,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Added support for switch valves
-- Added diagnostic sensors "Compressor failure", "Source actuator failure", "Source failure", "Source pressure failure",
-  "Three-phase failure" and "VDF failure" to the heat pump device
+- Added diagnostic sensors "Compressor", "Source actuator", "Source", "Source pressure",
+  "Three-phase" and "Variable drive frequency" to the heat pump device
 
 ### Fixed
 

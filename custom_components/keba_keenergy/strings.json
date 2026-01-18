@@ -66,7 +66,7 @@
                 "name": "Cool request"
             },
             "compressor_failure": {
-                "name": "Compressor failure"
+                "name": "Compressor"
             },
             "heat_request": {
                 "name": "Heat request{counter}"
@@ -75,19 +75,19 @@
                 "name": "Hot water flow"
             },
             "source_actuator_failure": {
-                "name": "Source actuator failure"
+                "name": "Source actuator"
             },
             "source_failure": {
-                "name": "Source failure"
+                "name": "Source"
             },
             "source_pressure_failure": {
-                "name": "Source pressure failure"
+                "name": "Source pressure"
             },
             "three_phase_failure": {
-                "name": "Three-phase failure"
+                "name": "Three-phase"
             },
             "vfd_failure": {
-                "name": "VDF failure"
+                "name": "Variable drive frequency"
             }
         },
         "climate": {
