@@ -234,17 +234,17 @@ class KebaKeEnergyEntity(
     ) -> None:
         """Write data to the KEBA KeEnergy API."""
         if section:
-            _current_index: int = self.index or 0
+            current_index: int = self.index or 0
             _range: int | None = device_numbers
 
             if _range and self.key_index is not None:
                 quantity: int = section.value.quantity
-                _current_index = _current_index * quantity + self.key_index
+                current_index = current_index * quantity + self.key_index
                 _range = _range * quantity
 
             request: dict[Section, Any] = {
                 section: (
-                    [value if index == _current_index else None for index in range(_range)]
+                    [value if index == current_index else None for index in range(_range)]
                     if isinstance(_range, int)
                     else value
                 ),
@@ -257,6 +257,15 @@ class KebaKeEnergyEntity(
             except (APIError, ClientError) as error:
                 msg: str = f"Failed to update {self.entity_id} to {value}: {error}"
                 raise HomeAssistantError(msg) from error
+
+            self.coordinator.async_update_value(
+                value,
+                section_id=self.section_id,
+                section=section,
+                index=self.index or 0,
+                key_index=self.key_index,
+            )
+
             await self.coordinator.async_request_refresh()
 
     def get_attribute(self, key: str, /, *, attr: str) -> str:

@@ -9,11 +9,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!--start-->
 
-## [1.6.1] - 2025-01-22
+## [1.6.1] - 2025-01-23
 
 ### Fixed
 
-- Fixed climate entity show wrong target temperature
+- Fixed slow API update and refresh on entities that can changed e.g. "Operation mode" or the "Preset mode"
+  in the climate entity
+- Fixed climate entity show wrong target temperature (now the target temperature value is without the offset)
 
 ## [1.6.0] - 2025-01-18
 

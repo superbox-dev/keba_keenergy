@@ -1,6 +1,7 @@
 """DataUpdateCoordinator for the KEBA KeEnergy integration."""
 
 import logging
+from copy import deepcopy
 from datetime import timedelta
 from functools import cached_property
 from typing import Any
@@ -224,6 +225,35 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
             raise UpdateFailed(error) from error
 
         return response
+
+    def async_update_value(
+        self,
+        value: Any,
+        /,
+        *,
+        section_id: str,
+        section: Section,
+        index: int,
+        key_index: int | None,
+    ) -> None:
+        """Optimistically update a single value into coordinator data."""
+        data: dict[str, ValueResponse] = deepcopy(self.data)
+        key: str = section.name.lower()
+
+        if section.value.human_readable:
+            value = section.value.human_readable(value).name.lower()
+
+        values: list[list[Value]] | list[Value] | Value = data[section_id][key]
+
+        if isinstance(values, list):
+            value_by_index: list[Value] | Value = values[index]
+
+            if isinstance(value_by_index, list):
+                value_by_index[key_index]["value"] = value
+            elif isinstance(value_by_index, dict):
+                value_by_index["value"] = value
+
+        self.async_set_updated_data(data)
 
     @cached_property
     def configuration_url(self) -> str:
