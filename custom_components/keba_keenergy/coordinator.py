@@ -248,7 +248,7 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
         if isinstance(values, list):
             value_by_index: list[Value] | Value = values[index]
 
-            if isinstance(value_by_index, list):
+            if isinstance(value_by_index, list) and key_index is not None:
                 value_by_index[key_index]["value"] = value
             elif isinstance(value_by_index, dict):
                 value_by_index["value"] = value
