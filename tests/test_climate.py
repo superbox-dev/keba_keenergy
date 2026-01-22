@@ -36,8 +36,7 @@ from tests import setup_integration
 from tests.api_data import DEFAULT_POSITION_DATA_RESPONSE
 from tests.api_data import DEFAULT_POSITION_FIXED_DATA_RESPONSE
 from tests.api_data import DEFAULT_POSITION_RESPONSE
-from tests.api_data import HEAT_CIRCUIT_OPERATION_MODE_3_DATA_RESPONSE
-from tests.api_data import HEAT_CIRCUIT_OPERATION_MODE_4_DATA_RESPONSE
+from tests.api_data import HEAT_CIRCUIT_OPERATION_MODE_DATA_RESPONSE
 from tests.api_data import MULTIPLE_POSITIONS_DATA_RESPONSE
 from tests.api_data import MULTIPLE_POSITIONS_RESPONSE
 from tests.api_data import get_multiple_position_fixed_data_response
@@ -151,8 +150,7 @@ async def test_climate_translations(
 @pytest.mark.parametrize(
     ("responses", "expected_target_temperature"),
     [
-        (HEAT_CIRCUIT_OPERATION_MODE_3_DATA_RESPONSE, 21.5),  # Night temperature 20.0 + Offset 1.5
-        (HEAT_CIRCUIT_OPERATION_MODE_4_DATA_RESPONSE, 19.5),  # Holiday temperature 18.0 + Offset 1.5
+        (HEAT_CIRCUIT_OPERATION_MODE_DATA_RESPONSE, 22.0),  # Taget temperature 20.5 + Offset 1.5
     ],
 )
 async def test_target_temperature(

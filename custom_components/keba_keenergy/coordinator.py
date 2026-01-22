@@ -9,6 +9,7 @@ from typing import cast
 from aiohttp import ClientSession
 from homeassistant.core import DOMAIN
 from homeassistant.core import HomeAssistant
+from homeassistant.helpers.debounce import Debouncer
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator
 from homeassistant.helpers.update_coordinator import UpdateFailed
 from keba_keenergy_api.api import KebaKeEnergyAPI
@@ -28,6 +29,7 @@ from keba_keenergy_api.endpoints import Value
 from keba_keenergy_api.endpoints import ValueResponse
 from keba_keenergy_api.error import APIError
 
+from .const import REQUEST_REFRESH_COOLDOWN
 from .const import SCAN_INTERVAL
 
 _LOGGER = logging.getLogger(__name__)
@@ -171,7 +173,18 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
         ]
         self.position: Position | None = None
 
-        super().__init__(hass, _LOGGER, name=DOMAIN, update_interval=timedelta(seconds=SCAN_INTERVAL))
+        super().__init__(
+            hass,
+            _LOGGER,
+            name=DOMAIN,
+            update_interval=timedelta(seconds=SCAN_INTERVAL),
+            request_refresh_debouncer=Debouncer(
+                hass,
+                _LOGGER,
+                cooldown=REQUEST_REFRESH_COOLDOWN,
+                immediate=True,
+            ),
+        )
 
     async def async_initialize(self) -> None:
         """Initialize values from API that never changed."""

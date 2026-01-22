@@ -10,4 +10,5 @@ MANUFACTURER: Final = "KEBA"
 MANUFACTURER_MTEC: Final = "M-TEC"
 MANUFACTURER_INO: Final = "ino"
 NAME: Final = "KeEnergy"
+REQUEST_REFRESH_COOLDOWN: Final[float]  = 0.5
 SCAN_INTERVAL: Final[int] = 20

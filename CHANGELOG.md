@@ -9,6 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!--start-->
 
+## [1.6.1] - 2025-01-22
+
+### Fixed
+
+- Fixed climate entity show wrong target temperature
+
 ## [1.6.0] - 2025-01-18
 
 ### Added

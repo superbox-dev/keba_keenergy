@@ -1,7 +1,6 @@
 """Support for the KEBA KeEnergy climate."""
 
 import logging
-from functools import cached_property
 from typing import Any
 from typing import Final
 
@@ -133,33 +132,21 @@ class KebaKeEnergyClimateEntity(KebaKeEnergyEntity, ClimateEntity):
         )
 
     @property
-    def target_temperature_for_preset(self) -> float:
-        """Return the temperature for the current preset."""
-        target_temperature = float(self.get_value("target_temperature_day"))
-
-        if self.preset_mode == PRESET_SLEEP:
-            target_temperature = float(self.get_value("target_temperature_night"))
-        elif self.preset_mode == PRESET_AWAY:
-            target_temperature = float(self.get_value("target_temperature_away"))
-
-        return target_temperature
-
-    @property
     def target_temperature(self) -> float:
         """Return the temperature we try to reach."""
-        return self.target_temperature_for_preset + float(self.get_value("target_temperature_offset"))
+        return float(self.get_value("target_temperature")) + float(self.get_value("target_temperature_offset"))
 
-    @cached_property
+    @property
     def min_temp(self) -> float:
         """Return the minimum temperature."""
-        return self.target_temperature_for_preset + float(
+        return float(self.get_value("target_temperature")) + float(
             self.get_attribute("target_temperature_offset", attr="lower_limit"),
         )
 
-    @cached_property
+    @property
     def max_temp(self) -> float:
         """Return the maximum temperature."""
-        return self.target_temperature_for_preset + float(
+        return float(self.get_value("target_temperature")) + float(
             self.get_attribute("target_temperature_offset", attr="upper_limit"),
         )
 
@@ -252,7 +239,7 @@ class KebaKeEnergyClimateEntity(KebaKeEnergyEntity, ClimateEntity):
         """Set new target temperature."""
         if temperature := kwargs.get(ATTR_TEMPERATURE):
             await self._async_write_data(
-                temperature - self.target_temperature_for_preset,
+                temperature - float(self.get_value("target_temperature")),
                 section=HeatCircuit.TARGET_TEMPERATURE_OFFSET,
                 device_numbers=self.coordinator.heat_circuit_numbers,
             )

@@ -257,8 +257,7 @@ class KebaKeEnergyEntity(
             except (APIError, ClientError) as error:
                 msg: str = f"Failed to update {self.entity_id} to {value}: {error}"
                 raise HomeAssistantError(msg) from error
-
-            await self.coordinator.async_refresh()
+            await self.coordinator.async_request_refresh()
 
     def get_attribute(self, key: str, /, *, attr: str) -> str:
         """Get extra attribute from the API by key."""
