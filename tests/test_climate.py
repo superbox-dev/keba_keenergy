@@ -110,11 +110,11 @@ async def test_climate(
     assert isinstance(state_2, State)
 
     assert state_2.attributes[ATTR_HVAC_MODES] == [HVACMode.AUTO, HVACMode.HEAT, HVACMode.OFF]
-    assert state_2.attributes[ATTR_MIN_TEMP] == 18.0
-    assert state_2.attributes[ATTR_MAX_TEMP] == 23.0
+    assert state_2.attributes[ATTR_MIN_TEMP] == 17.5
+    assert state_2.attributes[ATTR_MAX_TEMP] == 22.5
     assert state_2.attributes[ATTR_TARGET_TEMP_STEP] == 0.5
     assert state_2.attributes[ATTR_PRESET_MODES] == ["none", "away", "comfort", "sleep", "boost"]
-    assert state_2.attributes[ATTR_TEMPERATURE] == 20.5
+    assert state_2.attributes[ATTR_TEMPERATURE] == 20.0
     assert not state_2.attributes.get(ATTR_CURRENT_TEMPERATURE)
     assert not state_2.attributes.get(ATTR_CURRENT_HUMIDITY)
     assert state_2.attributes[ATTR_HVAC_ACTION] == HVACAction.OFF
@@ -150,7 +150,7 @@ async def test_climate_translations(
 @pytest.mark.parametrize(
     ("responses", "expected_target_temperature"),
     [
-        (HEAT_CIRCUIT_OPERATION_MODE_DATA_RESPONSE, 22.0),  # Taget temperature 20.5 + Offset 1.5
+        (HEAT_CIRCUIT_OPERATION_MODE_DATA_RESPONSE, 21.5),  # Selected target temperature 20.0 + Offset 1.5
     ],
 )
 async def test_target_temperature(
@@ -354,5 +354,5 @@ async def test_set_temperature(
     )
 
     fake_api.assert_called_write_with(
-        '[{"name": "APPL.CtrlAppl.sParam.heatCircuit[0].param.offsetRoomTemp", "value": "-1.0"}]',
+        '[{"name": "APPL.CtrlAppl.sParam.heatCircuit[0].param.offsetRoomTemp", "value": "-0.5"}]',
     )

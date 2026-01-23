@@ -389,6 +389,9 @@
             "room_temperature": {
                 "name": "Raumtemperatur"
             },
+            "selected_target_room_temperature": {
+                "name": "Soll-Raumtemperatur (ausgewählt)"
+            },
             "solar_circuit_pump_1": {
                 "name": "Pumpe 1"
             },

@@ -279,6 +279,15 @@ HEAT_CIRCUIT_OPERATION_MODE: str = """
     }
 """
 
+HEAT_CIRCUIT_SELECTED_TARGET_TEMPERATURE: str = """
+    {
+        "name": "APPL.CtrlAppl.sParam.heatCircuit[%s].values.selectedSetTemp",
+        "attributes": {
+        },
+        "value": "%s"
+    }
+"""
+
 HEAT_CIRCUIT_TARGET_TEMPERATURE: str = """
     {
         "name": "APPL.CtrlAppl.sParam.heatCircuit[%s].values.setValue",
@@ -1463,6 +1472,7 @@ DEFAULT_POSITION_DATA_RESPONSE: list[dict[str, Any]] = [
     json.loads(HEAT_CIRCUIT_TARGET_TEMPERATURE_NIGHT % ("0", "20")),
     json.loads(HEAT_CIRCUIT_HEATING_LIMIT_NIGHT % ("0", "18")),
     json.loads(HEAT_CIRCUIT_OPERATION_MODE % ("0", "3")),
+    json.loads(HEAT_CIRCUIT_SELECTED_TARGET_TEMPERATURE % ("0", "20")),
     json.loads(HEAT_CIRCUIT_TARGET_TEMPERATURE % ("0", "20.5")),
     json.loads(HEAT_CIRCUIT_TARGET_TEMPERATURE_OFFSET % ("0", "1.5")),
     json.loads(SOLAR_CIRCUIT_OPERATION_MODE % ("0", "0")),
@@ -1547,6 +1557,8 @@ ENTITY_UPDATED_DATA_RESPONSE: list[dict[str, Any]] = [
     json.loads(HEAT_CIRCUIT_HEATING_LIMIT_NIGHT % ("1", "18")),
     json.loads(HEAT_CIRCUIT_OPERATION_MODE % ("0", "3")),
     json.loads(HEAT_CIRCUIT_OPERATION_MODE % ("1", "1")),
+    json.loads(HEAT_CIRCUIT_SELECTED_TARGET_TEMPERATURE % ("0", "20")),
+    json.loads(HEAT_CIRCUIT_SELECTED_TARGET_TEMPERATURE % ("1", "20")),
     json.loads(HEAT_CIRCUIT_TARGET_TEMPERATURE % ("0", "20.5")),
     json.loads(HEAT_CIRCUIT_TARGET_TEMPERATURE % ("1", "20.5")),
     json.loads(HEAT_CIRCUIT_TARGET_TEMPERATURE_OFFSET % ("0", "1.5")),
@@ -1643,6 +1655,7 @@ HEAT_CIRCUIT_OPERATION_MODE_DATA_RESPONSE: list[dict[str, Any]] = [
     json.loads(HEAT_CIRCUIT_TARGET_TEMPERATURE_NIGHT % ("0", "20")),
     json.loads(HEAT_CIRCUIT_HEATING_LIMIT_NIGHT % ("0", "18")),
     json.loads(HEAT_CIRCUIT_OPERATION_MODE % ("0", "3")),
+    json.loads(HEAT_CIRCUIT_SELECTED_TARGET_TEMPERATURE % ("0", "20")),
     json.loads(HEAT_CIRCUIT_TARGET_TEMPERATURE % ("0", "20.5")),
     json.loads(HEAT_CIRCUIT_TARGET_TEMPERATURE_OFFSET % ("0", "1.5")),
     json.loads(SOLAR_CIRCUIT_OPERATION_MODE % ("0", "0")),
@@ -1727,6 +1740,8 @@ MULTIPLE_POSITIONS_DATA_RESPONSE: list[dict[str, Any]] = [
     json.loads(HEAT_CIRCUIT_HEATING_LIMIT_NIGHT % ("1", "18")),
     json.loads(HEAT_CIRCUIT_OPERATION_MODE % ("0", "2")),
     json.loads(HEAT_CIRCUIT_OPERATION_MODE % ("1", "0")),
+    json.loads(HEAT_CIRCUIT_SELECTED_TARGET_TEMPERATURE % ("0", "20")),
+    json.loads(HEAT_CIRCUIT_SELECTED_TARGET_TEMPERATURE % ("1", "20")),
     json.loads(HEAT_CIRCUIT_TARGET_TEMPERATURE % ("0", "20.5")),
     json.loads(HEAT_CIRCUIT_TARGET_TEMPERATURE % ("1", "20.5")),
     json.loads(HEAT_CIRCUIT_TARGET_TEMPERATURE_OFFSET % ("0", "1.5")),

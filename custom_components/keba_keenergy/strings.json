@@ -389,6 +389,9 @@
             "room_temperature": {
                 "name": "Room temperature"
             },
+            "selected_target_room_temperature": {
+                "name": "Target room temperature (selected)"
+            },
             "solar_circuit_pump_1": {
                 "name": "Pump 1"
             },

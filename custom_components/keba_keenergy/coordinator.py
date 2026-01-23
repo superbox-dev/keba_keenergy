@@ -88,6 +88,7 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
             HeatCircuit.TARGET_TEMPERATURE_NIGHT,
             HeatCircuit.HEATING_LIMIT_NIGHT,
             HeatCircuit.OPERATING_MODE,
+            HeatCircuit.SELECTED_TARGET_TEMPERATURE,
             HeatCircuit.TARGET_TEMPERATURE,
             HeatCircuit.TARGET_TEMPERATURE_OFFSET,
             SolarCircuit.OPERATING_MODE,

@@ -206,6 +206,15 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription, ...]] = {
         ),
         KebaKeEnergySensorEntityDescription(
             device_class=SensorDeviceClass.TEMPERATURE,
+            key="selected_target_temperature",
+            key_index=None,
+            native_unit_of_measurement=UnitOfTemperature.CELSIUS,
+            state_class=SensorStateClass.MEASUREMENT,
+            translation_key="selected_target_room_temperature",
+            value=lambda data: cast("float", data),
+        ),
+        KebaKeEnergySensorEntityDescription(
+            device_class=SensorDeviceClass.TEMPERATURE,
             key="target_temperature",
             key_index=None,
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,

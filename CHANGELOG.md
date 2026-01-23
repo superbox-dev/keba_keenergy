@@ -11,11 +11,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [1.6.1] - 2025-01-23
 
+### Added
+
+- Added new sensor "Target temperature (selected)" to the heat circuit.
+  This sensor show always the right target temperature (day, night, ...) without the offset.
+
 ### Fixed
 
 - Fixed slow API update and refresh on entities that can changed e.g. "Operation mode" or the "Preset mode"
   in the climate entity
-- Fixed climate entity show wrong target temperature (now the target temperature value is without the offset)
+- Fixed climate entity show wrong target temperature
 
 ## [1.6.0] - 2025-01-18
 

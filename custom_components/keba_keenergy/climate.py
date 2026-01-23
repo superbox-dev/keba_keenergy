@@ -134,19 +134,19 @@ class KebaKeEnergyClimateEntity(KebaKeEnergyEntity, ClimateEntity):
     @property
     def target_temperature(self) -> float:
         """Return the temperature we try to reach."""
-        return float(self.get_value("target_temperature")) + float(self.get_value("target_temperature_offset"))
+        return float(self.get_value("selected_target_temperature")) + float(self.get_value("target_temperature_offset"))
 
     @property
     def min_temp(self) -> float:
         """Return the minimum temperature."""
-        return float(self.get_value("target_temperature")) + float(
+        return float(self.get_value("selected_target_temperature")) + float(
             self.get_attribute("target_temperature_offset", attr="lower_limit"),
         )
 
     @property
     def max_temp(self) -> float:
         """Return the maximum temperature."""
-        return float(self.get_value("target_temperature")) + float(
+        return float(self.get_value("selected_target_temperature")) + float(
             self.get_attribute("target_temperature_offset", attr="upper_limit"),
         )
 
@@ -239,7 +239,7 @@ class KebaKeEnergyClimateEntity(KebaKeEnergyEntity, ClimateEntity):
         """Set new target temperature."""
         if temperature := kwargs.get(ATTR_TEMPERATURE):
             await self._async_write_data(
-                temperature - float(self.get_value("target_temperature")),
+                temperature - float(self.get_value("selected_target_temperature")),
                 section=HeatCircuit.TARGET_TEMPERATURE_OFFSET,
                 device_numbers=self.coordinator.heat_circuit_numbers,
             )
