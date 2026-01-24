@@ -337,11 +337,6 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
         return self.position.external_heat_source if self.position else 0
 
     @cached_property
-    def switch_valve_numbers(self) -> int:
-        """Return number of switch valves."""
-        return self.position.switch_valve if self.position else 0
-
-    @cached_property
     def has_photovoltaics(self) -> str:
         """Check if photovoltaics is available."""
         data: Value = cast("Value", self._fixed_data[SectionPrefix.SYSTEM]["has_photovoltaics"])
