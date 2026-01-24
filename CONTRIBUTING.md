@@ -11,6 +11,14 @@ Contributing to this project should be as easy and transparent as possible, whet
 - Submitting a fix
 - Proposing new features
 
+## Getting started
+
+Run development server:
+
+1. Set up the project with `./scripts/setup.sh`.
+2. Run `./scripts/develop.sh`.
+3. Open <http://127.0.0.1:8123> in your browser.
+
 ## GitHub is used for everything
 
 GitHub is used to host code, to track issues and feature requests, as well as accept pull requests.
@@ -47,15 +55,17 @@ People *love* thorough bug reports. I'm not even kidding.
 
 Use [black](https://github.com/ambv/black) to make sure the code follows the style.
 
-## Run development server
-
-1. Set up the project with `./scripts/setup.sh`.
-2. Run `./scripts/develop.sh`.
-3. Open <http://127.0.0.1:8123> in your browser.
+```bash
+uv run black .
+```
 
 ## Test your code modification
 
 To test the code we use [pytest](https://docs.pytest.org):
+
+```bash
+uv run pytest -n auto
+```
 
 ## License
 
