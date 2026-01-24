@@ -1,5 +1,5 @@
 from datetime import datetime
-from datetime import timezone
+from datetime import UTC
 from typing import Any
 from unittest.mock import patch
 
@@ -339,7 +339,7 @@ async def test_set_preset_mode_away(
 
     await setup_integration(hass, config_entry)
 
-    with patch.object(dt_util, "now", return_value=datetime(2026, 1, 24, 12, 0, tzinfo=timezone.utc)):
+    with patch.object(dt_util, "now", return_value=datetime(2026, 1, 24, 12, 0, tzinfo=UTC)):
         await hass.services.async_call(
             domain=CLIMATE_DOMAIN,
             service=SERVICE_SET_PRESET_MODE,
@@ -378,7 +378,7 @@ async def test_unset_preset_mode_away(
 
     await setup_integration(hass, config_entry)
 
-    with patch.object(dt_util, "now", return_value=datetime(2026, 1, 24, 12, 0, tzinfo=timezone.utc)):
+    with patch.object(dt_util, "now", return_value=datetime(2026, 1, 24, 12, 0, tzinfo=UTC)):
         await hass.services.async_call(
             domain=CLIMATE_DOMAIN,
             service=SERVICE_SET_PRESET_MODE,
