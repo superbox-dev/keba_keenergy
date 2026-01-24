@@ -9,23 +9,27 @@ repos:
       - id: detect-private-key
       - id: end-of-file-fixer
       - id: trailing-whitespace
+
   - repo: local
     hooks:
       - id: black
         name: black
         entry: uv run black --check
-        language: python
-        files: \.py$
+        language: system
+        types:
+          - python
       - id: ruff
         name: ruff
         entry: uv run ruff check
-        language: python
-        files: \.py$
+        language: system
+        types:
+          - python
       - id: mypy
         name: mypy
         entry: uv run mypy
-        language: python
-        files: \.py$
+        language: system
+        types:
+          - python
       - id: rumdl
         name: rumdl
         entry: uv run rumdl check
@@ -33,6 +37,6 @@ repos:
         files: \.md$
       - id: yamllint
         name: yamllint
-        entry: uv run yamllint .
-        language: python
+        entry: uv run yamllint
+        language: system
         files: \.ya?ml$
