@@ -20,8 +20,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Fixed slow API update and refresh on entities that can changed e.g. "Operation mode" or the "Preset mode"
   in the climate entity
-- Fixed climate entity show wrong target temperature
-- Fixed preset mode "away" in the climate entity
+- Fixed climate entity show wrong target temperature [(Issue #19)](https://github.com/superbox-dev/keba_keenergy/issues/19)
+- Fixed preset mode "away" in the climate entity [(Issue #21)](https://github.com/superbox-dev/keba_keenergy/issues/21)
 
 ## [1.6.0] - 2025-01-18
 
