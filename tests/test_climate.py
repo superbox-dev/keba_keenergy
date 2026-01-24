@@ -1,4 +1,7 @@
+from datetime import datetime
+from datetime import timezone
 from typing import Any
+from unittest.mock import patch
 
 import pytest
 from homeassistant.components.climate.const import ATTR_CURRENT_HUMIDITY
@@ -29,6 +32,7 @@ from homeassistant.const import SERVICE_TURN_OFF
 from homeassistant.const import SERVICE_TURN_ON
 from homeassistant.core import HomeAssistant
 from homeassistant.core import State
+from homeassistant.util import dt as dt_util
 from keba_keenergy_api.constants import HeatCircuitOperatingMode
 from pytest_homeassistant_custom_component.common import MockConfigEntry
 
@@ -37,7 +41,8 @@ from tests.api_data import DEFAULT_POSITION_DATA_RESPONSE
 from tests.api_data import DEFAULT_POSITION_FIXED_DATA_RESPONSE
 from tests.api_data import DEFAULT_POSITION_RESPONSE
 from tests.api_data import HEAT_CIRCUIT_OPERATION_MODE_DATA_RESPONSE
-from tests.api_data import MULTIPLE_POSITIONS_DATA_RESPONSE
+from tests.api_data import MULTIPLE_POSITIONS_DATA_RESPONSE_1
+from tests.api_data import MULTIPLE_POSITIONS_DATA_RESPONSE_2
 from tests.api_data import MULTIPLE_POSITIONS_RESPONSE
 from tests.api_data import get_multiple_position_fixed_data_response
 from tests.conftest import FakeKebaKeEnergyAPI
@@ -62,7 +67,7 @@ ENTITY_ID_2: str = "climate.keba_keenergy_12345678_2"
             [
                 MULTIPLE_POSITIONS_RESPONSE,
                 get_multiple_position_fixed_data_response(),
-                MULTIPLE_POSITIONS_DATA_RESPONSE,
+                MULTIPLE_POSITIONS_DATA_RESPONSE_1,
             ],
             [ENTITY_ID_1, ENTITY_ID_2],
         ),
@@ -75,7 +80,6 @@ async def test_climate_entities(
     response: list[list[dict[str, Any]]],
     entities: list[str],
 ) -> None:
-    """Test climate entities."""
     fake_api.responses = response
     fake_api.register_requests("10.0.0.100")
 
@@ -90,11 +94,10 @@ async def test_climate(
     config_entry: MockConfigEntry,
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
-    """Test climate."""
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITIONS_DATA_RESPONSE,
+        MULTIPLE_POSITIONS_DATA_RESPONSE_1,
     ]
     fake_api.register_requests("10.0.0.100")
 
@@ -127,11 +130,10 @@ async def test_climate_translations(
     config_entry: MockConfigEntry,
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
-    """Test climate."""
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITIONS_DATA_RESPONSE,
+        MULTIPLE_POSITIONS_DATA_RESPONSE_1,
     ]
     fake_api.register_requests("10.0.0.100")
 
@@ -160,7 +162,6 @@ async def test_target_temperature(
     responses: list[dict[str, Any]],
     expected_target_temperature: float,
 ) -> None:
-    """Test target temperature."""
     fake_api.responses = [
         DEFAULT_POSITION_RESPONSE,
         DEFAULT_POSITION_FIXED_DATA_RESPONSE,
@@ -181,13 +182,12 @@ async def test_turn_off(
     config_entry: MockConfigEntry,
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
-    """Test turn on climate."""
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITIONS_DATA_RESPONSE,
+        MULTIPLE_POSITIONS_DATA_RESPONSE_1,
         # Read API after services call
-        MULTIPLE_POSITIONS_DATA_RESPONSE,
+        MULTIPLE_POSITIONS_DATA_RESPONSE_1,
     ]
     fake_api.register_requests("10.0.0.100")
 
@@ -214,11 +214,10 @@ async def test_turn_on(
     config_entry: MockConfigEntry,
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
-    """Test turn on climate."""
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITIONS_DATA_RESPONSE,
+        MULTIPLE_POSITIONS_DATA_RESPONSE_1,
     ]
     fake_api.register_requests("10.0.0.100")
 
@@ -255,13 +254,12 @@ async def test_set_hvac_mode(
     hvac_mode: str,
     expected_hvac_mode: str,
 ) -> None:
-    """Test set preset mode."""
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITIONS_DATA_RESPONSE,
+        MULTIPLE_POSITIONS_DATA_RESPONSE_1,
         # Read API after services call
-        MULTIPLE_POSITIONS_DATA_RESPONSE,
+        MULTIPLE_POSITIONS_DATA_RESPONSE_1,
     ]
     fake_api.register_requests("10.0.0.100")
 
@@ -299,13 +297,12 @@ async def test_set_preset_mode(
     preset_mode: str,
     expected_preset_mode: str,
 ) -> None:
-    """Test set preset mode."""
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITIONS_DATA_RESPONSE,
+        MULTIPLE_POSITIONS_DATA_RESPONSE_1,
         # Read API after services call
-        MULTIPLE_POSITIONS_DATA_RESPONSE,
+        MULTIPLE_POSITIONS_DATA_RESPONSE_1,
     ]
     fake_api.register_requests("10.0.0.100")
 
@@ -326,18 +323,95 @@ async def test_set_preset_mode(
     )
 
 
+async def test_set_preset_mode_away(
+    hass: HomeAssistant,
+    config_entry: MockConfigEntry,
+    fake_api: FakeKebaKeEnergyAPI,
+) -> None:
+    fake_api.responses = [
+        MULTIPLE_POSITIONS_RESPONSE,
+        get_multiple_position_fixed_data_response(),
+        MULTIPLE_POSITIONS_DATA_RESPONSE_1,
+        # Read API after services call
+        MULTIPLE_POSITIONS_DATA_RESPONSE_1,
+    ]
+    fake_api.register_requests("10.0.0.100")
+
+    await setup_integration(hass, config_entry)
+
+    with patch.object(dt_util, "now", return_value=datetime(2026, 1, 24, 12, 0, tzinfo=timezone.utc)):
+        await hass.services.async_call(
+            domain=CLIMATE_DOMAIN,
+            service=SERVICE_SET_PRESET_MODE,
+            service_data={
+                ATTR_ENTITY_ID: ENTITY_ID_1,
+                ATTR_PRESET_MODE: PRESET_AWAY,
+            },
+            blocking=True,
+        )
+
+    fake_api.assert_called_write_with(
+        '[{"name": "APPL.CtrlAppl.sParam.heatCircuit[0].param.operatingMode", "value": "4"}]',
+    )
+
+    fake_api.assert_called_write_with(
+        '[{"name": "APPL.CtrlAppl.sParam.heatCircuit[0].param.holiday.start", "value": "1769209200"}, '
+        '{"name": "APPL.CtrlAppl.sParam.heatCircuit[1].param.holiday.start", "value": "1769209200"}, '
+        '{"name": "APPL.CtrlAppl.sParam.heatCircuit[0].param.holiday.stop", "value": "1800831599"}, '
+        '{"name": "APPL.CtrlAppl.sParam.heatCircuit[1].param.holiday.stop", "value": "1800831599"}]',
+    )
+
+
+async def test_unset_preset_mode_away(
+    hass: HomeAssistant,
+    config_entry: MockConfigEntry,
+    fake_api: FakeKebaKeEnergyAPI,
+) -> None:
+    fake_api.responses = [
+        MULTIPLE_POSITIONS_RESPONSE,
+        get_multiple_position_fixed_data_response(),
+        MULTIPLE_POSITIONS_DATA_RESPONSE_2,
+        # Read API after services call
+        MULTIPLE_POSITIONS_DATA_RESPONSE_1,
+    ]
+    fake_api.register_requests("10.0.0.100")
+
+    await setup_integration(hass, config_entry)
+
+    with patch.object(dt_util, "now", return_value=datetime(2026, 1, 24, 12, 0, tzinfo=timezone.utc)):
+        await hass.services.async_call(
+            domain=CLIMATE_DOMAIN,
+            service=SERVICE_SET_PRESET_MODE,
+            service_data={
+                ATTR_ENTITY_ID: ENTITY_ID_1,
+                ATTR_PRESET_MODE: PRESET_COMFORT,
+            },
+            blocking=True,
+        )
+
+    fake_api.assert_called_write_with(
+        '[{"name": "APPL.CtrlAppl.sParam.heatCircuit[0].param.operatingMode", "value": "2"}]',
+    )
+
+    fake_api.assert_called_write_with(
+        '[{"name": "APPL.CtrlAppl.sParam.heatCircuit[0].param.holiday.start", "value": "1769122800"}, '
+        '{"name": "APPL.CtrlAppl.sParam.heatCircuit[1].param.holiday.start", "value": "1769122800"}, '
+        '{"name": "APPL.CtrlAppl.sParam.heatCircuit[0].param.holiday.stop", "value": "1769209199"}, '
+        '{"name": "APPL.CtrlAppl.sParam.heatCircuit[1].param.holiday.stop", "value": "1769209199"}]',
+    )
+
+
 async def test_set_temperature(
     hass: HomeAssistant,
     config_entry: MockConfigEntry,
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
-    """Test setting temperature."""
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITIONS_DATA_RESPONSE,
+        MULTIPLE_POSITIONS_DATA_RESPONSE_1,
         # Read API after services call
-        MULTIPLE_POSITIONS_DATA_RESPONSE,
+        MULTIPLE_POSITIONS_DATA_RESPONSE_1,
     ]
     fake_api.register_requests("10.0.0.100")
 

@@ -19,7 +19,7 @@ from pytest_homeassistant_custom_component.common import MockConfigEntry
 
 from custom_components.keba_keenergy.const import DEFAULT_SSL
 from custom_components.keba_keenergy.const import DOMAIN
-from tests.api_data import MULTIPLE_POSITIONS_DATA_RESPONSE
+from tests.api_data import MULTIPLE_POSITIONS_DATA_RESPONSE_1
 from tests.api_data import MULTIPLE_POSITIONS_RESPONSE
 from tests.conftest import FakeKebaKeEnergyAPI
 
@@ -44,8 +44,7 @@ async def test_user_flow(
     hass: HomeAssistant,
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
-    """Test user happy flow from start to finish."""
-    fake_api.responses = [MULTIPLE_POSITIONS_RESPONSE, MULTIPLE_POSITIONS_DATA_RESPONSE]
+    fake_api.responses = [MULTIPLE_POSITIONS_RESPONSE, MULTIPLE_POSITIONS_DATA_RESPONSE_1]
     fake_api.register_auth_request("10.0.0.100")
     fake_api.register_requests("10.0.0.100")
 
@@ -81,8 +80,7 @@ async def test_user_flow_authentication(
     hass: HomeAssistant,
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
-    """Test user happy flow from start to finish with authentication."""
-    fake_api.responses = [MULTIPLE_POSITIONS_RESPONSE, MULTIPLE_POSITIONS_DATA_RESPONSE]
+    fake_api.responses = [MULTIPLE_POSITIONS_RESPONSE, MULTIPLE_POSITIONS_DATA_RESPONSE_1]
     fake_api.register_auth_request("10.0.0.100", status=401)
     fake_api.register_requests("10.0.0.100", ssl=True)
 
@@ -129,8 +127,7 @@ async def test_user_flow_authentication_cannot_connect(
     hass: HomeAssistant,
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
-    """Test user flow authentication with cannot connect error."""
-    fake_api.responses = [MULTIPLE_POSITIONS_RESPONSE, MULTIPLE_POSITIONS_DATA_RESPONSE]
+    fake_api.responses = [MULTIPLE_POSITIONS_RESPONSE, MULTIPLE_POSITIONS_DATA_RESPONSE_1]
     fake_api.register_auth_request("10.0.0.100", exc=ClientError())
     fake_api.register_requests("10.0.0.100", ssl=True)
 
@@ -172,7 +169,6 @@ async def test_user_flow_cannot_connect(
     side_effect: Exception,
     expected_error: str,
 ) -> None:
-    """Test when zeroconf gets an exception from the API."""
     fake_api.register_auth_request("10.0.0.100")
 
     result_user_step_1: ConfigFlowResult = await hass.config_entries.flow.async_init(
@@ -197,8 +193,7 @@ async def test_zeroconf_flow(
     hass: HomeAssistant,
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
-    """Test the zeroconf happy flow from start to finish."""
-    fake_api.responses = [MULTIPLE_POSITIONS_RESPONSE, MULTIPLE_POSITIONS_DATA_RESPONSE]
+    fake_api.responses = [MULTIPLE_POSITIONS_RESPONSE, MULTIPLE_POSITIONS_DATA_RESPONSE_1]
     fake_api.register_auth_request("ap4400.local")
     fake_api.register_requests("ap4400.local")
 
@@ -227,8 +222,7 @@ async def test_zeroconf_flow_authentication(
     hass: HomeAssistant,
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
-    """Test the zeroconf happy flow from start to finish with authentication."""
-    fake_api.responses = [MULTIPLE_POSITIONS_RESPONSE, MULTIPLE_POSITIONS_DATA_RESPONSE]
+    fake_api.responses = [MULTIPLE_POSITIONS_RESPONSE, MULTIPLE_POSITIONS_DATA_RESPONSE_1]
     fake_api.register_auth_request("ap4400.local", status=401)
     fake_api.register_requests("ap4400.local", ssl=True)
 
@@ -260,8 +254,7 @@ async def test_zeroconf_flow_authentication_cannot_connect(
     hass: HomeAssistant,
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
-    """Test the zeroconf happy flow from start to finish with authentication."""
-    fake_api.responses = [MULTIPLE_POSITIONS_RESPONSE, MULTIPLE_POSITIONS_DATA_RESPONSE]
+    fake_api.responses = [MULTIPLE_POSITIONS_RESPONSE, MULTIPLE_POSITIONS_DATA_RESPONSE_1]
     fake_api.register_auth_request("ap4400.local", exc=ClientError())
     fake_api.register_requests("ap4400.local", ssl=True)
 
@@ -279,7 +272,6 @@ async def test_zeroconf_flow_already_setup(
     hass: HomeAssistant,
     config_entry: MockConfigEntry,
 ) -> None:
-    """Test zeroconf discovery with already setup device."""
     config_entry.add_to_hass(hass)
 
     result: ConfigFlowResult = await hass.config_entries.flow.async_init(
@@ -305,7 +297,6 @@ async def test_zeroconf_cannot_connect(
     side_effect: Exception,
     expected_error: str,
 ) -> None:
-    """Test when zeroconf gets an exception from the API."""
     fake_api.register_auth_request("ap4400.local")
 
     result_discovery_confirm_1: ConfigFlowResult = await hass.config_entries.flow.async_init(

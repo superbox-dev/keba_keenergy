@@ -1,8 +1,13 @@
 """Support for the KEBA KeEnergy climate."""
 
 import logging
+from datetime import date
+from datetime import datetime
+from datetime import time
+from datetime import timedelta
 from typing import Any
 from typing import Final
+from typing import TYPE_CHECKING
 
 import voluptuous as vol
 from homeassistant.components.climate import ClimateEntity
@@ -22,6 +27,7 @@ from homeassistant.const import STATE_ON
 from homeassistant.const import UnitOfTemperature
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
+from homeassistant.util import dt as dt_util
 from keba_keenergy_api.constants import HeatCircuit
 from keba_keenergy_api.constants import HeatCircuitHeatRequest
 from keba_keenergy_api.constants import HeatCircuitOperatingMode
@@ -31,6 +37,9 @@ from .const import ATTR_OFFSET
 from .const import DOMAIN
 from .coordinator import KebaKeEnergyDataUpdateCoordinator
 from .entity import KebaKeEnergyEntity
+
+if TYPE_CHECKING:
+    from zoneinfo import ZoneInfo
 
 HEAT_CIRCUIT_PRESET_TO_HA: Final[dict[int, str]] = {
     HeatCircuitOperatingMode.AUTO.value: PRESET_NONE,
@@ -227,6 +236,8 @@ class KebaKeEnergyClimateEntity(KebaKeEnergyEntity, ClimateEntity):
 
     async def async_set_preset_mode(self, preset_mode: str) -> None:
         """Set preset mode for heat circuit."""
+        await self._async_set_away_date_range(preset_mode)
+
         for key, value in HEAT_CIRCUIT_PRESET_TO_HA.items():
             if value == preset_mode:
                 await self._async_write_data(
@@ -242,4 +253,21 @@ class KebaKeEnergyClimateEntity(KebaKeEnergyEntity, ClimateEntity):
                 temperature - float(self.get_value("selected_target_temperature")),
                 section=HeatCircuit.TARGET_TEMPERATURE_OFFSET,
                 device_numbers=self.coordinator.heat_circuit_numbers,
+            )
+
+    async def _async_set_away_date_range(self, preset_mode: str, /) -> None:
+        tz: ZoneInfo = await self.coordinator.get_timezone()
+        now: date = dt_util.now(tz).date()
+        start_date_tz: datetime = datetime.combine(now, time.min, tz)
+        end_date_tz: datetime = datetime.combine(now, time.max, tz)
+
+        if preset_mode == PRESET_AWAY:
+            await self.coordinator.set_away_date_range(
+                start_timestamp=start_date_tz.timestamp(),
+                end_timestamp=(end_date_tz + timedelta(days=365)).timestamp(),
+            )
+        elif self.preset_mode == PRESET_AWAY and preset_mode != PRESET_AWAY:
+            await self.coordinator.set_away_date_range(
+                start_timestamp=(start_date_tz - timedelta(days=1)).timestamp(),
+                end_timestamp=(end_date_tz - timedelta(days=1)).timestamp(),
             )

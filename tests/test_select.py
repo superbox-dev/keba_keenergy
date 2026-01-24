@@ -14,7 +14,7 @@ from homeassistant.exceptions import ServiceValidationError
 from pytest_homeassistant_custom_component.common import MockConfigEntry
 
 from tests import setup_integration
-from tests.api_data import MULTIPLE_POSITIONS_DATA_RESPONSE
+from tests.api_data import MULTIPLE_POSITIONS_DATA_RESPONSE_1
 from tests.api_data import MULTIPLE_POSITIONS_RESPONSE
 from tests.api_data import get_multiple_position_fixed_data_response
 from tests.conftest import FakeKebaKeEnergyAPI
@@ -27,7 +27,7 @@ from tests.conftest import FakeKebaKeEnergyAPI
             [
                 MULTIPLE_POSITIONS_RESPONSE,
                 get_multiple_position_fixed_data_response(has_passive_cooling="true"),
-                MULTIPLE_POSITIONS_DATA_RESPONSE,
+                MULTIPLE_POSITIONS_DATA_RESPONSE_1,
             ],
             ["standby", "summer", "auto_heat", "auto_cool", "auto"],
         ),
@@ -35,7 +35,7 @@ from tests.conftest import FakeKebaKeEnergyAPI
             [
                 MULTIPLE_POSITIONS_RESPONSE,
                 get_multiple_position_fixed_data_response(has_passive_cooling="false"),
-                MULTIPLE_POSITIONS_DATA_RESPONSE,
+                MULTIPLE_POSITIONS_DATA_RESPONSE_1,
             ],
             ["standby", "summer", "auto_heat"],
         ),
@@ -48,7 +48,6 @@ async def test_system_selects(
     response: list[list[dict[str, Any]]],
     expected_attr_options: list[str],
 ) -> None:
-    """Test system selects."""
     fake_api.responses = response
     fake_api.register_requests(config_entry.data[CONF_HOST])
 
@@ -66,11 +65,10 @@ async def test_system_selects_translations(
     config_entry: MockConfigEntry,
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
-    """Test system selects translations."""
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITIONS_DATA_RESPONSE,
+        MULTIPLE_POSITIONS_DATA_RESPONSE_1,
     ]
     fake_api.register_requests(config_entry.data[CONF_HOST])
 
@@ -87,11 +85,10 @@ async def test_heat_circuit_selects(
     config_entry: MockConfigEntry,
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
-    """Test heat circuit selects."""
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITIONS_DATA_RESPONSE,
+        MULTIPLE_POSITIONS_DATA_RESPONSE_1,
     ]
     fake_api.register_requests(config_entry.data[CONF_HOST])
 
@@ -111,11 +108,10 @@ async def test_heat_circuit_selects_translated(
     config_entry: MockConfigEntry,
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
-    """Test heat circuit selects translated."""
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITIONS_DATA_RESPONSE,
+        MULTIPLE_POSITIONS_DATA_RESPONSE_1,
     ]
     fake_api.register_requests(config_entry.data[CONF_HOST])
 
@@ -134,11 +130,10 @@ async def test_solar_circuit_selects(
     config_entry: MockConfigEntry,
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
-    """Test solar circuit selects."""
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITIONS_DATA_RESPONSE,
+        MULTIPLE_POSITIONS_DATA_RESPONSE_1,
     ]
     fake_api.register_requests(config_entry.data[CONF_HOST])
 
@@ -166,11 +161,10 @@ async def test_solar_circuit_selects_translated(
     config_entry: MockConfigEntry,
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
-    """Test solar circuit selects translated."""
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITIONS_DATA_RESPONSE,
+        MULTIPLE_POSITIONS_DATA_RESPONSE_1,
     ]
     fake_api.register_requests(config_entry.data[CONF_HOST])
 
@@ -195,11 +189,10 @@ async def test_buffer_tank_selects(
     config_entry: MockConfigEntry,
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
-    """Test buffer tank selects."""
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITIONS_DATA_RESPONSE,
+        MULTIPLE_POSITIONS_DATA_RESPONSE_1,
     ]
     fake_api.register_requests(config_entry.data[CONF_HOST])
 
@@ -223,11 +216,10 @@ async def test_buffer_tank_selects_translated(
     config_entry: MockConfigEntry,
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
-    """Test buffer tank selects translated."""
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITIONS_DATA_RESPONSE,
+        MULTIPLE_POSITIONS_DATA_RESPONSE_1,
     ]
     fake_api.register_requests(config_entry.data[CONF_HOST])
 
@@ -246,11 +238,10 @@ async def test_hot_water_tank_selects(
     config_entry: MockConfigEntry,
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
-    """Test hot water tank selects."""
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITIONS_DATA_RESPONSE,
+        MULTIPLE_POSITIONS_DATA_RESPONSE_1,
     ]
     fake_api.register_requests(config_entry.data[CONF_HOST])
 
@@ -275,11 +266,10 @@ async def test_hot_water_tank_selects_translated(
     config_entry: MockConfigEntry,
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
-    """Test hot water tank selects translated."""
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITIONS_DATA_RESPONSE,
+        MULTIPLE_POSITIONS_DATA_RESPONSE_1,
     ]
     fake_api.register_requests(config_entry.data[CONF_HOST])
 
@@ -298,11 +288,10 @@ async def test_external_heat_source_selects(
     config_entry: MockConfigEntry,
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
-    """Test external heat source selects."""
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITIONS_DATA_RESPONSE,
+        MULTIPLE_POSITIONS_DATA_RESPONSE_1,
     ]
     fake_api.register_requests(config_entry.data[CONF_HOST])
 
@@ -325,11 +314,10 @@ async def test_external_heat_source_translated(
     config_entry: MockConfigEntry,
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
-    """Test external heat source selects translated."""
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITIONS_DATA_RESPONSE,
+        MULTIPLE_POSITIONS_DATA_RESPONSE_1,
     ]
     fake_api.register_requests(config_entry.data[CONF_HOST])
 
@@ -386,13 +374,12 @@ async def test_select_option(
     option: int,
     expected: str,
 ) -> None:
-    """Test select an option."""
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(has_passive_cooling="true"),
-        MULTIPLE_POSITIONS_DATA_RESPONSE,
+        MULTIPLE_POSITIONS_DATA_RESPONSE_1,
         # Read API after services call
-        MULTIPLE_POSITIONS_DATA_RESPONSE,
+        MULTIPLE_POSITIONS_DATA_RESPONSE_1,
     ]
     fake_api.register_requests("10.0.0.100")
 
@@ -435,13 +422,12 @@ async def test_select_invalid_option(
     option: int,
     expected: str,
 ) -> None:
-    """Test select a invalid option."""
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(has_passive_cooling="false"),
-        MULTIPLE_POSITIONS_DATA_RESPONSE,
+        MULTIPLE_POSITIONS_DATA_RESPONSE_1,
         # Read API after services call
-        MULTIPLE_POSITIONS_DATA_RESPONSE,
+        MULTIPLE_POSITIONS_DATA_RESPONSE_1,
     ]
     fake_api.register_requests("10.0.0.100")
 

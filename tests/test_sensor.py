@@ -21,7 +21,7 @@ from homeassistant.core import State
 from pytest_homeassistant_custom_component.common import MockConfigEntry
 
 from tests import setup_integration
-from tests.api_data import MULTIPLE_POSITIONS_DATA_RESPONSE
+from tests.api_data import MULTIPLE_POSITIONS_DATA_RESPONSE_1
 from tests.api_data import MULTIPLE_POSITIONS_RESPONSE
 from tests.api_data import get_multiple_position_fixed_data_response
 from tests.conftest import FakeKebaKeEnergyAPI
@@ -33,11 +33,10 @@ async def test_system_sensors(
     config_entry: MockConfigEntry,
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
-    """Test system sensors."""
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITIONS_DATA_RESPONSE,
+        MULTIPLE_POSITIONS_DATA_RESPONSE_1,
     ]
     fake_api.register_requests(config_entry.data[CONF_HOST])
 
@@ -107,11 +106,10 @@ async def test_system_sensors_translated(
     config_entry: MockConfigEntry,
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
-    """Test system sensors translations."""
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITIONS_DATA_RESPONSE,
+        MULTIPLE_POSITIONS_DATA_RESPONSE_1,
     ]
     fake_api.register_requests(config_entry.data[CONF_HOST])
 
@@ -157,11 +155,10 @@ async def test_buffer_tank_sensors(
     config_entry: MockConfigEntry,
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
-    """Test buffer tank sensors."""
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITIONS_DATA_RESPONSE,
+        MULTIPLE_POSITIONS_DATA_RESPONSE_1,
     ]
     fake_api.register_requests(config_entry.data[CONF_HOST])
 
@@ -229,11 +226,10 @@ async def test_buffer_tank_sensors_translations(
     config_entry: MockConfigEntry,
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
-    """Test buffer tank sensors translations."""
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITIONS_DATA_RESPONSE,
+        MULTIPLE_POSITIONS_DATA_RESPONSE_1,
     ]
     fake_api.register_requests(config_entry.data[CONF_HOST])
 
@@ -282,11 +278,10 @@ async def test_hot_water_tank_sensors(
     config_entry: MockConfigEntry,
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
-    """Test hot water tank sensors."""
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITIONS_DATA_RESPONSE,
+        MULTIPLE_POSITIONS_DATA_RESPONSE_1,
     ]
     fake_api.register_requests(config_entry.data[CONF_HOST])
 
@@ -356,11 +351,10 @@ async def test_hot_water_tank_sensors_translations(
     config_entry: MockConfigEntry,
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
-    """Test hot water tank sensors translations."""
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITIONS_DATA_RESPONSE,
+        MULTIPLE_POSITIONS_DATA_RESPONSE_1,
     ]
     fake_api.register_requests(config_entry.data[CONF_HOST])
 
@@ -408,11 +402,10 @@ async def test_heat_pump_sensors(
     config_entry: MockConfigEntry,
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
-    """Test sensors."""
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITIONS_DATA_RESPONSE,
+        MULTIPLE_POSITIONS_DATA_RESPONSE_1,
     ]
     fake_api.register_requests(config_entry.data[CONF_HOST])
 
@@ -738,11 +731,10 @@ async def test_heat_pump_sensors_translations(
     config_entry: MockConfigEntry,
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
-    """Test heat pump sensors translations."""
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITIONS_DATA_RESPONSE,
+        MULTIPLE_POSITIONS_DATA_RESPONSE_1,
     ]
     fake_api.register_requests(config_entry.data[CONF_HOST])
 
@@ -941,11 +933,10 @@ async def test_heat_circuit_sensors(
     config_entry: MockConfigEntry,
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
-    """Test heat circuit sensors."""
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITIONS_DATA_RESPONSE,
+        MULTIPLE_POSITIONS_DATA_RESPONSE_1,
     ]
     fake_api.register_requests(config_entry.data[CONF_HOST])
 
@@ -1158,11 +1149,10 @@ async def test_heat_circuit_sensors_translations(
     config_entry: MockConfigEntry,
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
-    """Test heat circuit sensors translations."""
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITIONS_DATA_RESPONSE,
+        MULTIPLE_POSITIONS_DATA_RESPONSE_1,
     ]
     fake_api.register_requests(config_entry.data[CONF_HOST])
 
@@ -1288,11 +1278,10 @@ async def test_solar_circuit_sensors(
     config_entry: MockConfigEntry,
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
-    """Test solar circuit sensors."""
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITIONS_DATA_RESPONSE,
+        MULTIPLE_POSITIONS_DATA_RESPONSE_1,
     ]
     fake_api.register_requests(config_entry.data[CONF_HOST])
 
@@ -1509,11 +1498,10 @@ async def test_solar_circuit_sensors_translations(
     config_entry: MockConfigEntry,
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
-    """Test solar circuit sensors translations."""
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITIONS_DATA_RESPONSE,
+        MULTIPLE_POSITIONS_DATA_RESPONSE_1,
     ]
     fake_api.register_requests(config_entry.data[CONF_HOST])
 
@@ -1647,11 +1635,10 @@ async def test_external_heat_source_sensors(
     config_entry: MockConfigEntry,
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
-    """Test external heat source sensors."""
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITIONS_DATA_RESPONSE,
+        MULTIPLE_POSITIONS_DATA_RESPONSE_1,
     ]
     fake_api.register_requests(config_entry.data[CONF_HOST])
 
@@ -1724,11 +1711,10 @@ async def test_external_heat_source_sensors_translated(
     config_entry: MockConfigEntry,
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
-    """Test external heat source sensors translations."""
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITIONS_DATA_RESPONSE,
+        MULTIPLE_POSITIONS_DATA_RESPONSE_1,
     ]
     fake_api.register_requests(config_entry.data[CONF_HOST])
 
@@ -1782,11 +1768,10 @@ async def test_switch_valve_sensors(
     config_entry: MockConfigEntry,
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
-    """Test swich valve sensors."""
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITIONS_DATA_RESPONSE,
+        MULTIPLE_POSITIONS_DATA_RESPONSE_1,
     ]
     fake_api.register_requests(config_entry.data[CONF_HOST])
 
@@ -1812,11 +1797,10 @@ async def test_switch_valve_sensors_translated(
     config_entry: MockConfigEntry,
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
-    """Test switch valve sensors translations."""
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITIONS_DATA_RESPONSE,
+        MULTIPLE_POSITIONS_DATA_RESPONSE_1,
     ]
     fake_api.register_requests(config_entry.data[CONF_HOST])
 

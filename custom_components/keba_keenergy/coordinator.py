@@ -6,10 +6,12 @@ from datetime import timedelta
 from functools import cached_property
 from typing import Any
 from typing import cast
+from zoneinfo import ZoneInfo
 
 from aiohttp import ClientSession
 from homeassistant.core import DOMAIN
 from homeassistant.core import HomeAssistant
+from homeassistant.exceptions import HomeAssistantError
 from homeassistant.helpers.debounce import Debouncer
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator
 from homeassistant.helpers.update_coordinator import UpdateFailed
@@ -255,6 +257,24 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
                 value_by_index["value"] = value
 
         self.async_set_updated_data(data)
+
+    async def get_timezone(self) -> ZoneInfo:
+        """Get the timezone from the Web HMI."""
+        timezone: str = await self.api.system.get_timezone()
+        return ZoneInfo(timezone)
+
+    async def set_away_date_range(self, *, start_timestamp: float, end_timestamp: float) -> None:
+        """Set the away date range."""
+        if self.position:
+            try:
+                await self.api.write_data(
+                    request={
+                        HeatCircuit.AWAY_START_DATE: [int(start_timestamp) for _ in range(self.position.heat_circuit)],
+                        HeatCircuit.AWAY_END_DATE: [int(end_timestamp) for _ in range(self.position.heat_circuit)],
+                    },
+                )
+            except APIError as error:
+                raise HomeAssistantError(error) from error
 
     @cached_property
     def configuration_url(self) -> str:

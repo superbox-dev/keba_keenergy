@@ -27,7 +27,7 @@ from tests import setup_integration
 from tests.api_data import DEFAULT_POSITION_DATA_RESPONSE
 from tests.api_data import DEFAULT_POSITION_FIXED_DATA_RESPONSE
 from tests.api_data import DEFAULT_POSITION_RESPONSE
-from tests.api_data import MULTIPLE_POSITIONS_DATA_RESPONSE
+from tests.api_data import MULTIPLE_POSITIONS_DATA_RESPONSE_1
 from tests.api_data import MULTIPLE_POSITIONS_RESPONSE
 from tests.api_data import get_multiple_position_fixed_data_response
 from tests.conftest import FakeKebaKeEnergyAPI
@@ -50,7 +50,7 @@ ENTITY_ID_4: str = "water_heater.keba_keenergy_12345678_buffer_tank_1"
             [
                 MULTIPLE_POSITIONS_RESPONSE,
                 get_multiple_position_fixed_data_response(),
-                MULTIPLE_POSITIONS_DATA_RESPONSE,
+                MULTIPLE_POSITIONS_DATA_RESPONSE_1,
             ],
             [ENTITY_ID_1, ENTITY_ID_2, ENTITY_ID_4],
         ),
@@ -63,7 +63,6 @@ async def test_water_heater_entities(
     response: list[list[dict[str, Any]]],
     entities: list[str],
 ) -> None:
-    """Test water heater entities."""
     fake_api.responses = response
     fake_api.register_requests("10.0.0.100")
 
@@ -78,11 +77,10 @@ async def test_water_heater(
     config_entry: MockConfigEntry,
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
-    """Test water heater."""
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITIONS_DATA_RESPONSE,
+        MULTIPLE_POSITIONS_DATA_RESPONSE_1,
     ]
     fake_api.register_requests("10.0.0.100")
 
@@ -118,11 +116,10 @@ async def test_water_heater_translations(
     config_entry: MockConfigEntry,
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
-    """Test water heater translations."""
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITIONS_DATA_RESPONSE,
+        MULTIPLE_POSITIONS_DATA_RESPONSE_1,
     ]
     fake_api.register_requests("10.0.0.100")
 
@@ -160,13 +157,12 @@ async def test_turn_off(
     entity_id: str,
     expected: str,
 ) -> None:
-    """Test turn on water heater."""
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITIONS_DATA_RESPONSE,
+        MULTIPLE_POSITIONS_DATA_RESPONSE_1,
         # Read API after services call
-        MULTIPLE_POSITIONS_DATA_RESPONSE,
+        MULTIPLE_POSITIONS_DATA_RESPONSE_1,
     ]
     fake_api.register_requests("10.0.0.100")
 
@@ -205,13 +201,12 @@ async def test_turn_on(
     entity_id: str,
     expected: str,
 ) -> None:
-    """Test turn on water heater."""
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITIONS_DATA_RESPONSE,
+        MULTIPLE_POSITIONS_DATA_RESPONSE_1,
         # Read API after services call
-        MULTIPLE_POSITIONS_DATA_RESPONSE,
+        MULTIPLE_POSITIONS_DATA_RESPONSE_1,
     ]
     fake_api.register_requests("10.0.0.100")
 
@@ -278,13 +273,12 @@ async def test_set_operation_mode(
     operation_mode: str,
     expected: str,
 ) -> None:
-    """Test set operation mode."""
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITIONS_DATA_RESPONSE,
+        MULTIPLE_POSITIONS_DATA_RESPONSE_1,
         # Read API after services call
-        MULTIPLE_POSITIONS_DATA_RESPONSE,
+        MULTIPLE_POSITIONS_DATA_RESPONSE_1,
     ]
     fake_api.register_requests("10.0.0.100")
 
@@ -321,13 +315,12 @@ async def test_set_temperature(
     value: int,
     expected: str,
 ) -> None:
-    """Test setting temperature."""
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITIONS_DATA_RESPONSE,
+        MULTIPLE_POSITIONS_DATA_RESPONSE_1,
         # Read API after services call
-        MULTIPLE_POSITIONS_DATA_RESPONSE,
+        MULTIPLE_POSITIONS_DATA_RESPONSE_1,
     ]
     fake_api.register_requests("10.0.0.100")
 

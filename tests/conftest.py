@@ -19,6 +19,7 @@ from tests.api_data import DEVICE_INFO_RESPONSE
 from tests.api_data import FILTER_REQUESTS
 from tests.api_data import HMI_RESPONSE
 from tests.api_data import SYSTEM_RESPONSE
+from tests.api_data import TIMEZONE_RESPONSE
 
 
 @pytest.fixture
@@ -66,6 +67,12 @@ class FakeKebaKeEnergyAPI:
         self.aioclient_mock.post(
             f"{schema}://{host}/swupdate?action=getHmiInstalled",
             text=json.dumps(HMI_RESPONSE),
+            headers={"Content-Type": "application/json;charset=utf-8"},
+        )
+
+        self.aioclient_mock.post(
+            f"{schema}://{host}/dateTime?action=getTimeZone",
+            text=json.dumps(TIMEZONE_RESPONSE),
             headers={"Content-Type": "application/json;charset=utf-8"},
         )
 
