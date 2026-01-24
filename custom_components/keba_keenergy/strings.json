@@ -533,5 +533,25 @@
                 }
             }
         }
+    },
+    "services": {
+        "set_away_date_range": {
+            "description": "Set start and end dates for absence.",
+            "fields": {
+                "config_entry": {
+                    "description": "The configuration entry to use for this action.",
+                    "name": "Config entry"
+                },
+                "start_date": {
+                    "description": "Specifies the date on which the leave begins.",
+                    "name": "Start date"
+                },
+                "end_date": {
+                    "description": "Specifies the date on which the leave ends.",
+                    "name": "End date"
+                }
+            },
+            "name": "Set date range for being away"
+        }
     }
 }

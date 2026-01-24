@@ -16,6 +16,7 @@ from homeassistant.helpers.aiohttp_client import async_get_clientsession
 from .const import DOMAIN
 from .const import MANUFACTURER
 from .coordinator import KebaKeEnergyDataUpdateCoordinator
+from .services import async_setup_services
 
 if TYPE_CHECKING:
     from aiohttp import ClientSession
@@ -72,6 +73,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     )
 
     await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
+    await async_setup_services(hass)
 
     return True
 

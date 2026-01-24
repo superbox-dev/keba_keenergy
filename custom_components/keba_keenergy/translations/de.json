@@ -533,5 +533,25 @@
                 }
             }
         }
+    },
+    "services": {
+        "set_away_date_range": {
+            "description": "Start- und Enddatum für die Abwesenheit festlegen.",
+            "fields": {
+                "config_entry": {
+                    "description": "Der Konfigurationseintrag, der für diese Aktion verwendet werden soll. ",
+                    "name": "Konfigurationseintrag"
+                },
+                "start_date": {
+                    "description": "Gibt das Datum an, an dem die Abwesenheit beginnt.",
+                    "name": "Startdatum"
+                },
+                "end_date": {
+                    "description": "Gibt das Datum an, an dem die Abwesenheit endet.",
+                    "name": "Enddatum"
+                }
+            },
+            "name": "Datumsbereich für Abwesenheit festlegen"
+        }
     }
 }
