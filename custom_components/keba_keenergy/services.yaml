@@ -1,17 +1,17 @@
 set_away_date_range:
   fields:
     config_entry:
-      required: true
+      required: True
       selector:
         config_entry:
           integration: keba_keenergy
     start_date:
-      required: true
-      example: "2026-01-01"
+      required: True
+      example: 2026-01-01
       selector:
         date:
     end_date:
-      required: true
-      example: "2026-01-14"
+      required: True
+      example: 2026-01-14
       selector:
         date:
