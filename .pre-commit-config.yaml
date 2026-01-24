@@ -1,0 +1,29 @@
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.5.1
+    hooks:
+      - id: check-yaml
+      - id: end-of-file-fixer
+      - id: trailing-whitespace
+  - repo: local
+    hooks:
+      - id: black
+        entry:  uv run black
+        language: python
+        files: \.py$
+      - id: ruff
+        entry: uv run ruff check
+        language: python
+        files: \.py$
+      - id: mypy
+        entry: uv run mypy
+        language: python
+        files: \.py$
+      - id: rumdl
+        entry: uv run rumdl check
+        language: system
+        files: \.md$
+      - id: yamllint
+        entry:  uv run yamllint .
+        language: python
+        files: \.ya?ml$
