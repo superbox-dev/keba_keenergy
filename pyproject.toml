@@ -70,6 +70,7 @@ docs = [
 lint = [
     "black>=25.1.0",
     "mypy>=1.17.1",
+    "pre-commit>=4.5.1",
     "ruff>=0.12.9",
     "rumdl>=0.0.120",
     "types-PyYAML>=6.0.12.20250809",
