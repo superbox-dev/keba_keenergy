@@ -9,16 +9,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!--start-->
 
+### Added
+
+- Added service to set away date range [(Issue #20)](https://github.com/superbox-dev/keba_keenergy/issues/20)
+
 ## Changed
 
 - Bump `keba_keenergy_api` to v2.8.1
 - Changed documentation link to <www.superbox.one>
-
-## [1.7.0] - 2025-01-24
-
-### Added
-
-- Added service to set away date range [(Issue #20)](https://github.com/superbox-dev/keba_keenergy/issues/20)
 
 ## [1.6.1] - 2025-01-24
 
