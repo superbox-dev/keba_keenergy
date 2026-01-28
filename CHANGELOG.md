@@ -9,6 +9,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!--start-->
 
+## Changed
+
+- Bump `keba_keenergy_api` to v2.8.1
+- Changed documentation link to <www.superbox.one>
+
 ## [1.7.0] - 2025-01-24
 
 ### Added
