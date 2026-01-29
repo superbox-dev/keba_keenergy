@@ -106,10 +106,10 @@ class KebaKeEnergyEntity(
         """Return True if the entity is part of a switch valves else False."""
         return self.section_id == SectionPrefix.SWITCH_VALVE
 
-    @property
-    def is_photovoltaic(self) -> bool:
-        """Return True if the entity is part of a photovoltaic else False."""
-        return self.section_id == SectionPrefix.PHOTOVOLTAIC
+    # @property
+    # def is_photovoltaic(self) -> bool:
+    #     """Return True if the entity is part of a photovoltaic else False."""
+    #     return self.section_id == SectionPrefix.PHOTOVOLTAIC
 
     @property
     def device_name(self) -> str | None:
