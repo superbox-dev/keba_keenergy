@@ -534,6 +534,12 @@
             }
         }
     },
+    "issues": {
+        "frequent_flash_writes": {
+            "title": "Frequent write operations detected",
+            "description": "More than {limit} write operations were performed on the device this week.\n\nVery frequent write operations (for example caused by automations) may reduce the lifetime of the device's flash memory."
+        }
+    },
     "services": {
         "set_away_date_range": {
             "description": "Set start and end dates for absence.",

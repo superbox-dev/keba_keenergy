@@ -7,6 +7,7 @@ ATTR_OFFSET: Final[str] = "offset"
 CONFIG_ENTRY_VERSION: Final[int] = 1
 DEFAULT_SSL: Final[bool] = False
 DOMAIN: Final[str] = "keba_keenergy"
+FLASH_WRITE_LIMIT_PER_WEEK: Final[int] = 15
 MANUFACTURER: Final = "KEBA"
 MANUFACTURER_MTEC: Final = "M-TEC"
 MANUFACTURER_INO: Final = "ino"

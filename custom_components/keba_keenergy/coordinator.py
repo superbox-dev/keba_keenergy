@@ -2,6 +2,7 @@
 
 import logging
 from copy import deepcopy
+from datetime import date
 from datetime import timedelta
 from functools import cached_property
 from typing import Any
@@ -9,12 +10,13 @@ from typing import cast
 from zoneinfo import ZoneInfo
 
 from aiohttp import ClientSession
-from homeassistant.core import DOMAIN
 from homeassistant.core import HomeAssistant
 from homeassistant.exceptions import HomeAssistantError
+from homeassistant.helpers import issue_registry as ir
 from homeassistant.helpers.debounce import Debouncer
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator
 from homeassistant.helpers.update_coordinator import UpdateFailed
+from homeassistant.util.dt import now
 from keba_keenergy_api.api import KebaKeEnergyAPI
 from keba_keenergy_api.constants import BufferTank
 from keba_keenergy_api.constants import ExternalHeatSource
@@ -32,6 +34,8 @@ from keba_keenergy_api.endpoints import Value
 from keba_keenergy_api.endpoints import ValueResponse
 from keba_keenergy_api.error import APIError
 
+from .const import DOMAIN
+from .const import FLASH_WRITE_LIMIT_PER_WEEK
 from .const import REQUEST_REFRESH_COOLDOWN
 from .const import SCAN_INTERVAL
 
@@ -66,6 +70,10 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
         self._api_device_info: dict[str, Any] = {}
         self._api_system_info: dict[str, Any] = {}
         self._api_hmi_info: dict[str, Any] = {}
+
+        self._weekly_write_count: int = 0
+        self._write_count_week: tuple[int, int] | None = None
+        self._flash_issue_active: bool = False
 
         self._fixed_data: dict[str, ValueResponse] = {}
         self._has_photovoltaics: bool = False
@@ -258,6 +266,57 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
 
         self.async_set_updated_data(data)
 
+    async def async_write_data(self, request: dict[Section, Any], *, ignore_weekly_write_count: bool = False) -> None:
+        """Write data to the NAND from the KEBA KeEnergy control unit."""
+        self._reset_weekly_counter_if_needed()
+
+        if not ignore_weekly_write_count:
+            self._weekly_write_count += 1
+
+        _LOGGER.debug(
+            "API write request %s (writes this week: %s)",
+            request,
+            self._weekly_write_count,
+        )
+
+        if self._weekly_write_count > FLASH_WRITE_LIMIT_PER_WEEK and not self._flash_issue_active:
+            self._flash_issue_active = True
+            self._create_issue()
+
+        try:
+            await self.api.write_data(request=request)
+        except APIError as error:
+            msg: str = f"Failed to update: {error}"
+            raise HomeAssistantError(msg) from error
+
+    def _create_issue(self) -> None:
+        ir.async_create_issue(
+            self.hass,
+            domain=DOMAIN,
+            issue_id="frequent_flash_writes",
+            is_fixable=False,
+            translation_key="frequent_flash_writes",
+            translation_placeholders={
+                "limit": str(FLASH_WRITE_LIMIT_PER_WEEK),
+            },
+            severity=ir.IssueSeverity.WARNING,
+        )
+
+    def _reset_weekly_counter_if_needed(self) -> None:
+        today: date = now().date()
+        current_week: tuple[int, int] = today.isocalendar().year, today.isocalendar().week
+
+        if self._write_count_week != current_week:
+            self._write_count_week = current_week
+            self._weekly_write_count = 0
+            self._flash_issue_active = False
+
+            ir.async_delete_issue(
+                self.hass,
+                domain=DOMAIN,
+                issue_id="frequent_flash_writes",
+            )
+
     async def get_timezone(self) -> ZoneInfo:
         """Get the timezone from the Web HMI."""
         timezone: str = await self.api.system.get_timezone()
@@ -266,15 +325,12 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
     async def set_away_date_range(self, *, start_timestamp: float, end_timestamp: float) -> None:
         """Set the away date range."""
         if self.position:
-            try:
-                await self.api.write_data(
-                    request={
-                        HeatCircuit.AWAY_START_DATE: [int(start_timestamp) for _ in range(self.position.heat_circuit)],
-                        HeatCircuit.AWAY_END_DATE: [int(end_timestamp) for _ in range(self.position.heat_circuit)],
-                    },
-                )
-            except APIError as error:
-                raise HomeAssistantError(error) from error
+            await self.async_write_data(
+                request={
+                    HeatCircuit.AWAY_START_DATE: [int(start_timestamp) for _ in range(self.position.heat_circuit)],
+                    HeatCircuit.AWAY_END_DATE: [int(end_timestamp) for _ in range(self.position.heat_circuit)],
+                },
+            )
 
     @cached_property
     def configuration_url(self) -> str:

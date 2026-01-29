@@ -534,6 +534,12 @@
             }
         }
     },
+    "issues": {
+        "frequent_flash_writes": {
+            "title": "Viele Schreibzugriffe erkannt",
+            "description": "In dieser Woche wurden mehr als {limit} Schreibzugriffe auf das Gerät durchgeführt.\n\nSehr häufige Schreibzugriffe (zum Beispiel durch Automationen) können die Lebensdauer des Flash-Speichers des Geräts reduzieren."
+        }
+    },
     "services": {
         "set_away_date_range": {
             "description": "Start- und Enddatum für die Abwesenheit festlegen.",

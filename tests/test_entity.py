@@ -1,7 +1,6 @@
 from unittest.mock import patch
 
 import pytest
-from aiohttp import ClientError
 from homeassistant.components.homeassistant import SERVICE_UPDATE_ENTITY
 from homeassistant.components.homeassistant.const import DOMAIN as HA_DOMAIN
 from homeassistant.components.number import ATTR_VALUE
@@ -68,13 +67,11 @@ async def test_entity_update(
     [
         (
             APIError("mocked api error"),
-            "Failed to update number.keba_keenergy_12345678_hot_water_tank_standby_temperature_1 to 10.0: "
-            "mocked api error",
+            "Failed to update: mocked api error",
         ),
         (
-            ClientError("mocked client error"),
-            "Failed to update number.keba_keenergy_12345678_hot_water_tank_standby_temperature_1 to 10.0: "
-            "mocked client error",
+            APIError("mocked client error"),
+            "Failed to update: mocked client error",
         ),
     ],
 )

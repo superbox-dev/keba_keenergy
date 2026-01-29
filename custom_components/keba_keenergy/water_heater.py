@@ -192,6 +192,7 @@ class KebaKeEnergyHotWaterTankEntity(KebaKeEnergyWaterHeaterTankEntity, WaterHea
                     key,
                     section=HotWaterTank.OPERATING_MODE,
                     device_numbers=self.coordinator.hot_water_tank_numbers,
+                    ignore_daily_write_count=operation_mode == STATE_PERFORMANCE,
                 )
 
     async def async_set_temperature(self, **kwargs: Any) -> None:

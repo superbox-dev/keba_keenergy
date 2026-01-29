@@ -6,9 +6,7 @@ from functools import cached_property
 from typing import Any
 from typing import TYPE_CHECKING
 
-from aiohttp import ClientError
 from homeassistant.config_entries import ConfigEntry
-from homeassistant.exceptions import HomeAssistantError
 from homeassistant.helpers.device_registry import DeviceInfo
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 from keba_keenergy_api.constants import BufferTank
@@ -20,7 +18,6 @@ from keba_keenergy_api.constants import Section
 from keba_keenergy_api.constants import SectionPrefix
 from keba_keenergy_api.constants import SolarCircuit
 from keba_keenergy_api.constants import System
-from keba_keenergy_api.error import APIError
 
 from .const import DOMAIN
 from .const import MANUFACTURER
@@ -229,6 +226,7 @@ class KebaKeEnergyEntity(
         *,
         section: Section | None = None,
         device_numbers: int | None = None,
+        ignore_daily_write_count: bool = False,
     ) -> None:
         """Write data to the KEBA KeEnergy API."""
         if section:
@@ -248,13 +246,7 @@ class KebaKeEnergyEntity(
                 ),
             }
 
-            _LOGGER.debug("API write request %s", request)
-
-            try:
-                await self.coordinator.api.write_data(request=request)
-            except (APIError, ClientError) as error:
-                msg: str = f"Failed to update {self.entity_id} to {value}: {error}"
-                raise HomeAssistantError(msg) from error
+            await self.coordinator.async_write_data(request=request, ignore_weekly_write_count=ignore_daily_write_count)
 
             self.coordinator.async_update_value(
                 value,

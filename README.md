@@ -57,7 +57,7 @@ such as M-TEC, Windhager and ino, as well as other systems based on KEBA control
 3. Start the configuration flow: go to `Configuration` -> `Integrations`, click the `+ Add Integration` and select
    `KEBA KeEnergy` from the list.
 4. Add IP address or hostname of your KEBA KeEnergy device.
-5. Enjoy :-)
+5. Read the [FAQ](https://superbox.one/keba-keenergy/home-assistant/wiki/faq/) and enjoy :-)
 
 <!--end-home-->
 

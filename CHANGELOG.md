@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Added service to set away date range [(Issue #20)](https://github.com/superbox-dev/keba_keenergy/issues/20)
+- Add issue warning when more than 15 write operations are performed per week [(Issue #23)](https://github.com/superbox-dev/keba_keenergy/issues/23)
 
 ## Changed
 
