@@ -17,25 +17,30 @@ repos:
         language: system
         types:
           - python
+        exclude: ^\.venv/
       - id: ruff
         name: ruff
         entry: uv run ruff check
         language: system
         types:
           - python
+        exclude: ^\.venv/
       - id: mypy
         name: mypy
         entry: uv run mypy
         language: system
         types:
           - python
+        exclude: ^\.venv/
       - id: rumdl
         name: rumdl
         entry: uv run rumdl check
         language: system
         files: \.md$
+        exclude: ^\.venv/
       - id: yamllint
         name: yamllint
         entry: uv run yamllint
         language: system
         files: \.ya?ml$
+        exclude: ^\.venv/
