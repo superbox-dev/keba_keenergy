@@ -283,6 +283,7 @@ async def test_hot_water_tank_selects_translated(
     assert hot_water_tank_operating_mode_2.attributes[ATTR_FRIENDLY_NAME] == "Warmwasserspeicher 2 Betriebsart"
 
 
+@pytest.mark.usefixtures("entity_registry_enabled_by_default")
 async def test_external_heat_source_selects(
     hass: HomeAssistant,
     config_entry: MockConfigEntry,
@@ -309,6 +310,7 @@ async def test_external_heat_source_selects(
     ]
 
 
+@pytest.mark.usefixtures("entity_registry_enabled_by_default")
 async def test_external_heat_source_translated(
     hass: HomeAssistant,
     config_entry: MockConfigEntry,
@@ -366,6 +368,7 @@ async def test_external_heat_source_translated(
         ),
     ],
 )
+@pytest.mark.usefixtures("entity_registry_enabled_by_default")
 async def test_select_option(
     hass: HomeAssistant,
     config_entry: MockConfigEntry,

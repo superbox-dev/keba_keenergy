@@ -263,6 +263,7 @@ async def test_heat_circuit_numbers(
     )
 
 
+@pytest.mark.usefixtures("entity_registry_enabled_by_default")
 async def test_heat_circuit_numbers_translated(
     hass: HomeAssistant,
     config_entry: MockConfigEntry,
