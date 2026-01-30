@@ -1,6 +1,7 @@
 """DataUpdateCoordinator for the KEBA KeEnergy integration."""
 
 import logging
+from asyncio import Lock
 from copy import deepcopy
 from datetime import date
 from datetime import timedelta
@@ -14,6 +15,7 @@ from homeassistant.core import HomeAssistant
 from homeassistant.exceptions import HomeAssistantError
 from homeassistant.helpers import issue_registry as ir
 from homeassistant.helpers.debounce import Debouncer
+from homeassistant.helpers.storage import Store
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator
 from homeassistant.helpers.update_coordinator import UpdateFailed
 from homeassistant.util.dt import now
@@ -59,6 +61,9 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
         session: ClientSession,
     ) -> None:
         """Initialize."""
+        self._store: Store[dict[str, Any]] = Store(hass, version=1, key=DOMAIN)
+        self._write_lock: Lock = Lock()
+
         self.api: KebaKeEnergyAPI = KebaKeEnergyAPI(
             host,
             username=username,
@@ -200,6 +205,15 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
 
     async def async_initialize(self) -> None:
         """Initialize values from API that never changed."""
+        store_data: dict[str, Any] | None = await self._store.async_load()
+
+        if store_data:
+            counter: dict[str, Any] | None = store_data.get("flash_write_counter")
+
+            if isinstance(counter, dict):
+                self._write_count_week = tuple(counter["week"])
+                self._weekly_write_count = counter["count"]
+
         try:
             self._api_device_info = await self.api.system.get_device_info()
             self._api_system_info = await self.api.system.get_info()
@@ -268,20 +282,30 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
 
     async def async_write_data(self, request: dict[Section, Any], *, ignore_weekly_write_count: bool = False) -> None:
         """Write data to the NAND from the KEBA KeEnergy control unit."""
-        self._reset_weekly_counter_if_needed()
+        async with self._write_lock:
+            await self._async_reset_weekly_counter_if_needed()
 
-        if not ignore_weekly_write_count:
-            self._weekly_write_count += 1
+            if not ignore_weekly_write_count:
+                self._weekly_write_count += 1
 
-        _LOGGER.debug(
-            "API write request %s (writes this week: %s)",
-            request,
-            self._weekly_write_count,
-        )
+                await self._store.async_save(
+                    {
+                        "flash_write_counter": {
+                            "week": list(self._write_count_week) if self._write_count_week else [],
+                            "count": self._weekly_write_count,
+                        },
+                    },
+                )
 
-        if self._weekly_write_count > FLASH_WRITE_LIMIT_PER_WEEK and not self._flash_issue_active:
-            self._flash_issue_active = True
-            self._create_issue()
+            _LOGGER.debug(
+                "API write request %s (writes this week: %s)",
+                request,
+                self._weekly_write_count,
+            )
+
+            if self._weekly_write_count > FLASH_WRITE_LIMIT_PER_WEEK and not self._flash_issue_active:
+                self._flash_issue_active = True
+                self._create_issue()
 
         try:
             await self.api.write_data(request=request)
@@ -302,7 +326,7 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
             severity=ir.IssueSeverity.WARNING,
         )
 
-    def _reset_weekly_counter_if_needed(self) -> None:
+    async def _async_reset_weekly_counter_if_needed(self) -> None:
         today: date = now().date()
         current_week: tuple[int, int] = today.isocalendar().year, today.isocalendar().week
 
@@ -315,6 +339,15 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
                 self.hass,
                 domain=DOMAIN,
                 issue_id="frequent_flash_writes",
+            )
+
+            await self._store.async_save(
+                {
+                    "flash_write_counter": {
+                        "week": list(self._write_count_week),
+                        "count": self._weekly_write_count,
+                    },
+                },
             )
 
     async def get_timezone(self) -> ZoneInfo:
