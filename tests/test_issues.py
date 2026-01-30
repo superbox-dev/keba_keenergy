@@ -1,8 +1,8 @@
 from unittest.mock import patch
 
-from homeassistant.components.number import ATTR_VALUE
-from homeassistant.components.number import DOMAIN as NUMBER_DOMAIN
-from homeassistant.components.number.const import SERVICE_SET_VALUE
+from homeassistant.components.select import ATTR_OPTION
+from homeassistant.components.select import DOMAIN as SELECT_DOMAIN
+from homeassistant.components.select import SERVICE_SELECT_OPTION
 from homeassistant.const import ATTR_ENTITY_ID
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers import issue_registry as ir
@@ -36,25 +36,24 @@ async def test_set_value(
 
     with patch("custom_components.keba_keenergy.coordinator.FLASH_WRITE_LIMIT_PER_WEEK", 1):
         await hass.services.async_call(
-            domain=NUMBER_DOMAIN,
-            service=SERVICE_SET_VALUE,
+            domain=SELECT_DOMAIN,
+            service=SERVICE_SELECT_OPTION,
             service_data={
-                ATTR_ENTITY_ID: "number.keba_keenergy_12345678_heat_circuit_target_temperature_offset_1",
-                ATTR_VALUE: 0.5,
+                ATTR_ENTITY_ID: "select.keba_keenergy_12345678_buffer_tank_operating_mode_1",
+                ATTR_OPTION: "off",
             },
             blocking=True,
         )
 
         await hass.services.async_call(
-            domain=NUMBER_DOMAIN,
-            service=SERVICE_SET_VALUE,
+            domain=SELECT_DOMAIN,
+            service=SERVICE_SELECT_OPTION,
             service_data={
-                ATTR_ENTITY_ID: "number.keba_keenergy_12345678_heat_circuit_target_temperature_offset_1",
-                ATTR_VALUE: 1.0,
+                ATTR_ENTITY_ID: "select.keba_keenergy_12345678_buffer_tank_operating_mode_1",
+                ATTR_OPTION: "on",
             },
             blocking=True,
         )
-
     issue_registry = ir.async_get(hass)
 
     issue = issue_registry.async_get_issue(

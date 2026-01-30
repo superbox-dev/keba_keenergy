@@ -8,6 +8,7 @@ CONFIG_ENTRY_VERSION: Final[int] = 1
 DEFAULT_SSL: Final[bool] = False
 DOMAIN: Final[str] = "keba_keenergy"
 FLASH_WRITE_LIMIT_PER_WEEK: Final[int] = 15
+FLASH_WRITE_DELAY: Final[float] = 0.5
 MANUFACTURER: Final = "KEBA"
 MANUFACTURER_MTEC: Final = "M-TEC"
 MANUFACTURER_INO: Final = "ino"

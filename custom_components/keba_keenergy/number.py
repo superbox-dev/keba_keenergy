@@ -2,6 +2,7 @@
 
 import logging
 from dataclasses import dataclass
+from datetime import datetime
 from functools import cached_property
 
 from homeassistant.components.number import DOMAIN as NUMBER_DOMAIN
@@ -11,11 +12,14 @@ from homeassistant.components.number import NumberEntityDescription
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import PERCENTAGE
 from homeassistant.const import UnitOfTemperature
+from homeassistant.core import CALLBACK_TYPE
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
+from homeassistant.helpers.event import async_call_later
 from keba_keenergy_api.constants import SectionPrefix
 
 from .const import DOMAIN
+from .const import FLASH_WRITE_DELAY
 from .coordinator import KebaKeEnergyDataUpdateCoordinator
 from .entity import KebaKeEnergyExtendedEntity
 
@@ -211,6 +215,8 @@ class KebaKeEnergyNumberEntity(KebaKeEnergyExtendedEntity, NumberEntity):
         )
 
         self.entity_id: str = f"{NUMBER_DOMAIN}.{DOMAIN}_{self._attr_unique_id}"
+        self._async_call_later: CALLBACK_TYPE | None = None
+        self._pending_value: float | None = None
 
     @cached_property
     def native_min_value(self) -> float:
@@ -229,16 +235,33 @@ class KebaKeEnergyNumberEntity(KebaKeEnergyExtendedEntity, NumberEntity):
     @property
     def native_value(self) -> float:
         """Return the state of the number."""
-        return float(self.get_value(self.entity_description.key)) * self.entity_description.scale
+        native_value: float = float(self.get_value(self.entity_description.key)) * self.entity_description.scale
+
+        if self._pending_value is not None and self._async_call_later:
+            native_value = self._pending_value * self.entity_description.scale
+
+        return native_value
 
     async def async_set_native_value(self, value: float) -> None:
         """Set new value."""
-        new_value: float = value / self.entity_description.scale
-        current_value: float = float(self.get_value(self.entity_description.key))
+        self._pending_value = value / self.entity_description.scale
 
-        if new_value != current_value:
+        if self._async_call_later:
+            self._async_call_later()
+            self._async_call_later = None
+
+        self._async_call_later = async_call_later(self.hass, FLASH_WRITE_DELAY, self._async_debounced_write_data)
+
+    async def _async_debounced_write_data(self, _: datetime) -> None:
+        self._async_call_later = None
+
+        current_value = float(self.get_value(self.entity_description.key))
+
+        if self._pending_value != current_value:
             await self._async_write_data(
-                new_value,
+                self._pending_value,
                 section=self.section,
                 device_numbers=self.device_numbers,
             )
+
+        self._pending_value = None

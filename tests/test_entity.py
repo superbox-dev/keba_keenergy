@@ -3,9 +3,9 @@ from unittest.mock import patch
 import pytest
 from homeassistant.components.homeassistant import SERVICE_UPDATE_ENTITY
 from homeassistant.components.homeassistant.const import DOMAIN as HA_DOMAIN
-from homeassistant.components.number import ATTR_VALUE
-from homeassistant.components.number import DOMAIN as NUMBER_DOMAIN
-from homeassistant.components.number.const import SERVICE_SET_VALUE
+from homeassistant.components.select import ATTR_OPTION
+from homeassistant.components.select import DOMAIN as SELECT_DOMAIN
+from homeassistant.components.select import SERVICE_SELECT_OPTION
 from homeassistant.const import ATTR_ENTITY_ID
 from homeassistant.const import STATE_OFF
 from homeassistant.core import HomeAssistant
@@ -93,18 +93,18 @@ async def test_entity_update_failed(
 
     await setup_integration(hass, config_entry)
 
-    entity_id: str = "number.keba_keenergy_12345678_hot_water_tank_standby_temperature_1"
+    entity_id: str = "select.keba_keenergy_12345678_buffer_tank_operating_mode_1"
     state: State | None = hass.states.get(entity_id)
     assert isinstance(state, State)
 
     with patch.object(KebaKeEnergyAPI, "write_data", side_effect=side_effect):
         with pytest.raises(HomeAssistantError) as error:
             await hass.services.async_call(
-                domain=NUMBER_DOMAIN,
-                service=SERVICE_SET_VALUE,
+                domain=SELECT_DOMAIN,
+                service=SERVICE_SELECT_OPTION,
                 service_data={
                     ATTR_ENTITY_ID: entity_id,
-                    ATTR_VALUE: 10,
+                    ATTR_OPTION: "off",
                 },
                 blocking=True,
             )
