@@ -1,3 +1,4 @@
+from datetime import timedelta
 from typing import Any
 
 import pytest
@@ -21,7 +22,9 @@ from homeassistant.const import SERVICE_TURN_ON
 from homeassistant.const import STATE_OFF
 from homeassistant.core import HomeAssistant
 from homeassistant.core import State
+from homeassistant.util import dt as dt_util
 from pytest_homeassistant_custom_component.common import MockConfigEntry
+from pytest_homeassistant_custom_component.common import async_fire_time_changed
 
 from tests import setup_integration
 from tests.api_data import DEFAULT_POSITION_DATA_RESPONSE
@@ -347,5 +350,8 @@ async def test_set_temperature(
         },
         blocking=True,
     )
+
+    async_fire_time_changed(hass, dt_util.utcnow() + timedelta(seconds=1))
+    await hass.async_block_till_done()
 
     fake_api.assert_called_write_with(expected)

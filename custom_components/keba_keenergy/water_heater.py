@@ -1,5 +1,6 @@
 """Support for the KEBA KeEnergy water heater."""
 
+from datetime import datetime
 from functools import cached_property
 from typing import Any
 from typing import Final
@@ -17,8 +18,10 @@ from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import ATTR_TEMPERATURE
 from homeassistant.const import STATE_OFF
 from homeassistant.const import UnitOfTemperature
+from homeassistant.core import CALLBACK_TYPE
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
+from homeassistant.helpers.event import async_call_later
 from keba_keenergy_api.constants import BufferTank
 from keba_keenergy_api.constants import BufferTankOperatingMode
 from keba_keenergy_api.constants import HotWaterTank
@@ -26,6 +29,7 @@ from keba_keenergy_api.constants import HotWaterTankOperatingMode
 from keba_keenergy_api.constants import SectionPrefix
 
 from .const import DOMAIN
+from .const import FLASH_WRITE_DELAY
 from .coordinator import KebaKeEnergyDataUpdateCoordinator
 from .entity import KebaKeEnergyEntity
 
@@ -102,18 +106,13 @@ class KebaKeEnergyWaterHeaterTankEntity(KebaKeEnergyEntity, WaterHeaterEntity):
         super().__init__(coordinator, entry=entry, section_id=section_id, index=index)
 
     @property
-    def target_temperature(self) -> float:
-        """Return the temperature we try to reach."""
-        return float(self.get_value("target_temperature"))
-
-    @property
     def target_temperature_low(self) -> float:
-        """Return the lowbound target temperature we try to reach."""
+        """Return the low bound target temperature we try to reach."""
         return float(self.get_value("standby_temperature"))
 
     @property
     def target_temperature_high(self) -> float:
-        """Return the highbound target temperature we try to reach."""
+        """Return the high bound target temperature we try to reach."""
         return float(self.get_value("target_temperature"))
 
 
@@ -138,12 +137,28 @@ class KebaKeEnergyHotWaterTankEntity(KebaKeEnergyWaterHeaterTankEntity, WaterHea
     ) -> None:
         """Initialize the entity."""
         super().__init__(coordinator, description=description, entry=entry, section_id=section_id, index=index)
+
         self.entity_id: str = f"{WATER_HEATER_DOMAIN}.{DOMAIN}_{self._attr_unique_id}"
+
+        self._async_call_later: CALLBACK_TYPE | None = None
+        self._pending_value: float | None = None
 
     @property
     def current_temperature(self) -> float:
         """Return the current temperature."""
         return float(self.get_value("current_temperature"))
+
+    @property
+    def target_temperature(self) -> float:
+        """Return the temperature we try to reach."""
+        target_temperature: float
+
+        if self._pending_value is not None and self._async_call_later:
+            target_temperature = self._pending_value
+        else:
+            target_temperature = float(self.get_value("target_temperature"))
+
+        return target_temperature
 
     @cached_property
     def min_temp(self) -> float:
@@ -199,14 +214,28 @@ class KebaKeEnergyHotWaterTankEntity(KebaKeEnergyWaterHeaterTankEntity, WaterHea
 
     async def async_set_temperature(self, **kwargs: Any) -> None:
         """Set temperature for hot water tank."""
-        new_temperature: float = kwargs[ATTR_TEMPERATURE]
+        if temperature := kwargs.get(ATTR_TEMPERATURE):
+            self._pending_value = temperature
 
-        if new_temperature != self.current_temperature:
+            if self._async_call_later:
+                self._async_call_later()
+                self._async_call_later = None
+
+            self._async_call_later = async_call_later(self.hass, FLASH_WRITE_DELAY, self._async_debounced_write_data)
+
+    async def _async_debounced_write_data(self, _: datetime) -> None:
+        self._async_call_later = None
+
+        current_value: float = float(self.get_value("target_temperature"))
+
+        if self._pending_value is not None and self._pending_value != current_value:
             await self._async_write_data(
-                kwargs[ATTR_TEMPERATURE],
+                self._pending_value,
                 section=HotWaterTank.TARGET_TEMPERATURE,
                 device_numbers=self.coordinator.hot_water_tank_numbers,
             )
+
+        self._pending_value = None
 
 
 class KebaKeEnergyBufferTankEntity(KebaKeEnergyWaterHeaterTankEntity, WaterHeaterEntity):
@@ -240,6 +269,11 @@ class KebaKeEnergyBufferTankEntity(KebaKeEnergyWaterHeaterTankEntity, WaterHeate
     def current_temperature(self) -> float:
         """Return the current temperature."""
         return float(max(self.get_value("current_top_temperature"), self.get_value("current_bottom_temperature")))
+
+    @property
+    def target_temperature(self) -> float:
+        """Return the temperature we try to reach."""
+        return float(self.get_value("target_temperature"))
 
     @property
     def current_operation(self) -> str:

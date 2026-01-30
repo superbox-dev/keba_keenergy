@@ -215,6 +215,7 @@ class KebaKeEnergyNumberEntity(KebaKeEnergyExtendedEntity, NumberEntity):
         )
 
         self.entity_id: str = f"{NUMBER_DOMAIN}.{DOMAIN}_{self._attr_unique_id}"
+
         self._async_call_later: CALLBACK_TYPE | None = None
         self._pending_value: float | None = None
 
@@ -235,6 +236,8 @@ class KebaKeEnergyNumberEntity(KebaKeEnergyExtendedEntity, NumberEntity):
     @property
     def native_value(self) -> float:
         """Return the state of the number."""
+        native_value: float
+
         if self._pending_value is not None and self._async_call_later:
             native_value = self._pending_value * self.entity_description.scale
         else:

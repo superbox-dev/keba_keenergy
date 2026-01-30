@@ -25,8 +25,10 @@ from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import ATTR_TEMPERATURE
 from homeassistant.const import STATE_ON
 from homeassistant.const import UnitOfTemperature
+from homeassistant.core import CALLBACK_TYPE
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
+from homeassistant.helpers.event import async_call_later
 from homeassistant.util import dt as dt_util
 from keba_keenergy_api.constants import HeatCircuit
 from keba_keenergy_api.constants import HeatCircuitHeatRequest
@@ -35,6 +37,7 @@ from keba_keenergy_api.constants import SectionPrefix
 
 from .const import ATTR_OFFSET
 from .const import DOMAIN
+from .const import FLASH_WRITE_DELAY
 from .coordinator import KebaKeEnergyDataUpdateCoordinator
 from .entity import KebaKeEnergyEntity
 
@@ -123,8 +126,13 @@ class KebaKeEnergyClimateEntity(KebaKeEnergyEntity, ClimateEntity):
     ) -> None:
         """Initialize KEBA KeEnergy climate entity."""
         self.entity_description = description
+
         super().__init__(coordinator, entry, section_id, index)
+
         self.entity_id = f"{CLIMATE_DOMAIN}.{DOMAIN}_{self._attr_unique_id}"
+
+        self._async_call_later: CALLBACK_TYPE | None = None
+        self._pending_value: float | None = None
 
         self._operating_mode_status: int | None = None
 
@@ -145,7 +153,14 @@ class KebaKeEnergyClimateEntity(KebaKeEnergyEntity, ClimateEntity):
     @property
     def target_temperature(self) -> float:
         """Return the temperature we try to reach."""
-        return float(self.get_value("selected_target_temperature")) + float(self.get_value("target_temperature_offset"))
+        target_temperature_offset: float
+
+        if self._pending_value is not None and self._async_call_later:
+            target_temperature_offset = self._pending_value
+        else:
+            target_temperature_offset = float(self.get_value("target_temperature_offset"))
+
+        return float(self.get_value("selected_target_temperature")) + target_temperature_offset
 
     @property
     def min_temp(self) -> float:
@@ -253,15 +268,27 @@ class KebaKeEnergyClimateEntity(KebaKeEnergyEntity, ClimateEntity):
     async def async_set_temperature(self, **kwargs: Any) -> None:
         """Set new target temperature."""
         if temperature := kwargs.get(ATTR_TEMPERATURE):
-            new_value: float = temperature - float(self.get_value("selected_target_temperature"))
-            current_value: float = float(self.get_value("target_temperature_offset"))
+            self._pending_value = temperature - float(self.get_value("selected_target_temperature"))
 
-            if new_value != current_value:
-                await self._async_write_data(
-                    new_value,
-                    section=HeatCircuit.TARGET_TEMPERATURE_OFFSET,
-                    device_numbers=self.coordinator.heat_circuit_numbers,
-                )
+            if self._async_call_later:
+                self._async_call_later()
+                self._async_call_later = None
+
+            self._async_call_later = async_call_later(self.hass, FLASH_WRITE_DELAY, self._async_debounced_write_data)
+
+    async def _async_debounced_write_data(self, _: datetime) -> None:
+        self._async_call_later = None
+
+        current_value: float = float(self.get_value("target_temperature_offset"))
+
+        if self._pending_value is not None and self._pending_value != current_value:
+            await self._async_write_data(
+                self._pending_value,
+                section=HeatCircuit.TARGET_TEMPERATURE_OFFSET,
+                device_numbers=self.coordinator.heat_circuit_numbers,
+            )
+
+        self._pending_value = None
 
     async def _async_set_away_date_range(self, preset_mode: str, /) -> None:
         tz: ZoneInfo = await self.coordinator.get_timezone()
