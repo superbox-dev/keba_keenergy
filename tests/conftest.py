@@ -1,4 +1,5 @@
 import json
+import logging
 from collections.abc import Generator
 from typing import Any
 from unittest.mock import patch
@@ -108,6 +109,8 @@ class FakeKebaKeEnergyAPI:
         return AiohttpClientMockResponse(method, url=url)
 
     def assert_called_write_with(self, data: str, /) -> None:
+        logging.error(self.aioclient_mock.mock_calls)  # noqa: LOG015
+
         assert (
             "POST",
             URL("http://10.0.0.100/var/readWriteVars?action=set"),
