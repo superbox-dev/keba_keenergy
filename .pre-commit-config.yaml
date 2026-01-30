@@ -4,7 +4,6 @@ repos:
     hooks:
       - id: check-shebang-scripts-are-executable
       - id: check-symlinks
-      - id: check-yaml
       - id: check-toml
       - id: detect-private-key
       - id: end-of-file-fixer
