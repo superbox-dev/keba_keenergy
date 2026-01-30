@@ -28,6 +28,7 @@ from tests.api_data import DEFAULT_POSITION_DATA_RESPONSE
 from tests.api_data import DEFAULT_POSITION_FIXED_DATA_RESPONSE
 from tests.api_data import DEFAULT_POSITION_RESPONSE
 from tests.api_data import MULTIPLE_POSITIONS_DATA_RESPONSE_1
+from tests.api_data import MULTIPLE_POSITIONS_DATA_RESPONSE_2
 from tests.api_data import MULTIPLE_POSITIONS_RESPONSE
 from tests.api_data import get_multiple_position_fixed_data_response
 from tests.conftest import FakeKebaKeEnergyAPI
@@ -138,14 +139,16 @@ async def test_water_heater_translations(
 
 
 @pytest.mark.parametrize(
-    ("entity_id", "expected"),
+    ("entity_id", "response", "expected"),
     [
         (
             "water_heater.keba_keenergy_12345678_1",
+            MULTIPLE_POSITIONS_DATA_RESPONSE_2,
             '[{"name": "APPL.CtrlAppl.sParam.hotWaterTank[0].param.operatingMode", "value": "0"}]',
         ),
         (
             "water_heater.keba_keenergy_12345678_buffer_tank_1",
+            MULTIPLE_POSITIONS_DATA_RESPONSE_2,
             '[{"name": "APPL.CtrlAppl.sParam.bufferTank[0].param.operatingMode", "value": "0"}]',
         ),
     ],
@@ -155,14 +158,15 @@ async def test_turn_off(
     config_entry: MockConfigEntry,
     fake_api: FakeKebaKeEnergyAPI,
     entity_id: str,
+    response: list[dict[str, Any]],
     expected: str,
 ) -> None:
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITIONS_DATA_RESPONSE_1,
+        response,
         # Read API after services call
-        MULTIPLE_POSITIONS_DATA_RESPONSE_1,
+        response,
     ]
     fake_api.register_requests("10.0.0.100")
 
@@ -226,41 +230,48 @@ async def test_turn_on(
 
 
 @pytest.mark.parametrize(
-    ("entity_id", "operation_mode", "expected"),
+    ("entity_id", "operation_mode", "response", "expected"),
     [
         (
             "water_heater.keba_keenergy_12345678_1",
             STATE_ECO,
+            MULTIPLE_POSITIONS_DATA_RESPONSE_1,
             '[{"name": "APPL.CtrlAppl.sParam.hotWaterTank[0].param.operatingMode", "value": "1"}]',
         ),
         (
             "water_heater.keba_keenergy_12345678_1",
             STATE_PERFORMANCE,
+            MULTIPLE_POSITIONS_DATA_RESPONSE_2,
             '[{"name": "APPL.CtrlAppl.sParam.hotWaterTank[0].param.operatingMode", "value": "3"}]',
         ),
         (
             "water_heater.keba_keenergy_12345678_1",
             STATE_OFF,
+            MULTIPLE_POSITIONS_DATA_RESPONSE_1,
             '[{"name": "APPL.CtrlAppl.sParam.hotWaterTank[0].param.operatingMode", "value": "0"}]',
         ),
         (
             "water_heater.keba_keenergy_12345678_1",
             STATE_HEAT_PUMP,
+            MULTIPLE_POSITIONS_DATA_RESPONSE_1,
             '[{"name": "APPL.CtrlAppl.sParam.hotWaterTank[0].param.operatingMode", "value": "2"}]',
         ),
         (
             "water_heater.keba_keenergy_12345678_buffer_tank_1",
             STATE_PERFORMANCE,
+            MULTIPLE_POSITIONS_DATA_RESPONSE_1,
             '[{"name": "APPL.CtrlAppl.sParam.bufferTank[0].param.operatingMode", "value": "2"}]',
         ),
         (
             "water_heater.keba_keenergy_12345678_buffer_tank_1",
             STATE_OFF,
+            MULTIPLE_POSITIONS_DATA_RESPONSE_2,
             '[{"name": "APPL.CtrlAppl.sParam.bufferTank[0].param.operatingMode", "value": "0"}]',
         ),
         (
             "water_heater.keba_keenergy_12345678_buffer_tank_1",
             STATE_HEAT_PUMP,
+            MULTIPLE_POSITIONS_DATA_RESPONSE_1,
             '[{"name": "APPL.CtrlAppl.sParam.bufferTank[0].param.operatingMode", "value": "1"}]',
         ),
     ],
@@ -271,14 +282,15 @@ async def test_set_operation_mode(
     fake_api: FakeKebaKeEnergyAPI,
     entity_id: str,
     operation_mode: str,
+    response: list[dict[str, Any]],
     expected: str,
 ) -> None:
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITIONS_DATA_RESPONSE_1,
+        response,
         # Read API after services call
-        MULTIPLE_POSITIONS_DATA_RESPONSE_1,
+        response,
     ]
     fake_api.register_requests("10.0.0.100")
 

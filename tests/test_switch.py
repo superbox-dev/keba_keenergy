@@ -1,3 +1,5 @@
+from typing import Any
+
 import pytest
 from homeassistant.components.switch import SwitchDeviceClass
 from homeassistant.components.switch.const import DOMAIN as SWITCH_DOMAIN
@@ -13,6 +15,7 @@ from pytest_homeassistant_custom_component.common import MockConfigEntry
 
 from tests import setup_integration
 from tests.api_data import MULTIPLE_POSITIONS_DATA_RESPONSE_1
+from tests.api_data import MULTIPLE_POSITIONS_DATA_RESPONSE_2
 from tests.api_data import MULTIPLE_POSITIONS_RESPONSE
 from tests.api_data import get_multiple_position_fixed_data_response
 from tests.conftest import FakeKebaKeEnergyAPI
@@ -121,27 +124,31 @@ async def test_heat_pump_switches_translated(
 
 
 @pytest.mark.parametrize(
-    ("entity_id", "service", "expected"),
+    ("entity_id", "service", "response", "expected"),
     [
         (
             "switch.keba_keenergy_12345678_heat_pump_compressor_use_night_speed",
             SERVICE_TURN_ON,
+            MULTIPLE_POSITIONS_DATA_RESPONSE_2,
             '[{"name": "APPL.CtrlAppl.sParam.heatpump[0].HeatPumpPowerCtrl.param.useDayNightSpeed", "value": "1"}]',
         ),
         (
             "switch.keba_keenergy_12345678_heat_pump_compressor_use_night_speed",
             SERVICE_TURN_OFF,
+            MULTIPLE_POSITIONS_DATA_RESPONSE_1,
             '[{"name": "APPL.CtrlAppl.sParam.heatpump[0].HeatPumpPowerCtrl.param.useDayNightSpeed", "value": "0"}]',
         ),
         (
             "switch.keba_keenergy_12345678_solar_circuit_priority_1_before_2_2",
             SERVICE_TURN_ON,
+            MULTIPLE_POSITIONS_DATA_RESPONSE_2,
             '[{"name": "APPL.CtrlAppl.sParam.hmiRetainData.consumer1PrioritySolar[1]", "value": "1"}, '
             '{"name": "APPL.CtrlAppl.sParam.genericHeat[2].param.priority", "value": "14"}]',
         ),
         (
             "switch.keba_keenergy_12345678_solar_circuit_priority_1_before_2_2",
             SERVICE_TURN_OFF,
+            MULTIPLE_POSITIONS_DATA_RESPONSE_1,
             '[{"name": "APPL.CtrlAppl.sParam.hmiRetainData.consumer1PrioritySolar[1]", "value": "0"}, '
             '{"name": "APPL.CtrlAppl.sParam.genericHeat[2].param.priority", "value": "15"}]',
         ),
@@ -153,14 +160,15 @@ async def test_set_value(
     fake_api: FakeKebaKeEnergyAPI,
     entity_id: str,
     service: str,
+    response: list[dict[str, Any]],
     expected: str,
 ) -> None:
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITIONS_DATA_RESPONSE_1,
+        response,
         # Read API after services call
-        MULTIPLE_POSITIONS_DATA_RESPONSE_1,
+        response,
     ]
     fake_api.register_requests("10.0.0.100")
 

@@ -170,24 +170,26 @@ class KebaKeEnergyHotWaterTankEntity(KebaKeEnergyWaterHeaterTankEntity, WaterHea
 
     async def async_turn_off(self, **kwargs: Any) -> None:  # noqa: ARG002
         """Turn the hot water tank off."""
-        await self._async_write_data(
-            HotWaterTankOperatingMode.OFF.value,
-            section=HotWaterTank.OPERATING_MODE,
-            device_numbers=self.coordinator.hot_water_tank_numbers,
-        )
+        if self.current_operation != STATE_OFF:
+            await self._async_write_data(
+                HotWaterTankOperatingMode.OFF.value,
+                section=HotWaterTank.OPERATING_MODE,
+                device_numbers=self.coordinator.hot_water_tank_numbers,
+            )
 
     async def async_turn_on(self, **kwargs: Any) -> None:  # noqa: ARG002
         """Turn the hot water tank on."""
-        await self._async_write_data(
-            HotWaterTankOperatingMode.ON.value,
-            section=HotWaterTank.OPERATING_MODE,
-            device_numbers=self.coordinator.hot_water_tank_numbers,
-        )
+        if self.current_operation != STATE_HEAT_PUMP:
+            await self._async_write_data(
+                HotWaterTankOperatingMode.ON.value,
+                section=HotWaterTank.OPERATING_MODE,
+                device_numbers=self.coordinator.hot_water_tank_numbers,
+            )
 
     async def async_set_operation_mode(self, operation_mode: str) -> None:
         """Set operation mode for hot water tank."""
         for key, value in HOT_WATER_TANK_STATE_TO_HA.items():
-            if value == operation_mode:
+            if value == operation_mode and operation_mode != self.current_operation:
                 await self._async_write_data(
                     key,
                     section=HotWaterTank.OPERATING_MODE,
@@ -197,11 +199,14 @@ class KebaKeEnergyHotWaterTankEntity(KebaKeEnergyWaterHeaterTankEntity, WaterHea
 
     async def async_set_temperature(self, **kwargs: Any) -> None:
         """Set temperature for hot water tank."""
-        await self._async_write_data(
-            kwargs[ATTR_TEMPERATURE],
-            section=HotWaterTank.TARGET_TEMPERATURE,
-            device_numbers=self.coordinator.hot_water_tank_numbers,
-        )
+        new_temperature: float = kwargs[ATTR_TEMPERATURE]
+
+        if new_temperature != self.current_temperature:
+            await self._async_write_data(
+                kwargs[ATTR_TEMPERATURE],
+                section=HotWaterTank.TARGET_TEMPERATURE,
+                device_numbers=self.coordinator.hot_water_tank_numbers,
+            )
 
 
 class KebaKeEnergyBufferTankEntity(KebaKeEnergyWaterHeaterTankEntity, WaterHeaterEntity):
@@ -251,24 +256,26 @@ class KebaKeEnergyBufferTankEntity(KebaKeEnergyWaterHeaterTankEntity, WaterHeate
 
     async def async_turn_off(self, **kwargs: Any) -> None:  # noqa: ARG002
         """Turn the buffer tank off."""
-        await self._async_write_data(
-            BufferTankOperatingMode.OFF.value,
-            section=BufferTank.OPERATING_MODE,
-            device_numbers=self.coordinator.buffer_tank_numbers,
-        )
+        if self.current_operation != STATE_OFF:
+            await self._async_write_data(
+                BufferTankOperatingMode.OFF.value,
+                section=BufferTank.OPERATING_MODE,
+                device_numbers=self.coordinator.buffer_tank_numbers,
+            )
 
     async def async_turn_on(self, **kwargs: Any) -> None:  # noqa: ARG002
         """Turn the buffer tank on."""
-        await self._async_write_data(
-            BufferTankOperatingMode.ON.value,
-            section=BufferTank.OPERATING_MODE,
-            device_numbers=self.coordinator.buffer_tank_numbers,
-        )
+        if self.current_operation != STATE_HEAT_PUMP:
+            await self._async_write_data(
+                BufferTankOperatingMode.ON.value,
+                section=BufferTank.OPERATING_MODE,
+                device_numbers=self.coordinator.buffer_tank_numbers,
+            )
 
     async def async_set_operation_mode(self, operation_mode: str) -> None:
         """Set operation mode for buffer tank."""
         for key, value in BUFFER_TANK_STATE_TO_HA.items():
-            if value == operation_mode:
+            if value == operation_mode and operation_mode != self.current_operation:
                 await self._async_write_data(
                     key,
                     section=BufferTank.OPERATING_MODE,

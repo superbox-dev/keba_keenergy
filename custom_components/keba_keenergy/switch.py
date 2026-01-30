@@ -110,16 +110,18 @@ class KebaKeEnergySwitchEntity(KebaKeEnergyExtendedEntity, SwitchEntity):
 
     async def async_turn_off(self, **kwargs: Any) -> None:  # noqa: ARG002
         """Turn the switch off."""
-        await self._async_write_data(
-            0,
-            section=self.section,
-            device_numbers=self.device_numbers,
-        )
+        if self.is_on:
+            await self._async_write_data(
+                0,
+                section=self.section,
+                device_numbers=self.device_numbers,
+            )
 
     async def async_turn_on(self, **kwargs: Any) -> None:  # noqa: ARG002
         """Turn the switch on."""
-        await self._async_write_data(
-            1,
-            section=self.section,
-            device_numbers=self.device_numbers,
-        )
+        if not self.is_on:
+            await self._async_write_data(
+                1,
+                section=self.section,
+                device_numbers=self.device_numbers,
+            )

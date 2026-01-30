@@ -281,13 +281,13 @@ async def test_set_hvac_mode(
 
 
 @pytest.mark.parametrize(
-    ("preset_mode", "expected_preset_mode", "response"),
+    ("preset_mode", "response", "expected_preset_mode"),
     [
-        (PRESET_NONE, HeatCircuitOperatingMode.AUTO.value, MULTIPLE_POSITIONS_DATA_RESPONSE_1),
-        (PRESET_AWAY, HeatCircuitOperatingMode.HOLIDAY.value, MULTIPLE_POSITIONS_DATA_RESPONSE_1),
-        (PRESET_COMFORT, HeatCircuitOperatingMode.DAY.value, MULTIPLE_POSITIONS_DATA_RESPONSE_2),
-        (PRESET_SLEEP, HeatCircuitOperatingMode.NIGHT.value, MULTIPLE_POSITIONS_DATA_RESPONSE_1),
-        (PRESET_BOOST, HeatCircuitOperatingMode.PARTY.value, MULTIPLE_POSITIONS_DATA_RESPONSE_1),
+        (PRESET_NONE, MULTIPLE_POSITIONS_DATA_RESPONSE_1, HeatCircuitOperatingMode.AUTO.value),
+        (PRESET_AWAY, MULTIPLE_POSITIONS_DATA_RESPONSE_1, HeatCircuitOperatingMode.HOLIDAY.value),
+        (PRESET_COMFORT, MULTIPLE_POSITIONS_DATA_RESPONSE_2, HeatCircuitOperatingMode.DAY.value),
+        (PRESET_SLEEP, MULTIPLE_POSITIONS_DATA_RESPONSE_1, HeatCircuitOperatingMode.NIGHT.value),
+        (PRESET_BOOST, MULTIPLE_POSITIONS_DATA_RESPONSE_1, HeatCircuitOperatingMode.PARTY.value),
     ],
 )
 async def test_set_preset_mode(
@@ -295,8 +295,8 @@ async def test_set_preset_mode(
     config_entry: MockConfigEntry,
     fake_api: FakeKebaKeEnergyAPI,
     preset_mode: str,
-    expected_preset_mode: str,
     response: list[dict[str, Any]],
+    expected_preset_mode: str,
 ) -> None:
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
