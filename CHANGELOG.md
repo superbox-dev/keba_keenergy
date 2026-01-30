@@ -12,7 +12,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Added service to set away date range [(Issue #20)](https://github.com/superbox-dev/keba_keenergy/issues/20)
-- Added blueprint to set away date range from a calendar entry [(Issue #20)](https://github.com/superbox-dev/keba_keenergy/issues/20)
+- Added [blueprint](https://raw.githubusercontent.com/superbox-dev/keba_keenergy/refs/heads/main/blueprints/automation/keba_keenergy/set_away_date_range.yaml)
+  to set away date range from a calendar entry [(Issue #20)](https://github.com/superbox-dev/keba_keenergy/issues/20)
 - Added issue warning when more than 15 write operations are performed per week [(Issue #23)](https://github.com/superbox-dev/keba_keenergy/issues/23)
 
 ## Changed
