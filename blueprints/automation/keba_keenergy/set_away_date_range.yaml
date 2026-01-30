@@ -1,0 +1,45 @@
+blueprint:
+  name: 'KEBA KeEnergy: set away date range'
+  description: >
+    Sets the away date range of a KEBA KeEnergy control unit based on a calendar event
+    when a specific keyword is found in the event description.
+  domain: automation
+  input:
+    calendar_entity:
+      name: Calendar
+      description: Calendar entity to monitor
+      selector:
+        entity:
+          domain: calendar
+    keyword:
+      name: Keyword
+      description: Keyword that must be present in the calendar event
+      default: holiday
+      selector:
+        text:
+    keba_config_entry:
+      name: Config entry ID
+      description: Config Entry ID of the KEBA KeEnergy
+      selector:
+        config_entry:
+          integration: keba_keenergy
+
+mode: single
+
+trigger:
+  - platform: state
+    entity_id: !input calendar_entity
+
+condition:
+  - condition: template
+    value_template: >
+      {{ (state_attr(calendar_entity, 'message')|lower) is search(keyword|lower) }}
+
+action:
+  - service: keba_keenergy.set_away_date_range
+    data:
+      config_entry: !input keba_config_entry
+      start_date: >
+        {{ state_attr(calendar_entity, 'start_time')[:10] }}
+      end_date: >
+        {{ state_attr(calendar_entity, 'end_time')[:10] }}
