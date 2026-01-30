@@ -100,6 +100,7 @@ SELECT_TYPES: dict[str, tuple[KebaKeEnergySelectEntityDescription, ...]] = {
     SectionPrefix.EXTERNAL_HEAT_SOURCE: (
         KebaKeEnergySelectEntityDescription(
             key="operating_mode",
+            entity_registry_enabled_default=False,
             options=[_.name.lower() for _ in ExternalHeatSourceOperatingMode],
             translation_key="operating_mode_external_heat_source",
             values=ExternalHeatSourceOperatingMode,

@@ -149,6 +149,7 @@ async def test_hot_water_tank_numbers_translated(
     assert hot_water_tank_target_temperature_1.attributes[ATTR_FRIENDLY_NAME] == "Warmwasserspeicher 1 Soll-Temperatur"
 
 
+@pytest.mark.usefixtures("entity_registry_enabled_by_default")
 async def test_heat_pump_numbers(
     hass: HomeAssistant,
     config_entry: MockConfigEntry,
@@ -177,6 +178,7 @@ async def test_heat_pump_numbers(
     assert heat_pump_compressor_night_speed.attributes[ATTR_FRIENDLY_NAME] == "Heat pump Compressor speed (night)"
 
 
+@pytest.mark.usefixtures("entity_registry_enabled_by_default")
 async def test_heat_pump_numbers_translated(
     hass: HomeAssistant,
     config_entry: MockConfigEntry,
@@ -201,6 +203,7 @@ async def test_heat_pump_numbers_translated(
     assert heat_pump_compressor_night_speed.attributes[ATTR_FRIENDLY_NAME] == "Wärmepumpe Kompressordrehzahl (Nacht)"
 
 
+@pytest.mark.usefixtures("entity_registry_enabled_by_default")
 async def test_heat_circuit_numbers(
     hass: HomeAssistant,
     config_entry: MockConfigEntry,
@@ -470,6 +473,7 @@ async def test_solar_circuit_numbers_translated(
         ),
     ],
 )
+@pytest.mark.usefixtures("entity_registry_enabled_by_default")
 async def test_set_value(
     hass: HomeAssistant,
     config_entry: MockConfigEntry,
@@ -528,6 +532,7 @@ async def test_set_value(
         ),
     ],
 )
+@pytest.mark.usefixtures("entity_registry_enabled_by_default")
 async def test_set_value_bad_range(
     hass: HomeAssistant,
     config_entry: MockConfigEntry,

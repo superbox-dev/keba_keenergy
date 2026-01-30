@@ -42,6 +42,7 @@ NUMBER_TYPES: dict[str, tuple[KebaKeEnergyNumberEntityDescription, ...]] = {
     SectionPrefix.HEAT_CIRCUIT: (
         KebaKeEnergyNumberEntityDescription(
             device_class=NumberDeviceClass.TEMPERATURE,
+            entity_registry_enabled_default=False,
             key="target_temperature_day",
             key_index=None,
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
@@ -51,6 +52,7 @@ NUMBER_TYPES: dict[str, tuple[KebaKeEnergyNumberEntityDescription, ...]] = {
         ),
         KebaKeEnergyNumberEntityDescription(
             device_class=NumberDeviceClass.TEMPERATURE,
+            entity_registry_enabled_default=False,
             key="target_temperature_night",
             key_index=None,
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
@@ -60,6 +62,7 @@ NUMBER_TYPES: dict[str, tuple[KebaKeEnergyNumberEntityDescription, ...]] = {
         ),
         KebaKeEnergyNumberEntityDescription(
             device_class=NumberDeviceClass.TEMPERATURE,
+            entity_registry_enabled_default=False,
             key="target_temperature_away",
             key_index=None,
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
@@ -108,6 +111,7 @@ NUMBER_TYPES: dict[str, tuple[KebaKeEnergyNumberEntityDescription, ...]] = {
     SectionPrefix.HEAT_PUMP: (
         KebaKeEnergyNumberEntityDescription(
             device_class=NumberDeviceClass.SPEED,
+            entity_registry_enabled_default=False,
             key="compressor_night_speed",
             key_index=None,
             native_unit_of_measurement=PERCENTAGE,
