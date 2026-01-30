@@ -234,7 +234,7 @@ class KebaKeEnergyNumberEntity(KebaKeEnergyExtendedEntity, NumberEntity):
     async def async_set_native_value(self, value: float) -> None:
         """Set new value."""
         new_value: float = value / self.entity_description.scale
-        current_value = float(self.get_value(self.entity_description.key))
+        current_value: float = float(self.get_value(self.entity_description.key))
 
         if new_value != current_value:
             await self._async_write_data(

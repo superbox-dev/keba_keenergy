@@ -253,11 +253,15 @@ class KebaKeEnergyClimateEntity(KebaKeEnergyEntity, ClimateEntity):
     async def async_set_temperature(self, **kwargs: Any) -> None:
         """Set new target temperature."""
         if temperature := kwargs.get(ATTR_TEMPERATURE):
-            await self._async_write_data(
-                temperature - float(self.get_value("selected_target_temperature")),
-                section=HeatCircuit.TARGET_TEMPERATURE_OFFSET,
-                device_numbers=self.coordinator.heat_circuit_numbers,
-            )
+            new_value: float = temperature - float(self.get_value("selected_target_temperature"))
+            current_value: float = float(self.get_value("target_temperature_offset"))
+
+            if new_value != current_value:
+                await self._async_write_data(
+                    new_value,
+                    section=HeatCircuit.TARGET_TEMPERATURE_OFFSET,
+                    device_numbers=self.coordinator.heat_circuit_numbers,
+                )
 
     async def _async_set_away_date_range(self, preset_mode: str, /) -> None:
         tz: ZoneInfo = await self.coordinator.get_timezone()
