@@ -243,7 +243,7 @@ class KebaKeEnergyClimateEntity(KebaKeEnergyEntity, ClimateEntity):
         await self._async_set_away_date_range(preset_mode)
 
         for key, value in HEAT_CIRCUIT_PRESET_TO_HA.items():
-            if value == preset_mode:
+            if value == preset_mode and preset_mode != self.preset_mode:
                 await self._async_write_data(
                     key,
                     section=HeatCircuit.OPERATING_MODE,
