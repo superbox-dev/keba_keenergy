@@ -235,10 +235,10 @@ class KebaKeEnergyNumberEntity(KebaKeEnergyExtendedEntity, NumberEntity):
     @property
     def native_value(self) -> float:
         """Return the state of the number."""
-        native_value: float = float(self.get_value(self.entity_description.key)) * self.entity_description.scale
-
         if self._pending_value is not None and self._async_call_later:
             native_value = self._pending_value * self.entity_description.scale
+        else:
+            native_value = float(self.get_value(self.entity_description.key)) * self.entity_description.scale
 
         return native_value
 
@@ -257,7 +257,7 @@ class KebaKeEnergyNumberEntity(KebaKeEnergyExtendedEntity, NumberEntity):
 
         current_value = float(self.get_value(self.entity_description.key))
 
-        if self._pending_value != current_value:
+        if self._pending_value is not None and self._pending_value != current_value:
             await self._async_write_data(
                 self._pending_value,
                 section=self.section,
