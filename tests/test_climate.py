@@ -1,5 +1,5 @@
-from datetime import datetime
 from datetime import UTC
+from datetime import datetime
 from typing import Any
 from unittest.mock import patch
 
@@ -281,13 +281,13 @@ async def test_set_hvac_mode(
 
 
 @pytest.mark.parametrize(
-    ("preset_mode", "expected_preset_mode"),
+    ("preset_mode", "expected_preset_mode", "response"),
     [
-        (PRESET_NONE, HeatCircuitOperatingMode.AUTO.value),
-        (PRESET_AWAY, HeatCircuitOperatingMode.HOLIDAY.value),
-        (PRESET_COMFORT, HeatCircuitOperatingMode.DAY.value),
-        (PRESET_SLEEP, HeatCircuitOperatingMode.NIGHT.value),
-        (PRESET_BOOST, HeatCircuitOperatingMode.PARTY.value),
+        (PRESET_NONE, HeatCircuitOperatingMode.AUTO.value, MULTIPLE_POSITIONS_DATA_RESPONSE_1),
+        (PRESET_AWAY, HeatCircuitOperatingMode.HOLIDAY.value, MULTIPLE_POSITIONS_DATA_RESPONSE_1),
+        (PRESET_COMFORT, HeatCircuitOperatingMode.DAY.value, MULTIPLE_POSITIONS_DATA_RESPONSE_2),
+        (PRESET_SLEEP, HeatCircuitOperatingMode.NIGHT.value, MULTIPLE_POSITIONS_DATA_RESPONSE_1),
+        (PRESET_BOOST, HeatCircuitOperatingMode.PARTY.value, MULTIPLE_POSITIONS_DATA_RESPONSE_1),
     ],
 )
 async def test_set_preset_mode(
@@ -296,13 +296,14 @@ async def test_set_preset_mode(
     fake_api: FakeKebaKeEnergyAPI,
     preset_mode: str,
     expected_preset_mode: str,
+    response: list[dict[str, Any]],
 ) -> None:
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITIONS_DATA_RESPONSE_1,
+        response,
         # Read API after services call
-        MULTIPLE_POSITIONS_DATA_RESPONSE_1,
+        response,
     ]
     fake_api.register_requests("10.0.0.100")
 
