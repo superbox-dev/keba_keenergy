@@ -33,13 +33,13 @@ trigger:
 condition:
   - condition: template
     value_template: >
-      {{ (state_attr(calendar_entity, 'message')|lower) is search(keyword|lower) }}
+      {{ (state_attr(trigger.entity_id, 'message')|lower) is search(keyword|lower) }}
 
 action:
   - service: keba_keenergy.set_away_date_range
     data:
       config_entry: !input keba_config_entry
       start_date: >
-        {{ state_attr(calendar_entity, 'start_time')[:10] }}
+        {{ state_attr(trigger.entity_id, 'start_time')[:10] }}
       end_date: >
-        {{ state_attr(calendar_entity, 'end_time')[:10] }}
+        {{ state_attr(trigger.entity_id, 'end_time')[:10] }}
