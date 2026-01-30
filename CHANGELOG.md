@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!--start-->
 
+## [1.7.0] - 2025-01-30
+
 ### Added
 
 - Added service to set away date range [(Issue #20)](https://github.com/superbox-dev/keba_keenergy/issues/20)
