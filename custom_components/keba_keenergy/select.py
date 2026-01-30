@@ -178,8 +178,11 @@ class KebaKeEnergySelectEntity(KebaKeEnergyExtendedEntity, SelectEntity):
 
     async def async_select_option(self, option: str) -> None:
         """Select new option."""
-        await self._async_write_data(
-            self.entity_description.values[option.upper()].value,
-            section=self.section,
-            device_numbers=self.device_numbers,
-        )
+        new_option: str = option.upper()
+
+        if new_option != self.current_option:
+            await self._async_write_data(
+                self.entity_description.values[new_option].value,
+                section=self.section,
+                device_numbers=self.device_numbers,
+            )
