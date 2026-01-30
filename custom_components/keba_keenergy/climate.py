@@ -126,6 +126,8 @@ class KebaKeEnergyClimateEntity(KebaKeEnergyEntity, ClimateEntity):
         super().__init__(coordinator, entry, section_id, index)
         self.entity_id = f"{CLIMATE_DOMAIN}.{DOMAIN}_{self._attr_unique_id}"
 
+        self._operating_mode_status: int | None = None
+
     @property
     def icon(self) -> str | None:
         """Return the icon to use in the frontend, if any."""
@@ -227,7 +229,9 @@ class KebaKeEnergyClimateEntity(KebaKeEnergyEntity, ClimateEntity):
         elif hvac_mode == HVACMode.OFF:
             operating_mode_status = HeatCircuitOperatingMode.OFF.value
 
-        if operating_mode_status is not None:
+        if operating_mode_status is not None and self._operating_mode_status != operating_mode_status:
+            self._operating_mode_status = operating_mode_status
+
             await self._async_write_data(
                 operating_mode_status,
                 section=HeatCircuit.OPERATING_MODE,
