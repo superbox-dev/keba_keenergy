@@ -1,5 +1,15 @@
 # Examples
 
+## Blueprints
+
+### Set away date range
+
+Sets the away date range of a KEBA KeEnergy control unit based on a calendar event when a specific keyword is found
+in the event description.
+
+![Blueprint to set away mode](../../../assets/blueprint-set-away-mode.png)
+[Download blueprint](https://raw.githubusercontent.com/superbox-dev/keba_keenergy/refs/heads/main/blueprints/automation/keba_keenergy/set_away_date_range.yaml)
+
 ## Templates
 
 A template sensor to get the delta from the heatpump source input and output:
