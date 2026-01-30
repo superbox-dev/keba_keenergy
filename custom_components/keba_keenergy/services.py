@@ -78,8 +78,8 @@ async def _async_set_away_range(call: ServiceCall) -> None:
     if start_date and end_date:
         tz: ZoneInfo = await coordinator.get_timezone()
 
-        start_date_tz: datetime = parse_datetime_as_naive(start_date).astimezone(tz)
-        end_date_tz: datetime = parse_datetime_as_naive(end_date).astimezone(tz)
+        start_date_tz: datetime = parse_datetime_as_naive(start_date).replace(tzinfo=tz)
+        end_date_tz: datetime = parse_datetime_as_naive(end_date).replace(tzinfo=tz)
 
         await coordinator.set_away_date_range(
             start_timestamp=start_date_tz.timestamp(),
