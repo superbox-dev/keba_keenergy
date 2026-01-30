@@ -7,7 +7,7 @@
 Sets the away date range of a KEBA KeEnergy control unit based on a calendar event when a specific keyword is found
 in the event description.
 
-![Blueprint to set away mode](../../../assets/blueprint-set-away-mode.png)
+![Blueprint to set away date range](../../../assets/blueprint-set-away-mode.png)
 [Download blueprint](https://raw.githubusercontent.com/superbox-dev/keba_keenergy/refs/heads/main/blueprints/automation/keba_keenergy/set_away_date_range.yaml)
 
 ## Templates
