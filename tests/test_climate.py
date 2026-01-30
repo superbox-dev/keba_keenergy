@@ -21,7 +21,7 @@ from homeassistant.components.climate.const import HVACMode
 from homeassistant.components.climate.const import PRESET_AWAY
 from homeassistant.components.climate.const import PRESET_BOOST
 from homeassistant.components.climate.const import PRESET_COMFORT
-from homeassistant.components.climate.const import PRESET_NONE
+from homeassistant.components.climate.const import PRESET_HOME
 from homeassistant.components.climate.const import PRESET_SLEEP
 from homeassistant.components.climate.const import SERVICE_SET_HVAC_MODE
 from homeassistant.components.climate.const import SERVICE_SET_PRESET_MODE
@@ -118,12 +118,12 @@ async def test_climate(
     assert state_2.attributes[ATTR_MIN_TEMP] == 17.5
     assert state_2.attributes[ATTR_MAX_TEMP] == 22.5
     assert state_2.attributes[ATTR_TARGET_TEMP_STEP] == 0.5
-    assert state_2.attributes[ATTR_PRESET_MODES] == ["none", "away", "comfort", "sleep", "boost"]
+    assert state_2.attributes[ATTR_PRESET_MODES] == ["home", "away", "comfort", "sleep", "boost"]
     assert state_2.attributes[ATTR_TEMPERATURE] == 20.0
     assert not state_2.attributes.get(ATTR_CURRENT_TEMPERATURE)
     assert not state_2.attributes.get(ATTR_CURRENT_HUMIDITY)
     assert state_2.attributes[ATTR_HVAC_ACTION] == HVACAction.OFF
-    assert state_2.attributes[ATTR_PRESET_MODE] == "none"
+    assert state_2.attributes[ATTR_PRESET_MODE] == "home"
     assert state_2.attributes[ATTR_FRIENDLY_NAME] == "Heating circuit 2"
 
 
@@ -285,8 +285,7 @@ async def test_set_hvac_mode(
 @pytest.mark.parametrize(
     ("preset_mode", "response", "expected_preset_mode"),
     [
-        (PRESET_NONE, MULTIPLE_POSITIONS_DATA_RESPONSE_1, HeatCircuitOperatingMode.AUTO.value),
-        (PRESET_AWAY, MULTIPLE_POSITIONS_DATA_RESPONSE_1, HeatCircuitOperatingMode.HOLIDAY.value),
+        (PRESET_HOME, MULTIPLE_POSITIONS_DATA_RESPONSE_1, HeatCircuitOperatingMode.AUTO.value),
         (PRESET_COMFORT, MULTIPLE_POSITIONS_DATA_RESPONSE_2, HeatCircuitOperatingMode.DAY.value),
         (PRESET_SLEEP, MULTIPLE_POSITIONS_DATA_RESPONSE_1, HeatCircuitOperatingMode.NIGHT.value),
         (PRESET_BOOST, MULTIPLE_POSITIONS_DATA_RESPONSE_1, HeatCircuitOperatingMode.PARTY.value),
@@ -352,10 +351,6 @@ async def test_set_preset_mode_away(
             },
             blocking=True,
         )
-
-    fake_api.assert_called_write_with(
-        '[{"name": "APPL.CtrlAppl.sParam.heatCircuit[0].param.operatingMode", "value": "4"}]',
-    )
 
     fake_api.assert_called_write_with(
         '[{"name": "APPL.CtrlAppl.sParam.heatCircuit[0].param.holiday.start", "value": "1769209200"}, '

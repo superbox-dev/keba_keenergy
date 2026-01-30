@@ -19,7 +19,7 @@ from homeassistant.components.climate.const import HVACMode
 from homeassistant.components.climate.const import PRESET_AWAY
 from homeassistant.components.climate.const import PRESET_BOOST
 from homeassistant.components.climate.const import PRESET_COMFORT
-from homeassistant.components.climate.const import PRESET_NONE
+from homeassistant.components.climate.const import PRESET_HOME
 from homeassistant.components.climate.const import PRESET_SLEEP
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import ATTR_TEMPERATURE
@@ -45,7 +45,7 @@ if TYPE_CHECKING:
     from zoneinfo import ZoneInfo
 
 HEAT_CIRCUIT_PRESET_TO_HA: Final[dict[int, str]] = {
-    HeatCircuitOperatingMode.AUTO.value: PRESET_NONE,
+    HeatCircuitOperatingMode.AUTO.value: PRESET_HOME,
     HeatCircuitOperatingMode.HOLIDAY.value: PRESET_AWAY,
     HeatCircuitOperatingMode.DAY.value: PRESET_COMFORT,
     HeatCircuitOperatingMode.NIGHT.value: PRESET_SLEEP,
@@ -216,7 +216,7 @@ class KebaKeEnergyClimateEntity(KebaKeEnergyEntity, ClimateEntity):
     @property
     def preset_mode(self) -> str:
         """Return the current preset mode."""
-        preset_mode: str = PRESET_NONE
+        preset_mode: str = PRESET_HOME
         operating_mode: str = self.get_value("operating_mode")
 
         if HeatCircuitOperatingMode[operating_mode.upper()].value != HeatCircuitOperatingMode.OFF.value:
@@ -238,7 +238,8 @@ class KebaKeEnergyClimateEntity(KebaKeEnergyEntity, ClimateEntity):
 
         if hvac_mode == HVACMode.AUTO:
             operating_mode_status = HeatCircuitOperatingMode.AUTO.value
-            self._attr_preset_mode = PRESET_NONE
+            await self._async_set_away_date_range(PRESET_HOME)
+            self._attr_preset_mode = PRESET_HOME
         elif hvac_mode == HVACMode.HEAT:
             operating_mode_status = HeatCircuitOperatingMode.DAY.value
         elif hvac_mode == HVACMode.OFF:
@@ -258,7 +259,7 @@ class KebaKeEnergyClimateEntity(KebaKeEnergyEntity, ClimateEntity):
         await self._async_set_away_date_range(preset_mode)
 
         for key, value in HEAT_CIRCUIT_PRESET_TO_HA.items():
-            if value == preset_mode and preset_mode != self.preset_mode:
+            if value == preset_mode and preset_mode not in (self.preset_mode, PRESET_AWAY):
                 await self._async_write_data(
                     key,
                     section=HeatCircuit.OPERATING_MODE,
