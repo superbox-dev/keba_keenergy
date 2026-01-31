@@ -29,11 +29,12 @@ mode: single
 trigger:
   - platform: state
     entity_id: !input calendar_entity
+    to: 'on'
 
 condition:
   - condition: template
     value_template: >
-      {{ (state_attr(trigger.entity_id, 'message')|lower) is search(keyword|lower) }}
+      {{ (state_attr(trigger.entity_id, 'message')|default('')|lower) is search(keyword|lower) }}
 
 action:
   - service: keba_keenergy.set_away_date_range
