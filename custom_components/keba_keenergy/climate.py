@@ -294,8 +294,8 @@ class KebaKeEnergyClimateEntity(KebaKeEnergyEntity, ClimateEntity):
     async def _async_set_away_date_range(self, preset_mode: str, /) -> None:
         tz: ZoneInfo = await self.coordinator.get_timezone()
         now: date = dt_util.now(tz).date()
-        start_date_tz: datetime = datetime.combine(now, time.min, tz)
-        end_date_tz: datetime = datetime.combine(now, time.max, tz)
+        start_date_tz: datetime = datetime.combine(now, time.min, tzinfo=tz)
+        end_date_tz: datetime = datetime.combine(now, time.max, tzinfo=tz)
 
         if preset_mode == PRESET_AWAY:
             await self.coordinator.set_away_date_range(

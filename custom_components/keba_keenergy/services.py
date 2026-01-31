@@ -1,6 +1,9 @@
 """Support for the KEBA KeEnergy services."""
 
 import logging
+from datetime import date
+from datetime import datetime
+from datetime import time
 from typing import Final
 from typing import TYPE_CHECKING
 
@@ -20,7 +23,6 @@ from .const import SERVICE_SET_AWAY_DATE_RANGE
 from .coordinator import KebaKeEnergyDataUpdateCoordinator
 
 if TYPE_CHECKING:
-    from datetime import datetime
     from zoneinfo import ZoneInfo
 
 _LOGGER = logging.getLogger(__name__)
@@ -78,8 +80,11 @@ async def _async_set_away_range(call: ServiceCall) -> None:
     if start_date and end_date:
         tz: ZoneInfo = await coordinator.get_timezone()
 
-        start_date_tz: datetime = parse_datetime_as_naive(start_date).replace(tzinfo=tz)
-        end_date_tz: datetime = parse_datetime_as_naive(end_date).replace(tzinfo=tz)
+        start_date_naive: date = parse_datetime_as_naive(start_date).date()
+        end_date_naive: date = parse_datetime_as_naive(end_date).date()
+
+        start_date_tz = datetime.combine(start_date_naive, time.min, tzinfo=tz)
+        end_date_tz = datetime.combine(end_date_naive, time.max, tzinfo=tz)
 
         await coordinator.set_away_date_range(
             start_timestamp=start_date_tz.timestamp(),
