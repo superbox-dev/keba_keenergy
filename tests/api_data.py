@@ -316,6 +316,32 @@ HEAT_CIRCUIT_TARGET_TEMPERATURE_OFFSET: str = """
     }
 """
 
+HEAT_CIRCUIT_AWAY_START_DATE: str = """
+    {
+        "name": "APPL.CtrlAppl.sParam.heatCircuit[%s].param.holiday.start",
+        "attributes": {
+            "formatId": "fmt3p2",
+            "unitId": "TimeHour",
+            "upperLimit": "86400",
+            "lowerLimit": "0"
+        },
+        "value": "%s"
+    }
+"""
+
+HEAT_CIRCUIT_AWAY_END_DATE: str = """
+    {
+        "name": "APPL.CtrlAppl.sParam.heatCircuit[%s].param.holiday.stop",
+        "attributes": {
+            "formatId": "fmt3p2",
+            "unitId": "TimeHour",
+            "upperLimit": "86400",
+            "lowerLimit": "0"
+        },
+        "value": "%s"
+    }
+"""
+
 SOLAR_CIRCUIT_OPERATION_MODE: str = """
     {
         "name": "APPL.CtrlAppl.sParam.solarCircuit[%s].param.operatingMode",
@@ -1485,6 +1511,8 @@ DEFAULT_POSITION_DATA_RESPONSE: list[dict[str, Any]] = [
     json.loads(HEAT_CIRCUIT_SELECTED_TARGET_TEMPERATURE % ("0", "20")),
     json.loads(HEAT_CIRCUIT_TARGET_TEMPERATURE % ("0", "20.5")),
     json.loads(HEAT_CIRCUIT_TARGET_TEMPERATURE_OFFSET % ("0", "1.5")),
+    json.loads(HEAT_CIRCUIT_AWAY_START_DATE % ("0", "1769036400")),
+    json.loads(HEAT_CIRCUIT_AWAY_END_DATE % ("0", "1769122799")),
     json.loads(SOLAR_CIRCUIT_OPERATION_MODE % ("0", "0")),
     json.loads(SOLAR_CIRCUIT_SOURCE_TEMPERATURE % ("0", "44.43")),
     json.loads(SOLAR_CIRCUIT_PUMP_1 % ("0", "0.63")),
@@ -1573,6 +1601,10 @@ ENTITY_UPDATED_DATA_RESPONSE: list[dict[str, Any]] = [
     json.loads(HEAT_CIRCUIT_TARGET_TEMPERATURE % ("1", "20.5")),
     json.loads(HEAT_CIRCUIT_TARGET_TEMPERATURE_OFFSET % ("0", "1.5")),
     json.loads(HEAT_CIRCUIT_TARGET_TEMPERATURE_OFFSET % ("1", "0")),
+    json.loads(HEAT_CIRCUIT_AWAY_START_DATE % ("0", "1769036400")),
+    json.loads(HEAT_CIRCUIT_AWAY_START_DATE % ("1", "1769036400")),
+    json.loads(HEAT_CIRCUIT_AWAY_END_DATE % ("0", "1769122799")),
+    json.loads(HEAT_CIRCUIT_AWAY_END_DATE % ("1", "1769122799")),
     json.loads(SOLAR_CIRCUIT_OPERATION_MODE % ("0", "0")),
     json.loads(SOLAR_CIRCUIT_OPERATION_MODE % ("1", "1")),
     json.loads(SOLAR_CIRCUIT_SOURCE_TEMPERATURE % ("0", "44.43")),
@@ -1668,6 +1700,8 @@ HEAT_CIRCUIT_OPERATION_MODE_DATA_RESPONSE: list[dict[str, Any]] = [
     json.loads(HEAT_CIRCUIT_SELECTED_TARGET_TEMPERATURE % ("0", "20")),
     json.loads(HEAT_CIRCUIT_TARGET_TEMPERATURE % ("0", "20.5")),
     json.loads(HEAT_CIRCUIT_TARGET_TEMPERATURE_OFFSET % ("0", "1.5")),
+    json.loads(HEAT_CIRCUIT_AWAY_START_DATE % ("0", "1769036400")),
+    json.loads(HEAT_CIRCUIT_AWAY_END_DATE % ("0", "1769122799")),
     json.loads(SOLAR_CIRCUIT_OPERATION_MODE % ("0", "0")),
     json.loads(SOLAR_CIRCUIT_SOURCE_TEMPERATURE % ("0", "44.43")),
     json.loads(SOLAR_CIRCUIT_PUMP_1 % ("0", "0.63")),
@@ -1756,6 +1790,10 @@ MULTIPLE_POSITIONS_DATA_RESPONSE_1: list[dict[str, Any]] = [
     json.loads(HEAT_CIRCUIT_TARGET_TEMPERATURE % ("1", "20.5")),
     json.loads(HEAT_CIRCUIT_TARGET_TEMPERATURE_OFFSET % ("0", "1.5")),
     json.loads(HEAT_CIRCUIT_TARGET_TEMPERATURE_OFFSET % ("1", "0")),
+    json.loads(HEAT_CIRCUIT_AWAY_START_DATE % ("0", "1769036400")),
+    json.loads(HEAT_CIRCUIT_AWAY_START_DATE % ("1", "1769036400")),
+    json.loads(HEAT_CIRCUIT_AWAY_END_DATE % ("0", "1769122799")),
+    json.loads(HEAT_CIRCUIT_AWAY_END_DATE % ("1", "1769122799")),
     json.loads(SOLAR_CIRCUIT_OPERATION_MODE % ("0", "0")),
     json.loads(SOLAR_CIRCUIT_OPERATION_MODE % ("1", "1")),
     json.loads(SOLAR_CIRCUIT_SOURCE_TEMPERATURE % ("0", "44.43")),
@@ -1873,6 +1911,10 @@ MULTIPLE_POSITIONS_DATA_RESPONSE_2: list[dict[str, Any]] = [
     json.loads(HEAT_CIRCUIT_TARGET_TEMPERATURE % ("1", "20.5")),
     json.loads(HEAT_CIRCUIT_TARGET_TEMPERATURE_OFFSET % ("0", "1.5")),
     json.loads(HEAT_CIRCUIT_TARGET_TEMPERATURE_OFFSET % ("1", "0")),
+    json.loads(HEAT_CIRCUIT_AWAY_START_DATE % ("0", "1769036400")),
+    json.loads(HEAT_CIRCUIT_AWAY_START_DATE % ("1", "1769036400")),
+    json.loads(HEAT_CIRCUIT_AWAY_END_DATE % ("0", "1769122799")),
+    json.loads(HEAT_CIRCUIT_AWAY_END_DATE % ("1", "1769122799")),
     json.loads(SOLAR_CIRCUIT_OPERATION_MODE % ("0", "0")),
     json.loads(SOLAR_CIRCUIT_OPERATION_MODE % ("1", "1")),
     json.loads(SOLAR_CIRCUIT_SOURCE_TEMPERATURE % ("0", "44.43")),

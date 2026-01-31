@@ -106,6 +106,8 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
             HeatCircuit.SELECTED_TARGET_TEMPERATURE,
             HeatCircuit.TARGET_TEMPERATURE,
             HeatCircuit.TARGET_TEMPERATURE_OFFSET,
+            HeatCircuit.AWAY_START_DATE,
+            HeatCircuit.AWAY_END_DATE,
             SolarCircuit.OPERATING_MODE,
             SolarCircuit.SOURCE_TEMPERATURE,
             SolarCircuit.PUMP_1,
@@ -358,12 +360,21 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
     async def set_away_date_range(self, *, start_timestamp: float, end_timestamp: float) -> None:
         """Set the away date range."""
         if self.position:
-            await self.async_write_data(
-                request={
-                    HeatCircuit.AWAY_START_DATE: [int(start_timestamp) for _ in range(self.position.heat_circuit)],
-                    HeatCircuit.AWAY_END_DATE: [int(end_timestamp) for _ in range(self.position.heat_circuit)],
-                },
+            current_away_start_date: list[int] = cast(
+                "list[int]",
+                self.data[SectionPrefix.HEAT_CIRCUIT]["away_start_date"],
             )
+            current_away_end_date: list[int] = cast("list[int]", self.data[SectionPrefix.HEAT_CIRCUIT]["away_end_date"])
+            away_start_date: list[int] = [int(start_timestamp) for _ in range(self.position.heat_circuit)]
+            away_end_date: list[int] = [int(end_timestamp) for _ in range(self.position.heat_circuit)]
+
+            if current_away_start_date != away_start_date or current_away_end_date != away_end_date:
+                await self.async_write_data(
+                    request={
+                        HeatCircuit.AWAY_START_DATE: away_start_date,
+                        HeatCircuit.AWAY_END_DATE: away_end_date,
+                    },
+                )
 
     @cached_property
     def configuration_url(self) -> str:
