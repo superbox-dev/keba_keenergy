@@ -32,7 +32,16 @@ async def test_set_value(
     ]
     fake_api.register_requests("10.0.0.100")
 
-    await setup_integration(hass, config_entry)
+    with patch(
+        "homeassistant.helpers.storage.Store.async_load",
+        return_value={
+            "flash_write_counter": {
+                "week": [2026, 5],
+                "count": 1,
+            },
+        },
+    ):
+        await setup_integration(hass, config_entry)
 
     with patch("custom_components.keba_keenergy.coordinator.FLASH_WRITE_LIMIT_PER_WEEK", 1):
         await hass.services.async_call(
