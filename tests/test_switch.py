@@ -69,6 +69,7 @@ async def test_solar_circuit_switches_translated(
     assert solar_circuit_priority_1_before_2_1.attributes[ATTR_FRIENDLY_NAME] == "Solarkreis 1 Vorrang 1 vor 2"
 
 
+@pytest.mark.usefixtures("entity_registry_enabled_by_default")
 async def test_heat_pump_switches(
     hass: HomeAssistant,
     config_entry: MockConfigEntry,
@@ -96,6 +97,7 @@ async def test_heat_pump_switches(
     )
 
 
+@pytest.mark.usefixtures("entity_registry_enabled_by_default")
 async def test_heat_pump_switches_translated(
     hass: HomeAssistant,
     config_entry: MockConfigEntry,
@@ -154,6 +156,7 @@ async def test_heat_pump_switches_translated(
         ),
     ],
 )
+@pytest.mark.usefixtures("entity_registry_enabled_by_default")
 async def test_set_value(
     hass: HomeAssistant,
     config_entry: MockConfigEntry,
