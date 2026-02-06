@@ -69,7 +69,7 @@ class KebaKeEnergyEntity(
     @property
     def is_system_device(self) -> bool:
         """Return True if the entity is part of a KEBA KeEnergy control device else False."""
-        return self.section_id in [SectionPrefix.SYSTEM]
+        return self.section_id == SectionPrefix.SYSTEM
 
     @property
     def is_heat_circuit(self) -> bool:
