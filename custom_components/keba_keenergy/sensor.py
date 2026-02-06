@@ -843,6 +843,7 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription, ...]] = {
         ),
         KebaKeEnergySensorEntityDescription(
             device_class=SensorDeviceClass.TEMPERATURE,
+            entity_registry_enabled_default=False,
             key="circulation_return_temperature",
             key_index=None,
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
