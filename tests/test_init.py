@@ -28,7 +28,7 @@ async def test_load_entry(
     await setup_integration(hass, config_entry)
 
     assert config_entry.state is ConfigEntryState.LOADED
-    assert hass.states.async_entity_ids_count() == 186
+    assert hass.states.async_entity_ids_count() == 190
 
     assert set(hass.states.async_entity_ids()) == {
         "binary_sensor.keba_keenergy_12345678_buffer_tank_cool_request_1",
@@ -44,6 +44,8 @@ async def test_load_entry(
         "binary_sensor.keba_keenergy_12345678_heat_pump_has_source_pressure_failure",
         "binary_sensor.keba_keenergy_12345678_heat_pump_has_vfd_failure",
         "binary_sensor.keba_keenergy_12345678_heat_pump_heat_request",
+        "binary_sensor.keba_keenergy_12345678_hot_water_tank_circulation_pump_state_1",
+        "binary_sensor.keba_keenergy_12345678_hot_water_tank_circulation_pump_state_2",
         "binary_sensor.keba_keenergy_12345678_hot_water_tank_heat_request_1",
         "binary_sensor.keba_keenergy_12345678_hot_water_tank_heat_request_2",
         "binary_sensor.keba_keenergy_12345678_hot_water_tank_hot_water_flow_1",
@@ -173,6 +175,8 @@ async def test_load_entry(
         "sensor.keba_keenergy_12345678_heat_pump_operating_time",
         "sensor.keba_keenergy_12345678_heat_pump_max_runtime",
         "sensor.keba_keenergy_12345678_heat_pump_vaporizer_temperature",
+        "sensor.keba_keenergy_12345678_hot_water_tank_circulation_return_temperature_1",
+        "sensor.keba_keenergy_12345678_hot_water_tank_circulation_return_temperature_2",
         "sensor.keba_keenergy_12345678_hot_water_tank_current_temperature_1",
         "sensor.keba_keenergy_12345678_hot_water_tank_current_temperature_2",
         "sensor.keba_keenergy_12345678_hot_water_tank_operating_mode_1",

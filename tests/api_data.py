@@ -1130,6 +1130,30 @@ HOT_WATER_CURRENT_TEMPERATURE: str = """
     }
 """
 
+HOT_WATER_CIRCULATION_RETURN_TEMPERATURE: str = """
+    {
+        "name": "APPL.CtrlAppl.sParam.hotWaterTank[%s].circTemp.values.actValue",
+        "attributes": {
+            "formatId": "fmtTemp",
+            "longText": "Circ. reflux temp.",
+            "unitId": "Temp",
+            "upperLimit": "100",
+            "lowerLimit": "-100"
+        },
+        "value": "%s"
+    }
+"""
+
+HOT_WATER_CIRCULATION_PUMP_STATE: str = """
+    {
+        "name": "APPL.CtrlAppl.sParam.hotWaterTank[%s].circPump.pump.values.setValueB",
+        "attributes": {
+            "longText": "Pumps nom. value Circ."
+        },
+        "value": "%s"
+    }
+"""
+
 PHOTOVOLTAIC_EXCESS_POWER: str = """
     {
         "name": "APPL.CtrlAppl.sParam.photovoltaics.ElectricEnergyMeter.values.power",
@@ -1542,6 +1566,8 @@ DEFAULT_POSITION_DATA_RESPONSE: list[dict[str, Any]] = [
     json.loads(HOT_WATER_TANK_STANDBY_TEMPERATURE % ("0", "32.5")),
     json.loads(HOT_WATER_TANK_OPERATION_MODE % ("0", "3")),
     json.loads(HOT_WATER_CURRENT_TEMPERATURE % ("0", "47.700001")),
+    json.loads(HOT_WATER_CIRCULATION_RETURN_TEMPERATURE % ("0", "30.45")),
+    json.loads(HOT_WATER_CIRCULATION_PUMP_STATE % ("0", "false")),
     json.loads(PHOTOVOLTAIC_EXCESS_POWER % "437.700001"),
     json.loads(PHOTOVOLTAIC_DAILY_ENERGY % "437.700001"),
     json.loads(PHOTOVOLTAIC_TOTAL_ENERGY % "437.700001"),
@@ -1662,6 +1688,10 @@ ENTITY_UPDATED_DATA_RESPONSE: list[dict[str, Any]] = [
     json.loads(HOT_WATER_TANK_OPERATION_MODE % ("0", "0")),
     json.loads(HOT_WATER_CURRENT_TEMPERATURE % ("0", "47.700001")),
     json.loads(HOT_WATER_CURRENT_TEMPERATURE % ("1", "47.700001")),
+    json.loads(HOT_WATER_CIRCULATION_RETURN_TEMPERATURE % ("0", "30.45")),
+    json.loads(HOT_WATER_CIRCULATION_RETURN_TEMPERATURE % ("1", "32.45")),
+    json.loads(HOT_WATER_CIRCULATION_PUMP_STATE % ("0", "false")),
+    json.loads(HOT_WATER_CIRCULATION_PUMP_STATE % ("1", "true")),
     json.loads(PHOTOVOLTAIC_EXCESS_POWER % "437.700001"),
     json.loads(PHOTOVOLTAIC_DAILY_ENERGY % "437.700001"),
     json.loads(PHOTOVOLTAIC_TOTAL_ENERGY % "437.700001"),
@@ -1731,6 +1761,8 @@ HEAT_CIRCUIT_OPERATION_MODE_DATA_RESPONSE: list[dict[str, Any]] = [
     json.loads(HOT_WATER_TANK_STANDBY_TEMPERATURE % ("0", "32.5")),
     json.loads(HOT_WATER_TANK_OPERATION_MODE % ("0", "3")),
     json.loads(HOT_WATER_CURRENT_TEMPERATURE % ("0", "47.700001")),
+    json.loads(HOT_WATER_CIRCULATION_RETURN_TEMPERATURE % ("0", "34.45")),
+    json.loads(HOT_WATER_CIRCULATION_PUMP_STATE % ("0", "false")),
     json.loads(PHOTOVOLTAIC_EXCESS_POWER % "437.700001"),
     json.loads(PHOTOVOLTAIC_DAILY_ENERGY % "437.700001"),
     json.loads(PHOTOVOLTAIC_TOTAL_ENERGY % "437.700001"),
@@ -1851,6 +1883,10 @@ MULTIPLE_POSITIONS_DATA_RESPONSE_1: list[dict[str, Any]] = [
     json.loads(HOT_WATER_TANK_OPERATION_MODE % ("1", "0")),
     json.loads(HOT_WATER_CURRENT_TEMPERATURE % ("0", "47.700001")),
     json.loads(HOT_WATER_CURRENT_TEMPERATURE % ("1", "47.700001")),
+    json.loads(HOT_WATER_CIRCULATION_RETURN_TEMPERATURE % ("0", "30.45")),
+    json.loads(HOT_WATER_CIRCULATION_RETURN_TEMPERATURE % ("1", "27.45")),
+    json.loads(HOT_WATER_CIRCULATION_PUMP_STATE % ("0", "true")),
+    json.loads(HOT_WATER_CIRCULATION_PUMP_STATE % ("1", "false")),
     json.loads(PHOTOVOLTAIC_EXCESS_POWER % "437.700001"),
     json.loads(PHOTOVOLTAIC_DAILY_ENERGY % "437.700001"),
     json.loads(PHOTOVOLTAIC_TOTAL_ENERGY % "437.700001"),
@@ -1972,6 +2008,10 @@ MULTIPLE_POSITIONS_DATA_RESPONSE_2: list[dict[str, Any]] = [
     json.loads(HOT_WATER_TANK_OPERATION_MODE % ("1", "1")),
     json.loads(HOT_WATER_CURRENT_TEMPERATURE % ("0", "47.700001")),
     json.loads(HOT_WATER_CURRENT_TEMPERATURE % ("1", "47.700001")),
+    json.loads(HOT_WATER_CIRCULATION_RETURN_TEMPERATURE % ("0", "30.45")),
+    json.loads(HOT_WATER_CIRCULATION_RETURN_TEMPERATURE % ("1", "36.45")),
+    json.loads(HOT_WATER_CIRCULATION_PUMP_STATE % ("0", "false")),
+    json.loads(HOT_WATER_CIRCULATION_PUMP_STATE % ("1", "true")),
     json.loads(PHOTOVOLTAIC_EXCESS_POWER % "437.700001"),
     json.loads(PHOTOVOLTAIC_DAILY_ENERGY % "437.700001"),
     json.loads(PHOTOVOLTAIC_TOTAL_ENERGY % "437.700001"),

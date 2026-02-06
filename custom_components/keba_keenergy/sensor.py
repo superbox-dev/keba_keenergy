@@ -841,6 +841,15 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription, ...]] = {
             icon="mdi:thermometer-chevron-up",
             value=lambda data: cast("float", data),
         ),
+        KebaKeEnergySensorEntityDescription(
+            device_class=SensorDeviceClass.TEMPERATURE,
+            key="circulation_return_temperature",
+            key_index=None,
+            native_unit_of_measurement=UnitOfTemperature.CELSIUS,
+            state_class=SensorStateClass.MEASUREMENT,
+            translation_key="circulation_return_temperature",
+            value=lambda data: cast("float", data),
+        ),
     ),
     SectionPrefix.EXTERNAL_HEAT_SOURCE: (
         KebaKeEnergySensorEntityDescription(

@@ -62,6 +62,9 @@
     },
     "entity": {
         "binary_sensor": {
+            "circulation_pump_state": {
+                "name": "Circulation pump state"
+            },
             "cool_request": {
                 "name": "Cool request"
             },
@@ -198,6 +201,9 @@
             },
             "circulation_pump": {
                 "name": "Circulation pump speed"
+            },
+            "circulation_return_temperature": {
+                "name": "Circulation return temperature"
             },
             "cpu_usage": {
                 "name": "CPU usage"

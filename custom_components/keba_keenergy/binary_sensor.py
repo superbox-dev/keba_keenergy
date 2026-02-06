@@ -172,6 +172,14 @@ BINARY_SENSOR_TYPES: dict[str, tuple[KebaKeEnergyBinarySensorEntityDescription, 
             translation_key="hot_water_flow",
             icon="mdi:water",
         ),
+        KebaKeEnergyBinarySensorEntityDescription(
+            device_class=BinarySensorDeviceClass.RUNNING,
+            entity_registry_enabled_default=False,
+            key="circulation_pump_state",
+            key_index=None,
+            translation_key="circulation_pump_state",
+            icon="mdi:pump",
+        ),
     ),
     SectionPrefix.EXTERNAL_HEAT_SOURCE: (
         KebaKeEnergyBinarySensorEntityDescription(

@@ -177,6 +177,8 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
             HotWaterTank.STANDBY_TEMPERATURE,
             HotWaterTank.OPERATING_MODE,
             HotWaterTank.CURRENT_TEMPERATURE,
+            HotWaterTank.CIRCULATION_RETURN_TEMPERATURE,
+            HotWaterTank.CIRCULATION_PUMP_STATE,
             Photovoltaic.EXCESS_POWER,
             Photovoltaic.DAILY_ENERGY,
             Photovoltaic.TOTAL_ENERGY,

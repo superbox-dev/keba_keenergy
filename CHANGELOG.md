@@ -11,6 +11,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [1.8.0b1] - 2025-01-06
 
+### Added
+
+- Added sensor "Circulation return temperature" to the hot water tank [(Issue #24)](https://github.com/superbox-dev/keba_keenergy/issues/24)
+- Added binary sensor "Circulation pump state" to the hot water tank [(Issue #24)](https://github.com/superbox-dev/keba_keenergy/issues/24)
+
 ### Changed
 
 - The entity icons have been slightly improved

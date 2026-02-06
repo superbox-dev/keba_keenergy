@@ -62,6 +62,9 @@
     },
     "entity": {
         "binary_sensor": {
+            "circulation_pump_state": {
+                "name": "Zirkulationspumpe Status"
+            },
             "cool_request": {
                 "name": "Kühlanforderung"
             },
@@ -198,6 +201,9 @@
             },
             "circulation_pump": {
                 "name": "Umwälzpumpedrehzahl"
+            },
+            "circulation_return_temperature": {
+                "name": "Zirkulations-Rücklauftemperatur"
             },
             "cpu_usage": {
                 "name": "CPU-Auslastung"
