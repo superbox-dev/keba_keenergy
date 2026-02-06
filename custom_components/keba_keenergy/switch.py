@@ -48,6 +48,7 @@ SWITCH_TYPES: dict[str, tuple[KebaKeEnergySwitchEntityDescription, ...]] = {
     SectionPrefix.HEAT_PUMP: (
         KebaKeEnergySwitchEntityDescription(
             device_class=SwitchDeviceClass.SWITCH,
+            entity_registry_enabled_default=False,
             key="compressor_use_night_speed",
             key_index=None,
             translation_key="compressor_use_night_speed",
