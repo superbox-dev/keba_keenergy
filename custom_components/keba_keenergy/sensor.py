@@ -957,7 +957,7 @@ async def async_setup_entry(
     # e.g. buffer tank, hot water tank, heat circuit, solar circuit or heat pump.
 
     for section_id, section_data in coordinator.data.items():
-        if section_id == SectionPrefix.PHOTOVOLTAIC and coordinator.has_photovoltaics == STATE_OFF:
+        if section_id == SectionPrefix.PHOTOVOLTAIC and coordinator.has_photovoltaics == STATE_OFF:  # pragma: no cover
             continue
 
         for description in SENSOR_TYPES.get(section_id, {}):

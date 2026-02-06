@@ -30,10 +30,11 @@ from tests import setup_integration
 from tests.api_data import DEFAULT_POSITION_DATA_RESPONSE
 from tests.api_data import DEFAULT_POSITION_FIXED_DATA_RESPONSE
 from tests.api_data import DEFAULT_POSITION_RESPONSE
-from tests.api_data import MULTIPLE_POSITIONS_DATA_RESPONSE_1
-from tests.api_data import MULTIPLE_POSITIONS_DATA_RESPONSE_2
 from tests.api_data import MULTIPLE_POSITIONS_RESPONSE
+from tests.api_data import MULTIPLE_POSITION_DATA_RESPONSE_1
+from tests.api_data import MULTIPLE_POSITION_DATA_RESPONSE_2
 from tests.api_data import get_multiple_position_fixed_data_response
+from tests.api_data import get_single_position_fixed_data_response
 from tests.conftest import FakeKebaKeEnergyAPI
 
 ENTITY_ID: str = "water_heater.keba_keenergy_12345678"
@@ -54,7 +55,7 @@ ENTITY_ID_4: str = "water_heater.keba_keenergy_12345678_buffer_tank_1"
             [
                 MULTIPLE_POSITIONS_RESPONSE,
                 get_multiple_position_fixed_data_response(),
-                MULTIPLE_POSITIONS_DATA_RESPONSE_1,
+                MULTIPLE_POSITION_DATA_RESPONSE_1,
             ],
             [ENTITY_ID_1, ENTITY_ID_2, ENTITY_ID_4],
         ),
@@ -84,7 +85,7 @@ async def test_water_heater(
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITIONS_DATA_RESPONSE_1,
+        MULTIPLE_POSITION_DATA_RESPONSE_1,
     ]
     fake_api.register_requests("10.0.0.100")
 
@@ -123,7 +124,7 @@ async def test_water_heater_translations(
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITIONS_DATA_RESPONSE_1,
+        MULTIPLE_POSITION_DATA_RESPONSE_1,
     ]
     fake_api.register_requests("10.0.0.100")
 
@@ -146,12 +147,12 @@ async def test_water_heater_translations(
     [
         (
             "water_heater.keba_keenergy_12345678_1",
-            MULTIPLE_POSITIONS_DATA_RESPONSE_2,
+            MULTIPLE_POSITION_DATA_RESPONSE_2,
             '[{"name": "APPL.CtrlAppl.sParam.hotWaterTank[0].param.operatingMode", "value": "0"}]',
         ),
         (
             "water_heater.keba_keenergy_12345678_buffer_tank_1",
-            MULTIPLE_POSITIONS_DATA_RESPONSE_2,
+            MULTIPLE_POSITION_DATA_RESPONSE_2,
             '[{"name": "APPL.CtrlAppl.sParam.bufferTank[0].param.operatingMode", "value": "0"}]',
         ),
     ],
@@ -211,9 +212,9 @@ async def test_turn_on(
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITIONS_DATA_RESPONSE_1,
+        MULTIPLE_POSITION_DATA_RESPONSE_1,
         # Read API after services call
-        MULTIPLE_POSITIONS_DATA_RESPONSE_1,
+        MULTIPLE_POSITION_DATA_RESPONSE_1,
     ]
     fake_api.register_requests("10.0.0.100")
 
@@ -238,43 +239,43 @@ async def test_turn_on(
         (
             "water_heater.keba_keenergy_12345678_1",
             STATE_ECO,
-            MULTIPLE_POSITIONS_DATA_RESPONSE_1,
+            MULTIPLE_POSITION_DATA_RESPONSE_1,
             '[{"name": "APPL.CtrlAppl.sParam.hotWaterTank[0].param.operatingMode", "value": "1"}]',
         ),
         (
             "water_heater.keba_keenergy_12345678_1",
             STATE_PERFORMANCE,
-            MULTIPLE_POSITIONS_DATA_RESPONSE_2,
+            MULTIPLE_POSITION_DATA_RESPONSE_2,
             '[{"name": "APPL.CtrlAppl.sParam.hotWaterTank[0].param.operatingMode", "value": "3"}]',
         ),
         (
             "water_heater.keba_keenergy_12345678_1",
             STATE_OFF,
-            MULTIPLE_POSITIONS_DATA_RESPONSE_1,
+            MULTIPLE_POSITION_DATA_RESPONSE_1,
             '[{"name": "APPL.CtrlAppl.sParam.hotWaterTank[0].param.operatingMode", "value": "0"}]',
         ),
         (
             "water_heater.keba_keenergy_12345678_1",
             STATE_HEAT_PUMP,
-            MULTIPLE_POSITIONS_DATA_RESPONSE_1,
+            MULTIPLE_POSITION_DATA_RESPONSE_1,
             '[{"name": "APPL.CtrlAppl.sParam.hotWaterTank[0].param.operatingMode", "value": "2"}]',
         ),
         (
             "water_heater.keba_keenergy_12345678_buffer_tank_1",
             STATE_PERFORMANCE,
-            MULTIPLE_POSITIONS_DATA_RESPONSE_1,
+            MULTIPLE_POSITION_DATA_RESPONSE_1,
             '[{"name": "APPL.CtrlAppl.sParam.bufferTank[0].param.operatingMode", "value": "2"}]',
         ),
         (
             "water_heater.keba_keenergy_12345678_buffer_tank_1",
             STATE_OFF,
-            MULTIPLE_POSITIONS_DATA_RESPONSE_2,
+            MULTIPLE_POSITION_DATA_RESPONSE_2,
             '[{"name": "APPL.CtrlAppl.sParam.bufferTank[0].param.operatingMode", "value": "0"}]',
         ),
         (
             "water_heater.keba_keenergy_12345678_buffer_tank_1",
             STATE_HEAT_PUMP,
-            MULTIPLE_POSITIONS_DATA_RESPONSE_1,
+            MULTIPLE_POSITION_DATA_RESPONSE_1,
             '[{"name": "APPL.CtrlAppl.sParam.bufferTank[0].param.operatingMode", "value": "1"}]',
         ),
     ],
@@ -333,9 +334,9 @@ async def test_set_temperature(
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITIONS_DATA_RESPONSE_1,
+        MULTIPLE_POSITION_DATA_RESPONSE_1,
         # Read API after services call
-        MULTIPLE_POSITIONS_DATA_RESPONSE_1,
+        MULTIPLE_POSITION_DATA_RESPONSE_1,
     ]
     fake_api.register_requests("10.0.0.100")
 
@@ -355,3 +356,43 @@ async def test_set_temperature(
     await hass.async_block_till_done()
 
     fake_api.assert_called_write_with(expected)
+
+
+async def test_target_temperature_uses_pending_value(
+    hass: HomeAssistant,
+    config_entry: MockConfigEntry,
+    fake_api: FakeKebaKeEnergyAPI,
+) -> None:
+    fake_api.responses = [
+        DEFAULT_POSITION_RESPONSE,
+        DEFAULT_POSITION_FIXED_DATA_RESPONSE,
+        get_single_position_fixed_data_response(hot_water_tank_target_temperature="51"),
+        get_single_position_fixed_data_response(hot_water_tank_target_temperature="45"),
+        get_single_position_fixed_data_response(hot_water_tank_target_temperature="44"),
+    ]
+    fake_api.register_requests("10.0.0.100")
+
+    await setup_integration(hass, config_entry)
+
+    entity = hass.data["water_heater"].get_entity(ENTITY_ID)
+    assert entity is not None
+
+    assert entity.target_temperature == 51.0
+
+    # First call → creates _async_call_later
+    await entity.async_set_temperature(**{ATTR_TEMPERATURE: 45})
+    first_handle = entity._async_call_later
+
+    assert first_handle is not None
+    assert entity._pending_value == 45
+    assert entity._async_call_later is not None
+
+    # Second call BEFORE debounce fires
+    await entity.async_set_temperature(**{ATTR_TEMPERATURE: 44})
+
+    # Old timer must be cancelled and replaced
+    assert entity._async_call_later is not None
+    assert entity._async_call_later is not first_handle
+
+    # ✅ pending value is used
+    assert entity.target_temperature == 44

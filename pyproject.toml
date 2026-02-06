@@ -118,6 +118,7 @@ ignore = [
     "PLR0915", # too-many-statements
     "PLR2004", # magic-value-comparison
     "S101",    # assert
+    "SLF001",  # private-member-access
 ]
 
 [tool.rumdl]
