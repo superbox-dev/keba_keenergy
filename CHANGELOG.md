@@ -9,6 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!--start-->
 
+## [1.8.0b1] - 2025-01-06
+
+### Changed
+
+- The entity icons have been slightly improved
+
 ## [1.7.0] - 2025-01-31
 
 ### Added
