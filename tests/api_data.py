@@ -342,6 +342,51 @@ HEAT_CIRCUIT_AWAY_END_DATE: str = """
     }
 """
 
+HEAT_CIRCUIT_HEATING_CURVE_OFFSET: str = """
+    {
+        "name": "APPL.CtrlAppl.sParam.heatCircuit[%s].param.heatCurveOffset",
+        "attributes": {
+            "formatId": "fmtTemp",
+            "longText": "Heat curve offset",
+            "unitId": "TempRel",
+            "upperLimit": "10",
+            "lowerLimit": "-10"
+        },
+        "value": "%s"
+    }
+"""
+
+HEAT_CIRCUIT_HEATING_CURVE_SLOPE: str = """
+    {
+        "name": "APPL.CtrlAppl.sParam.heatCircuit[%s].param.heatCurveGradient",
+        "attributes": {
+            "formatId": "fmt3p2",
+            "longText": "Heat curve grad.",
+            "upperLimit": "5",
+            "lowerLimit": "0"
+        },
+        "value": "%s"
+    }
+"""
+
+HEAT_CIRCUIT_USE_HEATING_CURVE: str = """
+    {
+        "name": "APPL.CtrlAppl.sParam.heatCircuit[%s].param.enableHeatCurveLinTab",
+        "attributes": {},
+        "value": "%s"
+    }
+"""
+
+HEAT_CIRCUIT_CURRENT_HEATING_CURVE: str = """
+    {
+        "name": "APPL.CtrlAppl.sParam.heatCircuit[%s].param.linTab.fileName",
+        "attributes": {
+            "longText": "Heat curve"
+        },
+        "value": "%s"
+    }
+"""
+
 SOLAR_CIRCUIT_OPERATION_MODE: str = """
     {
         "name": "APPL.CtrlAppl.sParam.solarCircuit[%s].param.operatingMode",
@@ -1537,6 +1582,10 @@ DEFAULT_POSITION_DATA_RESPONSE: list[dict[str, Any]] = [
     json.loads(HEAT_CIRCUIT_TARGET_TEMPERATURE_OFFSET % ("0", "1.5")),
     json.loads(HEAT_CIRCUIT_AWAY_START_DATE % ("0", "1769036400")),
     json.loads(HEAT_CIRCUIT_AWAY_END_DATE % ("0", "1769122799")),
+    json.loads(HEAT_CIRCUIT_HEATING_CURVE_OFFSET % ("0", "0.5")),
+    json.loads(HEAT_CIRCUIT_HEATING_CURVE_SLOPE % ("0", "0.1")),
+    json.loads(HEAT_CIRCUIT_USE_HEATING_CURVE % ("0", "true")),
+    json.loads(HEAT_CIRCUIT_CURRENT_HEATING_CURVE % ("0", "HC1")),
     json.loads(SOLAR_CIRCUIT_OPERATION_MODE % ("0", "0")),
     json.loads(SOLAR_CIRCUIT_SOURCE_TEMPERATURE % ("0", "44.43")),
     json.loads(SOLAR_CIRCUIT_PUMP_1 % ("0", "0.63")),
@@ -1631,6 +1680,14 @@ ENTITY_UPDATED_DATA_RESPONSE: list[dict[str, Any]] = [
     json.loads(HEAT_CIRCUIT_AWAY_START_DATE % ("1", "1769036400")),
     json.loads(HEAT_CIRCUIT_AWAY_END_DATE % ("0", "1769122799")),
     json.loads(HEAT_CIRCUIT_AWAY_END_DATE % ("1", "1769122799")),
+    json.loads(HEAT_CIRCUIT_HEATING_CURVE_OFFSET % ("0", "0.5")),
+    json.loads(HEAT_CIRCUIT_HEATING_CURVE_OFFSET % ("1", "-0.5")),
+    json.loads(HEAT_CIRCUIT_HEATING_CURVE_SLOPE % ("0", "0.2")),
+    json.loads(HEAT_CIRCUIT_HEATING_CURVE_SLOPE % ("1", "0.3")),
+    json.loads(HEAT_CIRCUIT_USE_HEATING_CURVE % ("0", "true")),
+    json.loads(HEAT_CIRCUIT_USE_HEATING_CURVE % ("1", "false")),
+    json.loads(HEAT_CIRCUIT_CURRENT_HEATING_CURVE % ("0", "HC2")),
+    json.loads(HEAT_CIRCUIT_CURRENT_HEATING_CURVE % ("1", "HC3")),
     json.loads(SOLAR_CIRCUIT_OPERATION_MODE % ("0", "0")),
     json.loads(SOLAR_CIRCUIT_OPERATION_MODE % ("1", "1")),
     json.loads(SOLAR_CIRCUIT_SOURCE_TEMPERATURE % ("0", "44.43")),
@@ -1732,6 +1789,10 @@ HEAT_CIRCUIT_OPERATION_MODE_DATA_RESPONSE: list[dict[str, Any]] = [
     json.loads(HEAT_CIRCUIT_TARGET_TEMPERATURE_OFFSET % ("0", "1.5")),
     json.loads(HEAT_CIRCUIT_AWAY_START_DATE % ("0", "1769036400")),
     json.loads(HEAT_CIRCUIT_AWAY_END_DATE % ("0", "1769122799")),
+    json.loads(HEAT_CIRCUIT_HEATING_CURVE_OFFSET % ("0", "0.5")),
+    json.loads(HEAT_CIRCUIT_HEATING_CURVE_SLOPE % ("0", "0.4")),
+    json.loads(HEAT_CIRCUIT_USE_HEATING_CURVE % ("0", "false")),
+    json.loads(HEAT_CIRCUIT_CURRENT_HEATING_CURVE % ("0", "HC4")),
     json.loads(SOLAR_CIRCUIT_OPERATION_MODE % ("0", "0")),
     json.loads(SOLAR_CIRCUIT_SOURCE_TEMPERATURE % ("0", "44.43")),
     json.loads(SOLAR_CIRCUIT_PUMP_1 % ("0", "0.63")),
@@ -1826,6 +1887,14 @@ MULTIPLE_POSITIONS_DATA_RESPONSE_1: list[dict[str, Any]] = [
     json.loads(HEAT_CIRCUIT_AWAY_START_DATE % ("1", "1769036400")),
     json.loads(HEAT_CIRCUIT_AWAY_END_DATE % ("0", "1769122799")),
     json.loads(HEAT_CIRCUIT_AWAY_END_DATE % ("1", "1769122799")),
+    json.loads(HEAT_CIRCUIT_HEATING_CURVE_OFFSET % ("0", "1.5")),
+    json.loads(HEAT_CIRCUIT_HEATING_CURVE_OFFSET % ("1", "-1.5")),
+    json.loads(HEAT_CIRCUIT_HEATING_CURVE_SLOPE % ("0", "0.5")),
+    json.loads(HEAT_CIRCUIT_HEATING_CURVE_SLOPE % ("1", "0.6")),
+    json.loads(HEAT_CIRCUIT_USE_HEATING_CURVE % ("0", "false")),
+    json.loads(HEAT_CIRCUIT_USE_HEATING_CURVE % ("1", "true")),
+    json.loads(HEAT_CIRCUIT_CURRENT_HEATING_CURVE % ("0", "HC6")),
+    json.loads(HEAT_CIRCUIT_CURRENT_HEATING_CURVE % ("1", "HC7")),
     json.loads(SOLAR_CIRCUIT_OPERATION_MODE % ("0", "0")),
     json.loads(SOLAR_CIRCUIT_OPERATION_MODE % ("1", "1")),
     json.loads(SOLAR_CIRCUIT_SOURCE_TEMPERATURE % ("0", "44.43")),
@@ -1951,6 +2020,14 @@ MULTIPLE_POSITIONS_DATA_RESPONSE_2: list[dict[str, Any]] = [
     json.loads(HEAT_CIRCUIT_AWAY_START_DATE % ("1", "1769036400")),
     json.loads(HEAT_CIRCUIT_AWAY_END_DATE % ("0", "1769122799")),
     json.loads(HEAT_CIRCUIT_AWAY_END_DATE % ("1", "1769122799")),
+    json.loads(HEAT_CIRCUIT_HEATING_CURVE_OFFSET % ("0", "4.5")),
+    json.loads(HEAT_CIRCUIT_HEATING_CURVE_OFFSET % ("1", "-4.5")),
+    json.loads(HEAT_CIRCUIT_HEATING_CURVE_SLOPE % ("0", "0.7")),
+    json.loads(HEAT_CIRCUIT_HEATING_CURVE_SLOPE % ("1", "0.8")),
+    json.loads(HEAT_CIRCUIT_USE_HEATING_CURVE % ("0", "false")),
+    json.loads(HEAT_CIRCUIT_USE_HEATING_CURVE % ("1", "true")),
+    json.loads(HEAT_CIRCUIT_CURRENT_HEATING_CURVE % ("0", "HC FBH")),
+    json.loads(HEAT_CIRCUIT_CURRENT_HEATING_CURVE % ("1", "HC HK")),
     json.loads(SOLAR_CIRCUIT_OPERATION_MODE % ("0", "0")),
     json.loads(SOLAR_CIRCUIT_OPERATION_MODE % ("1", "1")),
     json.loads(SOLAR_CIRCUIT_SOURCE_TEMPERATURE % ("0", "44.43")),

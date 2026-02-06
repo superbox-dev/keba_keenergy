@@ -14,6 +14,7 @@ from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from keba_keenergy_api.constants import BufferTankOperatingMode
 from keba_keenergy_api.constants import ExternalHeatSourceOperatingMode
+from keba_keenergy_api.constants import HeatCircuitHeatingCurve
 from keba_keenergy_api.constants import HeatCircuitOperatingMode
 from keba_keenergy_api.constants import HotWaterTankOperatingMode
 from keba_keenergy_api.constants import SectionPrefix
@@ -71,6 +72,25 @@ SELECT_TYPES: dict[str, tuple[KebaKeEnergySelectEntityDescription, ...]] = {
             icon="mdi:cog",
             values=HeatCircuitOperatingMode,
         ),
+        KebaKeEnergySelectEntityDescription(
+            entity_registry_enabled_default=False,
+            key="heating_curve",
+            options=[
+                HeatCircuitHeatingCurve.HC1.name.lower(),
+                HeatCircuitHeatingCurve.HC2.name.lower(),
+                HeatCircuitHeatingCurve.HC3.name.lower(),
+                HeatCircuitHeatingCurve.HC4.name.lower(),
+                HeatCircuitHeatingCurve.HC5.name.lower(),
+                HeatCircuitHeatingCurve.HC6.name.lower(),
+                HeatCircuitHeatingCurve.HC7.name.lower(),
+                HeatCircuitHeatingCurve.HC8.name.lower(),
+                HeatCircuitHeatingCurve.HC_FBH.name.lower(),
+                HeatCircuitHeatingCurve.HC_HK.name.lower(),
+            ],
+            translation_key="heating_curve",
+            icon="mdi:chart-bell-curve-cumulative",
+            values=HeatCircuitHeatingCurve,
+        ),
     ),
     SectionPrefix.SOLAR_CIRCUIT: (
         KebaKeEnergySelectEntityDescription(
@@ -104,8 +124,8 @@ SELECT_TYPES: dict[str, tuple[KebaKeEnergySelectEntityDescription, ...]] = {
     ),
     SectionPrefix.EXTERNAL_HEAT_SOURCE: (
         KebaKeEnergySelectEntityDescription(
-            key="operating_mode",
             entity_registry_enabled_default=False,
+            key="operating_mode",
             options=[_.name.lower() for _ in ExternalHeatSourceOperatingMode],
             translation_key="operating_mode_external_heat_source",
             icon="mdi:cog",

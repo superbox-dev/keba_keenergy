@@ -223,6 +223,28 @@ async def test_heat_circuit_numbers(
 
     await setup_integration(hass, config_entry)
 
+    heat_circuit_heating_curve_offset_1: State | None = hass.states.get(
+        "number.keba_keenergy_12345678_heat_circuit_heating_curve_offset_1",
+    )
+    assert isinstance(heat_circuit_heating_curve_offset_1, State)
+    assert heat_circuit_heating_curve_offset_1.attributes[ATTR_MIN] == -10.0
+    assert heat_circuit_heating_curve_offset_1.attributes[ATTR_MAX] == 10.0
+    assert heat_circuit_heating_curve_offset_1.attributes[ATTR_STEP] == 0.5
+    assert heat_circuit_heating_curve_offset_1.attributes[CONF_UNIT_OF_MEASUREMENT] == UnitOfTemperature.CELSIUS
+    assert heat_circuit_heating_curve_offset_1.attributes[CONF_DEVICE_CLASS] == SensorDeviceClass.TEMPERATURE
+    assert (
+        heat_circuit_heating_curve_offset_1.attributes[ATTR_FRIENDLY_NAME] == "Heating circuit 1 Heating curve offset"
+    )
+
+    heat_circuit_heating_curve_slope_1: State | None = hass.states.get(
+        "number.keba_keenergy_12345678_heat_circuit_heating_curve_slope_1",
+    )
+    assert isinstance(heat_circuit_heating_curve_slope_1, State)
+    assert heat_circuit_heating_curve_slope_1.attributes[ATTR_MIN] == 0.0
+    assert heat_circuit_heating_curve_slope_1.attributes[ATTR_MAX] == 5.0
+    assert heat_circuit_heating_curve_slope_1.attributes[ATTR_STEP] == 0.1
+    assert heat_circuit_heating_curve_slope_1.attributes[ATTR_FRIENDLY_NAME] == "Heating circuit 1 Heating curve slope"
+
     heat_circuit_target_temperature_away_1: State | None = hass.states.get(
         "number.keba_keenergy_12345678_heat_circuit_target_temperature_away_1",
     )
@@ -283,6 +305,18 @@ async def test_heat_circuit_numbers_translated(
 
     hass.config.language = "de"
     await setup_integration(hass, config_entry)
+
+    heat_circuit_heating_curve_offset_1: State | None = hass.states.get(
+        "number.keba_keenergy_12345678_heat_circuit_heating_curve_offset_1",
+    )
+    assert isinstance(heat_circuit_heating_curve_offset_1, State)
+    assert heat_circuit_heating_curve_offset_1.attributes[ATTR_FRIENDLY_NAME] == "Heizkreis 1 Heizkurven-Offset"
+
+    heat_circuit_heating_curve_slope_1: State | None = hass.states.get(
+        "number.keba_keenergy_12345678_heat_circuit_heating_curve_slope_1",
+    )
+    assert isinstance(heat_circuit_heating_curve_slope_1, State)
+    assert heat_circuit_heating_curve_slope_1.attributes[ATTR_FRIENDLY_NAME] == "Heizkreis 1 Heizkurven-Steigung"
 
     heat_circuit_target_temperature_away_1: State | None = hass.states.get(
         "number.keba_keenergy_12345678_heat_circuit_target_temperature_away_1",
@@ -475,6 +509,16 @@ async def test_solar_circuit_numbers_translated(
             0.5,
             '[{"name": "APPL.CtrlAppl.sParam.heatCircuit[0].param.offsetRoomTemp", "value": "0.5"}]',
         ),
+        (
+            "number.keba_keenergy_12345678_heat_circuit_heating_curve_offset_1",
+            5.5,
+            '[{"name": "APPL.CtrlAppl.sParam.heatCircuit[0].param.heatCurveOffset", "value": "5.5"}]',
+        ),
+        (
+            "number.keba_keenergy_12345678_heat_circuit_heating_curve_slope_1",
+            0.3,
+            '[{"name": "APPL.CtrlAppl.sParam.heatCircuit[0].param.heatCurveGradient", "value": "0.3"}]',
+        ),
     ],
 )
 @pytest.mark.usefixtures("entity_registry_enabled_by_default")
@@ -536,6 +580,18 @@ async def test_set_value(
             -3,
             "Value -3.0 for number.keba_keenergy_12345678_heat_circuit_target_temperature_offset_1 "
             "is outside valid range -2.5 - 2.5",
+        ),
+        (
+            "number.keba_keenergy_12345678_heat_circuit_heating_curve_offset_1",
+            -11,
+            "Value -11.0 for number.keba_keenergy_12345678_heat_circuit_heating_curve_offset_1 "
+            "is outside valid range -10.0 - 10.0",
+        ),
+        (
+            "number.keba_keenergy_12345678_heat_circuit_heating_curve_slope_1",
+            -0.1,
+            "Value -0.1 for number.keba_keenergy_12345678_heat_circuit_heating_curve_slope_1 "
+            "is outside valid range 0.0 - 5.0",
         ),
     ],
 )

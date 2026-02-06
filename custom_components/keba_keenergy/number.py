@@ -83,6 +83,25 @@ NUMBER_TYPES: dict[str, tuple[KebaKeEnergyNumberEntityDescription, ...]] = {
             translation_key="target_room_temperature_offset",
             scale=1,
         ),
+        KebaKeEnergyNumberEntityDescription(
+            device_class=NumberDeviceClass.TEMPERATURE,
+            entity_registry_enabled_default=False,
+            key="heating_curve_offset",
+            key_index=None,
+            native_unit_of_measurement=UnitOfTemperature.CELSIUS,
+            native_step=0.5,
+            translation_key="heating_curve_offset",
+            scale=1,
+        ),
+        KebaKeEnergyNumberEntityDescription(
+            key="heating_curve_slope",
+            entity_registry_enabled_default=False,
+            key_index=None,
+            native_step=0.1,
+            translation_key="heating_curve_slope",
+            icon="mdi:slope-uphill",
+            scale=1,
+        ),
     ),
     SectionPrefix.SOLAR_CIRCUIT: (
         KebaKeEnergyNumberEntityDescription(

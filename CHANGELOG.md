@@ -15,6 +15,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Added sensor "Circulation return temperature" to the hot water tank [(Issue #24)](https://github.com/superbox-dev/keba_keenergy/issues/24)
 - Added binary sensor "Circulation pump state" to the hot water tank [(Issue #24)](https://github.com/superbox-dev/keba_keenergy/issues/24)
+- Added select entity "Heating curve" to the heating circuit [(Issue #24)](https://github.com/superbox-dev/keba_keenergy/issues/24)
+- Added number entity "Heating curve offset" to the heating circuit [(Issue #24)](https://github.com/superbox-dev/keba_keenergy/issues/24)
+- Added number entity "Heating curve slope" to the heating circuit [(Issue #24)](https://github.com/superbox-dev/keba_keenergy/issues/24)
+- Added switch entity "Use heating curve" to the heating circuit [(Issue #24)](https://github.com/superbox-dev/keba_keenergy/issues/24)
 
 ### Changed
 

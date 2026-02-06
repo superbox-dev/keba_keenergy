@@ -28,7 +28,7 @@ async def test_load_entry(
     await setup_integration(hass, config_entry)
 
     assert config_entry.state is ConfigEntryState.LOADED
-    assert hass.states.async_entity_ids_count() == 190
+    assert hass.states.async_entity_ids_count() == 198
 
     assert set(hass.states.async_entity_ids()) == {
         "binary_sensor.keba_keenergy_12345678_buffer_tank_cool_request_1",
@@ -61,6 +61,8 @@ async def test_load_entry(
         "select.keba_keenergy_12345678_external_heat_source_operating_mode_1",
         "select.keba_keenergy_12345678_external_heat_source_operating_mode_2",
         "select.keba_keenergy_12345678_operating_mode",
+        "select.keba_keenergy_12345678_heat_circuit_heating_curve_1",
+        "select.keba_keenergy_12345678_heat_circuit_heating_curve_2",
         "select.keba_keenergy_12345678_heat_circuit_operating_mode_1",
         "select.keba_keenergy_12345678_heat_circuit_operating_mode_2",
         "select.keba_keenergy_12345678_hot_water_tank_operating_mode_1",
@@ -69,6 +71,10 @@ async def test_load_entry(
         "select.keba_keenergy_12345678_solar_circuit_operating_mode_2",
         "number.keba_keenergy_12345678_buffer_tank_standby_temperature_1",
         "number.keba_keenergy_12345678_buffer_tank_standby_temperature_2",
+        "number.keba_keenergy_12345678_heat_circuit_heating_curve_offset_1",
+        "number.keba_keenergy_12345678_heat_circuit_heating_curve_offset_2",
+        "number.keba_keenergy_12345678_heat_circuit_heating_curve_slope_1",
+        "number.keba_keenergy_12345678_heat_circuit_heating_curve_slope_2",
         "number.keba_keenergy_12345678_heat_circuit_target_temperature_away_1",
         "number.keba_keenergy_12345678_heat_circuit_target_temperature_away_2",
         "number.keba_keenergy_12345678_heat_circuit_target_temperature_day_1",
@@ -217,6 +223,8 @@ async def test_load_entry(
         "sensor.keba_keenergy_12345678_switch_valve_position_2",
         "sensor.keba_keenergy_12345678_webserver_cpu_usage",
         "sensor.keba_keenergy_12345678_webview_cpu_usage",
+        "switch.keba_keenergy_12345678_heat_circuit_use_heating_curve_1",
+        "switch.keba_keenergy_12345678_heat_circuit_use_heating_curve_2",
         "switch.keba_keenergy_12345678_heat_pump_compressor_use_night_speed",
         "switch.keba_keenergy_12345678_solar_circuit_priority_1_before_2_1",
         "switch.keba_keenergy_12345678_solar_circuit_priority_1_before_2_2",

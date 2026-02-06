@@ -80,6 +80,7 @@ async def test_system_selects_translations(
     assert operating_mode.attributes[ATTR_FRIENDLY_NAME] == "Bedieneinheit Betriebsart"
 
 
+@pytest.mark.usefixtures("entity_registry_enabled_by_default")
 async def test_heat_circuit_selects(
     hass: HomeAssistant,
     config_entry: MockConfigEntry,
@@ -102,7 +103,27 @@ async def test_heat_circuit_selects(
     assert heat_circuit_operating_mode_1.attributes[ATTR_FRIENDLY_NAME] == "Heating circuit 1 Operating mode"
     assert heat_circuit_operating_mode_1.attributes[ATTR_OPTIONS] == ["off", "auto", "day", "night", "holiday", "party"]
 
+    heat_circuit_heating_curve_1: State | None = hass.states.get(
+        "select.keba_keenergy_12345678_heat_circuit_heating_curve_1",
+    )
+    assert isinstance(heat_circuit_heating_curve_1, State)
+    assert heat_circuit_heating_curve_1.state == "hc6"
+    assert heat_circuit_heating_curve_1.attributes[ATTR_FRIENDLY_NAME] == "Heating circuit 1 Heating curve"
+    assert heat_circuit_heating_curve_1.attributes[ATTR_OPTIONS] == [
+        "hc1",
+        "hc2",
+        "hc3",
+        "hc4",
+        "hc5",
+        "hc6",
+        "hc7",
+        "hc8",
+        "hc_fbh",
+        "hc_hk",
+    ]
 
+
+@pytest.mark.usefixtures("entity_registry_enabled_by_default")
 async def test_heat_circuit_selects_translated(
     hass: HomeAssistant,
     config_entry: MockConfigEntry,
@@ -123,6 +144,12 @@ async def test_heat_circuit_selects_translated(
     )
     assert isinstance(heat_circuit_operating_mode_1, State)
     assert heat_circuit_operating_mode_1.attributes[ATTR_FRIENDLY_NAME] == "Heizkreis 1 Betriebsart"
+
+    heat_circuit_heating_curve_1: State | None = hass.states.get(
+        "select.keba_keenergy_12345678_heat_circuit_heating_curve_1",
+    )
+    assert isinstance(heat_circuit_heating_curve_1, State)
+    assert heat_circuit_heating_curve_1.attributes[ATTR_FRIENDLY_NAME] == "Heizkreis 1 Heizkurve"
 
 
 async def test_solar_circuit_selects(
@@ -365,6 +392,11 @@ async def test_external_heat_source_translated(
             "select.keba_keenergy_12345678_external_heat_source_operating_mode_1",
             "on",
             '[{"name": "APPL.CtrlAppl.sParam.extHeatSource[0].param.operatingMode", "value": "1"}]',
+        ),
+        (
+            "select.keba_keenergy_12345678_heat_circuit_heating_curve_1",
+            "hc_fbh",
+            '[{"name": "APPL.CtrlAppl.sParam.heatCircuit[0].param.linTab.fileName", "value": "HC FBH"}]',
         ),
     ],
 )

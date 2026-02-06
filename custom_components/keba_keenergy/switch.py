@@ -37,6 +37,16 @@ class KebaKeEnergySwitchEntityDescription(
 
 
 SWITCH_TYPES: dict[str, tuple[KebaKeEnergySwitchEntityDescription, ...]] = {
+    SectionPrefix.HEAT_CIRCUIT: (
+        KebaKeEnergySwitchEntityDescription(
+            device_class=SwitchDeviceClass.SWITCH,
+            entity_registry_enabled_default=False,
+            key="use_heating_curve",
+            key_index=None,
+            translation_key="use_heating_curve",
+            icon="mdi:chart-bell-curve-cumulative",
+        ),
+    ),
     SectionPrefix.SOLAR_CIRCUIT: (
         KebaKeEnergySwitchEntityDescription(
             device_class=SwitchDeviceClass.SWITCH,

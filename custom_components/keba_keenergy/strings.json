@@ -115,6 +115,12 @@
             "compressor_night_speed": {
                 "name": "Compressor speed (night)"
             },
+            "heating_curve_offset": {
+                "name": "Heating curve offset"
+            },
+            "heating_curve_slope": {
+                "name": "Heating curve slope"
+            },
             "standby_temperature": {
                 "name": "Standby temperature"
             },
@@ -138,6 +144,22 @@
             }
         },
         "select": {
+            "heating_curve": {
+                "name": "Heating curve",
+                "state": {
+                    "hc1": "Curve 1",
+                    "hc2": "Curve 2",
+                    "hc3": "Curve 3",
+                    "hc4": "Curve 4",
+                    "hc5": "Curve 5",
+                    "hc6": "Curve 6",
+                    "hc7": "Curve 7",
+                    "hc8": "Curve 8",
+                    "hc9": "Curve 9",
+                    "hc_fbh": "Underfloor heating",
+                    "hc_hk": "Radiator heating"
+                }
+            },
             "operating_mode_buffer_tank": {
                 "name": "Operating mode",
                 "state": {
@@ -520,6 +542,9 @@
             },
             "priority_1_before_2": {
                 "name": "Priority 1 before 2"
+            },
+            "use_heating_curve": {
+                "name": "Use heating curve"
             }
         },
         "water_heater": {
