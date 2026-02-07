@@ -16,10 +16,12 @@ from homeassistant.core import ServiceCall
 from homeassistant.exceptions import ServiceValidationError
 from homeassistant.helpers import config_validation as cv
 from homeassistant.helpers import selector
+from keba_keenergy_api.constants import HeatCircuitHeatingCurve
 
 from .const import ATTR_CONFIG_ENTRY
 from .const import DOMAIN
 from .const import SERVICE_SET_AWAY_DATE_RANGE
+from .const import SERVICE_SET_HEATING_CURVE_POINTS
 from .coordinator import KebaKeEnergyDataUpdateCoordinator
 
 if TYPE_CHECKING:
@@ -42,6 +44,39 @@ AWAY_DATE_RANGE_SCHEMA: vol.Schema = vol.Schema(
     },
 )
 
+ATTR_POINTS: Final[str] = "points"
+ATTR_OUTSIDE: Final[str] = "outside"
+ATTR_FLOW: Final[str] = "flow"
+ATTR_HEATING_CURVE: Final[str] = "heating_curve"
+HEATING_CURVE_POINT_SCHEMA = vol.Schema(
+    {
+        vol.Required(ATTR_OUTSIDE): vol.All(
+            vol.Coerce(float),
+            vol.Range(min=-40, max=40),
+        ),
+        vol.Required(ATTR_FLOW): vol.All(
+            vol.Coerce(float),
+            vol.Range(min=10, max=90),
+        ),
+    },
+)
+
+
+HEATING_CURVE_POINTS_SCHEMA: vol.Schema = vol.Schema(
+    {
+        vol.Required(ATTR_CONFIG_ENTRY): selector.ConfigEntrySelector(
+            {
+                "integration": DOMAIN,
+            },
+        ),
+        vol.Required(ATTR_HEATING_CURVE): vol.In([_.name.lower() for _ in HeatCircuitHeatingCurve]),
+        vol.Required(ATTR_POINTS): vol.All(
+            cv.ensure_list,
+            [HEATING_CURVE_POINT_SCHEMA],
+        ),
+    },
+)
+
 
 def __get_coordinator(call: ServiceCall) -> KebaKeEnergyDataUpdateCoordinator:
     """Get the coordinator from the entry."""
@@ -53,7 +88,7 @@ def __get_coordinator(call: ServiceCall) -> KebaKeEnergyDataUpdateCoordinator:
             translation_domain=DOMAIN,
             translation_key="invalid_config_entry",
             translation_placeholders={
-                "config_entry": entry_id,
+                "config_entry_id": entry_id,
             },
         )
 
@@ -62,7 +97,7 @@ def __get_coordinator(call: ServiceCall) -> KebaKeEnergyDataUpdateCoordinator:
             translation_domain=DOMAIN,
             translation_key="unloaded_config_entry",
             translation_placeholders={
-                "config_entry": entry.title,
+                "config_entry_id": entry.title,
             },
         )
 
@@ -98,6 +133,9 @@ async def _async_set_away_range(call: ServiceCall) -> None:
         )
 
 
+async def _async_set_heating_curve_points(call: ServiceCall) -> None: ...
+
+
 async def async_setup_services(hass: HomeAssistant) -> None:
     """KEBA KeEnergy services setup."""
     hass.services.async_register(
@@ -105,4 +143,11 @@ async def async_setup_services(hass: HomeAssistant) -> None:
         service=SERVICE_SET_AWAY_DATE_RANGE,
         service_func=_async_set_away_range,
         schema=AWAY_DATE_RANGE_SCHEMA,
+    )
+
+    hass.services.async_register(
+        DOMAIN,
+        service=SERVICE_SET_HEATING_CURVE_POINTS,
+        service_func=_async_set_heating_curve_points,
+        schema=HEATING_CURVE_POINTS_SCHEMA,
     )
