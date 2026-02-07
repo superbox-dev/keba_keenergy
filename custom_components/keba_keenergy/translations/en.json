@@ -565,6 +565,11 @@
             }
         }
     },
+    "exceptions": {
+        "end_date_smaller_than_start_date": {
+            "message": "The end date must not be earlier than the start date."
+        }
+    },
     "issues": {
         "frequent_flash_writes": {
             "title": "Frequent write operations detected",

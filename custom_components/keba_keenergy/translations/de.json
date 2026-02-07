@@ -565,6 +565,11 @@
             }
         }
     },
+    "exceptions": {
+        "end_date_smaller_than_start_date": {
+            "message": "Das Enddatum darf nicht vor dem Startdatum liegen."
+        }
+    },
     "issues": {
         "frequent_flash_writes": {
             "title": "Viele Schreibzugriffe erkannt",

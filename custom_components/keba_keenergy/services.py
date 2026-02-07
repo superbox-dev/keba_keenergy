@@ -86,6 +86,12 @@ async def _async_set_away_range(call: ServiceCall) -> None:
         start_date_tz = datetime.combine(start_date_naive, time.min, tzinfo=tz)
         end_date_tz = datetime.combine(end_date_naive, time.max, tzinfo=tz)
 
+        if end_date_tz < start_date_tz:
+            raise ServiceValidationError(
+                translation_domain=DOMAIN,
+                translation_key="end_date_smaller_than_start_date",
+            )
+
         await coordinator.set_away_date_range(
             start_timestamp=start_date_tz.timestamp(),
             end_timestamp=end_date_tz.timestamp(),
