@@ -97,16 +97,16 @@ async def test_entity_update_failed(
     state: State | None = hass.states.get(entity_id)
     assert isinstance(state, State)
 
-    with patch.object(KebaKeEnergyAPI, "write_data", side_effect=side_effect):
-        with pytest.raises(HomeAssistantError) as error:
-            await hass.services.async_call(
-                domain=SELECT_DOMAIN,
-                service=SERVICE_SELECT_OPTION,
-                service_data={
-                    ATTR_ENTITY_ID: entity_id,
-                    ATTR_OPTION: "off",
-                },
-                blocking=True,
-            )
-
-        assert str(error.value) == expected_error
+    with (
+        patch.object(KebaKeEnergyAPI, "write_data", side_effect=side_effect),
+        pytest.raises(HomeAssistantError, match=expected_error),
+    ):
+        await hass.services.async_call(
+            domain=SELECT_DOMAIN,
+            service=SERVICE_SELECT_OPTION,
+            service_data={
+                ATTR_ENTITY_ID: entity_id,
+                ATTR_OPTION: "off",
+            },
+            blocking=True,
+        )

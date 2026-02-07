@@ -471,7 +471,7 @@ async def test_select_invalid_option(
     state: State | None = hass.states.get(entity_id)
     assert isinstance(state, State)
 
-    with pytest.raises(ServiceValidationError) as error:
+    with pytest.raises(ServiceValidationError, match=expected):
         await hass.services.async_call(
             domain=SELECT_DOMAIN,
             service=SERVICE_SELECT_OPTION,
@@ -481,5 +481,3 @@ async def test_select_invalid_option(
             },
             blocking=True,
         )
-
-    assert str(error.value) == expected

@@ -51,6 +51,38 @@ async def test_set_away_range(
     )
 
 
+async def test_set_away_range_with_invalid_start_and_end_date(
+    hass: HomeAssistant,
+    config_entry: MockConfigEntry,
+    fake_api: FakeKebaKeEnergyAPI,
+) -> None:
+    fake_api.responses = [
+        MULTIPLE_POSITIONS_RESPONSE,
+        get_multiple_position_fixed_data_response(),
+        MULTIPLE_POSITION_DATA_RESPONSE_1,
+        # Read API after services call
+        MULTIPLE_POSITION_DATA_RESPONSE_1,
+    ]
+    fake_api.register_requests(config_entry.data[CONF_HOST])
+
+    await setup_integration(hass, config_entry)
+
+    with pytest.raises(
+        ServiceValidationError,
+        match="The end date must not be earlier than the start date",
+    ):
+        await hass.services.async_call(
+            domain=DOMAIN,
+            service=SERVICE_SET_AWAY_DATE_RANGE,
+            service_data={
+                ATTR_CONFIG_ENTRY: config_entry.entry_id,
+                ATTR_START_DATE: "2025-01-14",
+                ATTR_END_DATE: "2025-01-01",
+            },
+            blocking=True,
+        )
+
+
 async def test_set_away_range_with_invalid_config_entry(
     hass: HomeAssistant,
     config_entry: MockConfigEntry,
@@ -67,7 +99,10 @@ async def test_set_away_range_with_invalid_config_entry(
 
     await setup_integration(hass, config_entry)
 
-    with pytest.raises(ServiceValidationError) as error:
+    with pytest.raises(
+        ServiceValidationError,
+        match=r"Invalid integration provided\. Got invalid",
+    ):
         await hass.services.async_call(
             domain=DOMAIN,
             service=SERVICE_SET_AWAY_DATE_RANGE,
@@ -78,8 +113,6 @@ async def test_set_away_range_with_invalid_config_entry(
             },
             blocking=True,
         )
-
-    assert error.value.translation_key == "invalid_config_entry"
 
 
 async def test_set_away_range_with_unloaded_config_entry(
@@ -102,7 +135,10 @@ async def test_set_away_range_with_unloaded_config_entry(
     await hass.config_entries.async_unload(config_entry.entry_id)
     await hass.async_block_till_done()
 
-    with pytest.raises(ServiceValidationError) as error:
+    with pytest.raises(
+        ServiceValidationError,
+        match=r"Invalid integration provided\. KEBA KeEnergy \(ap4400\.local\) is not loaded",
+    ):
         await hass.services.async_call(
             domain=DOMAIN,
             service=SERVICE_SET_AWAY_DATE_RANGE,
@@ -113,5 +149,3 @@ async def test_set_away_range_with_unloaded_config_entry(
             },
             blocking=True,
         )
-
-    assert error.value.translation_key == "unloaded_config_entry"

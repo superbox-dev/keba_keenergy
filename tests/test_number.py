@@ -569,32 +569,32 @@ async def test_set_value(
         (
             "number.keba_keenergy_12345678_hot_water_tank_target_temperature_1",
             100,
-            "Value 100.0 for number.keba_keenergy_12345678_hot_water_tank_target_temperature_1 "
-            "is outside valid range 0.0 - 52.0",
+            r"Value 100\.0 for number\.keba_keenergy_12345678_hot_water_tank_target_temperature_1 "
+            r"is outside valid range 0\.0 - 52\.0",
         ),
         (
             "number.keba_keenergy_12345678_heat_circuit_target_temperature_day_1",
             -10,
-            "Value -10.0 for number.keba_keenergy_12345678_heat_circuit_target_temperature_day_1 "
-            "is outside valid range 10.0 - 30.0",
+            r"Value -10\.0 for number\.keba_keenergy_12345678_heat_circuit_target_temperature_day_1 "
+            r"is outside valid range 10\.0 - 30\.0",
         ),
         (
             "number.keba_keenergy_12345678_heat_circuit_target_temperature_offset_1",
             -3,
-            "Value -3.0 for number.keba_keenergy_12345678_heat_circuit_target_temperature_offset_1 "
-            "is outside valid range -2.5 - 2.5",
+            r"Value -3\.0 for number\.keba_keenergy_12345678_heat_circuit_target_temperature_offset_1 "
+            r"is outside valid range -2\.5 - 2\.5",
         ),
         (
             "number.keba_keenergy_12345678_heat_circuit_heating_curve_offset_1",
             -11,
-            "Value -11.0 for number.keba_keenergy_12345678_heat_circuit_heating_curve_offset_1 "
-            "is outside valid range -10.0 - 10.0",
+            r"Value -11\.0 for number\.keba_keenergy_12345678_heat_circuit_heating_curve_offset_1 "
+            r"is outside valid range -10\.0 - 10\.0",
         ),
         (
             "number.keba_keenergy_12345678_heat_circuit_heating_curve_slope_1",
             -0.1,
-            "Value -0.1 for number.keba_keenergy_12345678_heat_circuit_heating_curve_slope_1 "
-            "is outside valid range 0.0 - 5.0",
+            r"Value -0\.1 for number\.keba_keenergy_12345678_heat_circuit_heating_curve_slope_1 "
+            r"is outside valid range 0\.0 - 5\.0",
         ),
     ],
 )
@@ -618,7 +618,7 @@ async def test_set_value_bad_range(
 
     await setup_integration(hass, config_entry)
 
-    with pytest.raises(ServiceValidationError) as error:
+    with pytest.raises(ServiceValidationError, match=expected):
         await hass.services.async_call(
             domain=NUMBER_DOMAIN,
             service=SERVICE_SET_VALUE,
@@ -629,8 +629,6 @@ async def test_set_value_bad_range(
             blocking=True,
         )
 
-    assert str(error.value) == expected
-
 
 @pytest.mark.parametrize(
     ("entity_id", "value", "expected"),
@@ -638,12 +636,12 @@ async def test_set_value_bad_range(
         (
             "number.keba_keenergy_12345678_hot_water_tank_max_temperature_1",
             None,
-            "expected float for dictionary value @ data['value']",
+            r"expected float for dictionary value @ data\['value']",
         ),
         (
             "number.keba_keenergy_12345678_heat_circuit_day_temperature_1",
             "bad",
-            "expected float for dictionary value @ data['value']",
+            r"expected float for dictionary value @ data\['value']",
         ),
     ],
 )
@@ -666,7 +664,7 @@ async def test_set_value_bad_attr(
 
     await setup_integration(hass, config_entry)
 
-    with pytest.raises(vol.Invalid) as error:
+    with pytest.raises(vol.Invalid, match=expected):
         await hass.services.async_call(
             domain=NUMBER_DOMAIN,
             service=SERVICE_SET_VALUE,
@@ -676,8 +674,6 @@ async def test_set_value_bad_attr(
             },
             blocking=True,
         )
-
-    assert str(error.value) == expected
 
 
 async def test_number_native_value_uses_pending_value(
