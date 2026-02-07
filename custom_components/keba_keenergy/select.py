@@ -75,18 +75,7 @@ SELECT_TYPES: dict[str, tuple[KebaKeEnergySelectEntityDescription, ...]] = {
         KebaKeEnergySelectEntityDescription(
             entity_registry_enabled_default=False,
             key="heating_curve",
-            options=[
-                HeatCircuitHeatingCurve.HC1.name.lower(),
-                HeatCircuitHeatingCurve.HC2.name.lower(),
-                HeatCircuitHeatingCurve.HC3.name.lower(),
-                HeatCircuitHeatingCurve.HC4.name.lower(),
-                HeatCircuitHeatingCurve.HC5.name.lower(),
-                HeatCircuitHeatingCurve.HC6.name.lower(),
-                HeatCircuitHeatingCurve.HC7.name.lower(),
-                HeatCircuitHeatingCurve.HC8.name.lower(),
-                HeatCircuitHeatingCurve.HC_FBH.name.lower(),
-                HeatCircuitHeatingCurve.HC_HK.name.lower(),
-            ],
+            options=[_.name.lower() for _ in HeatCircuitHeatingCurve],
             translation_key="heating_curve",
             icon="mdi:chart-bell-curve-cumulative",
             values=HeatCircuitHeatingCurve,
@@ -95,10 +84,7 @@ SELECT_TYPES: dict[str, tuple[KebaKeEnergySelectEntityDescription, ...]] = {
     SectionPrefix.SOLAR_CIRCUIT: (
         KebaKeEnergySelectEntityDescription(
             key="operating_mode",
-            options=[
-                SolarCircuitOperatingMode.OFF.name.lower(),
-                SolarCircuitOperatingMode.ON.name.lower(),
-            ],
+            options=[_.name.lower() for _ in SolarCircuitOperatingMode],
             translation_key="operating_mode_solar_circuit",
             icon="mdi:cog",
             values=SolarCircuitOperatingMode,
