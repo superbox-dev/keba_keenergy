@@ -11,11 +11,13 @@ from homeassistant.const import STATE_OFF
 from homeassistant.core import HomeAssistant
 from homeassistant.core import State
 from homeassistant.exceptions import HomeAssistantError
+from homeassistant.helpers.translation import async_get_translations
 from homeassistant.setup import async_setup_component
 from keba_keenergy_api.api import KebaKeEnergyAPI
 from keba_keenergy_api.error import APIError
 from pytest_homeassistant_custom_component.common import MockConfigEntry
 
+from custom_components.keba_keenergy.const import DOMAIN
 from tests import setup_integration
 from tests.api_data import ENTITY_UPDATED_DATA_RESPONSE
 from tests.api_data import MULTIPLE_POSITIONS_RESPONSE
@@ -110,3 +112,15 @@ async def test_entity_update_failed(
             },
             blocking=True,
         )
+
+    translations = await async_get_translations(
+        hass,
+        "de",
+        "exceptions",
+        [DOMAIN],
+    )
+
+    assert (
+        translations[f"component.{DOMAIN}.exceptions.failed_to_update.message"]
+        == "Aktualisierung fehlgeschlagen: {error}"
+    )

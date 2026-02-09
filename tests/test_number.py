@@ -232,7 +232,7 @@ async def test_heat_circuit_numbers(
     assert isinstance(heat_circuit_heating_curve_offset_1, State)
     assert heat_circuit_heating_curve_offset_1.attributes[ATTR_MIN] == -10.0
     assert heat_circuit_heating_curve_offset_1.attributes[ATTR_MAX] == 10.0
-    assert heat_circuit_heating_curve_offset_1.attributes[ATTR_STEP] == 0.5
+    assert heat_circuit_heating_curve_offset_1.attributes[ATTR_STEP] == 0.1
     assert heat_circuit_heating_curve_offset_1.attributes[CONF_UNIT_OF_MEASUREMENT] == UnitOfTemperature.CELSIUS
     assert heat_circuit_heating_curve_offset_1.attributes[CONF_DEVICE_CLASS] == SensorDeviceClass.TEMPERATURE
     assert (
@@ -245,7 +245,7 @@ async def test_heat_circuit_numbers(
     assert isinstance(heat_circuit_heating_curve_slope_1, State)
     assert heat_circuit_heating_curve_slope_1.attributes[ATTR_MIN] == 0.0
     assert heat_circuit_heating_curve_slope_1.attributes[ATTR_MAX] == 5.0
-    assert heat_circuit_heating_curve_slope_1.attributes[ATTR_STEP] == 0.1
+    assert heat_circuit_heating_curve_slope_1.attributes[ATTR_STEP] == 0.01
     assert heat_circuit_heating_curve_slope_1.attributes[ATTR_FRIENDLY_NAME] == "Heating circuit 1 Heating curve slope"
 
     heat_circuit_target_temperature_away_1: State | None = hass.states.get(
