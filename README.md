@@ -8,8 +8,9 @@ web interface as Home Assistant entities for monitoring, control, and automation
 
 [![Dashboard](docs/assets/dashboard.png)](docs/assets/dashboard.png)
 
-> Take a look at the [example page](https://superbox.one/keba-keenergy/home-assistant/wiki/examples/)
-in the Wiki to create awesome dashboards in Home Assistant.
+> Take a look at the [example page][wiki-examples] in the Wiki to create awesome dashboards in Home Assistant.
+
+[wiki-examples]: https://superbox.one/keba-keenergy/home-assistant/wiki/examples/
 
 ## With the KEBA KeEnergy Home Assistant Integration, you can
 
@@ -32,14 +33,15 @@ in the Wiki to create awesome dashboards in Home Assistant.
   * Buffer tank
   * External heat source
 
-> Looking for more information? The [Wiki](https://superbox.one/keba-keenergy/home-assistant/wiki/supported-devices/) contains in-depth
-documentation.
+> Looking for more information? The [Wiki][wiki-supported-devices] contains in-depth documentation.
 
 ## Supported systems
 
-The KEBA KeEnergy Integration works with heat pumps that provide a KEBA KeEnergy Web HMI interface.
-It is successfully used with devices from [manufacturers](https://github.com/superbox-dev/keba_keenergy/wiki/Supported-devices)
-such as M-TEC, Windhager and ino, as well as other systems based on KEBA controls.
+The KEBA KeEnergy Integration works with heat pumps that provide a KEBA KeEnergy Web HMI interface. It is successfully
+used with devices from [manufacturers][wiki-supported-devices] such as M-TEC, Windhager and ino,
+as well as other systems based on KEBA controls.
+
+[wiki-supported-devices]: https://superbox.one/keba-keenergy/home-assistant/wiki/supported-devices/
 
 ## Requirements
 
@@ -49,7 +51,7 @@ such as M-TEC, Windhager and ino, as well as other systems based on KEBA control
 
 ## Getting started
 
-[![Open HACS repository on my Home Assistant](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=mh-superbox&repository=keba_keenergy&category=integration)
+[![Open HACS repository on my Home Assistant](https://my.home-assistant.io/badges/hacs_repository.svg)][redirect-hacs]
 
 1. Install this integration with HACS (search for "KEBA KeEnergy") or copy the contents of this repository into the
    `custom_components/keba_keenergy` directory.
@@ -59,6 +61,8 @@ such as M-TEC, Windhager and ino, as well as other systems based on KEBA control
 4. Add IP address or hostname of your KEBA KeEnergy device.
 5. Read the [FAQ](https://superbox.one/keba-keenergy/home-assistant/wiki/faq/) and enjoy :-)
 
+[redirect-hacs]: https://my.home-assistant.io/redirect/hacs_repository/?owner=mh-superbox&repository=keba_keenergy&category=integration
+
 <!--end-home-->
 
 ## Donation
@@ -67,7 +71,9 @@ such as M-TEC, Windhager and ino, as well as other systems based on KEBA control
 
 I put a lot of time into this project. If you like it, you can support me with a donation.
 
-[![KoFi](https://raw.githubusercontent.com/superbox-dev/.github/refs/heads/main/profile/superbox-kofi.jpg)](https://ko-fi.com/F2F0KXO6D)
+[![KoFi](https://raw.githubusercontent.com/superbox-dev/.github/refs/heads/main/profile/superbox-kofi.jpg)][kofi]
+
+[kofi]: https://ko-fi.com/F2F0KXO6D
 
 <!--end-donation-->
 
@@ -99,9 +105,13 @@ I'm happy about your contributions to the project!
 You can get started by reading the [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ![coverage-badge](https://raw.githubusercontent.com/superbox-dev/keba_keenergy/main/coverage-badge.svg)
-[![CI](https://github.com/superbox-dev/KEBA-KeEnergy-API/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/superbox-dev/keba_keenergy/actions/workflows/ci.yml)
 
-[![CI](https://github.com/superbox-dev/keba_keenergy/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/superbox-dev/keba_keenergy_api/actions/workflows/ci.yml)
-![Typing: strict](https://img.shields.io/badge/typing-strict-green.svg)
-![Code style: black](https://img.shields.io/badge/code%20style-black-black)
-![Code style: Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/charliermarsh/ruff/main/assets/badge/v1.json)
+[![CI](https://github.com/superbox-dev/keba_keenergy/actions/workflows/ci.yml/badge.svg?branch=main)][workflow-ci]
+![Typing: strict][typing-strict]
+![Code style: black][code-black]
+![Code style: Ruff][code-ruff]
+
+[workflow-ci]: https://github.com/superbox-dev/keba_keenergy/actions/workflows/ci.yml
+[typing-strict]: https://img.shields.io/badge/typing-strict-green.svg
+[code-black]: https://img.shields.io/badge/code%20style-black-black
+[code-ruff]: https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/charliermarsh/ruff/main/assets/badge/v1.json

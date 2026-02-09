@@ -36,16 +36,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Added service to set away date range [(Issue #20)](https://github.com/superbox-dev/keba_keenergy/issues/20)
-- Added [blueprint](https://superbox.one/keba-keenergy/home-assistant/wiki/examples/#set-away-date-range)
-  to set away date range from a calendar entry [(Issue #20)](https://github.com/superbox-dev/keba_keenergy/issues/20)
-- Added issue warning when more than 30 write operations are performed per week
-  [(Issue #23)](https://github.com/superbox-dev/keba_keenergy/issues/23)
+- Added service to set away date range [(Issue #20)][issue-20]
+- Added [blueprint][blueprint] to set away date range from a calendar entry [(Issue #20)][issue-20]
+- Added issue warning when more than 30 write operations are performed per week [(Issue #23)][issue-20]
 
 ## Changed
 
 - Bump `keba_keenergy_api` to v2.8.1
 - Changed documentation link to <www.superbox.one>
+
+[blueprint]: https://superbox.one/keba-keenergy/home-assistant/wiki/examples/#set-away-date-range
+[issue-20]: https://github.com/superbox-dev/keba_keenergy/issues/20
 
 ## [1.6.1] - 2025-01-24
 
@@ -58,9 +59,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Fixed slow API update and refresh on entities that can changed e.g. "Operation mode" or the "Preset mode"
   in the climate entity
-- Fixed climate entity show wrong target temperature
-  [(Issue #19)](https://github.com/superbox-dev/keba_keenergy/issues/19)
-- Fixed preset mode "away" in the climate entity [(Issue #21)](https://github.com/superbox-dev/keba_keenergy/issues/21)
+- Fixed climate entity show wrong target temperature [(Issue #19)][issue-19]
+- Fixed preset mode "away" in the climate entity [(Issue #21)][issue-21]
+
+[issue-19]: https://github.com/superbox-dev/keba_keenergy/issues/19
+[issue-21]: https://github.com/superbox-dev/keba_keenergy/issues/21
 
 ## [1.6.0] - 2025-01-18
 

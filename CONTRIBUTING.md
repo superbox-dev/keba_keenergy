@@ -69,6 +69,8 @@ uv run pytest -n auto
 
 ## License
 
-By contributing, you agree that your contributions will be licensed under its [Apache License](https://github.com/superbox-dev/keba_keenergy/blob/main/LICENSE).
+By contributing, you agree that your contributions will be licensed under its [Apache License][license].
+
+[license]: https://github.com/superbox-dev/keba_keenergy/blob/main/LICENSE
 
 <!--end-contributing-->
