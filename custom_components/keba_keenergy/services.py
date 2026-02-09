@@ -146,6 +146,9 @@ async def _async_set_heating_curve_points(call: ServiceCall) -> None:
         raise ServiceValidationError(
             translation_domain=DOMAIN,
             translation_key="cannot_find_heating_curve",
+            translation_placeholders={
+                "heating_curve": heating_curve.upper(),
+            },
         )
 
     points: HeatingCurvePoints = tuple(

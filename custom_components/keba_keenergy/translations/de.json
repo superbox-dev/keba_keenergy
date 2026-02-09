@@ -566,6 +566,12 @@
         }
     },
     "exceptions": {
+        "cannot_find_heating_curve": {
+            "message": "Heizkurve \"{heating_curve}\" nicht gefunden."
+        },
+        "duplicate_outdoor_temperature_values": {
+            "message": "Doppelte Außentemperatur-Werte gefunden."
+        },
         "end_date_smaller_than_start_date": {
             "message": "Das Enddatum darf nicht vor dem Startdatum liegen."
         },

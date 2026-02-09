@@ -566,6 +566,12 @@
         }
     },
     "exceptions": {
+        "cannot_find_heating_curve": {
+            "message": "Can not find heating curve \"{heating_curve}\"."
+        },
+        "duplicate_outdoor_temperature_values": {
+            "message": "Duplicate outdoor temperature values found."
+        },
         "end_date_smaller_than_start_date": {
             "message": "The end date must not be earlier than the start date."
         },
@@ -573,7 +579,7 @@
             "message": "Failed to update: {error}"
         },
         "invalid_config_entry": {
-            "message": "Invalid integration provided. Got {config_entry_id}"
+            "message": "Invalid integration provided. Got {config_entry_id}."
         },
         "unloaded_config_entry": {
             "message": "Invalid integration provided. {config_entry_id} is not loaded."
