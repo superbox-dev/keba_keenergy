@@ -42,7 +42,7 @@ classifiers = [
 ]
 requires-python = ">= 3.13.2"
 dependencies = [
-    "keba_keenergy_api==2.9.0b3",
+    "keba_keenergy_api==2.9.0b5",
     "homeassistant>=2025.8.2",
     "requests>=2.32.5"
 ]
