@@ -569,6 +569,9 @@
         "end_date_smaller_than_start_date": {
             "message": "Das Enddatum darf nicht vor dem Startdatum liegen."
         },
+        "failed_to_update": {
+            "message": "Aktualisierung fehlgeschlagen: {error}"
+        },
         "invalid_config_entry": {
             "message": "Ungültige Integration angegeben. {config_entry_id} erhalten."
         },

@@ -569,6 +569,9 @@
         "end_date_smaller_than_start_date": {
             "message": "The end date must not be earlier than the start date."
         },
+        "failed_to_update": {
+            "message": "Failed to update: {error}"
+        },
         "invalid_config_entry": {
             "message": "Invalid integration provided. Got {config_entry_id}"
         },

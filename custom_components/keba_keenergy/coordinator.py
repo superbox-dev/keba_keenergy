@@ -324,8 +324,13 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
         try:
             await write_fn()
         except APIError as error:
-            msg: str = f"Failed to update: {error}"
-            raise HomeAssistantError(msg) from error
+            raise HomeAssistantError(
+                translation_domain=DOMAIN,
+                translation_key="failed_to_update",
+                translation_placeholders={
+                    "error": str(error),
+                },
+            ) from error
 
     async def async_write_data(self, request: dict[Section, Any], *, ignore_weekly_write_count: bool = False) -> None:
         """Write data to the NAND from the KEBA KeEnergy control unit."""
