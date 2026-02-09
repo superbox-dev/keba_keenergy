@@ -17,6 +17,7 @@ from homeassistant.exceptions import ServiceValidationError
 from homeassistant.helpers import config_validation as cv
 from homeassistant.helpers import selector
 from keba_keenergy_api.constants import HeatCircuitHeatingCurve
+from keba_keenergy_api.constants import MAX_HEATING_CURVE_POINTS
 from keba_keenergy_api.endpoints import HeatingCurvePoint
 from keba_keenergy_api.endpoints import HeatingCurvePoints
 from keba_keenergy_api.endpoints import HeatingCurves
@@ -51,6 +52,7 @@ ATTR_POINTS: Final[str] = "points"
 ATTR_OUTDOOR: Final[str] = "outdoor"
 ATTR_FLOW: Final[str] = "flow"
 ATTR_HEATING_CURVE: Final[str] = "heating_curve"
+
 HEATING_CURVE_POINT_SCHEMA = vol.Schema(
     {
         vol.Required(ATTR_OUTDOOR): vol.All(
@@ -64,7 +66,6 @@ HEATING_CURVE_POINT_SCHEMA = vol.Schema(
     },
 )
 
-
 HEATING_CURVE_POINTS_SCHEMA: vol.Schema = vol.Schema(
     {
         vol.Required(ATTR_CONFIG_ENTRY): selector.ConfigEntrySelector(
@@ -75,6 +76,7 @@ HEATING_CURVE_POINTS_SCHEMA: vol.Schema = vol.Schema(
         vol.Required(ATTR_HEATING_CURVE): vol.In([_.name.lower() for _ in HeatCircuitHeatingCurve]),
         vol.Required(ATTR_POINTS): vol.All(
             cv.ensure_list,
+            vol.Length(max=MAX_HEATING_CURVE_POINTS),
             [HEATING_CURVE_POINT_SCHEMA],
         ),
     },
@@ -154,6 +156,7 @@ async def _async_set_heating_curve_points(call: ServiceCall) -> None:
     points: HeatingCurvePoints = tuple(
         HeatingCurvePoint(**d) for d in sorted(call.data[ATTR_POINTS], key=lambda p: p[ATTR_OUTDOOR])
     )
+
     outdoors: list[float] = [p.outdoor for p in points]
 
     if len(outdoors) != len(set(outdoors)):
