@@ -17,6 +17,9 @@ from homeassistant.exceptions import ServiceValidationError
 from homeassistant.helpers import config_validation as cv
 from homeassistant.helpers import selector
 from keba_keenergy_api.constants import HeatCircuitHeatingCurve
+from keba_keenergy_api.endpoints import HeatingCurvePoint
+from keba_keenergy_api.endpoints import HeatingCurvePoints
+from keba_keenergy_api.endpoints import HeatingCurves
 
 from .const import ATTR_CONFIG_ENTRY
 from .const import DOMAIN
@@ -45,12 +48,12 @@ AWAY_DATE_RANGE_SCHEMA: vol.Schema = vol.Schema(
 )
 
 ATTR_POINTS: Final[str] = "points"
-ATTR_OUTSIDE: Final[str] = "outside"
+ATTR_OUTDOOR: Final[str] = "outdoor"
 ATTR_FLOW: Final[str] = "flow"
 ATTR_HEATING_CURVE: Final[str] = "heating_curve"
 HEATING_CURVE_POINT_SCHEMA = vol.Schema(
     {
-        vol.Required(ATTR_OUTSIDE): vol.All(
+        vol.Required(ATTR_OUTDOOR): vol.All(
             vol.Coerce(float),
             vol.Range(min=-40, max=40),
         ),
@@ -133,7 +136,35 @@ async def _async_set_away_range(call: ServiceCall) -> None:
         )
 
 
-async def _async_set_heating_curve_points(call: ServiceCall) -> None: ...
+async def _async_set_heating_curve_points(call: ServiceCall) -> None:
+    coordinator: KebaKeEnergyDataUpdateCoordinator = __get_coordinator(call)
+
+    heating_curve: str = call.data[ATTR_HEATING_CURVE]
+    heating_curves: HeatingCurves = await coordinator.api.heat_circuit.get_heating_curve_points()
+
+    if not heating_curves.get(heating_curve):
+        raise ServiceValidationError(
+            translation_domain=DOMAIN,
+            translation_key="cannot_find_heating_curve",
+        )
+
+    points: HeatingCurvePoints = tuple(
+        HeatingCurvePoint(**d) for d in sorted(call.data[ATTR_POINTS], key=lambda p: p[ATTR_OUTDOOR])
+    )
+    outdoors: list[float] = [p.outdoor for p in points]
+
+    if len(outdoors) != len(set(outdoors)):
+        raise ServiceValidationError(
+            translation_domain=DOMAIN,
+            translation_key="duplicate_outdoor_temperature_values",
+        )
+
+    await coordinator.async_execute_write(
+        write_fn=lambda: coordinator.api.heat_circuit.set_heating_curve_points(
+            heating_curve=heating_curve.upper(),
+            points=points,
+        ),
+    )
 
 
 async def async_setup_services(hass: HomeAssistant) -> None:

@@ -2,6 +2,8 @@
 
 import logging
 from asyncio import Lock
+from collections.abc import Awaitable
+from collections.abc import Callable
 from copy import deepcopy
 from datetime import date
 from datetime import timedelta
@@ -288,8 +290,13 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
 
         self.async_set_updated_data(data)
 
-    async def async_write_data(self, request: dict[Section, Any], *, ignore_weekly_write_count: bool = False) -> None:
-        """Write data to the NAND from the KEBA KeEnergy control unit."""
+    async def async_execute_write(
+        self,
+        *,
+        write_fn: Callable[[], Awaitable[None]],
+        ignore_weekly_write_count: bool = False,
+    ) -> None:
+        """Set the weekly counter and write to the NAND."""
         async with self._write_lock:
             await self._async_reset_weekly_counter_if_needed()
 
@@ -306,8 +313,7 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
                 )
 
             _LOGGER.debug(
-                "API write request %s (writes this week: %s)",
-                request,
+                "API write request (writes this week: %s)",
                 self._weekly_write_count,
             )
 
@@ -316,10 +322,17 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
                 self._create_issue()
 
         try:
-            await self.api.write_data(request=request)
+            await write_fn()
         except APIError as error:
             msg: str = f"Failed to update: {error}"
             raise HomeAssistantError(msg) from error
+
+    async def async_write_data(self, request: dict[Section, Any], *, ignore_weekly_write_count: bool = False) -> None:
+        """Write data to the NAND from the KEBA KeEnergy control unit."""
+        await self.async_execute_write(
+            write_fn=lambda: self.api.write_data(request=request),
+            ignore_weekly_write_count=ignore_weekly_write_count,
+        )
 
     def _create_issue(self) -> None:
         ir.async_create_issue(

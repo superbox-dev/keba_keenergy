@@ -13,12 +13,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Added sensor "Circulation return temperature" to the hot water tank [(Issue #24)](https://github.com/superbox-dev/keba_keenergy/issues/24)
-- Added binary sensor "Circulation pump state" to the hot water tank [(Issue #24)](https://github.com/superbox-dev/keba_keenergy/issues/24)
-- Added select entity "Heating curve" to the heating circuit [(Issue #24)](https://github.com/superbox-dev/keba_keenergy/issues/24)
-- Added number entity "Heating curve offset" to the heating circuit [(Issue #24)](https://github.com/superbox-dev/keba_keenergy/issues/24)
-- Added number entity "Heating curve slope" to the heating circuit [(Issue #24)](https://github.com/superbox-dev/keba_keenergy/issues/24)
-- Added switch entity "Use heating curve" to the heating circuit [(Issue #24)](https://github.com/superbox-dev/keba_keenergy/issues/24)
+- Added sensor "Circulation return temperature" to the hot water tank
+  [(Issue #24)](https://github.com/superbox-dev/keba_keenergy/issues/24)
+- Added binary sensor "Circulation pump state" to the hot water tank
+  [(Issue #24)](https://github.com/superbox-dev/keba_keenergy/issues/24)
+- Added select entity "Heating curve" to the heating circuit
+  [(Issue #24)](https://github.com/superbox-dev/keba_keenergy/issues/24)
+- Added number entity "Heating curve offset" to the heating circuit
+  [(Issue #24)](https://github.com/superbox-dev/keba_keenergy/issues/24)
+- Added number entity "Heating curve slope" to the heating circuit
+  [(Issue #24)](https://github.com/superbox-dev/keba_keenergy/issues/24)
+- Added switch entity "Use heating curve" to the heating circuit
+  [(Issue #24)](https://github.com/superbox-dev/keba_keenergy/issues/24)
+- Added service "set_heating_curve_points"
+  [(Issue #24)](https://github.com/superbox-dev/keba_keenergy/issues/24)
 
 ### Changed
 
@@ -29,9 +37,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Added service to set away date range [(Issue #20)](https://github.com/superbox-dev/keba_keenergy/issues/20)
-- Added [blueprint](https://raw.githubusercontent.com/superbox-dev/keba_keenergy/refs/heads/main/blueprints/automation/keba_keenergy/set_away_date_range.yaml)
+- Added [blueprint](https://superbox.one/keba-keenergy/home-assistant/wiki/examples/#set-away-date-range)
   to set away date range from a calendar entry [(Issue #20)](https://github.com/superbox-dev/keba_keenergy/issues/20)
-- Added issue warning when more than 30 write operations are performed per week [(Issue #23)](https://github.com/superbox-dev/keba_keenergy/issues/23)
+- Added issue warning when more than 30 write operations are performed per week
+  [(Issue #23)](https://github.com/superbox-dev/keba_keenergy/issues/23)
 
 ## Changed
 
@@ -49,7 +58,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Fixed slow API update and refresh on entities that can changed e.g. "Operation mode" or the "Preset mode"
   in the climate entity
-- Fixed climate entity show wrong target temperature [(Issue #19)](https://github.com/superbox-dev/keba_keenergy/issues/19)
+- Fixed climate entity show wrong target temperature
+  [(Issue #19)](https://github.com/superbox-dev/keba_keenergy/issues/19)
 - Fixed preset mode "away" in the climate entity [(Issue #21)](https://github.com/superbox-dev/keba_keenergy/issues/21)
 
 ## [1.6.0] - 2025-01-18
