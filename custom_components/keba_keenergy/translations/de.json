@@ -569,14 +569,14 @@
         "cannot_find_heating_curve": {
             "message": "Heizkurve \"{heating_curve}\" nicht gefunden."
         },
+        "communication_error": {
+            "message": "Bei der Kommunikation mit der API ist ein Fehler aufgetreten: {error}"
+        },
         "duplicate_outdoor_temperature_values": {
             "message": "Doppelte Außentemperatur-Werte gefunden."
         },
         "end_date_smaller_than_start_date": {
             "message": "Das Enddatum darf nicht vor dem Startdatum liegen."
-        },
-        "failed_to_update": {
-            "message": "Aktualisierung fehlgeschlagen: {error}"
         },
         "invalid_config_entry": {
             "message": "Ungültige Integration angegeben. {config_entry_id} erhalten."

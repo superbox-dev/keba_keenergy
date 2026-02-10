@@ -69,11 +69,11 @@ async def test_entity_update(
     [
         (
             APIError("mocked api error"),
-            "Failed to update: mocked api error",
+            "An error occurred while communicate with the API: mocked api error",
         ),
         (
             APIError("mocked client error"),
-            "Failed to update: mocked client error",
+            "An error occurred while communicate with the API: mocked client error",
         ),
     ],
 )
@@ -121,6 +121,6 @@ async def test_entity_update_failed(
     )
 
     assert (
-        translations[f"component.{DOMAIN}.exceptions.failed_to_update.message"]
-        == "Aktualisierung fehlgeschlagen: {error}"
+        translations[f"component.{DOMAIN}.exceptions.communication_error.message"]
+        == "Bei der Kommunikation mit der API ist ein Fehler aufgetreten: {error}"
     )

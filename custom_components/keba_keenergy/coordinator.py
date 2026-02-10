@@ -213,6 +213,32 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
             ),
         )
 
+    @staticmethod
+    async def _api_call_for_update(coro: Awaitable[Any]) -> Any:
+        try:
+            return await coro
+        except APIError as error:
+            raise UpdateFailed(
+                translation_domain=DOMAIN,
+                translation_key="communication_error",
+                translation_placeholders={
+                    "error": str(error),
+                },
+            ) from error
+
+    @staticmethod
+    async def _api_call_for_user(coro: Awaitable[Any]) -> Any:
+        try:
+            return await coro
+        except APIError as error:
+            raise HomeAssistantError(
+                translation_domain=DOMAIN,
+                translation_key="communication_error",
+                translation_placeholders={
+                    "error": str(error),
+                },
+            ) from error
+
     async def async_initialize(self) -> None:
         """Initialize values from API that never changed."""
         store_data: dict[str, Any] | None = await self._store.async_load()
@@ -224,40 +250,37 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
                 self._write_count_week = tuple(counter["week"])
                 self._weekly_write_count = counter["count"]
 
-        try:
-            self._api_device_info = await self.api.system.get_device_info()
-            self._api_system_info = await self.api.system.get_info()
-            self._api_hmi_info = await self.api.system.get_hmi_info()
-            self.position = await self.api.system.get_positions()
-            self.request_data = await self.api.filter_request(
-                request=self.request_data,
-                position=self.position,
-            )
+        await self._api_call_for_update(self._async_fixed_data())
 
-            self._fixed_data = await self.api.read_data(
-                request=[
-                    System.HAS_PHOTOVOLTAICS,
-                    HeatCircuit.HAS_ROOM_TEMPERATURE,
-                    HeatCircuit.HAS_ROOM_HUMIDITY,
-                    HeatPump.HAS_PASSIVE_COOLING,
-                ],
-                position=self.position,
-            )
+    async def _async_fixed_data(self) -> None:
+        self._api_device_info = await self.api.system.get_device_info()
+        self._api_system_info = await self.api.system.get_info()
+        self._api_hmi_info = await self.api.system.get_hmi_info()
+        self.position = await self.api.system.get_positions()
 
-        except APIError as error:
-            _LOGGER.error(error)  # noqa: TRY400
-            raise UpdateFailed(error) from error
+        self.request_data = await self.api.filter_request(
+            request=self.request_data,
+            position=self.position,
+        )
+
+        self._fixed_data = await self.api.read_data(
+            request=[
+                System.HAS_PHOTOVOLTAICS,
+                HeatCircuit.HAS_ROOM_TEMPERATURE,
+                HeatCircuit.HAS_ROOM_HUMIDITY,
+                HeatPump.HAS_PASSIVE_COOLING,
+            ],
+            position=self.position,
+        )
 
     async def _async_update_data(self) -> dict[str, ValueResponse]:
         """Read all values from API to update coordinator data."""
-        try:
-            response: dict[str, ValueResponse] = await self.api.read_data(
+        response: dict[str, ValueResponse] = await self._api_call_for_update(
+            self.api.read_data(
                 request=self.request_data,
                 position=self.position,
-            )
-        except APIError as error:
-            _LOGGER.error(error)  # noqa: TRY400
-            raise UpdateFailed(error) from error
+            ),
+        )
 
         return response
 
@@ -321,16 +344,7 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
                 self._flash_issue_active = True
                 self._create_issue()
 
-        try:
-            await write_fn()
-        except APIError as error:
-            raise HomeAssistantError(
-                translation_domain=DOMAIN,
-                translation_key="failed_to_update",
-                translation_placeholders={
-                    "error": str(error),
-                },
-            ) from error
+        await self._api_call_for_user(write_fn())
 
     async def async_write_data(self, request: dict[Section, Any], *, ignore_weekly_write_count: bool = False) -> None:
         """Write data to the NAND from the KEBA KeEnergy control unit."""
@@ -378,7 +392,7 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
 
     async def get_timezone(self) -> ZoneInfo:
         """Get the timezone from the Web HMI."""
-        timezone: str = await self.api.system.get_timezone()
+        timezone: str = await self._api_call_for_user(self.api.system.get_timezone())
         return ZoneInfo(timezone)
 
     async def set_away_date_range(self, *, start_timestamp: float, end_timestamp: float) -> None:

@@ -8,6 +8,7 @@ from homeassistant.helpers.aiohttp_client import async_get_clientsession
 from homeassistant.helpers.update_coordinator import UpdateFailed
 from keba_keenergy_api.error import APIError
 
+from custom_components.keba_keenergy.const import DOMAIN
 from custom_components.keba_keenergy.coordinator import KebaKeEnergyDataUpdateCoordinator
 
 if TYPE_CHECKING:
@@ -38,4 +39,6 @@ async def test_async_update_data_api_error_raises_update_failed(
     ):
         await coordinator._async_update_data()
 
-    assert str(error.value) == "boom"
+    assert error.value.translation_domain == DOMAIN
+    assert error.value.translation_key == "communication_error"
+    assert error.value.translation_placeholders == {"error": "boom"}
