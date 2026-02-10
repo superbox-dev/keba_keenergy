@@ -258,7 +258,7 @@
                 "name": "Coefficient of performance"
             },
             "condenser_temperature": {
-                "name": "Condenser temperature"
+                "name": "Condensation temperature"
             },
             "current_bottom_temperature": {
                 "name": "Current temperature (bottom)"
@@ -527,7 +527,7 @@
                 "name": "Total thermal energy"
             },
             "vaporizer_temperature": {
-                "name": "Vaporizer temperature"
+                "name": "Vaporization temperature"
             },
             "webserver_cpu_usage": {
                 "name": "WebServer CPU usage"

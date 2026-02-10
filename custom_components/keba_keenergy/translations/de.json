@@ -258,7 +258,7 @@
                 "name": "Leistungszahl"
             },
             "condenser_temperature": {
-                "name": "Kondensatortemperatur"
+                "name": "Kondensationstemperatur"
             },
             "current_bottom_temperature": {
                 "name": "Ist-Temperatur (unten)"
@@ -446,7 +446,7 @@
                 "state": {
                     "auto_cool": "Kühlen",
                     "auto_heat": "Heizen",
-                    "defrost": "Abdauen",
+                    "defrost": "Abtauen",
                     "error": "Fehler",
                     "flow": "Vorlauf",
                     "inflow": "Nachlauf",
@@ -527,7 +527,7 @@
                 "name": "Gesamtwärmemenge"
             },
             "vaporizer_temperature": {
-                "name": "Verdampfertemperatur"
+                "name": "Verdampfungstemperatur"
             },
             "webserver_cpu_usage": {
                 "name": "WebServer CPU-Auslastung"
