@@ -13,24 +13,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Added sensor "Circulation return temperature" to the hot water tank
-  [(Issue #24)](https://github.com/superbox-dev/keba_keenergy/issues/24)
-- Added binary sensor "Circulation pump state" to the hot water tank
-  [(Issue #24)](https://github.com/superbox-dev/keba_keenergy/issues/24)
-- Added select entity "Heating curve" to the heating circuit
-  [(Issue #24)](https://github.com/superbox-dev/keba_keenergy/issues/24)
-- Added number entity "Heating curve offset" to the heating circuit
-  [(Issue #24)](https://github.com/superbox-dev/keba_keenergy/issues/24)
-- Added number entity "Heating curve slope" to the heating circuit
-  [(Issue #24)](https://github.com/superbox-dev/keba_keenergy/issues/24)
-- Added switch entity "Use heating curve" to the heating circuit
-  [(Issue #24)](https://github.com/superbox-dev/keba_keenergy/issues/24)
-- Added service "set_heating_curve_points"
-  [(Issue #24)](https://github.com/superbox-dev/keba_keenergy/issues/24)
+- Added sensor "Circulation return temperature" to the hot water tank [(Issue #24)][issue-24]
+- Added binary sensor "Circulation pump state" to the hot water tank [(Issue #24)][issue-24]
+- Added select entity "Heating curve" to the heating circuit [(Issue #24)][issue-24]
+- Added number entity "Heating curve offset" to the heating circuit [(Issue #24)][issue-24]
+- Added number entity "Heating curve slope" to the heating circuit [(Issue #24)][issue-24]
+- Added switch entity "Use heating curve" to the heating circuit [(Issue #24)][issue-24]
+- Added service "set_heating_curve_points" [(Issue #24)][issue-24]
 
 ### Changed
 
 - The entity icons have been slightly improved
+- Update translations [issue-28]
+
+[issue-24]: https://github.com/superbox-dev/keba_keenergy/issues/24
+[issue-28]: https://github.com/superbox-dev/keba_keenergy/issues/28
 
 ## [1.7.0] - 2025-01-31
 
