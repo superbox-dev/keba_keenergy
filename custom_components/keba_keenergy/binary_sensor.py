@@ -2,7 +2,6 @@
 
 import logging
 from dataclasses import dataclass
-from typing import cast
 
 from homeassistant.components.binary_sensor import BinarySensorDeviceClass
 from homeassistant.components.binary_sensor import BinarySensorEntity
@@ -205,7 +204,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry, async_add_e
     # e.g. buffer tank, hot water tank, heat circuit, solar circuit or heat pump.
 
     for section_id, section_data in coordinator.data.items():
-        for description in BINARY_SENSOR_TYPES.get(section_id, {}):
+        for description in BINARY_SENSOR_TYPES.get(section_id, ()):
             for key, values in section_data.items():
                 if key == description.key:
                     device_numbers: int = len(values) if isinstance(values, list) else 1
@@ -250,4 +249,4 @@ class KebaKeEnergyBinarySensorEntity(KebaKeEnergyExtendedEntity, BinarySensorEnt
     @property
     def is_on(self) -> bool:
         """Return true if the binary sensor is on."""
-        return cast("bool", (self.get_value(self.entity_description.key) == "on"))
+        return self.get_value(self.entity_description.key, expected_type=str) == "on"

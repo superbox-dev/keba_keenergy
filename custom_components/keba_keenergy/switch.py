@@ -3,7 +3,6 @@
 import logging
 from dataclasses import dataclass
 from typing import Any
-from typing import cast
 
 from homeassistant.components.switch import SwitchDeviceClass
 from homeassistant.components.switch import SwitchEntity
@@ -77,7 +76,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry, async_add_e
     # e.g. buffer tank, hot water tank, heat circuit, solar circuit or heat pump.
 
     for section_id, section_data in coordinator.data.items():
-        for description in SWITCH_TYPES.get(section_id, {}):
+        for description in SWITCH_TYPES.get(section_id, ()):
             for key, values in section_data.items():
                 if key == description.key:
                     device_numbers: int = len(values) if isinstance(values, list) else 1
@@ -117,7 +116,7 @@ class KebaKeEnergySwitchEntity(KebaKeEnergyExtendedEntity, SwitchEntity):
     @property
     def is_on(self) -> bool:
         """Return true if the switch is on."""
-        return cast("bool", (self.get_value(self.entity_description.key) == "on"))
+        return self.get_value(self.entity_description.key, expected_type=str) == "on"
 
     async def async_turn_off(self, **kwargs: Any) -> None:  # noqa: ARG002
         """Turn the switch off."""

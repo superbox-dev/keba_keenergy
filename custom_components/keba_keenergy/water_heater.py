@@ -106,14 +106,14 @@ class KebaKeEnergyWaterHeaterTankEntity(KebaKeEnergyEntity, WaterHeaterEntity):
         super().__init__(coordinator, entry=entry, section_id=section_id, index=index)
 
     @property
-    def target_temperature_low(self) -> float:
+    def target_temperature_low(self) -> float | None:
         """Return the low bound target temperature we try to reach."""
-        return float(self.get_value("standby_temperature"))
+        return self.get_value("standby_temperature", expected_type=float)
 
     @property
-    def target_temperature_high(self) -> float:
+    def target_temperature_high(self) -> float | None:
         """Return the high bound target temperature we try to reach."""
-        return float(self.get_value("target_temperature"))
+        return self.get_value("target_temperature", expected_type=float)
 
 
 class KebaKeEnergyHotWaterTankEntity(KebaKeEnergyWaterHeaterTankEntity, WaterHeaterEntity):
@@ -144,19 +144,19 @@ class KebaKeEnergyHotWaterTankEntity(KebaKeEnergyWaterHeaterTankEntity, WaterHea
         self._pending_value: float | None = None
 
     @property
-    def current_temperature(self) -> float:
+    def current_temperature(self) -> float | None:
         """Return the current temperature."""
-        return float(self.get_value("current_temperature"))
+        return self.get_value("current_temperature", expected_type=float)
 
     @property
-    def target_temperature(self) -> float:
+    def target_temperature(self) -> float | None:
         """Return the temperature we try to reach."""
-        target_temperature: float
+        target_temperature: float | None
 
         if self._pending_value is not None and self._async_call_later:
             target_temperature = self._pending_value
         else:
-            target_temperature = float(self.get_value("target_temperature"))
+            target_temperature = self.get_value("target_temperature", expected_type=float)
 
         return target_temperature
 
@@ -171,10 +171,10 @@ class KebaKeEnergyHotWaterTankEntity(KebaKeEnergyWaterHeaterTankEntity, WaterHea
         return float(self.get_attribute("target_temperature", attr="upper_limit"))
 
     @property
-    def current_operation(self) -> str:
+    def current_operation(self) -> str | None:
         """Return current operation mode."""
         _current_operation: str = STATE_OFF
-        operating_mode: str = self.get_value("operating_mode")
+        operating_mode: str | None = self.get_value("operating_mode", expected_type=str)
 
         for key, value in HOT_WATER_TANK_STATE_TO_HA.items():
             if HotWaterTankOperatingMode(key).name.lower() == operating_mode:
@@ -226,7 +226,7 @@ class KebaKeEnergyHotWaterTankEntity(KebaKeEnergyWaterHeaterTankEntity, WaterHea
     async def _async_debounced_write_data(self, _: datetime) -> None:
         self._async_call_later = None
 
-        current_value: float = float(self.get_value("target_temperature"))
+        current_value: float | None = self.get_value("target_temperature", expected_type=float)
 
         if self._pending_value is not None and self._pending_value != current_value:
             await self._async_write_data(
@@ -266,25 +266,37 @@ class KebaKeEnergyBufferTankEntity(KebaKeEnergyWaterHeaterTankEntity, WaterHeate
         self.entity_id: str = f"{WATER_HEATER_DOMAIN}.{DOMAIN}_{self._attr_unique_id}"
 
     @property
-    def current_temperature(self) -> float:
+    def current_temperature(self) -> float | None:
         """Return the current temperature."""
-        return float(max(self.get_value("current_top_temperature"), self.get_value("current_bottom_temperature")))
+        values: list[float] = [
+            value
+            for value in (
+                self.get_value("current_top_temperature", expected_type=float),
+                self.get_value("current_bottom_temperature", expected_type=float),
+            )
+            if value is not None
+        ]
+
+        return max(values) if values else None
 
     @property
-    def target_temperature(self) -> float:
+    def target_temperature(self) -> float | None:
         """Return the temperature we try to reach."""
-        return float(self.get_value("target_temperature"))
+        return self.get_value("target_temperature", expected_type=float)
 
     @property
-    def current_operation(self) -> str:
+    def current_operation(self) -> str | None:
         """Return current operation mode."""
-        _current_operation: str = STATE_OFF
-        operating_mode: str = self.get_value("operating_mode")
+        _current_operation: str | None = None
+        operating_mode: str | None = self.get_value("operating_mode", expected_type=str)
 
-        for key, value in BUFFER_TANK_STATE_TO_HA.items():
-            if BufferTankOperatingMode(key).name.lower() == operating_mode:
-                _current_operation = value
-                break
+        if operating_mode:
+            _current_operation = STATE_OFF
+
+            for key, value in BUFFER_TANK_STATE_TO_HA.items():
+                if BufferTankOperatingMode(key).name.lower() == operating_mode:
+                    _current_operation = value
+                    break
 
         return _current_operation
 

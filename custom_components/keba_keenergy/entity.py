@@ -4,10 +4,12 @@ import logging
 from collections.abc import Mapping
 from functools import cached_property
 from typing import Any
-from typing import TYPE_CHECKING
+from typing import TypeVar
+from typing import overload
 
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.helpers.device_registry import DeviceInfo
+from homeassistant.helpers.typing import StateType
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 from keba_keenergy_api.constants import BufferTank
 from keba_keenergy_api.constants import ExternalHeatSource
@@ -18,6 +20,7 @@ from keba_keenergy_api.constants import Section
 from keba_keenergy_api.constants import SectionPrefix
 from keba_keenergy_api.constants import SolarCircuit
 from keba_keenergy_api.constants import System
+from keba_keenergy_api.endpoints import Value
 
 from .const import DOMAIN
 from .const import MANUFACTURER
@@ -25,9 +28,9 @@ from .const import MANUFACTURER_INO
 from .const import MANUFACTURER_MTEC
 from .coordinator import KebaKeEnergyDataUpdateCoordinator
 
-if TYPE_CHECKING:
-    from keba_keenergy_api.endpoints import Value
 _LOGGER = logging.getLogger(__name__)
+
+T = TypeVar("T", str, int, float)
 
 
 class KebaKeEnergyEntity(
@@ -258,35 +261,45 @@ class KebaKeEnergyEntity(
 
             await self.coordinator.async_request_refresh()
 
+    def get_entity_data(self, key: str, /) -> Value | None:
+        """Get the real entity data from the coordinator data."""
+        entity_data: list[list[Value]] | list[Value] | Value | None = self.coordinator.data[self.section_id].get(key)
+
+        if isinstance(entity_data, list):
+            entity_data = entity_data[self.index or 0]
+
+        if isinstance(entity_data, list) and self.key_index is not None:
+            entity_data = entity_data[self.key_index]
+
+        assert not isinstance(entity_data, list)
+        return entity_data
+
     def get_attribute(self, key: str, /, *, attr: str) -> str:
         """Get extra attribute from the API by key."""
-        data: list[list[Value]] | list[Value] | Value | None = self.coordinator.data[self.section_id].get(key, None)
+        entity_data: Value | None = self.get_entity_data(key)
         attributes: dict[str, Any] = {}
 
-        if isinstance(data, list):
-            data = data[self.index or 0]
-
-        if isinstance(data, list) and self.key_index is not None:
-            data = data[self.key_index]
-
-        if isinstance(data, dict):
-            attributes = data["attributes"]
+        if isinstance(entity_data, dict):
+            attributes = entity_data["attributes"]
 
         return str(attributes.get(attr, ""))
 
-    def get_value(self, key: str, /) -> Any:
+    @overload
+    def get_value(self, key: str, /, *, expected_type: type[T]) -> T | None: ...
+
+    @overload
+    def get_value(self, key: str, /) -> StateType: ...
+
+    def get_value(self, key: str, /, *, expected_type: type[T] | None = None) -> StateType:
         """Get value from the API by key."""
-        data: list[list[Value]] | list[Value] | Value | None = self.coordinator.data[self.section_id].get(key, None)
-        value: Value | None = None
+        entity_data: Value | None = self.get_entity_data(key)
+        value: StateType = None
 
-        if isinstance(data, list):
-            data = data[self.index or 0]
+        if isinstance(entity_data, dict):
+            value = entity_data["value"]
 
-        if isinstance(data, list) and self.key_index is not None:
-            data = data[self.key_index]
-
-        if isinstance(data, dict):
-            value = data["value"]
+        if expected_type and value is not None:
+            return expected_type(value)
 
         return value
 

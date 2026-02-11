@@ -193,7 +193,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry, async_add_e
     # e.g. buffer tank, hot water tank, heat circuit, solar circuit or heat pump.
 
     for section_id, section_data in coordinator.data.items():
-        for description in NUMBER_TYPES.get(section_id, {}):
+        for description in NUMBER_TYPES.get(section_id, ()):
             for key, values in section_data.items():
                 if key == description.key:
                     device_numbers: int = len(values) if isinstance(values, list) else 1
@@ -253,14 +253,17 @@ class KebaKeEnergyNumberEntity(KebaKeEnergyExtendedEntity, NumberEntity):
         )
 
     @property
-    def native_value(self) -> float:
+    def native_value(self) -> float | None:
         """Return the state of the number."""
-        native_value: float
+        native_value: float | None
 
         if self._pending_value is not None and self._async_call_later:
             native_value = self._pending_value * self.entity_description.scale
         else:
-            native_value = float(self.get_value(self.entity_description.key)) * self.entity_description.scale
+            native_value = self.get_value(self.entity_description.key, expected_type=float)
+
+            if native_value:
+                native_value = native_value * self.entity_description.scale
 
         return native_value
 
@@ -277,7 +280,7 @@ class KebaKeEnergyNumberEntity(KebaKeEnergyExtendedEntity, NumberEntity):
     async def _async_debounced_write_data(self, _: datetime) -> None:
         self._async_call_later = None
 
-        current_value = float(self.get_value(self.entity_description.key))
+        current_value = self.get_value(self.entity_description.key, expected_type=float)
 
         if self._pending_value is not None and self._pending_value != current_value:
             await self._async_write_data(

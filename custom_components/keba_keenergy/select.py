@@ -1,6 +1,7 @@
 """Support for the KEBA KeEnergy selects."""
 
 import logging
+from collections.abc import Callable
 from dataclasses import dataclass
 from enum import Enum
 from functools import cached_property
@@ -33,6 +34,7 @@ class KebaKeEnergySelectEntityDescriptionMixin:
     """Required values for KEBA KeEnergy selects."""
 
     values: type[Enum]
+    value: Callable[[str | None], str | None]
 
 
 @dataclass(frozen=True)
@@ -55,6 +57,7 @@ SELECT_TYPES: dict[str, tuple[KebaKeEnergySelectEntityDescription, ...]] = {
             translation_key="operating_mode_system",
             icon="mdi:cog",
             values=SystemOperatingMode,
+            value=lambda data: data,
         ),
     ),
     SectionPrefix.HEAT_CIRCUIT: (
@@ -71,14 +74,16 @@ SELECT_TYPES: dict[str, tuple[KebaKeEnergySelectEntityDescription, ...]] = {
             translation_key="operating_mode_heat_circuit",
             icon="mdi:cog",
             values=HeatCircuitOperatingMode,
+            value=lambda data: data,
         ),
         KebaKeEnergySelectEntityDescription(
             entity_registry_enabled_default=False,
             key="heating_curve",
-            options=[_.name.lower() for _ in HeatCircuitHeatingCurve],
+            options=[_.name for _ in HeatCircuitHeatingCurve],
             translation_key="heating_curve",
             icon="mdi:chart-bell-curve-cumulative",
             values=HeatCircuitHeatingCurve,
+            value=lambda data: str(data).upper(),
         ),
     ),
     SectionPrefix.SOLAR_CIRCUIT: (
@@ -88,6 +93,7 @@ SELECT_TYPES: dict[str, tuple[KebaKeEnergySelectEntityDescription, ...]] = {
             translation_key="operating_mode_solar_circuit",
             icon="mdi:cog",
             values=SolarCircuitOperatingMode,
+            value=lambda data: data,
         ),
     ),
     SectionPrefix.BUFFER_TANK: (
@@ -97,6 +103,7 @@ SELECT_TYPES: dict[str, tuple[KebaKeEnergySelectEntityDescription, ...]] = {
             translation_key="operating_mode_buffer_tank",
             icon="mdi:cog",
             values=BufferTankOperatingMode,
+            value=lambda data: data,
         ),
     ),
     SectionPrefix.HOT_WATER_TANK: (
@@ -106,6 +113,7 @@ SELECT_TYPES: dict[str, tuple[KebaKeEnergySelectEntityDescription, ...]] = {
             translation_key="operating_mode_hot_water_tank",
             icon="mdi:cog",
             values=HotWaterTankOperatingMode,
+            value=lambda data: data,
         ),
     ),
     SectionPrefix.EXTERNAL_HEAT_SOURCE: (
@@ -116,6 +124,7 @@ SELECT_TYPES: dict[str, tuple[KebaKeEnergySelectEntityDescription, ...]] = {
             translation_key="operating_mode_external_heat_source",
             icon="mdi:cog",
             values=ExternalHeatSourceOperatingMode,
+            value=lambda data: data,
         ),
     ),
 }
@@ -131,7 +140,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry, async_add_e
     # e.g. buffer tank, hot water tank, heat circuit, solar circuit or heat pump.
 
     for section_id, section_data in coordinator.data.items():
-        for description in SELECT_TYPES.get(section_id, {}):
+        for description in SELECT_TYPES.get(section_id, ()):
             for key, values in section_data.items():
                 if key == description.key:
                     device_numbers: int = len(values) if isinstance(values, list) else 1
@@ -186,15 +195,13 @@ class KebaKeEnergySelectEntity(KebaKeEnergyExtendedEntity, SelectEntity):
     @property
     def current_option(self) -> str | None:
         """Return current select option."""
-        return str(self.get_value(self.entity_description.key))
+        return self.entity_description.value(self.get_value(self.entity_description.key, expected_type=str))
 
     async def async_select_option(self, option: str) -> None:
         """Select new option."""
-        new_option: str = option.upper()
-
-        if new_option != self.current_option:
+        if option != self.current_option:
             await self._async_write_data(
-                self.entity_description.values[new_option].value,
+                self.entity_description.values[option.upper()].value,
                 section=self.section,
                 device_numbers=self.device_numbers,
             )

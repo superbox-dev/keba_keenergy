@@ -9,6 +9,7 @@ from datetime import date
 from datetime import timedelta
 from functools import cached_property
 from typing import Any
+from typing import TypeGuard
 from typing import cast
 from zoneinfo import ZoneInfo
 
@@ -33,6 +34,7 @@ from keba_keenergy_api.constants import SectionPrefix
 from keba_keenergy_api.constants import SolarCircuit
 from keba_keenergy_api.constants import SwitchValve
 from keba_keenergy_api.constants import System
+from keba_keenergy_api.constants import SystemHasPhotovoltaics
 from keba_keenergy_api.endpoints import Position
 from keba_keenergy_api.endpoints import Value
 from keba_keenergy_api.endpoints import ValueResponse
@@ -44,6 +46,11 @@ from .const import REQUEST_REFRESH_COOLDOWN
 from .const import SCAN_INTERVAL
 
 _LOGGER = logging.getLogger(__name__)
+
+
+def is_int_value_list(value: object) -> TypeGuard[list[int]]:
+    """Check if the value list only contains integer values."""
+    return isinstance(value, list) and all(isinstance(v, dict) and isinstance(v.get("value"), int) for v in value)
 
 
 class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueResponse]]):
@@ -398,21 +405,24 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
     async def set_away_date_range(self, *, start_timestamp: float, end_timestamp: float) -> None:
         """Set the away date range."""
         if self.position:
-            current_away_start_date: list[int] = cast(
-                "list[int]",
-                self.data[SectionPrefix.HEAT_CIRCUIT]["away_start_date"],
-            )
-            current_away_end_date: list[int] = cast("list[int]", self.data[SectionPrefix.HEAT_CIRCUIT]["away_end_date"])
-            away_start_date: list[int] = [int(start_timestamp) for _ in range(self.position.heat_circuit)]
-            away_end_date: list[int] = [int(end_timestamp) for _ in range(self.position.heat_circuit)]
+            current_away_start_date: list[list[Value]] | list[Value] | Value = self.data[SectionPrefix.HEAT_CIRCUIT][
+                "away_start_date"
+            ]
+            current_away_end_date: list[list[Value]] | list[Value] | Value = self.data[SectionPrefix.HEAT_CIRCUIT][
+                "away_end_date"
+            ]
 
-            if current_away_start_date != away_start_date or current_away_end_date != away_end_date:
-                await self.async_write_data(
-                    request={
-                        HeatCircuit.AWAY_START_DATE: away_start_date,
-                        HeatCircuit.AWAY_END_DATE: away_end_date,
-                    },
-                )
+            if is_int_value_list(current_away_start_date) and is_int_value_list(current_away_end_date):
+                away_start_date: list[int] = [int(start_timestamp) for _ in range(self.position.heat_circuit)]
+                away_end_date: list[int] = [int(end_timestamp) for _ in range(self.position.heat_circuit)]
+
+                if current_away_start_date != away_start_date or current_away_end_date != away_end_date:
+                    await self.async_write_data(
+                        request={
+                            HeatCircuit.AWAY_START_DATE: away_start_date,
+                            HeatCircuit.AWAY_END_DATE: away_end_date,
+                        },
+                    )
 
     @cached_property
     def configuration_url(self) -> str:
@@ -475,10 +485,10 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
         return self.position.external_heat_source if self.position else 0
 
     @cached_property
-    def has_photovoltaics(self) -> str:
+    def has_photovoltaics(self) -> bool:
         """Check if photovoltaics is available."""
-        data: Value = cast("Value", self._fixed_data[SectionPrefix.SYSTEM]["has_photovoltaics"])
-        return str(data["value"])
+        data: list[list[Value]] | list[Value] | Value = self._fixed_data[SectionPrefix.SYSTEM]["has_photovoltaics"]
+        return bool(SystemHasPhotovoltaics.ON.name.lower() == data["value"]) if isinstance(data, dict) else False
 
     def has_room_temperature(self, *, index: int) -> str:
         """Check if room temperature sensor is available."""
