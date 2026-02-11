@@ -108,7 +108,7 @@ async def test_entity_update_failed(
             service=SERVICE_SELECT_OPTION,
             service_data={
                 ATTR_ENTITY_ID: entity_id,
-                ATTR_OPTION: "off",
+                ATTR_OPTION: "on",
             },
             blocking=True,
         )

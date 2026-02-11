@@ -217,7 +217,7 @@ async def test_set_heating_curve_points(
         service=SERVICE_SET_HEATING_CURVE_POINTS,
         service_data={
             ATTR_CONFIG_ENTRY: config_entry.entry_id,
-            ATTR_HEATING_CURVE: "hc1",
+            ATTR_HEATING_CURVE: "HC1",
             ATTR_POINTS: [
                 {"outdoor": -20, "flow": 35.30},
                 {"outdoor": 20, "flow": 23.9},
@@ -283,7 +283,7 @@ async def test_set_heating_curve_points_with_invalid_heating_curve(
             service=SERVICE_SET_HEATING_CURVE_POINTS,
             service_data={
                 ATTR_CONFIG_ENTRY: config_entry.entry_id,
-                ATTR_HEATING_CURVE: "hc1",
+                ATTR_HEATING_CURVE: "HC1",
                 ATTR_POINTS: [
                     {"outdoor": -20, "flow": 35.30},
                     {"outdoor": 20, "flow": 23.9},
@@ -339,7 +339,7 @@ async def test_set_heating_curve_points_with_duplicate_outdoor_temperatures(
             service=SERVICE_SET_HEATING_CURVE_POINTS,
             service_data={
                 ATTR_CONFIG_ENTRY: config_entry.entry_id,
-                ATTR_HEATING_CURVE: "hc1",
+                ATTR_HEATING_CURVE: "HC1",
                 ATTR_POINTS: [
                     {"outdoor": 20, "flow": 35.30},
                     {"outdoor": 20, "flow": 23.9},

@@ -49,7 +49,7 @@ async def test_set_value(
             service=SERVICE_SELECT_OPTION,
             service_data={
                 ATTR_ENTITY_ID: "select.keba_keenergy_12345678_buffer_tank_operating_mode_1",
-                ATTR_OPTION: "off",
+                ATTR_OPTION: "on",
             },
             blocking=True,
         )
@@ -63,6 +63,7 @@ async def test_set_value(
             },
             blocking=True,
         )
+
     issue_registry = ir.async_get(hass)
 
     issue = issue_registry.async_get_issue(

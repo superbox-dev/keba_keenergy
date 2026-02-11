@@ -107,19 +107,19 @@ async def test_heat_circuit_selects(
         "select.keba_keenergy_12345678_heat_circuit_heating_curve_1",
     )
     assert isinstance(heat_circuit_heating_curve_1, State)
-    assert heat_circuit_heating_curve_1.state == "hc6"
+    assert heat_circuit_heating_curve_1.state == "HC6"
     assert heat_circuit_heating_curve_1.attributes[ATTR_FRIENDLY_NAME] == "Heating circuit 1 Heating curve"
     assert heat_circuit_heating_curve_1.attributes[ATTR_OPTIONS] == [
-        "hc1",
-        "hc2",
-        "hc3",
-        "hc4",
-        "hc5",
-        "hc6",
-        "hc7",
-        "hc8",
-        "hc_fbh",
-        "hc_hk",
+        "HC1",
+        "HC2",
+        "HC3",
+        "HC4",
+        "HC5",
+        "HC6",
+        "HC7",
+        "HC8",
+        "HC_FBH",
+        "HC_HK",
     ]
 
 
@@ -365,11 +365,6 @@ async def test_external_heat_source_translated(
     [
         (
             "select.keba_keenergy_12345678_operating_mode",
-            "auto_heat",
-            '[{"name": "APPL.CtrlAppl.sParam.param.operatingMode", "value": "2"}]',
-        ),
-        (
-            "select.keba_keenergy_12345678_operating_mode",
             "auto_cool",
             '[{"name": "APPL.CtrlAppl.sParam.param.operatingMode", "value": "3"}]',
         ),
@@ -380,8 +375,8 @@ async def test_external_heat_source_translated(
         ),
         (
             "select.keba_keenergy_12345678_solar_circuit_operating_mode_1",
-            "off",
-            '[{"name": "APPL.CtrlAppl.sParam.solarCircuit[0].param.operatingMode", "value": "0"}]',
+            "on",
+            '[{"name": "APPL.CtrlAppl.sParam.solarCircuit[0].param.operatingMode", "value": "1"}]',
         ),
         (
             "select.keba_keenergy_12345678_hot_water_tank_operating_mode_2",
@@ -395,7 +390,7 @@ async def test_external_heat_source_translated(
         ),
         (
             "select.keba_keenergy_12345678_heat_circuit_heating_curve_1",
-            "hc_fbh",
+            "HC_FBH",
             '[{"name": "APPL.CtrlAppl.sParam.heatCircuit[0].param.linTab.fileName", "value": "HC FBH"}]',
         ),
     ],

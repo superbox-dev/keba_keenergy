@@ -21,8 +21,8 @@ from homeassistant.core import State
 from pytest_homeassistant_custom_component.common import MockConfigEntry
 
 from tests import setup_integration
-from tests.api_data import MULTIPLE_POSITION_DATA_RESPONSE_1
 from tests.api_data import MULTIPLE_POSITIONS_RESPONSE
+from tests.api_data import MULTIPLE_POSITION_DATA_RESPONSE_1
 from tests.api_data import get_multiple_position_fixed_data_response
 from tests.conftest import FakeKebaKeEnergyAPI
 
@@ -942,6 +942,14 @@ async def test_heat_circuit_sensors(
 
     await setup_integration(hass, config_entry)
 
+    heat_circuit_heating_curve_1: State | None = hass.states.get(
+        "sensor.keba_keenergy_12345678_heat_circuit_heating_curve_1",
+    )
+    assert isinstance(heat_circuit_heating_curve_1, State)
+    assert heat_circuit_heating_curve_1.state == "HC6"
+    assert heat_circuit_heating_curve_1.attributes[CONF_DEVICE_CLASS] == SensorDeviceClass.ENUM
+    assert heat_circuit_heating_curve_1.attributes[ATTR_FRIENDLY_NAME] == "Heating circuit 1 Heating curve"
+
     heat_circuit_room_temperature_1: State | None = hass.states.get(
         "sensor.keba_keenergy_12345678_heat_circuit_room_temperature_1",
     )
@@ -1158,6 +1166,12 @@ async def test_heat_circuit_sensors_translations(
 
     hass.config.language = "de"
     await setup_integration(hass, config_entry)
+
+    heat_circuit_heating_curve_1: State | None = hass.states.get(
+        "sensor.keba_keenergy_12345678_heat_circuit_heating_curve_1",
+    )
+    assert isinstance(heat_circuit_heating_curve_1, State)
+    assert heat_circuit_heating_curve_1.attributes[ATTR_FRIENDLY_NAME] == "Heizkreis 1 Heizkurve"
 
     heat_circuit_room_temperature_1: State | None = hass.states.get(
         "sensor.keba_keenergy_12345678_heat_circuit_room_temperature_1",
