@@ -108,6 +108,7 @@ ignore = [
     "ERA001",
     "I001",    # unsorted-imports
     "PLR0913", # too-many-arguments
+    "S101",    # assert
     "TRY003",  # raise-vanilla-args
 ]
 
@@ -117,7 +118,6 @@ ignore = [
     "PLR0913", # too-many-arguments
     "PLR0915", # too-many-statements
     "PLR2004", # magic-value-comparison
-    "S101",    # assert
     "SLF001",  # private-member-access
 ]
 
