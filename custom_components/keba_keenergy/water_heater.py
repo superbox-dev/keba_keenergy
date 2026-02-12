@@ -1,6 +1,5 @@
 """Support for the KEBA KeEnergy water heater."""
 
-from datetime import datetime
 from functools import cached_property
 from typing import Any
 from typing import Final
@@ -18,7 +17,7 @@ from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import ATTR_TEMPERATURE
 from homeassistant.const import STATE_OFF
 from homeassistant.const import UnitOfTemperature
-from homeassistant.core import CALLBACK_TYPE
+from homeassistant.core import HassJob
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.event import async_call_later
@@ -140,8 +139,9 @@ class KebaKeEnergyHotWaterTankEntity(KebaKeEnergyWaterHeaterTankEntity, WaterHea
 
         self.entity_id: str = f"{WATER_HEATER_DOMAIN}.{DOMAIN}_{self._attr_unique_id}"
 
-        self._async_call_later: CALLBACK_TYPE | None = None
-        self._pending_value: float | None = None
+        self._pending_key = "target_temperature_offset"
+        self._pending_section = HotWaterTank.TARGET_TEMPERATURE
+        self._pending_device_numbers = self.coordinator.hot_water_tank_numbers
 
     @property
     def current_temperature(self) -> float | None:
@@ -221,21 +221,14 @@ class KebaKeEnergyHotWaterTankEntity(KebaKeEnergyWaterHeaterTankEntity, WaterHea
                 self._async_call_later()
                 self._async_call_later = None
 
-            self._async_call_later = async_call_later(self.hass, FLASH_WRITE_DELAY, self._async_debounced_write_data)
-
-    async def _async_debounced_write_data(self, _: datetime) -> None:
-        self._async_call_later = None
-
-        current_value: float | None = self.get_value("target_temperature", expected_type=float)
-
-        if self._pending_value is not None and self._pending_value != current_value:
-            await self._async_write_data(
-                self._pending_value,
-                section=HotWaterTank.TARGET_TEMPERATURE,
-                device_numbers=self.coordinator.hot_water_tank_numbers,
+            self._async_call_later = async_call_later(
+                hass=self.hass,
+                delay=FLASH_WRITE_DELAY,
+                action=HassJob(
+                    self._async_debounced_write_data,
+                    cancel_on_shutdown=True,
+                ),
             )
-
-        self._pending_value = None
 
 
 class KebaKeEnergyBufferTankEntity(KebaKeEnergyWaterHeaterTankEntity, WaterHeaterEntity):

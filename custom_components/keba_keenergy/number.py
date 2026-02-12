@@ -2,7 +2,6 @@
 
 import logging
 from dataclasses import dataclass
-from datetime import datetime
 from functools import cached_property
 
 from homeassistant.components.number import DOMAIN as NUMBER_DOMAIN
@@ -12,7 +11,7 @@ from homeassistant.components.number import NumberEntityDescription
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import PERCENTAGE
 from homeassistant.const import UnitOfTemperature
-from homeassistant.core import CALLBACK_TYPE
+from homeassistant.core import HassJob
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.event import async_call_later
@@ -235,8 +234,9 @@ class KebaKeEnergyNumberEntity(KebaKeEnergyExtendedEntity, NumberEntity):
 
         self.entity_id: str = f"{NUMBER_DOMAIN}.{DOMAIN}_{self._attr_unique_id}"
 
-        self._async_call_later: CALLBACK_TYPE | None = None
-        self._pending_value: float | None = None
+        self._pending_key = self.entity_description.key
+        self._pending_section = self.section
+        self._pending_device_numbers = self.device_numbers
 
     @cached_property
     def native_min_value(self) -> float:
@@ -275,18 +275,11 @@ class KebaKeEnergyNumberEntity(KebaKeEnergyExtendedEntity, NumberEntity):
             self._async_call_later()
             self._async_call_later = None
 
-        self._async_call_later = async_call_later(self.hass, FLASH_WRITE_DELAY, self._async_debounced_write_data)
-
-    async def _async_debounced_write_data(self, _: datetime) -> None:
-        self._async_call_later = None
-
-        current_value = self.get_value(self.entity_description.key, expected_type=float)
-
-        if self._pending_value is not None and self._pending_value != current_value:
-            await self._async_write_data(
-                self._pending_value,
-                section=self.section,
-                device_numbers=self.device_numbers,
-            )
-
-        self._pending_value = None
+        self._async_call_later = async_call_later(
+            hass=self.hass,
+            delay=FLASH_WRITE_DELAY,
+            action=HassJob(
+                self._async_debounced_write_data,
+                cancel_on_shutdown=True,
+            ),
+        )

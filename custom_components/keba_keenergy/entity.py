@@ -2,8 +2,10 @@
 
 import logging
 from collections.abc import Mapping
+from datetime import datetime
 from functools import cached_property
 from typing import Any
+from typing import TYPE_CHECKING
 from typing import TypeVar
 from typing import overload
 
@@ -27,6 +29,9 @@ from .const import MANUFACTURER
 from .const import MANUFACTURER_INO
 from .const import MANUFACTURER_MTEC
 from .coordinator import KebaKeEnergyDataUpdateCoordinator
+
+if TYPE_CHECKING:
+    from homeassistant.core import CALLBACK_TYPE
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -62,6 +67,12 @@ class KebaKeEnergyEntity(
 
         if self.position is not None:
             self._attr_unique_id = f"{self._attr_unique_id}_{self.position}"
+
+        self._async_call_later: CALLBACK_TYPE | None = None
+        self._pending_value: float | None = None
+        self._pending_key: str = ""
+        self._pending_section: Section | None = None
+        self._pending_device_numbers: int | None = None
 
     @property
     def position(self) -> int | None:
@@ -260,6 +271,19 @@ class KebaKeEnergyEntity(
             )
 
             await self.coordinator.async_request_refresh()
+
+    async def _async_debounced_write_data(self, _: datetime) -> None:
+        """Write data (debounced) to the KEBA KeEnergy API."""
+        self._async_call_later = None
+
+        current_value = self.get_value(self._pending_key, expected_type=float)
+
+        if self._pending_value is not None and self._pending_value != current_value:
+            await self._async_write_data(
+                self._pending_value,
+                section=self._pending_section,
+                device_numbers=self._pending_device_numbers,
+            )
 
     def get_entity_data(self, key: str, /) -> Value | None:
         """Get the real entity data from the coordinator data."""
