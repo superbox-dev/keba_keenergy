@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added number entity "Heating curve slope" to the heating circuit [(Issue #24)][issue-24]
 - Added switch entity "Use heating curve" to the heating circuit [(Issue #24)][issue-24]
 - Added service "set_heating_curve_points" [(Issue #24)][issue-24]
+- Added sensor `Heating curve` with points as extra state attributes [(Issue #24)][issue-24]
 
 ### Changed
 
