@@ -299,6 +299,9 @@
                     "temporary_off": "Off (temporary)"
                 }
             },
+            "heating_curve": {
+                "name": "Heating curve"
+            },
             "heating_energy": {
                 "name": "Heating energy"
             },

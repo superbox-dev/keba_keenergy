@@ -299,6 +299,9 @@
                     "temporary_off": "Aus (Vorübergehend)"
                 }
             },
+            "heating_curve": {
+                "name": "Heizkurve"
+            },
             "heating_energy": {
                 "name": "Wärmemenge"
             },
