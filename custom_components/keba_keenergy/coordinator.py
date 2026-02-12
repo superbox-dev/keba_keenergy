@@ -27,6 +27,7 @@ from keba_keenergy_api.constants import BufferTank
 from keba_keenergy_api.constants import ExternalHeatSource
 from keba_keenergy_api.constants import HeatCircuit
 from keba_keenergy_api.constants import HeatPump
+from keba_keenergy_api.constants import HeatPumpHasPassiveCooling
 from keba_keenergy_api.constants import HotWaterTank
 from keba_keenergy_api.constants import Photovoltaic
 from keba_keenergy_api.constants import Section
@@ -487,8 +488,8 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
     @cached_property
     def has_photovoltaics(self) -> bool:
         """Check if photovoltaics is available."""
-        data: list[list[Value]] | list[Value] | Value = self._fixed_data[SectionPrefix.SYSTEM]["has_photovoltaics"]
-        return bool(SystemHasPhotovoltaics.ON.name.lower() == data["value"]) if isinstance(data, dict) else False
+        data: Value = cast("Value", self._fixed_data[SectionPrefix.SYSTEM]["has_photovoltaics"])
+        return bool(SystemHasPhotovoltaics.ON.name.lower() == data["value"])
 
     def has_room_temperature(self, *, index: int) -> str:
         """Check if room temperature sensor is available."""
@@ -500,7 +501,7 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
         data: list[Value] = cast("list[Value]", self._fixed_data[SectionPrefix.HEAT_CIRCUIT]["has_room_humidity"])
         return str(data[index]["value"])
 
-    def has_passive_cooling(self, *, index: int) -> str:
+    def has_passive_cooling(self, *, index: int) -> bool:
         """Check if passive cooling is available."""
         data: list[Value] = cast("list[Value]", self._fixed_data[SectionPrefix.HEAT_PUMP]["has_passive_cooling"])
-        return str(data[index]["value"])
+        return bool(HeatPumpHasPassiveCooling.ON.name.lower() == data[index]["value"])
