@@ -32,8 +32,10 @@ async def test_set_away_range(
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
         MULTIPLE_POSITION_DATA_RESPONSE_1,
+        HEATING_CURVES_RESPONSE_1_1,
         # Read API after services call
         MULTIPLE_POSITION_DATA_RESPONSE_1,
+        HEATING_CURVES_RESPONSE_1_1,
     ]
     fake_api.register_requests(config_entry.data[CONF_HOST])
 
@@ -67,8 +69,10 @@ async def test_set_away_range_with_invalid_start_and_end_date(
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
         MULTIPLE_POSITION_DATA_RESPONSE_1,
+        HEATING_CURVES_RESPONSE_1_1,
         # Read API after services call
         MULTIPLE_POSITION_DATA_RESPONSE_1,
+        HEATING_CURVES_RESPONSE_1_1,
     ]
     fake_api.register_requests(config_entry.data[CONF_HOST])
 
@@ -111,8 +115,10 @@ async def test_set_away_range_with_invalid_config_entry(
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
         MULTIPLE_POSITION_DATA_RESPONSE_1,
+        HEATING_CURVES_RESPONSE_1_1,
         # Read API after services call
         MULTIPLE_POSITION_DATA_RESPONSE_1,
+        HEATING_CURVES_RESPONSE_1_1,
     ]
     fake_api.register_requests(config_entry.data[CONF_HOST])
 
@@ -155,8 +161,10 @@ async def test_set_away_range_with_unloaded_config_entry(
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
         MULTIPLE_POSITION_DATA_RESPONSE_1,
+        HEATING_CURVES_RESPONSE_1_1,
         # Read API after services call
         MULTIPLE_POSITION_DATA_RESPONSE_1,
+        HEATING_CURVES_RESPONSE_1_1,
     ]
     fake_api.register_requests(config_entry.data[CONF_HOST])
 
@@ -204,9 +212,9 @@ async def test_set_heating_curve_points(
         get_multiple_position_fixed_data_response(),
         MULTIPLE_POSITION_DATA_RESPONSE_1,
         HEATING_CURVES_RESPONSE_1_1,
-        HEATING_CURVES_RESPONSE_2,
         # Read API after services call
-        MULTIPLE_POSITION_DATA_RESPONSE_1,
+        HEATING_CURVES_RESPONSE_1_1,
+        HEATING_CURVES_RESPONSE_2,
     ]
     fake_api.register_requests(config_entry.data[CONF_HOST])
 
@@ -252,7 +260,22 @@ async def test_set_heating_curve_points(
         '{"name": "APPL.CtrlAppl.sParam.linTabPool[0].points[7].x", "value": "15.0"}, '
         '{"name": "APPL.CtrlAppl.sParam.linTabPool[0].points[7].y", "value": "25.3"}, '
         '{"name": "APPL.CtrlAppl.sParam.linTabPool[0].points[8].x", "value": "20.0"}, '
-        '{"name": "APPL.CtrlAppl.sParam.linTabPool[0].points[8].y", "value": "23.9"}]',
+        '{"name": "APPL.CtrlAppl.sParam.linTabPool[0].points[8].y", "value": "23.9"}, '
+        '{"name": "APPL.CtrlAppl.sParam.linTabPool[0].points[9].x", "value": "0"}, '
+        '{"name": "APPL.CtrlAppl.sParam.linTabPool[0].points[9].y", "value": "0"}, '
+        '{"name": "APPL.CtrlAppl.sParam.linTabPool[0].points[10].x", "value": "0"}, '
+        '{"name": "APPL.CtrlAppl.sParam.linTabPool[0].points[10].y", "value": "0"}, '
+        '{"name": "APPL.CtrlAppl.sParam.linTabPool[0].points[11].x", "value": "0"}, '
+        '{"name": "APPL.CtrlAppl.sParam.linTabPool[0].points[11].y", "value": "0"}, '
+        '{"name": "APPL.CtrlAppl.sParam.linTabPool[0].points[12].x", "value": "0"}, '
+        '{"name": "APPL.CtrlAppl.sParam.linTabPool[0].points[12].y", "value": "0"}, '
+        '{"name": "APPL.CtrlAppl.sParam.linTabPool[0].points[13].x", "value": "0"}, '
+        '{"name": "APPL.CtrlAppl.sParam.linTabPool[0].points[13].y", "value": "0"}, '
+        '{"name": "APPL.CtrlAppl.sParam.linTabPool[0].points[14].x", "value": "0"}, '
+        '{"name": "APPL.CtrlAppl.sParam.linTabPool[0].points[14].y", "value": "0"}, '
+        '{"name": "APPL.CtrlAppl.sParam.linTabPool[0].points[15].x", "value": "0"}, '
+        '{"name": "APPL.CtrlAppl.sParam.linTabPool[0].points[15].y", "value": "0"}, '
+        '{"name": "APPL.CtrlApplsParam.linTabPool[0].verCnt", "value": "192"}]',
     )
 
 
@@ -265,10 +288,10 @@ async def test_set_heating_curve_points_with_invalid_heating_curve(
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
         MULTIPLE_POSITION_DATA_RESPONSE_1,
+        HEATING_CURVES_RESPONSE_1_1,
+        # Read API after services call
         HEATING_CURVES_RESPONSE_1_2,
         HEATING_CURVES_RESPONSE_2,
-        # Read API after services call
-        MULTIPLE_POSITION_DATA_RESPONSE_1,
     ]
     fake_api.register_requests(config_entry.data[CONF_HOST])
 
@@ -322,9 +345,9 @@ async def test_set_heating_curve_points_with_duplicate_outdoor_temperatures(
         get_multiple_position_fixed_data_response(),
         MULTIPLE_POSITION_DATA_RESPONSE_1,
         HEATING_CURVES_RESPONSE_1_1,
-        HEATING_CURVES_RESPONSE_2,
         # Read API after services call
-        MULTIPLE_POSITION_DATA_RESPONSE_1,
+        HEATING_CURVES_RESPONSE_1_1,
+        HEATING_CURVES_RESPONSE_2,
     ]
     fake_api.register_requests(config_entry.data[CONF_HOST])
 

@@ -30,6 +30,7 @@ from tests import setup_integration
 from tests.api_data import DEFAULT_POSITION_DATA_RESPONSE
 from tests.api_data import DEFAULT_POSITION_FIXED_DATA_RESPONSE
 from tests.api_data import DEFAULT_POSITION_RESPONSE
+from tests.api_data import HEATING_CURVES_RESPONSE_1_1
 from tests.api_data import MULTIPLE_POSITIONS_RESPONSE
 from tests.api_data import MULTIPLE_POSITION_DATA_RESPONSE_1
 from tests.api_data import MULTIPLE_POSITION_DATA_RESPONSE_2
@@ -48,7 +49,12 @@ ENTITY_ID_4: str = "water_heater.keba_keenergy_12345678_buffer_tank_1"
     ("response", "entities"),
     [
         (
-            [DEFAULT_POSITION_RESPONSE, DEFAULT_POSITION_FIXED_DATA_RESPONSE, DEFAULT_POSITION_DATA_RESPONSE],
+            [
+                DEFAULT_POSITION_RESPONSE,
+                DEFAULT_POSITION_FIXED_DATA_RESPONSE,
+                DEFAULT_POSITION_DATA_RESPONSE,
+                HEATING_CURVES_RESPONSE_1_1,
+            ],
             [ENTITY_ID, ENTITY_ID_3],
         ),
         (
@@ -56,6 +62,7 @@ ENTITY_ID_4: str = "water_heater.keba_keenergy_12345678_buffer_tank_1"
                 MULTIPLE_POSITIONS_RESPONSE,
                 get_multiple_position_fixed_data_response(),
                 MULTIPLE_POSITION_DATA_RESPONSE_1,
+                HEATING_CURVES_RESPONSE_1_1,
             ],
             [ENTITY_ID_1, ENTITY_ID_2, ENTITY_ID_4],
         ),
@@ -86,6 +93,7 @@ async def test_water_heater(
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
         MULTIPLE_POSITION_DATA_RESPONSE_1,
+        HEATING_CURVES_RESPONSE_1_1,
     ]
     fake_api.register_requests("10.0.0.100")
 
@@ -125,6 +133,7 @@ async def test_water_heater_translations(
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
         MULTIPLE_POSITION_DATA_RESPONSE_1,
+        HEATING_CURVES_RESPONSE_1_1,
     ]
     fake_api.register_requests("10.0.0.100")
 
@@ -169,8 +178,10 @@ async def test_turn_off(
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
         response,
+        HEATING_CURVES_RESPONSE_1_1,
         # Read API after services call
         response,
+        HEATING_CURVES_RESPONSE_1_1,
     ]
     fake_api.register_requests("10.0.0.100")
 
@@ -213,8 +224,10 @@ async def test_turn_on(
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
         MULTIPLE_POSITION_DATA_RESPONSE_1,
+        HEATING_CURVES_RESPONSE_1_1,
         # Read API after services call
         MULTIPLE_POSITION_DATA_RESPONSE_1,
+        HEATING_CURVES_RESPONSE_1_1,
     ]
     fake_api.register_requests("10.0.0.100")
 
@@ -293,8 +306,10 @@ async def test_set_operation_mode(
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
         response,
+        HEATING_CURVES_RESPONSE_1_1,
         # Read API after services call
         response,
+        HEATING_CURVES_RESPONSE_1_1,
     ]
     fake_api.register_requests("10.0.0.100")
 
@@ -335,8 +350,10 @@ async def test_set_temperature(
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
         MULTIPLE_POSITION_DATA_RESPONSE_1,
+        HEATING_CURVES_RESPONSE_1_1,
         # Read API after services call
         MULTIPLE_POSITION_DATA_RESPONSE_1,
+        HEATING_CURVES_RESPONSE_1_1,
     ]
     fake_api.register_requests("10.0.0.100")
 
@@ -367,8 +384,11 @@ async def test_target_temperature_uses_pending_value(
         DEFAULT_POSITION_RESPONSE,
         DEFAULT_POSITION_FIXED_DATA_RESPONSE,
         get_single_position_fixed_data_response(hot_water_tank_target_temperature="51"),
+        HEATING_CURVES_RESPONSE_1_1,
         get_single_position_fixed_data_response(hot_water_tank_target_temperature="45"),
+        HEATING_CURVES_RESPONSE_1_1,
         get_single_position_fixed_data_response(hot_water_tank_target_temperature="44"),
+        HEATING_CURVES_RESPONSE_1_1,
     ]
     fake_api.register_requests("10.0.0.100")
 

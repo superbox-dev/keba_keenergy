@@ -8,6 +8,7 @@ from homeassistant.core import State
 from pytest_homeassistant_custom_component.common import MockConfigEntry
 
 from tests import setup_integration
+from tests.api_data import HEATING_CURVES_RESPONSE_1_1
 from tests.api_data import MULTIPLE_POSITIONS_RESPONSE
 from tests.api_data import MULTIPLE_POSITION_DATA_RESPONSE_1
 from tests.api_data import get_multiple_position_fixed_data_response
@@ -24,6 +25,7 @@ async def test_binary_sensors(
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
         MULTIPLE_POSITION_DATA_RESPONSE_1,
+        HEATING_CURVES_RESPONSE_1_1,
     ]
     fake_api.register_requests(config_entry.data[CONF_HOST])
 
@@ -186,6 +188,7 @@ async def test_binary_sensors_translations(
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
         MULTIPLE_POSITION_DATA_RESPONSE_1,
+        HEATING_CURVES_RESPONSE_1_1,
     ]
     fake_api.register_requests(config_entry.data[CONF_HOST])
 

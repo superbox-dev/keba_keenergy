@@ -163,6 +163,7 @@ async def test_user_flow_authentication_cannot_connect(
         (Exception("mocked client error"), "unknown"),
     ],
 )
+@pytest.mark.no_fail_on_keba_errors
 async def test_user_flow_cannot_connect(
     hass: HomeAssistant,
     fake_api: FakeKebaKeEnergyAPI,
@@ -291,6 +292,7 @@ async def test_zeroconf_flow_already_setup(
         (Exception("mocked client error"), "unknown"),
     ],
 )
+@pytest.mark.no_fail_on_keba_errors
 async def test_zeroconf_cannot_connect(
     hass: HomeAssistant,
     fake_api: FakeKebaKeEnergyAPI,

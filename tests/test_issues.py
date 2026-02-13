@@ -11,6 +11,7 @@ from pytest_homeassistant_custom_component.common import MockConfigEntry
 
 from custom_components.keba_keenergy.const import DOMAIN
 from tests import setup_integration
+from tests.api_data import HEATING_CURVES_RESPONSE_1_1
 from tests.api_data import MULTIPLE_POSITIONS_RESPONSE
 from tests.api_data import MULTIPLE_POSITION_DATA_RESPONSE_1
 from tests.api_data import get_multiple_position_fixed_data_response
@@ -26,9 +27,13 @@ async def test_set_value(
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
         MULTIPLE_POSITION_DATA_RESPONSE_1,
-        # Read API after services call
+        HEATING_CURVES_RESPONSE_1_1,
+        # Read API after services call #1
         MULTIPLE_POSITION_DATA_RESPONSE_1,
+        HEATING_CURVES_RESPONSE_1_1,
+        # Read API after services call #1
         MULTIPLE_POSITION_DATA_RESPONSE_1,
+        HEATING_CURVES_RESPONSE_1_1,
     ]
     fake_api.register_requests("10.0.0.100")
 
