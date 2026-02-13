@@ -181,7 +181,6 @@ async def test_heat_circuit_selects_translated(
     )
     assert isinstance(heat_circuit_operating_mode_1, State)
     assert heat_circuit_operating_mode_1.attributes[ATTR_FRIENDLY_NAME] == "Heizkreis 1 Betriebsart"
-
     assert {
         opt: translations[f"component.keba_keenergy.entity.select.operating_mode_heat_circuit.state.{opt}"]
         for opt in heat_circuit_operating_mode_1.attributes[ATTR_OPTIONS]
@@ -199,7 +198,6 @@ async def test_heat_circuit_selects_translated(
     )
     assert isinstance(heat_circuit_heating_curve_1, State)
     assert heat_circuit_heating_curve_1.attributes[ATTR_FRIENDLY_NAME] == "Heizkreis 1 Heizkurve"
-
     assert {
         opt: translations[f"component.keba_keenergy.entity.select.heating_curve.state.{opt}"]
         for opt in heat_circuit_heating_curve_1.attributes[ATTR_OPTIONS]

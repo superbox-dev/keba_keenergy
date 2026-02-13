@@ -517,8 +517,8 @@
                 "name": "Position",
                 "state": {
                     "neutral": "Neutral",
-                    "open": "Offen",
-                    "closed": "Geschlossen"
+                    "open": "Position 1",
+                    "closed": "Position 2"
                 }
             },
             "target_overheating": {

@@ -2159,6 +2159,7 @@ async def test_switch_valve_sensors(
     fake_api.register_requests(config_entry.data[CONF_HOST])
 
     await setup_integration(hass, config_entry)
+    translations: dict[str, str] = await init_translations(hass, config_entry, category="entity")
 
     switch_valve_position_1: State | None = hass.states.get(
         "sensor.keba_keenergy_12345678_switch_valve_position_1",
@@ -2171,6 +2172,14 @@ async def test_switch_valve_sensors(
         "open",
         "closed",
     ]
+    assert {
+        opt: translations[f"component.keba_keenergy.entity.sensor.switch_valve_position.state.{opt}"]
+        for opt in switch_valve_position_1.attributes[ATTR_OPTIONS]
+    } == {
+        "closed": "Position 2",
+        "neutral": "Neutral",
+        "open": "Position 1",
+    }
     assert switch_valve_position_1.attributes[ATTR_FRIENDLY_NAME] == "Switch valve 1 Position"
 
 
@@ -2190,11 +2199,20 @@ async def test_switch_valve_sensors_translated(
 
     hass.config.language = "de"
     await setup_integration(hass, config_entry)
+    translations: dict[str, str] = await init_translations(hass, config_entry, category="entity")
 
     switch_valve_position_1: State | None = hass.states.get(
         "sensor.keba_keenergy_12345678_switch_valve_position_1",
     )
     assert isinstance(switch_valve_position_1, State)
+    assert {
+        opt: translations[f"component.keba_keenergy.entity.sensor.switch_valve_position.state.{opt}"]
+        for opt in switch_valve_position_1.attributes[ATTR_OPTIONS]
+    } == {
+        "closed": "Position 2",
+        "neutral": "Neutral",
+        "open": "Position 1",
+    }
     assert switch_valve_position_1.attributes[ATTR_FRIENDLY_NAME] == "Umschaltventil 1 Position"
 
 
