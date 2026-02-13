@@ -28,6 +28,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - The entity icons have been slightly improved
 - Update translations [issue-28]
 
+### Fixed
+
+- Changed wrong unit J to kWh on sensors "Solar circuit Heating energy" and "Solar circuit Daily energy" [(Issue #32)][issue-32]
+
+[issue-32]: https://github.com/superbox-dev/keba_keenergy/issues/32
 [issue-29]: https://github.com/superbox-dev/keba_keenergy/issues/29
 [issue-28]: https://github.com/superbox-dev/keba_keenergy/issues/28
 [issue-24]: https://github.com/superbox-dev/keba_keenergy/issues/24
