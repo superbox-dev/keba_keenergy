@@ -306,10 +306,10 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
             device_class=SensorDeviceClass.ENUM,
             key="heating_curve",
             key_index=None,
-            options=[_.name for _ in HeatCircuitHeatingCurve],
+            options=[_.name.lower() for _ in HeatCircuitHeatingCurve],
             translation_key="heating_curve",
             icon="mdi:chart-bell-curve-cumulative",
-            value=lambda data: data.upper(),
+            value=lambda data: data,
         ),
     ),
     SectionPrefix.SOLAR_CIRCUIT: (

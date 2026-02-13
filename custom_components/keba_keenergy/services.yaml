@@ -29,16 +29,16 @@ set_heating_curve_points:
       selector:
         select:
           options:
-            - HC1
-            - HC2
-            - HC3
-            - HC4
-            - HC5
-            - HC6
-            - HC7
-            - HC8
-            - HC_FBH
-            - HC_HK
+            - hc1
+            - hc2
+            - hc3
+            - hc4
+            - hc5
+            - hc6
+            - hc7
+            - hc8
+            - hc_fbh
+            - hc_hk
           translation_key: heating_curve
     points:
       example:

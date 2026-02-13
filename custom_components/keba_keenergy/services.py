@@ -73,7 +73,7 @@ HEATING_CURVE_POINTS_SCHEMA: vol.Schema = vol.Schema(
                 "integration": DOMAIN,
             },
         ),
-        vol.Required(ATTR_HEATING_CURVE): vol.In([_.name for _ in HeatCircuitHeatingCurve]),
+        vol.Required(ATTR_HEATING_CURVE): vol.In([_.name.lower() for _ in HeatCircuitHeatingCurve]),
         vol.Required(ATTR_POINTS): vol.All(
             cv.ensure_list,
             vol.Length(max=MAX_HEATING_CURVE_POINTS),
@@ -144,7 +144,7 @@ async def _async_set_heating_curve_points(call: ServiceCall) -> None:
     heating_curve: str = call.data[ATTR_HEATING_CURVE]
     heating_curves: HeatingCurves = await coordinator.api.heat_circuit.get_heating_curve_points()
 
-    if not heating_curves.get(heating_curve.lower()):
+    if not heating_curves.get(heating_curve):
         raise ServiceValidationError(
             translation_domain=DOMAIN,
             translation_key="cannot_find_heating_curve",
@@ -170,7 +170,7 @@ async def _async_set_heating_curve_points(call: ServiceCall) -> None:
 
     await coordinator.async_execute_write(
         write_fn=lambda: coordinator.api.heat_circuit.set_heating_curve_points(
-            heating_curve=heating_curve,
+            heating_curve=heating_curve.upper(),
             points=points,
         ),
     )

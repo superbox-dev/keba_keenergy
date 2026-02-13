@@ -1,8 +1,10 @@
+from typing import Any
+
 import pytest
+import voluptuous as vol
 from homeassistant.const import CONF_HOST
 from homeassistant.core import HomeAssistant
 from homeassistant.exceptions import ServiceValidationError
-from homeassistant.helpers.translation import async_get_translations
 from pytest_homeassistant_custom_component.common import MockConfigEntry
 
 from custom_components.keba_keenergy.const import ATTR_CONFIG_ENTRY
@@ -13,6 +15,9 @@ from custom_components.keba_keenergy.services import ATTR_END_DATE
 from custom_components.keba_keenergy.services import ATTR_HEATING_CURVE
 from custom_components.keba_keenergy.services import ATTR_POINTS
 from custom_components.keba_keenergy.services import ATTR_START_DATE
+from custom_components.keba_keenergy.services import AWAY_DATE_RANGE_SCHEMA
+from custom_components.keba_keenergy.services import HEATING_CURVE_POINTS_SCHEMA
+from tests import init_translations
 from tests import setup_integration
 from tests.api_data import HEATING_CURVES_RESPONSE_1_1
 from tests.api_data import HEATING_CURVES_RESPONSE_1_2
@@ -76,7 +81,9 @@ async def test_set_away_range_with_invalid_start_and_end_date(
     ]
     fake_api.register_requests(config_entry.data[CONF_HOST])
 
+    hass.config.language = "de"
     await setup_integration(hass, config_entry)
+    translations: dict[str, str] = await init_translations(hass, config_entry, category="exceptions")
 
     with pytest.raises(
         ServiceValidationError,
@@ -93,23 +100,25 @@ async def test_set_away_range_with_invalid_start_and_end_date(
             blocking=True,
         )
 
-    translations = await async_get_translations(
-        hass,
-        "de",
-        "exceptions",
-        [DOMAIN],
-    )
-
     assert (
-        translations[f"component.{DOMAIN}.exceptions.end_date_smaller_than_start_date.message"]
+        translations["component.keba_keenergy.exceptions.end_date_smaller_than_start_date.message"]
         == "Das Enddatum darf nicht vor dem Startdatum liegen."
     )
 
 
+@pytest.mark.parametrize(
+    ("language", "expected"),
+    [
+        ("en", "Invalid integration provided. Got {config_entry_id}."),
+        ("de", "Ungültige Integration angegeben. {config_entry_id} erhalten."),
+    ],
+)
 async def test_set_away_range_with_invalid_config_entry(
     hass: HomeAssistant,
     config_entry: MockConfigEntry,
     fake_api: FakeKebaKeEnergyAPI,
+    language: str,
+    expected: str,
 ) -> None:
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
@@ -122,12 +131,11 @@ async def test_set_away_range_with_invalid_config_entry(
     ]
     fake_api.register_requests(config_entry.data[CONF_HOST])
 
+    hass.config.language = language
     await setup_integration(hass, config_entry)
+    translations: dict[str, str] = await init_translations(hass, config_entry, category="exceptions")
 
-    with pytest.raises(
-        ServiceValidationError,
-        match=r"Invalid integration provided\. Got invalid",
-    ):
+    with pytest.raises(ServiceValidationError):
         await hass.services.async_call(
             domain=DOMAIN,
             service=SERVICE_SET_AWAY_DATE_RANGE,
@@ -139,23 +147,22 @@ async def test_set_away_range_with_invalid_config_entry(
             blocking=True,
         )
 
-    translations = await async_get_translations(
-        hass,
-        "de",
-        "exceptions",
-        [DOMAIN],
-    )
-
-    assert (
-        translations[f"component.{DOMAIN}.exceptions.invalid_config_entry.message"]
-        == "Ungültige Integration angegeben. {config_entry_id} erhalten."
-    )
+    assert translations["component.keba_keenergy.exceptions.invalid_config_entry.message"] == expected
 
 
+@pytest.mark.parametrize(
+    ("language", "expected"),
+    [
+        ("en", "Invalid integration provided. {config_entry_id} is not loaded."),
+        ("de", "Ungültige Integration angegeben. {config_entry_id} ist nicht geladen."),
+    ],
+)
 async def test_set_away_range_with_unloaded_config_entry(
     hass: HomeAssistant,
     config_entry: MockConfigEntry,
     fake_api: FakeKebaKeEnergyAPI,
+    language: str,
+    expected: str,
 ) -> None:
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
@@ -168,16 +175,15 @@ async def test_set_away_range_with_unloaded_config_entry(
     ]
     fake_api.register_requests(config_entry.data[CONF_HOST])
 
+    hass.config.language = language
     await setup_integration(hass, config_entry)
+    translations: dict[str, str] = await init_translations(hass, config_entry, category="exceptions")
 
     # Unload the config entry
     await hass.config_entries.async_unload(config_entry.entry_id)
     await hass.async_block_till_done()
 
-    with pytest.raises(
-        ServiceValidationError,
-        match=r"Invalid integration provided\. KEBA KeEnergy \(ap4400\.local\) is not loaded",
-    ):
+    with pytest.raises(ServiceValidationError):
         await hass.services.async_call(
             domain=DOMAIN,
             service=SERVICE_SET_AWAY_DATE_RANGE,
@@ -189,17 +195,7 @@ async def test_set_away_range_with_unloaded_config_entry(
             blocking=True,
         )
 
-    translations = await async_get_translations(
-        hass,
-        "de",
-        "exceptions",
-        [DOMAIN],
-    )
-
-    assert (
-        translations[f"component.{DOMAIN}.exceptions.unloaded_config_entry.message"]
-        == "Ungültige Integration angegeben. {config_entry_id} ist nicht geladen."
-    )
+    assert translations["component.keba_keenergy.exceptions.unloaded_config_entry.message"] == expected
 
 
 async def test_set_heating_curve_points(
@@ -225,7 +221,7 @@ async def test_set_heating_curve_points(
         service=SERVICE_SET_HEATING_CURVE_POINTS,
         service_data={
             ATTR_CONFIG_ENTRY: config_entry.entry_id,
-            ATTR_HEATING_CURVE: "HC1",
+            ATTR_HEATING_CURVE: "hc1",
             ATTR_POINTS: [
                 {"outdoor": -20, "flow": 35.30},
                 {"outdoor": 20, "flow": 23.9},
@@ -279,10 +275,19 @@ async def test_set_heating_curve_points(
     )
 
 
+@pytest.mark.parametrize(
+    ("language", "expected"),
+    [
+        ("en", 'Can not find heating curve "{heating_curve}".'),
+        ("de", 'Heizkurve "{heating_curve}" nicht gefunden.'),
+    ],
+)
 async def test_set_heating_curve_points_with_invalid_heating_curve(
     hass: HomeAssistant,
     config_entry: MockConfigEntry,
     fake_api: FakeKebaKeEnergyAPI,
+    language: str,
+    expected: str,
 ) -> None:
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
@@ -295,7 +300,9 @@ async def test_set_heating_curve_points_with_invalid_heating_curve(
     ]
     fake_api.register_requests(config_entry.data[CONF_HOST])
 
+    hass.config.language = language
     await setup_integration(hass, config_entry)
+    translations: dict[str, str] = await init_translations(hass, config_entry, category="exceptions")
 
     with pytest.raises(
         ServiceValidationError,
@@ -306,7 +313,7 @@ async def test_set_heating_curve_points_with_invalid_heating_curve(
             service=SERVICE_SET_HEATING_CURVE_POINTS,
             service_data={
                 ATTR_CONFIG_ENTRY: config_entry.entry_id,
-                ATTR_HEATING_CURVE: "HC1",
+                ATTR_HEATING_CURVE: "hc1",
                 ATTR_POINTS: [
                     {"outdoor": -20, "flow": 35.30},
                     {"outdoor": 20, "flow": 23.9},
@@ -322,23 +329,22 @@ async def test_set_heating_curve_points_with_invalid_heating_curve(
             blocking=True,
         )
 
-    translations = await async_get_translations(
-        hass,
-        "de",
-        "exceptions",
-        [DOMAIN],
-    )
-
-    assert (
-        translations[f"component.{DOMAIN}.exceptions.cannot_find_heating_curve.message"]
-        == 'Heizkurve "{heating_curve}" nicht gefunden.'
-    )
+    assert translations["component.keba_keenergy.exceptions.cannot_find_heating_curve.message"] == expected
 
 
+@pytest.mark.parametrize(
+    ("language", "expected"),
+    [
+        ("en", "Duplicate outdoor temperature values found."),
+        ("de", "Doppelte Außentemperatur-Werte gefunden."),
+    ],
+)
 async def test_set_heating_curve_points_with_duplicate_outdoor_temperatures(
     hass: HomeAssistant,
     config_entry: MockConfigEntry,
     fake_api: FakeKebaKeEnergyAPI,
+    language: str,
+    expected: str,
 ) -> None:
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
@@ -351,7 +357,9 @@ async def test_set_heating_curve_points_with_duplicate_outdoor_temperatures(
     ]
     fake_api.register_requests(config_entry.data[CONF_HOST])
 
+    hass.config.language = language
     await setup_integration(hass, config_entry)
+    translations: dict[str, str] = await init_translations(hass, config_entry, category="exceptions")
 
     with pytest.raises(
         ServiceValidationError,
@@ -362,7 +370,7 @@ async def test_set_heating_curve_points_with_duplicate_outdoor_temperatures(
             service=SERVICE_SET_HEATING_CURVE_POINTS,
             service_data={
                 ATTR_CONFIG_ENTRY: config_entry.entry_id,
-                ATTR_HEATING_CURVE: "HC1",
+                ATTR_HEATING_CURVE: "hc1",
                 ATTR_POINTS: [
                     {"outdoor": 20, "flow": 35.30},
                     {"outdoor": 20, "flow": 23.9},
@@ -378,14 +386,59 @@ async def test_set_heating_curve_points_with_duplicate_outdoor_temperatures(
             blocking=True,
         )
 
-    translations = await async_get_translations(
-        hass,
-        "de",
-        "exceptions",
-        [DOMAIN],
-    )
+    assert translations["component.keba_keenergy.exceptions.duplicate_outdoor_temperature_values.message"] == expected
 
-    assert (
-        translations[f"component.{DOMAIN}.exceptions.duplicate_outdoor_temperature_values.message"]
-        == "Doppelte Außentemperatur-Werte gefunden."
-    )
+
+def test_away_date_range_schema_valid() -> None:
+    data = {
+        ATTR_CONFIG_ENTRY: "1234",
+        ATTR_START_DATE: "2026-01-01",
+        ATTR_END_DATE: "2026-01-10",
+    }
+
+    AWAY_DATE_RANGE_SCHEMA(data)
+
+
+def test_away_date_range_schema_missing_start() -> None:
+    data = {
+        ATTR_CONFIG_ENTRY: "1234",
+        ATTR_END_DATE: "2026-01-10",
+    }
+
+    with pytest.raises(vol.Invalid):
+        AWAY_DATE_RANGE_SCHEMA(data)
+
+
+def test_heating_curve_points_schema_valid() -> None:
+    data: dict[str, Any] = {
+        ATTR_CONFIG_ENTRY: "1234",
+        ATTR_HEATING_CURVE: "hc1",
+        ATTR_POINTS: [
+            {"outdoor": -20, "flow": 35.3},
+            {"outdoor": 0, "flow": 29.5},
+        ],
+    }
+
+    HEATING_CURVE_POINTS_SCHEMA(data)
+
+
+def test_heating_curve_points_schema_too_many_points() -> None:
+    data: dict[str, Any] = {
+        ATTR_CONFIG_ENTRY: "1234",
+        ATTR_HEATING_CURVE: "hc1",
+        ATTR_POINTS: [{"outdoor": i, "flow": i} for i in range(100)],
+    }
+
+    with pytest.raises(vol.Invalid):
+        HEATING_CURVE_POINTS_SCHEMA(data)
+
+
+def test_heating_curve_points_schema_invalid_curve() -> None:
+    data: dict[str, Any] = {
+        ATTR_CONFIG_ENTRY: "1234",
+        ATTR_HEATING_CURVE: "INVALID",
+        ATTR_POINTS: [{"outdoor": 0, "flow": 30}],
+    }
+
+    with pytest.raises(vol.Invalid):
+        HEATING_CURVE_POINTS_SCHEMA(data)

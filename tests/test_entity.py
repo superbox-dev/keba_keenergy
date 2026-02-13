@@ -11,13 +11,12 @@ from homeassistant.const import STATE_OFF
 from homeassistant.core import HomeAssistant
 from homeassistant.core import State
 from homeassistant.exceptions import HomeAssistantError
-from homeassistant.helpers.translation import async_get_translations
 from homeassistant.setup import async_setup_component
 from keba_keenergy_api.api import KebaKeEnergyAPI
 from keba_keenergy_api.error import APIError
 from pytest_homeassistant_custom_component.common import MockConfigEntry
 
-from custom_components.keba_keenergy.const import DOMAIN
+from tests import init_translations
 from tests import setup_integration
 from tests.api_data import ENTITY_UPDATED_DATA_RESPONSE
 from tests.api_data import HEATING_CURVES_RESPONSE_1_1
@@ -95,7 +94,9 @@ async def test_entity_update_failed(
     ]
     fake_api.register_requests("10.0.0.100")
 
+    hass.config.language = "de"
     await setup_integration(hass, config_entry)
+    translations: dict[str, str] = await init_translations(hass, config_entry, category="exceptions")
 
     entity_id: str = "select.keba_keenergy_12345678_buffer_tank_operating_mode_1"
     state: State | None = hass.states.get(entity_id)
@@ -115,14 +116,7 @@ async def test_entity_update_failed(
             blocking=True,
         )
 
-    translations = await async_get_translations(
-        hass,
-        "de",
-        "exceptions",
-        [DOMAIN],
-    )
-
     assert (
-        translations[f"component.{DOMAIN}.exceptions.communication_error.message"]
+        translations["component.keba_keenergy.exceptions.communication_error.message"]
         == "Bei der Kommunikation mit der API ist ein Fehler aufgetreten: {error}"
     )

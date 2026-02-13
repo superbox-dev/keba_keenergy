@@ -147,17 +147,17 @@
             "heating_curve": {
                 "name": "Heizkurve",
                 "state": {
-                    "HC1": "Kurve 1",
-                    "HC2": "Kurve 2",
-                    "HC3": "Kurve 3",
-                    "HC4": "Kurve 4",
-                    "HC5": "Kurve 5",
-                    "HC6": "Kurve 6",
-                    "HC7": "Kurve 7",
-                    "HC8": "Kurve 8",
-                    "HC9": "Kurve 9",
-                    "HC_FBH": "Fußbodenheizung",
-                    "HC_HK": "Heizkörper"
+                    "hc1": "Kurve 1",
+                    "hc2": "Kurve 2",
+                    "hc3": "Kurve 3",
+                    "hc4": "Kurve 4",
+                    "hc5": "Kurve 5",
+                    "hc6": "Kurve 6",
+                    "hc7": "Kurve 7",
+                    "hc8": "Kurve 8",
+                    "hc9": "Kurve 9",
+                    "hc_fbh": "Fußbodenheizung",
+                    "hc_hk": "Heizkörper"
                 }
             },
             "operating_mode_buffer_tank": {
@@ -165,14 +165,14 @@
                 "state": {
                     "heat_up": "Aufheizen",
                     "off": "Aus",
-                    "on": "An"
+                    "on": "Ein"
                 }
             },
             "operating_mode_external_heat_source": {
                 "name": "Betriebsart",
                 "state": {
                     "off": "Aus",
-                    "on": "An"
+                    "on": "Ein"
                 }
             },
             "operating_mode_heat_circuit": {
@@ -192,14 +192,14 @@
                     "auto": "Zeitplan",
                     "heat_up": "Aufheizen",
                     "off": "Aus",
-                    "on": "An"
+                    "on": "Ein"
                 }
             },
             "operating_mode_solar_circuit": {
                 "name": "Betriebsart",
                 "state": {
                     "off": "Aus",
-                    "on": "An"
+                    "on": "Ein"
                 }
             },
             "operating_mode_system": {
@@ -300,7 +300,20 @@
                 }
             },
             "heating_curve": {
-                "name": "Heizkurve"
+                "name": "Heizkurve",
+                "state": {
+                    "hc1": "1",
+                    "hc2": "2",
+                    "hc3": "3",
+                    "hc4": "4",
+                    "hc5": "5",
+                    "hc6": "6",
+                    "hc7": "7",
+                    "hc8": "8",
+                    "hc9": "9",
+                    "hc_fbh": "Fußbodenheizung",
+                    "hc_hk": "Heizkörper"
+                }
             },
             "heating_energy": {
                 "name": "Wärmemenge"
@@ -349,14 +362,14 @@
                 "state": {
                     "heat_up": "Aufheizen",
                     "off": "Aus",
-                    "on": "An"
+                    "on": "Ein"
                 }
             },
             "operating_mode_external_heat_source": {
                 "name": "Betriebsart",
                 "state": {
                     "off": "Aus",
-                    "on": "An"
+                    "on": "Ein"
                 }
             },
             "operating_mode_heat_circuit": {
@@ -378,14 +391,14 @@
                     "auto": "Auto",
                     "heat_up": "Aufheizen",
                     "off": "Aus",
-                    "on": "An"
+                    "on": "Ein"
                 }
             },
             "operating_mode_solar_circuit": {
                 "name": "Betriebsart",
                 "state": {
                     "off": "Aus",
-                    "on": "An"
+                    "on": "Ein"
                 }
             },
             "operating_mode_system": {
@@ -597,17 +610,17 @@
     "selector": {
         "heating_curve":{
             "options": {
-                "HC1": "Kurve 1",
-                "HC2": "Kurve 2",
-                "HC3": "Kurve 3",
-                "HC4": "Kurve 4",
-                "HC5": "Kurve 5",
-                "HC6": "Kurve 6",
-                "HC7": "Kurve 7",
-                "HC8": "Kurve 8",
-                "HC9": "Kurve 9",
-                "HC_FBH": "Fußbodenheizung",
-                "HC_HK": "Heizkörper"
+                "hc1": "1",
+                "hc2": "2",
+                "hc3": "3",
+                "hc4": "4",
+                "hc5": "5",
+                "hc6": "6",
+                "hc7": "7",
+                "hc8": "8",
+                "hc9": "9",
+                "hc_fbh": "Fußbodenheizung",
+                "hc_hk": "Heizkörper"
             }
         }
     },
