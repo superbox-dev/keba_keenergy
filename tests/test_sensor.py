@@ -1798,7 +1798,7 @@ async def test_solar_circuit_sensors(
         "sensor.keba_keenergy_12345678_solar_circuit_heating_energy_1",
     )
     assert isinstance(solar_circuit_heating_energy_1, State)
-    assert solar_circuit_heating_energy_1.state == "8.73"
+    assert solar_circuit_heating_energy_1.state == "305.13"
     assert solar_circuit_heating_energy_1.attributes[CONF_UNIT_OF_MEASUREMENT] == UnitOfEnergy.KILO_WATT_HOUR
     assert solar_circuit_heating_energy_1.attributes[ATTR_STATE_CLASS] == SensorStateClass.TOTAL
     assert solar_circuit_heating_energy_1.attributes[CONF_DEVICE_CLASS] == SensorDeviceClass.ENERGY
@@ -1808,7 +1808,7 @@ async def test_solar_circuit_sensors(
         "sensor.keba_keenergy_12345678_solar_circuit_heating_energy_2",
     )
     assert isinstance(solar_circuit_heating_energy_2, State)
-    assert solar_circuit_heating_energy_2.state == "4.73"
+    assert solar_circuit_heating_energy_2.state == "305.13"
     assert solar_circuit_heating_energy_2.attributes[CONF_UNIT_OF_MEASUREMENT] == UnitOfEnergy.KILO_WATT_HOUR
     assert solar_circuit_heating_energy_2.attributes[ATTR_STATE_CLASS] == SensorStateClass.TOTAL
     assert solar_circuit_heating_energy_2.attributes[CONF_DEVICE_CLASS] == SensorDeviceClass.ENERGY
@@ -1818,7 +1818,7 @@ async def test_solar_circuit_sensors(
         "sensor.keba_keenergy_12345678_solar_circuit_daily_energy_1",
     )
     assert isinstance(solar_circuit_daily_energy_1, State)
-    assert solar_circuit_daily_energy_1.state == "2.33"
+    assert solar_circuit_daily_energy_1.state == "0.08"
     assert solar_circuit_daily_energy_1.attributes[CONF_UNIT_OF_MEASUREMENT] == UnitOfEnergy.KILO_WATT_HOUR
     assert solar_circuit_daily_energy_1.attributes[ATTR_STATE_CLASS] == SensorStateClass.TOTAL
     assert solar_circuit_daily_energy_1.attributes[CONF_DEVICE_CLASS] == SensorDeviceClass.ENERGY
@@ -1828,7 +1828,7 @@ async def test_solar_circuit_sensors(
         "sensor.keba_keenergy_12345678_solar_circuit_daily_energy_2",
     )
     assert isinstance(solar_circuit_daily_energy_2, State)
-    assert solar_circuit_daily_energy_2.state == "3.33"
+    assert solar_circuit_daily_energy_2.state == "0.08"
     assert solar_circuit_daily_energy_2.attributes[CONF_UNIT_OF_MEASUREMENT] == UnitOfEnergy.KILO_WATT_HOUR
     assert solar_circuit_daily_energy_2.attributes[ATTR_STATE_CLASS] == SensorStateClass.TOTAL
     assert solar_circuit_daily_energy_2.attributes[CONF_DEVICE_CLASS] == SensorDeviceClass.ENERGY
