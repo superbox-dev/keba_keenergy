@@ -656,6 +656,35 @@ HEAT_PUMP_VAPORIZER_TEMPERATURE: dict[str, Any] = {
     "value": "-4.5617409",
 }
 
+HEAT_PUMP_TARGET_OVERHEATING: dict[str, Any] = {
+    "name": "APPL.CtrlAppl.sParam.heatpump[0].OverHeatCtrl.values.setOH",
+    "attributes": {
+        "formatId": "fmtTemp",
+        "longText": "Set suction SH",
+        "unitId": "TempRel",
+    },
+    "value": "5.4999752",
+}
+
+HEAT_PUMP_CURRENT_OVERHEATING: dict[str, Any] = {
+    "name": "APPL.CtrlAppl.sParam.heatpump[0].OverHeatCtrl.values.actOH",
+    "attributes": {
+        "formatId": "fmtTemp",
+        "longText": "Act. suction SH",
+        "unitId": "TempRel",
+    },
+    "value": "18.676249",
+}
+
+HEAT_PUMP_EXPANSION_VALVE_POSITION: dict[str, Any] = {
+    "name": "APPL.CtrlAppl.sParam.heatpump[0].OverHeatCtrl.values.stepperPos",
+    "attributes": {
+        "formatId": "fmt4p0",
+        "longText": "Stepper position",
+    },
+    "value": "20",
+}
+
 HEAT_PUMP_HEAT_REQUEST: dict[str, Any] = {
     "name": "APPL.CtrlAppl.sParam.heatpump[0].values.request",
     "attributes": {
@@ -1500,6 +1529,9 @@ def get_heat_pump_data(compressor_night_speed: str = "true") -> list[dict[str, A
         json.loads(HEAT_PUMP_COMPRESSOR_USE_NIGHT_SPEED % compressor_night_speed),
         HEAT_PUMP_CONDENSER_TEMPERATURE,
         HEAT_PUMP_VAPORIZER_TEMPERATURE,
+        HEAT_PUMP_TARGET_OVERHEATING,
+        HEAT_PUMP_CURRENT_OVERHEATING,
+        HEAT_PUMP_EXPANSION_VALVE_POSITION,
         HEAT_PUMP_HEAT_REQUEST,
         HEAT_PUMP_HIGH_PRESSURE,
         HEAT_PUMP_FLOW_TEMPERATURE,

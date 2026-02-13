@@ -30,7 +30,7 @@ async def test_load_entry(
     await setup_integration(hass, config_entry)
 
     assert config_entry.state is ConfigEntryState.LOADED
-    assert hass.states.async_entity_ids_count() == 200
+    assert hass.states.async_entity_ids_count() == 203
 
     assert set(hass.states.async_entity_ids()) == {
         "binary_sensor.keba_keenergy_12345678_buffer_tank_cool_request_1",
@@ -162,6 +162,8 @@ async def test_load_entry(
         "sensor.keba_keenergy_12345678_heat_pump_cooling_energy_consumption",
         "sensor.keba_keenergy_12345678_heat_pump_cooling_spf",
         "sensor.keba_keenergy_12345678_heat_pump_cop",
+        "sensor.keba_keenergy_12345678_heat_pump_current_overheating",
+        "sensor.keba_keenergy_12345678_heat_pump_expansion_valve_position",
         "sensor.keba_keenergy_12345678_heat_pump_flow_temperature",
         "sensor.keba_keenergy_12345678_heat_pump_heating_energy",
         "sensor.keba_keenergy_12345678_heat_pump_heating_energy_consumption",
@@ -174,6 +176,7 @@ async def test_load_entry(
         "sensor.keba_keenergy_12345678_heat_pump_hot_water_spf",
         "sensor.keba_keenergy_12345678_heat_pump_low_pressure",
         "sensor.keba_keenergy_12345678_heat_pump_return_flow_temperature",
+        "sensor.keba_keenergy_12345678_heat_pump_target_overheating",
         "sensor.keba_keenergy_12345678_heat_pump_source_input_temperature",
         "sensor.keba_keenergy_12345678_heat_pump_source_output_temperature",
         "sensor.keba_keenergy_12345678_heat_pump_source_pump_speed",

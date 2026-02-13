@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Added sensors for "Target overheating", "Current overheating", and "Expansion valve position" [(Issue #29)][issue-29]
 - Added sensor "Circulation return temperature" to the hot water tank [(Issue #24)][issue-24]
 - Added binary sensor "Circulation pump state" to the hot water tank [(Issue #24)][issue-24]
 - Added select entity "Heating curve" to the heating circuit [(Issue #24)][issue-24]
@@ -27,8 +28,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - The entity icons have been slightly improved
 - Update translations [issue-28]
 
-[issue-24]: https://github.com/superbox-dev/keba_keenergy/issues/24
+[issue-29]: https://github.com/superbox-dev/keba_keenergy/issues/29
 [issue-28]: https://github.com/superbox-dev/keba_keenergy/issues/28
+[issue-24]: https://github.com/superbox-dev/keba_keenergy/issues/24
 
 ## [1.7.0] - 2025-01-31
 

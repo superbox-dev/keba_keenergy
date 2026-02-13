@@ -263,6 +263,9 @@
             "current_bottom_temperature": {
                 "name": "Current temperature (bottom)"
             },
+            "current_overheating": {
+                "name": "Current overheating"
+            },
             "current_temperature": {
                 "name": "Current temperature{counter}"
             },
@@ -274,6 +277,9 @@
             },
             "dew_point": {
                 "name": "Dew point"
+            },
+            "expansion_valve_position": {
+                "name": "Expansion valve position"
             },
             "free_ram": {
                 "name": "Free RAM"
@@ -514,6 +520,9 @@
                     "open": "Open",
                     "closed": "Closed"
                 }
+            },
+            "target_overheating": {
+                "name": "Target overheating"
             },
             "target_temperature": {
                 "name": "Target temperature{counter}"

@@ -871,6 +871,33 @@ async def test_heat_pump_sensors(
     assert heat_pump_vaporizer_temperature.attributes[CONF_DEVICE_CLASS] == SensorDeviceClass.TEMPERATURE
     assert heat_pump_vaporizer_temperature.attributes[ATTR_FRIENDLY_NAME] == "Heat pump Vaporization temperature"
 
+    heat_pump_target_overheating: State | None = hass.states.get(
+        "sensor.keba_keenergy_12345678_heat_pump_target_overheating",
+    )
+    assert isinstance(heat_pump_target_overheating, State)
+    assert heat_pump_target_overheating.state == "5.5"
+    assert heat_pump_target_overheating.attributes[CONF_UNIT_OF_MEASUREMENT] == UnitOfTemperature.CELSIUS
+    assert heat_pump_target_overheating.attributes[ATTR_STATE_CLASS] == SensorStateClass.MEASUREMENT
+    assert heat_pump_target_overheating.attributes[CONF_DEVICE_CLASS] == SensorDeviceClass.TEMPERATURE
+    assert heat_pump_target_overheating.attributes[ATTR_FRIENDLY_NAME] == "Heat pump Target overheating"
+
+    heat_pump_current_overheating: State | None = hass.states.get(
+        "sensor.keba_keenergy_12345678_heat_pump_current_overheating",
+    )
+    assert isinstance(heat_pump_current_overheating, State)
+    assert heat_pump_current_overheating.state == "18.68"
+    assert heat_pump_current_overheating.attributes[CONF_UNIT_OF_MEASUREMENT] == UnitOfTemperature.CELSIUS
+    assert heat_pump_current_overheating.attributes[ATTR_STATE_CLASS] == SensorStateClass.MEASUREMENT
+    assert heat_pump_current_overheating.attributes[CONF_DEVICE_CLASS] == SensorDeviceClass.TEMPERATURE
+    assert heat_pump_current_overheating.attributes[ATTR_FRIENDLY_NAME] == "Heat pump Current overheating"
+
+    heat_pump_expansion_valve_position: State | None = hass.states.get(
+        "sensor.keba_keenergy_12345678_heat_pump_expansion_valve_position",
+    )
+    assert isinstance(heat_pump_expansion_valve_position, State)
+    assert heat_pump_expansion_valve_position.state == "20"
+    assert heat_pump_expansion_valve_position.attributes[ATTR_FRIENDLY_NAME] == "Heat pump Expansion valve position"
+
     heat_pump_activation_counter: State | None = hass.states.get(
         "sensor.keba_keenergy_12345678_heat_pump_activation_counter",
     )
@@ -1126,6 +1153,24 @@ async def test_heat_pump_sensors_translations(
     )
     assert isinstance(heat_pump_vaporizer_temperature, State)
     assert heat_pump_vaporizer_temperature.attributes[ATTR_FRIENDLY_NAME] == "Wärmepumpe Verdampfungstemperatur"
+
+    heat_pump_target_overheating: State | None = hass.states.get(
+        "sensor.keba_keenergy_12345678_heat_pump_target_overheating",
+    )
+    assert isinstance(heat_pump_target_overheating, State)
+    assert heat_pump_target_overheating.attributes[ATTR_FRIENDLY_NAME] == "Wärmepumpe Sollüberhitzung"
+
+    heat_pump_current_overheating: State | None = hass.states.get(
+        "sensor.keba_keenergy_12345678_heat_pump_current_overheating",
+    )
+    assert isinstance(heat_pump_current_overheating, State)
+    assert heat_pump_current_overheating.attributes[ATTR_FRIENDLY_NAME] == "Wärmepumpe Istüberhitzung"
+
+    heat_pump_expansion_valve_position: State | None = hass.states.get(
+        "sensor.keba_keenergy_12345678_heat_pump_expansion_valve_position",
+    )
+    assert isinstance(heat_pump_expansion_valve_position, State)
+    assert heat_pump_expansion_valve_position.attributes[ATTR_FRIENDLY_NAME] == "Wärmepumpe Expansionsventil"
 
     heat_pump_activation_counter: State | None = hass.states.get(
         "sensor.keba_keenergy_12345678_heat_pump_activation_counter",

@@ -263,6 +263,9 @@
             "current_bottom_temperature": {
                 "name": "Ist-Temperatur (unten)"
             },
+            "current_overheating": {
+                "name": "Istüberhitzung"
+            },
             "current_temperature": {
                 "name": "Ist-Temperatur{counter}"
             },
@@ -274,6 +277,9 @@
             },
             "dew_point": {
                 "name": "Taupunkt"
+            },
+            "expansion_valve_position": {
+                "name": "Expansionsventil"
             },
             "free_ram": {
                 "name": "Freier RAM"
@@ -514,6 +520,9 @@
                     "open": "Offen",
                     "closed": "Geschlossen"
                 }
+            },
+            "target_overheating": {
+                "name": "Sollüberhitzung"
             },
             "target_temperature": {
                 "name": "Soll-Temperatur{counter}"
