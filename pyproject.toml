@@ -46,7 +46,7 @@ dependencies = [
     "homeassistant>=2025.8.2",
     "requests>=2.32.5"
 ]
-version = "1.8.0b2"
+version = "1.8.0b3"
 
 [project.urls]
 "Repository" = "https://github.com/superbox-dev/keba_keenergy"
@@ -142,6 +142,9 @@ log_cli_format = "%(levelname)-8s | %(asctime)s | [%(name)s] %(message)s"
 addopts = "--cov=custom_components --cov-report=term-missing --cov-report=xml:reports/coverage.xml --color=yes --exitfirst --failed-first --strict-config --strict-markers --junitxml=reports/pytest.xml"
 asyncio_mode = "auto"
 asyncio_default_fixture_loop_scope = "function"
+markers = [
+  "no_fail_on_keba_errors: Disable the fail_on_keba_errors autouse fixture",
+]
 
 [tool.coverage.run] # https://coverage.readthedocs.io/en/latest/config.html#run
 branch = false
