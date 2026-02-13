@@ -170,7 +170,7 @@ async def _async_set_heating_curve_points(call: ServiceCall) -> None:
 
     await coordinator.async_execute_write(
         write_fn=lambda: coordinator.api.heat_circuit.set_heating_curve_points(
-            heating_curve=heating_curve.upper(),
+            heating_curve=HeatCircuitHeatingCurve[heating_curve.upper()].value,
             points=points,
         ),
     )
