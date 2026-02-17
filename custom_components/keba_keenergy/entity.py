@@ -125,11 +125,6 @@ class KebaKeEnergyEntity(
     #     """Return True if the entity is part of a photovoltaic else False."""
     #     return self.section_id == SectionPrefix.PHOTOVOLTAIC
 
-    @property
-    def device_name(self) -> str | None:
-        """Return the device name and number."""
-        return None
-
     @cached_property
     def device_identifier(self) -> str:
         """Return the device identifier."""
@@ -209,7 +204,6 @@ class KebaKeEnergyEntity(
     def device_info(self) -> DeviceInfo:
         """Return updated device specific attributes."""
         data: dict[str, Any] = {
-            "name": self.device_name,
             "manufacturer": self.device_manufacturer,
             "model": self.device_model,
             "sw_version": (self.coordinator.device_hmi_sw_version if self.is_system_device else None),
@@ -222,7 +216,6 @@ class KebaKeEnergyEntity(
         _device_info: DeviceInfo = DeviceInfo(
             configuration_url=self.coordinator.configuration_url,
             identifiers={(DOMAIN, self.device_identifier)},
-            name=data["name"],
             model=data["model"],
             manufacturer=data["manufacturer"],
             sw_version=data["sw_version"],
