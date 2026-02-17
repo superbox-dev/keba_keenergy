@@ -26,7 +26,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - The entity icons have been slightly improved
-- Update translations [issue-28]
+- Update translations
 
 ### Fixed
 
@@ -34,7 +34,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 [issue-32]: https://github.com/superbox-dev/keba_keenergy/issues/32
 [issue-29]: https://github.com/superbox-dev/keba_keenergy/issues/29
-[issue-28]: https://github.com/superbox-dev/keba_keenergy/issues/28
 [issue-24]: https://github.com/superbox-dev/keba_keenergy/issues/24
 
 ## [1.7.0] - 2025-01-31
