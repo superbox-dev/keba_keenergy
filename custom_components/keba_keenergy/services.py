@@ -106,7 +106,7 @@ def __get_coordinator(call: ServiceCall) -> KebaKeEnergyDataUpdateCoordinator:
             },
         )
 
-    coordinator: KebaKeEnergyDataUpdateCoordinator = entry.runtime_data
+    coordinator: KebaKeEnergyDataUpdateCoordinator = call.hass.data[DOMAIN][entry_id]
 
     return coordinator
 
