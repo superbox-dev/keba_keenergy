@@ -989,12 +989,12 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
 
 
 async def async_setup_entry(
-    hass: HomeAssistant,
+    hass: HomeAssistant,  # noqa: ARG001
     entry: ConfigEntry,
     async_add_entities: AddEntitiesCallback,
 ) -> None:
     """Set up KEBA KeEnergy sensors from a config entry."""
-    coordinator: KebaKeEnergyDataUpdateCoordinator = hass.data[DOMAIN][entry.entry_id]
+    coordinator: KebaKeEnergyDataUpdateCoordinator = entry.runtime_data
     sensors: list[KebaKeEnergySensorEntity] = []
 
     # Loop over all device data and add an index to the sensor
