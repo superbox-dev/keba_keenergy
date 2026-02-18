@@ -14,11 +14,66 @@ from homeassistant.core import State
 from pytest_homeassistant_custom_component.common import MockConfigEntry
 
 from tests import setup_integration
-from tests.api_data import MULTIPLE_POSITIONS_DATA_RESPONSE_1
-from tests.api_data import MULTIPLE_POSITIONS_DATA_RESPONSE_2
+from tests.api_data import HEATING_CURVES_RESPONSE_1_1
 from tests.api_data import MULTIPLE_POSITIONS_RESPONSE
+from tests.api_data import MULTIPLE_POSITION_DATA_RESPONSE_1
+from tests.api_data import MULTIPLE_POSITION_DATA_RESPONSE_2
 from tests.api_data import get_multiple_position_fixed_data_response
 from tests.conftest import FakeKebaKeEnergyAPI
+
+
+@pytest.mark.usefixtures("entity_registry_enabled_by_default")
+async def test_heat_circuit_switches(
+    hass: HomeAssistant,
+    config_entry: MockConfigEntry,
+    fake_api: FakeKebaKeEnergyAPI,
+) -> None:
+    fake_api.responses = [
+        MULTIPLE_POSITIONS_RESPONSE,
+        get_multiple_position_fixed_data_response(),
+        MULTIPLE_POSITION_DATA_RESPONSE_1,
+        HEATING_CURVES_RESPONSE_1_1,
+        # Read API after services call
+        MULTIPLE_POSITION_DATA_RESPONSE_1,
+        HEATING_CURVES_RESPONSE_1_1,
+    ]
+    fake_api.register_requests(config_entry.data[CONF_HOST])
+
+    await setup_integration(hass, config_entry)
+
+    heat_circuit_use_heating_curve_1: State | None = hass.states.get(
+        "switch.keba_keenergy_12345678_heat_circuit_use_heating_curve_1",
+    )
+    assert isinstance(heat_circuit_use_heating_curve_1, State)
+    assert heat_circuit_use_heating_curve_1.attributes[CONF_DEVICE_CLASS] == SwitchDeviceClass.SWITCH
+    assert heat_circuit_use_heating_curve_1.attributes[ATTR_FRIENDLY_NAME] == "Heating circuit 1 Use heating curve"
+
+
+@pytest.mark.usefixtures("entity_registry_enabled_by_default")
+async def test_heat_circuit_switches_translated(
+    hass: HomeAssistant,
+    config_entry: MockConfigEntry,
+    fake_api: FakeKebaKeEnergyAPI,
+) -> None:
+    fake_api.responses = [
+        MULTIPLE_POSITIONS_RESPONSE,
+        get_multiple_position_fixed_data_response(),
+        MULTIPLE_POSITION_DATA_RESPONSE_1,
+        HEATING_CURVES_RESPONSE_1_1,
+        # Read API after services call
+        MULTIPLE_POSITION_DATA_RESPONSE_1,
+        HEATING_CURVES_RESPONSE_1_1,
+    ]
+    fake_api.register_requests(config_entry.data[CONF_HOST])
+
+    hass.config.language = "de"
+    await setup_integration(hass, config_entry)
+
+    heat_circuit_use_heating_curve_1: State | None = hass.states.get(
+        "switch.keba_keenergy_12345678_heat_circuit_use_heating_curve_1",
+    )
+    assert isinstance(heat_circuit_use_heating_curve_1, State)
+    assert heat_circuit_use_heating_curve_1.attributes[ATTR_FRIENDLY_NAME] == "Heizkreis 1 Heizkurve verwenden"
 
 
 async def test_solar_circuit_switches(
@@ -29,9 +84,11 @@ async def test_solar_circuit_switches(
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITIONS_DATA_RESPONSE_1,
+        MULTIPLE_POSITION_DATA_RESPONSE_1,
+        HEATING_CURVES_RESPONSE_1_1,
         # Read API after services call
-        MULTIPLE_POSITIONS_DATA_RESPONSE_1,
+        MULTIPLE_POSITION_DATA_RESPONSE_1,
+        HEATING_CURVES_RESPONSE_1_1,
     ]
     fake_api.register_requests(config_entry.data[CONF_HOST])
 
@@ -53,9 +110,11 @@ async def test_solar_circuit_switches_translated(
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITIONS_DATA_RESPONSE_1,
+        MULTIPLE_POSITION_DATA_RESPONSE_1,
+        HEATING_CURVES_RESPONSE_1_1,
         # Read API after services call
-        MULTIPLE_POSITIONS_DATA_RESPONSE_1,
+        MULTIPLE_POSITION_DATA_RESPONSE_1,
+        HEATING_CURVES_RESPONSE_1_1,
     ]
     fake_api.register_requests(config_entry.data[CONF_HOST])
 
@@ -69,6 +128,7 @@ async def test_solar_circuit_switches_translated(
     assert solar_circuit_priority_1_before_2_1.attributes[ATTR_FRIENDLY_NAME] == "Solarkreis 1 Vorrang 1 vor 2"
 
 
+@pytest.mark.usefixtures("entity_registry_enabled_by_default")
 async def test_heat_pump_switches(
     hass: HomeAssistant,
     config_entry: MockConfigEntry,
@@ -77,9 +137,11 @@ async def test_heat_pump_switches(
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITIONS_DATA_RESPONSE_1,
+        MULTIPLE_POSITION_DATA_RESPONSE_1,
+        HEATING_CURVES_RESPONSE_1_1,
         # Read API after services call
-        MULTIPLE_POSITIONS_DATA_RESPONSE_1,
+        MULTIPLE_POSITION_DATA_RESPONSE_1,
+        HEATING_CURVES_RESPONSE_1_1,
     ]
     fake_api.register_requests(config_entry.data[CONF_HOST])
 
@@ -96,6 +158,7 @@ async def test_heat_pump_switches(
     )
 
 
+@pytest.mark.usefixtures("entity_registry_enabled_by_default")
 async def test_heat_pump_switches_translated(
     hass: HomeAssistant,
     config_entry: MockConfigEntry,
@@ -104,9 +167,11 @@ async def test_heat_pump_switches_translated(
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITIONS_DATA_RESPONSE_1,
+        MULTIPLE_POSITION_DATA_RESPONSE_1,
+        HEATING_CURVES_RESPONSE_1_1,
         # Read API after services call
-        MULTIPLE_POSITIONS_DATA_RESPONSE_1,
+        MULTIPLE_POSITION_DATA_RESPONSE_1,
+        HEATING_CURVES_RESPONSE_1_1,
     ]
     fake_api.register_requests(config_entry.data[CONF_HOST])
 
@@ -129,31 +194,38 @@ async def test_heat_pump_switches_translated(
         (
             "switch.keba_keenergy_12345678_heat_pump_compressor_use_night_speed",
             SERVICE_TURN_ON,
-            MULTIPLE_POSITIONS_DATA_RESPONSE_2,
+            MULTIPLE_POSITION_DATA_RESPONSE_2,
             '[{"name": "APPL.CtrlAppl.sParam.heatpump[0].HeatPumpPowerCtrl.param.useDayNightSpeed", "value": "1"}]',
         ),
         (
             "switch.keba_keenergy_12345678_heat_pump_compressor_use_night_speed",
             SERVICE_TURN_OFF,
-            MULTIPLE_POSITIONS_DATA_RESPONSE_1,
+            MULTIPLE_POSITION_DATA_RESPONSE_1,
             '[{"name": "APPL.CtrlAppl.sParam.heatpump[0].HeatPumpPowerCtrl.param.useDayNightSpeed", "value": "0"}]',
         ),
         (
             "switch.keba_keenergy_12345678_solar_circuit_priority_1_before_2_2",
             SERVICE_TURN_ON,
-            MULTIPLE_POSITIONS_DATA_RESPONSE_2,
+            MULTIPLE_POSITION_DATA_RESPONSE_2,
             '[{"name": "APPL.CtrlAppl.sParam.hmiRetainData.consumer1PrioritySolar[1]", "value": "1"}, '
             '{"name": "APPL.CtrlAppl.sParam.genericHeat[2].param.priority", "value": "14"}]',
         ),
         (
             "switch.keba_keenergy_12345678_solar_circuit_priority_1_before_2_2",
             SERVICE_TURN_OFF,
-            MULTIPLE_POSITIONS_DATA_RESPONSE_1,
+            MULTIPLE_POSITION_DATA_RESPONSE_1,
             '[{"name": "APPL.CtrlAppl.sParam.hmiRetainData.consumer1PrioritySolar[1]", "value": "0"}, '
             '{"name": "APPL.CtrlAppl.sParam.genericHeat[2].param.priority", "value": "15"}]',
         ),
+        (
+            "switch.keba_keenergy_12345678_heat_circuit_use_heating_curve_1",
+            SERVICE_TURN_ON,
+            MULTIPLE_POSITION_DATA_RESPONSE_1,
+            '[{"name": "APPL.CtrlAppl.sParam.heatCircuit[0].param.enableHeatCurveLinTab", "value": "1"}]',
+        ),
     ],
 )
+@pytest.mark.usefixtures("entity_registry_enabled_by_default")
 async def test_set_value(
     hass: HomeAssistant,
     config_entry: MockConfigEntry,
@@ -167,8 +239,10 @@ async def test_set_value(
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
         response,
+        HEATING_CURVES_RESPONSE_1_1,
         # Read API after services call
         response,
+        HEATING_CURVES_RESPONSE_1_1,
     ]
     fake_api.register_requests("10.0.0.100")
 

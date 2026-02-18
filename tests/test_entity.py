@@ -16,10 +16,12 @@ from keba_keenergy_api.api import KebaKeEnergyAPI
 from keba_keenergy_api.error import APIError
 from pytest_homeassistant_custom_component.common import MockConfigEntry
 
+from tests import init_translations
 from tests import setup_integration
 from tests.api_data import ENTITY_UPDATED_DATA_RESPONSE
-from tests.api_data import MULTIPLE_POSITIONS_DATA_RESPONSE_1
+from tests.api_data import HEATING_CURVES_RESPONSE_1_1
 from tests.api_data import MULTIPLE_POSITIONS_RESPONSE
+from tests.api_data import MULTIPLE_POSITION_DATA_RESPONSE_1
 from tests.api_data import get_multiple_position_fixed_data_response
 from tests.conftest import FakeKebaKeEnergyAPI
 
@@ -32,9 +34,11 @@ async def test_entity_update(
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITIONS_DATA_RESPONSE_1,
+        MULTIPLE_POSITION_DATA_RESPONSE_1,
+        HEATING_CURVES_RESPONSE_1_1,
         # Read API after services call
         ENTITY_UPDATED_DATA_RESPONSE,
+        HEATING_CURVES_RESPONSE_1_1,
     ]
     fake_api.register_requests("10.0.0.100")
 
@@ -67,11 +71,11 @@ async def test_entity_update(
     [
         (
             APIError("mocked api error"),
-            "Failed to update: mocked api error",
+            "An error occurred while communicate with the API: mocked api error",
         ),
         (
             APIError("mocked client error"),
-            "Failed to update: mocked client error",
+            "An error occurred while communicate with the API: mocked client error",
         ),
     ],
 )
@@ -85,28 +89,34 @@ async def test_entity_update_failed(
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITIONS_DATA_RESPONSE_1,
-        # Read API after services call
-        MULTIPLE_POSITIONS_DATA_RESPONSE_1,
+        MULTIPLE_POSITION_DATA_RESPONSE_1,
+        HEATING_CURVES_RESPONSE_1_1,
     ]
     fake_api.register_requests("10.0.0.100")
 
+    hass.config.language = "de"
     await setup_integration(hass, config_entry)
+    translations: dict[str, str] = await init_translations(hass, config_entry, category="exceptions")
 
     entity_id: str = "select.keba_keenergy_12345678_buffer_tank_operating_mode_1"
     state: State | None = hass.states.get(entity_id)
     assert isinstance(state, State)
 
-    with patch.object(KebaKeEnergyAPI, "write_data", side_effect=side_effect):
-        with pytest.raises(HomeAssistantError) as error:
-            await hass.services.async_call(
-                domain=SELECT_DOMAIN,
-                service=SERVICE_SELECT_OPTION,
-                service_data={
-                    ATTR_ENTITY_ID: entity_id,
-                    ATTR_OPTION: "off",
-                },
-                blocking=True,
-            )
+    with (
+        patch.object(KebaKeEnergyAPI, "write_data", side_effect=side_effect),
+        pytest.raises(HomeAssistantError, match=expected_error),
+    ):
+        await hass.services.async_call(
+            domain=SELECT_DOMAIN,
+            service=SERVICE_SELECT_OPTION,
+            service_data={
+                ATTR_ENTITY_ID: entity_id,
+                ATTR_OPTION: "on",
+            },
+            blocking=True,
+        )
 
-        assert str(error.value) == expected_error
+    assert (
+        translations["component.keba_keenergy.exceptions.communication_error.message"]
+        == "Bei der Kommunikation mit der API ist ein Fehler aufgetreten: {error}"
+    )

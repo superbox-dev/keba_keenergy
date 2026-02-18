@@ -62,6 +62,9 @@
     },
     "entity": {
         "binary_sensor": {
+            "circulation_pump_state": {
+                "name": "Circulation pump state"
+            },
             "cool_request": {
                 "name": "Cool request"
             },
@@ -112,6 +115,12 @@
             "compressor_night_speed": {
                 "name": "Compressor speed (night)"
             },
+            "heating_curve_offset": {
+                "name": "Heating curve offset"
+            },
+            "heating_curve_slope": {
+                "name": "Heating curve slope"
+            },
             "standby_temperature": {
                 "name": "Standby temperature"
             },
@@ -135,6 +144,22 @@
             }
         },
         "select": {
+            "heating_curve": {
+                "name": "Heating curve",
+                "state": {
+                    "hc1": "1",
+                    "hc2": "2",
+                    "hc3": "3",
+                    "hc4": "4",
+                    "hc5": "5",
+                    "hc6": "6",
+                    "hc7": "7",
+                    "hc8": "8",
+                    "hc9": "9",
+                    "hc_fbh": "Underfloor heating",
+                    "hc_hk": "Radiator heating"
+                }
+            },
             "operating_mode_buffer_tank": {
                 "name": "Operating mode",
                 "state": {
@@ -199,6 +224,9 @@
             "circulation_pump": {
                 "name": "Circulation pump speed"
             },
+            "circulation_return_temperature": {
+                "name": "Circulation return temperature"
+            },
             "cpu_usage": {
                 "name": "CPU usage"
             },
@@ -230,10 +258,13 @@
                 "name": "Coefficient of performance"
             },
             "condenser_temperature": {
-                "name": "Condenser temperature"
+                "name": "Condensation temperature"
             },
             "current_bottom_temperature": {
                 "name": "Current temperature (bottom)"
+            },
+            "current_overheating": {
+                "name": "Current overheating"
             },
             "current_temperature": {
                 "name": "Current temperature{counter}"
@@ -246,6 +277,9 @@
             },
             "dew_point": {
                 "name": "Dew point"
+            },
+            "expansion_valve_position": {
+                "name": "Expansion valve position"
             },
             "free_ram": {
                 "name": "Free RAM"
@@ -269,6 +303,22 @@
                     "outdoor_off": "Off (high outside temperature)",
                     "room_off": "Off (high room temperature)",
                     "temporary_off": "Off (temporary)"
+                }
+            },
+            "heating_curve": {
+                "name": "Heating curve",
+                "state": {
+                    "hc1": "1",
+                    "hc2": "2",
+                    "hc3": "3",
+                    "hc4": "4",
+                    "hc5": "5",
+                    "hc6": "6",
+                    "hc7": "7",
+                    "hc8": "8",
+                    "hc9": "9",
+                    "hc_fbh": "Underfloor heating",
+                    "hc_hk": "Radiator heating"
                 }
             },
             "heating_energy": {
@@ -467,9 +517,12 @@
                 "name": "Position",
                 "state": {
                     "neutral": "Neutral",
-                    "open": "Open",
-                    "closed": "Closed"
+                    "open": "Position 1",
+                    "closed": "Position 2"
                 }
+            },
+            "target_overheating": {
+                "name": "Target overheating"
             },
             "target_temperature": {
                 "name": "Target temperature{counter}"
@@ -499,7 +552,7 @@
                 "name": "Total thermal energy"
             },
             "vaporizer_temperature": {
-                "name": "Vaporizer temperature"
+                "name": "Vaporization temperature"
             },
             "webserver_cpu_usage": {
                 "name": "WebServer CPU usage"
@@ -514,6 +567,9 @@
             },
             "priority_1_before_2": {
                 "name": "Priority 1 before 2"
+            },
+            "use_heating_curve": {
+                "name": "Use heating curve"
             }
         },
         "water_heater": {
@@ -534,30 +590,85 @@
             }
         }
     },
+    "exceptions": {
+        "cannot_find_heating_curve": {
+            "message": "Can not find heating curve \"{heating_curve}\"."
+        },
+        "communication_error": {
+            "message": "An error occurred while communicate with the API: {error}"
+        },
+        "duplicate_outdoor_temperature_values": {
+            "message": "Duplicate outdoor temperature values found."
+        },
+        "end_date_smaller_than_start_date": {
+            "message": "The end date must not be earlier than the start date."
+        },
+        "invalid_config_entry": {
+            "message": "Invalid integration provided. Got {config_entry_id}."
+        },
+        "unloaded_config_entry": {
+            "message": "Invalid integration provided. {config_entry_id} is not loaded."
+        }
+    },
     "issues": {
         "frequent_flash_writes": {
             "title": "Frequent write operations detected",
             "description": "More than {limit} write operations were performed on the device this week.\n\nVery frequent write operations (for example caused by automations) may reduce the lifetime of the device's flash memory."
         }
     },
+    "selector": {
+        "heating_curve":{
+            "options": {
+                "hc1": "1",
+                "hc2": "2",
+                "hc3": "3",
+                "hc4": "4",
+                "hc5": "5",
+                "hc6": "6",
+                "hc7": "7",
+                "hc8": "8",
+                "hc9": "9",
+                "hc_fbh": "Underfloor heating",
+                "hc_hk": "Radiator heating"
+            }
+        }
+    },
     "services": {
         "set_away_date_range": {
-            "description": "Set start and end dates for absence.",
+            "name": "Set away date range",
+            "description": "Sets the start and end dates for the away period.",
             "fields": {
                 "config_entry": {
-                    "description": "The configuration entry to use for this action.",
-                    "name": "Config entry"
+                    "description": "The integration to use for this action.",
+                    "name": "Integration"
                 },
                 "start_date": {
-                    "description": "Specifies the date on which the leave begins.",
+                    "description": "Date on which the away period starts.",
                     "name": "Start date"
                 },
                 "end_date": {
-                    "description": "Specifies the date on which the leave ends.",
+                    "description": "Date on which the away period ends.",
                     "name": "End date"
                 }
-            },
-            "name": "Set date range for being away"
+            }
+        },
+        "set_heating_curve_points": {
+            "name": "Set heating curve points",
+            "description": "Sets the points of a heating curve.",
+            "fields": {
+                "config_entry": {
+                    "description": "The integration to use for this action.",
+                    "name": "Integration"
+                },
+                "heating_curve": {
+                    "description": "The heating curve whose points should be updated.",
+                    "name": "Heating curve"
+                },
+                "points": {
+                    "name": "Points",
+                    "description": "List of heating curve points, each with an outdoor temperature and a corresponding flow temperature."
+                }
+            }
         }
     }
 }

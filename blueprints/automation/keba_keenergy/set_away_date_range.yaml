@@ -34,7 +34,7 @@ trigger:
 condition:
   - condition: template
     value_template: >
-      {{ (state_attr(trigger.entity_id, 'message')|default('')|lower) is search(keyword|lower) }}
+      {{ keyword|lower in state_attr(trigger.entity_id, 'message')|default('')|lower }}
 
 action:
   - service: keba_keenergy.set_away_date_range

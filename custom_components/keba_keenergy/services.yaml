@@ -6,12 +6,48 @@ set_away_date_range:
         config_entry:
           integration: keba_keenergy
     start_date:
-      required: True
       example: 2026-01-01
+      required: True
       selector:
         date:
     end_date:
-      required: True
       example: 2026-01-14
+      required: True
       selector:
         date:
+
+set_heating_curve_points:
+  fields:
+    config_entry:
+      required: True
+      selector:
+        config_entry:
+          integration: keba_keenergy
+    heating_curve:
+      example: hc1
+      required: True
+      selector:
+        select:
+          options:
+            - hc1
+            - hc2
+            - hc3
+            - hc4
+            - hc5
+            - hc6
+            - hc7
+            - hc8
+            - hc_fbh
+            - hc_hk
+          translation_key: heating_curve
+    points:
+      example:
+        - outdoor: 20
+          flow: 20
+        - outdoor: 0
+          flow: 30
+        - outdoor: -20
+          flow: 40
+      required: True
+      selector:
+        object:

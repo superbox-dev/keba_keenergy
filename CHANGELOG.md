@@ -9,19 +9,49 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!--start-->
 
+## [1.8.0] - 2025-02-17
+
+### Added
+
+- Added sensors for "Target overheating", "Current overheating", and "Expansion valve position" [(Issue #29)][issue-29]
+- Added sensor "Circulation return temperature" to the hot water tank [(Issue #24)][issue-24]
+- Added binary sensor "Circulation pump state" to the hot water tank [(Issue #24)][issue-24]
+- Added select entity "Heating curve" to the heating circuit [(Issue #24)][issue-24]
+- Added number entity "Heating curve offset" to the heating circuit [(Issue #24)][issue-24]
+- Added number entity "Heating curve slope" to the heating circuit [(Issue #24)][issue-24]
+- Added switch entity "Use heating curve" to the heating circuit [(Issue #24)][issue-24]
+- Added service "set_heating_curve_points" [(Issue #24)][issue-24]
+- Added sensor `Heating curve` with points as extra state attributes [(Issue #24)][issue-24]
+
+### Changed
+
+- The entity icons have been slightly improved
+- Update translations
+
+### Fixed
+
+- Changed wrong unit J to kWh on sensors "Solar circuit Heating energy" and "Solar circuit Daily energy" [(Issue #32)][issue-32]
+
+[issue-32]: https://github.com/superbox-dev/keba_keenergy/issues/32
+[issue-29]: https://github.com/superbox-dev/keba_keenergy/issues/29
+[issue-24]: https://github.com/superbox-dev/keba_keenergy/issues/24
+
 ## [1.7.0] - 2025-01-31
 
 ### Added
 
-- Added service to set away date range [(Issue #20)](https://github.com/superbox-dev/keba_keenergy/issues/20)
-- Added [blueprint](https://raw.githubusercontent.com/superbox-dev/keba_keenergy/refs/heads/main/blueprints/automation/keba_keenergy/set_away_date_range.yaml)
-  to set away date range from a calendar entry [(Issue #20)](https://github.com/superbox-dev/keba_keenergy/issues/20)
-- Added issue warning when more than 30 write operations are performed per week [(Issue #23)](https://github.com/superbox-dev/keba_keenergy/issues/23)
+- Added service to set away date range [(Issue #20)][issue-20]
+- Added [blueprint][blueprint] to set away date range from a calendar entry [(Issue #20)][issue-20]
+- Added issue warning when more than 30 write operations are performed per week [(Issue #23)][issue-23]
 
 ## Changed
 
 - Bump `keba_keenergy_api` to v2.8.1
 - Changed documentation link to <www.superbox.one>
+
+[blueprint]: https://superbox.one/keba-keenergy/home-assistant/wiki/examples/#set-away-date-range
+[issue-20]: https://github.com/superbox-dev/keba_keenergy/issues/20
+[issue-23]: https://github.com/superbox-dev/keba_keenergy/issues/23
 
 ## [1.6.1] - 2025-01-24
 
@@ -34,8 +64,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Fixed slow API update and refresh on entities that can changed e.g. "Operation mode" or the "Preset mode"
   in the climate entity
-- Fixed climate entity show wrong target temperature [(Issue #19)](https://github.com/superbox-dev/keba_keenergy/issues/19)
-- Fixed preset mode "away" in the climate entity [(Issue #21)](https://github.com/superbox-dev/keba_keenergy/issues/21)
+- Fixed climate entity show wrong target temperature [(Issue #19)][issue-19]
+- Fixed preset mode "away" in the climate entity [(Issue #21)][issue-21]
+
+[issue-19]: https://github.com/superbox-dev/keba_keenergy/issues/19
+[issue-21]: https://github.com/superbox-dev/keba_keenergy/issues/21
 
 ## [1.6.0] - 2025-01-18
 

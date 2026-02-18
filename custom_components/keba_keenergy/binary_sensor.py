@@ -2,7 +2,6 @@
 
 import logging
 from dataclasses import dataclass
-from typing import cast
 
 from homeassistant.components.binary_sensor import BinarySensorDeviceClass
 from homeassistant.components.binary_sensor import BinarySensorEntity
@@ -172,6 +171,14 @@ BINARY_SENSOR_TYPES: dict[str, tuple[KebaKeEnergyBinarySensorEntityDescription, 
             translation_key="hot_water_flow",
             icon="mdi:water",
         ),
+        KebaKeEnergyBinarySensorEntityDescription(
+            device_class=BinarySensorDeviceClass.RUNNING,
+            entity_registry_enabled_default=False,
+            key="circulation_pump_state",
+            key_index=None,
+            translation_key="circulation_pump_state",
+            icon="mdi:pump",
+        ),
     ),
     SectionPrefix.EXTERNAL_HEAT_SOURCE: (
         KebaKeEnergyBinarySensorEntityDescription(
@@ -187,9 +194,13 @@ BINARY_SENSOR_TYPES: dict[str, tuple[KebaKeEnergyBinarySensorEntityDescription, 
 }
 
 
-async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry, async_add_entities: AddEntitiesCallback) -> None:
+async def async_setup_entry(
+    hass: HomeAssistant,  # noqa: ARG001
+    entry: ConfigEntry,
+    async_add_entities: AddEntitiesCallback,
+) -> None:
     """Set up KEBA KeEnergy binary sensors from a config entry."""
-    coordinator: KebaKeEnergyDataUpdateCoordinator = hass.data[DOMAIN][entry.entry_id]
+    coordinator: KebaKeEnergyDataUpdateCoordinator = entry.runtime_data
     binary_sensors: list[KebaKeEnergyBinarySensorEntity] = []
 
     # Loop over all device data and add an index to the binary sensor
@@ -197,7 +208,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry, async_add_e
     # e.g. buffer tank, hot water tank, heat circuit, solar circuit or heat pump.
 
     for section_id, section_data in coordinator.data.items():
-        for description in BINARY_SENSOR_TYPES.get(section_id, {}):
+        for description in BINARY_SENSOR_TYPES.get(section_id, ()):
             for key, values in section_data.items():
                 if key == description.key:
                     device_numbers: int = len(values) if isinstance(values, list) else 1
@@ -242,4 +253,4 @@ class KebaKeEnergyBinarySensorEntity(KebaKeEnergyExtendedEntity, BinarySensorEnt
     @property
     def is_on(self) -> bool:
         """Return true if the binary sensor is on."""
-        return cast("bool", (self.get_value(self.entity_description.key) == "on"))
+        return self.get_value(self.entity_description.key, expected_type=str) == "on"

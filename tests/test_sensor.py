@@ -20,9 +20,11 @@ from homeassistant.core import HomeAssistant
 from homeassistant.core import State
 from pytest_homeassistant_custom_component.common import MockConfigEntry
 
+from tests import init_translations
 from tests import setup_integration
-from tests.api_data import MULTIPLE_POSITIONS_DATA_RESPONSE_1
+from tests.api_data import HEATING_CURVES_RESPONSE_1_1
 from tests.api_data import MULTIPLE_POSITIONS_RESPONSE
+from tests.api_data import MULTIPLE_POSITION_DATA_RESPONSE_1
 from tests.api_data import get_multiple_position_fixed_data_response
 from tests.conftest import FakeKebaKeEnergyAPI
 
@@ -36,11 +38,13 @@ async def test_system_sensors(
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITIONS_DATA_RESPONSE_1,
+        MULTIPLE_POSITION_DATA_RESPONSE_1,
+        HEATING_CURVES_RESPONSE_1_1,
     ]
     fake_api.register_requests(config_entry.data[CONF_HOST])
 
     await setup_integration(hass, config_entry)
+    translations: dict[str, str] = await init_translations(hass, config_entry, category="entity")
 
     outdoor_temperature: State | None = hass.states.get("sensor.keba_keenergy_12345678_outdoor_temperature")
     assert isinstance(outdoor_temperature, State)
@@ -55,6 +59,17 @@ async def test_system_sensors(
     assert operating_mode.state == "auto_heat"
     assert operating_mode.attributes[CONF_DEVICE_CLASS] == SensorDeviceClass.ENUM
     assert operating_mode.attributes[ATTR_OPTIONS] == ["setup", "standby", "summer", "auto_heat", "auto_cool", "auto"]
+    assert {
+        opt: translations[f"component.keba_keenergy.entity.sensor.operating_mode_system.state.{opt}"]
+        for opt in operating_mode.attributes[ATTR_OPTIONS]
+    } == {
+        "auto": "Automatic",
+        "auto_cool": "Cooling",
+        "auto_heat": "Heating",
+        "setup": "Setup",
+        "standby": "Standby",
+        "summer": "Summer mode (hot water only)",
+    }
     assert operating_mode.attributes[ATTR_FRIENDLY_NAME] == "Control unit Operating mode"
 
     cpu_usage: State | None = hass.states.get("sensor.keba_keenergy_12345678_cpu_usage")
@@ -109,12 +124,14 @@ async def test_system_sensors_translated(
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITIONS_DATA_RESPONSE_1,
+        MULTIPLE_POSITION_DATA_RESPONSE_1,
+        HEATING_CURVES_RESPONSE_1_1,
     ]
     fake_api.register_requests(config_entry.data[CONF_HOST])
 
     hass.config.language = "de"
     await setup_integration(hass, config_entry)
+    translations: dict[str, str] = await init_translations(hass, config_entry, category="entity")
 
     outdoor_temperature: State | None = hass.states.get("sensor.keba_keenergy_12345678_outdoor_temperature")
     assert isinstance(outdoor_temperature, State)
@@ -122,6 +139,17 @@ async def test_system_sensors_translated(
 
     operating_mode: State | None = hass.states.get("sensor.keba_keenergy_12345678_operating_mode")
     assert isinstance(operating_mode, State)
+    assert {
+        opt: translations[f"component.keba_keenergy.entity.sensor.operating_mode_system.state.{opt}"]
+        for opt in operating_mode.attributes[ATTR_OPTIONS]
+    } == {
+        "auto": "Automatik",
+        "auto_cool": "Kühlen",
+        "auto_heat": "Heizen",
+        "setup": "Einrichtung",
+        "standby": "Standby",
+        "summer": "Sommerbetrieb (nur Warmwasser)",
+    }
     assert operating_mode.attributes[ATTR_FRIENDLY_NAME] == "Bedieneinheit Betriebsart"
 
     cpu_usage: State | None = hass.states.get("sensor.keba_keenergy_12345678_cpu_usage")
@@ -158,11 +186,13 @@ async def test_buffer_tank_sensors(
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITIONS_DATA_RESPONSE_1,
+        MULTIPLE_POSITION_DATA_RESPONSE_1,
+        HEATING_CURVES_RESPONSE_1_1,
     ]
     fake_api.register_requests(config_entry.data[CONF_HOST])
 
     await setup_integration(hass, config_entry)
+    translations: dict[str, str] = await init_translations(hass, config_entry, category="entity")
 
     buffer_tank_current_top_temperature_1: State | None = hass.states.get(
         "sensor.keba_keenergy_12345678_buffer_tank_current_top_temperature_2",
@@ -197,6 +227,14 @@ async def test_buffer_tank_sensors(
     assert buffer_tank_operating_mode_1.state == "off"
     assert buffer_tank_operating_mode_1.attributes[CONF_DEVICE_CLASS] == SensorDeviceClass.ENUM
     assert buffer_tank_operating_mode_1.attributes[ATTR_OPTIONS] == ["off", "on", "heat_up"]
+    assert {
+        opt: translations[f"component.keba_keenergy.entity.sensor.operating_mode_buffer_tank.state.{opt}"]
+        for opt in buffer_tank_operating_mode_1.attributes[ATTR_OPTIONS]
+    } == {
+        "heat_up": "Heat up",
+        "off": "Off",
+        "on": "On",
+    }
     assert buffer_tank_operating_mode_1.attributes[ATTR_FRIENDLY_NAME] == "Buffer tank 1 Operating mode"
 
     buffer_tank_standby_temperature_1: State | None = hass.states.get(
@@ -229,12 +267,14 @@ async def test_buffer_tank_sensors_translations(
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITIONS_DATA_RESPONSE_1,
+        MULTIPLE_POSITION_DATA_RESPONSE_1,
+        HEATING_CURVES_RESPONSE_1_1,
     ]
     fake_api.register_requests(config_entry.data[CONF_HOST])
 
     hass.config.language = "de"
     await setup_integration(hass, config_entry)
+    translations: dict[str, str] = await init_translations(hass, config_entry, category="entity")
 
     buffer_tank_current_top_temperature_1: State | None = hass.states.get(
         "sensor.keba_keenergy_12345678_buffer_tank_current_top_temperature_2",
@@ -257,6 +297,14 @@ async def test_buffer_tank_sensors_translations(
         "sensor.keba_keenergy_12345678_buffer_tank_operating_mode_1",
     )
     assert isinstance(buffer_tank_operating_mode_1, State)
+    assert {
+        opt: translations[f"component.keba_keenergy.entity.sensor.operating_mode_buffer_tank.state.{opt}"]
+        for opt in buffer_tank_operating_mode_1.attributes[ATTR_OPTIONS]
+    } == {
+        "heat_up": "Aufheizen",
+        "off": "Aus",
+        "on": "Ein",
+    }
     assert buffer_tank_operating_mode_1.attributes[ATTR_FRIENDLY_NAME] == "Pufferspeicher 1 Betriebsart"
 
     buffer_tank_standby_temperature_1: State | None = hass.states.get(
@@ -281,11 +329,13 @@ async def test_hot_water_tank_sensors(
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITIONS_DATA_RESPONSE_1,
+        MULTIPLE_POSITION_DATA_RESPONSE_1,
+        HEATING_CURVES_RESPONSE_1_1,
     ]
     fake_api.register_requests(config_entry.data[CONF_HOST])
 
     await setup_integration(hass, config_entry)
+    translations: dict[str, str] = await init_translations(hass, config_entry, category="entity")
 
     hot_water_tank_current_temperature_1: State | None = hass.states.get(
         "sensor.keba_keenergy_12345678_hot_water_tank_current_temperature_1",
@@ -304,6 +354,15 @@ async def test_hot_water_tank_sensors(
     assert hot_water_tank_operating_mode_1.state == "heat_up"
     assert hot_water_tank_operating_mode_1.attributes[CONF_DEVICE_CLASS] == SensorDeviceClass.ENUM
     assert hot_water_tank_operating_mode_1.attributes[ATTR_OPTIONS] == ["off", "auto", "on", "heat_up"]
+    assert {
+        opt: translations[f"component.keba_keenergy.entity.sensor.operating_mode_hot_water_tank.state.{opt}"]
+        for opt in hot_water_tank_operating_mode_1.attributes[ATTR_OPTIONS]
+    } == {
+        "heat_up": "Heat up",
+        "auto": "Auto",
+        "off": "Off",
+        "on": "On",
+    }
     assert hot_water_tank_operating_mode_1.attributes[ATTR_FRIENDLY_NAME] == "Hot water tank 1 Operating mode"
 
     hot_water_tank_min_temperature_1: State | None = hass.states.get(
@@ -354,12 +413,14 @@ async def test_hot_water_tank_sensors_translations(
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITIONS_DATA_RESPONSE_1,
+        MULTIPLE_POSITION_DATA_RESPONSE_1,
+        HEATING_CURVES_RESPONSE_1_1,
     ]
     fake_api.register_requests(config_entry.data[CONF_HOST])
 
     hass.config.language = "de"
     await setup_integration(hass, config_entry)
+    translations: dict[str, str] = await init_translations(hass, config_entry, category="entity")
 
     hot_water_tank_current_temperature_1: State | None = hass.states.get(
         "sensor.keba_keenergy_12345678_hot_water_tank_current_temperature_1",
@@ -371,6 +432,15 @@ async def test_hot_water_tank_sensors_translations(
         "sensor.keba_keenergy_12345678_hot_water_tank_operating_mode_1",
     )
     assert isinstance(hot_water_tank_operating_mode_1, State)
+    assert {
+        opt: translations[f"component.keba_keenergy.entity.sensor.operating_mode_hot_water_tank.state.{opt}"]
+        for opt in hot_water_tank_operating_mode_1.attributes[ATTR_OPTIONS]
+    } == {
+        "auto": "Auto",
+        "heat_up": "Aufheizen",
+        "off": "Aus",
+        "on": "Ein",
+    }
     assert hot_water_tank_operating_mode_1.attributes[ATTR_FRIENDLY_NAME] == "Warmwasserspeicher 1 Betriebsart"
 
     hot_water_tank_standby_temperature_1: State | None = hass.states.get(
@@ -405,11 +475,13 @@ async def test_heat_pump_sensors(
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITIONS_DATA_RESPONSE_1,
+        MULTIPLE_POSITION_DATA_RESPONSE_1,
+        HEATING_CURVES_RESPONSE_1_1,
     ]
     fake_api.register_requests(config_entry.data[CONF_HOST])
 
     await setup_integration(hass, config_entry)
+    translations: dict[str, str] = await init_translations(hass, config_entry, category="entity")
 
     heat_pump_state: State | None = hass.states.get("sensor.keba_keenergy_12345678_heat_pump_state")
     assert isinstance(heat_pump_state, State)
@@ -426,12 +498,95 @@ async def test_heat_pump_sensors(
         "shutdown",
         "error",
     ]
+    assert {
+        opt: translations[f"component.keba_keenergy.entity.sensor.state.state.{opt}"]
+        for opt in heat_pump_state.attributes[ATTR_OPTIONS]
+    } == {
+        "auto_cool": "Cooling",
+        "auto_heat": "Heating",
+        "defrost": "Defrost",
+        "error": "Error",
+        "flow": "Flow",
+        "inflow": "Inflow",
+        "pump_down": "Pump down",
+        "shutdown": "Shutdown",
+        "standby": "Standby",
+    }
     assert heat_pump_state.attributes[ATTR_FRIENDLY_NAME] == "Heat pump State"
 
     heat_pump_substate: State | None = hass.states.get("sensor.keba_keenergy_12345678_heat_pump_substate")
     assert isinstance(heat_pump_substate, State)
     assert heat_pump_substate.state == "oil_preheating"
     assert heat_pump_substate.attributes[CONF_DEVICE_CLASS] == SensorDeviceClass.ENUM
+    assert heat_pump_substate.attributes[ATTR_OPTIONS] == [
+        "none",
+        "oil_preheating",
+        "pump_pre_run",
+        "random_delay",
+        "pressure_equalization",
+        "defrost_pre_flow",
+        "defrost_monitoring",
+        "snow_detection",
+        "flushing",
+        "defrost_initialization",
+        "preheat_flow",
+        "defrost",
+        "drip",
+        "defrost_end",
+        "open",
+        "compressor_post_run",
+        "pump_post_run",
+        "lubrication_pulse",
+        "reduced_speed",
+        "compressor_delay",
+        "defrost_venting",
+        "switch_heating_cooling",
+        "wait_for_compressor",
+        "compressor_stop",
+        "bivalent_lock",
+        "locked",
+        "return_flow_off",
+        "mixer_open",
+        "zone_valve",
+        "electric_defrost",
+        "counterflow_valve",
+    ]
+    assert {
+        opt: translations[f"component.keba_keenergy.entity.sensor.substate.state.{opt}"]
+        for opt in heat_pump_substate.attributes[ATTR_OPTIONS]
+    } == {
+        "bivalent_lock": "Bivalent lock",
+        "compressor_delay": "Compressor delay",
+        "compressor_post_run": "Compressor post-run",
+        "compressor_stop": "Compressor stop",
+        "counterflow_valve": "Counterflow valve",
+        "defrost": "Defrost",
+        "defrost_end": "Defrost end",
+        "defrost_initialization": "Defrost initialization",
+        "defrost_monitoring": "Defrost monitoring",
+        "defrost_pre_flow": "Defrost pre-flow",
+        "defrost_venting": "Defrost venting",
+        "drip": "Drip",
+        "electric_defrost": "Electric defrost",
+        "flushing": "Flushing",
+        "locked": "Locked",
+        "lubrication_pulse": "Lubrication pulse",
+        "mixer_open": "Mixer open",
+        "none": "-",
+        "oil_preheating": "Oil preheating",
+        "open": "Open",
+        "preheat_flow": "Preheat flow",
+        "pressure_equalization": "Pressure equalization",
+        "pump_post_run": "Pump post-run",
+        "pump_pre_run": "Pump pre-run",
+        "random_delay": "Random delay",
+        "reduced_speed": "Reduced speed",
+        "return_flow_off": "Return flow off",
+        "snow_detection": "Snow detection",
+        "switch_heating_cooling": "Switch heating/cooling",
+        "wait_for_compressor": "Waiting for compressor",
+        "zone_valve": "Zone valve",
+    }
     assert heat_pump_substate.attributes[ATTR_FRIENDLY_NAME] == "Heat pump Substate"
 
     heat_pump_circulation_pump: State | None = hass.states.get(
@@ -557,7 +712,7 @@ async def test_heat_pump_sensors(
     assert heat_pump_condenser_temperature.attributes[CONF_UNIT_OF_MEASUREMENT] == UnitOfTemperature.CELSIUS
     assert heat_pump_condenser_temperature.attributes[ATTR_STATE_CLASS] == SensorStateClass.MEASUREMENT
     assert heat_pump_condenser_temperature.attributes[CONF_DEVICE_CLASS] == SensorDeviceClass.TEMPERATURE
-    assert heat_pump_condenser_temperature.attributes[ATTR_FRIENDLY_NAME] == "Heat pump Condenser temperature"
+    assert heat_pump_condenser_temperature.attributes[ATTR_FRIENDLY_NAME] == "Heat pump Condensation temperature"
 
     heat_pump_heating_power: State | None = hass.states.get("sensor.keba_keenergy_12345678_heat_pump_heating_power")
     assert isinstance(heat_pump_heating_power, State)
@@ -714,7 +869,34 @@ async def test_heat_pump_sensors(
     assert heat_pump_vaporizer_temperature.attributes[CONF_UNIT_OF_MEASUREMENT] == UnitOfTemperature.CELSIUS
     assert heat_pump_vaporizer_temperature.attributes[ATTR_STATE_CLASS] == SensorStateClass.MEASUREMENT
     assert heat_pump_vaporizer_temperature.attributes[CONF_DEVICE_CLASS] == SensorDeviceClass.TEMPERATURE
-    assert heat_pump_vaporizer_temperature.attributes[ATTR_FRIENDLY_NAME] == "Heat pump Vaporizer temperature"
+    assert heat_pump_vaporizer_temperature.attributes[ATTR_FRIENDLY_NAME] == "Heat pump Vaporization temperature"
+
+    heat_pump_target_overheating: State | None = hass.states.get(
+        "sensor.keba_keenergy_12345678_heat_pump_target_overheating",
+    )
+    assert isinstance(heat_pump_target_overheating, State)
+    assert heat_pump_target_overheating.state == "5.5"
+    assert heat_pump_target_overheating.attributes[CONF_UNIT_OF_MEASUREMENT] == UnitOfTemperature.CELSIUS
+    assert heat_pump_target_overheating.attributes[ATTR_STATE_CLASS] == SensorStateClass.MEASUREMENT
+    assert heat_pump_target_overheating.attributes[CONF_DEVICE_CLASS] == SensorDeviceClass.TEMPERATURE
+    assert heat_pump_target_overheating.attributes[ATTR_FRIENDLY_NAME] == "Heat pump Target overheating"
+
+    heat_pump_current_overheating: State | None = hass.states.get(
+        "sensor.keba_keenergy_12345678_heat_pump_current_overheating",
+    )
+    assert isinstance(heat_pump_current_overheating, State)
+    assert heat_pump_current_overheating.state == "18.68"
+    assert heat_pump_current_overheating.attributes[CONF_UNIT_OF_MEASUREMENT] == UnitOfTemperature.CELSIUS
+    assert heat_pump_current_overheating.attributes[ATTR_STATE_CLASS] == SensorStateClass.MEASUREMENT
+    assert heat_pump_current_overheating.attributes[CONF_DEVICE_CLASS] == SensorDeviceClass.TEMPERATURE
+    assert heat_pump_current_overheating.attributes[ATTR_FRIENDLY_NAME] == "Heat pump Current overheating"
+
+    heat_pump_expansion_valve_position: State | None = hass.states.get(
+        "sensor.keba_keenergy_12345678_heat_pump_expansion_valve_position",
+    )
+    assert isinstance(heat_pump_expansion_valve_position, State)
+    assert heat_pump_expansion_valve_position.state == "20"
+    assert heat_pump_expansion_valve_position.attributes[ATTR_FRIENDLY_NAME] == "Heat pump Expansion valve position"
 
     heat_pump_activation_counter: State | None = hass.states.get(
         "sensor.keba_keenergy_12345678_heat_pump_activation_counter",
@@ -734,19 +916,71 @@ async def test_heat_pump_sensors_translations(
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITIONS_DATA_RESPONSE_1,
+        MULTIPLE_POSITION_DATA_RESPONSE_1,
+        HEATING_CURVES_RESPONSE_1_1,
     ]
     fake_api.register_requests(config_entry.data[CONF_HOST])
 
     hass.config.language = "de"
     await setup_integration(hass, config_entry)
+    translations: dict[str, str] = await init_translations(hass, config_entry, category="entity")
 
     heat_pump_state: State | None = hass.states.get("sensor.keba_keenergy_12345678_heat_pump_state")
     assert isinstance(heat_pump_state, State)
+    assert {
+        opt: translations[f"component.keba_keenergy.entity.sensor.state.state.{opt}"]
+        for opt in heat_pump_state.attributes[ATTR_OPTIONS]
+    } == {
+        "auto_cool": "Kühlen",
+        "auto_heat": "Heizen",
+        "defrost": "Abtauen",
+        "error": "Fehler",
+        "flow": "Vorlauf",
+        "inflow": "Nachlauf",
+        "pump_down": "Pump-Down-Vorgang",
+        "shutdown": "Herunterfahren",
+        "standby": "Standby",
+    }
     assert heat_pump_state.attributes[ATTR_FRIENDLY_NAME] == "Wärmepumpe Status"
 
     heat_pump_substate: State | None = hass.states.get("sensor.keba_keenergy_12345678_heat_pump_substate")
     assert isinstance(heat_pump_substate, State)
+    assert {
+        opt: translations[f"component.keba_keenergy.entity.sensor.substate.state.{opt}"]
+        for opt in heat_pump_substate.attributes[ATTR_OPTIONS]
+    } == {
+        "bivalent_lock": "Bivalente Sperre",
+        "compressor_delay": "Kompressorverzögerung",
+        "compressor_post_run": "Kompressornachlauf",
+        "compressor_stop": "Kompressorstopp",
+        "counterflow_valve": "Gegenstromventil",
+        "defrost": "Abtauen",
+        "defrost_end": "Abtauende",
+        "defrost_initialization": "Abtauinitialisierung",
+        "defrost_monitoring": "Abtauüberwachung",
+        "defrost_pre_flow": "Abtauvorlauf",
+        "defrost_venting": "Abtaulüften",
+        "drip": "Abtropfen",
+        "electric_defrost": "Elektrisches Abtauen",
+        "flushing": "Spülen",
+        "locked": "Gesperrt",
+        "lubrication_pulse": "Schmierimpuls",
+        "mixer_open": "Mischer offen",
+        "none": "-",
+        "oil_preheating": "Ölvorwärmung",
+        "open": "Öffnen",
+        "preheat_flow": "Heizvorlauf",
+        "pressure_equalization": "Druckausgleich",
+        "pump_post_run": "Pumpennachlauf",
+        "pump_pre_run": "Pumpenvorlauf",
+        "random_delay": "Zufallsverzögerung",
+        "reduced_speed": "Reduzierte Geschwindigkeit",
+        "return_flow_off": "Rücklauf aus",
+        "snow_detection": "Schneeerkennung",
+        "switch_heating_cooling": "Umschalten Heizen/Kühlen",
+        "wait_for_compressor": "Warten auf Kompressor",
+        "zone_valve": "Zonenventil",
+    }
     assert heat_pump_substate.attributes[ATTR_FRIENDLY_NAME] == "Wärmepumpe Unterstatus"
 
     heat_pump_circulation_pump: State | None = hass.states.get(
@@ -823,7 +1057,7 @@ async def test_heat_pump_sensors_translations(
         "sensor.keba_keenergy_12345678_heat_pump_condenser_temperature",
     )
     assert isinstance(heat_pump_condenser_temperature, State)
-    assert heat_pump_condenser_temperature.attributes[ATTR_FRIENDLY_NAME] == "Wärmepumpe Kondensatortemperatur"
+    assert heat_pump_condenser_temperature.attributes[ATTR_FRIENDLY_NAME] == "Wärmepumpe Kondensationstemperatur"
 
     heat_pump_heating_power: State | None = hass.states.get("sensor.keba_keenergy_12345678_heat_pump_heating_power")
     assert isinstance(heat_pump_heating_power, State)
@@ -918,7 +1152,25 @@ async def test_heat_pump_sensors_translations(
         "sensor.keba_keenergy_12345678_heat_pump_vaporizer_temperature",
     )
     assert isinstance(heat_pump_vaporizer_temperature, State)
-    assert heat_pump_vaporizer_temperature.attributes[ATTR_FRIENDLY_NAME] == "Wärmepumpe Verdampfertemperatur"
+    assert heat_pump_vaporizer_temperature.attributes[ATTR_FRIENDLY_NAME] == "Wärmepumpe Verdampfungstemperatur"
+
+    heat_pump_target_overheating: State | None = hass.states.get(
+        "sensor.keba_keenergy_12345678_heat_pump_target_overheating",
+    )
+    assert isinstance(heat_pump_target_overheating, State)
+    assert heat_pump_target_overheating.attributes[ATTR_FRIENDLY_NAME] == "Wärmepumpe Sollüberhitzung"
+
+    heat_pump_current_overheating: State | None = hass.states.get(
+        "sensor.keba_keenergy_12345678_heat_pump_current_overheating",
+    )
+    assert isinstance(heat_pump_current_overheating, State)
+    assert heat_pump_current_overheating.attributes[ATTR_FRIENDLY_NAME] == "Wärmepumpe Istüberhitzung"
+
+    heat_pump_expansion_valve_position: State | None = hass.states.get(
+        "sensor.keba_keenergy_12345678_heat_pump_expansion_valve_position",
+    )
+    assert isinstance(heat_pump_expansion_valve_position, State)
+    assert heat_pump_expansion_valve_position.attributes[ATTR_FRIENDLY_NAME] == "Wärmepumpe Expansionsventil"
 
     heat_pump_activation_counter: State | None = hass.states.get(
         "sensor.keba_keenergy_12345678_heat_pump_activation_counter",
@@ -936,11 +1188,48 @@ async def test_heat_circuit_sensors(
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITIONS_DATA_RESPONSE_1,
+        MULTIPLE_POSITION_DATA_RESPONSE_1,
+        HEATING_CURVES_RESPONSE_1_1,
     ]
     fake_api.register_requests(config_entry.data[CONF_HOST])
 
     await setup_integration(hass, config_entry)
+    translations: dict[str, str] = await init_translations(hass, config_entry, category="entity")
+
+    heat_circuit_heating_curve_1: State | None = hass.states.get(
+        "sensor.keba_keenergy_12345678_heat_circuit_heating_curve_1",
+    )
+    assert isinstance(heat_circuit_heating_curve_1, State)
+    assert heat_circuit_heating_curve_1.state == "hc6"
+    assert heat_circuit_heating_curve_1.attributes[ATTR_OPTIONS] == [
+        "hc1",
+        "hc2",
+        "hc3",
+        "hc4",
+        "hc5",
+        "hc6",
+        "hc7",
+        "hc8",
+        "hc_fbh",
+        "hc_hk",
+    ]
+    assert {
+        opt: translations[f"component.keba_keenergy.entity.sensor.heating_curve.state.{opt}"]
+        for opt in heat_circuit_heating_curve_1.attributes[ATTR_OPTIONS]
+    } == {
+        "hc1": "1",
+        "hc2": "2",
+        "hc3": "3",
+        "hc4": "4",
+        "hc5": "5",
+        "hc6": "6",
+        "hc7": "7",
+        "hc8": "8",
+        "hc_fbh": "Underfloor heating",
+        "hc_hk": "Radiator heating",
+    }
+    assert heat_circuit_heating_curve_1.attributes[CONF_DEVICE_CLASS] == SensorDeviceClass.ENUM
+    assert heat_circuit_heating_curve_1.attributes[ATTR_FRIENDLY_NAME] == "Heating circuit 1 Heating curve"
 
     heat_circuit_room_temperature_1: State | None = hass.states.get(
         "sensor.keba_keenergy_12345678_heat_circuit_room_temperature_1",
@@ -1123,6 +1412,19 @@ async def test_heat_circuit_sensors(
         "external",
         "room_control",
     ]
+    assert {
+        opt: translations[f"component.keba_keenergy.entity.sensor.operating_mode_heat_circuit.state.{opt}"]
+        for opt in heat_circuit_operating_mode_1.attributes[ATTR_OPTIONS]
+    } == {
+        "auto": "Auto",
+        "day": "Day",
+        "external": "External",
+        "holiday": "Away",
+        "night": "Night",
+        "off": "Off",
+        "party": "Party",
+        "room_control": "Room control",
+    }
     assert heat_circuit_operating_mode_1.attributes[ATTR_FRIENDLY_NAME] == "Heating circuit 1 Operating mode"
 
     heat_circuit_heat_request_1: State | None = hass.states.get(
@@ -1140,6 +1442,18 @@ async def test_heat_circuit_sensors(
         "outdoor_off",
         "inflow_off",
     ]
+    assert {
+        opt: translations[f"component.keba_keenergy.entity.sensor.heat_request.state.{opt}"]
+        for opt in heat_circuit_heat_request_1.attributes[ATTR_OPTIONS]
+    } == {
+        "flow_off": "Off (low flow temperature)",
+        "inflow_off": "Off (high return flow temperature)",
+        "off": "Off",
+        "on": "On",
+        "outdoor_off": "Off (high outside temperature)",
+        "room_off": "Off (high room temperature)",
+        "temporary_off": "Off (temporary)",
+    }
     assert heat_circuit_heat_request_1.attributes[ATTR_FRIENDLY_NAME] == "Heating circuit 1 Heat request"
 
 
@@ -1152,12 +1466,35 @@ async def test_heat_circuit_sensors_translations(
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITIONS_DATA_RESPONSE_1,
+        MULTIPLE_POSITION_DATA_RESPONSE_1,
+        HEATING_CURVES_RESPONSE_1_1,
     ]
     fake_api.register_requests(config_entry.data[CONF_HOST])
 
     hass.config.language = "de"
     await setup_integration(hass, config_entry)
+    translations: dict[str, str] = await init_translations(hass, config_entry, category="entity")
+
+    heat_circuit_heating_curve_1: State | None = hass.states.get(
+        "sensor.keba_keenergy_12345678_heat_circuit_heating_curve_1",
+    )
+    assert isinstance(heat_circuit_heating_curve_1, State)
+    assert {
+        opt: translations[f"component.keba_keenergy.entity.sensor.heating_curve.state.{opt}"]
+        for opt in heat_circuit_heating_curve_1.attributes[ATTR_OPTIONS]
+    } == {
+        "hc1": "1",
+        "hc2": "2",
+        "hc3": "3",
+        "hc4": "4",
+        "hc5": "5",
+        "hc6": "6",
+        "hc7": "7",
+        "hc8": "8",
+        "hc_fbh": "Fußbodenheizung",
+        "hc_hk": "Heizkörper",
+    }
+    assert heat_circuit_heating_curve_1.attributes[ATTR_FRIENDLY_NAME] == "Heizkreis 1 Heizkurve"
 
     heat_circuit_room_temperature_1: State | None = hass.states.get(
         "sensor.keba_keenergy_12345678_heat_circuit_room_temperature_1",
@@ -1263,12 +1600,37 @@ async def test_heat_circuit_sensors_translations(
         "sensor.keba_keenergy_12345678_heat_circuit_operating_mode_1",
     )
     assert isinstance(heat_circuit_operating_mode_1, State)
+    assert {
+        opt: translations[f"component.keba_keenergy.entity.sensor.operating_mode_heat_circuit.state.{opt}"]
+        for opt in heat_circuit_operating_mode_1.attributes[ATTR_OPTIONS]
+    } == {
+        "auto": "Auto",
+        "day": "Tag",
+        "external": "Extern",
+        "holiday": "Urlaub",
+        "night": "Nacht",
+        "off": "Aus",
+        "party": "Party",
+        "room_control": "Raumregelung",
+    }
     assert heat_circuit_operating_mode_1.attributes[ATTR_FRIENDLY_NAME] == "Heizkreis 1 Betriebsart"
 
     heat_circuit_heat_request_1: State | None = hass.states.get(
         "sensor.keba_keenergy_12345678_heat_circuit_heat_request_1",
     )
     assert isinstance(heat_circuit_heat_request_1, State)
+    assert {
+        opt: translations[f"component.keba_keenergy.entity.sensor.heat_request.state.{opt}"]
+        for opt in heat_circuit_heat_request_1.attributes[ATTR_OPTIONS]
+    } == {
+        "flow_off": "Aus (Niedrige Vorlauftemperatur)",
+        "inflow_off": "Aus (Hohe Rücklauftemperatur)",
+        "off": "Aus",
+        "on": "Ein",
+        "outdoor_off": "Aus (Hohe Außentemperatur)",
+        "room_off": "Aus (Hohe Raumtemperatur)",
+        "temporary_off": "Aus (Vorübergehend)",
+    }
     assert heat_circuit_heat_request_1.attributes.get(ATTR_FRIENDLY_NAME) == "Heizkreis 1 Heizanforderung"
 
 
@@ -1281,7 +1643,8 @@ async def test_solar_circuit_sensors(
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITIONS_DATA_RESPONSE_1,
+        MULTIPLE_POSITION_DATA_RESPONSE_1,
+        HEATING_CURVES_RESPONSE_1_1,
     ]
     fake_api.register_requests(config_entry.data[CONF_HOST])
 
@@ -1435,7 +1798,7 @@ async def test_solar_circuit_sensors(
         "sensor.keba_keenergy_12345678_solar_circuit_heating_energy_1",
     )
     assert isinstance(solar_circuit_heating_energy_1, State)
-    assert solar_circuit_heating_energy_1.state == "8.73"
+    assert solar_circuit_heating_energy_1.state == "305.13"
     assert solar_circuit_heating_energy_1.attributes[CONF_UNIT_OF_MEASUREMENT] == UnitOfEnergy.KILO_WATT_HOUR
     assert solar_circuit_heating_energy_1.attributes[ATTR_STATE_CLASS] == SensorStateClass.TOTAL
     assert solar_circuit_heating_energy_1.attributes[CONF_DEVICE_CLASS] == SensorDeviceClass.ENERGY
@@ -1445,7 +1808,7 @@ async def test_solar_circuit_sensors(
         "sensor.keba_keenergy_12345678_solar_circuit_heating_energy_2",
     )
     assert isinstance(solar_circuit_heating_energy_2, State)
-    assert solar_circuit_heating_energy_2.state == "4.73"
+    assert solar_circuit_heating_energy_2.state == "305.13"
     assert solar_circuit_heating_energy_2.attributes[CONF_UNIT_OF_MEASUREMENT] == UnitOfEnergy.KILO_WATT_HOUR
     assert solar_circuit_heating_energy_2.attributes[ATTR_STATE_CLASS] == SensorStateClass.TOTAL
     assert solar_circuit_heating_energy_2.attributes[CONF_DEVICE_CLASS] == SensorDeviceClass.ENERGY
@@ -1455,7 +1818,7 @@ async def test_solar_circuit_sensors(
         "sensor.keba_keenergy_12345678_solar_circuit_daily_energy_1",
     )
     assert isinstance(solar_circuit_daily_energy_1, State)
-    assert solar_circuit_daily_energy_1.state == "2.33"
+    assert solar_circuit_daily_energy_1.state == "0.08"
     assert solar_circuit_daily_energy_1.attributes[CONF_UNIT_OF_MEASUREMENT] == UnitOfEnergy.KILO_WATT_HOUR
     assert solar_circuit_daily_energy_1.attributes[ATTR_STATE_CLASS] == SensorStateClass.TOTAL
     assert solar_circuit_daily_energy_1.attributes[CONF_DEVICE_CLASS] == SensorDeviceClass.ENERGY
@@ -1465,7 +1828,7 @@ async def test_solar_circuit_sensors(
         "sensor.keba_keenergy_12345678_solar_circuit_daily_energy_2",
     )
     assert isinstance(solar_circuit_daily_energy_2, State)
-    assert solar_circuit_daily_energy_2.state == "3.33"
+    assert solar_circuit_daily_energy_2.state == "0.08"
     assert solar_circuit_daily_energy_2.attributes[CONF_UNIT_OF_MEASUREMENT] == UnitOfEnergy.KILO_WATT_HOUR
     assert solar_circuit_daily_energy_2.attributes[ATTR_STATE_CLASS] == SensorStateClass.TOTAL
     assert solar_circuit_daily_energy_2.attributes[CONF_DEVICE_CLASS] == SensorDeviceClass.ENERGY
@@ -1501,7 +1864,8 @@ async def test_solar_circuit_sensors_translations(
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITIONS_DATA_RESPONSE_1,
+        MULTIPLE_POSITION_DATA_RESPONSE_1,
+        HEATING_CURVES_RESPONSE_1_1,
     ]
     fake_api.register_requests(config_entry.data[CONF_HOST])
 
@@ -1638,11 +2002,13 @@ async def test_external_heat_source_sensors(
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITIONS_DATA_RESPONSE_1,
+        MULTIPLE_POSITION_DATA_RESPONSE_1,
+        HEATING_CURVES_RESPONSE_1_1,
     ]
     fake_api.register_requests(config_entry.data[CONF_HOST])
 
     await setup_integration(hass, config_entry)
+    translations: dict[str, str] = await init_translations(hass, config_entry, category="entity")
 
     external_heat_source_operating_mode_1: State | None = hass.states.get(
         "sensor.keba_keenergy_12345678_external_heat_source_operating_mode_1",
@@ -1654,6 +2020,13 @@ async def test_external_heat_source_sensors(
         "off",
         "on",
     ]
+    assert {
+        opt: translations[f"component.keba_keenergy.entity.sensor.operating_mode_external_heat_source.state.{opt}"]
+        for opt in external_heat_source_operating_mode_1.attributes[ATTR_OPTIONS]
+    } == {
+        "off": "Off",
+        "on": "On",
+    }
     assert (
         external_heat_source_operating_mode_1.attributes[ATTR_FRIENDLY_NAME] == "External heat source 1 Operating mode"
     )
@@ -1714,17 +2087,26 @@ async def test_external_heat_source_sensors_translated(
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITIONS_DATA_RESPONSE_1,
+        MULTIPLE_POSITION_DATA_RESPONSE_1,
+        HEATING_CURVES_RESPONSE_1_1,
     ]
     fake_api.register_requests(config_entry.data[CONF_HOST])
 
     hass.config.language = "de"
     await setup_integration(hass, config_entry)
+    translations: dict[str, str] = await init_translations(hass, config_entry, category="entity")
 
     external_heat_source_operating_mode_1: State | None = hass.states.get(
         "sensor.keba_keenergy_12345678_external_heat_source_operating_mode_1",
     )
     assert isinstance(external_heat_source_operating_mode_1, State)
+    assert {
+        opt: translations[f"component.keba_keenergy.entity.sensor.operating_mode_external_heat_source.state.{opt}"]
+        for opt in external_heat_source_operating_mode_1.attributes[ATTR_OPTIONS]
+    } == {
+        "off": "Aus",
+        "on": "Ein",
+    }
     assert external_heat_source_operating_mode_1.attributes[ATTR_FRIENDLY_NAME] == "Externe Wärmequelle 1 Betriebsart"
 
     external_heat_source_target_temperature_1: State | None = hass.states.get(
@@ -1771,11 +2153,13 @@ async def test_switch_valve_sensors(
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITIONS_DATA_RESPONSE_1,
+        MULTIPLE_POSITION_DATA_RESPONSE_1,
+        HEATING_CURVES_RESPONSE_1_1,
     ]
     fake_api.register_requests(config_entry.data[CONF_HOST])
 
     await setup_integration(hass, config_entry)
+    translations: dict[str, str] = await init_translations(hass, config_entry, category="entity")
 
     switch_valve_position_1: State | None = hass.states.get(
         "sensor.keba_keenergy_12345678_switch_valve_position_1",
@@ -1788,6 +2172,14 @@ async def test_switch_valve_sensors(
         "open",
         "closed",
     ]
+    assert {
+        opt: translations[f"component.keba_keenergy.entity.sensor.switch_valve_position.state.{opt}"]
+        for opt in switch_valve_position_1.attributes[ATTR_OPTIONS]
+    } == {
+        "closed": "Position 2",
+        "neutral": "Neutral",
+        "open": "Position 1",
+    }
     assert switch_valve_position_1.attributes[ATTR_FRIENDLY_NAME] == "Switch valve 1 Position"
 
 
@@ -1800,17 +2192,27 @@ async def test_switch_valve_sensors_translated(
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITIONS_DATA_RESPONSE_1,
+        MULTIPLE_POSITION_DATA_RESPONSE_1,
+        HEATING_CURVES_RESPONSE_1_1,
     ]
     fake_api.register_requests(config_entry.data[CONF_HOST])
 
     hass.config.language = "de"
     await setup_integration(hass, config_entry)
+    translations: dict[str, str] = await init_translations(hass, config_entry, category="entity")
 
     switch_valve_position_1: State | None = hass.states.get(
         "sensor.keba_keenergy_12345678_switch_valve_position_1",
     )
     assert isinstance(switch_valve_position_1, State)
+    assert {
+        opt: translations[f"component.keba_keenergy.entity.sensor.switch_valve_position.state.{opt}"]
+        for opt in switch_valve_position_1.attributes[ATTR_OPTIONS]
+    } == {
+        "closed": "Position 2",
+        "neutral": "Neutral",
+        "open": "Position 1",
+    }
     assert switch_valve_position_1.attributes[ATTR_FRIENDLY_NAME] == "Umschaltventil 1 Position"
 
 

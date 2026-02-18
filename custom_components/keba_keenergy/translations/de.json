@@ -62,6 +62,9 @@
     },
     "entity": {
         "binary_sensor": {
+            "circulation_pump_state": {
+                "name": "Zirkulationspumpe Status"
+            },
             "cool_request": {
                 "name": "Kühlanforderung"
             },
@@ -112,6 +115,12 @@
             "compressor_night_speed": {
                 "name": "Kompressordrehzahl (Nacht)"
             },
+            "heating_curve_offset": {
+                "name": "Heizkurven-Offset"
+            },
+            "heating_curve_slope": {
+                "name": "Heizkurven-Steigung"
+            },
             "standby_temperature": {
                 "name": "Stütztemperatur"
             },
@@ -135,19 +144,35 @@
             }
         },
         "select": {
+            "heating_curve": {
+                "name": "Heizkurve",
+                "state": {
+                    "hc1": "Kurve 1",
+                    "hc2": "Kurve 2",
+                    "hc3": "Kurve 3",
+                    "hc4": "Kurve 4",
+                    "hc5": "Kurve 5",
+                    "hc6": "Kurve 6",
+                    "hc7": "Kurve 7",
+                    "hc8": "Kurve 8",
+                    "hc9": "Kurve 9",
+                    "hc_fbh": "Fußbodenheizung",
+                    "hc_hk": "Heizkörper"
+                }
+            },
             "operating_mode_buffer_tank": {
                 "name": "Betriebsart",
                 "state": {
                     "heat_up": "Aufheizen",
                     "off": "Aus",
-                    "on": "An"
+                    "on": "Ein"
                 }
             },
             "operating_mode_external_heat_source": {
                 "name": "Betriebsart",
                 "state": {
                     "off": "Aus",
-                    "on": "An"
+                    "on": "Ein"
                 }
             },
             "operating_mode_heat_circuit": {
@@ -167,14 +192,14 @@
                     "auto": "Zeitplan",
                     "heat_up": "Aufheizen",
                     "off": "Aus",
-                    "on": "An"
+                    "on": "Ein"
                 }
             },
             "operating_mode_solar_circuit": {
                 "name": "Betriebsart",
                 "state": {
                     "off": "Aus",
-                    "on": "An"
+                    "on": "Ein"
                 }
             },
             "operating_mode_system": {
@@ -198,6 +223,9 @@
             },
             "circulation_pump": {
                 "name": "Umwälzpumpedrehzahl"
+            },
+            "circulation_return_temperature": {
+                "name": "Zirkulations-Rücklauftemperatur"
             },
             "cpu_usage": {
                 "name": "CPU-Auslastung"
@@ -230,10 +258,13 @@
                 "name": "Leistungszahl"
             },
             "condenser_temperature": {
-                "name": "Kondensatortemperatur"
+                "name": "Kondensationstemperatur"
             },
             "current_bottom_temperature": {
                 "name": "Ist-Temperatur (unten)"
+            },
+            "current_overheating": {
+                "name": "Istüberhitzung"
             },
             "current_temperature": {
                 "name": "Ist-Temperatur{counter}"
@@ -246,6 +277,9 @@
             },
             "dew_point": {
                 "name": "Taupunkt"
+            },
+            "expansion_valve_position": {
+                "name": "Expansionsventil"
             },
             "free_ram": {
                 "name": "Freier RAM"
@@ -269,6 +303,22 @@
                     "outdoor_off": "Aus (Hohe Außentemperatur)",
                     "room_off": "Aus (Hohe Raumtemperatur)",
                     "temporary_off": "Aus (Vorübergehend)"
+                }
+            },
+            "heating_curve": {
+                "name": "Heizkurve",
+                "state": {
+                    "hc1": "1",
+                    "hc2": "2",
+                    "hc3": "3",
+                    "hc4": "4",
+                    "hc5": "5",
+                    "hc6": "6",
+                    "hc7": "7",
+                    "hc8": "8",
+                    "hc9": "9",
+                    "hc_fbh": "Fußbodenheizung",
+                    "hc_hk": "Heizkörper"
                 }
             },
             "heating_energy": {
@@ -318,14 +368,14 @@
                 "state": {
                     "heat_up": "Aufheizen",
                     "off": "Aus",
-                    "on": "An"
+                    "on": "Ein"
                 }
             },
             "operating_mode_external_heat_source": {
                 "name": "Betriebsart",
                 "state": {
                     "off": "Aus",
-                    "on": "An"
+                    "on": "Ein"
                 }
             },
             "operating_mode_heat_circuit": {
@@ -347,14 +397,14 @@
                     "auto": "Auto",
                     "heat_up": "Aufheizen",
                     "off": "Aus",
-                    "on": "An"
+                    "on": "Ein"
                 }
             },
             "operating_mode_solar_circuit": {
                 "name": "Betriebsart",
                 "state": {
                     "off": "Aus",
-                    "on": "An"
+                    "on": "Ein"
                 }
             },
             "operating_mode_system": {
@@ -418,7 +468,7 @@
                 "state": {
                     "auto_cool": "Kühlen",
                     "auto_heat": "Heizen",
-                    "defrost": "Abdauen",
+                    "defrost": "Abtauen",
                     "error": "Fehler",
                     "flow": "Vorlauf",
                     "inflow": "Nachlauf",
@@ -467,9 +517,12 @@
                 "name": "Position",
                 "state": {
                     "neutral": "Neutral",
-                    "open": "Offen",
-                    "closed": "Geschlossen"
+                    "open": "Position 1",
+                    "closed": "Position 2"
                 }
+            },
+            "target_overheating": {
+                "name": "Sollüberhitzung"
             },
             "target_temperature": {
                 "name": "Soll-Temperatur{counter}"
@@ -499,7 +552,7 @@
                 "name": "Gesamtwärmemenge"
             },
             "vaporizer_temperature": {
-                "name": "Verdampfertemperatur"
+                "name": "Verdampfungstemperatur"
             },
             "webserver_cpu_usage": {
                 "name": "WebServer CPU-Auslastung"
@@ -514,6 +567,9 @@
             },
             "priority_1_before_2": {
                 "name": "Vorrang 1 vor 2"
+            },
+            "use_heating_curve": {
+                "name": "Heizkurve verwenden"
             }
         },
         "water_heater": {
@@ -534,30 +590,85 @@
             }
         }
     },
+    "exceptions": {
+        "cannot_find_heating_curve": {
+            "message": "Heizkurve \"{heating_curve}\" nicht gefunden."
+        },
+        "communication_error": {
+            "message": "Bei der Kommunikation mit der API ist ein Fehler aufgetreten: {error}"
+        },
+        "duplicate_outdoor_temperature_values": {
+            "message": "Doppelte Außentemperatur-Werte gefunden."
+        },
+        "end_date_smaller_than_start_date": {
+            "message": "Das Enddatum darf nicht vor dem Startdatum liegen."
+        },
+        "invalid_config_entry": {
+            "message": "Ungültige Integration angegeben. {config_entry_id} erhalten."
+        },
+        "unloaded_config_entry": {
+            "message": "Ungültige Integration angegeben. {config_entry_id} ist nicht geladen."
+        }
+    },
     "issues": {
         "frequent_flash_writes": {
             "title": "Viele Schreibzugriffe erkannt",
             "description": "In dieser Woche wurden mehr als {limit} Schreibzugriffe auf das Gerät durchgeführt.\n\nSehr häufige Schreibzugriffe (zum Beispiel durch Automationen) können die Lebensdauer des Flash-Speichers des Geräts reduzieren."
         }
     },
+    "selector": {
+        "heating_curve":{
+            "options": {
+                "hc1": "1",
+                "hc2": "2",
+                "hc3": "3",
+                "hc4": "4",
+                "hc5": "5",
+                "hc6": "6",
+                "hc7": "7",
+                "hc8": "8",
+                "hc9": "9",
+                "hc_fbh": "Fußbodenheizung",
+                "hc_hk": "Heizkörper"
+            }
+        }
+    },
     "services": {
         "set_away_date_range": {
+            "name": "Datumsbereich für Abwesenheit festlegen",
             "description": "Start- und Enddatum für die Abwesenheit festlegen.",
             "fields": {
                 "config_entry": {
-                    "description": "Der Konfigurationseintrag, der für diese Aktion verwendet werden soll. ",
-                    "name": "Konfigurationseintrag"
+                    "description": "Die für diese Aktion zu verwendende Integration.",
+                    "name": "Integration"
                 },
                 "start_date": {
-                    "description": "Gibt das Datum an, an dem die Abwesenheit beginnt.",
+                    "description": "Datum, an dem die Abwesenheit beginnt.",
                     "name": "Startdatum"
                 },
                 "end_date": {
-                    "description": "Gibt das Datum an, an dem die Abwesenheit endet.",
+                    "description": "Datum, an dem die Abwesenheit endet.",
                     "name": "Enddatum"
                 }
-            },
-            "name": "Datumsbereich für Abwesenheit festlegen"
+            }
+        },
+        "set_heating_curve_points": {
+            "name": "Heizkurvenpunkte setzen",
+            "description": "Setzt die Punkte einer Heizkurve.",
+            "fields": {
+                "config_entry": {
+                    "description": "Die für diese Aktion zu verwendende Integration.",
+                    "name": "Integration"
+                },
+                "heating_curve": {
+                    "description": "Die Heizkurve, deren Punkte geändert werden sollen.",
+                    "name": "Heizkurve"
+                },
+                "points": {
+                    "description": "Liste der Heizkurvenpunkte mit Außentemperatur und zugehöriger Vorlauftemperatur.",
+                    "name": "Punkte"
+                }
+            }
         }
     }
 }

@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/keba_keenergy.iml" filepath="$PROJECT_DIR$/.idea/keba_keenergy.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/KEBA-KeEnergy.iml" filepath="$PROJECT_DIR$/.idea/KEBA-KeEnergy.iml" />
     </modules>
   </component>
 </project>

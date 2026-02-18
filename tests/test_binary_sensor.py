@@ -8,8 +8,9 @@ from homeassistant.core import State
 from pytest_homeassistant_custom_component.common import MockConfigEntry
 
 from tests import setup_integration
-from tests.api_data import MULTIPLE_POSITIONS_DATA_RESPONSE_1
+from tests.api_data import HEATING_CURVES_RESPONSE_1_1
 from tests.api_data import MULTIPLE_POSITIONS_RESPONSE
+from tests.api_data import MULTIPLE_POSITION_DATA_RESPONSE_1
 from tests.api_data import get_multiple_position_fixed_data_response
 from tests.conftest import FakeKebaKeEnergyAPI
 
@@ -23,7 +24,8 @@ async def test_binary_sensors(
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITIONS_DATA_RESPONSE_1,
+        MULTIPLE_POSITION_DATA_RESPONSE_1,
+        HEATING_CURVES_RESPONSE_1_1,
     ]
     fake_api.register_requests(config_entry.data[CONF_HOST])
 
@@ -99,6 +101,26 @@ async def test_binary_sensors(
     assert hot_water_tank_hot_water_flow_2.state == STATE_ON
     assert hot_water_tank_hot_water_flow_2.attributes[ATTR_FRIENDLY_NAME] == "Hot water tank 2 Hot water flow"
 
+    hot_water_tank_circulation_pump_state_1: State | None = hass.states.get(
+        "binary_sensor.keba_keenergy_12345678_hot_water_tank_circulation_pump_state_1",
+    )
+    assert isinstance(hot_water_tank_circulation_pump_state_1, State)
+    assert hot_water_tank_circulation_pump_state_1.state == STATE_ON
+    assert (
+        hot_water_tank_circulation_pump_state_1.attributes[ATTR_FRIENDLY_NAME]
+        == "Hot water tank 1 Circulation pump state"
+    )
+
+    hot_water_tank_circulation_pump_state_2: State | None = hass.states.get(
+        "binary_sensor.keba_keenergy_12345678_hot_water_tank_circulation_pump_state_2",
+    )
+    assert isinstance(hot_water_tank_circulation_pump_state_2, State)
+    assert hot_water_tank_circulation_pump_state_2.state == STATE_OFF
+    assert (
+        hot_water_tank_circulation_pump_state_2.attributes[ATTR_FRIENDLY_NAME]
+        == "Hot water tank 2 Circulation pump state"
+    )
+
     heat_pump_heat_request: State | None = hass.states.get(
         "binary_sensor.keba_keenergy_12345678_heat_pump_heat_request",
     )
@@ -165,7 +187,8 @@ async def test_binary_sensors_translations(
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITIONS_DATA_RESPONSE_1,
+        MULTIPLE_POSITION_DATA_RESPONSE_1,
+        HEATING_CURVES_RESPONSE_1_1,
     ]
     fake_api.register_requests(config_entry.data[CONF_HOST])
 
@@ -231,6 +254,24 @@ async def test_binary_sensors_translations(
     )
     assert isinstance(hot_water_tank_hot_water_flow_2, State)
     assert hot_water_tank_hot_water_flow_2.attributes[ATTR_FRIENDLY_NAME] == "Warmwasserspeicher 2 Warmwasser läuft"
+
+    hot_water_tank_circulation_pump_state_1: State | None = hass.states.get(
+        "binary_sensor.keba_keenergy_12345678_hot_water_tank_circulation_pump_state_1",
+    )
+    assert isinstance(hot_water_tank_circulation_pump_state_1, State)
+    assert (
+        hot_water_tank_circulation_pump_state_1.attributes[ATTR_FRIENDLY_NAME]
+        == "Warmwasserspeicher 1 Zirkulationspumpe Status"
+    )
+
+    hot_water_tank_circulation_pump_state_2: State | None = hass.states.get(
+        "binary_sensor.keba_keenergy_12345678_hot_water_tank_circulation_pump_state_2",
+    )
+    assert isinstance(hot_water_tank_circulation_pump_state_2, State)
+    assert (
+        hot_water_tank_circulation_pump_state_2.attributes[ATTR_FRIENDLY_NAME]
+        == "Warmwasserspeicher 2 Zirkulationspumpe Status"
+    )
 
     heat_pump_heat_request: State | None = hass.states.get(
         "binary_sensor.keba_keenergy_12345678_heat_pump_heat_request",

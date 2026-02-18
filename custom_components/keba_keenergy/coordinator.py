@@ -2,11 +2,14 @@
 
 import logging
 from asyncio import Lock
+from collections.abc import Awaitable
+from collections.abc import Callable
 from copy import deepcopy
 from datetime import date
 from datetime import timedelta
 from functools import cached_property
 from typing import Any
+from typing import TypeGuard
 from typing import cast
 from zoneinfo import ZoneInfo
 
@@ -24,6 +27,7 @@ from keba_keenergy_api.constants import BufferTank
 from keba_keenergy_api.constants import ExternalHeatSource
 from keba_keenergy_api.constants import HeatCircuit
 from keba_keenergy_api.constants import HeatPump
+from keba_keenergy_api.constants import HeatPumpHasPassiveCooling
 from keba_keenergy_api.constants import HotWaterTank
 from keba_keenergy_api.constants import Photovoltaic
 from keba_keenergy_api.constants import Section
@@ -31,6 +35,7 @@ from keba_keenergy_api.constants import SectionPrefix
 from keba_keenergy_api.constants import SolarCircuit
 from keba_keenergy_api.constants import SwitchValve
 from keba_keenergy_api.constants import System
+from keba_keenergy_api.constants import SystemHasPhotovoltaics
 from keba_keenergy_api.endpoints import Position
 from keba_keenergy_api.endpoints import Value
 from keba_keenergy_api.endpoints import ValueResponse
@@ -42,6 +47,11 @@ from .const import REQUEST_REFRESH_COOLDOWN
 from .const import SCAN_INTERVAL
 
 _LOGGER = logging.getLogger(__name__)
+
+
+def is_int_value_list(value: object) -> TypeGuard[list[int]]:
+    """Check if the value list only contains integer values."""
+    return isinstance(value, list) and all(isinstance(v, dict) and isinstance(v.get("value"), int) for v in value)
 
 
 class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueResponse]]):
@@ -108,6 +118,10 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
             HeatCircuit.TARGET_TEMPERATURE_OFFSET,
             HeatCircuit.AWAY_START_DATE,
             HeatCircuit.AWAY_END_DATE,
+            HeatCircuit.HEATING_CURVE_OFFSET,
+            HeatCircuit.HEATING_CURVE_SLOPE,
+            HeatCircuit.USE_HEATING_CURVE,
+            HeatCircuit.HEATING_CURVE,
             SolarCircuit.OPERATING_MODE,
             SolarCircuit.SOURCE_TEMPERATURE,
             SolarCircuit.PUMP_1,
@@ -128,6 +142,9 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
             HeatPump.COMPRESSOR_USE_NIGHT_SPEED,
             HeatPump.CONDENSER_TEMPERATURE,
             HeatPump.VAPORIZER_TEMPERATURE,
+            HeatPump.TARGET_OVERHEATING,
+            HeatPump.CURRENT_OVERHEATING,
+            HeatPump.EXPANSION_VALVE_POSITION,
             HeatPump.HEAT_REQUEST,
             HeatPump.HIGH_PRESSURE,
             HeatPump.FLOW_TEMPERATURE,
@@ -177,6 +194,8 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
             HotWaterTank.STANDBY_TEMPERATURE,
             HotWaterTank.OPERATING_MODE,
             HotWaterTank.CURRENT_TEMPERATURE,
+            HotWaterTank.CIRCULATION_RETURN_TEMPERATURE,
+            HotWaterTank.CIRCULATION_PUMP_STATE,
             Photovoltaic.EXCESS_POWER,
             Photovoltaic.DAILY_ENERGY,
             Photovoltaic.TOTAL_ENERGY,
@@ -205,6 +224,32 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
             ),
         )
 
+    @staticmethod
+    async def _api_call_for_update(coro: Awaitable[Any]) -> Any:
+        try:
+            return await coro
+        except APIError as error:
+            raise UpdateFailed(
+                translation_domain=DOMAIN,
+                translation_key="communication_error",
+                translation_placeholders={
+                    "error": str(error),
+                },
+            ) from error
+
+    @staticmethod
+    async def _api_call_for_user(coro: Awaitable[Any]) -> Any:
+        try:
+            return await coro
+        except APIError as error:
+            raise HomeAssistantError(
+                translation_domain=DOMAIN,
+                translation_key="communication_error",
+                translation_placeholders={
+                    "error": str(error),
+                },
+            ) from error
+
     async def async_initialize(self) -> None:
         """Initialize values from API that never changed."""
         store_data: dict[str, Any] | None = await self._store.async_load()
@@ -216,40 +261,37 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
                 self._write_count_week = tuple(counter["week"])
                 self._weekly_write_count = counter["count"]
 
-        try:
-            self._api_device_info = await self.api.system.get_device_info()
-            self._api_system_info = await self.api.system.get_info()
-            self._api_hmi_info = await self.api.system.get_hmi_info()
-            self.position = await self.api.system.get_positions()
-            self.request_data = await self.api.filter_request(
-                request=self.request_data,
-                position=self.position,
-            )
+        await self._api_call_for_update(self._async_fixed_data())
 
-            self._fixed_data = await self.api.read_data(
-                request=[
-                    System.HAS_PHOTOVOLTAICS,
-                    HeatCircuit.HAS_ROOM_TEMPERATURE,
-                    HeatCircuit.HAS_ROOM_HUMIDITY,
-                    HeatPump.HAS_PASSIVE_COOLING,
-                ],
-                position=self.position,
-            )
+    async def _async_fixed_data(self) -> None:
+        self._api_device_info = await self.api.system.get_device_info()
+        self._api_system_info = await self.api.system.get_info()
+        self._api_hmi_info = await self.api.system.get_hmi_info()
+        self.position = await self.api.system.get_positions()
 
-        except APIError as error:
-            _LOGGER.error(error)  # noqa: TRY400
-            raise UpdateFailed(error) from error
+        self.request_data = await self.api.filter_request(
+            request=self.request_data,
+            position=self.position,
+        )
+
+        self._fixed_data = await self.api.read_data(
+            request=[
+                System.HAS_PHOTOVOLTAICS,
+                HeatCircuit.HAS_ROOM_TEMPERATURE,
+                HeatCircuit.HAS_ROOM_HUMIDITY,
+                HeatPump.HAS_PASSIVE_COOLING,
+            ],
+            position=self.position,
+        )
 
     async def _async_update_data(self) -> dict[str, ValueResponse]:
         """Read all values from API to update coordinator data."""
-        try:
-            response: dict[str, ValueResponse] = await self.api.read_data(
+        response: dict[str, ValueResponse] = await self._api_call_for_update(
+            self.api.read_data(
                 request=self.request_data,
                 position=self.position,
-            )
-        except APIError as error:
-            _LOGGER.error(error)  # noqa: TRY400
-            raise UpdateFailed(error) from error
+            ),
+        )
 
         return response
 
@@ -282,8 +324,13 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
 
         self.async_set_updated_data(data)
 
-    async def async_write_data(self, request: dict[Section, Any], *, ignore_weekly_write_count: bool = False) -> None:
-        """Write data to the NAND from the KEBA KeEnergy control unit."""
+    async def async_execute_write(
+        self,
+        *,
+        write_fn: Callable[[], Awaitable[None]],
+        ignore_weekly_write_count: bool = False,
+    ) -> None:
+        """Set the weekly counter and write to the NAND."""
         async with self._write_lock:
             await self._async_reset_weekly_counter_if_needed()
 
@@ -300,8 +347,7 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
                 )
 
             _LOGGER.debug(
-                "API write request %s (writes this week: %s)",
-                request,
+                "API write request (writes this week: %s)",
                 self._weekly_write_count,
             )
 
@@ -309,11 +355,14 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
                 self._flash_issue_active = True
                 self._create_issue()
 
-        try:
-            await self.api.write_data(request=request)
-        except APIError as error:
-            msg: str = f"Failed to update: {error}"
-            raise HomeAssistantError(msg) from error
+        await self._api_call_for_user(write_fn())
+
+    async def async_write_data(self, request: dict[Section, Any], *, ignore_weekly_write_count: bool = False) -> None:
+        """Write data to the NAND from the KEBA KeEnergy control unit."""
+        await self.async_execute_write(
+            write_fn=lambda: self.api.write_data(request=request),
+            ignore_weekly_write_count=ignore_weekly_write_count,
+        )
 
     def _create_issue(self) -> None:
         ir.async_create_issue(
@@ -354,27 +403,30 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
 
     async def get_timezone(self) -> ZoneInfo:
         """Get the timezone from the Web HMI."""
-        timezone: str = await self.api.system.get_timezone()
+        timezone: str = await self._api_call_for_user(self.api.system.get_timezone())
         return ZoneInfo(timezone)
 
     async def set_away_date_range(self, *, start_timestamp: float, end_timestamp: float) -> None:
         """Set the away date range."""
         if self.position:
-            current_away_start_date: list[int] = cast(
-                "list[int]",
-                self.data[SectionPrefix.HEAT_CIRCUIT]["away_start_date"],
-            )
-            current_away_end_date: list[int] = cast("list[int]", self.data[SectionPrefix.HEAT_CIRCUIT]["away_end_date"])
-            away_start_date: list[int] = [int(start_timestamp) for _ in range(self.position.heat_circuit)]
-            away_end_date: list[int] = [int(end_timestamp) for _ in range(self.position.heat_circuit)]
+            current_away_start_date: list[list[Value]] | list[Value] | Value = self.data[SectionPrefix.HEAT_CIRCUIT][
+                "away_start_date"
+            ]
+            current_away_end_date: list[list[Value]] | list[Value] | Value = self.data[SectionPrefix.HEAT_CIRCUIT][
+                "away_end_date"
+            ]
 
-            if current_away_start_date != away_start_date or current_away_end_date != away_end_date:
-                await self.async_write_data(
-                    request={
-                        HeatCircuit.AWAY_START_DATE: away_start_date,
-                        HeatCircuit.AWAY_END_DATE: away_end_date,
-                    },
-                )
+            if is_int_value_list(current_away_start_date) and is_int_value_list(current_away_end_date):
+                away_start_date: list[int] = [int(start_timestamp) for _ in range(self.position.heat_circuit)]
+                away_end_date: list[int] = [int(end_timestamp) for _ in range(self.position.heat_circuit)]
+
+                if current_away_start_date != away_start_date or current_away_end_date != away_end_date:
+                    await self.async_write_data(
+                        request={
+                            HeatCircuit.AWAY_START_DATE: away_start_date,
+                            HeatCircuit.AWAY_END_DATE: away_end_date,
+                        },
+                    )
 
     @cached_property
     def configuration_url(self) -> str:
@@ -437,10 +489,10 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
         return self.position.external_heat_source if self.position else 0
 
     @cached_property
-    def has_photovoltaics(self) -> str:
+    def has_photovoltaics(self) -> bool:
         """Check if photovoltaics is available."""
         data: Value = cast("Value", self._fixed_data[SectionPrefix.SYSTEM]["has_photovoltaics"])
-        return str(data["value"])
+        return bool(SystemHasPhotovoltaics.ON.name.lower() == data["value"])
 
     def has_room_temperature(self, *, index: int) -> str:
         """Check if room temperature sensor is available."""
@@ -452,7 +504,7 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
         data: list[Value] = cast("list[Value]", self._fixed_data[SectionPrefix.HEAT_CIRCUIT]["has_room_humidity"])
         return str(data[index]["value"])
 
-    def has_passive_cooling(self, *, index: int) -> str:
+    def has_passive_cooling(self, *, index: int) -> bool:
         """Check if passive cooling is available."""
         data: list[Value] = cast("list[Value]", self._fixed_data[SectionPrefix.HEAT_PUMP]["has_passive_cooling"])
-        return str(data[index]["value"])
+        return bool(HeatPumpHasPassiveCooling.ON.name.lower() == data[index]["value"])

@@ -2,7 +2,6 @@
 
 import logging
 from dataclasses import dataclass
-from datetime import datetime
 from functools import cached_property
 
 from homeassistant.components.number import DOMAIN as NUMBER_DOMAIN
@@ -12,7 +11,7 @@ from homeassistant.components.number import NumberEntityDescription
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import PERCENTAGE
 from homeassistant.const import UnitOfTemperature
-from homeassistant.core import CALLBACK_TYPE
+from homeassistant.core import HassJob
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.event import async_call_later
@@ -81,6 +80,25 @@ NUMBER_TYPES: dict[str, tuple[KebaKeEnergyNumberEntityDescription, ...]] = {
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             native_step=0.5,
             translation_key="target_room_temperature_offset",
+            scale=1,
+        ),
+        KebaKeEnergyNumberEntityDescription(
+            device_class=NumberDeviceClass.TEMPERATURE,
+            entity_registry_enabled_default=False,
+            key="heating_curve_offset",
+            key_index=None,
+            native_unit_of_measurement=UnitOfTemperature.CELSIUS,
+            native_step=0.1,
+            translation_key="heating_curve_offset",
+            scale=1,
+        ),
+        KebaKeEnergyNumberEntityDescription(
+            key="heating_curve_slope",
+            entity_registry_enabled_default=False,
+            key_index=None,
+            native_step=0.01,
+            translation_key="heating_curve_slope",
+            icon="mdi:slope-uphill",
             scale=1,
         ),
     ),
@@ -164,9 +182,13 @@ NUMBER_TYPES: dict[str, tuple[KebaKeEnergyNumberEntityDescription, ...]] = {
 }
 
 
-async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry, async_add_entities: AddEntitiesCallback) -> None:
+async def async_setup_entry(
+    hass: HomeAssistant,  # noqa: ARG001
+    entry: ConfigEntry,
+    async_add_entities: AddEntitiesCallback,
+) -> None:
     """Set up KEBA KeEnergy numbers from a config entry."""
-    coordinator: KebaKeEnergyDataUpdateCoordinator = hass.data[DOMAIN][entry.entry_id]
+    coordinator: KebaKeEnergyDataUpdateCoordinator = entry.runtime_data
     numbers: list[KebaKeEnergyNumberEntity] = []
 
     # Loop over all device data and add an index to the sensor
@@ -174,7 +196,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry, async_add_e
     # e.g. buffer tank, hot water tank, heat circuit, solar circuit or heat pump.
 
     for section_id, section_data in coordinator.data.items():
-        for description in NUMBER_TYPES.get(section_id, {}):
+        for description in NUMBER_TYPES.get(section_id, ()):
             for key, values in section_data.items():
                 if key == description.key:
                     device_numbers: int = len(values) if isinstance(values, list) else 1
@@ -216,8 +238,9 @@ class KebaKeEnergyNumberEntity(KebaKeEnergyExtendedEntity, NumberEntity):
 
         self.entity_id: str = f"{NUMBER_DOMAIN}.{DOMAIN}_{self._attr_unique_id}"
 
-        self._async_call_later: CALLBACK_TYPE | None = None
-        self._pending_value: float | None = None
+        self._pending_key = self.entity_description.key
+        self._pending_section = self.section
+        self._pending_device_numbers = self.device_numbers
 
     @cached_property
     def native_min_value(self) -> float:
@@ -234,14 +257,17 @@ class KebaKeEnergyNumberEntity(KebaKeEnergyExtendedEntity, NumberEntity):
         )
 
     @property
-    def native_value(self) -> float:
+    def native_value(self) -> float | None:
         """Return the state of the number."""
-        native_value: float
+        native_value: float | None
 
         if self._pending_value is not None and self._async_call_later:
             native_value = self._pending_value * self.entity_description.scale
         else:
-            native_value = float(self.get_value(self.entity_description.key)) * self.entity_description.scale
+            native_value = self.get_value(self.entity_description.key, expected_type=float)
+
+            if native_value:
+                native_value = native_value * self.entity_description.scale
 
         return native_value
 
@@ -253,18 +279,11 @@ class KebaKeEnergyNumberEntity(KebaKeEnergyExtendedEntity, NumberEntity):
             self._async_call_later()
             self._async_call_later = None
 
-        self._async_call_later = async_call_later(self.hass, FLASH_WRITE_DELAY, self._async_debounced_write_data)
-
-    async def _async_debounced_write_data(self, _: datetime) -> None:
-        self._async_call_later = None
-
-        current_value = float(self.get_value(self.entity_description.key))
-
-        if self._pending_value is not None and self._pending_value != current_value:
-            await self._async_write_data(
-                self._pending_value,
-                section=self.section,
-                device_numbers=self.device_numbers,
-            )
-
-        self._pending_value = None
+        self._async_call_later = async_call_later(
+            hass=self.hass,
+            delay=FLASH_WRITE_DELAY,
+            action=HassJob(
+                self._async_debounced_write_data,
+                cancel_on_shutdown=True,
+            ),
+        )

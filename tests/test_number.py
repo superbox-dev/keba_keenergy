@@ -25,9 +25,13 @@ from pytest_homeassistant_custom_component.common import MockConfigEntry
 from pytest_homeassistant_custom_component.common import async_fire_time_changed
 
 from tests import setup_integration
-from tests.api_data import MULTIPLE_POSITIONS_DATA_RESPONSE_1
+from tests.api_data import DEFAULT_POSITION_FIXED_DATA_RESPONSE
+from tests.api_data import DEFAULT_POSITION_RESPONSE
+from tests.api_data import HEATING_CURVES_RESPONSE_1_1
 from tests.api_data import MULTIPLE_POSITIONS_RESPONSE
+from tests.api_data import MULTIPLE_POSITION_DATA_RESPONSE_1
 from tests.api_data import get_multiple_position_fixed_data_response
+from tests.api_data import get_single_position_fixed_data_response
 from tests.conftest import FakeKebaKeEnergyAPI
 
 
@@ -39,9 +43,8 @@ async def test_buffer_tank_numbers(
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITIONS_DATA_RESPONSE_1,
-        # Read API after services call
-        MULTIPLE_POSITIONS_DATA_RESPONSE_1,
+        MULTIPLE_POSITION_DATA_RESPONSE_1,
+        HEATING_CURVES_RESPONSE_1_1,
     ]
     fake_api.register_requests(config_entry.data[CONF_HOST])
 
@@ -67,9 +70,11 @@ async def test_buffer_tank_numbers_translated(
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITIONS_DATA_RESPONSE_1,
+        MULTIPLE_POSITION_DATA_RESPONSE_1,
+        HEATING_CURVES_RESPONSE_1_1,
         # Read API after services call
-        MULTIPLE_POSITIONS_DATA_RESPONSE_1,
+        MULTIPLE_POSITION_DATA_RESPONSE_1,
+        HEATING_CURVES_RESPONSE_1_1,
     ]
     fake_api.register_requests(config_entry.data[CONF_HOST])
 
@@ -91,9 +96,11 @@ async def test_hot_water_tank_numbers(
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITIONS_DATA_RESPONSE_1,
+        MULTIPLE_POSITION_DATA_RESPONSE_1,
+        HEATING_CURVES_RESPONSE_1_1,
         # Read API after services call
-        MULTIPLE_POSITIONS_DATA_RESPONSE_1,
+        MULTIPLE_POSITION_DATA_RESPONSE_1,
+        HEATING_CURVES_RESPONSE_1_1,
     ]
     fake_api.register_requests(config_entry.data[CONF_HOST])
 
@@ -130,9 +137,11 @@ async def test_hot_water_tank_numbers_translated(
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITIONS_DATA_RESPONSE_1,
+        MULTIPLE_POSITION_DATA_RESPONSE_1,
+        HEATING_CURVES_RESPONSE_1_1,
         # Read API after services call
-        MULTIPLE_POSITIONS_DATA_RESPONSE_1,
+        MULTIPLE_POSITION_DATA_RESPONSE_1,
+        HEATING_CURVES_RESPONSE_1_1,
     ]
     fake_api.register_requests(config_entry.data[CONF_HOST])
 
@@ -161,9 +170,11 @@ async def test_heat_pump_numbers(
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITIONS_DATA_RESPONSE_1,
+        MULTIPLE_POSITION_DATA_RESPONSE_1,
+        HEATING_CURVES_RESPONSE_1_1,
         # Read API after services call
-        MULTIPLE_POSITIONS_DATA_RESPONSE_1,
+        MULTIPLE_POSITION_DATA_RESPONSE_1,
+        HEATING_CURVES_RESPONSE_1_1,
     ]
     fake_api.register_requests(config_entry.data[CONF_HOST])
 
@@ -190,9 +201,11 @@ async def test_heat_pump_numbers_translated(
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITIONS_DATA_RESPONSE_1,
+        MULTIPLE_POSITION_DATA_RESPONSE_1,
+        HEATING_CURVES_RESPONSE_1_1,
         # Read API after services call
-        MULTIPLE_POSITIONS_DATA_RESPONSE_1,
+        MULTIPLE_POSITION_DATA_RESPONSE_1,
+        HEATING_CURVES_RESPONSE_1_1,
     ]
     fake_api.register_requests(config_entry.data[CONF_HOST])
 
@@ -215,13 +228,37 @@ async def test_heat_circuit_numbers(
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITIONS_DATA_RESPONSE_1,
+        MULTIPLE_POSITION_DATA_RESPONSE_1,
+        HEATING_CURVES_RESPONSE_1_1,
         # Read API after services call
-        MULTIPLE_POSITIONS_DATA_RESPONSE_1,
+        MULTIPLE_POSITION_DATA_RESPONSE_1,
+        HEATING_CURVES_RESPONSE_1_1,
     ]
     fake_api.register_requests(config_entry.data[CONF_HOST])
 
     await setup_integration(hass, config_entry)
+
+    heat_circuit_heating_curve_offset_1: State | None = hass.states.get(
+        "number.keba_keenergy_12345678_heat_circuit_heating_curve_offset_1",
+    )
+    assert isinstance(heat_circuit_heating_curve_offset_1, State)
+    assert heat_circuit_heating_curve_offset_1.attributes[ATTR_MIN] == -10.0
+    assert heat_circuit_heating_curve_offset_1.attributes[ATTR_MAX] == 10.0
+    assert heat_circuit_heating_curve_offset_1.attributes[ATTR_STEP] == 0.1
+    assert heat_circuit_heating_curve_offset_1.attributes[CONF_UNIT_OF_MEASUREMENT] == UnitOfTemperature.CELSIUS
+    assert heat_circuit_heating_curve_offset_1.attributes[CONF_DEVICE_CLASS] == SensorDeviceClass.TEMPERATURE
+    assert (
+        heat_circuit_heating_curve_offset_1.attributes[ATTR_FRIENDLY_NAME] == "Heating circuit 1 Heating curve offset"
+    )
+
+    heat_circuit_heating_curve_slope_1: State | None = hass.states.get(
+        "number.keba_keenergy_12345678_heat_circuit_heating_curve_slope_1",
+    )
+    assert isinstance(heat_circuit_heating_curve_slope_1, State)
+    assert heat_circuit_heating_curve_slope_1.attributes[ATTR_MIN] == 0.0
+    assert heat_circuit_heating_curve_slope_1.attributes[ATTR_MAX] == 5.0
+    assert heat_circuit_heating_curve_slope_1.attributes[ATTR_STEP] == 0.01
+    assert heat_circuit_heating_curve_slope_1.attributes[ATTR_FRIENDLY_NAME] == "Heating circuit 1 Heating curve slope"
 
     heat_circuit_target_temperature_away_1: State | None = hass.states.get(
         "number.keba_keenergy_12345678_heat_circuit_target_temperature_away_1",
@@ -275,14 +312,28 @@ async def test_heat_circuit_numbers_translated(
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITIONS_DATA_RESPONSE_1,
+        MULTIPLE_POSITION_DATA_RESPONSE_1,
+        HEATING_CURVES_RESPONSE_1_1,
         # Read API after services call
-        MULTIPLE_POSITIONS_DATA_RESPONSE_1,
+        MULTIPLE_POSITION_DATA_RESPONSE_1,
+        HEATING_CURVES_RESPONSE_1_1,
     ]
     fake_api.register_requests(config_entry.data[CONF_HOST])
 
     hass.config.language = "de"
     await setup_integration(hass, config_entry)
+
+    heat_circuit_heating_curve_offset_1: State | None = hass.states.get(
+        "number.keba_keenergy_12345678_heat_circuit_heating_curve_offset_1",
+    )
+    assert isinstance(heat_circuit_heating_curve_offset_1, State)
+    assert heat_circuit_heating_curve_offset_1.attributes[ATTR_FRIENDLY_NAME] == "Heizkreis 1 Heizkurven-Offset"
+
+    heat_circuit_heating_curve_slope_1: State | None = hass.states.get(
+        "number.keba_keenergy_12345678_heat_circuit_heating_curve_slope_1",
+    )
+    assert isinstance(heat_circuit_heating_curve_slope_1, State)
+    assert heat_circuit_heating_curve_slope_1.attributes[ATTR_FRIENDLY_NAME] == "Heizkreis 1 Heizkurven-Steigung"
 
     heat_circuit_target_temperature_away_1: State | None = hass.states.get(
         "number.keba_keenergy_12345678_heat_circuit_target_temperature_away_1",
@@ -328,9 +379,11 @@ async def test_solar_circuit_numbers(
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITIONS_DATA_RESPONSE_1,
+        MULTIPLE_POSITION_DATA_RESPONSE_1,
+        HEATING_CURVES_RESPONSE_1_1,
         # Read API after services call
-        MULTIPLE_POSITIONS_DATA_RESPONSE_1,
+        MULTIPLE_POSITION_DATA_RESPONSE_1,
+        HEATING_CURVES_RESPONSE_1_1,
     ]
     fake_api.register_requests(config_entry.data[CONF_HOST])
 
@@ -393,9 +446,11 @@ async def test_solar_circuit_numbers_translated(
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITIONS_DATA_RESPONSE_1,
+        MULTIPLE_POSITION_DATA_RESPONSE_1,
+        HEATING_CURVES_RESPONSE_1_1,
         # Read API after services call
-        MULTIPLE_POSITIONS_DATA_RESPONSE_1,
+        MULTIPLE_POSITION_DATA_RESPONSE_1,
+        HEATING_CURVES_RESPONSE_1_1,
     ]
     fake_api.register_requests(config_entry.data[CONF_HOST])
 
@@ -475,6 +530,16 @@ async def test_solar_circuit_numbers_translated(
             0.5,
             '[{"name": "APPL.CtrlAppl.sParam.heatCircuit[0].param.offsetRoomTemp", "value": "0.5"}]',
         ),
+        (
+            "number.keba_keenergy_12345678_heat_circuit_heating_curve_offset_1",
+            5.5,
+            '[{"name": "APPL.CtrlAppl.sParam.heatCircuit[0].param.heatCurveOffset", "value": "5.5"}]',
+        ),
+        (
+            "number.keba_keenergy_12345678_heat_circuit_heating_curve_slope_1",
+            0.3,
+            '[{"name": "APPL.CtrlAppl.sParam.heatCircuit[0].param.heatCurveGradient", "value": "0.3"}]',
+        ),
     ],
 )
 @pytest.mark.usefixtures("entity_registry_enabled_by_default")
@@ -489,9 +554,11 @@ async def test_set_value(
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITIONS_DATA_RESPONSE_1,
+        MULTIPLE_POSITION_DATA_RESPONSE_1,
+        HEATING_CURVES_RESPONSE_1_1,
         # Read API after services call
-        MULTIPLE_POSITIONS_DATA_RESPONSE_1,
+        MULTIPLE_POSITION_DATA_RESPONSE_1,
+        HEATING_CURVES_RESPONSE_1_1,
     ]
     fake_api.register_requests("10.0.0.100")
 
@@ -522,20 +589,32 @@ async def test_set_value(
         (
             "number.keba_keenergy_12345678_hot_water_tank_target_temperature_1",
             100,
-            "Value 100.0 for number.keba_keenergy_12345678_hot_water_tank_target_temperature_1 "
-            "is outside valid range 0.0 - 52.0",
+            r"Value 100\.0 for number\.keba_keenergy_12345678_hot_water_tank_target_temperature_1 "
+            r"is outside valid range 0\.0 - 52\.0",
         ),
         (
             "number.keba_keenergy_12345678_heat_circuit_target_temperature_day_1",
             -10,
-            "Value -10.0 for number.keba_keenergy_12345678_heat_circuit_target_temperature_day_1 "
-            "is outside valid range 10.0 - 30.0",
+            r"Value -10\.0 for number\.keba_keenergy_12345678_heat_circuit_target_temperature_day_1 "
+            r"is outside valid range 10\.0 - 30\.0",
         ),
         (
             "number.keba_keenergy_12345678_heat_circuit_target_temperature_offset_1",
             -3,
-            "Value -3.0 for number.keba_keenergy_12345678_heat_circuit_target_temperature_offset_1 "
-            "is outside valid range -2.5 - 2.5",
+            r"Value -3\.0 for number\.keba_keenergy_12345678_heat_circuit_target_temperature_offset_1 "
+            r"is outside valid range -2\.5 - 2\.5",
+        ),
+        (
+            "number.keba_keenergy_12345678_heat_circuit_heating_curve_offset_1",
+            -11,
+            r"Value -11\.0 for number\.keba_keenergy_12345678_heat_circuit_heating_curve_offset_1 "
+            r"is outside valid range -10\.0 - 10\.0",
+        ),
+        (
+            "number.keba_keenergy_12345678_heat_circuit_heating_curve_slope_1",
+            -0.1,
+            r"Value -0\.1 for number\.keba_keenergy_12345678_heat_circuit_heating_curve_slope_1 "
+            r"is outside valid range 0\.0 - 5\.0",
         ),
     ],
 )
@@ -551,15 +630,17 @@ async def test_set_value_bad_range(
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITIONS_DATA_RESPONSE_1,
+        MULTIPLE_POSITION_DATA_RESPONSE_1,
+        HEATING_CURVES_RESPONSE_1_1,
         # Read API after services call
-        MULTIPLE_POSITIONS_DATA_RESPONSE_1,
+        MULTIPLE_POSITION_DATA_RESPONSE_1,
+        HEATING_CURVES_RESPONSE_1_1,
     ]
     fake_api.register_requests("10.0.0.100")
 
     await setup_integration(hass, config_entry)
 
-    with pytest.raises(ServiceValidationError) as error:
+    with pytest.raises(ServiceValidationError, match=expected):
         await hass.services.async_call(
             domain=NUMBER_DOMAIN,
             service=SERVICE_SET_VALUE,
@@ -570,8 +651,6 @@ async def test_set_value_bad_range(
             blocking=True,
         )
 
-    assert str(error.value) == expected
-
 
 @pytest.mark.parametrize(
     ("entity_id", "value", "expected"),
@@ -579,12 +658,12 @@ async def test_set_value_bad_range(
         (
             "number.keba_keenergy_12345678_hot_water_tank_max_temperature_1",
             None,
-            "expected float for dictionary value @ data['value']",
+            r"expected float for dictionary value @ data\['value']",
         ),
         (
             "number.keba_keenergy_12345678_heat_circuit_day_temperature_1",
             "bad",
-            "expected float for dictionary value @ data['value']",
+            r"expected float for dictionary value @ data\['value']",
         ),
     ],
 )
@@ -599,15 +678,17 @@ async def test_set_value_bad_attr(
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITIONS_DATA_RESPONSE_1,
+        MULTIPLE_POSITION_DATA_RESPONSE_1,
+        HEATING_CURVES_RESPONSE_1_1,
         # Read API after services call
-        MULTIPLE_POSITIONS_DATA_RESPONSE_1,
+        MULTIPLE_POSITION_DATA_RESPONSE_1,
+        HEATING_CURVES_RESPONSE_1_1,
     ]
     fake_api.register_requests("10.0.0.100")
 
     await setup_integration(hass, config_entry)
 
-    with pytest.raises(vol.Invalid) as error:
+    with pytest.raises(vol.Invalid, match=expected):
         await hass.services.async_call(
             domain=NUMBER_DOMAIN,
             service=SERVICE_SET_VALUE,
@@ -618,4 +699,41 @@ async def test_set_value_bad_attr(
             blocking=True,
         )
 
-    assert str(error.value) == expected
+
+async def test_number_native_value_uses_pending_value(
+    hass: HomeAssistant,
+    config_entry: MockConfigEntry,
+    fake_api: FakeKebaKeEnergyAPI,
+) -> None:
+    fake_api.responses = [
+        DEFAULT_POSITION_RESPONSE,
+        DEFAULT_POSITION_FIXED_DATA_RESPONSE,
+        get_single_position_fixed_data_response(heat_circuit_target_temperature_offset="1.5"),
+        HEATING_CURVES_RESPONSE_1_1,
+        get_single_position_fixed_data_response(heat_circuit_target_temperature_offset="1.0"),
+        HEATING_CURVES_RESPONSE_1_1,
+        get_single_position_fixed_data_response(heat_circuit_target_temperature_offset="0.5"),
+        HEATING_CURVES_RESPONSE_1_1,
+    ]
+    fake_api.register_requests(config_entry.data["host"])
+
+    await setup_integration(hass, config_entry)
+
+    entity = hass.data["number"].get_entity("number.keba_keenergy_12345678_heat_circuit_target_temperature_offset")
+    assert entity is not None
+
+    assert entity.native_value == 1.5
+
+    # First call → creates debounce handle
+    await entity.async_set_native_value(1.0)
+    first_handle = entity._async_call_later
+
+    assert first_handle is not None
+    assert entity.native_value == 1.0
+
+    # Second call BEFORE debounce fires
+    await entity.async_set_native_value(0.5)
+
+    assert entity._async_call_later is not None
+    assert entity._async_call_later is not first_handle
+    assert entity.native_value == 0.5

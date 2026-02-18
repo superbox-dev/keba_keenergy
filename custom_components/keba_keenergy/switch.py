@@ -3,7 +3,6 @@
 import logging
 from dataclasses import dataclass
 from typing import Any
-from typing import cast
 
 from homeassistant.components.switch import SwitchDeviceClass
 from homeassistant.components.switch import SwitchEntity
@@ -37,6 +36,16 @@ class KebaKeEnergySwitchEntityDescription(
 
 
 SWITCH_TYPES: dict[str, tuple[KebaKeEnergySwitchEntityDescription, ...]] = {
+    SectionPrefix.HEAT_CIRCUIT: (
+        KebaKeEnergySwitchEntityDescription(
+            device_class=SwitchDeviceClass.SWITCH,
+            entity_registry_enabled_default=False,
+            key="use_heating_curve",
+            key_index=None,
+            translation_key="use_heating_curve",
+            icon="mdi:chart-bell-curve-cumulative",
+        ),
+    ),
     SectionPrefix.SOLAR_CIRCUIT: (
         KebaKeEnergySwitchEntityDescription(
             device_class=SwitchDeviceClass.SWITCH,
@@ -48,6 +57,7 @@ SWITCH_TYPES: dict[str, tuple[KebaKeEnergySwitchEntityDescription, ...]] = {
     SectionPrefix.HEAT_PUMP: (
         KebaKeEnergySwitchEntityDescription(
             device_class=SwitchDeviceClass.SWITCH,
+            entity_registry_enabled_default=False,
             key="compressor_use_night_speed",
             key_index=None,
             translation_key="compressor_use_night_speed",
@@ -56,9 +66,13 @@ SWITCH_TYPES: dict[str, tuple[KebaKeEnergySwitchEntityDescription, ...]] = {
 }
 
 
-async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry, async_add_entities: AddEntitiesCallback) -> None:
+async def async_setup_entry(
+    hass: HomeAssistant,  # noqa: ARG001
+    entry: ConfigEntry,
+    async_add_entities: AddEntitiesCallback,
+) -> None:
     """Set up KEBA KeEnergy switches from a config entry."""
-    coordinator: KebaKeEnergyDataUpdateCoordinator = hass.data[DOMAIN][entry.entry_id]
+    coordinator: KebaKeEnergyDataUpdateCoordinator = entry.runtime_data
     numbers: list[KebaKeEnergySwitchEntity] = []
 
     # Loop over all device data and add an index to the sensor
@@ -66,7 +80,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry, async_add_e
     # e.g. buffer tank, hot water tank, heat circuit, solar circuit or heat pump.
 
     for section_id, section_data in coordinator.data.items():
-        for description in SWITCH_TYPES.get(section_id, {}):
+        for description in SWITCH_TYPES.get(section_id, ()):
             for key, values in section_data.items():
                 if key == description.key:
                     device_numbers: int = len(values) if isinstance(values, list) else 1
@@ -106,7 +120,7 @@ class KebaKeEnergySwitchEntity(KebaKeEnergyExtendedEntity, SwitchEntity):
     @property
     def is_on(self) -> bool:
         """Return true if the switch is on."""
-        return cast("bool", (self.get_value(self.entity_description.key) == "on"))
+        return self.get_value(self.entity_description.key, expected_type=str) == "on"
 
     async def async_turn_off(self, **kwargs: Any) -> None:  # noqa: ARG002
         """Turn the switch off."""

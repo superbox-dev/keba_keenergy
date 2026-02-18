@@ -42,11 +42,10 @@ classifiers = [
 ]
 requires-python = ">= 3.13.2"
 dependencies = [
-    "keba_keenergy_api==2.8.1",
-    "homeassistant>=2025.8.2",
-    "requests>=2.32.5"
+    "keba_keenergy_api==2.9.0",
+    "homeassistant>=2025.8.2"
 ]
-version = "1.7.0"
+version = "1.8.0"
 
 [project.urls]
 "Repository" = "https://github.com/superbox-dev/keba_keenergy"
@@ -108,6 +107,7 @@ ignore = [
     "ERA001",
     "I001",    # unsorted-imports
     "PLR0913", # too-many-arguments
+    "S101",    # assert
     "TRY003",  # raise-vanilla-args
 ]
 
@@ -117,7 +117,7 @@ ignore = [
     "PLR0913", # too-many-arguments
     "PLR0915", # too-many-statements
     "PLR2004", # magic-value-comparison
-    "S101",    # assert
+    "SLF001",  # private-member-access
 ]
 
 [tool.rumdl]
@@ -141,6 +141,9 @@ log_cli_format = "%(levelname)-8s | %(asctime)s | [%(name)s] %(message)s"
 addopts = "--cov=custom_components --cov-report=term-missing --cov-report=xml:reports/coverage.xml --color=yes --exitfirst --failed-first --strict-config --strict-markers --junitxml=reports/pytest.xml"
 asyncio_mode = "auto"
 asyncio_default_fixture_loop_scope = "function"
+markers = [
+  "no_fail_on_keba_errors: Disable the fail_on_keba_errors autouse fixture",
+]
 
 [tool.coverage.run] # https://coverage.readthedocs.io/en/latest/config.html#run
 branch = false

@@ -1,4 +1,6 @@
 import json
+import logging
+from collections.abc import AsyncGenerator
 from collections.abc import Generator
 from typing import Any
 from unittest.mock import patch
@@ -7,6 +9,7 @@ import pytest
 from _pytest.fixtures import SubRequest
 from homeassistant.const import CONF_HOST
 from homeassistant.const import CONF_SSL
+from homeassistant.core import HomeAssistant
 from pytest_homeassistant_custom_component.common import MockConfigEntry
 from pytest_homeassistant_custom_component.syrupy import HomeAssistantSnapshotExtension
 from pytest_homeassistant_custom_component.test_util.aiohttp import AiohttpClientMockResponse
@@ -31,6 +34,34 @@ def snapshot(snapshot: SnapshotAssertion) -> SnapshotAssertion:
 @pytest.fixture(autouse=True)
 def auto_enable_custom_integrations(enable_custom_integrations: None) -> None:  # noqa: ARG001
     return
+
+
+@pytest.fixture(autouse=True)
+async def fail_on_log_errors(hass: HomeAssistant, request: pytest.FixtureRequest) -> AsyncGenerator[None]:
+    """Get all Home Assistant errors."""
+    if request.node.get_closest_marker("no_fail_on_keba_errors"):
+        yield
+        return
+
+    records: list[logging.LogRecord] = []
+
+    class Handler(logging.Handler):
+        def emit(self, record: logging.LogRecord) -> None:
+            if record.levelno >= logging.ERROR:
+                records.append(record)
+
+    logger: logging.Logger = logging.getLogger("custom_components.keba_keenergy")
+    handler: Handler = Handler()
+    logger.addHandler(handler)
+
+    yield
+
+    await hass.async_block_till_done()
+    logger.removeHandler(handler)
+
+    if records:
+        msgs: str = "\n".join(r.getMessage() for r in records)
+        pytest.fail(f"Keba integration logged errors:\n{msgs}")
 
 
 class FakeKebaKeEnergyAPI:

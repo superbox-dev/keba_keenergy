@@ -2,12 +2,16 @@
 
 import logging
 from collections.abc import Mapping
+from datetime import datetime
 from functools import cached_property
 from typing import Any
 from typing import TYPE_CHECKING
+from typing import TypeVar
+from typing import overload
 
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.helpers.device_registry import DeviceInfo
+from homeassistant.helpers.typing import StateType
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 from keba_keenergy_api.constants import BufferTank
 from keba_keenergy_api.constants import ExternalHeatSource
@@ -18,6 +22,7 @@ from keba_keenergy_api.constants import Section
 from keba_keenergy_api.constants import SectionPrefix
 from keba_keenergy_api.constants import SolarCircuit
 from keba_keenergy_api.constants import System
+from keba_keenergy_api.endpoints import Value
 
 from .const import DOMAIN
 from .const import MANUFACTURER
@@ -26,8 +31,11 @@ from .const import MANUFACTURER_MTEC
 from .coordinator import KebaKeEnergyDataUpdateCoordinator
 
 if TYPE_CHECKING:
-    from keba_keenergy_api.endpoints import Value
+    from homeassistant.core import CALLBACK_TYPE
+
 _LOGGER = logging.getLogger(__name__)
+
+T = TypeVar("T", str, int, float)
 
 
 class KebaKeEnergyEntity(
@@ -60,6 +68,12 @@ class KebaKeEnergyEntity(
         if self.position is not None:
             self._attr_unique_id = f"{self._attr_unique_id}_{self.position}"
 
+        self._async_call_later: CALLBACK_TYPE | None = None
+        self._pending_value: float | None = None
+        self._pending_key: str = ""
+        self._pending_section: Section | None = None
+        self._pending_device_numbers: int | None = None
+
     @property
     def position(self) -> int | None:
         """Return device position number."""
@@ -69,7 +83,7 @@ class KebaKeEnergyEntity(
     @property
     def is_system_device(self) -> bool:
         """Return True if the entity is part of a KEBA KeEnergy control device else False."""
-        return self.section_id in [SectionPrefix.SYSTEM]
+        return self.section_id == SectionPrefix.SYSTEM
 
     @property
     def is_heat_circuit(self) -> bool:
@@ -111,11 +125,6 @@ class KebaKeEnergyEntity(
     #     """Return True if the entity is part of a photovoltaic else False."""
     #     return self.section_id == SectionPrefix.PHOTOVOLTAIC
 
-    @property
-    def device_name(self) -> str | None:
-        """Return the device name and number."""
-        return None
-
     @cached_property
     def device_identifier(self) -> str:
         """Return the device identifier."""
@@ -139,7 +148,7 @@ class KebaKeEnergyEntity(
         elif self.is_heat_pump:
             if self.coordinator.device_name.endswith("MTec"):
                 _manufacturer = MANUFACTURER_MTEC
-            elif self.coordinator.device_name.startswith("Bartl"):
+            elif self.coordinator.device_name.startswith("Bartl"):  # pragma: no cover
                 _manufacturer = MANUFACTURER_INO
 
         return _manufacturer
@@ -195,7 +204,6 @@ class KebaKeEnergyEntity(
     def device_info(self) -> DeviceInfo:
         """Return updated device specific attributes."""
         data: dict[str, Any] = {
-            "name": self.device_name,
             "manufacturer": self.device_manufacturer,
             "model": self.device_model,
             "sw_version": (self.coordinator.device_hmi_sw_version if self.is_system_device else None),
@@ -208,7 +216,6 @@ class KebaKeEnergyEntity(
         _device_info: DeviceInfo = DeviceInfo(
             configuration_url=self.coordinator.configuration_url,
             identifiers={(DOMAIN, self.device_identifier)},
-            name=data["name"],
             model=data["model"],
             manufacturer=data["manufacturer"],
             sw_version=data["sw_version"],
@@ -258,35 +265,58 @@ class KebaKeEnergyEntity(
 
             await self.coordinator.async_request_refresh()
 
+    async def _async_debounced_write_data(self, _: datetime) -> None:
+        """Write data (debounced) to the KEBA KeEnergy API."""
+        self._async_call_later = None
+
+        current_value = self.get_value(self._pending_key, expected_type=float)
+
+        if self._pending_value is not None and self._pending_value != current_value:
+            await self._async_write_data(
+                self._pending_value,
+                section=self._pending_section,
+                device_numbers=self._pending_device_numbers,
+            )
+
+    def get_entity_data(self, key: str, /) -> Value | None:
+        """Get the real entity data from the coordinator data."""
+        entity_data: list[list[Value]] | list[Value] | Value | None = self.coordinator.data[self.section_id].get(key)
+
+        if isinstance(entity_data, list):
+            entity_data = entity_data[self.index or 0]
+
+        if isinstance(entity_data, list) and self.key_index is not None:
+            entity_data = entity_data[self.key_index]
+
+        assert not isinstance(entity_data, list)
+        return entity_data
+
     def get_attribute(self, key: str, /, *, attr: str) -> str:
         """Get extra attribute from the API by key."""
-        data: list[list[Value]] | list[Value] | Value | None = self.coordinator.data[self.section_id].get(key, None)
+        entity_data: Value | None = self.get_entity_data(key)
         attributes: dict[str, Any] = {}
 
-        if isinstance(data, list):
-            data = data[self.index or 0]
-
-        if isinstance(data, list) and self.key_index is not None:
-            data = data[self.key_index]
-
-        if isinstance(data, dict):
-            attributes = data["attributes"]
+        if isinstance(entity_data, dict):
+            attributes = entity_data["attributes"]
 
         return str(attributes.get(attr, ""))
 
-    def get_value(self, key: str, /) -> Any:
+    @overload
+    def get_value(self, key: str, /, *, expected_type: type[T]) -> T | None: ...
+
+    @overload
+    def get_value(self, key: str, /) -> StateType: ...
+
+    def get_value(self, key: str, /, *, expected_type: type[T] | None = None) -> StateType:
         """Get value from the API by key."""
-        data: list[list[Value]] | list[Value] | Value | None = self.coordinator.data[self.section_id].get(key, None)
-        value: Value | None = None
+        entity_data: Value | None = self.get_entity_data(key)
+        value: StateType = None
 
-        if isinstance(data, list):
-            data = data[self.index or 0]
+        if isinstance(entity_data, dict):
+            value = entity_data["value"]
 
-        if isinstance(data, list) and self.key_index is not None:
-            data = data[self.key_index]
-
-        if isinstance(data, dict):
-            value = data["value"]
+        if expected_type and value is not None:
+            return expected_type(value)
 
         return value
 

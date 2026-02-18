@@ -42,11 +42,12 @@ from tests import setup_integration
 from tests.api_data import DEFAULT_POSITION_DATA_RESPONSE
 from tests.api_data import DEFAULT_POSITION_FIXED_DATA_RESPONSE
 from tests.api_data import DEFAULT_POSITION_RESPONSE
-from tests.api_data import HEAT_CIRCUIT_OPERATION_MODE_DATA_RESPONSE
-from tests.api_data import MULTIPLE_POSITIONS_DATA_RESPONSE_1
-from tests.api_data import MULTIPLE_POSITIONS_DATA_RESPONSE_2
+from tests.api_data import HEATING_CURVES_RESPONSE_1_1
 from tests.api_data import MULTIPLE_POSITIONS_RESPONSE
+from tests.api_data import MULTIPLE_POSITION_DATA_RESPONSE_1
+from tests.api_data import MULTIPLE_POSITION_DATA_RESPONSE_2
 from tests.api_data import get_multiple_position_fixed_data_response
+from tests.api_data import get_single_position_fixed_data_response
 from tests.conftest import FakeKebaKeEnergyAPI
 
 ENTITY_ID: str = "climate.keba_keenergy_12345678"
@@ -62,6 +63,7 @@ ENTITY_ID_2: str = "climate.keba_keenergy_12345678_2"
                 DEFAULT_POSITION_RESPONSE,
                 DEFAULT_POSITION_FIXED_DATA_RESPONSE,
                 DEFAULT_POSITION_DATA_RESPONSE,
+                HEATING_CURVES_RESPONSE_1_1,
             ],
             [ENTITY_ID],
         ),
@@ -69,7 +71,8 @@ ENTITY_ID_2: str = "climate.keba_keenergy_12345678_2"
             [
                 MULTIPLE_POSITIONS_RESPONSE,
                 get_multiple_position_fixed_data_response(),
-                MULTIPLE_POSITIONS_DATA_RESPONSE_1,
+                MULTIPLE_POSITION_DATA_RESPONSE_1,
+                HEATING_CURVES_RESPONSE_1_1,
             ],
             [ENTITY_ID_1, ENTITY_ID_2],
         ),
@@ -99,7 +102,8 @@ async def test_climate(
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITIONS_DATA_RESPONSE_1,
+        MULTIPLE_POSITION_DATA_RESPONSE_1,
+        HEATING_CURVES_RESPONSE_1_1,
     ]
     fake_api.register_requests("10.0.0.100")
 
@@ -135,7 +139,8 @@ async def test_climate_translations(
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITIONS_DATA_RESPONSE_1,
+        MULTIPLE_POSITION_DATA_RESPONSE_1,
+        HEATING_CURVES_RESPONSE_1_1,
     ]
     fake_api.register_requests("10.0.0.100")
 
@@ -154,7 +159,10 @@ async def test_climate_translations(
 @pytest.mark.parametrize(
     ("responses", "expected_target_temperature"),
     [
-        (HEAT_CIRCUIT_OPERATION_MODE_DATA_RESPONSE, 21.5),  # Selected target temperature 20.0 + Offset 1.5
+        (
+            get_single_position_fixed_data_response(heat_circuit_target_temperature_offset="1.5"),
+            21.5,
+        ),  # Selected target temperature 20.0 + Offset 1.5
     ],
 )
 async def test_target_temperature(
@@ -168,6 +176,7 @@ async def test_target_temperature(
         DEFAULT_POSITION_RESPONSE,
         DEFAULT_POSITION_FIXED_DATA_RESPONSE,
         responses,
+        HEATING_CURVES_RESPONSE_1_1,
     ]
     fake_api.register_requests("10.0.0.100")
 
@@ -179,6 +188,42 @@ async def test_target_temperature(
     assert state.attributes[ATTR_TEMPERATURE] == expected_target_temperature
 
 
+async def test_target_temperature_uses_pending_value(
+    hass: HomeAssistant,
+    config_entry: MockConfigEntry,
+    fake_api: FakeKebaKeEnergyAPI,
+) -> None:
+    fake_api.responses = [
+        DEFAULT_POSITION_RESPONSE,
+        DEFAULT_POSITION_FIXED_DATA_RESPONSE,
+        get_single_position_fixed_data_response(heat_circuit_target_temperature_offset="1.5"),
+        HEATING_CURVES_RESPONSE_1_1,
+    ]
+    fake_api.register_requests("10.0.0.100")
+
+    await setup_integration(hass, config_entry)
+
+    entity = hass.data["climate"].get_entity(ENTITY_ID)
+    assert entity is not None
+
+    assert entity.target_temperature == 21.5
+
+    # First call → creates _async_call_later
+    await entity.async_set_temperature(**{ATTR_TEMPERATURE: 21.0})
+    first_handle = entity._async_call_later
+
+    assert first_handle is not None
+    assert entity._pending_value == 1.0
+    assert entity._async_call_later is not None
+
+    # Second call BEFORE debounce fires
+    await entity.async_set_temperature(**{ATTR_TEMPERATURE: 20.5})
+
+    assert entity._async_call_later is not None
+    assert entity._async_call_later is not first_handle
+    assert entity.target_temperature == 20.5
+
+
 async def test_turn_off(
     hass: HomeAssistant,
     config_entry: MockConfigEntry,
@@ -187,9 +232,11 @@ async def test_turn_off(
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITIONS_DATA_RESPONSE_1,
+        MULTIPLE_POSITION_DATA_RESPONSE_1,
+        HEATING_CURVES_RESPONSE_1_1,
         # Read API after services call
-        MULTIPLE_POSITIONS_DATA_RESPONSE_1,
+        MULTIPLE_POSITION_DATA_RESPONSE_1,
+        HEATING_CURVES_RESPONSE_1_1,
     ]
     fake_api.register_requests("10.0.0.100")
 
@@ -219,7 +266,11 @@ async def test_turn_on(
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITIONS_DATA_RESPONSE_1,
+        MULTIPLE_POSITION_DATA_RESPONSE_1,
+        HEATING_CURVES_RESPONSE_1_1,
+        # Read API after services call
+        MULTIPLE_POSITION_DATA_RESPONSE_1,
+        HEATING_CURVES_RESPONSE_1_1,
     ]
     fake_api.register_requests("10.0.0.100")
 
@@ -259,9 +310,11 @@ async def test_set_hvac_mode(
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITIONS_DATA_RESPONSE_1,
+        MULTIPLE_POSITION_DATA_RESPONSE_1,
+        HEATING_CURVES_RESPONSE_1_1,
         # Read API after services call
-        MULTIPLE_POSITIONS_DATA_RESPONSE_1,
+        MULTIPLE_POSITION_DATA_RESPONSE_1,
+        HEATING_CURVES_RESPONSE_1_1,
     ]
     fake_api.register_requests("10.0.0.100")
 
@@ -285,10 +338,10 @@ async def test_set_hvac_mode(
 @pytest.mark.parametrize(
     ("preset_mode", "response", "expected_preset_mode"),
     [
-        (PRESET_HOME, MULTIPLE_POSITIONS_DATA_RESPONSE_1, HeatCircuitOperatingMode.AUTO.value),
-        (PRESET_COMFORT, MULTIPLE_POSITIONS_DATA_RESPONSE_2, HeatCircuitOperatingMode.DAY.value),
-        (PRESET_SLEEP, MULTIPLE_POSITIONS_DATA_RESPONSE_1, HeatCircuitOperatingMode.NIGHT.value),
-        (PRESET_BOOST, MULTIPLE_POSITIONS_DATA_RESPONSE_1, HeatCircuitOperatingMode.PARTY.value),
+        (PRESET_HOME, MULTIPLE_POSITION_DATA_RESPONSE_1, HeatCircuitOperatingMode.AUTO.value),
+        (PRESET_COMFORT, MULTIPLE_POSITION_DATA_RESPONSE_2, HeatCircuitOperatingMode.DAY.value),
+        (PRESET_SLEEP, MULTIPLE_POSITION_DATA_RESPONSE_1, HeatCircuitOperatingMode.NIGHT.value),
+        (PRESET_BOOST, MULTIPLE_POSITION_DATA_RESPONSE_1, HeatCircuitOperatingMode.PARTY.value),
     ],
 )
 async def test_set_preset_mode(
@@ -303,8 +356,10 @@ async def test_set_preset_mode(
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
         response,
+        HEATING_CURVES_RESPONSE_1_1,
         # Read API after services call
         response,
+        HEATING_CURVES_RESPONSE_1_1,
     ]
     fake_api.register_requests("10.0.0.100")
 
@@ -333,9 +388,8 @@ async def test_set_preset_mode_away(
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITIONS_DATA_RESPONSE_1,
-        # Read API after services call
-        MULTIPLE_POSITIONS_DATA_RESPONSE_1,
+        MULTIPLE_POSITION_DATA_RESPONSE_1,
+        HEATING_CURVES_RESPONSE_1_1,
     ]
     fake_api.register_requests("10.0.0.100")
 
@@ -368,9 +422,11 @@ async def test_unset_preset_mode_away(
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITIONS_DATA_RESPONSE_2,
+        MULTIPLE_POSITION_DATA_RESPONSE_2,
+        HEATING_CURVES_RESPONSE_1_1,
         # Read API after services call
-        MULTIPLE_POSITIONS_DATA_RESPONSE_1,
+        MULTIPLE_POSITION_DATA_RESPONSE_1,
+        HEATING_CURVES_RESPONSE_1_1,
     ]
     fake_api.register_requests("10.0.0.100")
 
@@ -407,9 +463,11 @@ async def test_set_temperature(
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITIONS_DATA_RESPONSE_1,
+        MULTIPLE_POSITION_DATA_RESPONSE_1,
+        HEATING_CURVES_RESPONSE_1_1,
         # Read API after services call
-        MULTIPLE_POSITIONS_DATA_RESPONSE_1,
+        MULTIPLE_POSITION_DATA_RESPONSE_1,
+        HEATING_CURVES_RESPONSE_1_1,
     ]
     fake_api.register_requests("10.0.0.100")
 

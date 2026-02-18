@@ -6,8 +6,9 @@ from homeassistant.core import HomeAssistant
 from pytest_homeassistant_custom_component.common import MockConfigEntry
 
 from tests import setup_integration
-from tests.api_data import MULTIPLE_POSITIONS_DATA_RESPONSE_1
+from tests.api_data import HEATING_CURVES_RESPONSE_1_1
 from tests.api_data import MULTIPLE_POSITIONS_RESPONSE
+from tests.api_data import MULTIPLE_POSITION_DATA_RESPONSE_1
 from tests.api_data import get_multiple_position_fixed_data_response
 from tests.conftest import FakeKebaKeEnergyAPI
 
@@ -21,14 +22,15 @@ async def test_load_entry(
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITIONS_DATA_RESPONSE_1,
+        MULTIPLE_POSITION_DATA_RESPONSE_1,
+        HEATING_CURVES_RESPONSE_1_1,
     ]
     fake_api.register_requests(config_entry.data[CONF_HOST])
 
     await setup_integration(hass, config_entry)
 
     assert config_entry.state is ConfigEntryState.LOADED
-    assert hass.states.async_entity_ids_count() == 186
+    assert hass.states.async_entity_ids_count() == 203
 
     assert set(hass.states.async_entity_ids()) == {
         "binary_sensor.keba_keenergy_12345678_buffer_tank_cool_request_1",
@@ -44,6 +46,8 @@ async def test_load_entry(
         "binary_sensor.keba_keenergy_12345678_heat_pump_has_source_pressure_failure",
         "binary_sensor.keba_keenergy_12345678_heat_pump_has_vfd_failure",
         "binary_sensor.keba_keenergy_12345678_heat_pump_heat_request",
+        "binary_sensor.keba_keenergy_12345678_hot_water_tank_circulation_pump_state_1",
+        "binary_sensor.keba_keenergy_12345678_hot_water_tank_circulation_pump_state_2",
         "binary_sensor.keba_keenergy_12345678_hot_water_tank_heat_request_1",
         "binary_sensor.keba_keenergy_12345678_hot_water_tank_heat_request_2",
         "binary_sensor.keba_keenergy_12345678_hot_water_tank_hot_water_flow_1",
@@ -59,6 +63,8 @@ async def test_load_entry(
         "select.keba_keenergy_12345678_external_heat_source_operating_mode_1",
         "select.keba_keenergy_12345678_external_heat_source_operating_mode_2",
         "select.keba_keenergy_12345678_operating_mode",
+        "select.keba_keenergy_12345678_heat_circuit_heating_curve_1",
+        "select.keba_keenergy_12345678_heat_circuit_heating_curve_2",
         "select.keba_keenergy_12345678_heat_circuit_operating_mode_1",
         "select.keba_keenergy_12345678_heat_circuit_operating_mode_2",
         "select.keba_keenergy_12345678_hot_water_tank_operating_mode_1",
@@ -67,6 +73,10 @@ async def test_load_entry(
         "select.keba_keenergy_12345678_solar_circuit_operating_mode_2",
         "number.keba_keenergy_12345678_buffer_tank_standby_temperature_1",
         "number.keba_keenergy_12345678_buffer_tank_standby_temperature_2",
+        "number.keba_keenergy_12345678_heat_circuit_heating_curve_offset_1",
+        "number.keba_keenergy_12345678_heat_circuit_heating_curve_offset_2",
+        "number.keba_keenergy_12345678_heat_circuit_heating_curve_slope_1",
+        "number.keba_keenergy_12345678_heat_circuit_heating_curve_slope_2",
         "number.keba_keenergy_12345678_heat_circuit_target_temperature_away_1",
         "number.keba_keenergy_12345678_heat_circuit_target_temperature_away_2",
         "number.keba_keenergy_12345678_heat_circuit_target_temperature_day_1",
@@ -113,6 +123,8 @@ async def test_load_entry(
         "sensor.keba_keenergy_12345678_heat_circuit_flow_temperature_2",
         "sensor.keba_keenergy_12345678_heat_circuit_flow_temperature_setpoint_1",
         "sensor.keba_keenergy_12345678_heat_circuit_flow_temperature_setpoint_2",
+        "sensor.keba_keenergy_12345678_heat_circuit_heating_curve_1",
+        "sensor.keba_keenergy_12345678_heat_circuit_heating_curve_2",
         "sensor.keba_keenergy_12345678_heat_circuit_heat_request_1",
         "sensor.keba_keenergy_12345678_heat_circuit_heat_request_2",
         "sensor.keba_keenergy_12345678_heat_circuit_heating_limit_day_1",
@@ -150,6 +162,8 @@ async def test_load_entry(
         "sensor.keba_keenergy_12345678_heat_pump_cooling_energy_consumption",
         "sensor.keba_keenergy_12345678_heat_pump_cooling_spf",
         "sensor.keba_keenergy_12345678_heat_pump_cop",
+        "sensor.keba_keenergy_12345678_heat_pump_current_overheating",
+        "sensor.keba_keenergy_12345678_heat_pump_expansion_valve_position",
         "sensor.keba_keenergy_12345678_heat_pump_flow_temperature",
         "sensor.keba_keenergy_12345678_heat_pump_heating_energy",
         "sensor.keba_keenergy_12345678_heat_pump_heating_energy_consumption",
@@ -162,6 +176,7 @@ async def test_load_entry(
         "sensor.keba_keenergy_12345678_heat_pump_hot_water_spf",
         "sensor.keba_keenergy_12345678_heat_pump_low_pressure",
         "sensor.keba_keenergy_12345678_heat_pump_return_flow_temperature",
+        "sensor.keba_keenergy_12345678_heat_pump_target_overheating",
         "sensor.keba_keenergy_12345678_heat_pump_source_input_temperature",
         "sensor.keba_keenergy_12345678_heat_pump_source_output_temperature",
         "sensor.keba_keenergy_12345678_heat_pump_source_pump_speed",
@@ -173,6 +188,8 @@ async def test_load_entry(
         "sensor.keba_keenergy_12345678_heat_pump_operating_time",
         "sensor.keba_keenergy_12345678_heat_pump_max_runtime",
         "sensor.keba_keenergy_12345678_heat_pump_vaporizer_temperature",
+        "sensor.keba_keenergy_12345678_hot_water_tank_circulation_return_temperature_1",
+        "sensor.keba_keenergy_12345678_hot_water_tank_circulation_return_temperature_2",
         "sensor.keba_keenergy_12345678_hot_water_tank_current_temperature_1",
         "sensor.keba_keenergy_12345678_hot_water_tank_current_temperature_2",
         "sensor.keba_keenergy_12345678_hot_water_tank_operating_mode_1",
@@ -213,6 +230,8 @@ async def test_load_entry(
         "sensor.keba_keenergy_12345678_switch_valve_position_2",
         "sensor.keba_keenergy_12345678_webserver_cpu_usage",
         "sensor.keba_keenergy_12345678_webview_cpu_usage",
+        "switch.keba_keenergy_12345678_heat_circuit_use_heating_curve_1",
+        "switch.keba_keenergy_12345678_heat_circuit_use_heating_curve_2",
         "switch.keba_keenergy_12345678_heat_pump_compressor_use_night_speed",
         "switch.keba_keenergy_12345678_solar_circuit_priority_1_before_2_1",
         "switch.keba_keenergy_12345678_solar_circuit_priority_1_before_2_2",
@@ -247,7 +266,8 @@ async def test_unload_entry(
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITIONS_DATA_RESPONSE_1,
+        MULTIPLE_POSITION_DATA_RESPONSE_1,
+        HEATING_CURVES_RESPONSE_1_1,
     ]
     fake_api.register_requests(config_entry.data[CONF_HOST])
 
