@@ -47,12 +47,12 @@ BUFFER_TANK_STATE_TO_HA: Final[dict[int, str]] = {
 
 
 async def async_setup_entry(
-    hass: HomeAssistant,
+    hass: HomeAssistant,  # noqa: ARG001
     entry: ConfigEntry,
     async_add_entities: AddEntitiesCallback,
 ) -> None:
     """Set up KEBA KeEnergy water heaters from a config entry."""
-    coordinator: KebaKeEnergyDataUpdateCoordinator = hass.data[DOMAIN][entry.entry_id]
+    coordinator: KebaKeEnergyDataUpdateCoordinator = entry.runtime_data
     water_heaters: list[KebaKeEnergyWaterHeaterTankEntity] = []
 
     water_heaters += [
