@@ -16,6 +16,10 @@
                     "password": "Password",
                     "username": "Username"
                 },
+                "data_description": {
+                    "password": "The password to log in to your {name} device.",
+                    "username": "The username to log in to your {name} device."
+                },
                 "description": "Please enter the username and password."
             },
             "discovery_confirm": {
@@ -27,7 +31,10 @@
                     "host": "Host",
                     "ssl": "Uses an SSL certificate"
                 },
-                "description": "Configure the IP address or hostname of your {name} device."
+                "data_description": {
+                  "host": "The hostname or IP address of your {name} device."
+                },
+                "description": "Configure your {name} device."
             }
         }
     },

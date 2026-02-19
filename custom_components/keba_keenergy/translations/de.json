@@ -16,6 +16,10 @@
                     "password": "Passwort",
                     "username": "Benutzername"
                 },
+                "data_description": {
+                    "password": "Das Passwort zur Anmeldung bei deinem {name}-Gerät.",
+                    "username": "Der Benutzername zur Anmeldung bei deinem {name}-Gerät."
+                },
                 "description": "Bitte gib den Benutzernamen und das Passwort ein."
             },
             "discovery_confirm": {
@@ -27,7 +31,10 @@
                     "host": "Host",
                     "ssl": "SSL-Zertifikat verwenden"
                 },
-                "description": "Konfiguriere die IP-Adresse oder den Hostnamen deines {name}-Geräts."
+                "data_description": {
+                  "host": "The hostname or IP address of your {name} device."
+                },
+                "description": "Konfiguriere dein {name}-Gerät."
             }
         }
     },
