@@ -22,6 +22,7 @@ from tests import setup_integration
 from tests.api_data import HEATING_CURVES_RESPONSE_1_1
 from tests.api_data import HEATING_CURVES_RESPONSE_1_2
 from tests.api_data import HEATING_CURVES_RESPONSE_2
+from tests.api_data import HEATING_CURVE_NAMES_RESPONSE
 from tests.api_data import MULTIPLE_POSITIONS_RESPONSE
 from tests.api_data import MULTIPLE_POSITION_DATA_RESPONSE_1
 from tests.api_data import get_multiple_position_fixed_data_response
@@ -35,12 +36,13 @@ async def test_set_away_range(
 ) -> None:
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
+        HEATING_CURVE_NAMES_RESPONSE,
         get_multiple_position_fixed_data_response(),
         MULTIPLE_POSITION_DATA_RESPONSE_1,
-        HEATING_CURVES_RESPONSE_1_1,
+        *HEATING_CURVES_RESPONSE_1_1,
         # Read API after services call
         MULTIPLE_POSITION_DATA_RESPONSE_1,
-        HEATING_CURVES_RESPONSE_1_1,
+        *HEATING_CURVES_RESPONSE_1_1,
     ]
     fake_api.register_requests(config_entry.data[CONF_HOST])
 
@@ -72,12 +74,13 @@ async def test_set_away_range_with_invalid_start_and_end_date(
 ) -> None:
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
+        HEATING_CURVE_NAMES_RESPONSE,
         get_multiple_position_fixed_data_response(),
         MULTIPLE_POSITION_DATA_RESPONSE_1,
-        HEATING_CURVES_RESPONSE_1_1,
+        *HEATING_CURVES_RESPONSE_1_1,
         # Read API after services call
         MULTIPLE_POSITION_DATA_RESPONSE_1,
-        HEATING_CURVES_RESPONSE_1_1,
+        *HEATING_CURVES_RESPONSE_1_1,
     ]
     fake_api.register_requests(config_entry.data[CONF_HOST])
 
@@ -122,12 +125,13 @@ async def test_set_away_range_with_invalid_config_entry(
 ) -> None:
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
+        HEATING_CURVE_NAMES_RESPONSE,
         get_multiple_position_fixed_data_response(),
         MULTIPLE_POSITION_DATA_RESPONSE_1,
-        HEATING_CURVES_RESPONSE_1_1,
+        *HEATING_CURVES_RESPONSE_1_1,
         # Read API after services call
         MULTIPLE_POSITION_DATA_RESPONSE_1,
-        HEATING_CURVES_RESPONSE_1_1,
+        *HEATING_CURVES_RESPONSE_1_1,
     ]
     fake_api.register_requests(config_entry.data[CONF_HOST])
 
@@ -166,12 +170,13 @@ async def test_set_away_range_with_unloaded_config_entry(
 ) -> None:
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
+        HEATING_CURVE_NAMES_RESPONSE,
         get_multiple_position_fixed_data_response(),
         MULTIPLE_POSITION_DATA_RESPONSE_1,
-        HEATING_CURVES_RESPONSE_1_1,
+        *HEATING_CURVES_RESPONSE_1_1,
         # Read API after services call
         MULTIPLE_POSITION_DATA_RESPONSE_1,
-        HEATING_CURVES_RESPONSE_1_1,
+        *HEATING_CURVES_RESPONSE_1_1,
     ]
     fake_api.register_requests(config_entry.data[CONF_HOST])
 
@@ -205,12 +210,13 @@ async def test_set_heating_curve_points(
 ) -> None:
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
+        HEATING_CURVE_NAMES_RESPONSE,
         get_multiple_position_fixed_data_response(),
         MULTIPLE_POSITION_DATA_RESPONSE_1,
-        HEATING_CURVES_RESPONSE_1_1,
+        *HEATING_CURVES_RESPONSE_1_1,
         # Read API after services call
-        HEATING_CURVES_RESPONSE_1_1,
-        HEATING_CURVES_RESPONSE_2,
+        *HEATING_CURVES_RESPONSE_1_1,
+        *HEATING_CURVES_RESPONSE_2,
     ]
     fake_api.register_requests(config_entry.data[CONF_HOST])
 
@@ -221,7 +227,7 @@ async def test_set_heating_curve_points(
         service=SERVICE_SET_HEATING_CURVE_POINTS,
         service_data={
             ATTR_CONFIG_ENTRY: config_entry.entry_id,
-            ATTR_HEATING_CURVE: "hc1",
+            ATTR_HEATING_CURVE: "HC1",
             ATTR_POINTS: [
                 {"outdoor": -20, "flow": 35.30},
                 {"outdoor": 20, "flow": 23.9},
@@ -291,12 +297,13 @@ async def test_set_heating_curve_points_with_invalid_heating_curve(
 ) -> None:
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
+        HEATING_CURVE_NAMES_RESPONSE,
         get_multiple_position_fixed_data_response(),
         MULTIPLE_POSITION_DATA_RESPONSE_1,
-        HEATING_CURVES_RESPONSE_1_1,
+        *HEATING_CURVES_RESPONSE_1_1,
         # Read API after services call
-        HEATING_CURVES_RESPONSE_1_2,
-        HEATING_CURVES_RESPONSE_2,
+        *HEATING_CURVES_RESPONSE_1_2,
+        *HEATING_CURVES_RESPONSE_2,
     ]
     fake_api.register_requests(config_entry.data[CONF_HOST])
 
@@ -313,7 +320,7 @@ async def test_set_heating_curve_points_with_invalid_heating_curve(
             service=SERVICE_SET_HEATING_CURVE_POINTS,
             service_data={
                 ATTR_CONFIG_ENTRY: config_entry.entry_id,
-                ATTR_HEATING_CURVE: "hc1",
+                ATTR_HEATING_CURVE: "HC1",
                 ATTR_POINTS: [
                     {"outdoor": -20, "flow": 35.30},
                     {"outdoor": 20, "flow": 23.9},
@@ -348,12 +355,13 @@ async def test_set_heating_curve_points_with_duplicate_outdoor_temperatures(
 ) -> None:
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
+        HEATING_CURVE_NAMES_RESPONSE,
         get_multiple_position_fixed_data_response(),
         MULTIPLE_POSITION_DATA_RESPONSE_1,
-        HEATING_CURVES_RESPONSE_1_1,
+        *HEATING_CURVES_RESPONSE_1_1,
         # Read API after services call
-        HEATING_CURVES_RESPONSE_1_1,
-        HEATING_CURVES_RESPONSE_2,
+        *HEATING_CURVES_RESPONSE_1_1,
+        *HEATING_CURVES_RESPONSE_2,
     ]
     fake_api.register_requests(config_entry.data[CONF_HOST])
 
@@ -370,7 +378,7 @@ async def test_set_heating_curve_points_with_duplicate_outdoor_temperatures(
             service=SERVICE_SET_HEATING_CURVE_POINTS,
             service_data={
                 ATTR_CONFIG_ENTRY: config_entry.entry_id,
-                ATTR_HEATING_CURVE: "hc1",
+                ATTR_HEATING_CURVE: "HC1",
                 ATTR_POINTS: [
                     {"outdoor": 20, "flow": 35.30},
                     {"outdoor": 20, "flow": 23.9},
@@ -412,7 +420,7 @@ def test_away_date_range_schema_missing_start() -> None:
 def test_heating_curve_points_schema_valid() -> None:
     data: dict[str, Any] = {
         ATTR_CONFIG_ENTRY: "1234",
-        ATTR_HEATING_CURVE: "hc1",
+        ATTR_HEATING_CURVE: "HC1",
         ATTR_POINTS: [
             {"outdoor": -20, "flow": 35.3},
             {"outdoor": 0, "flow": 29.5},

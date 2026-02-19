@@ -16,7 +16,6 @@ from homeassistant.core import ServiceCall
 from homeassistant.exceptions import ServiceValidationError
 from homeassistant.helpers import config_validation as cv
 from homeassistant.helpers import selector
-from keba_keenergy_api.constants import HeatCircuitHeatingCurve
 from keba_keenergy_api.constants import MAX_HEATING_CURVE_POINTS
 from keba_keenergy_api.endpoints import HeatingCurvePoint
 from keba_keenergy_api.endpoints import HeatingCurvePoints
@@ -73,7 +72,11 @@ HEATING_CURVE_POINTS_SCHEMA: vol.Schema = vol.Schema(
                 "integration": DOMAIN,
             },
         ),
-        vol.Required(ATTR_HEATING_CURVE): vol.In([_.name.lower() for _ in HeatCircuitHeatingCurve]),
+        vol.Required(ATTR_HEATING_CURVE): vol.All(
+            str,
+            vol.Length(min=2),
+            vol.Match(r"^HC"),
+        ),
         vol.Required(ATTR_POINTS): vol.All(
             cv.ensure_list,
             vol.Length(max=MAX_HEATING_CURVE_POINTS),
@@ -144,12 +147,12 @@ async def _async_set_heating_curve_points(call: ServiceCall) -> None:
     heating_curve: str = call.data[ATTR_HEATING_CURVE]
     heating_curves: HeatingCurves = await coordinator.api.heat_circuit.get_heating_curve_points()
 
-    if not heating_curves.get(heating_curve):
+    if heating_curve not in heating_curves:
         raise ServiceValidationError(
             translation_domain=DOMAIN,
             translation_key="cannot_find_heating_curve",
             translation_placeholders={
-                "heating_curve": heating_curve.upper(),
+                "heating_curve": heating_curve,
             },
         )
 
@@ -170,7 +173,7 @@ async def _async_set_heating_curve_points(call: ServiceCall) -> None:
 
     await coordinator.async_execute_write(
         write_fn=lambda: coordinator.api.heat_circuit.set_heating_curve_points(
-            heating_curve=HeatCircuitHeatingCurve[heating_curve.upper()].value,
+            heating_curve=heating_curve,
             points=points,
         ),
     )

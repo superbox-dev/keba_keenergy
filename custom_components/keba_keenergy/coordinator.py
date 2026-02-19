@@ -210,6 +210,7 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
             System.FREE_RAM,
         ]
         self.position: Position | None = None
+        self.available_heating_curves: tuple[tuple[int, str], ...] = ()
 
         super().__init__(
             hass,
@@ -268,6 +269,7 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
         self._api_system_info = await self.api.system.get_info()
         self._api_hmi_info = await self.api.system.get_hmi_info()
         self.position = await self.api.system.get_positions()
+        self.available_heating_curves = await self.api.heat_circuit.get_available_heating_curves()
 
         self.request_data = await self.api.filter_request(
             request=self.request_data,

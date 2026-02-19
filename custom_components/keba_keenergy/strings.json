@@ -145,20 +145,7 @@
         },
         "select": {
             "heating_curve": {
-                "name": "Heating curve",
-                "state": {
-                    "hc1": "1",
-                    "hc2": "2",
-                    "hc3": "3",
-                    "hc4": "4",
-                    "hc5": "5",
-                    "hc6": "6",
-                    "hc7": "7",
-                    "hc8": "8",
-                    "hc9": "9",
-                    "hc_fbh": "Underfloor heating",
-                    "hc_hk": "Radiator heating"
-                }
+                "name": "Heating curve"
             },
             "operating_mode_buffer_tank": {
                 "name": "Operating mode",
@@ -306,20 +293,7 @@
                 }
             },
             "heating_curve": {
-                "name": "Heating curve",
-                "state": {
-                    "hc1": "1",
-                    "hc2": "2",
-                    "hc3": "3",
-                    "hc4": "4",
-                    "hc5": "5",
-                    "hc6": "6",
-                    "hc7": "7",
-                    "hc8": "8",
-                    "hc9": "9",
-                    "hc_fbh": "Underfloor heating",
-                    "hc_hk": "Radiator heating"
-                }
+                "name": "Heating curve"
             },
             "heating_energy": {
                 "name": "Heating energy"
@@ -616,23 +590,6 @@
             "description": "More than {limit} write operations were performed on the device this week.\n\nVery frequent write operations (for example caused by automations) may reduce the lifetime of the device's flash memory."
         }
     },
-    "selector": {
-        "heating_curve":{
-            "options": {
-                "hc1": "1",
-                "hc2": "2",
-                "hc3": "3",
-                "hc4": "4",
-                "hc5": "5",
-                "hc6": "6",
-                "hc7": "7",
-                "hc8": "8",
-                "hc9": "9",
-                "hc_fbh": "Underfloor heating",
-                "hc_hk": "Radiator heating"
-            }
-        }
-    },
     "services": {
         "set_away_date_range": {
             "name": "Set away date range",
@@ -661,7 +618,7 @@
                     "name": "Integration"
                 },
                 "heating_curve": {
-                    "description": "The heating curve whose points should be updated.",
+                    "description": "e.g. HC 1, HC 2, HC FBH, HC HK",
                     "name": "Heating curve"
                 },
                 "points": {

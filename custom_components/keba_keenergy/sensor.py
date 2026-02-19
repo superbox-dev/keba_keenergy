@@ -27,7 +27,6 @@ from homeassistant.helpers.typing import StateType
 from keba_keenergy_api.constants import BufferTankOperatingMode
 from keba_keenergy_api.constants import ExternalHeatSourceOperatingMode
 from keba_keenergy_api.constants import HeatCircuitHeatRequest
-from keba_keenergy_api.constants import HeatCircuitHeatingCurve
 from keba_keenergy_api.constants import HeatCircuitOperatingMode
 from keba_keenergy_api.constants import HeatPumpState
 from keba_keenergy_api.constants import HeatPumpSubState
@@ -303,10 +302,8 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
             value=lambda data: data,
         ),
         KebaKeEnergySensorEntityDescription[str](
-            device_class=SensorDeviceClass.ENUM,
             key="heating_curve",
             key_index=None,
-            options=[_.name.lower() for _ in HeatCircuitHeatingCurve],
             translation_key="heating_curve",
             icon="mdi:chart-bell-curve-cumulative",
             value=lambda data: data,

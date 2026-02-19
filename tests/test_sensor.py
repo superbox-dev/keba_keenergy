@@ -23,6 +23,7 @@ from pytest_homeassistant_custom_component.common import MockConfigEntry
 from tests import init_translations
 from tests import setup_integration
 from tests.api_data import HEATING_CURVES_RESPONSE_1_1
+from tests.api_data import HEATING_CURVE_NAMES_RESPONSE
 from tests.api_data import MULTIPLE_POSITIONS_RESPONSE
 from tests.api_data import MULTIPLE_POSITION_DATA_RESPONSE_1
 from tests.api_data import get_multiple_position_fixed_data_response
@@ -37,9 +38,10 @@ async def test_system_sensors(
 ) -> None:
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
+        HEATING_CURVE_NAMES_RESPONSE,
         get_multiple_position_fixed_data_response(),
         MULTIPLE_POSITION_DATA_RESPONSE_1,
-        HEATING_CURVES_RESPONSE_1_1,
+        *HEATING_CURVES_RESPONSE_1_1,
     ]
     fake_api.register_requests(config_entry.data[CONF_HOST])
 
@@ -123,9 +125,10 @@ async def test_system_sensors_translated(
 ) -> None:
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
+        HEATING_CURVE_NAMES_RESPONSE,
         get_multiple_position_fixed_data_response(),
         MULTIPLE_POSITION_DATA_RESPONSE_1,
-        HEATING_CURVES_RESPONSE_1_1,
+        *HEATING_CURVES_RESPONSE_1_1,
     ]
     fake_api.register_requests(config_entry.data[CONF_HOST])
 
@@ -185,9 +188,10 @@ async def test_buffer_tank_sensors(
 ) -> None:
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
+        HEATING_CURVE_NAMES_RESPONSE,
         get_multiple_position_fixed_data_response(),
         MULTIPLE_POSITION_DATA_RESPONSE_1,
-        HEATING_CURVES_RESPONSE_1_1,
+        *HEATING_CURVES_RESPONSE_1_1,
     ]
     fake_api.register_requests(config_entry.data[CONF_HOST])
 
@@ -266,9 +270,10 @@ async def test_buffer_tank_sensors_translations(
 ) -> None:
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
+        HEATING_CURVE_NAMES_RESPONSE,
         get_multiple_position_fixed_data_response(),
         MULTIPLE_POSITION_DATA_RESPONSE_1,
-        HEATING_CURVES_RESPONSE_1_1,
+        *HEATING_CURVES_RESPONSE_1_1,
     ]
     fake_api.register_requests(config_entry.data[CONF_HOST])
 
@@ -328,9 +333,10 @@ async def test_hot_water_tank_sensors(
 ) -> None:
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
+        HEATING_CURVE_NAMES_RESPONSE,
         get_multiple_position_fixed_data_response(),
         MULTIPLE_POSITION_DATA_RESPONSE_1,
-        HEATING_CURVES_RESPONSE_1_1,
+        *HEATING_CURVES_RESPONSE_1_1,
     ]
     fake_api.register_requests(config_entry.data[CONF_HOST])
 
@@ -412,9 +418,10 @@ async def test_hot_water_tank_sensors_translations(
 ) -> None:
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
+        HEATING_CURVE_NAMES_RESPONSE,
         get_multiple_position_fixed_data_response(),
         MULTIPLE_POSITION_DATA_RESPONSE_1,
-        HEATING_CURVES_RESPONSE_1_1,
+        *HEATING_CURVES_RESPONSE_1_1,
     ]
     fake_api.register_requests(config_entry.data[CONF_HOST])
 
@@ -474,9 +481,10 @@ async def test_heat_pump_sensors(
 ) -> None:
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
+        HEATING_CURVE_NAMES_RESPONSE,
         get_multiple_position_fixed_data_response(),
         MULTIPLE_POSITION_DATA_RESPONSE_1,
-        HEATING_CURVES_RESPONSE_1_1,
+        *HEATING_CURVES_RESPONSE_1_1,
     ]
     fake_api.register_requests(config_entry.data[CONF_HOST])
 
@@ -915,9 +923,10 @@ async def test_heat_pump_sensors_translations(
 ) -> None:
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
+        HEATING_CURVE_NAMES_RESPONSE,
         get_multiple_position_fixed_data_response(),
         MULTIPLE_POSITION_DATA_RESPONSE_1,
-        HEATING_CURVES_RESPONSE_1_1,
+        *HEATING_CURVES_RESPONSE_1_1,
     ]
     fake_api.register_requests(config_entry.data[CONF_HOST])
 
@@ -1187,9 +1196,10 @@ async def test_heat_circuit_sensors(
 ) -> None:
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
+        HEATING_CURVE_NAMES_RESPONSE,
         get_multiple_position_fixed_data_response(),
         MULTIPLE_POSITION_DATA_RESPONSE_1,
-        HEATING_CURVES_RESPONSE_1_1,
+        *HEATING_CURVES_RESPONSE_1_1,
     ]
     fake_api.register_requests(config_entry.data[CONF_HOST])
 
@@ -1200,35 +1210,7 @@ async def test_heat_circuit_sensors(
         "sensor.keba_keenergy_12345678_heat_circuit_heating_curve_1",
     )
     assert isinstance(heat_circuit_heating_curve_1, State)
-    assert heat_circuit_heating_curve_1.state == "hc6"
-    assert heat_circuit_heating_curve_1.attributes[ATTR_OPTIONS] == [
-        "hc1",
-        "hc2",
-        "hc3",
-        "hc4",
-        "hc5",
-        "hc6",
-        "hc7",
-        "hc8",
-        "hc_fbh",
-        "hc_hk",
-    ]
-    assert {
-        opt: translations[f"component.keba_keenergy.entity.sensor.heating_curve.state.{opt}"]
-        for opt in heat_circuit_heating_curve_1.attributes[ATTR_OPTIONS]
-    } == {
-        "hc1": "1",
-        "hc2": "2",
-        "hc3": "3",
-        "hc4": "4",
-        "hc5": "5",
-        "hc6": "6",
-        "hc7": "7",
-        "hc8": "8",
-        "hc_fbh": "Underfloor heating",
-        "hc_hk": "Radiator heating",
-    }
-    assert heat_circuit_heating_curve_1.attributes[CONF_DEVICE_CLASS] == SensorDeviceClass.ENUM
+    assert heat_circuit_heating_curve_1.state == "HC6"
     assert heat_circuit_heating_curve_1.attributes[ATTR_FRIENDLY_NAME] == "Heating circuit 1 Heating curve"
 
     heat_circuit_room_temperature_1: State | None = hass.states.get(
@@ -1465,9 +1447,10 @@ async def test_heat_circuit_sensors_translations(
 ) -> None:
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
+        HEATING_CURVE_NAMES_RESPONSE,
         get_multiple_position_fixed_data_response(),
         MULTIPLE_POSITION_DATA_RESPONSE_1,
-        HEATING_CURVES_RESPONSE_1_1,
+        *HEATING_CURVES_RESPONSE_1_1,
     ]
     fake_api.register_requests(config_entry.data[CONF_HOST])
 
@@ -1479,21 +1462,6 @@ async def test_heat_circuit_sensors_translations(
         "sensor.keba_keenergy_12345678_heat_circuit_heating_curve_1",
     )
     assert isinstance(heat_circuit_heating_curve_1, State)
-    assert {
-        opt: translations[f"component.keba_keenergy.entity.sensor.heating_curve.state.{opt}"]
-        for opt in heat_circuit_heating_curve_1.attributes[ATTR_OPTIONS]
-    } == {
-        "hc1": "1",
-        "hc2": "2",
-        "hc3": "3",
-        "hc4": "4",
-        "hc5": "5",
-        "hc6": "6",
-        "hc7": "7",
-        "hc8": "8",
-        "hc_fbh": "Fußbodenheizung",
-        "hc_hk": "Heizkörper",
-    }
     assert heat_circuit_heating_curve_1.attributes[ATTR_FRIENDLY_NAME] == "Heizkreis 1 Heizkurve"
 
     heat_circuit_room_temperature_1: State | None = hass.states.get(
@@ -1642,9 +1610,10 @@ async def test_solar_circuit_sensors(
 ) -> None:
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
+        HEATING_CURVE_NAMES_RESPONSE,
         get_multiple_position_fixed_data_response(),
         MULTIPLE_POSITION_DATA_RESPONSE_1,
-        HEATING_CURVES_RESPONSE_1_1,
+        *HEATING_CURVES_RESPONSE_1_1,
     ]
     fake_api.register_requests(config_entry.data[CONF_HOST])
 
@@ -1863,9 +1832,10 @@ async def test_solar_circuit_sensors_translations(
 ) -> None:
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
+        HEATING_CURVE_NAMES_RESPONSE,
         get_multiple_position_fixed_data_response(),
         MULTIPLE_POSITION_DATA_RESPONSE_1,
-        HEATING_CURVES_RESPONSE_1_1,
+        *HEATING_CURVES_RESPONSE_1_1,
     ]
     fake_api.register_requests(config_entry.data[CONF_HOST])
 
@@ -2001,9 +1971,10 @@ async def test_external_heat_source_sensors(
 ) -> None:
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
+        HEATING_CURVE_NAMES_RESPONSE,
         get_multiple_position_fixed_data_response(),
         MULTIPLE_POSITION_DATA_RESPONSE_1,
-        HEATING_CURVES_RESPONSE_1_1,
+        *HEATING_CURVES_RESPONSE_1_1,
     ]
     fake_api.register_requests(config_entry.data[CONF_HOST])
 
@@ -2086,9 +2057,10 @@ async def test_external_heat_source_sensors_translated(
 ) -> None:
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
+        HEATING_CURVE_NAMES_RESPONSE,
         get_multiple_position_fixed_data_response(),
         MULTIPLE_POSITION_DATA_RESPONSE_1,
-        HEATING_CURVES_RESPONSE_1_1,
+        *HEATING_CURVES_RESPONSE_1_1,
     ]
     fake_api.register_requests(config_entry.data[CONF_HOST])
 
@@ -2152,9 +2124,10 @@ async def test_switch_valve_sensors(
 ) -> None:
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
+        HEATING_CURVE_NAMES_RESPONSE,
         get_multiple_position_fixed_data_response(),
         MULTIPLE_POSITION_DATA_RESPONSE_1,
-        HEATING_CURVES_RESPONSE_1_1,
+        *HEATING_CURVES_RESPONSE_1_1,
     ]
     fake_api.register_requests(config_entry.data[CONF_HOST])
 
@@ -2191,9 +2164,10 @@ async def test_switch_valve_sensors_translated(
 ) -> None:
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
+        HEATING_CURVE_NAMES_RESPONSE,
         get_multiple_position_fixed_data_response(),
         MULTIPLE_POSITION_DATA_RESPONSE_1,
-        HEATING_CURVES_RESPONSE_1_1,
+        *HEATING_CURVES_RESPONSE_1_1,
     ]
     fake_api.register_requests(config_entry.data[CONF_HOST])
 

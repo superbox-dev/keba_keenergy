@@ -15,6 +15,7 @@ from pytest_homeassistant_custom_component.common import MockConfigEntry
 
 from tests import setup_integration
 from tests.api_data import HEATING_CURVES_RESPONSE_1_1
+from tests.api_data import HEATING_CURVE_NAMES_RESPONSE
 from tests.api_data import MULTIPLE_POSITIONS_RESPONSE
 from tests.api_data import MULTIPLE_POSITION_DATA_RESPONSE_1
 from tests.api_data import MULTIPLE_POSITION_DATA_RESPONSE_2
@@ -30,12 +31,13 @@ async def test_heat_circuit_switches(
 ) -> None:
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
+        HEATING_CURVE_NAMES_RESPONSE,
         get_multiple_position_fixed_data_response(),
         MULTIPLE_POSITION_DATA_RESPONSE_1,
-        HEATING_CURVES_RESPONSE_1_1,
+        *HEATING_CURVES_RESPONSE_1_1,
         # Read API after services call
         MULTIPLE_POSITION_DATA_RESPONSE_1,
-        HEATING_CURVES_RESPONSE_1_1,
+        *HEATING_CURVES_RESPONSE_1_1,
     ]
     fake_api.register_requests(config_entry.data[CONF_HOST])
 
@@ -57,12 +59,13 @@ async def test_heat_circuit_switches_translated(
 ) -> None:
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
+        HEATING_CURVE_NAMES_RESPONSE,
         get_multiple_position_fixed_data_response(),
         MULTIPLE_POSITION_DATA_RESPONSE_1,
-        HEATING_CURVES_RESPONSE_1_1,
+        *HEATING_CURVES_RESPONSE_1_1,
         # Read API after services call
         MULTIPLE_POSITION_DATA_RESPONSE_1,
-        HEATING_CURVES_RESPONSE_1_1,
+        *HEATING_CURVES_RESPONSE_1_1,
     ]
     fake_api.register_requests(config_entry.data[CONF_HOST])
 
@@ -83,12 +86,13 @@ async def test_solar_circuit_switches(
 ) -> None:
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
+        HEATING_CURVE_NAMES_RESPONSE,
         get_multiple_position_fixed_data_response(),
         MULTIPLE_POSITION_DATA_RESPONSE_1,
-        HEATING_CURVES_RESPONSE_1_1,
+        *HEATING_CURVES_RESPONSE_1_1,
         # Read API after services call
         MULTIPLE_POSITION_DATA_RESPONSE_1,
-        HEATING_CURVES_RESPONSE_1_1,
+        *HEATING_CURVES_RESPONSE_1_1,
     ]
     fake_api.register_requests(config_entry.data[CONF_HOST])
 
@@ -109,12 +113,13 @@ async def test_solar_circuit_switches_translated(
 ) -> None:
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
+        HEATING_CURVE_NAMES_RESPONSE,
         get_multiple_position_fixed_data_response(),
         MULTIPLE_POSITION_DATA_RESPONSE_1,
-        HEATING_CURVES_RESPONSE_1_1,
+        *HEATING_CURVES_RESPONSE_1_1,
         # Read API after services call
         MULTIPLE_POSITION_DATA_RESPONSE_1,
-        HEATING_CURVES_RESPONSE_1_1,
+        *HEATING_CURVES_RESPONSE_1_1,
     ]
     fake_api.register_requests(config_entry.data[CONF_HOST])
 
@@ -136,12 +141,13 @@ async def test_heat_pump_switches(
 ) -> None:
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
+        HEATING_CURVE_NAMES_RESPONSE,
         get_multiple_position_fixed_data_response(),
         MULTIPLE_POSITION_DATA_RESPONSE_1,
-        HEATING_CURVES_RESPONSE_1_1,
+        *HEATING_CURVES_RESPONSE_1_1,
         # Read API after services call
         MULTIPLE_POSITION_DATA_RESPONSE_1,
-        HEATING_CURVES_RESPONSE_1_1,
+        *HEATING_CURVES_RESPONSE_1_1,
     ]
     fake_api.register_requests(config_entry.data[CONF_HOST])
 
@@ -166,12 +172,13 @@ async def test_heat_pump_switches_translated(
 ) -> None:
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
+        HEATING_CURVE_NAMES_RESPONSE,
         get_multiple_position_fixed_data_response(),
         MULTIPLE_POSITION_DATA_RESPONSE_1,
-        HEATING_CURVES_RESPONSE_1_1,
+        *HEATING_CURVES_RESPONSE_1_1,
         # Read API after services call
         MULTIPLE_POSITION_DATA_RESPONSE_1,
-        HEATING_CURVES_RESPONSE_1_1,
+        *HEATING_CURVES_RESPONSE_1_1,
     ]
     fake_api.register_requests(config_entry.data[CONF_HOST])
 
@@ -237,12 +244,13 @@ async def test_set_value(
 ) -> None:
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
+        HEATING_CURVE_NAMES_RESPONSE,
         get_multiple_position_fixed_data_response(),
         response,
-        HEATING_CURVES_RESPONSE_1_1,
+        *HEATING_CURVES_RESPONSE_1_1,
         # Read API after services call
         response,
-        HEATING_CURVES_RESPONSE_1_1,
+        *HEATING_CURVES_RESPONSE_1_1,
     ]
     fake_api.register_requests("10.0.0.100")
 

@@ -9,6 +9,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!--start-->
 
+## [1.8.1] - 2025-02-19
+
+### Fixed
+
+## Fixed missing heating curve names [(Issue #36)][issue-36]
+
+[issue-36]: https://github.com/superbox-dev/keba_keenergy/issues/36
+
 ## [1.8.0] - 2025-02-17
 
 ### Added

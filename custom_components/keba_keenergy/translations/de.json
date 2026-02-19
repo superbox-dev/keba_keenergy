@@ -145,20 +145,7 @@
         },
         "select": {
             "heating_curve": {
-                "name": "Heizkurve",
-                "state": {
-                    "hc1": "Kurve 1",
-                    "hc2": "Kurve 2",
-                    "hc3": "Kurve 3",
-                    "hc4": "Kurve 4",
-                    "hc5": "Kurve 5",
-                    "hc6": "Kurve 6",
-                    "hc7": "Kurve 7",
-                    "hc8": "Kurve 8",
-                    "hc9": "Kurve 9",
-                    "hc_fbh": "Fußbodenheizung",
-                    "hc_hk": "Heizkörper"
-                }
+                "name": "Heizkurve"
             },
             "operating_mode_buffer_tank": {
                 "name": "Betriebsart",
@@ -306,20 +293,7 @@
                 }
             },
             "heating_curve": {
-                "name": "Heizkurve",
-                "state": {
-                    "hc1": "1",
-                    "hc2": "2",
-                    "hc3": "3",
-                    "hc4": "4",
-                    "hc5": "5",
-                    "hc6": "6",
-                    "hc7": "7",
-                    "hc8": "8",
-                    "hc9": "9",
-                    "hc_fbh": "Fußbodenheizung",
-                    "hc_hk": "Heizkörper"
-                }
+                "name": "Heizkurve"
             },
             "heating_energy": {
                 "name": "Wärmemenge"
@@ -616,23 +590,6 @@
             "description": "In dieser Woche wurden mehr als {limit} Schreibzugriffe auf das Gerät durchgeführt.\n\nSehr häufige Schreibzugriffe (zum Beispiel durch Automationen) können die Lebensdauer des Flash-Speichers des Geräts reduzieren."
         }
     },
-    "selector": {
-        "heating_curve":{
-            "options": {
-                "hc1": "1",
-                "hc2": "2",
-                "hc3": "3",
-                "hc4": "4",
-                "hc5": "5",
-                "hc6": "6",
-                "hc7": "7",
-                "hc8": "8",
-                "hc9": "9",
-                "hc_fbh": "Fußbodenheizung",
-                "hc_hk": "Heizkörper"
-            }
-        }
-    },
     "services": {
         "set_away_date_range": {
             "name": "Datumsbereich für Abwesenheit festlegen",
@@ -661,7 +618,7 @@
                     "name": "Integration"
                 },
                 "heating_curve": {
-                    "description": "Die Heizkurve, deren Punkte geändert werden sollen.",
+                    "description": "z.B. HC 1, HC 2, HC FBH, HC HK",
                     "name": "Heizkurve"
                 },
                 "points": {

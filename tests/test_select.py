@@ -16,6 +16,7 @@ from pytest_homeassistant_custom_component.common import MockConfigEntry
 from tests import init_translations
 from tests import setup_integration
 from tests.api_data import HEATING_CURVES_RESPONSE_1_1
+from tests.api_data import HEATING_CURVE_NAMES_RESPONSE
 from tests.api_data import MULTIPLE_POSITIONS_RESPONSE
 from tests.api_data import MULTIPLE_POSITION_DATA_RESPONSE_1
 from tests.api_data import get_multiple_position_fixed_data_response
@@ -28,18 +29,20 @@ from tests.conftest import FakeKebaKeEnergyAPI
         (
             [
                 MULTIPLE_POSITIONS_RESPONSE,
+                HEATING_CURVE_NAMES_RESPONSE,
                 get_multiple_position_fixed_data_response(has_passive_cooling="true"),
                 MULTIPLE_POSITION_DATA_RESPONSE_1,
-                HEATING_CURVES_RESPONSE_1_1,
+                *HEATING_CURVES_RESPONSE_1_1,
             ],
             ["standby", "summer", "auto_heat", "auto_cool", "auto"],
         ),
         (
             [
                 MULTIPLE_POSITIONS_RESPONSE,
+                HEATING_CURVE_NAMES_RESPONSE,
                 get_multiple_position_fixed_data_response(has_passive_cooling="false"),
                 MULTIPLE_POSITION_DATA_RESPONSE_1,
-                HEATING_CURVES_RESPONSE_1_1,
+                *HEATING_CURVES_RESPONSE_1_1,
             ],
             ["standby", "summer", "auto_heat"],
         ),
@@ -71,9 +74,10 @@ async def test_system_selects_translations(
 ) -> None:
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
+        HEATING_CURVE_NAMES_RESPONSE,
         get_multiple_position_fixed_data_response(),
         MULTIPLE_POSITION_DATA_RESPONSE_1,
-        HEATING_CURVES_RESPONSE_1_1,
+        *HEATING_CURVES_RESPONSE_1_1,
     ]
     fake_api.register_requests(config_entry.data[CONF_HOST])
 
@@ -93,9 +97,10 @@ async def test_heat_circuit_selects(
 ) -> None:
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
+        HEATING_CURVE_NAMES_RESPONSE,
         get_multiple_position_fixed_data_response(),
         MULTIPLE_POSITION_DATA_RESPONSE_1,
-        HEATING_CURVES_RESPONSE_1_1,
+        *HEATING_CURVES_RESPONSE_1_1,
     ]
     fake_api.register_requests(config_entry.data[CONF_HOST])
 
@@ -126,36 +131,20 @@ async def test_heat_circuit_selects(
         "select.keba_keenergy_12345678_heat_circuit_heating_curve_1",
     )
     assert isinstance(heat_circuit_heating_curve_1, State)
-    assert heat_circuit_heating_curve_1.state == "hc6"
+    assert heat_circuit_heating_curve_1.state == "HC6"
     assert heat_circuit_heating_curve_1.attributes[ATTR_FRIENDLY_NAME] == "Heating circuit 1 Heating curve"
     assert heat_circuit_heating_curve_1.attributes[ATTR_OPTIONS] == [
-        "hc1",
-        "hc2",
-        "hc3",
-        "hc4",
-        "hc5",
-        "hc6",
-        "hc7",
-        "hc8",
-        "hc_fbh",
-        "hc_hk",
+        "HC1",
+        "HC2",
+        "HC3",
+        "HC4",
+        "HC5",
+        "HC6",
+        "HC7",
+        "HC8",
+        "HC FBH",
+        "HC HK",
     ]
-
-    assert {
-        opt: translations[f"component.keba_keenergy.entity.select.heating_curve.state.{opt}"]
-        for opt in heat_circuit_heating_curve_1.attributes[ATTR_OPTIONS]
-    } == {
-        "hc1": "1",
-        "hc2": "2",
-        "hc3": "3",
-        "hc4": "4",
-        "hc5": "5",
-        "hc6": "6",
-        "hc7": "7",
-        "hc8": "8",
-        "hc_fbh": "Underfloor heating",
-        "hc_hk": "Radiator heating",
-    }
 
 
 @pytest.mark.usefixtures("entity_registry_enabled_by_default")
@@ -166,9 +155,10 @@ async def test_heat_circuit_selects_translated(
 ) -> None:
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
+        HEATING_CURVE_NAMES_RESPONSE,
         get_multiple_position_fixed_data_response(),
         MULTIPLE_POSITION_DATA_RESPONSE_1,
-        HEATING_CURVES_RESPONSE_1_1,
+        *HEATING_CURVES_RESPONSE_1_1,
     ]
     fake_api.register_requests(config_entry.data[CONF_HOST])
 
@@ -198,21 +188,6 @@ async def test_heat_circuit_selects_translated(
     )
     assert isinstance(heat_circuit_heating_curve_1, State)
     assert heat_circuit_heating_curve_1.attributes[ATTR_FRIENDLY_NAME] == "Heizkreis 1 Heizkurve"
-    assert {
-        opt: translations[f"component.keba_keenergy.entity.select.heating_curve.state.{opt}"]
-        for opt in heat_circuit_heating_curve_1.attributes[ATTR_OPTIONS]
-    } == {
-        "hc1": "Kurve 1",
-        "hc2": "Kurve 2",
-        "hc3": "Kurve 3",
-        "hc4": "Kurve 4",
-        "hc5": "Kurve 5",
-        "hc6": "Kurve 6",
-        "hc7": "Kurve 7",
-        "hc8": "Kurve 8",
-        "hc_fbh": "Fußbodenheizung",
-        "hc_hk": "Heizkörper",
-    }
 
 
 async def test_solar_circuit_selects(
@@ -222,9 +197,10 @@ async def test_solar_circuit_selects(
 ) -> None:
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
+        HEATING_CURVE_NAMES_RESPONSE,
         get_multiple_position_fixed_data_response(),
         MULTIPLE_POSITION_DATA_RESPONSE_1,
-        HEATING_CURVES_RESPONSE_1_1,
+        *HEATING_CURVES_RESPONSE_1_1,
     ]
     fake_api.register_requests(config_entry.data[CONF_HOST])
 
@@ -271,9 +247,10 @@ async def test_solar_circuit_selects_translated(
 ) -> None:
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
+        HEATING_CURVE_NAMES_RESPONSE,
         get_multiple_position_fixed_data_response(),
         MULTIPLE_POSITION_DATA_RESPONSE_1,
-        HEATING_CURVES_RESPONSE_1_1,
+        *HEATING_CURVES_RESPONSE_1_1,
     ]
     fake_api.register_requests(config_entry.data[CONF_HOST])
 
@@ -317,9 +294,10 @@ async def test_buffer_tank_selects(
 ) -> None:
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
+        HEATING_CURVE_NAMES_RESPONSE,
         get_multiple_position_fixed_data_response(),
         MULTIPLE_POSITION_DATA_RESPONSE_1,
-        HEATING_CURVES_RESPONSE_1_1,
+        *HEATING_CURVES_RESPONSE_1_1,
     ]
     fake_api.register_requests(config_entry.data[CONF_HOST])
 
@@ -355,9 +333,10 @@ async def test_buffer_tank_selects_translated(
 ) -> None:
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
+        HEATING_CURVE_NAMES_RESPONSE,
         get_multiple_position_fixed_data_response(),
         MULTIPLE_POSITION_DATA_RESPONSE_1,
-        HEATING_CURVES_RESPONSE_1_1,
+        *HEATING_CURVES_RESPONSE_1_1,
     ]
     fake_api.register_requests(config_entry.data[CONF_HOST])
 
@@ -388,9 +367,10 @@ async def test_hot_water_tank_selects(
 ) -> None:
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
+        HEATING_CURVE_NAMES_RESPONSE,
         get_multiple_position_fixed_data_response(),
         MULTIPLE_POSITION_DATA_RESPONSE_1,
-        HEATING_CURVES_RESPONSE_1_1,
+        *HEATING_CURVES_RESPONSE_1_1,
     ]
     fake_api.register_requests(config_entry.data[CONF_HOST])
 
@@ -428,9 +408,10 @@ async def test_hot_water_tank_selects_translated(
 ) -> None:
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
+        HEATING_CURVE_NAMES_RESPONSE,
         get_multiple_position_fixed_data_response(),
         MULTIPLE_POSITION_DATA_RESPONSE_1,
-        HEATING_CURVES_RESPONSE_1_1,
+        *HEATING_CURVES_RESPONSE_1_1,
     ]
     fake_api.register_requests(config_entry.data[CONF_HOST])
 
@@ -463,9 +444,10 @@ async def test_external_heat_source_selects(
 ) -> None:
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
+        HEATING_CURVE_NAMES_RESPONSE,
         get_multiple_position_fixed_data_response(),
         MULTIPLE_POSITION_DATA_RESPONSE_1,
-        HEATING_CURVES_RESPONSE_1_1,
+        *HEATING_CURVES_RESPONSE_1_1,
     ]
     fake_api.register_requests(config_entry.data[CONF_HOST])
 
@@ -502,9 +484,10 @@ async def test_external_heat_source_translated(
 ) -> None:
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
+        HEATING_CURVE_NAMES_RESPONSE,
         get_multiple_position_fixed_data_response(),
         MULTIPLE_POSITION_DATA_RESPONSE_1,
-        HEATING_CURVES_RESPONSE_1_1,
+        *HEATING_CURVES_RESPONSE_1_1,
     ]
     fake_api.register_requests(config_entry.data[CONF_HOST])
 
@@ -557,7 +540,7 @@ async def test_external_heat_source_translated(
         ),
         (
             "select.keba_keenergy_12345678_heat_circuit_heating_curve_1",
-            "hc_fbh",
+            "HC FBH",
             '[{"name": "APPL.CtrlAppl.sParam.heatCircuit[0].param.linTab.fileName", "value": "HC FBH"}]',
         ),
     ],
@@ -573,12 +556,13 @@ async def test_select_option(
 ) -> None:
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
+        HEATING_CURVE_NAMES_RESPONSE,
         get_multiple_position_fixed_data_response(has_passive_cooling="true"),
         MULTIPLE_POSITION_DATA_RESPONSE_1,
-        HEATING_CURVES_RESPONSE_1_1,
+        *HEATING_CURVES_RESPONSE_1_1,
         # Read API after services call
         MULTIPLE_POSITION_DATA_RESPONSE_1,
-        HEATING_CURVES_RESPONSE_1_1,
+        *HEATING_CURVES_RESPONSE_1_1,
     ]
     fake_api.register_requests("10.0.0.100")
 
@@ -623,12 +607,13 @@ async def test_select_invalid_option(
 ) -> None:
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
+        HEATING_CURVE_NAMES_RESPONSE,
         get_multiple_position_fixed_data_response(has_passive_cooling="false"),
         MULTIPLE_POSITION_DATA_RESPONSE_1,
-        HEATING_CURVES_RESPONSE_1_1,
+        *HEATING_CURVES_RESPONSE_1_1,
         # Read API after services call
         MULTIPLE_POSITION_DATA_RESPONSE_1,
-        HEATING_CURVES_RESPONSE_1_1,
+        *HEATING_CURVES_RESPONSE_1_1,
     ]
     fake_api.register_requests("10.0.0.100")
 
