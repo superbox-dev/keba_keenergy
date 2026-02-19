@@ -12,6 +12,7 @@ from homeassistant.const import Platform
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers import device_registry as dr
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
+from homeassistant.helpers.typing import ConfigType
 
 from .const import DOMAIN
 from .const import MANUFACTURER
@@ -34,8 +35,14 @@ PLATFORMS: list[Platform] = [
 _LOGGER = logging.getLogger(__name__)
 
 
+async def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:  # noqa: ARG001
+    """Set up the  KEBA KeEnergy component."""
+    await async_setup_services(hass)
+    return True
+
+
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
-    """Set up KEBA KeEnergy platform."""
+    """Set up the KEBA KeEnergy platform."""
     host: str = entry.data[CONF_HOST]
     username: str | None = entry.data.get(CONF_USERNAME)
     password: str | None = entry.data.get(CONF_PASSWORD)
@@ -72,7 +79,6 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     )
 
     await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
-    await async_setup_services(hass)
 
     return True
 
