@@ -25,7 +25,7 @@ set_heating_curve_points:
           integration: keba_keenergy
     heating_curve:
       example: HC1
-      required: true
+      required: True
       selector:
         text:
     points:

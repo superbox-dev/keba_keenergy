@@ -30,6 +30,7 @@ _LOGGER = logging.getLogger(__name__)
 class KebaKeEnergySelectEntityDescriptionMixin:
     """Required values for KEBA KeEnergy selects."""
 
+    entity_class: type["KebaKeEnergySelectEntity"]
     value: Callable[[str], str | int]
 
 
@@ -39,8 +40,6 @@ class KebaKeEnergySelectEntityDescription(
     KebaKeEnergySelectEntityDescriptionMixin,
 ):
     """Class describing KEBA KeEnergy select entities."""
-
-    entity_class: type["KebaKeEnergySelectEntity"]
 
 
 class KebaKeEnergySelectEntity(KebaKeEnergyExtendedEntity, SelectEntity):
