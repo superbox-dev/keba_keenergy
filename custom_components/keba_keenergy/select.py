@@ -4,11 +4,13 @@ import logging
 from collections.abc import Callable
 from dataclasses import dataclass
 from functools import cached_property
+from typing import Final
 
 from homeassistant.components.select import DOMAIN as SELECT_DOMAIN
 from homeassistant.components.select import SelectEntity
 from homeassistant.components.select import SelectEntityDescription
 from homeassistant.config_entries import ConfigEntry
+from homeassistant.const import EntityCategory
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from keba_keenergy_api.constants import BufferTankOperatingMode
@@ -24,6 +26,8 @@ from .coordinator import KebaKeEnergyDataUpdateCoordinator
 from .entity import KebaKeEnergyExtendedEntity
 
 _LOGGER = logging.getLogger(__name__)
+
+PARALLEL_UPDATES: Final[int] = 0
 
 
 @dataclass(frozen=True)
@@ -109,6 +113,7 @@ SELECT_TYPES: dict[str, tuple[KebaKeEnergySelectEntityDescription, ...]] = {
     SectionPrefix.SYSTEM: (
         KebaKeEnergySelectEntityDescription(
             entity_class=KebaKeEnergySystemOperatingModeSelectEntity,
+            entity_category=EntityCategory.CONFIG,
             key="operating_mode",
             options=[
                 SystemOperatingMode.STANDBY.name.lower(),
@@ -123,6 +128,7 @@ SELECT_TYPES: dict[str, tuple[KebaKeEnergySelectEntityDescription, ...]] = {
     SectionPrefix.HEAT_CIRCUIT: (
         KebaKeEnergySelectEntityDescription(
             entity_class=KebaKeEnergySelectEntity,
+            entity_category=EntityCategory.CONFIG,
             key="operating_mode",
             options=[
                 HeatCircuitOperatingMode.OFF.name.lower(),
@@ -138,6 +144,7 @@ SELECT_TYPES: dict[str, tuple[KebaKeEnergySelectEntityDescription, ...]] = {
         ),
         KebaKeEnergySelectEntityDescription(
             entity_class=KebaKeEnergyHeatingCurveSelectEntity,
+            entity_category=EntityCategory.CONFIG,
             entity_registry_enabled_default=False,
             key="heating_curve",
             translation_key="heating_curve",
@@ -148,6 +155,7 @@ SELECT_TYPES: dict[str, tuple[KebaKeEnergySelectEntityDescription, ...]] = {
     SectionPrefix.SOLAR_CIRCUIT: (
         KebaKeEnergySelectEntityDescription(
             entity_class=KebaKeEnergySelectEntity,
+            entity_category=EntityCategory.CONFIG,
             key="operating_mode",
             options=[_.name.lower() for _ in SolarCircuitOperatingMode],
             translation_key="operating_mode_solar_circuit",
@@ -158,6 +166,7 @@ SELECT_TYPES: dict[str, tuple[KebaKeEnergySelectEntityDescription, ...]] = {
     SectionPrefix.BUFFER_TANK: (
         KebaKeEnergySelectEntityDescription(
             entity_class=KebaKeEnergySelectEntity,
+            entity_category=EntityCategory.CONFIG,
             key="operating_mode",
             options=[_.name.lower() for _ in BufferTankOperatingMode],
             translation_key="operating_mode_buffer_tank",
@@ -168,6 +177,7 @@ SELECT_TYPES: dict[str, tuple[KebaKeEnergySelectEntityDescription, ...]] = {
     SectionPrefix.HOT_WATER_TANK: (
         KebaKeEnergySelectEntityDescription(
             entity_class=KebaKeEnergySelectEntity,
+            entity_category=EntityCategory.CONFIG,
             key="operating_mode",
             options=[_.name.lower() for _ in HotWaterTankOperatingMode],
             translation_key="operating_mode_hot_water_tank",
@@ -178,6 +188,7 @@ SELECT_TYPES: dict[str, tuple[KebaKeEnergySelectEntityDescription, ...]] = {
     SectionPrefix.EXTERNAL_HEAT_SOURCE: (
         KebaKeEnergySelectEntityDescription(
             entity_class=KebaKeEnergySelectEntity,
+            entity_category=EntityCategory.CONFIG,
             entity_registry_enabled_default=False,
             key="operating_mode",
             options=[_.name.lower() for _ in ExternalHeatSourceOperatingMode],

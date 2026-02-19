@@ -3,12 +3,14 @@
 import logging
 from dataclasses import dataclass
 from typing import Any
+from typing import Final
 
 from homeassistant.components.switch import SwitchDeviceClass
 from homeassistant.components.switch import SwitchEntity
 from homeassistant.components.switch import SwitchEntityDescription
 from homeassistant.components.switch.const import DOMAIN as SWITCH_DOMAIN
 from homeassistant.config_entries import ConfigEntry
+from homeassistant.const import EntityCategory
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from keba_keenergy_api.constants import SectionPrefix
@@ -18,6 +20,8 @@ from .coordinator import KebaKeEnergyDataUpdateCoordinator
 from .entity import KebaKeEnergyExtendedEntity
 
 _LOGGER = logging.getLogger(__name__)
+
+PARALLEL_UPDATES: Final[int] = 0
 
 
 @dataclass(frozen=True)
@@ -79,6 +83,7 @@ SWITCH_TYPES: dict[str, tuple[KebaKeEnergySwitchEntityDescription, ...]] = {
     SectionPrefix.HEAT_CIRCUIT: (
         KebaKeEnergySwitchEntityDescription(
             device_class=SwitchDeviceClass.SWITCH,
+            entity_category=EntityCategory.CONFIG,
             entity_registry_enabled_default=False,
             key="use_heating_curve",
             key_index=None,
@@ -89,6 +94,7 @@ SWITCH_TYPES: dict[str, tuple[KebaKeEnergySwitchEntityDescription, ...]] = {
     SectionPrefix.SOLAR_CIRCUIT: (
         KebaKeEnergySwitchEntityDescription(
             device_class=SwitchDeviceClass.SWITCH,
+            entity_category=EntityCategory.CONFIG,
             key="priority_1_before_2",
             key_index=None,
             translation_key="priority_1_before_2",
@@ -97,6 +103,7 @@ SWITCH_TYPES: dict[str, tuple[KebaKeEnergySwitchEntityDescription, ...]] = {
     SectionPrefix.HEAT_PUMP: (
         KebaKeEnergySwitchEntityDescription(
             device_class=SwitchDeviceClass.SWITCH,
+            entity_category=EntityCategory.CONFIG,
             entity_registry_enabled_default=False,
             key="compressor_use_night_speed",
             key_index=None,

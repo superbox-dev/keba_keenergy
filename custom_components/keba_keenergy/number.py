@@ -3,12 +3,14 @@
 import logging
 from dataclasses import dataclass
 from functools import cached_property
+from typing import Final
 
 from homeassistant.components.number import DOMAIN as NUMBER_DOMAIN
 from homeassistant.components.number import NumberDeviceClass
 from homeassistant.components.number import NumberEntity
 from homeassistant.components.number import NumberEntityDescription
 from homeassistant.config_entries import ConfigEntry
+from homeassistant.const import EntityCategory
 from homeassistant.const import PERCENTAGE
 from homeassistant.const import UnitOfTemperature
 from homeassistant.core import HassJob
@@ -23,6 +25,8 @@ from .coordinator import KebaKeEnergyDataUpdateCoordinator
 from .entity import KebaKeEnergyExtendedEntity
 
 _LOGGER = logging.getLogger(__name__)
+
+PARALLEL_UPDATES: Final[int] = 0
 
 
 @dataclass(frozen=True)
@@ -120,6 +124,7 @@ NUMBER_TYPES: dict[str, tuple[KebaKeEnergyNumberEntityDescription, ...]] = {
     SectionPrefix.HEAT_CIRCUIT: (
         KebaKeEnergyNumberEntityDescription(
             device_class=NumberDeviceClass.TEMPERATURE,
+            entity_category=EntityCategory.CONFIG,
             entity_registry_enabled_default=False,
             key="target_temperature_day",
             key_index=None,
@@ -130,6 +135,7 @@ NUMBER_TYPES: dict[str, tuple[KebaKeEnergyNumberEntityDescription, ...]] = {
         ),
         KebaKeEnergyNumberEntityDescription(
             device_class=NumberDeviceClass.TEMPERATURE,
+            entity_category=EntityCategory.CONFIG,
             entity_registry_enabled_default=False,
             key="target_temperature_night",
             key_index=None,
@@ -140,6 +146,7 @@ NUMBER_TYPES: dict[str, tuple[KebaKeEnergyNumberEntityDescription, ...]] = {
         ),
         KebaKeEnergyNumberEntityDescription(
             device_class=NumberDeviceClass.TEMPERATURE,
+            entity_category=EntityCategory.CONFIG,
             entity_registry_enabled_default=False,
             key="target_temperature_away",
             key_index=None,
@@ -150,6 +157,7 @@ NUMBER_TYPES: dict[str, tuple[KebaKeEnergyNumberEntityDescription, ...]] = {
         ),
         KebaKeEnergyNumberEntityDescription(
             device_class=NumberDeviceClass.TEMPERATURE,
+            entity_category=EntityCategory.CONFIG,
             key="target_temperature_offset",
             key_index=None,
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
@@ -159,6 +167,7 @@ NUMBER_TYPES: dict[str, tuple[KebaKeEnergyNumberEntityDescription, ...]] = {
         ),
         KebaKeEnergyNumberEntityDescription(
             device_class=NumberDeviceClass.TEMPERATURE,
+            entity_category=EntityCategory.CONFIG,
             entity_registry_enabled_default=False,
             key="heating_curve_offset",
             key_index=None,
@@ -168,8 +177,9 @@ NUMBER_TYPES: dict[str, tuple[KebaKeEnergyNumberEntityDescription, ...]] = {
             scale=1,
         ),
         KebaKeEnergyNumberEntityDescription(
-            key="heating_curve_slope",
+            entity_category=EntityCategory.CONFIG,
             entity_registry_enabled_default=False,
+            key="heating_curve_slope",
             key_index=None,
             native_step=0.01,
             translation_key="heating_curve_slope",
@@ -179,6 +189,7 @@ NUMBER_TYPES: dict[str, tuple[KebaKeEnergyNumberEntityDescription, ...]] = {
     ),
     SectionPrefix.SOLAR_CIRCUIT: (
         KebaKeEnergyNumberEntityDescription(
+            entity_category=EntityCategory.CONFIG,
             device_class=NumberDeviceClass.TEMPERATURE,
             key="target_temperature",
             key_index=0,
@@ -192,6 +203,7 @@ NUMBER_TYPES: dict[str, tuple[KebaKeEnergyNumberEntityDescription, ...]] = {
             scale=1,
         ),
         KebaKeEnergyNumberEntityDescription(
+            entity_category=EntityCategory.CONFIG,
             device_class=NumberDeviceClass.TEMPERATURE,
             key="target_temperature",
             key_index=1,
@@ -207,6 +219,7 @@ NUMBER_TYPES: dict[str, tuple[KebaKeEnergyNumberEntityDescription, ...]] = {
     ),
     SectionPrefix.HEAT_PUMP: (
         KebaKeEnergyNumberEntityDescription(
+            entity_category=EntityCategory.CONFIG,
             device_class=NumberDeviceClass.SPEED,
             entity_registry_enabled_default=False,
             key="compressor_night_speed",
@@ -219,6 +232,7 @@ NUMBER_TYPES: dict[str, tuple[KebaKeEnergyNumberEntityDescription, ...]] = {
     ),
     SectionPrefix.BUFFER_TANK: (
         KebaKeEnergyNumberEntityDescription(
+            entity_category=EntityCategory.CONFIG,
             device_class=NumberDeviceClass.TEMPERATURE,
             key="standby_temperature",
             key_index=None,
@@ -231,6 +245,7 @@ NUMBER_TYPES: dict[str, tuple[KebaKeEnergyNumberEntityDescription, ...]] = {
     ),
     SectionPrefix.HOT_WATER_TANK: (
         KebaKeEnergyNumberEntityDescription(
+            entity_category=EntityCategory.CONFIG,
             device_class=NumberDeviceClass.TEMPERATURE,
             key="standby_temperature",
             key_index=None,
@@ -241,6 +256,7 @@ NUMBER_TYPES: dict[str, tuple[KebaKeEnergyNumberEntityDescription, ...]] = {
             scale=1,
         ),
         KebaKeEnergyNumberEntityDescription(
+            entity_category=EntityCategory.CONFIG,
             device_class=NumberDeviceClass.TEMPERATURE,
             key="target_temperature",
             key_index=None,

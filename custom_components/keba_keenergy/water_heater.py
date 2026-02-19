@@ -32,6 +32,8 @@ from .const import FLASH_WRITE_DELAY
 from .coordinator import KebaKeEnergyDataUpdateCoordinator
 from .entity import KebaKeEnergyEntity
 
+PARALLEL_UPDATES: Final[int] = 0
+
 HOT_WATER_TANK_STATE_TO_HA: Final[dict[int, str]] = {
     HotWaterTankOperatingMode.AUTO.value: STATE_ECO,
     HotWaterTankOperatingMode.HEAT_UP.value: STATE_PERFORMANCE,

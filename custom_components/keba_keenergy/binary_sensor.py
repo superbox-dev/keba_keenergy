@@ -2,6 +2,7 @@
 
 import logging
 from dataclasses import dataclass
+from typing import Final
 
 from homeassistant.components.binary_sensor import BinarySensorDeviceClass
 from homeassistant.components.binary_sensor import BinarySensorEntity
@@ -18,6 +19,8 @@ from .coordinator import KebaKeEnergyDataUpdateCoordinator
 from .entity import KebaKeEnergyExtendedEntity
 
 _LOGGER = logging.getLogger(__name__)
+
+PARALLEL_UPDATES: Final[int] = 0
 
 
 @dataclass(frozen=True)

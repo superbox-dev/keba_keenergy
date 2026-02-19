@@ -4,6 +4,7 @@ import logging
 from collections.abc import Callable
 from dataclasses import dataclass
 from typing import Any
+from typing import Final
 from typing import TYPE_CHECKING
 from typing import TypeVar
 
@@ -35,17 +36,18 @@ from keba_keenergy_api.constants import SectionPrefix
 from keba_keenergy_api.constants import SwitchValvePosition
 from keba_keenergy_api.constants import SystemOperatingMode
 
-if TYPE_CHECKING:
-    from keba_keenergy_api.endpoints import Value
-
 from .const import DOMAIN
 from .coordinator import KebaKeEnergyDataUpdateCoordinator
 from .entity import KebaKeEnergyExtendedEntity
 
+if TYPE_CHECKING:
+    from keba_keenergy_api.endpoints import Value
+
 T = TypeVar("T", bound=StateType)
 
-
 _LOGGER = logging.getLogger(__name__)
+
+PARALLEL_UPDATES: Final[int] = 0
 
 
 @dataclass(frozen=True)

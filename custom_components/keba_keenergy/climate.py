@@ -43,7 +43,10 @@ from .entity import KebaKeEnergyEntity
 
 if TYPE_CHECKING:
     from zoneinfo import ZoneInfo
+
 _LOGGER = logging.getLogger(__name__)
+
+PARALLEL_UPDATES: Final[int] = 0
 
 HEAT_CIRCUIT_PRESET_TO_HA: Final[dict[int, str]] = {
     HeatCircuitOperatingMode.AUTO.value: PRESET_HOME,
