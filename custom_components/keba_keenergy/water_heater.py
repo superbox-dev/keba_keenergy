@@ -13,7 +13,6 @@ from homeassistant.components.water_heater import WaterHeaterEntityFeature
 from homeassistant.components.water_heater.const import (
     DOMAIN as WATER_HEATER_DOMAIN,
 )
-from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import ATTR_TEMPERATURE
 from homeassistant.const import STATE_OFF
 from homeassistant.const import UnitOfTemperature
@@ -29,6 +28,7 @@ from keba_keenergy_api.constants import SectionPrefix
 
 from .const import DOMAIN
 from .const import FLASH_WRITE_DELAY
+from .coordinator import KebaKeEnergyConfigEntry
 from .coordinator import KebaKeEnergyDataUpdateCoordinator
 from .entity import KebaKeEnergyEntity
 
@@ -58,7 +58,7 @@ class KebaKeEnergyWaterHeaterTankEntity(KebaKeEnergyEntity, WaterHeaterEntity):
         self,
         coordinator: KebaKeEnergyDataUpdateCoordinator,
         description: WaterHeaterEntityDescription,
-        entry: ConfigEntry,
+        entry: KebaKeEnergyConfigEntry,
         section_id: str,
         index: int | None,
     ) -> None:
@@ -92,7 +92,7 @@ class KebaKeEnergyHotWaterTankEntity(KebaKeEnergyWaterHeaterTankEntity, WaterHea
         self,
         coordinator: KebaKeEnergyDataUpdateCoordinator,
         description: WaterHeaterEntityDescription,
-        entry: ConfigEntry,
+        entry: KebaKeEnergyConfigEntry,
         section_id: str,
         index: int | None,
     ) -> None:
@@ -206,7 +206,7 @@ class KebaKeEnergyBufferTankEntity(KebaKeEnergyWaterHeaterTankEntity, WaterHeate
         self,
         coordinator: KebaKeEnergyDataUpdateCoordinator,
         description: WaterHeaterEntityDescription,
-        entry: ConfigEntry,
+        entry: KebaKeEnergyConfigEntry,
         section_id: str,
         index: int | None,
     ) -> None:
@@ -286,7 +286,7 @@ class KebaKeEnergyBufferTankEntity(KebaKeEnergyWaterHeaterTankEntity, WaterHeate
 
 async def async_setup_entry(
     hass: HomeAssistant,  # noqa: ARG001
-    entry: ConfigEntry,
+    entry: KebaKeEnergyConfigEntry,
     async_add_entities: AddEntitiesCallback,
 ) -> None:
     """Set up KEBA KeEnergy water heaters from a config entry."""

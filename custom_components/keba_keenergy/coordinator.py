@@ -14,6 +14,7 @@ from typing import cast
 from zoneinfo import ZoneInfo
 
 from aiohttp import ClientSession
+from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 from homeassistant.exceptions import HomeAssistantError
 from homeassistant.helpers import issue_registry as ir
@@ -47,6 +48,8 @@ from .const import REQUEST_REFRESH_COOLDOWN
 from .const import SCAN_INTERVAL
 
 _LOGGER = logging.getLogger(__name__)
+
+type KebaKeEnergyConfigEntry = ConfigEntry[KebaKeEnergyDataUpdateCoordinator]
 
 
 def is_int_value_list(value: object) -> TypeGuard[list[int]]:

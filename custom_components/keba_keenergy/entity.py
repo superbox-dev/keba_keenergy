@@ -9,7 +9,6 @@ from typing import TYPE_CHECKING
 from typing import TypeVar
 from typing import overload
 
-from homeassistant.config_entries import ConfigEntry
 from homeassistant.helpers.device_registry import DeviceInfo
 from homeassistant.helpers.typing import StateType
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
@@ -28,6 +27,7 @@ from .const import DOMAIN
 from .const import MANUFACTURER
 from .const import MANUFACTURER_INO
 from .const import MANUFACTURER_MTEC
+from .coordinator import KebaKeEnergyConfigEntry
 from .coordinator import KebaKeEnergyDataUpdateCoordinator
 
 if TYPE_CHECKING:
@@ -48,14 +48,14 @@ class KebaKeEnergyEntity(
     def __init__(
         self,
         coordinator: KebaKeEnergyDataUpdateCoordinator,
-        entry: ConfigEntry,
+        entry: KebaKeEnergyConfigEntry,
         section_id: str,
         index: int | None,
         key_index: int | None = None,
     ) -> None:
         """Initialize the KEBA KeEnergy entity."""
         super().__init__(coordinator)
-        self.entry: ConfigEntry = entry
+        self.entry: KebaKeEnergyConfigEntry = entry
         self.section_id: str = section_id
         self.index: int | None = index
         self.key_index: int | None = key_index
@@ -327,7 +327,7 @@ class KebaKeEnergyExtendedEntity(KebaKeEnergyEntity):
     def __init__(
         self,
         coordinator: KebaKeEnergyDataUpdateCoordinator,
-        entry: ConfigEntry,
+        entry: KebaKeEnergyConfigEntry,
         section_id: str,
         index: int | None,
         key_index: int | None = None,

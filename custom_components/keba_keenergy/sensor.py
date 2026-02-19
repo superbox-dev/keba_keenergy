@@ -13,7 +13,6 @@ from homeassistant.components.sensor import SensorDeviceClass
 from homeassistant.components.sensor import SensorEntity
 from homeassistant.components.sensor import SensorEntityDescription
 from homeassistant.components.sensor import SensorStateClass
-from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import EntityCategory
 from homeassistant.const import PERCENTAGE
 from homeassistant.const import UnitOfEnergy
@@ -37,6 +36,7 @@ from keba_keenergy_api.constants import SwitchValvePosition
 from keba_keenergy_api.constants import SystemOperatingMode
 
 from .const import DOMAIN
+from .coordinator import KebaKeEnergyConfigEntry
 from .coordinator import KebaKeEnergyDataUpdateCoordinator
 from .entity import KebaKeEnergyExtendedEntity
 
@@ -73,7 +73,7 @@ class KebaKeEnergySensorEntity(KebaKeEnergyExtendedEntity, SensorEntity):
         self,
         coordinator: KebaKeEnergyDataUpdateCoordinator,
         description: KebaKeEnergySensorEntityDescription[StateType],
-        entry: ConfigEntry,
+        entry: KebaKeEnergyConfigEntry,
         section_id: str,
         index: int | None,
     ) -> None:
@@ -1030,7 +1030,7 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
 
 async def async_setup_entry(
     hass: HomeAssistant,  # noqa: ARG001
-    entry: ConfigEntry,
+    entry: KebaKeEnergyConfigEntry,
     async_add_entities: AddEntitiesCallback,
 ) -> None:
     """Set up KEBA KeEnergy sensors from a config entry."""

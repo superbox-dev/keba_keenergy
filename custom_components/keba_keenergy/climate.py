@@ -21,7 +21,6 @@ from homeassistant.components.climate.const import PRESET_BOOST
 from homeassistant.components.climate.const import PRESET_COMFORT
 from homeassistant.components.climate.const import PRESET_HOME
 from homeassistant.components.climate.const import PRESET_SLEEP
-from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import ATTR_TEMPERATURE
 from homeassistant.const import STATE_ON
 from homeassistant.const import UnitOfTemperature
@@ -38,6 +37,7 @@ from keba_keenergy_api.constants import SectionPrefix
 from .const import ATTR_OFFSET
 from .const import DOMAIN
 from .const import FLASH_WRITE_DELAY
+from .coordinator import KebaKeEnergyConfigEntry
 from .coordinator import KebaKeEnergyDataUpdateCoordinator
 from .entity import KebaKeEnergyEntity
 
@@ -102,7 +102,7 @@ class KebaKeEnergyClimateEntity(KebaKeEnergyEntity, ClimateEntity):
         self,
         coordinator: KebaKeEnergyDataUpdateCoordinator,
         description: ClimateEntityDescription,
-        entry: ConfigEntry,
+        entry: KebaKeEnergyConfigEntry,
         section_id: str,
         index: int | None,
     ) -> None:
@@ -311,7 +311,7 @@ class KebaKeEnergyClimateEntity(KebaKeEnergyEntity, ClimateEntity):
 
 async def async_setup_entry(
     hass: HomeAssistant,  # noqa: ARG001
-    entry: ConfigEntry,
+    entry: KebaKeEnergyConfigEntry,
     async_add_entities: AddEntitiesCallback,
 ) -> None:
     """Set up KEBA KeEnergy climates from a config entry."""

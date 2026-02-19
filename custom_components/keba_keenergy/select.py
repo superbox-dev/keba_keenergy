@@ -9,7 +9,6 @@ from typing import Final
 from homeassistant.components.select import DOMAIN as SELECT_DOMAIN
 from homeassistant.components.select import SelectEntity
 from homeassistant.components.select import SelectEntityDescription
-from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import EntityCategory
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
@@ -22,6 +21,7 @@ from keba_keenergy_api.constants import SolarCircuitOperatingMode
 from keba_keenergy_api.constants import SystemOperatingMode
 
 from .const import DOMAIN
+from .coordinator import KebaKeEnergyConfigEntry
 from .coordinator import KebaKeEnergyDataUpdateCoordinator
 from .entity import KebaKeEnergyExtendedEntity
 
@@ -53,7 +53,7 @@ class KebaKeEnergySelectEntity(KebaKeEnergyExtendedEntity, SelectEntity):
         self,
         coordinator: KebaKeEnergyDataUpdateCoordinator,
         description: KebaKeEnergySelectEntityDescription,
-        entry: ConfigEntry,
+        entry: KebaKeEnergyConfigEntry,
         section_id: str,
         index: int | None,
     ) -> None:
@@ -202,7 +202,7 @@ SELECT_TYPES: dict[str, tuple[KebaKeEnergySelectEntityDescription, ...]] = {
 
 async def async_setup_entry(
     hass: HomeAssistant,  # noqa: ARG001
-    entry: ConfigEntry,
+    entry: KebaKeEnergyConfigEntry,
     async_add_entities: AddEntitiesCallback,
 ) -> None:
     """Set up KEBA KeEnergy selects from a config entry."""

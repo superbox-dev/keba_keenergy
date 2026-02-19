@@ -9,13 +9,13 @@ from homeassistant.components.switch import SwitchDeviceClass
 from homeassistant.components.switch import SwitchEntity
 from homeassistant.components.switch import SwitchEntityDescription
 from homeassistant.components.switch.const import DOMAIN as SWITCH_DOMAIN
-from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import EntityCategory
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from keba_keenergy_api.constants import SectionPrefix
 
 from .const import DOMAIN
+from .coordinator import KebaKeEnergyConfigEntry
 from .coordinator import KebaKeEnergyDataUpdateCoordinator
 from .entity import KebaKeEnergyExtendedEntity
 
@@ -46,7 +46,7 @@ class KebaKeEnergySwitchEntity(KebaKeEnergyExtendedEntity, SwitchEntity):
         self,
         coordinator: KebaKeEnergyDataUpdateCoordinator,
         description: SwitchEntityDescription,
-        entry: ConfigEntry,
+        entry: KebaKeEnergyConfigEntry,
         section_id: str,
         index: int | None,
     ) -> None:
@@ -115,7 +115,7 @@ SWITCH_TYPES: dict[str, tuple[KebaKeEnergySwitchEntityDescription, ...]] = {
 
 async def async_setup_entry(
     hass: HomeAssistant,  # noqa: ARG001
-    entry: ConfigEntry,
+    entry: KebaKeEnergyConfigEntry,
     async_add_entities: AddEntitiesCallback,
 ) -> None:
     """Set up KEBA KeEnergy switches from a config entry."""

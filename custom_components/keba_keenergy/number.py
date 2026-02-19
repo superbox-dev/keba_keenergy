@@ -9,7 +9,6 @@ from homeassistant.components.number import DOMAIN as NUMBER_DOMAIN
 from homeassistant.components.number import NumberDeviceClass
 from homeassistant.components.number import NumberEntity
 from homeassistant.components.number import NumberEntityDescription
-from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import EntityCategory
 from homeassistant.const import PERCENTAGE
 from homeassistant.const import UnitOfTemperature
@@ -21,6 +20,7 @@ from keba_keenergy_api.constants import SectionPrefix
 
 from .const import DOMAIN
 from .const import FLASH_WRITE_DELAY
+from .coordinator import KebaKeEnergyConfigEntry
 from .coordinator import KebaKeEnergyDataUpdateCoordinator
 from .entity import KebaKeEnergyExtendedEntity
 
@@ -52,7 +52,7 @@ class KebaKeEnergyNumberEntity(KebaKeEnergyExtendedEntity, NumberEntity):
         self,
         coordinator: KebaKeEnergyDataUpdateCoordinator,
         description: KebaKeEnergyNumberEntityDescription,
-        entry: ConfigEntry,
+        entry: KebaKeEnergyConfigEntry,
         section_id: str,
         index: int | None,
     ) -> None:
@@ -275,7 +275,7 @@ NUMBER_TYPES: dict[str, tuple[KebaKeEnergyNumberEntityDescription, ...]] = {
 
 async def async_setup_entry(
     hass: HomeAssistant,  # noqa: ARG001
-    entry: ConfigEntry,
+    entry: KebaKeEnergyConfigEntry,
     async_add_entities: AddEntitiesCallback,
 ) -> None:
     """Set up KEBA KeEnergy numbers from a config entry."""

@@ -3,7 +3,6 @@
 import logging
 from typing import TYPE_CHECKING
 
-from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import CONF_HOST
 from homeassistant.const import CONF_PASSWORD
 from homeassistant.const import CONF_SSL
@@ -16,6 +15,7 @@ from homeassistant.helpers.typing import ConfigType
 
 from .const import DOMAIN
 from .const import MANUFACTURER
+from .coordinator import KebaKeEnergyConfigEntry
 from .coordinator import KebaKeEnergyDataUpdateCoordinator
 from .services import async_setup_services
 
@@ -41,7 +41,7 @@ async def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:  # noqa:
     return True
 
 
-async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
+async def async_setup_entry(hass: HomeAssistant, entry: KebaKeEnergyConfigEntry) -> bool:
     """Set up the KEBA KeEnergy platform."""
     host: str = entry.data[CONF_HOST]
     username: str | None = entry.data.get(CONF_USERNAME)
@@ -83,6 +83,6 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     return True
 
 
-async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
+async def async_unload_entry(hass: HomeAssistant, entry: KebaKeEnergyConfigEntry) -> bool:
     """Unload a config entry."""
     return await hass.config_entries.async_unload_platforms(entry, PLATFORMS)

@@ -9,7 +9,6 @@ from typing import TYPE_CHECKING
 
 import voluptuous as vol
 from ciso8601 import parse_datetime_as_naive
-from homeassistant.config_entries import ConfigEntry
 from homeassistant.config_entries import ConfigEntryState
 from homeassistant.core import HomeAssistant
 from homeassistant.core import ServiceCall
@@ -25,6 +24,7 @@ from .const import ATTR_CONFIG_ENTRY
 from .const import DOMAIN
 from .const import SERVICE_SET_AWAY_DATE_RANGE
 from .const import SERVICE_SET_HEATING_CURVE_POINTS
+from .coordinator import KebaKeEnergyConfigEntry
 from .coordinator import KebaKeEnergyDataUpdateCoordinator
 
 if TYPE_CHECKING:
@@ -89,7 +89,7 @@ HEATING_CURVE_POINTS_SCHEMA: vol.Schema = vol.Schema(
 def __get_coordinator(call: ServiceCall) -> KebaKeEnergyDataUpdateCoordinator:
     """Get the coordinator from the entry."""
     entry_id: str = call.data[ATTR_CONFIG_ENTRY]
-    entry: ConfigEntry | None = call.hass.config_entries.async_get_entry(entry_id)
+    entry: KebaKeEnergyConfigEntry | None = call.hass.config_entries.async_get_entry(entry_id)
 
     if not entry:
         raise ServiceValidationError(
