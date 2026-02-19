@@ -41,6 +41,81 @@ class KebaKeEnergyNumberEntityDescription(
     """Class describing KEBA KeEnergy number entities."""
 
 
+class KebaKeEnergyNumberEntity(KebaKeEnergyExtendedEntity, NumberEntity):
+    """KEBA KeEnergy number entity."""
+
+    def __init__(
+        self,
+        coordinator: KebaKeEnergyDataUpdateCoordinator,
+        description: KebaKeEnergyNumberEntityDescription,
+        entry: ConfigEntry,
+        section_id: str,
+        index: int | None,
+    ) -> None:
+        """Initialize the entity."""
+        self.entity_description: KebaKeEnergyNumberEntityDescription = description
+
+        super().__init__(
+            coordinator,
+            entry=entry,
+            section_id=section_id,
+            index=index,
+            key_index=self.entity_description.key_index,
+        )
+
+        self.entity_id: str = f"{NUMBER_DOMAIN}.{DOMAIN}_{self._attr_unique_id}"
+
+        self._pending_key = self.entity_description.key
+        self._pending_section = self.section
+        self._pending_device_numbers = self.device_numbers
+
+    @cached_property
+    def native_min_value(self) -> float:
+        """Return the maximum value."""
+        return (
+            float(self.get_attribute(self.entity_description.key, attr="lower_limit")) * self.entity_description.scale
+        )
+
+    @cached_property
+    def native_max_value(self) -> float:
+        """Return the maximum value."""
+        return (
+            float(self.get_attribute(self.entity_description.key, attr="upper_limit")) * self.entity_description.scale
+        )
+
+    @property
+    def native_value(self) -> float | None:
+        """Return the state of the number."""
+        native_value: float | None
+
+        if self._pending_value is not None and self._async_call_later:
+            native_value = self._pending_value * self.entity_description.scale
+        else:
+            native_value = self.get_value(self.entity_description.key, expected_type=float)
+
+            if native_value:
+                native_value = native_value * self.entity_description.scale
+
+        return native_value
+
+    async def async_set_native_value(self, value: float) -> None:
+        """Set new value."""
+        self._pending_value = value / self.entity_description.scale
+
+        if self._async_call_later:
+            self._async_call_later()
+            self._async_call_later = None
+
+        self._async_call_later = async_call_later(
+            hass=self.hass,
+            delay=FLASH_WRITE_DELAY,
+            action=HassJob(
+                self._async_debounced_write_data,
+                cancel_on_shutdown=True,
+            ),
+        )
+
+
 NUMBER_TYPES: dict[str, tuple[KebaKeEnergyNumberEntityDescription, ...]] = {
     SectionPrefix.HEAT_CIRCUIT: (
         KebaKeEnergyNumberEntityDescription(
@@ -212,78 +287,3 @@ async def async_setup_entry(
                     ]
 
     async_add_entities(numbers)
-
-
-class KebaKeEnergyNumberEntity(KebaKeEnergyExtendedEntity, NumberEntity):
-    """KEBA KeEnergy number entity."""
-
-    def __init__(
-        self,
-        coordinator: KebaKeEnergyDataUpdateCoordinator,
-        description: KebaKeEnergyNumberEntityDescription,
-        entry: ConfigEntry,
-        section_id: str,
-        index: int | None,
-    ) -> None:
-        """Initialize the entity."""
-        self.entity_description: KebaKeEnergyNumberEntityDescription = description
-
-        super().__init__(
-            coordinator,
-            entry=entry,
-            section_id=section_id,
-            index=index,
-            key_index=self.entity_description.key_index,
-        )
-
-        self.entity_id: str = f"{NUMBER_DOMAIN}.{DOMAIN}_{self._attr_unique_id}"
-
-        self._pending_key = self.entity_description.key
-        self._pending_section = self.section
-        self._pending_device_numbers = self.device_numbers
-
-    @cached_property
-    def native_min_value(self) -> float:
-        """Return the maximum value."""
-        return (
-            float(self.get_attribute(self.entity_description.key, attr="lower_limit")) * self.entity_description.scale
-        )
-
-    @cached_property
-    def native_max_value(self) -> float:
-        """Return the maximum value."""
-        return (
-            float(self.get_attribute(self.entity_description.key, attr="upper_limit")) * self.entity_description.scale
-        )
-
-    @property
-    def native_value(self) -> float | None:
-        """Return the state of the number."""
-        native_value: float | None
-
-        if self._pending_value is not None and self._async_call_later:
-            native_value = self._pending_value * self.entity_description.scale
-        else:
-            native_value = self.get_value(self.entity_description.key, expected_type=float)
-
-            if native_value:
-                native_value = native_value * self.entity_description.scale
-
-        return native_value
-
-    async def async_set_native_value(self, value: float) -> None:
-        """Set new value."""
-        self._pending_value = value / self.entity_description.scale
-
-        if self._async_call_later:
-            self._async_call_later()
-            self._async_call_later = None
-
-        self._async_call_later = async_call_later(
-            hass=self.hass,
-            delay=FLASH_WRITE_DELAY,
-            action=HassJob(
-                self._async_debounced_write_data,
-                cancel_on_shutdown=True,
-            ),
-        )

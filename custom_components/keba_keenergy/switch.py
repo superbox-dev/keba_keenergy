@@ -35,6 +35,46 @@ class KebaKeEnergySwitchEntityDescription(
     """Class describing KEBA KeEnergy number entities."""
 
 
+class KebaKeEnergySwitchEntity(KebaKeEnergyExtendedEntity, SwitchEntity):
+    """KEBA KeEnergy switch entity."""
+
+    def __init__(
+        self,
+        coordinator: KebaKeEnergyDataUpdateCoordinator,
+        description: SwitchEntityDescription,
+        entry: ConfigEntry,
+        section_id: str,
+        index: int | None,
+    ) -> None:
+        """Initialize the entity."""
+        self.entity_description: SwitchEntityDescription = description
+        super().__init__(coordinator, entry=entry, section_id=section_id, index=index)
+        self.entity_id: str = f"{SWITCH_DOMAIN}.{DOMAIN}_{self._attr_unique_id}"
+
+    @property
+    def is_on(self) -> bool:
+        """Return true if the switch is on."""
+        return self.get_value(self.entity_description.key, expected_type=str) == "on"
+
+    async def async_turn_off(self, **kwargs: Any) -> None:  # noqa: ARG002
+        """Turn the switch off."""
+        if self.is_on:
+            await self._async_write_data(
+                0,
+                section=self.section,
+                device_numbers=self.device_numbers,
+            )
+
+    async def async_turn_on(self, **kwargs: Any) -> None:  # noqa: ARG002
+        """Turn the switch on."""
+        if not self.is_on:
+            await self._async_write_data(
+                1,
+                section=self.section,
+                device_numbers=self.device_numbers,
+            )
+
+
 SWITCH_TYPES: dict[str, tuple[KebaKeEnergySwitchEntityDescription, ...]] = {
     SectionPrefix.HEAT_CIRCUIT: (
         KebaKeEnergySwitchEntityDescription(
@@ -96,46 +136,3 @@ async def async_setup_entry(
                     ]
 
     async_add_entities(numbers)
-
-
-_LOGGER = logging.getLogger(__name__)
-
-
-class KebaKeEnergySwitchEntity(KebaKeEnergyExtendedEntity, SwitchEntity):
-    """KEBA KeEnergy switch entity."""
-
-    def __init__(
-        self,
-        coordinator: KebaKeEnergyDataUpdateCoordinator,
-        description: SwitchEntityDescription,
-        entry: ConfigEntry,
-        section_id: str,
-        index: int | None,
-    ) -> None:
-        """Initialize the entity."""
-        self.entity_description: SwitchEntityDescription = description
-        super().__init__(coordinator, entry=entry, section_id=section_id, index=index)
-        self.entity_id: str = f"{SWITCH_DOMAIN}.{DOMAIN}_{self._attr_unique_id}"
-
-    @property
-    def is_on(self) -> bool:
-        """Return true if the switch is on."""
-        return self.get_value(self.entity_description.key, expected_type=str) == "on"
-
-    async def async_turn_off(self, **kwargs: Any) -> None:  # noqa: ARG002
-        """Turn the switch off."""
-        if self.is_on:
-            await self._async_write_data(
-                0,
-                section=self.section,
-                device_numbers=self.device_numbers,
-            )
-
-    async def async_turn_on(self, **kwargs: Any) -> None:  # noqa: ARG002
-        """Turn the switch on."""
-        if not self.is_on:
-            await self._async_write_data(
-                1,
-                section=self.section,
-                device_numbers=self.device_numbers,
-            )

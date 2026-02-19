@@ -64,6 +64,47 @@ class KebaKeEnergySensorEntityDescription[T](
     """Class describing KEBA KeEnergy sensor entities."""
 
 
+class KebaKeEnergySensorEntity(KebaKeEnergyExtendedEntity, SensorEntity):
+    """KEBA KeEnergy sensor entity."""
+
+    def __init__(
+        self,
+        coordinator: KebaKeEnergyDataUpdateCoordinator,
+        description: KebaKeEnergySensorEntityDescription[StateType],
+        entry: ConfigEntry,
+        section_id: str,
+        index: int | None,
+    ) -> None:
+        """Initialize the entity."""
+        self.entity_description: KebaKeEnergySensorEntityDescription[StateType] = description
+
+        super().__init__(
+            coordinator,
+            entry=entry,
+            section_id=section_id,
+            index=index,
+            key_index=self.entity_description.key_index,
+        )
+
+        self.entity_id: str = f"{SENSOR_DOMAIN}.{DOMAIN}_{self._attr_unique_id}"
+
+    @property
+    def native_value(self) -> StateType:
+        """Return the state of the sensor."""
+        return self.entity_description.value(self.get_value(self.entity_description.key))
+
+    @property
+    def extra_state_attributes(self) -> dict[str, Any] | None:
+        """Return extra state attributes."""
+        entity_data: Value | None = self.get_entity_data(self.entity_description.key)
+        attributes: dict[str, Any] | None = None
+
+        if isinstance(entity_data, dict):
+            attributes = entity_data["attributes"]
+
+        return attributes
+
+
 SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = {
     SectionPrefix.SYSTEM: (
         KebaKeEnergySensorEntityDescription[float](
@@ -1017,44 +1058,3 @@ async def async_setup_entry(
                         for index in range(device_numbers)
                     ]
     async_add_entities(sensors)
-
-
-class KebaKeEnergySensorEntity(KebaKeEnergyExtendedEntity, SensorEntity):
-    """KEBA KeEnergy sensor entity."""
-
-    def __init__(
-        self,
-        coordinator: KebaKeEnergyDataUpdateCoordinator,
-        description: KebaKeEnergySensorEntityDescription[StateType],
-        entry: ConfigEntry,
-        section_id: str,
-        index: int | None,
-    ) -> None:
-        """Initialize the entity."""
-        self.entity_description: KebaKeEnergySensorEntityDescription[StateType] = description
-
-        super().__init__(
-            coordinator,
-            entry=entry,
-            section_id=section_id,
-            index=index,
-            key_index=self.entity_description.key_index,
-        )
-
-        self.entity_id: str = f"{SENSOR_DOMAIN}.{DOMAIN}_{self._attr_unique_id}"
-
-    @property
-    def native_value(self) -> StateType:
-        """Return the state of the sensor."""
-        return self.entity_description.value(self.get_value(self.entity_description.key))
-
-    @property
-    def extra_state_attributes(self) -> dict[str, Any] | None:
-        """Return extra state attributes."""
-        entity_data: Value | None = self.get_entity_data(self.entity_description.key)
-        attributes: dict[str, Any] | None = None
-
-        if isinstance(entity_data, dict):
-            attributes = entity_data["attributes"]
-
-        return attributes

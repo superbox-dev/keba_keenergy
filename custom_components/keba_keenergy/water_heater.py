@@ -46,46 +46,6 @@ BUFFER_TANK_STATE_TO_HA: Final[dict[int, str]] = {
 }
 
 
-async def async_setup_entry(
-    hass: HomeAssistant,  # noqa: ARG001
-    entry: ConfigEntry,
-    async_add_entities: AddEntitiesCallback,
-) -> None:
-    """Set up KEBA KeEnergy water heaters from a config entry."""
-    coordinator: KebaKeEnergyDataUpdateCoordinator = entry.runtime_data
-    water_heaters: list[KebaKeEnergyWaterHeaterTankEntity] = []
-
-    water_heaters += [
-        KebaKeEnergyHotWaterTankEntity(
-            coordinator,
-            description=WaterHeaterEntityDescription(
-                key="hot_water_tank",
-                translation_key="hot_water_tank",
-            ),
-            entry=entry,
-            section_id=SectionPrefix.HOT_WATER_TANK.value,
-            index=index if coordinator.hot_water_tank_numbers > 1 else None,
-        )
-        for index in range(coordinator.hot_water_tank_numbers)
-    ]
-
-    water_heaters += [
-        KebaKeEnergyBufferTankEntity(
-            coordinator,
-            description=WaterHeaterEntityDescription(
-                key="buffer_tank",
-                translation_key="buffer_tank",
-            ),
-            entry=entry,
-            section_id=SectionPrefix.BUFFER_TANK.value,
-            index=index if coordinator.buffer_tank_numbers > 1 else None,
-        )
-        for index in range(coordinator.buffer_tank_numbers)
-    ]
-
-    async_add_entities(water_heaters)
-
-
 class KebaKeEnergyWaterHeaterTankEntity(KebaKeEnergyEntity, WaterHeaterEntity):
     """KEBA KeEnergy water heat entity."""
 
@@ -320,3 +280,43 @@ class KebaKeEnergyBufferTankEntity(KebaKeEnergyWaterHeaterTankEntity, WaterHeate
                     section=BufferTank.OPERATING_MODE,
                     device_numbers=self.coordinator.buffer_tank_numbers,
                 )
+
+
+async def async_setup_entry(
+    hass: HomeAssistant,  # noqa: ARG001
+    entry: ConfigEntry,
+    async_add_entities: AddEntitiesCallback,
+) -> None:
+    """Set up KEBA KeEnergy water heaters from a config entry."""
+    coordinator: KebaKeEnergyDataUpdateCoordinator = entry.runtime_data
+    water_heaters: list[KebaKeEnergyWaterHeaterTankEntity] = []
+
+    water_heaters += [
+        KebaKeEnergyHotWaterTankEntity(
+            coordinator,
+            description=WaterHeaterEntityDescription(
+                key="hot_water_tank",
+                translation_key="hot_water_tank",
+            ),
+            entry=entry,
+            section_id=SectionPrefix.HOT_WATER_TANK.value,
+            index=index if coordinator.hot_water_tank_numbers > 1 else None,
+        )
+        for index in range(coordinator.hot_water_tank_numbers)
+    ]
+
+    water_heaters += [
+        KebaKeEnergyBufferTankEntity(
+            coordinator,
+            description=WaterHeaterEntityDescription(
+                key="buffer_tank",
+                translation_key="buffer_tank",
+            ),
+            entry=entry,
+            section_id=SectionPrefix.BUFFER_TANK.value,
+            index=index if coordinator.buffer_tank_numbers > 1 else None,
+        )
+        for index in range(coordinator.buffer_tank_numbers)
+    ]
+
+    async_add_entities(water_heaters)

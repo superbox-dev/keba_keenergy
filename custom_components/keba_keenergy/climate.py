@@ -43,6 +43,7 @@ from .entity import KebaKeEnergyEntity
 
 if TYPE_CHECKING:
     from zoneinfo import ZoneInfo
+_LOGGER = logging.getLogger(__name__)
 
 HEAT_CIRCUIT_PRESET_TO_HA: Final[dict[int, str]] = {
     HeatCircuitOperatingMode.AUTO.value: PRESET_HOME,
@@ -69,32 +70,6 @@ TEMPERATURE_OFFSET_SCHEMA = {
 TEMPERATURE_SCHEMA = {
     vol.Required(ATTR_TEMPERATURE): vol.Coerce(float),
 }
-
-_LOGGER = logging.getLogger(__name__)
-
-
-async def async_setup_entry(
-    hass: HomeAssistant,  # noqa: ARG001
-    entry: ConfigEntry,
-    async_add_entities: AddEntitiesCallback,
-) -> None:
-    """Set up KEBA KeEnergy climates from a config entry."""
-    coordinator: KebaKeEnergyDataUpdateCoordinator = entry.runtime_data
-    climates: list[KebaKeEnergyClimateEntity] = [
-        KebaKeEnergyClimateEntity(
-            coordinator,
-            description=ClimateEntityDescription(
-                key="heat_circuit",
-                translation_key="heat_circuit",
-            ),
-            entry=entry,
-            section_id=SectionPrefix.HEAT_CIRCUIT.value,
-            index=index if coordinator.heat_circuit_numbers > 1 else None,
-        )
-        for index in range(coordinator.heat_circuit_numbers)
-    ]
-
-    async_add_entities(climates)
 
 
 class KebaKeEnergyClimateEntity(KebaKeEnergyEntity, ClimateEntity):
@@ -329,3 +304,27 @@ class KebaKeEnergyClimateEntity(KebaKeEnergyEntity, ClimateEntity):
                 start_timestamp=(start_date_tz - timedelta(days=1)).timestamp(),
                 end_timestamp=(end_date_tz - timedelta(days=1)).timestamp(),
             )
+
+
+async def async_setup_entry(
+    hass: HomeAssistant,  # noqa: ARG001
+    entry: ConfigEntry,
+    async_add_entities: AddEntitiesCallback,
+) -> None:
+    """Set up KEBA KeEnergy climates from a config entry."""
+    coordinator: KebaKeEnergyDataUpdateCoordinator = entry.runtime_data
+    climates: list[KebaKeEnergyClimateEntity] = [
+        KebaKeEnergyClimateEntity(
+            coordinator,
+            description=ClimateEntityDescription(
+                key="heat_circuit",
+                translation_key="heat_circuit",
+            ),
+            entry=entry,
+            section_id=SectionPrefix.HEAT_CIRCUIT.value,
+            index=index if coordinator.heat_circuit_numbers > 1 else None,
+        )
+        for index in range(coordinator.heat_circuit_numbers)
+    ]
+
+    async_add_entities(climates)
