@@ -4,6 +4,7 @@
             "already_configured": "Failed to connect",
             "already_in_progress": "Configuration flow is already in progress",
             "reauth_successful": "Re-authentication was successful",
+            "reconfigure_successful": "Re-configuration was successful",
             "wrong_account": "The user credentials provided do not match this {name} device"
         },
         "error": {

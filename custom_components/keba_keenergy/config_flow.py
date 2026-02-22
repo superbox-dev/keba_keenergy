@@ -1,9 +1,9 @@
 """Config flow for KEBA KeEnergy."""
 
 import logging
+from collections.abc import Mapping
 from http import HTTPStatus
 from typing import Any
-from collections.abc import Mapping
 from typing import TYPE_CHECKING
 
 import voluptuous as vol
@@ -29,6 +29,7 @@ from .const import NAME
 
 if TYPE_CHECKING:
     from aiohttp import ClientSession
+    from .coordinator import KebaKeEnergyConfigEntry
 
 STEP_USER_DATA_SCHEMA: vol.Schema = vol.Schema(
     {
@@ -86,6 +87,8 @@ class KebaKeEnergyConfigFlow(ConfigFlow, domain=DOMAIN):
         self.host: str = ""
         self.ssl: bool = False
         self.serial_number: str | None = None
+
+        self._entry: KebaKeEnergyConfigEntry | None = None
 
     async def _async_check_authentication_required(self) -> bool:
         """Check if authentication required."""
@@ -167,21 +170,8 @@ class KebaKeEnergyConfigFlow(ConfigFlow, domain=DOMAIN):
             errors = await self._async_validate_or_error(user_input)
 
             if self.serial_number and not errors:
-                await self.async_set_unique_id(self.serial_number)
-                self._abort_if_unique_id_mismatch(
-                    reason="wrong_account",
-                    description_placeholders={
-                        "name": f"{MANUFACTURER} {NAME}",
-                    },
-                )
-
-                return self.async_update_reload_and_abort(
-                    self._get_reauth_entry(),
-                    data_updates={
-                        CONF_USERNAME: user_input[CONF_USERNAME],
-                        CONF_PASSWORD: user_input[CONF_PASSWORD],
-                    },
-                )
+                self._entry = self._get_reauth_entry()
+                return await self._async_complete_entry(user_input)
 
         return self.async_show_form(
             step_id="reauth_confirm",
@@ -231,6 +221,15 @@ class KebaKeEnergyConfigFlow(ConfigFlow, domain=DOMAIN):
             },
         )
 
+    async def async_step_reconfigure(self, user_input: dict[str, Any] | None = None) -> ConfigFlowResult:
+        """Handle reconfiguration of the integration."""
+        self._entry = self._get_reconfigure_entry()
+
+        self.host = self._entry.data[CONF_HOST]
+        self.ssl = self._entry.data[CONF_SSL]
+
+        return await self.async_step_user(user_input)
+
     async def _async_validate_or_error(self, user_input: dict[str, Any]) -> dict[str, Any]:
         """Validate or error."""
         errors: dict[str, str] = {}
@@ -249,6 +248,20 @@ class KebaKeEnergyConfigFlow(ConfigFlow, domain=DOMAIN):
 
     async def _async_complete_entry(self, user_input: dict[str, Any]) -> ConfigFlowResult:
         await self.async_set_unique_id(self.serial_number)
+
+        if self._entry is not None:
+            self._abort_if_unique_id_mismatch(
+                reason="wrong_account",
+                description_placeholders={
+                    "name": f"{MANUFACTURER} {NAME}",
+                },
+            )
+
+            return self.async_update_reload_and_abort(
+                self._entry,
+                data_updates=user_input,
+            )
+
         self._abort_if_unique_id_configured()
 
         return self.async_create_entry(title=f"{MANUFACTURER} {NAME} ({self.host})", data=user_input)

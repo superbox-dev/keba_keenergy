@@ -4,6 +4,7 @@
             "already_configured": "Das Gerät ist bereits konfiguriert",
             "already_in_progress": "Konfigurationsvorgang läuft bereits",
             "reauth_successful": "Die erneute Authentifizierung war erfolgreich",
+            "reconfigure_successful": "Die Neukonfiguration war erfolgreich",
             "wrong_account": "Die angegebenen Benutzer-Anmeldedaten passen nicht zu diesem {name}-Gerät"
         },
         "error": {

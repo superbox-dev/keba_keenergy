@@ -9,7 +9,9 @@ from homeassistant import setup
 from homeassistant.config_entries import SOURCE_USER
 from homeassistant.config_entries import SOURCE_ZEROCONF
 from homeassistant.const import CONF_HOST
+from homeassistant.const import CONF_PASSWORD
 from homeassistant.const import CONF_SSL
+from homeassistant.const import CONF_USERNAME
 from homeassistant.core import HomeAssistant
 from homeassistant.data_entry_flow import FlowResultType
 from homeassistant.helpers.service_info.zeroconf import ZeroconfServiceInfo
@@ -138,6 +140,52 @@ async def test_user_flow_authentication(
     assert hass.config_entries.async_entry_for_domain_unique_id(DOMAIN, "12345678")
 
 
+async def test_reconfigure_flow_authentication(
+    hass: HomeAssistant,
+    config_entry: MockConfigEntry,
+    fake_api: FakeKebaKeEnergyAPI,
+) -> None:
+    fake_api.responses = [
+        MULTIPLE_POSITIONS_RESPONSE,
+        HEATING_CURVE_NAMES_RESPONSE,
+        get_multiple_position_fixed_data_response(),
+        MULTIPLE_POSITION_DATA_RESPONSE_1,
+        *HEATING_CURVES_RESPONSE_1_1,
+    ]
+
+    fake_api.register_auth_request("10.0.0.200", status=401)
+    fake_api.register_requests("10.0.0.200", ssl=True)
+
+    config_entry.add_to_hass(hass)
+
+    result: ConfigFlowResult = await config_entry.start_reconfigure_flow(hass)
+
+    assert result["type"] == FlowResultType.FORM
+    assert result["step_id"] == "user"
+
+    result_user_step: ConfigFlowResult = await hass.config_entries.flow.async_configure(
+        result["flow_id"],
+        {
+            CONF_HOST: "10.0.0.200",
+            CONF_SSL: True,
+        },
+    )
+
+    assert result_user_step["type"] == FlowResultType.FORM
+    assert result_user_step["step_id"] == "auth"
+
+    result_auth_step: ConfigFlowResult = await hass.config_entries.flow.async_configure(
+        result["flow_id"],
+        {
+            CONF_USERNAME: "test",
+            CONF_PASSWORD: "test",
+        },
+    )
+
+    assert result_auth_step["type"] == FlowResultType.ABORT
+    assert result_auth_step["reason"] == "reconfigure_successful"
+
+
 async def test_user_flow_authentication_cannot_connect(
     hass: HomeAssistant,
     fake_api: FakeKebaKeEnergyAPI,
@@ -199,6 +247,8 @@ async def test_reauth_flow_success(
         MULTIPLE_POSITION_DATA_RESPONSE_1,
         *HEATING_CURVES_RESPONSE_1_1,
     ]
+
+    fake_api.register_auth_request("10.0.0.100")
     fake_api.register_requests("10.0.0.100", ssl=True)
 
     config_entry.add_to_hass(hass)
@@ -235,6 +285,7 @@ async def test_reauth_flow_failure(
     fake_api.register_requests("10.0.0.100", ssl=True)
 
     config_entry.add_to_hass(hass)
+
     result_start_reauth: ConfigFlowResult = await config_entry.start_reauth_flow(
         hass,
         data={
@@ -280,6 +331,7 @@ async def test_reauth_flow_wrong_account(
     fake_api.register_requests("10.0.0.100", ssl=True)
 
     config_entry.add_to_hass(hass)
+
     result_start_reauth: ConfigFlowResult = await config_entry.start_reauth_flow(
         hass,
         data={
