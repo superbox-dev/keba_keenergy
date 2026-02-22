@@ -80,14 +80,29 @@ class FakeKebaKeEnergyAPI:
     def register_auth_request(self, host: str, /, *, status: int = 200, exc: Exception | None = None) -> None:
         self.aioclient_mock.get(f"https://{host}", status=status, exc=exc)
 
-    def register_requests(self, host: str, /, *, ssl: bool = False) -> None:
+    def register_get_device_info(
+        self,
+        host: str,
+        /,
+        *,
+        ssl: bool = False,
+        status: int = 200,
+        exc: Exception | None = None,
+    ) -> None:
         schema: str = "https" if ssl else "http"
 
         self.aioclient_mock.post(
             f"{schema}://{host}/deviceControl?action=getDeviceInfo",
             text=json.dumps(DEVICE_INFO_RESPONSE),
             headers={"Content-Type": "application/json;charset=utf-8"},
+            status=status,
+            exc=exc,
         )
+
+    def register_requests(self, host: str, /, *, ssl: bool = False) -> None:
+        schema: str = "https" if ssl else "http"
+
+        self.register_get_device_info(host, ssl=ssl)
 
         self.aioclient_mock.post(
             f"{schema}://{host}/swupdate?action=getSystemInstalled",

@@ -240,6 +240,13 @@ async def test_reauth_flow_success(
     config_entry: MockConfigEntry,
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
+    fake_api.responses = [
+        MULTIPLE_POSITIONS_RESPONSE,
+        HEATING_CURVE_NAMES_RESPONSE,
+        get_multiple_position_fixed_data_response(),
+        MULTIPLE_POSITION_DATA_RESPONSE_1,
+        *HEATING_CURVES_RESPONSE_1_1,
+    ]
     fake_api.register_requests("10.0.0.100", ssl=True)
 
     config_entry.add_to_hass(hass)
@@ -273,7 +280,7 @@ async def test_reauth_flow_failure(
     config_entry: MockConfigEntry,
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
-    fake_api.register_requests("10.0.0.100", ssl=True)
+    fake_api.register_get_device_info("10.0.0.100", ssl=True, status=401)
 
     config_entry.add_to_hass(hass)
 
@@ -289,20 +296,19 @@ async def test_reauth_flow_failure(
     assert result_start_reauth["step_id"] == "reauth_confirm"
     assert result_start_reauth["errors"] == {}
 
-    with patch.object(SystemEndpoints, "get_device_info", side_effect=APIError(status=HTTPStatus.UNAUTHORIZED)):
-        result: ConfigFlowResult = await hass.config_entries.flow.async_configure(
-            result_start_reauth["flow_id"],
-            user_input={
-                "username": "test",
-                "password": "test",
-            },
-        )
+    result: ConfigFlowResult = await hass.config_entries.flow.async_configure(
+        result_start_reauth["flow_id"],
+        user_input={
+            "username": "test",
+            "password": "test",
+        },
+    )
 
-        assert result["type"] is FlowResultType.FORM
-        assert result["step_id"] == "reauth_confirm"
-        assert result["errors"] == {
-            "base": "invalid_auth",
-        }
+    assert result["type"] is FlowResultType.FORM
+    assert result["step_id"] == "reauth_confirm"
+    assert result["errors"] == {
+        "base": "invalid_auth",
+    }
 
 
 @pytest.mark.parametrize(
@@ -319,7 +325,7 @@ async def test_reauth_flow_wrong_account(
     config_entry: MockConfigEntry,
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
-    fake_api.register_requests("10.0.0.100", ssl=True)
+    fake_api.register_get_device_info("10.0.0.100", ssl=True)
 
     config_entry.add_to_hass(hass)
 
@@ -512,6 +518,7 @@ async def test_zeroconf_cannot_connect(
     expected_error: str,
 ) -> None:
     fake_api.register_auth_request("ap4400.local")
+    fake_api.register_get_device_info("ap4400.local", ssl=False, exc=side_effect)
 
     result_discovery_confirm_1: ConfigFlowResult = await hass.config_entries.flow.async_init(
         DOMAIN,
@@ -519,11 +526,10 @@ async def test_zeroconf_cannot_connect(
         data=ZERO_CONF_SERVICE_INFO,
     )
 
-    with patch.object(SystemEndpoints, "get_device_info", side_effect=side_effect):
-        result_discovery_confirm_2: ConfigFlowResult = await hass.config_entries.flow.async_configure(
-            result_discovery_confirm_1["flow_id"],
-            user_input={},
-        )
+    result_discovery_confirm_2: ConfigFlowResult = await hass.config_entries.flow.async_configure(
+        result_discovery_confirm_1["flow_id"],
+        user_input={},
+    )
 
     assert result_discovery_confirm_2["type"] == FlowResultType.FORM
     assert result_discovery_confirm_2["errors"] == {"base": expected_error}
