@@ -213,12 +213,12 @@
             "operating_mode_system": {
                 "name": "Operating mode",
                 "state": {
-                    "setup": "Setup",
-                    "standby": "Standby",
-                    "summer": "Hot water only",
                     "auto_heat": "Heating",
                     "auto_cool": "Cooling",
-                    "auto": "Automatic"
+                    "auto": "Automatic",
+                    "setup": "Setup",
+                    "standby": "Standby",
+                    "summer": "Hot water only"
                 }
             }
         },

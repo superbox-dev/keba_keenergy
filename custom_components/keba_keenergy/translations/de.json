@@ -405,12 +405,12 @@
             "operating_mode_system": {
                 "name": "Betriebsart",
                 "state": {
-                    "setup": "Einrichtung",
-                    "standby": "Standby",
-                    "summer": "Sommerbetrieb (nur Warmwasser)",
                     "auto_heat": "Heizen",
                     "auto_cool": "Kühlen",
-                    "auto": "Automatik"
+                    "auto": "Automatik",
+                    "setup": "Einrichtung",
+                    "standby": "Standby",
+                    "summer": "Sommerbetrieb (nur Warmwasser)"
                 }
             },
             "outdoor_temperature": {

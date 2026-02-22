@@ -1,0 +1,162 @@
+{
+    "entity": {
+        "binary_sensor": {
+            "circulation_pump_state": {
+                "state": {
+                    "off": "mdi:pump-off",
+                    "on": "mdi:pump"
+                }
+            },
+            "cool_request": {
+                "state": {
+                    "off": "mdi:power-off",
+                    "on": "mdi:snowflake"
+                }
+            },
+            "compressor_failure": {
+                "state": {
+                    "off": "mdi:check-circle",
+                    "on": "mdi:alert-circle"
+                }
+            },
+            "heat_request": {
+                "state": {
+                    "off": "mdi:power-off",
+                    "on": "mdi:fire"
+                }
+            },
+            "hot_water_flow": {
+                "state": {
+                    "off": "mdi:water-off",
+                    "on": "mdi:water"
+                }
+            },
+            "source_actuator_failure": {
+                "state": {
+                    "off": "mdi:check-circle",
+                    "on": "mdi:alert-circle"
+                }
+            },
+            "source_failure": {
+                "state": {
+                    "off": "mdi:check-circle",
+                    "on": "mdi:alert-circle"
+                }
+            },
+            "source_pressure_failure": {
+                "state": {
+                    "off": "mdi:check-circle",
+                    "on": "mdi:alert-circle"
+                }
+            },
+            "three_phase_failure": {
+                "state": {
+                    "off": "mdi:check-circle",
+                    "on": "mdi:alert-circle"
+                }
+            },
+            "vfd_failure": {
+                "state": {
+                    "off": "mdi:check-circle",
+                    "on": "mdi:alert-circle"
+                }
+            }
+        },
+        "sensor": {
+            "circulation_pump": {
+              "default": "mdi:speedometer",
+                "range": {
+                    "0": "mdi:speedometer-slow",
+                    "50": "mdi:speedometer-medium",
+                    "75": "mdi:sun-thermometer"
+                }
+            },
+            "compressor": {
+                "default": "mdi:speedometer",
+                "range": {
+                    "0": "mdi:speedometer-slow",
+                    "50": "mdi:speedometer-medium",
+                    "75": "mdi:sun-thermometer"
+                }
+            },
+            "heat_request": {
+                "default": "mdi:fire-off",
+                "state": {
+                    "on": "mdi:fire"
+                }
+            },
+            "operating_mode_buffer_tank": {
+                "state": {
+                    "heat_up": "mdi:fire",
+                    "off": "mdi:power-off",
+                    "on": "mdi:power"
+                }
+            },
+            "operating_mode_external_heat_source": {
+                "state": {
+                    "off": "mdi:power-off",
+                    "on": "mdi:power"
+                }
+            },
+            "operating_mode_hot_water_tank": {
+                "state": {
+                    "auto": "mdi:thermometer-auto",
+                    "heat_up": "mdi:fire",
+                    "off": "mdi:power-off",
+                    "on": "mdi:power"
+                }
+            },
+            "operating_mode_heat_circuit": {
+                "state": {
+                    "auto": "mdi:clock-outline",
+                    "day": "mdi:weather-sunny",
+                    "night": "mdi:weather-night",
+                    "holiday": "mdi:bag-checked",
+                    "off": "mdi:power-standby",
+                    "party": "mdi:glass-cocktail"
+                }
+            },
+            "operating_mode_system": {
+                "default": "mdi:cog",
+                "state": {
+                    "standby": "mdi:power-standby",
+                    "summer": "mdi:water-thermometer",
+                    "auto_heat": "mdi:fire",
+                    "auto_cool": "mdi:snowflake",
+                    "auto": "mdi:thermometer-auto"
+                }
+            },
+            "outdoor_temperature": {
+                "default": "mdi:sun-thermometer",
+                "range": {
+                    "-30": "mdi:snowflake-thermometer",
+                    "10": "mdi:sun-thermometer"
+                }
+            },
+            "solar_circuit_pump_1": {
+                "default": "mdi:speedometer",
+                "range": {
+                    "0": "mdi:speedometer-slow",
+                    "50": "mdi:speedometer-medium",
+                    "75": "mdi:sun-thermometer"
+                }
+            },
+            "solar_circuit_pump_2": {
+                "default": "mdi:speedometer",
+                "range": {
+                    "0": "mdi:speedometer-slow",
+                    "50": "mdi:speedometer-medium",
+                    "75": "mdi:sun-thermometer"
+                }
+            },
+            "source_pump_speed": {
+                "default": "mdi:speedometer",
+                "range": {
+                    "0": "mdi:speedometer-slow",
+                    "50": "mdi:speedometer-medium",
+                    "75": "mdi:sun-thermometer"
+                }
+            }
+        }
+    }
+}

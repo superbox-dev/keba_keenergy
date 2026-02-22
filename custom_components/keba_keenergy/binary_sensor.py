@@ -47,7 +47,6 @@ BINARY_SENSOR_TYPES: dict[str, tuple[KebaKeEnergyBinarySensorEntityDescription, 
             translation_placeholders={
                 "counter": " 1",
             },
-            icon="mdi:fire",
         ),
         KebaKeEnergyBinarySensorEntityDescription(
             key="heat_request",
@@ -56,7 +55,6 @@ BINARY_SENSOR_TYPES: dict[str, tuple[KebaKeEnergyBinarySensorEntityDescription, 
             translation_placeholders={
                 "counter": " 2",
             },
-            icon="mdi:fire",
         ),
     ),
     SectionPrefix.HEAT_PUMP: (
@@ -67,7 +65,6 @@ BINARY_SENSOR_TYPES: dict[str, tuple[KebaKeEnergyBinarySensorEntityDescription, 
             translation_placeholders={
                 "counter": "",
             },
-            icon="mdi:fire",
         ),
         KebaKeEnergyBinarySensorEntityDescription(
             device_class=BinarySensorDeviceClass.PROBLEM,
@@ -78,7 +75,6 @@ BINARY_SENSOR_TYPES: dict[str, tuple[KebaKeEnergyBinarySensorEntityDescription, 
             translation_placeholders={
                 "counter": "",
             },
-            icon="mdi:alert-rhombus",
         ),
         KebaKeEnergyBinarySensorEntityDescription(
             device_class=BinarySensorDeviceClass.PROBLEM,
@@ -89,7 +85,6 @@ BINARY_SENSOR_TYPES: dict[str, tuple[KebaKeEnergyBinarySensorEntityDescription, 
             translation_placeholders={
                 "counter": "",
             },
-            icon="mdi:alert-rhombus",
         ),
         KebaKeEnergyBinarySensorEntityDescription(
             device_class=BinarySensorDeviceClass.PROBLEM,
@@ -100,7 +95,6 @@ BINARY_SENSOR_TYPES: dict[str, tuple[KebaKeEnergyBinarySensorEntityDescription, 
             translation_placeholders={
                 "counter": "",
             },
-            icon="mdi:alert-rhombus",
         ),
         KebaKeEnergyBinarySensorEntityDescription(
             device_class=BinarySensorDeviceClass.PROBLEM,
@@ -111,7 +105,6 @@ BINARY_SENSOR_TYPES: dict[str, tuple[KebaKeEnergyBinarySensorEntityDescription, 
             translation_placeholders={
                 "counter": "",
             },
-            icon="mdi:alert-rhombus",
         ),
         KebaKeEnergyBinarySensorEntityDescription(
             device_class=BinarySensorDeviceClass.PROBLEM,
@@ -122,7 +115,6 @@ BINARY_SENSOR_TYPES: dict[str, tuple[KebaKeEnergyBinarySensorEntityDescription, 
             translation_placeholders={
                 "counter": "",
             },
-            icon="mdi:alert-rhombus",
         ),
         KebaKeEnergyBinarySensorEntityDescription(
             device_class=BinarySensorDeviceClass.PROBLEM,
@@ -133,7 +125,6 @@ BINARY_SENSOR_TYPES: dict[str, tuple[KebaKeEnergyBinarySensorEntityDescription, 
             translation_placeholders={
                 "counter": "",
             },
-            icon="mdi:alert-rhombus",
         ),
     ),
     SectionPrefix.BUFFER_TANK: (
@@ -144,7 +135,6 @@ BINARY_SENSOR_TYPES: dict[str, tuple[KebaKeEnergyBinarySensorEntityDescription, 
             translation_placeholders={
                 "counter": "",
             },
-            icon="mdi:fire",
         ),
         KebaKeEnergyBinarySensorEntityDescription(
             entity_registry_enabled_default=False,
@@ -154,7 +144,6 @@ BINARY_SENSOR_TYPES: dict[str, tuple[KebaKeEnergyBinarySensorEntityDescription, 
             translation_placeholders={
                 "counter": "",
             },
-            icon="mdi:snowflake",
         ),
     ),
     SectionPrefix.HOT_WATER_TANK: (
@@ -165,14 +154,12 @@ BINARY_SENSOR_TYPES: dict[str, tuple[KebaKeEnergyBinarySensorEntityDescription, 
             translation_placeholders={
                 "counter": "",
             },
-            icon="mdi:fire",
         ),
         KebaKeEnergyBinarySensorEntityDescription(
             entity_registry_enabled_default=False,
             key="hot_water_flow",
             key_index=None,
             translation_key="hot_water_flow",
-            icon="mdi:water",
         ),
         KebaKeEnergyBinarySensorEntityDescription(
             device_class=BinarySensorDeviceClass.RUNNING,
@@ -180,7 +167,6 @@ BINARY_SENSOR_TYPES: dict[str, tuple[KebaKeEnergyBinarySensorEntityDescription, 
             key="circulation_pump_state",
             key_index=None,
             translation_key="circulation_pump_state",
-            icon="mdi:pump",
         ),
     ),
     SectionPrefix.EXTERNAL_HEAT_SOURCE: (
@@ -191,7 +177,6 @@ BINARY_SENSOR_TYPES: dict[str, tuple[KebaKeEnergyBinarySensorEntityDescription, 
             translation_placeholders={
                 "counter": "",
             },
-            icon="mdi:fire",
         ),
     ),
 }
