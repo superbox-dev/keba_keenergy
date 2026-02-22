@@ -240,15 +240,6 @@ async def test_reauth_flow_success(
     config_entry: MockConfigEntry,
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
-    fake_api.responses = [
-        MULTIPLE_POSITIONS_RESPONSE,
-        HEATING_CURVE_NAMES_RESPONSE,
-        get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITION_DATA_RESPONSE_1,
-        *HEATING_CURVES_RESPONSE_1_1,
-    ]
-
-    fake_api.register_auth_request("10.0.0.100")
     fake_api.register_requests("10.0.0.100", ssl=True)
 
     config_entry.add_to_hass(hass)
