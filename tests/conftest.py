@@ -150,8 +150,9 @@ class FakeKebaKeEnergyAPI:
 @pytest.fixture
 async def fake_api(
     aioclient_mock: AiohttpClientMocker,
-) -> FakeKebaKeEnergyAPI:
-    return FakeKebaKeEnergyAPI(aioclient_mock)
+) -> AsyncGenerator[FakeKebaKeEnergyAPI]:
+    yield FakeKebaKeEnergyAPI(aioclient_mock)
+    aioclient_mock.clear_requests()
 
 
 @pytest.fixture

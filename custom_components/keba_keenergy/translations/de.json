@@ -2,7 +2,9 @@
     "config": {
         "abort": {
             "already_configured": "Das Gerät ist bereits konfiguriert",
-            "already_in_progress": "Konfigurationsvorgang läuft bereits"
+            "already_in_progress": "Konfigurationsvorgang läuft bereits",
+            "reauth_successful": "Die erneute Authentifizierung war erfolgreich",
+            "wrong_account": "Die angegebenen Benutzer-Anmeldedaten passen nicht zu diesem {name}-Gerät"
         },
         "error": {
             "cannot_connect": "Verbindung fehlgeschlagen",
@@ -25,6 +27,17 @@
             "discovery_confirm": {
                 "description": "Möchtest du {name} ({host}) zu Home Assistant hinzufügen?",
                 "title": "Discovered {name}"
+            },
+            "reauth_confirm": {
+                "data": {
+                    "password": "Passwort",
+                    "username": "Benutzername"
+                },
+                "data_description": {
+                    "password": "Das Passwort zur Anmeldung bei deinem {name}-Gerät.",
+                    "username": "Der Benutzername zur Anmeldung bei deinem {name}-Gerät."
+                },
+                "description": "Bitte gib den Benutzernamen und das Passwort erneut ein."
             },
             "user": {
                 "data": {
@@ -572,6 +585,9 @@
         }
     },
     "exceptions": {
+        "authentication_error": {
+            "message": "Authentifizierung fehlgeschlagen. Bitte überprüfe deine Anmeldedaten."
+        },
         "cannot_find_heating_curve": {
             "message": "Heizkurve \"{heating_curve}\" nicht gefunden."
         },

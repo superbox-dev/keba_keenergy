@@ -2,7 +2,9 @@
     "config": {
         "abort": {
             "already_configured": "Failed to connect",
-            "already_in_progress": "Configuration flow is already in progress"
+            "already_in_progress": "Configuration flow is already in progress",
+            "reauth_successful": "Re-authentication was successful",
+            "wrong_account": "The user credentials provided do not match this {name} device"
         },
         "error": {
             "cannot_connect": "Failed to connect",
@@ -25,6 +27,17 @@
             "discovery_confirm": {
                 "description": "Do you want to add {name} ({host}) to Home Assistant?",
                 "title": "Discovered {name}"
+            },
+            "reauth_confirm": {
+                "data": {
+                    "password": "Password",
+                    "username": "Username"
+                },
+                "data_description": {
+                    "password": "The password to log in to your {name} device.",
+                    "username": "The username to log in to your {name} device."
+                },
+                "description": "Please re-enter the username and password."
             },
             "user": {
                 "data": {
@@ -572,6 +585,9 @@
         }
     },
     "exceptions": {
+        "authentication_error": {
+            "message": "Authentication failed. Please check your credentials."
+        },
         "cannot_find_heating_curve": {
             "message": "Can not find heating curve \"{heating_curve}\"."
         },

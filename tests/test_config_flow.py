@@ -177,6 +177,134 @@ async def test_user_flow_authentication_cannot_connect(
 
 
 @pytest.mark.parametrize(
+    "config_entry",
+    [
+        {
+            "data": {
+                CONF_SSL: True,
+            },
+        },
+    ],
+    indirect=True,
+)
+async def test_reauth_flow_success(
+    hass: HomeAssistant,
+    config_entry: MockConfigEntry,
+    fake_api: FakeKebaKeEnergyAPI,
+) -> None:
+    fake_api.responses = [
+        MULTIPLE_POSITIONS_RESPONSE,
+        HEATING_CURVE_NAMES_RESPONSE,
+        get_multiple_position_fixed_data_response(),
+        MULTIPLE_POSITION_DATA_RESPONSE_1,
+        *HEATING_CURVES_RESPONSE_1_1,
+    ]
+    fake_api.register_requests("10.0.0.100", ssl=True)
+
+    config_entry.add_to_hass(hass)
+
+    result_start_reauth: ConfigFlowResult = await config_entry.start_reauth_flow(
+        hass,
+        data={
+            CONF_HOST: "10.0.0.100",
+            CONF_SSL: True,
+        },
+    )
+
+    assert result_start_reauth["type"] is FlowResultType.FORM
+    assert result_start_reauth["step_id"] == "reauth_confirm"
+    assert result_start_reauth["errors"] == {}
+
+    result: ConfigFlowResult = await hass.config_entries.flow.async_configure(
+        result_start_reauth["flow_id"],
+        user_input={
+            "username": "test",
+            "password": "test",
+        },
+    )
+
+    assert result["type"] is FlowResultType.ABORT
+    assert result["reason"] == "reauth_successful"
+
+
+async def test_reauth_flow_failure(
+    hass: HomeAssistant,
+    config_entry: MockConfigEntry,
+    fake_api: FakeKebaKeEnergyAPI,
+) -> None:
+    fake_api.register_requests("10.0.0.100", ssl=True)
+
+    config_entry.add_to_hass(hass)
+    result_start_reauth: ConfigFlowResult = await config_entry.start_reauth_flow(
+        hass,
+        data={
+            CONF_HOST: "10.0.0.100",
+            CONF_SSL: True,
+        },
+    )
+
+    assert result_start_reauth["type"] is FlowResultType.FORM
+    assert result_start_reauth["step_id"] == "reauth_confirm"
+    assert result_start_reauth["errors"] == {}
+
+    with patch.object(SystemEndpoints, "get_device_info", side_effect=APIError(status=HTTPStatus.UNAUTHORIZED)):
+        result: ConfigFlowResult = await hass.config_entries.flow.async_configure(
+            result_start_reauth["flow_id"],
+            user_input={
+                "username": "test",
+                "password": "test",
+            },
+        )
+
+        assert result["type"] is FlowResultType.FORM
+        assert result["step_id"] == "reauth_confirm"
+        assert result["errors"] == {
+            "base": "invalid_auth",
+        }
+
+
+@pytest.mark.parametrize(
+    "config_entry",
+    [
+        {
+            "unique_id": "12345679",
+        },
+    ],
+    indirect=True,
+)
+async def test_reauth_flow_wrong_account(
+    hass: HomeAssistant,
+    config_entry: MockConfigEntry,
+    fake_api: FakeKebaKeEnergyAPI,
+) -> None:
+    fake_api.register_requests("10.0.0.100", ssl=True)
+
+    config_entry.add_to_hass(hass)
+    result_start_reauth: ConfigFlowResult = await config_entry.start_reauth_flow(
+        hass,
+        data={
+            CONF_HOST: "10.0.0.100",
+            CONF_SSL: True,
+        },
+    )
+
+    assert result_start_reauth["type"] is FlowResultType.FORM
+    assert result_start_reauth["step_id"] == "reauth_confirm"
+    assert result_start_reauth["errors"] == {}
+
+    result: ConfigFlowResult = await hass.config_entries.flow.async_configure(
+        result_start_reauth["flow_id"],
+        user_input={
+            "username": "test",
+            "password": "test",
+        },
+    )
+
+    assert result["type"] is FlowResultType.ABORT
+    assert result["reason"] == "wrong_account"
+
+
+@pytest.mark.parametrize(
     ("side_effect", "expected_error"),
     [
         (APIError("mocked api error"), "cannot_connect"),
@@ -232,7 +360,10 @@ async def test_zeroconf_flow(
     )
     assert result_discovery_confirm["step_id"] == "discovery_confirm"
     assert result_discovery_confirm["type"] == FlowResultType.FORM
-    assert result_discovery_confirm["description_placeholders"] == {"name": "KEBA KeEnergy", "host": "ap4400.local"}
+    assert result_discovery_confirm["description_placeholders"] == {
+        "name": "KEBA KeEnergy",
+        "host": "ap4400.local",
+    }
     assert not result_discovery_confirm["errors"]
 
     result_create_entry: ConfigFlowResult = await hass.config_entries.flow.async_configure(
@@ -267,7 +398,9 @@ async def test_zeroconf_flow_authentication(
     )
     assert result_auth_step["step_id"] == "auth"
     assert result_auth_step["type"] == FlowResultType.FORM
-    assert result_auth_step["description_placeholders"] is None
+    assert result_auth_step["description_placeholders"] == {
+        "name": "KEBA KeEnergy",
+    }
     assert not result_auth_step["errors"]
 
     result_create_entry: ConfigFlowResult = await hass.config_entries.flow.async_configure(

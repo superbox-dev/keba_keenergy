@@ -3,6 +3,7 @@
 import logging
 from http import HTTPStatus
 from typing import Any
+from collections.abc import Mapping
 from typing import TYPE_CHECKING
 
 import voluptuous as vol
@@ -144,6 +145,51 @@ class KebaKeEnergyConfigFlow(ConfigFlow, domain=DOMAIN):
             step_id="auth",
             data_schema=STEP_AUTH_DATA_SCHEMA,
             errors=errors,
+            description_placeholders={
+                "name": f"{MANUFACTURER} {NAME}",
+            },
+        )
+
+    async def async_step_reauth(self, entry_data: Mapping[str, Any]) -> ConfigFlowResult:
+        """Perform reauth after an authentication error."""
+        self.host = entry_data[CONF_HOST]
+        self.ssl = entry_data[CONF_SSL]
+
+        return await self.async_step_reauth_confirm()
+
+    async def async_step_reauth_confirm(self, user_input: dict[str, Any] | None = None) -> ConfigFlowResult:
+        """Handle reauth confirmation flow."""
+        errors: dict[str, str] = {}
+        if user_input is not None:
+            user_input[CONF_HOST] = self.host
+            user_input[CONF_SSL] = self.ssl
+
+            errors = await self._async_validate_or_error(user_input)
+
+            if self.serial_number and not errors:
+                await self.async_set_unique_id(self.serial_number)
+                self._abort_if_unique_id_mismatch(
+                    reason="wrong_account",
+                    description_placeholders={
+                        "name": f"{MANUFACTURER} {NAME}",
+                    },
+                )
+
+                return self.async_update_reload_and_abort(
+                    self._get_reauth_entry(),
+                    data_updates={
+                        CONF_USERNAME: user_input[CONF_USERNAME],
+                        CONF_PASSWORD: user_input[CONF_PASSWORD],
+                    },
+                )
+
+        return self.async_show_form(
+            step_id="reauth_confirm",
+            data_schema=STEP_AUTH_DATA_SCHEMA,
+            errors=errors,
+            description_placeholders={
+                "name": f"{MANUFACTURER} {NAME}",
+            },
         )
 
     async def async_step_zeroconf(self, discovery_info: ZeroconfServiceInfo) -> ConfigFlowResult:

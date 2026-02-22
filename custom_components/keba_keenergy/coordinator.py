@@ -16,6 +16,7 @@ from zoneinfo import ZoneInfo
 from aiohttp import ClientSession
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
+from homeassistant.exceptions import ConfigEntryAuthFailed
 from homeassistant.exceptions import HomeAssistantError
 from homeassistant.helpers import issue_registry as ir
 from homeassistant.helpers.debounce import Debouncer
@@ -41,6 +42,7 @@ from keba_keenergy_api.endpoints import Position
 from keba_keenergy_api.endpoints import Value
 from keba_keenergy_api.endpoints import ValueResponse
 from keba_keenergy_api.error import APIError
+from keba_keenergy_api.error import AuthenticationError
 
 from .const import DOMAIN
 from .const import FLASH_WRITE_LIMIT_PER_WEEK
@@ -235,6 +237,11 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
     async def _api_call_for_update(coro: Awaitable[Any]) -> Any:
         try:
             return await coro
+        except AuthenticationError as error:
+            raise ConfigEntryAuthFailed(
+                translation_domain=DOMAIN,
+                translation_key="authentication_error",
+            ) from error
         except APIError as error:
             raise UpdateFailed(
                 translation_domain=DOMAIN,
