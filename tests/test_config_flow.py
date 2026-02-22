@@ -19,8 +19,11 @@ from pytest_homeassistant_custom_component.common import MockConfigEntry
 
 from custom_components.keba_keenergy.const import DEFAULT_SSL
 from custom_components.keba_keenergy.const import DOMAIN
+from tests.api_data import HEATING_CURVES_RESPONSE_1_1
+from tests.api_data import HEATING_CURVE_NAMES_RESPONSE
 from tests.api_data import MULTIPLE_POSITIONS_RESPONSE
 from tests.api_data import MULTIPLE_POSITION_DATA_RESPONSE_1
+from tests.api_data import get_multiple_position_fixed_data_response
 from tests.conftest import FakeKebaKeEnergyAPI
 
 if TYPE_CHECKING:
@@ -44,7 +47,13 @@ async def test_user_flow(
     hass: HomeAssistant,
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
-    fake_api.responses = [MULTIPLE_POSITIONS_RESPONSE, MULTIPLE_POSITION_DATA_RESPONSE_1]
+    fake_api.responses = [
+        MULTIPLE_POSITIONS_RESPONSE,
+        HEATING_CURVE_NAMES_RESPONSE,
+        get_multiple_position_fixed_data_response(),
+        MULTIPLE_POSITION_DATA_RESPONSE_1,
+        *HEATING_CURVES_RESPONSE_1_1,
+    ]
     fake_api.register_auth_request("10.0.0.100")
     fake_api.register_requests("10.0.0.100")
 
@@ -80,7 +89,13 @@ async def test_user_flow_authentication(
     hass: HomeAssistant,
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
-    fake_api.responses = [MULTIPLE_POSITIONS_RESPONSE, MULTIPLE_POSITION_DATA_RESPONSE_1]
+    fake_api.responses = [
+        MULTIPLE_POSITIONS_RESPONSE,
+        HEATING_CURVE_NAMES_RESPONSE,
+        get_multiple_position_fixed_data_response(),
+        MULTIPLE_POSITION_DATA_RESPONSE_1,
+        *HEATING_CURVES_RESPONSE_1_1,
+    ]
     fake_api.register_auth_request("10.0.0.100", status=401)
     fake_api.register_requests("10.0.0.100", ssl=True)
 
@@ -127,7 +142,13 @@ async def test_user_flow_authentication_cannot_connect(
     hass: HomeAssistant,
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
-    fake_api.responses = [MULTIPLE_POSITIONS_RESPONSE, MULTIPLE_POSITION_DATA_RESPONSE_1]
+    fake_api.responses = [
+        MULTIPLE_POSITIONS_RESPONSE,
+        HEATING_CURVE_NAMES_RESPONSE,
+        get_multiple_position_fixed_data_response(),
+        MULTIPLE_POSITION_DATA_RESPONSE_1,
+        *HEATING_CURVES_RESPONSE_1_1,
+    ]
     fake_api.register_auth_request("10.0.0.100", exc=ClientError())
     fake_api.register_requests("10.0.0.100", ssl=True)
 
@@ -194,7 +215,13 @@ async def test_zeroconf_flow(
     hass: HomeAssistant,
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
-    fake_api.responses = [MULTIPLE_POSITIONS_RESPONSE, MULTIPLE_POSITION_DATA_RESPONSE_1]
+    fake_api.responses = [
+        MULTIPLE_POSITIONS_RESPONSE,
+        HEATING_CURVE_NAMES_RESPONSE,
+        get_multiple_position_fixed_data_response(),
+        MULTIPLE_POSITION_DATA_RESPONSE_1,
+        *HEATING_CURVES_RESPONSE_1_1,
+    ]
     fake_api.register_auth_request("ap4400.local")
     fake_api.register_requests("ap4400.local")
 
@@ -223,7 +250,13 @@ async def test_zeroconf_flow_authentication(
     hass: HomeAssistant,
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
-    fake_api.responses = [MULTIPLE_POSITIONS_RESPONSE, MULTIPLE_POSITION_DATA_RESPONSE_1]
+    fake_api.responses = [
+        MULTIPLE_POSITIONS_RESPONSE,
+        HEATING_CURVE_NAMES_RESPONSE,
+        get_multiple_position_fixed_data_response(),
+        MULTIPLE_POSITION_DATA_RESPONSE_1,
+        *HEATING_CURVES_RESPONSE_1_1,
+    ]
     fake_api.register_auth_request("ap4400.local", status=401)
     fake_api.register_requests("ap4400.local", ssl=True)
 
@@ -255,7 +288,10 @@ async def test_zeroconf_flow_authentication_cannot_connect(
     hass: HomeAssistant,
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
-    fake_api.responses = [MULTIPLE_POSITIONS_RESPONSE, MULTIPLE_POSITION_DATA_RESPONSE_1]
+    fake_api.responses = [
+        MULTIPLE_POSITIONS_RESPONSE,
+        MULTIPLE_POSITION_DATA_RESPONSE_1,
+    ]
     fake_api.register_auth_request("ap4400.local", exc=ClientError())
     fake_api.register_requests("ap4400.local", ssl=True)
 

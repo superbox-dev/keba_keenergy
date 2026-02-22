@@ -60,7 +60,6 @@ async def async_setup_entry(hass: HomeAssistant, entry: KebaKeEnergyConfigEntry)
         session=session,
     )
 
-    await coordinator.async_initialize()
     await coordinator.async_config_entry_first_refresh()
 
     entry.runtime_data = coordinator
