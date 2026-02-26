@@ -387,6 +387,20 @@ HEAT_CIRCUIT_CURRENT_HEATING_CURVE: str = """
     }
 """
 
+HEAT_CIRCUIT_PUMP_SPEED: str = """
+    {
+        "name": "APPL.CtrlAppl.sParam.heatCircuit[%s]pumpAO.values.setValueScaled",
+        "attributes": {
+            "formatId": "fmt3p0",
+            "longText": "Pump speed",
+            "unitId": "Pct100",
+            "upperLimit": "1",
+            "lowerLimit":"0"
+        },
+        "value": "%s"
+    }
+"""
+
 SOLAR_CIRCUIT_OPERATION_MODE: str = """
     {
         "name": "APPL.CtrlAppl.sParam.solarCircuit[%s].param.operatingMode",
@@ -1618,6 +1632,7 @@ DEFAULT_POSITION_DATA_RESPONSE: list[dict[str, Any]] = [
     json.loads(HEAT_CIRCUIT_HEATING_CURVE_SLOPE % ("0", "0.1")),
     json.loads(HEAT_CIRCUIT_USE_HEATING_CURVE % ("0", "true")),
     json.loads(HEAT_CIRCUIT_CURRENT_HEATING_CURVE % ("0", "HC1")),
+    json.loads(HEAT_CIRCUIT_PUMP_SPEED % ("0", "0.5")),
     json.loads(SOLAR_CIRCUIT_OPERATION_MODE % ("0", "0")),
     json.loads(SOLAR_CIRCUIT_SOURCE_TEMPERATURE % ("0", "44.43")),
     json.loads(SOLAR_CIRCUIT_PUMP_1 % ("0", "0.63")),
@@ -1720,6 +1735,8 @@ ENTITY_UPDATED_DATA_RESPONSE: list[dict[str, Any]] = [
     json.loads(HEAT_CIRCUIT_USE_HEATING_CURVE % ("1", "false")),
     json.loads(HEAT_CIRCUIT_CURRENT_HEATING_CURVE % ("0", "HC2")),
     json.loads(HEAT_CIRCUIT_CURRENT_HEATING_CURVE % ("1", "HC3")),
+    json.loads(HEAT_CIRCUIT_PUMP_SPEED % ("0", "0.5")),
+    json.loads(HEAT_CIRCUIT_PUMP_SPEED % ("1", "0.5")),
     json.loads(SOLAR_CIRCUIT_OPERATION_MODE % ("0", "0")),
     json.loads(SOLAR_CIRCUIT_OPERATION_MODE % ("1", "1")),
     json.loads(SOLAR_CIRCUIT_SOURCE_TEMPERATURE % ("0", "44.43")),
@@ -1830,6 +1847,7 @@ def get_single_position_fixed_data_response(
         json.loads(HEAT_CIRCUIT_HEATING_CURVE_SLOPE % ("0", "0.4")),
         json.loads(HEAT_CIRCUIT_USE_HEATING_CURVE % ("0", "false")),
         json.loads(HEAT_CIRCUIT_CURRENT_HEATING_CURVE % ("0", "HC4")),
+        json.loads(HEAT_CIRCUIT_PUMP_SPEED % ("0", "0.5")),
         json.loads(SOLAR_CIRCUIT_OPERATION_MODE % ("0", "0")),
         json.loads(SOLAR_CIRCUIT_SOURCE_TEMPERATURE % ("0", "44.43")),
         json.loads(SOLAR_CIRCUIT_PUMP_1 % ("0", "0.63")),
@@ -1933,6 +1951,8 @@ MULTIPLE_POSITION_DATA_RESPONSE_1: list[dict[str, Any]] = [
     json.loads(HEAT_CIRCUIT_USE_HEATING_CURVE % ("1", "true")),
     json.loads(HEAT_CIRCUIT_CURRENT_HEATING_CURVE % ("0", "HC6")),
     json.loads(HEAT_CIRCUIT_CURRENT_HEATING_CURVE % ("1", "HC7")),
+    json.loads(HEAT_CIRCUIT_PUMP_SPEED % ("0", "0.5")),
+    json.loads(HEAT_CIRCUIT_PUMP_SPEED % ("1", "0.5")),
     json.loads(SOLAR_CIRCUIT_OPERATION_MODE % ("0", "0")),
     json.loads(SOLAR_CIRCUIT_OPERATION_MODE % ("1", "1")),
     json.loads(SOLAR_CIRCUIT_SOURCE_TEMPERATURE % ("0", "44.43")),
@@ -2066,6 +2086,8 @@ MULTIPLE_POSITION_DATA_RESPONSE_2: list[dict[str, Any]] = [
     json.loads(HEAT_CIRCUIT_USE_HEATING_CURVE % ("1", "true")),
     json.loads(HEAT_CIRCUIT_CURRENT_HEATING_CURVE % ("0", "HC FBH")),
     json.loads(HEAT_CIRCUIT_CURRENT_HEATING_CURVE % ("1", "HC HK")),
+    json.loads(HEAT_CIRCUIT_PUMP_SPEED % ("0", "0.5")),
+    json.loads(HEAT_CIRCUIT_PUMP_SPEED % ("1", "0.5")),
     json.loads(SOLAR_CIRCUIT_OPERATION_MODE % ("0", "0")),
     json.loads(SOLAR_CIRCUIT_OPERATION_MODE % ("1", "1")),
     json.loads(SOLAR_CIRCUIT_SOURCE_TEMPERATURE % ("0", "44.43")),

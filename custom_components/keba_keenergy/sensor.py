@@ -347,6 +347,15 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
             icon="mdi:chart-bell-curve-cumulative",
             value=lambda data: data,
         ),
+        KebaKeEnergySensorEntityDescription[float](
+            entity_registry_enabled_default=False,
+            key="pump_speed",
+            key_index=None,
+            native_unit_of_measurement=PERCENTAGE,
+            state_class=SensorStateClass.MEASUREMENT,
+            translation_key="pump_speed",
+            value=lambda data: data * 100,
+        ),
     ),
     SectionPrefix.SOLAR_CIRCUIT: (
         KebaKeEnergySensorEntityDescription[float](

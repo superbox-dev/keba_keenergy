@@ -9,13 +9,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!--start-->
 
-## [1.9.0] - 2025-02-22
+## [1.9.0b2] - 2025-02-26
+
+### Added
+
+- Add heating circuit pump speed sensor [(Issue #34)][issue-34]
 
 ### Changed
 
 - Update code with the [quality scale checklist][qs-checklist].
 
 [qs-checklist]: https://developers.home-assistant.io/docs/core/integration-quality-scale/rules/
+[issue-34]: https://github.com/superbox-dev/keba_keenergy/issues/34
 
 ## [1.8.1] - 2025-02-20
 

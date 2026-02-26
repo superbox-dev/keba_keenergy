@@ -416,6 +416,9 @@
             "outdoor_temperature": {
                 "name": "Außentemperatur"
             },
+            "pump_speed": {
+                "name": "Pumpendrehzahl"
+            },
             "pv_excess_power": {
                 "name": "Überschussleistung"
             },

@@ -82,6 +82,7 @@ REQUEST_DATA: list[Section] = [
     HeatCircuit.HEATING_CURVE_SLOPE,
     HeatCircuit.USE_HEATING_CURVE,
     HeatCircuit.HEATING_CURVE,
+    HeatCircuit.PUMP_SPEED,
     SolarCircuit.OPERATING_MODE,
     SolarCircuit.SOURCE_TEMPERATURE,
     SolarCircuit.PUMP_1,

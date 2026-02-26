@@ -1409,6 +1409,15 @@ async def test_heat_circuit_sensors(
     }
     assert heat_circuit_operating_mode_1.attributes[ATTR_FRIENDLY_NAME] == "Heating circuit 1 Operating mode"
 
+    heat_circuit_pump_speed_1: State | None = hass.states.get(
+        "sensor.keba_keenergy_12345678_heat_circuit_pump_speed_1",
+    )
+    assert isinstance(heat_circuit_pump_speed_1, State)
+    assert heat_circuit_pump_speed_1.state == "50.0"
+    assert heat_circuit_pump_speed_1.attributes[CONF_UNIT_OF_MEASUREMENT] == PERCENTAGE
+    assert heat_circuit_pump_speed_1.attributes[ATTR_STATE_CLASS] == SensorStateClass.MEASUREMENT
+    assert heat_circuit_pump_speed_1.attributes[ATTR_FRIENDLY_NAME] == "Heating circuit 1 Pump speed"
+
     heat_circuit_heat_request_1: State | None = hass.states.get(
         "sensor.keba_keenergy_12345678_heat_circuit_heat_request_1",
     )
@@ -1582,6 +1591,12 @@ async def test_heat_circuit_sensors_translations(
         "room_control": "Raumregelung",
     }
     assert heat_circuit_operating_mode_1.attributes[ATTR_FRIENDLY_NAME] == "Heizkreis 1 Betriebsart"
+
+    heat_circuit_pump_speed_1: State | None = hass.states.get(
+        "sensor.keba_keenergy_12345678_heat_circuit_pump_speed_1",
+    )
+    assert isinstance(heat_circuit_pump_speed_1, State)
+    assert heat_circuit_pump_speed_1.attributes[ATTR_FRIENDLY_NAME] == "Heizkreis 1 Pumpendrehzahl"
 
     heat_circuit_heat_request_1: State | None = hass.states.get(
         "sensor.keba_keenergy_12345678_heat_circuit_heat_request_1",
