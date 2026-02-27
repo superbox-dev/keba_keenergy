@@ -133,12 +133,20 @@
                     "10": "mdi:sun-thermometer"
                 }
             },
+            "pump_speed": {
+                "default": "mdi:speedometer",
+                "range": {
+                    "0": "mdi:speedometer-slow",
+                    "50": "mdi:speedometer-medium",
+                    "75": "mdi:speedometer"
+                }
+            },
             "solar_circuit_pump_1": {
                 "default": "mdi:speedometer",
                 "range": {
                     "0": "mdi:speedometer-slow",
                     "50": "mdi:speedometer-medium",
-                    "75": "mdi:sun-thermometer"
+                    "75": "mdi:speedometer"
                 }
             },
             "solar_circuit_pump_2": {
@@ -146,7 +154,7 @@
                 "range": {
                     "0": "mdi:speedometer-slow",
                     "50": "mdi:speedometer-medium",
-                    "75": "mdi:sun-thermometer"
+                    "75": "mdi:speedometer"
                 }
             },
             "source_pump_speed": {
@@ -154,7 +162,7 @@
                 "range": {
                     "0": "mdi:speedometer-slow",
                     "50": "mdi:speedometer-medium",
-                    "75": "mdi:sun-thermometer"
+                    "75": "mdi:speedometer"
                 }
             }
         }
