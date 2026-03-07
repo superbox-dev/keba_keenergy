@@ -1,23 +1,28 @@
 """Support for the KEBA KeEnergy switches."""
 
+from __future__ import annotations
+
 import logging
 from dataclasses import dataclass
 from typing import Any
 from typing import Final
+from typing import TYPE_CHECKING
 
 from homeassistant.components.switch import SwitchDeviceClass
 from homeassistant.components.switch import SwitchEntity
 from homeassistant.components.switch import SwitchEntityDescription
 from homeassistant.components.switch.const import DOMAIN as SWITCH_DOMAIN
 from homeassistant.const import EntityCategory
-from homeassistant.core import HomeAssistant
-from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from keba_keenergy_api.constants import SectionPrefix
 
 from .const import DOMAIN
-from .coordinator import KebaKeEnergyConfigEntry
-from .coordinator import KebaKeEnergyDataUpdateCoordinator
 from .entity import KebaKeEnergyExtendedEntity
+
+if TYPE_CHECKING:
+    from homeassistant.core import HomeAssistant
+    from homeassistant.helpers.entity_platform import AddEntitiesCallback
+    from .coordinator import KebaKeEnergyConfigEntry
+    from .coordinator import KebaKeEnergyDataUpdateCoordinator
 
 _LOGGER = logging.getLogger(__name__)
 

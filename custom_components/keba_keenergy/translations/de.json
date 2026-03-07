@@ -617,6 +617,18 @@
             "description": "In dieser Woche wurden mehr als {limit} Schreibzugriffe auf das Gerät durchgeführt.\n\nSehr häufige Schreibzugriffe (zum Beispiel durch Automationen) können die Lebensdauer des Flash-Speichers des Geräts reduzieren."
         }
     },
+    "options": {
+        "step": {
+            "init": {
+                "data": {
+                    "scan_interval": "Scan Intervall"
+                },
+                "data_description": {
+                    "scan_interval": "Sekunden zwischen Updates"
+                }
+            }
+        }
+    },
     "services": {
         "set_away_date_range": {
             "name": "Datumsbereich für Abwesenheit festlegen",

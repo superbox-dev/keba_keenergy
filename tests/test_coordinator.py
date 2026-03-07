@@ -42,6 +42,7 @@ async def test_async_update_data_api_error_raises_update_failed(
         password=None,
         ssl=False,
         session=session,
+        scan_interval=20,
     )
 
     with (

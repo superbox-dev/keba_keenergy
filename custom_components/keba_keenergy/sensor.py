@@ -1,7 +1,8 @@
 """Support for the KEBA KeEnergy sensors."""
 
+from __future__ import annotations
+
 import logging
-from collections.abc import Callable
 from dataclasses import dataclass
 from typing import Any
 from typing import Final
@@ -21,8 +22,6 @@ from homeassistant.const import UnitOfPower
 from homeassistant.const import UnitOfPressure
 from homeassistant.const import UnitOfTemperature
 from homeassistant.const import UnitOfTime
-from homeassistant.core import HomeAssistant
-from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.typing import StateType
 from keba_keenergy_api.constants import BufferTankOperatingMode
 from keba_keenergy_api.constants import ExternalHeatSourceOperatingMode
@@ -36,12 +35,15 @@ from keba_keenergy_api.constants import SwitchValvePosition
 from keba_keenergy_api.constants import SystemOperatingMode
 
 from .const import DOMAIN
-from .coordinator import KebaKeEnergyConfigEntry
-from .coordinator import KebaKeEnergyDataUpdateCoordinator
 from .entity import KebaKeEnergyExtendedEntity
 
 if TYPE_CHECKING:
+    from collections.abc import Callable
+    from homeassistant.core import HomeAssistant
+    from homeassistant.helpers.entity_platform import AddEntitiesCallback
     from keba_keenergy_api.endpoints import Value
+    from .coordinator import KebaKeEnergyConfigEntry
+    from .coordinator import KebaKeEnergyDataUpdateCoordinator
 
 T = TypeVar("T", bound=StateType)
 

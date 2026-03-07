@@ -1,9 +1,12 @@
 """Support for the KEBA KeEnergy numbers."""
 
+from __future__ import annotations
+
 import logging
 from dataclasses import dataclass
 from functools import cached_property
 from typing import Final
+from typing import TYPE_CHECKING
 
 from homeassistant.components.number import DOMAIN as NUMBER_DOMAIN
 from homeassistant.components.number import NumberDeviceClass
@@ -13,16 +16,19 @@ from homeassistant.const import EntityCategory
 from homeassistant.const import PERCENTAGE
 from homeassistant.const import UnitOfTemperature
 from homeassistant.core import HassJob
-from homeassistant.core import HomeAssistant
-from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.event import async_call_later
 from keba_keenergy_api.constants import SectionPrefix
 
 from .const import DOMAIN
 from .const import FLASH_WRITE_DELAY
-from .coordinator import KebaKeEnergyConfigEntry
-from .coordinator import KebaKeEnergyDataUpdateCoordinator
 from .entity import KebaKeEnergyExtendedEntity
+
+if TYPE_CHECKING:
+    from homeassistant.core import HomeAssistant
+    from homeassistant.helpers.entity_platform import AddEntitiesCallback
+    from .coordinator import KebaKeEnergyConfigEntry
+    from .coordinator import KebaKeEnergyDataUpdateCoordinator
+
 
 _LOGGER = logging.getLogger(__name__)
 

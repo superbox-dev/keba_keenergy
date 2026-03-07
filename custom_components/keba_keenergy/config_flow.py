@@ -1,7 +1,8 @@
 """Config flow for KEBA KeEnergy."""
 
+from __future__ import annotations
+
 import logging
-from collections.abc import Mapping
 from http import HTTPStatus
 from typing import Any
 from typing import TYPE_CHECKING
@@ -10,24 +11,31 @@ import voluptuous as vol
 from aiohttp import ClientError
 from homeassistant.config_entries import ConfigFlow
 from homeassistant.config_entries import ConfigFlowResult
+from homeassistant.config_entries import OptionsFlowWithReload
 from homeassistant.const import CONF_HOST
 from homeassistant.const import CONF_PASSWORD
+from homeassistant.const import CONF_SCAN_INTERVAL
 from homeassistant.const import CONF_SSL
 from homeassistant.const import CONF_USERNAME
 from homeassistant.core import HomeAssistant
+from homeassistant.core import callback
 from homeassistant.exceptions import HomeAssistantError
+from homeassistant.helpers import config_validation as cv
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
-from homeassistant.helpers.service_info.zeroconf import ZeroconfServiceInfo
 from keba_keenergy_api.api import KebaKeEnergyAPI
 from keba_keenergy_api.error import APIError
 
 from .const import CONFIG_ENTRY_VERSION
+from .const import DEFAULT_SCAN_INTERVAL
 from .const import DEFAULT_SSL
 from .const import DOMAIN
 from .const import MANUFACTURER
+from .const import MIN_SCAN_INTERVAL
 from .const import NAME
 
 if TYPE_CHECKING:
+    from collections.abc import Mapping
+    from homeassistant.helpers.service_info.zeroconf import ZeroconfServiceInfo
     from aiohttp import ClientSession
     from .coordinator import KebaKeEnergyConfigEntry
 
@@ -44,7 +52,6 @@ STEP_AUTH_DATA_SCHEMA: vol.Schema = vol.Schema(
         vol.Required(CONF_PASSWORD): str,
     },
 )
-
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -265,6 +272,37 @@ class KebaKeEnergyConfigFlow(ConfigFlow, domain=DOMAIN):
         self._abort_if_unique_id_configured()
 
         return self.async_create_entry(title=f"{MANUFACTURER} {NAME} ({self.host})", data=user_input)
+
+    @staticmethod
+    @callback
+    def async_get_options_flow(
+        config_entry: KebaKeEnergyConfigEntry,  # noqa: ARG004
+    ) -> KebaKeEnergyOptionsFlow:
+        """Get the options flow for this handler."""
+        return KebaKeEnergyOptionsFlow()
+
+
+class KebaKeEnergyOptionsFlow(OptionsFlowWithReload):
+    """Option flow for KEBA KeEnergy."""
+
+    async def async_step_init(self, user_input: dict[str, Any] | None = None) -> ConfigFlowResult:
+        """Handle options flow."""
+        if user_input is not None:
+            return self.async_create_entry(data=user_input)
+
+        data_schema = vol.Schema(
+            {
+                vol.Required(
+                    CONF_SCAN_INTERVAL,
+                    default=self.config_entry.options.get(CONF_SCAN_INTERVAL, DEFAULT_SCAN_INTERVAL),
+                ): vol.All(cv.positive_int, vol.Range(min=MIN_SCAN_INTERVAL)),
+            },
+        )
+
+        return self.async_show_form(
+            step_id="init",
+            data_schema=data_schema,
+        )
 
 
 class CannotConnectError(HomeAssistantError):

@@ -1,5 +1,7 @@
 """Support for the KEBA KeEnergy climate."""
 
+from __future__ import annotations
+
 import logging
 from datetime import date
 from datetime import datetime
@@ -25,8 +27,6 @@ from homeassistant.const import ATTR_TEMPERATURE
 from homeassistant.const import STATE_ON
 from homeassistant.const import UnitOfTemperature
 from homeassistant.core import HassJob
-from homeassistant.core import HomeAssistant
-from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.event import async_call_later
 from homeassistant.util import dt as dt_util
 from keba_keenergy_api.constants import HeatCircuit
@@ -37,12 +37,14 @@ from keba_keenergy_api.constants import SectionPrefix
 from .const import ATTR_OFFSET
 from .const import DOMAIN
 from .const import FLASH_WRITE_DELAY
-from .coordinator import KebaKeEnergyConfigEntry
-from .coordinator import KebaKeEnergyDataUpdateCoordinator
 from .entity import KebaKeEnergyEntity
 
 if TYPE_CHECKING:
+    from homeassistant.core import HomeAssistant
+    from homeassistant.helpers.entity_platform import AddEntitiesCallback
     from zoneinfo import ZoneInfo
+    from .coordinator import KebaKeEnergyConfigEntry
+    from .coordinator import KebaKeEnergyDataUpdateCoordinator
 
 _LOGGER = logging.getLogger(__name__)
 

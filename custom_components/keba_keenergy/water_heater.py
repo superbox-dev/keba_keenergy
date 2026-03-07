@@ -1,8 +1,11 @@
 """Support for the KEBA KeEnergy water heater."""
 
+from __future__ import annotations
+
 from functools import cached_property
 from typing import Any
 from typing import Final
+from typing import TYPE_CHECKING
 
 from homeassistant.components.water_heater import STATE_ECO
 from homeassistant.components.water_heater import STATE_HEAT_PUMP
@@ -18,7 +21,6 @@ from homeassistant.const import STATE_OFF
 from homeassistant.const import UnitOfTemperature
 from homeassistant.core import HassJob
 from homeassistant.core import HomeAssistant
-from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.event import async_call_later
 from keba_keenergy_api.constants import BufferTank
 from keba_keenergy_api.constants import BufferTankOperatingMode
@@ -28,9 +30,12 @@ from keba_keenergy_api.constants import SectionPrefix
 
 from .const import DOMAIN
 from .const import FLASH_WRITE_DELAY
-from .coordinator import KebaKeEnergyConfigEntry
-from .coordinator import KebaKeEnergyDataUpdateCoordinator
 from .entity import KebaKeEnergyEntity
+
+if TYPE_CHECKING:
+    from homeassistant.helpers.entity_platform import AddEntitiesCallback
+    from .coordinator import KebaKeEnergyConfigEntry
+    from .coordinator import KebaKeEnergyDataUpdateCoordinator
 
 PARALLEL_UPDATES: Final[int] = 0
 

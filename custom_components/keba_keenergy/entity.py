@@ -1,8 +1,8 @@
 """Entity classes for the KEBA KeEnergy integration."""
 
+from __future__ import annotations
+
 import logging
-from collections.abc import Mapping
-from datetime import datetime
 from functools import cached_property
 from typing import Any
 from typing import TYPE_CHECKING
@@ -10,7 +10,6 @@ from typing import TypeVar
 from typing import overload
 
 from homeassistant.helpers.device_registry import DeviceInfo
-from homeassistant.helpers.typing import StateType
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 from keba_keenergy_api.constants import BufferTank
 from keba_keenergy_api.constants import ExternalHeatSource
@@ -21,7 +20,6 @@ from keba_keenergy_api.constants import Section
 from keba_keenergy_api.constants import SectionPrefix
 from keba_keenergy_api.constants import SolarCircuit
 from keba_keenergy_api.constants import System
-from keba_keenergy_api.endpoints import Value
 
 from .const import DOMAIN
 from .const import MANUFACTURER
@@ -31,7 +29,11 @@ from .coordinator import KebaKeEnergyConfigEntry
 from .coordinator import KebaKeEnergyDataUpdateCoordinator
 
 if TYPE_CHECKING:
+    from collections.abc import Mapping
+    from datetime import datetime
     from homeassistant.core import CALLBACK_TYPE
+    from homeassistant.helpers.typing import StateType
+    from keba_keenergy_api.endpoints import Value
 
 _LOGGER = logging.getLogger(__name__)
 

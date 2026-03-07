@@ -9,10 +9,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!--start-->
 
-## [1.9.0b1] - 2025-02-26
+## [1.9.0b2] - 2025-03-07
 
 ### Added
 
+- Add options to set a custom polling rate per device [(Issue #30)][issue-30]
 - Add heating circuit pump speed sensor [(Issue #34)][issue-34]
 
 ### Changed
@@ -20,6 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Update code with the [quality scale checklist][qs-checklist].
 
 [qs-checklist]: https://developers.home-assistant.io/docs/core/integration-quality-scale/rules/
+[issue-30]: https://github.com/superbox-dev/keba_keenergy/issues/30
 [issue-34]: https://github.com/superbox-dev/keba_keenergy/issues/34
 
 ## [1.8.1] - 2025-02-20

@@ -1,21 +1,20 @@
 """DataUpdateCoordinator for the KEBA KeEnergy integration."""
 
+from __future__ import annotations
+
 import logging
 from asyncio import Lock
-from collections.abc import Awaitable
-from collections.abc import Callable
 from copy import deepcopy
 from datetime import date
 from datetime import timedelta
 from functools import cached_property
 from typing import Any
+from typing import TYPE_CHECKING
 from typing import TypeGuard
 from typing import cast
 from zoneinfo import ZoneInfo
 
-from aiohttp import ClientSession
 from homeassistant.config_entries import ConfigEntry
-from homeassistant.core import HomeAssistant
 from homeassistant.exceptions import ConfigEntryAuthFailed
 from homeassistant.exceptions import HomeAssistantError
 from homeassistant.helpers import issue_registry as ir
@@ -47,7 +46,12 @@ from keba_keenergy_api.error import AuthenticationError
 from .const import DOMAIN
 from .const import FLASH_WRITE_LIMIT_PER_WEEK
 from .const import REQUEST_REFRESH_COOLDOWN
-from .const import SCAN_INTERVAL
+
+if TYPE_CHECKING:
+    from collections.abc import Callable
+    from collections.abc import Awaitable
+    from aiohttp import ClientSession
+    from homeassistant.core import HomeAssistant
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -191,6 +195,7 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
         username: str | None,
         password: str | None,
         ssl: bool,
+        scan_interval: int,
         session: ClientSession,
     ) -> None:
         """Initialize."""
@@ -225,7 +230,7 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
             hass,
             _LOGGER,
             name=DOMAIN,
-            update_interval=timedelta(seconds=SCAN_INTERVAL),
+            update_interval=timedelta(seconds=scan_interval),
             request_refresh_debouncer=Debouncer(
                 hass,
                 _LOGGER,

@@ -617,6 +617,18 @@
             "description": "More than {limit} write operations were performed on the device this week.\n\nVery frequent write operations (for example caused by automations) may reduce the lifetime of the device's flash memory."
         }
     },
+    "options": {
+        "step": {
+            "init": {
+                "data": {
+                    "scan_interval": "Scan interval"
+                },
+                "data_description": {
+                    "scan_interval": "Seconds between updates"
+                }
+            }
+        }
+    },
     "services": {
         "set_away_date_range": {
             "name": "Set away date range",

@@ -1,17 +1,17 @@
 """Support for the KEBA KeEnergy selects."""
 
+from __future__ import annotations
+
 import logging
-from collections.abc import Callable
 from dataclasses import dataclass
 from functools import cached_property
 from typing import Final
+from typing import TYPE_CHECKING
 
 from homeassistant.components.select import DOMAIN as SELECT_DOMAIN
 from homeassistant.components.select import SelectEntity
 from homeassistant.components.select import SelectEntityDescription
 from homeassistant.const import EntityCategory
-from homeassistant.core import HomeAssistant
-from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from keba_keenergy_api.constants import BufferTankOperatingMode
 from keba_keenergy_api.constants import ExternalHeatSourceOperatingMode
 from keba_keenergy_api.constants import HeatCircuitOperatingMode
@@ -21,9 +21,15 @@ from keba_keenergy_api.constants import SolarCircuitOperatingMode
 from keba_keenergy_api.constants import SystemOperatingMode
 
 from .const import DOMAIN
-from .coordinator import KebaKeEnergyConfigEntry
-from .coordinator import KebaKeEnergyDataUpdateCoordinator
 from .entity import KebaKeEnergyExtendedEntity
+
+if TYPE_CHECKING:
+    from collections.abc import Callable
+    from homeassistant.core import HomeAssistant
+    from homeassistant.helpers.entity_platform import AddEntitiesCallback
+    from .coordinator import KebaKeEnergyConfigEntry
+    from .coordinator import KebaKeEnergyDataUpdateCoordinator
+
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -34,7 +40,7 @@ PARALLEL_UPDATES: Final[int] = 0
 class KebaKeEnergySelectEntityDescriptionMixin:
     """Required values for KEBA KeEnergy selects."""
 
-    entity_class: type["KebaKeEnergySelectEntity"]
+    entity_class: type[KebaKeEnergySelectEntity]
     value: Callable[[str], str | int]
 
 

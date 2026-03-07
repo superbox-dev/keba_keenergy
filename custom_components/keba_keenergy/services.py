@@ -1,5 +1,7 @@
 """Support for the KEBA KeEnergy services."""
 
+from __future__ import annotations
+
 import logging
 from datetime import date
 from datetime import datetime
@@ -10,8 +12,6 @@ from typing import TYPE_CHECKING
 import voluptuous as vol
 from ciso8601 import parse_datetime_as_naive
 from homeassistant.config_entries import ConfigEntryState
-from homeassistant.core import HomeAssistant
-from homeassistant.core import ServiceCall
 from homeassistant.exceptions import ServiceValidationError
 from homeassistant.helpers import config_validation as cv
 from homeassistant.helpers import selector
@@ -24,11 +24,13 @@ from .const import ATTR_CONFIG_ENTRY
 from .const import DOMAIN
 from .const import SERVICE_SET_AWAY_DATE_RANGE
 from .const import SERVICE_SET_HEATING_CURVE_POINTS
-from .coordinator import KebaKeEnergyConfigEntry
-from .coordinator import KebaKeEnergyDataUpdateCoordinator
 
 if TYPE_CHECKING:
+    from homeassistant.core import HomeAssistant
+    from homeassistant.core import ServiceCall
     from zoneinfo import ZoneInfo
+    from .coordinator import KebaKeEnergyConfigEntry
+    from .coordinator import KebaKeEnergyDataUpdateCoordinator
 
 _LOGGER = logging.getLogger(__name__)
 
