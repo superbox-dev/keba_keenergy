@@ -995,35 +995,6 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
             value=lambda data: data,
         ),
     ),
-    # SectionPrefix.PHOTOVOLTAIC: (
-    #     KebaKeEnergySensorEntityDescription[float](
-    #         device_class=SensorDeviceClass.POWER,
-    #         key="excess_power",
-    #         key_index=None,
-    #         native_unit_of_measurement=UnitOfPower.WATT,
-    #         state_class=SensorStateClass.MEASUREMENT,
-    #         translation_key="pv_excess_power",
-    #         value=lambda data: data,
-    #     ),
-    #     KebaKeEnergySensorEntityDescription[float](
-    #         device_class=SensorDeviceClass.ENERGY,
-    #         key="daily_energy",
-    #         key_index=None,
-    #         native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
-    #         state_class=SensorStateClass.TOTAL,
-    #         translation_key="daily_energy",
-    #         value=lambda data: data,
-    #     ),
-    #     KebaKeEnergySensorEntityDescription[float](
-    #         device_class=SensorDeviceClass.ENERGY,
-    #         key="total_energy",
-    #         key_index=None,
-    #         native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
-    #         state_class=SensorStateClass.TOTAL_INCREASING,
-    #         translation_key="pv_total_energy",
-    #         value=lambda data: data,
-    #     ),
-    # ),
 }
 
 
@@ -1041,9 +1012,6 @@ async def async_setup_entry(
     # e.g. buffer tank, hot water tank, heat circuit, solar circuit or heat pump.
 
     for section_id, section_data in coordinator.data.items():
-        if section_id == SectionPrefix.PHOTOVOLTAIC and not coordinator.has_photovoltaics:  # pragma: no cover
-            continue
-
         for description in SENSOR_TYPES.get(section_id, ()):
             for key, values in section_data.items():
                 if key == description.key:

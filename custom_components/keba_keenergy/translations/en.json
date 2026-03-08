@@ -71,9 +71,6 @@
         "hot_water_tank": {
             "name": "Hot water tank{position}"
         },
-        "photovoltaic": {
-            "name": "Photovoltaic{position}"
-        },
         "solar_circuit": {
             "name": "Solar circuit{position}"
         },

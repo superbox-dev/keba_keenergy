@@ -71,9 +71,6 @@
         "hot_water_tank": {
             "name": "Warmwasserspeicher{position}"
         },
-        "photovoltaic": {
-            "name": "Photovoltaik{position}"
-        },
         "solar_circuit": {
             "name": "Solarkreis{position}"
         },

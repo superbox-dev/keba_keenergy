@@ -122,11 +122,6 @@ class KebaKeEnergyEntity(
         """Return True if the entity is part of a switch valves else False."""
         return self.section_id == SectionPrefix.SWITCH_VALVE
 
-    # @property
-    # def is_photovoltaic(self) -> bool:
-    #     """Return True if the entity is part of a photovoltaic else False."""
-    #     return self.section_id == SectionPrefix.PHOTOVOLTAIC
-
     @cached_property
     def device_identifier(self) -> str:
         """Return the device identifier."""
@@ -191,8 +186,6 @@ class KebaKeEnergyEntity(
             translation_key = "external_heat_source"
         elif self.is_switch_valve:
             translation_key = "switch_valve"
-        # elif self.is_photovoltaic:
-        #     translation_key = "photovoltaic"
 
         return translation_key
 
@@ -374,7 +367,5 @@ class KebaKeEnergyExtendedEntity(KebaKeEnergyEntity):
         elif self.is_external_heat_source:
             section = ExternalHeatSource[self.entity_description.key.upper()]
             self.device_numbers = self.coordinator.external_heat_source_numbers
-        # elif self.is_photovoltaic:
-        #     section = Photovoltaic[self.entity_description.key.upper()]
 
         return section

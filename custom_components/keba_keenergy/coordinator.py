@@ -30,13 +30,11 @@ from keba_keenergy_api.constants import HeatCircuit
 from keba_keenergy_api.constants import HeatPump
 from keba_keenergy_api.constants import HeatPumpHasPassiveCooling
 from keba_keenergy_api.constants import HotWaterTank
-from keba_keenergy_api.constants import Photovoltaic
 from keba_keenergy_api.constants import Section
 from keba_keenergy_api.constants import SectionPrefix
 from keba_keenergy_api.constants import SolarCircuit
 from keba_keenergy_api.constants import SwitchValve
 from keba_keenergy_api.constants import System
-from keba_keenergy_api.constants import SystemHasPhotovoltaics
 from keba_keenergy_api.endpoints import Position
 from keba_keenergy_api.endpoints import Value
 from keba_keenergy_api.endpoints import ValueResponse
@@ -161,9 +159,6 @@ REQUEST_DATA: list[Section] = [
     HotWaterTank.CURRENT_TEMPERATURE,
     HotWaterTank.CIRCULATION_RETURN_TEMPERATURE,
     HotWaterTank.CIRCULATION_PUMP_STATE,
-    Photovoltaic.EXCESS_POWER,
-    Photovoltaic.DAILY_ENERGY,
-    Photovoltaic.TOTAL_ENERGY,
     SwitchValve.POSITION,
     System.OUTDOOR_TEMPERATURE,
     System.OPERATING_MODE,
@@ -219,7 +214,6 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
         self._flash_issue_active: bool = False
 
         self._fixed_data: dict[str, ValueResponse] = {}
-        self._has_photovoltaics: bool = False
 
         self.request_data: list[Section] = REQUEST_DATA
 
@@ -297,7 +291,6 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
 
         self._fixed_data = await self.api.read_data(
             request=[
-                System.HAS_PHOTOVOLTAICS,
                 HeatCircuit.HAS_ROOM_TEMPERATURE,
                 HeatCircuit.HAS_ROOM_HUMIDITY,
                 HeatPump.HAS_PASSIVE_COOLING,
@@ -508,12 +501,6 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
     def external_heat_source_numbers(self) -> int:
         """Return number of external heat sources."""
         return self.position.external_heat_source if self.position else 0
-
-    @cached_property
-    def has_photovoltaics(self) -> bool:
-        """Check if photovoltaics is available."""
-        data: Value = cast("Value", self._fixed_data[SectionPrefix.SYSTEM]["has_photovoltaics"])
-        return bool(SystemHasPhotovoltaics.ON.name.lower() == data["value"])
 
     def has_room_temperature(self, *, index: int) -> str:
         """Check if room temperature sensor is available."""
