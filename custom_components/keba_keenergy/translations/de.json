@@ -618,10 +618,26 @@
         "step": {
             "init": {
                 "data": {
-                    "scan_interval": "Scan Intervall"
+                    "scan_interval": "Scan Intervall",
+                    "scan_interval_tick_external_heat_source": "Update-Multiplikator für die externe Wärmequelle",
+                    "scan_interval_tick_buffer_tank": "Update-Multiplikator für den Pufferspeicher",
+                    "scan_interval_tick_heat_circuit": "Update-Multiplikator für den Heizkreis",
+                    "scan_interval_tick_heat_pump": "Update-Multiplikator für die Wärmepumpe",
+                    "scan_interval_tick_hot_water_tank": "Update-Multiplikator für den Warmwasserspeicher",
+                    "scan_interval_tick_solar_circuit": "Update-Multiplikator für den Solarkreis",
+                    "scan_interval_tick_switch_valve": "Update-Multiplikator für das Umschaltventil",
+                    "scan_interval_tick_system": "Update-Multiplikator die Bedieneinheit"
                 },
                 "data_description": {
-                    "scan_interval": "Sekunden zwischen Updates"
+                    "scan_interval": "Zeit in Sekunden zwischen den Updates",
+                    "scan_interval_tick_external_heat_source": "Anzahl Intervalle zwischen Updates",
+                    "scan_interval_tick_buffer_tank": "Anzahl Intervalle zwischen Updates",
+                    "scan_interval_tick_heat_circuit": "Anzahl Intervalle zwischen Updates",
+                    "scan_interval_tick_heat_pump": "Anzahl Intervalle zwischen Updates",
+                    "scan_interval_tick_hot_water_tank": "Anzahl Intervalle zwischen Updates",
+                    "scan_interval_tick_solar_circuit": "Anzahl Intervalle zwischen Updates",
+                    "scan_interval_tick_switch_valve": "Anzahl Intervalle zwischen Updates",
+                    "scan_interval_tick_system": "Anzahl Intervalle zwischen Updates"
                 }
             }
         }

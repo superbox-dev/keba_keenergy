@@ -618,10 +618,26 @@
         "step": {
             "init": {
                 "data": {
-                    "scan_interval": "Scan interval"
+                    "scan_interval": "Scan interval",
+                    "scan_interval_tick_external_heat_source": "External heat source update multiplier",
+                    "scan_interval_tick_buffer_tank": "Buffer tank update multiplier",
+                    "scan_interval_tick_heat_circuit": "Heating circuit update multiplier",
+                    "scan_interval_tick_heat_pump": "Heat pump update multiplier",
+                    "scan_interval_tick_hot_water_tank": "Hot water tank update multiplier",
+                    "scan_interval_tick_solar_circuit": "Solar circuit update multiplier",
+                    "scan_interval_tick_switch_valve": "Switch valve update multiplier",
+                    "scan_interval_tick_system": "Control unit update multiplier"
                 },
                 "data_description": {
-                    "scan_interval": "Seconds between updates"
+                    "scan_interval": "Time in seconds between updates",
+                    "scan_interval_tick_external_heat_source": "Number of scan intervals between updates",
+                    "scan_interval_tick_buffer_tank": "Number of scan intervals between updates",
+                    "scan_interval_tick_heat_circuit": "Number of scan intervals between updates",
+                    "scan_interval_tick_heat_pump": "Number of scan intervals between updates",
+                    "scan_interval_tick_hot_water_tank": "Number of scan intervals between updates",
+                    "scan_interval_tick_solar_circuit": "Number of scan intervals between updates",
+                    "scan_interval_tick_switch_valve": "Number of scan intervals between updates",
+                    "scan_interval_tick_system": "Number of scan intervals between updates"
                 }
             }
         }

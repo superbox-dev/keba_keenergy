@@ -20,12 +20,22 @@ from homeassistant.const import CONF_USERNAME
 from homeassistant.core import HomeAssistant
 from homeassistant.core import callback
 from homeassistant.exceptions import HomeAssistantError
-from homeassistant.helpers import config_validation as cv
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
+from homeassistant.helpers.selector import NumberSelector
+from homeassistant.helpers.selector import NumberSelectorConfig
+from homeassistant.helpers.selector import NumberSelectorMode
 from keba_keenergy_api.api import KebaKeEnergyAPI
 from keba_keenergy_api.error import APIError
 
 from .const import CONFIG_ENTRY_VERSION
+from .const import CONF_BUFFER_TANK_TICK
+from .const import CONF_EXTERNAL_HEAT_SOURCE_TICK
+from .const import CONF_HEAT_CIRCUIT_TICK
+from .const import CONF_HEAT_PUMP_TICK
+from .const import CONF_HOT_WATER_TANK_TICK
+from .const import CONF_SOLAR_CIRCUIT_TICK
+from .const import CONF_SWITCH_VALVE_TICK
+from .const import CONF_SYSTEM_TICK
 from .const import DEFAULT_SCAN_INTERVAL
 from .const import DEFAULT_SSL
 from .const import DOMAIN
@@ -295,7 +305,101 @@ class KebaKeEnergyOptionsFlow(OptionsFlowWithReload):
                 vol.Required(
                     CONF_SCAN_INTERVAL,
                     default=self.config_entry.options.get(CONF_SCAN_INTERVAL, DEFAULT_SCAN_INTERVAL),
-                ): vol.All(cv.positive_int, vol.Range(min=MIN_SCAN_INTERVAL)),
+                ): NumberSelector(
+                    NumberSelectorConfig(
+                        min=MIN_SCAN_INTERVAL,
+                        step=1,
+                        mode=NumberSelectorMode.BOX,
+                    ),
+                ),
+                vol.Required(
+                    CONF_SYSTEM_TICK,
+                    default=self.config_entry.options.get(CONF_SYSTEM_TICK, 1),
+                ): NumberSelector(
+                    NumberSelectorConfig(
+                        min=1,
+                        max=180,
+                        step=1,
+                        mode=NumberSelectorMode.BOX,
+                    ),
+                ),
+                vol.Required(
+                    CONF_HEAT_PUMP_TICK,
+                    default=self.config_entry.options.get(CONF_HEAT_PUMP_TICK, 1),
+                ): NumberSelector(
+                    NumberSelectorConfig(
+                        min=1,
+                        max=180,
+                        step=1,
+                        mode=NumberSelectorMode.BOX,
+                    ),
+                ),
+                vol.Required(
+                    CONF_HEAT_CIRCUIT_TICK,
+                    default=self.config_entry.options.get(CONF_HEAT_CIRCUIT_TICK, 1),
+                ): NumberSelector(
+                    NumberSelectorConfig(
+                        min=1,
+                        max=180,
+                        step=1,
+                        mode=NumberSelectorMode.BOX,
+                    ),
+                ),
+                vol.Required(
+                    CONF_SOLAR_CIRCUIT_TICK,
+                    default=self.config_entry.options.get(CONF_SOLAR_CIRCUIT_TICK, 1),
+                ): NumberSelector(
+                    NumberSelectorConfig(
+                        min=1,
+                        max=180,
+                        step=1,
+                        mode=NumberSelectorMode.BOX,
+                    ),
+                ),
+                vol.Required(
+                    CONF_HOT_WATER_TANK_TICK,
+                    default=self.config_entry.options.get(CONF_HOT_WATER_TANK_TICK, 1),
+                ): NumberSelector(
+                    NumberSelectorConfig(
+                        min=1,
+                        max=180,
+                        step=1,
+                        mode=NumberSelectorMode.BOX,
+                    ),
+                ),
+                vol.Required(
+                    CONF_BUFFER_TANK_TICK,
+                    default=self.config_entry.options.get(CONF_BUFFER_TANK_TICK, 1),
+                ): NumberSelector(
+                    NumberSelectorConfig(
+                        min=1,
+                        max=180,
+                        step=1,
+                        mode=NumberSelectorMode.BOX,
+                    ),
+                ),
+                vol.Required(
+                    CONF_SWITCH_VALVE_TICK,
+                    default=self.config_entry.options.get(CONF_SWITCH_VALVE_TICK, 1),
+                ): NumberSelector(
+                    NumberSelectorConfig(
+                        min=1,
+                        max=180,
+                        step=1,
+                        mode=NumberSelectorMode.BOX,
+                    ),
+                ),
+                vol.Required(
+                    CONF_EXTERNAL_HEAT_SOURCE_TICK,
+                    default=self.config_entry.options.get(CONF_EXTERNAL_HEAT_SOURCE_TICK, 1),
+                ): NumberSelector(
+                    NumberSelectorConfig(
+                        min=1,
+                        max=180,
+                        step=1,
+                        mode=NumberSelectorMode.BOX,
+                    ),
+                ),
             },
         )
 
