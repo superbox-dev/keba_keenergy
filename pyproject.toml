@@ -37,6 +37,7 @@ classifiers = [
     "Development Status :: 5 - Production/Stable",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
     "Programming Language :: Python :: 3 :: Only",
     "Operating System :: OS Independent",
 ]
@@ -87,6 +88,7 @@ packages = []
 
 [tool.black]
 line-length = 120
+target-version = ["py313"]
 
 [tool.mypy]
 strict = true
