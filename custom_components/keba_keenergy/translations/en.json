@@ -615,6 +615,9 @@
         }
     },
     "options": {
+        "abort": {
+            "options_not_ready": "Integration not fully loaded"
+        },
         "step": {
             "init": {
                 "data": {
@@ -630,14 +633,14 @@
                 },
                 "data_description": {
                     "scan_interval": "Time in seconds between updates",
-                    "scan_interval_tick_external_heat_source": "Number of scan intervals between updates",
-                    "scan_interval_tick_buffer_tank": "Number of scan intervals between updates",
-                    "scan_interval_tick_heat_circuit": "Number of scan intervals between updates",
-                    "scan_interval_tick_heat_pump": "Number of scan intervals between updates",
-                    "scan_interval_tick_hot_water_tank": "Number of scan intervals between updates",
-                    "scan_interval_tick_solar_circuit": "Number of scan intervals between updates",
-                    "scan_interval_tick_switch_valve": "Number of scan intervals between updates",
-                    "scan_interval_tick_system": "Number of scan intervals between updates"
+                    "scan_interval_tick_external_heat_source": "Update every X scan intervals",
+                    "scan_interval_tick_buffer_tank": "Update every X scan intervals",
+                    "scan_interval_tick_heat_circuit": "Update every X scan intervals",
+                    "scan_interval_tick_heat_pump": "Update every X scan intervals",
+                    "scan_interval_tick_hot_water_tank": "Update every X scan intervals",
+                    "scan_interval_tick_solar_circuit": "Update every X scan intervals",
+                    "scan_interval_tick_switch_valve": "Update every X scan intervals",
+                    "scan_interval_tick_system": "Update every X scan intervals"
                 }
             }
         }

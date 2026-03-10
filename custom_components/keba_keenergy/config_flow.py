@@ -48,6 +48,7 @@ if TYPE_CHECKING:
     from homeassistant.helpers.service_info.zeroconf import ZeroconfServiceInfo
     from aiohttp import ClientSession
     from .coordinator import KebaKeEnergyConfigEntry
+    from .coordinator import KebaKeEnergyDataUpdateCoordinator
 
 STEP_USER_DATA_SCHEMA: vol.Schema = vol.Schema(
     {
@@ -300,112 +301,73 @@ class KebaKeEnergyOptionsFlow(OptionsFlowWithReload):
         if user_input is not None:
             return self.async_create_entry(data=user_input)
 
-        data_schema = vol.Schema(
-            {
-                vol.Required(
-                    CONF_SCAN_INTERVAL,
-                    default=self.config_entry.options.get(CONF_SCAN_INTERVAL, DEFAULT_SCAN_INTERVAL),
-                ): NumberSelector(
-                    NumberSelectorConfig(
-                        min=MIN_SCAN_INTERVAL,
-                        step=1,
-                        mode=NumberSelectorMode.BOX,
-                    ),
-                ),
-                vol.Required(
-                    CONF_SYSTEM_TICK,
-                    default=self.config_entry.options.get(CONF_SYSTEM_TICK, 1),
-                ): NumberSelector(
-                    NumberSelectorConfig(
-                        min=1,
-                        max=180,
-                        step=1,
-                        mode=NumberSelectorMode.BOX,
-                    ),
-                ),
-                vol.Required(
-                    CONF_HEAT_PUMP_TICK,
-                    default=self.config_entry.options.get(CONF_HEAT_PUMP_TICK, 1),
-                ): NumberSelector(
-                    NumberSelectorConfig(
-                        min=1,
-                        max=180,
-                        step=1,
-                        mode=NumberSelectorMode.BOX,
-                    ),
-                ),
-                vol.Required(
-                    CONF_HEAT_CIRCUIT_TICK,
-                    default=self.config_entry.options.get(CONF_HEAT_CIRCUIT_TICK, 1),
-                ): NumberSelector(
-                    NumberSelectorConfig(
-                        min=1,
-                        max=180,
-                        step=1,
-                        mode=NumberSelectorMode.BOX,
-                    ),
-                ),
-                vol.Required(
-                    CONF_SOLAR_CIRCUIT_TICK,
-                    default=self.config_entry.options.get(CONF_SOLAR_CIRCUIT_TICK, 1),
-                ): NumberSelector(
-                    NumberSelectorConfig(
-                        min=1,
-                        max=180,
-                        step=1,
-                        mode=NumberSelectorMode.BOX,
-                    ),
-                ),
-                vol.Required(
-                    CONF_HOT_WATER_TANK_TICK,
-                    default=self.config_entry.options.get(CONF_HOT_WATER_TANK_TICK, 1),
-                ): NumberSelector(
-                    NumberSelectorConfig(
-                        min=1,
-                        max=180,
-                        step=1,
-                        mode=NumberSelectorMode.BOX,
-                    ),
-                ),
-                vol.Required(
-                    CONF_BUFFER_TANK_TICK,
-                    default=self.config_entry.options.get(CONF_BUFFER_TANK_TICK, 1),
-                ): NumberSelector(
-                    NumberSelectorConfig(
-                        min=1,
-                        max=180,
-                        step=1,
-                        mode=NumberSelectorMode.BOX,
-                    ),
-                ),
-                vol.Required(
-                    CONF_SWITCH_VALVE_TICK,
-                    default=self.config_entry.options.get(CONF_SWITCH_VALVE_TICK, 1),
-                ): NumberSelector(
-                    NumberSelectorConfig(
-                        min=1,
-                        max=180,
-                        step=1,
-                        mode=NumberSelectorMode.BOX,
-                    ),
-                ),
-                vol.Required(
-                    CONF_EXTERNAL_HEAT_SOURCE_TICK,
-                    default=self.config_entry.options.get(CONF_EXTERNAL_HEAT_SOURCE_TICK, 1),
-                ): NumberSelector(
-                    NumberSelectorConfig(
-                        min=1,
-                        max=180,
-                        step=1,
-                        mode=NumberSelectorMode.BOX,
-                    ),
-                ),
-            },
+        coordinator: KebaKeEnergyDataUpdateCoordinator | None = getattr(
+            self.config_entry,
+            "runtime_data",
+            None,
         )
+
+        if coordinator is None:
+            return self.async_abort(reason="options_not_ready")
+
+        schema_fields: dict[Any, Any] = {}
+
+        schema_fields[
+            vol.Required(
+                CONF_SCAN_INTERVAL,
+                default=self.config_entry.options.get(CONF_SCAN_INTERVAL, DEFAULT_SCAN_INTERVAL),
+            )
+        ] = NumberSelector(
+            NumberSelectorConfig(
+                min=MIN_SCAN_INTERVAL,
+                step=1,
+                mode=NumberSelectorMode.BOX,
+            ),
+        )
+
+        schema_fields[
+            vol.Required(
+                CONF_SYSTEM_TICK,
+                default=self.config_entry.options.get(CONF_SYSTEM_TICK, 1),
+            )
+        ] = NumberSelector(
+            NumberSelectorConfig(
+                min=1,
+                max=180,
+                step=1,
+                mode=NumberSelectorMode.BOX,
+            ),
+        )
+
+        tick_mapping: dict[str, str] = {
+            CONF_HEAT_PUMP_TICK: "heat_pump",
+            CONF_HEAT_CIRCUIT_TICK: "heat_circuit",
+            CONF_SOLAR_CIRCUIT_TICK: "solar_circuit",
+            CONF_HOT_WATER_TANK_TICK: "hot_water_tank",
+            CONF_BUFFER_TANK_TICK: "buffer_tank",
+            CONF_SWITCH_VALVE_TICK: "switch_valve",
+            CONF_EXTERNAL_HEAT_SOURCE_TICK: "external_heat_source",
+        }
+
+        for conf_key, position_attr in tick_mapping.items():
+            if getattr(coordinator.position, position_attr):
+                schema_fields[
+                    vol.Required(
+                        conf_key,
+                        default=self.config_entry.options.get(conf_key, 1),
+                    )
+                ] = NumberSelector(
+                    NumberSelectorConfig(
+                        min=1,
+                        max=180,
+                        step=1,
+                        mode=NumberSelectorMode.BOX,
+                    ),
+                )
 
         return self.async_show_form(
             step_id="init",
-            data_schema=data_schema,
+            data_schema=vol.Schema(schema_fields),
         )
 
 

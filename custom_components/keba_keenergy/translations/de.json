@@ -615,10 +615,13 @@
         }
     },
     "options": {
+        "abort": {
+            "options_not_ready": "Integration nicht vollständig geladen"
+        },
         "step": {
             "init": {
                 "data": {
-                    "scan_interval": "Scan Intervall",
+                    "scan_interval": "Scan-Intervall",
                     "scan_interval_tick_external_heat_source": "Update-Multiplikator für die externe Wärmequelle",
                     "scan_interval_tick_buffer_tank": "Update-Multiplikator für den Pufferspeicher",
                     "scan_interval_tick_heat_circuit": "Update-Multiplikator für den Heizkreis",
@@ -630,14 +633,14 @@
                 },
                 "data_description": {
                     "scan_interval": "Zeit in Sekunden zwischen den Updates",
-                    "scan_interval_tick_external_heat_source": "Anzahl Intervalle zwischen Updates",
-                    "scan_interval_tick_buffer_tank": "Anzahl Intervalle zwischen Updates",
-                    "scan_interval_tick_heat_circuit": "Anzahl Intervalle zwischen Updates",
-                    "scan_interval_tick_heat_pump": "Anzahl Intervalle zwischen Updates",
-                    "scan_interval_tick_hot_water_tank": "Anzahl Intervalle zwischen Updates",
-                    "scan_interval_tick_solar_circuit": "Anzahl Intervalle zwischen Updates",
-                    "scan_interval_tick_switch_valve": "Anzahl Intervalle zwischen Updates",
-                    "scan_interval_tick_system": "Anzahl Intervalle zwischen Updates"
+                    "scan_interval_tick_external_heat_source": "Aktualisierung alle X Scan-Intervalle",
+                    "scan_interval_tick_buffer_tank": "Aktualisierung alle X Scan-Intervalle",
+                    "scan_interval_tick_heat_circuit": "Aktualisierung alle X Scan-Intervalle",
+                    "scan_interval_tick_heat_pump": "Aktualisierung alle X Scan-Intervalle",
+                    "scan_interval_tick_hot_water_tank": "Aktualisierung alle X Scan-Intervalle",
+                    "scan_interval_tick_solar_circuit": "Aktualisierung alle X Scan-Intervalle",
+                    "scan_interval_tick_switch_valve": "Aktualisierung alle X Scan-Intervalle",
+                    "scan_interval_tick_system": "Aktualisierung alle X Scan-Intervalle"
                 }
             }
         }
