@@ -1630,6 +1630,7 @@ async def test_solar_circuit_sensors(
         MULTIPLE_POSITION_DATA_RESPONSE_1,
         *HEATING_CURVES_RESPONSE_1_1,
     ]
+
     fake_api.register_requests(config_entry.data[CONF_HOST])
 
     await setup_integration(hass, config_entry)

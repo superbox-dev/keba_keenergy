@@ -9,9 +9,7 @@ from homeassistant import setup
 from homeassistant.config_entries import SOURCE_USER
 from homeassistant.config_entries import SOURCE_ZEROCONF
 from homeassistant.const import CONF_HOST
-from homeassistant.const import CONF_PASSWORD
 from homeassistant.const import CONF_SSL
-from homeassistant.const import CONF_USERNAME
 from homeassistant.core import HomeAssistant
 from homeassistant.data_entry_flow import FlowResultType
 from homeassistant.helpers.service_info.zeroconf import ZeroconfServiceInfo
@@ -19,8 +17,8 @@ from keba_keenergy_api.endpoints import SystemEndpoints
 from keba_keenergy_api.error import APIError
 from pytest_homeassistant_custom_component.common import MockConfigEntry
 
-from custom_components.keba_keenergy.const import DEFAULT_SSL
 from custom_components.keba_keenergy.const import DOMAIN
+from tests import setup_integration
 from tests.api_data import HEATING_CURVES_RESPONSE_1_1
 from tests.api_data import HEATING_CURVE_NAMES_RESPONSE
 from tests.api_data import MULTIPLE_POSITIONS_RESPONSE
@@ -166,8 +164,8 @@ async def test_reconfigure_flow_authentication(
     result_user_step: ConfigFlowResult = await hass.config_entries.flow.async_configure(
         result["flow_id"],
         {
-            CONF_HOST: "10.0.0.200",
-            CONF_SSL: True,
+            "host": "10.0.0.200",
+            "ssl": True,
         },
     )
 
@@ -177,8 +175,8 @@ async def test_reconfigure_flow_authentication(
     result_auth_step: ConfigFlowResult = await hass.config_entries.flow.async_configure(
         result["flow_id"],
         {
-            CONF_USERNAME: "test",
-            CONF_PASSWORD: "test",
+            "username": "test",
+            "password": "test",
         },
     )
 
@@ -213,8 +211,8 @@ async def test_user_flow_authentication_cannot_connect(
     result_auth_step: ConfigFlowResult = await hass.config_entries.flow.async_configure(
         result_user_step["flow_id"],
         user_input={
-            CONF_HOST: "10.0.0.100",
-            CONF_SSL: True,
+            "host": "10.0.0.100",
+            "ssl": True,
         },
     )
 
@@ -229,7 +227,7 @@ async def test_user_flow_authentication_cannot_connect(
     [
         {
             "data": {
-                CONF_SSL: True,
+                "ssl": True,
             },
         },
     ],
@@ -254,8 +252,8 @@ async def test_reauth_flow_success(
     result_start_reauth: ConfigFlowResult = await config_entry.start_reauth_flow(
         hass,
         data={
-            CONF_HOST: "10.0.0.100",
-            CONF_SSL: True,
+            "host": "10.0.0.100",
+            "ssl": True,
         },
     )
 
@@ -287,8 +285,8 @@ async def test_reauth_flow_failure(
     result_start_reauth: ConfigFlowResult = await config_entry.start_reauth_flow(
         hass,
         data={
-            CONF_HOST: "10.0.0.100",
-            CONF_SSL: True,
+            "host": "10.0.0.100",
+            "ssl": True,
         },
     )
 
@@ -332,8 +330,8 @@ async def test_reauth_flow_wrong_account(
     result_start_reauth: ConfigFlowResult = await config_entry.start_reauth_flow(
         hass,
         data={
-            CONF_HOST: "10.0.0.100",
-            CONF_SSL: True,
+            "host": "10.0.0.100",
+            "ssl": True,
         },
     )
 
@@ -379,8 +377,8 @@ async def test_user_flow_cannot_connect(
         result_user_step_2: ConfigFlowResult = await hass.config_entries.flow.async_configure(
             result_user_step_1["flow_id"],
             user_input={
-                CONF_HOST: "10.0.0.100",
-                CONF_SSL: DEFAULT_SSL,
+                "host": "10.0.0.100",
+                "ssl": False,
             },
         )
 
@@ -533,3 +531,103 @@ async def test_zeroconf_cannot_connect(
 
     assert result_discovery_confirm_2["type"] == FlowResultType.FORM
     assert result_discovery_confirm_2["errors"] == {"base": expected_error}
+
+
+async def test_option_flow(
+    hass: HomeAssistant,
+    config_entry: MockConfigEntry,
+    fake_api: FakeKebaKeEnergyAPI,
+) -> None:
+    fake_api.responses = [
+        # 1. coordinator
+        MULTIPLE_POSITIONS_RESPONSE,
+        HEATING_CURVE_NAMES_RESPONSE,
+        get_multiple_position_fixed_data_response(),
+        MULTIPLE_POSITION_DATA_RESPONSE_1,
+        *HEATING_CURVES_RESPONSE_1_1,
+        # 2. coordinator
+        MULTIPLE_POSITIONS_RESPONSE,
+        HEATING_CURVE_NAMES_RESPONSE,
+        get_multiple_position_fixed_data_response(),
+        MULTIPLE_POSITION_DATA_RESPONSE_1,
+        *HEATING_CURVES_RESPONSE_1_1,
+    ]
+    fake_api.register_requests(config_entry.data[CONF_HOST])
+
+    await setup_integration(hass, config_entry)
+
+    result_init: ConfigFlowResult = await hass.config_entries.options.async_init(
+        config_entry.entry_id,
+        data=None,
+    )
+
+    assert result_init["type"] is FlowResultType.FORM
+    assert result_init["step_id"] == "init"
+    assert result_init["data_schema"]
+
+    assert list(result_init["data_schema"].schema.keys()) == [
+        "scan_interval",
+        "scan_interval_tick_system",
+        "scan_interval_tick_heat_pump",
+        "scan_interval_tick_heat_circuit",
+        "scan_interval_tick_solar_circuit",
+        "scan_interval_tick_hot_water_tank",
+        "scan_interval_tick_buffer_tank",
+        "scan_interval_tick_switch_valve",
+        "scan_interval_tick_external_heat_source",
+    ]
+
+    result_create_entry: ConfigFlowResult = await hass.config_entries.options.async_configure(
+        result_init["flow_id"],
+        user_input={
+            "scan_interval": 60,
+            "scan_interval_tick_system": 2,
+            "scan_interval_tick_heat_pump": 2,
+            "scan_interval_tick_heat_circuit": 4,
+            "scan_interval_tick_solar_circuit": 1,
+            "scan_interval_tick_hot_water_tank": 1,
+            "scan_interval_tick_buffer_tank": 8,
+            "scan_interval_tick_switch_valve": 1,
+            "scan_interval_tick_external_heat_source": 2,
+        },
+    )
+
+    assert result_create_entry["type"] is FlowResultType.CREATE_ENTRY
+    assert result_create_entry["data"] == {
+        "scan_interval": 60,
+        "scan_interval_tick_system": 2,
+        "scan_interval_tick_heat_pump": 2,
+        "scan_interval_tick_heat_circuit": 4,
+        "scan_interval_tick_solar_circuit": 1,
+        "scan_interval_tick_hot_water_tank": 1,
+        "scan_interval_tick_buffer_tank": 8,
+        "scan_interval_tick_switch_valve": 1,
+        "scan_interval_tick_external_heat_source": 2,
+    }
+
+
+async def test_option_flow_when_integration_not_fully_loaded(
+    hass: HomeAssistant,
+    config_entry: MockConfigEntry,
+    fake_api: FakeKebaKeEnergyAPI,
+) -> None:
+    fake_api.responses = [
+        # 1. coordinator
+        MULTIPLE_POSITIONS_RESPONSE,
+        HEATING_CURVE_NAMES_RESPONSE,
+        get_multiple_position_fixed_data_response(),
+        MULTIPLE_POSITION_DATA_RESPONSE_1,
+        *HEATING_CURVES_RESPONSE_1_1,
+    ]
+    fake_api.register_requests(config_entry.data[CONF_HOST])
+
+    await setup_integration(hass, config_entry)
+    config_entry.runtime_data = None
+
+    result_init: ConfigFlowResult = await hass.config_entries.options.async_init(
+        config_entry.entry_id,
+        data=None,
+    )
+
+    assert result_init["type"] == FlowResultType.ABORT
+    assert result_init["reason"] == "options_not_ready"
