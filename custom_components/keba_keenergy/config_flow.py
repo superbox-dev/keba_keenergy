@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import logging
+import math
 from http import HTTPStatus
 from typing import Any
 from typing import TYPE_CHECKING
@@ -296,10 +297,45 @@ class KebaKeEnergyConfigFlow(ConfigFlow, domain=DOMAIN):
 class KebaKeEnergyOptionsFlow(OptionsFlowWithReload):
     """Option flow for KEBA KeEnergy."""
 
+    @staticmethod
+    def _normalize_user_input(user_input: dict[str, Any]) -> dict[str, Any]:
+        scan_interval: int = user_input[CONF_SCAN_INTERVAL]
+
+        tick_keys: list[str] = [
+            CONF_SYSTEM_TICK,
+            CONF_HEAT_PUMP_TICK,
+            CONF_HEAT_CIRCUIT_TICK,
+            CONF_SOLAR_CIRCUIT_TICK,
+            CONF_HOT_WATER_TANK_TICK,
+            CONF_BUFFER_TANK_TICK,
+            CONF_SWITCH_VALVE_TICK,
+            CONF_EXTERNAL_HEAT_SOURCE_TICK,
+        ]
+
+        ticks: list[int] = [int(user_input.get(k, 1)) for k in tick_keys if k in user_input]
+
+        if ticks:
+            gcd: int = math.gcd(*ticks)
+
+            if gcd > 1:
+                user_input[CONF_SCAN_INTERVAL] = int(scan_interval * gcd)
+
+                for key in tick_keys:
+                    if key in user_input:
+                        user_input[key] = int(user_input[key] // gcd)
+
+        _LOGGER.debug(
+            "Tick normalization: %s -> gcd=%s",
+            user_input,
+            math.gcd(*ticks) if ticks else None,
+        )
+
+        return user_input
+
     async def async_step_init(self, user_input: dict[str, Any] | None = None) -> ConfigFlowResult:
         """Handle options flow."""
         if user_input is not None:
-            return self.async_create_entry(data=user_input)
+            return self.async_create_entry(data=self._normalize_user_input(user_input))
 
         coordinator: KebaKeEnergyDataUpdateCoordinator | None = getattr(
             self.config_entry,

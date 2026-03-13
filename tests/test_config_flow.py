@@ -581,20 +581,20 @@ async def test_option_flow(
         result_init["flow_id"],
         user_input={
             "scan_interval": 60,
-            "scan_interval_tick_system": 2,
-            "scan_interval_tick_heat_pump": 2,
-            "scan_interval_tick_heat_circuit": 4,
-            "scan_interval_tick_solar_circuit": 1,
-            "scan_interval_tick_hot_water_tank": 1,
-            "scan_interval_tick_buffer_tank": 8,
-            "scan_interval_tick_switch_valve": 1,
-            "scan_interval_tick_external_heat_source": 2,
+            "scan_interval_tick_system": 4,
+            "scan_interval_tick_heat_pump": 4,
+            "scan_interval_tick_heat_circuit": 8,
+            "scan_interval_tick_solar_circuit": 2,
+            "scan_interval_tick_hot_water_tank": 2,
+            "scan_interval_tick_buffer_tank": 16,
+            "scan_interval_tick_switch_valve": 2,
+            "scan_interval_tick_external_heat_source": 4,
         },
     )
 
     assert result_create_entry["type"] is FlowResultType.CREATE_ENTRY
     assert result_create_entry["data"] == {
-        "scan_interval": 60,
+        "scan_interval": 120,
         "scan_interval_tick_system": 2,
         "scan_interval_tick_heat_pump": 2,
         "scan_interval_tick_heat_circuit": 4,
