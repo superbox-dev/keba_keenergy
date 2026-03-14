@@ -7,14 +7,12 @@ from typing import TYPE_CHECKING
 
 from homeassistant.const import CONF_HOST
 from homeassistant.const import CONF_PASSWORD
-from homeassistant.const import CONF_SCAN_INTERVAL
 from homeassistant.const import CONF_SSL
 from homeassistant.const import CONF_USERNAME
 from homeassistant.const import Platform
 from homeassistant.helpers import device_registry as dr
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 
-from .const import DEFAULT_SCAN_INTERVAL
 from .const import DOMAIN
 from .const import MANUFACTURER
 from .coordinator import KebaKeEnergyConfigEntry
@@ -57,11 +55,11 @@ async def async_setup_entry(hass: HomeAssistant, entry: KebaKeEnergyConfigEntry)
 
     coordinator: KebaKeEnergyDataUpdateCoordinator = KebaKeEnergyDataUpdateCoordinator(
         hass,
+        entry,
         host=host,
         username=username,
         password=password,
         ssl=ssl,
-        scan_interval=entry.options.get(CONF_SCAN_INTERVAL, DEFAULT_SCAN_INTERVAL),
         session=session,
     )
 

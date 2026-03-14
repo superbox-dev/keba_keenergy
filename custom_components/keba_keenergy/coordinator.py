@@ -15,6 +15,7 @@ from typing import cast
 from zoneinfo import ZoneInfo
 
 from homeassistant.config_entries import ConfigEntry
+from homeassistant.const import CONF_SCAN_INTERVAL
 from homeassistant.exceptions import ConfigEntryAuthFailed
 from homeassistant.exceptions import HomeAssistantError
 from homeassistant.helpers import issue_registry as ir
@@ -41,6 +42,7 @@ from keba_keenergy_api.endpoints import ValueResponse
 from keba_keenergy_api.error import APIError
 from keba_keenergy_api.error import AuthenticationError
 
+from .const import DEFAULT_SCAN_INTERVAL
 from .const import DOMAIN
 from .const import FLASH_WRITE_LIMIT_PER_WEEK
 from .const import REQUEST_REFRESH_COOLDOWN
@@ -55,120 +57,137 @@ _LOGGER = logging.getLogger(__name__)
 
 type KebaKeEnergyConfigEntry = ConfigEntry[KebaKeEnergyDataUpdateCoordinator]
 
-REQUEST_DATA: list[Section] = [
-    ExternalHeatSource.OPERATING_MODE,
-    ExternalHeatSource.TARGET_TEMPERATURE,
-    ExternalHeatSource.HEAT_REQUEST,
-    ExternalHeatSource.OPERATING_TIME,
-    ExternalHeatSource.MAX_RUNTIME,
-    ExternalHeatSource.ACTIVATION_COUNTER,
-    HeatCircuit.ROOM_TEMPERATURE,
-    HeatCircuit.ROOM_HUMIDITY,
-    HeatCircuit.DEW_POINT,
-    HeatCircuit.FLOW_TEMPERATURE_SETPOINT,
-    HeatCircuit.FLOW_TEMPERATURE,
-    HeatCircuit.RETURN_FLOW_TEMPERATURE,
-    HeatCircuit.TARGET_TEMPERATURE_DAY,
-    HeatCircuit.HEATING_LIMIT_DAY,
-    HeatCircuit.HEAT_REQUEST,
-    HeatCircuit.TARGET_TEMPERATURE_AWAY,
-    HeatCircuit.TARGET_TEMPERATURE_NIGHT,
-    HeatCircuit.HEATING_LIMIT_NIGHT,
-    HeatCircuit.OPERATING_MODE,
-    HeatCircuit.SELECTED_TARGET_TEMPERATURE,
-    HeatCircuit.TARGET_TEMPERATURE,
-    HeatCircuit.TARGET_TEMPERATURE_OFFSET,
-    HeatCircuit.AWAY_START_DATE,
-    HeatCircuit.AWAY_END_DATE,
-    HeatCircuit.HEATING_CURVE_OFFSET,
-    HeatCircuit.HEATING_CURVE_SLOPE,
-    HeatCircuit.USE_HEATING_CURVE,
-    HeatCircuit.HEATING_CURVE,
-    HeatCircuit.PUMP_SPEED,
-    SolarCircuit.OPERATING_MODE,
-    SolarCircuit.SOURCE_TEMPERATURE,
-    SolarCircuit.PUMP_1,
-    SolarCircuit.PUMP_2,
-    SolarCircuit.CURRENT_TEMPERATURE,
-    SolarCircuit.TARGET_TEMPERATURE,
-    SolarCircuit.HEAT_REQUEST,
-    SolarCircuit.HEATING_ENERGY,
-    SolarCircuit.DAILY_ENERGY,
-    SolarCircuit.ACTUAL_POWER,
-    SolarCircuit.PRIORITY_1_BEFORE_2,
-    HeatPump.CIRCULATION_PUMP,
-    HeatPump.SOURCE_PUMP_SPEED,
-    HeatPump.COMPRESSOR,
-    HeatPump.COMPRESSOR_NIGHT_SPEED,
-    HeatPump.COMPRESSOR_INPUT_TEMPERATURE,
-    HeatPump.COMPRESSOR_OUTPUT_TEMPERATURE,
-    HeatPump.COMPRESSOR_USE_NIGHT_SPEED,
-    HeatPump.CONDENSER_TEMPERATURE,
-    HeatPump.VAPORIZER_TEMPERATURE,
-    HeatPump.TARGET_OVERHEATING,
-    HeatPump.CURRENT_OVERHEATING,
-    HeatPump.EXPANSION_VALVE_POSITION,
-    HeatPump.HEAT_REQUEST,
-    HeatPump.HIGH_PRESSURE,
-    HeatPump.FLOW_TEMPERATURE,
-    HeatPump.LOW_PRESSURE,
-    HeatPump.NAME,
-    HeatPump.RETURN_FLOW_TEMPERATURE,
-    HeatPump.SOURCE_INPUT_TEMPERATURE,
-    HeatPump.SOURCE_OUTPUT_TEMPERATURE,
-    HeatPump.STATE,
-    HeatPump.SUBSTATE,
-    HeatPump.COMPRESSOR_POWER,
-    HeatPump.HEATING_POWER,
-    HeatPump.HOT_WATER_POWER,
-    HeatPump.COP,
-    HeatPump.HEATING_ENERGY,
-    HeatPump.HEATING_ENERGY_CONSUMPTION,
-    HeatPump.HEATING_SPF,
-    HeatPump.COOLING_ENERGY,
-    HeatPump.COOLING_ENERGY_CONSUMPTION,
-    HeatPump.COOLING_SPF,
-    HeatPump.HOT_WATER_ENERGY,
-    HeatPump.HOT_WATER_ENERGY_CONSUMPTION,
-    HeatPump.HOT_WATER_SPF,
-    HeatPump.TOTAL_THERMAL_ENERGY,
-    HeatPump.TOTAL_ENERGY_CONSUMPTION,
-    HeatPump.TOTAL_SPF,
-    HeatPump.OPERATING_TIME,
-    HeatPump.MAX_RUNTIME,
-    HeatPump.ACTIVATION_COUNTER,
-    HeatPump.HAS_COMPRESSOR_FAILURE,
-    HeatPump.HAS_SOURCE_FAILURE,
-    HeatPump.HAS_SOURCE_ACTUATOR_FAILURE,
-    HeatPump.HAS_THREE_PHASE_FAILURE,
-    HeatPump.HAS_SOURCE_PRESSURE_FAILURE,
-    HeatPump.HAS_VFD_FAILURE,
-    BufferTank.CURRENT_TOP_TEMPERATURE,
-    BufferTank.CURRENT_BOTTOM_TEMPERATURE,
-    BufferTank.OPERATING_MODE,
-    BufferTank.STANDBY_TEMPERATURE,
-    BufferTank.TARGET_TEMPERATURE,
-    BufferTank.HEAT_REQUEST,
-    BufferTank.COOL_REQUEST,
-    HotWaterTank.HEAT_REQUEST,
-    HotWaterTank.HOT_WATER_FLOW,
-    HotWaterTank.FRESH_WATER_MODULE_TEMPERATURE,
-    HotWaterTank.TARGET_TEMPERATURE,
-    HotWaterTank.STANDBY_TEMPERATURE,
-    HotWaterTank.OPERATING_MODE,
-    HotWaterTank.CURRENT_TEMPERATURE,
-    HotWaterTank.CIRCULATION_RETURN_TEMPERATURE,
-    HotWaterTank.CIRCULATION_PUMP_STATE,
-    SwitchValve.POSITION,
-    System.OUTDOOR_TEMPERATURE,
-    System.OPERATING_MODE,
-    System.CPU_USAGE,
-    System.WEBVIEW_CPU_USAGE,
-    System.WEBSERVER_CPU_USAGE,
-    System.CONTROL_CPU_USAGE,
-    System.RAM_USAGE,
-    System.FREE_RAM,
-]
+
+REQUEST_DATA_GROUPS: dict[SectionPrefix, list[Section]] = {
+    SectionPrefix.EXTERNAL_HEAT_SOURCE: [
+        ExternalHeatSource.OPERATING_MODE,
+        ExternalHeatSource.TARGET_TEMPERATURE,
+        ExternalHeatSource.HEAT_REQUEST,
+        ExternalHeatSource.OPERATING_TIME,
+        ExternalHeatSource.MAX_RUNTIME,
+        ExternalHeatSource.ACTIVATION_COUNTER,
+    ],
+    SectionPrefix.HEAT_CIRCUIT: [
+        HeatCircuit.ROOM_TEMPERATURE,
+        HeatCircuit.ROOM_HUMIDITY,
+        HeatCircuit.DEW_POINT,
+        HeatCircuit.FLOW_TEMPERATURE_SETPOINT,
+        HeatCircuit.FLOW_TEMPERATURE,
+        HeatCircuit.RETURN_FLOW_TEMPERATURE,
+        HeatCircuit.TARGET_TEMPERATURE_DAY,
+        HeatCircuit.HEATING_LIMIT_DAY,
+        HeatCircuit.HEAT_REQUEST,
+        HeatCircuit.TARGET_TEMPERATURE_AWAY,
+        HeatCircuit.TARGET_TEMPERATURE_NIGHT,
+        HeatCircuit.HEATING_LIMIT_NIGHT,
+        HeatCircuit.OPERATING_MODE,
+        HeatCircuit.SELECTED_TARGET_TEMPERATURE,
+        HeatCircuit.TARGET_TEMPERATURE,
+        HeatCircuit.TARGET_TEMPERATURE_OFFSET,
+        HeatCircuit.AWAY_START_DATE,
+        HeatCircuit.AWAY_END_DATE,
+        HeatCircuit.HEATING_CURVE_OFFSET,
+        HeatCircuit.HEATING_CURVE_SLOPE,
+        HeatCircuit.USE_HEATING_CURVE,
+        HeatCircuit.HEATING_CURVE,
+        HeatCircuit.PUMP_SPEED,
+    ],
+    SectionPrefix.SOLAR_CIRCUIT: [
+        SolarCircuit.OPERATING_MODE,
+        SolarCircuit.SOURCE_TEMPERATURE,
+        SolarCircuit.PUMP_1,
+        SolarCircuit.PUMP_2,
+        SolarCircuit.CURRENT_TEMPERATURE,
+        SolarCircuit.TARGET_TEMPERATURE,
+        SolarCircuit.HEAT_REQUEST,
+        SolarCircuit.HEATING_ENERGY,
+        SolarCircuit.DAILY_ENERGY,
+        SolarCircuit.ACTUAL_POWER,
+        SolarCircuit.PRIORITY_1_BEFORE_2,
+    ],
+    SectionPrefix.HEAT_PUMP: [
+        HeatPump.CIRCULATION_PUMP,
+        HeatPump.SOURCE_PUMP_SPEED,
+        HeatPump.COMPRESSOR,
+        HeatPump.COMPRESSOR_NIGHT_SPEED,
+        HeatPump.COMPRESSOR_INPUT_TEMPERATURE,
+        HeatPump.COMPRESSOR_OUTPUT_TEMPERATURE,
+        HeatPump.COMPRESSOR_USE_NIGHT_SPEED,
+        HeatPump.CONDENSER_TEMPERATURE,
+        HeatPump.VAPORIZER_TEMPERATURE,
+        HeatPump.TARGET_OVERHEATING,
+        HeatPump.CURRENT_OVERHEATING,
+        HeatPump.EXPANSION_VALVE_POSITION,
+        HeatPump.HEAT_REQUEST,
+        HeatPump.HIGH_PRESSURE,
+        HeatPump.FLOW_TEMPERATURE,
+        HeatPump.LOW_PRESSURE,
+        HeatPump.NAME,
+        HeatPump.RETURN_FLOW_TEMPERATURE,
+        HeatPump.SOURCE_INPUT_TEMPERATURE,
+        HeatPump.SOURCE_OUTPUT_TEMPERATURE,
+        HeatPump.STATE,
+        HeatPump.SUBSTATE,
+        HeatPump.COMPRESSOR_POWER,
+        HeatPump.HEATING_POWER,
+        HeatPump.HOT_WATER_POWER,
+        HeatPump.COP,
+        HeatPump.HEATING_ENERGY,
+        HeatPump.HEATING_ENERGY_CONSUMPTION,
+        HeatPump.HEATING_SPF,
+        HeatPump.COOLING_ENERGY,
+        HeatPump.COOLING_ENERGY_CONSUMPTION,
+        HeatPump.COOLING_SPF,
+        HeatPump.HOT_WATER_ENERGY,
+        HeatPump.HOT_WATER_ENERGY_CONSUMPTION,
+        HeatPump.HOT_WATER_SPF,
+        HeatPump.TOTAL_THERMAL_ENERGY,
+        HeatPump.TOTAL_ENERGY_CONSUMPTION,
+        HeatPump.TOTAL_SPF,
+        HeatPump.OPERATING_TIME,
+        HeatPump.MAX_RUNTIME,
+        HeatPump.ACTIVATION_COUNTER,
+        HeatPump.HAS_COMPRESSOR_FAILURE,
+        HeatPump.HAS_SOURCE_FAILURE,
+        HeatPump.HAS_SOURCE_ACTUATOR_FAILURE,
+        HeatPump.HAS_THREE_PHASE_FAILURE,
+        HeatPump.HAS_SOURCE_PRESSURE_FAILURE,
+        HeatPump.HAS_VFD_FAILURE,
+    ],
+    SectionPrefix.BUFFER_TANK: [
+        BufferTank.CURRENT_TOP_TEMPERATURE,
+        BufferTank.CURRENT_BOTTOM_TEMPERATURE,
+        BufferTank.OPERATING_MODE,
+        BufferTank.STANDBY_TEMPERATURE,
+        BufferTank.TARGET_TEMPERATURE,
+        BufferTank.HEAT_REQUEST,
+        BufferTank.COOL_REQUEST,
+    ],
+    SectionPrefix.HOT_WATER_TANK: [
+        HotWaterTank.HEAT_REQUEST,
+        HotWaterTank.HOT_WATER_FLOW,
+        HotWaterTank.FRESH_WATER_MODULE_TEMPERATURE,
+        HotWaterTank.TARGET_TEMPERATURE,
+        HotWaterTank.STANDBY_TEMPERATURE,
+        HotWaterTank.OPERATING_MODE,
+        HotWaterTank.CURRENT_TEMPERATURE,
+        HotWaterTank.CIRCULATION_RETURN_TEMPERATURE,
+        HotWaterTank.CIRCULATION_PUMP_STATE,
+    ],
+    SectionPrefix.SWITCH_VALVE: [
+        SwitchValve.POSITION,
+    ],
+    SectionPrefix.SYSTEM: [
+        System.OUTDOOR_TEMPERATURE,
+        System.OPERATING_MODE,
+        System.CPU_USAGE,
+        System.WEBVIEW_CPU_USAGE,
+        System.WEBSERVER_CPU_USAGE,
+        System.CONTROL_CPU_USAGE,
+        System.RAM_USAGE,
+        System.FREE_RAM,
+    ],
+}
 
 
 def is_int_value_list(value: object) -> TypeGuard[list[int]]:
@@ -184,16 +203,18 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
     def __init__(
         self,
         hass: HomeAssistant,
+        entry: KebaKeEnergyConfigEntry,
         /,
         *,
         host: str,
         username: str | None,
         password: str | None,
         ssl: bool,
-        scan_interval: int,
         session: ClientSession,
     ) -> None:
         """Initialize."""
+        self.config_entry: KebaKeEnergyConfigEntry = entry
+
         self._store: Store[dict[str, Any]] = Store(hass, version=1, key=DOMAIN)
         self._write_lock: Lock = Lock()
 
@@ -214,8 +235,12 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
         self._flash_issue_active: bool = False
 
         self._fixed_data: dict[str, ValueResponse] = {}
+        self._tick_counter: int = 0
 
-        self.request_data: list[Section] = REQUEST_DATA
+        self.request_data: list[Section] = [
+            section for sections in REQUEST_DATA_GROUPS.values() for section in sections
+        ]
+        self.request_data_groups: dict[SectionPrefix, list[Section]] = {}
 
         self.position: Position | None = None
         self.available_heating_curves: tuple[tuple[int, str], ...] = ()
@@ -224,7 +249,7 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
             hass,
             _LOGGER,
             name=DOMAIN,
-            update_interval=timedelta(seconds=scan_interval),
+            update_interval=timedelta(seconds=entry.options.get(CONF_SCAN_INTERVAL, DEFAULT_SCAN_INTERVAL)),
             request_refresh_debouncer=Debouncer(
                 hass,
                 _LOGGER,
@@ -289,6 +314,12 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
             position=self.position,
         )
 
+        self.request_data_groups = {
+            prefix: [section for section in sections if section in self.request_data]
+            for prefix, sections in REQUEST_DATA_GROUPS.items()
+            if prefix == SectionPrefix.SYSTEM or (self.position and getattr(self.position, prefix.value, 0) > 0)
+        }
+
         self._fixed_data = await self.api.read_data(
             request=[
                 HeatCircuit.HAS_ROOM_TEMPERATURE,
@@ -300,12 +331,44 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
 
     async def _async_update_data(self) -> dict[str, ValueResponse]:
         """Read all values from API to update coordinator data."""
+        first_run: bool = self._tick_counter == 0
+        self._tick_counter = (self._tick_counter + 1) % 1_000_000
+
+        request: list[Section] = []
+
+        for section, section_data in self.request_data_groups.items():
+            multiplier: int = self.config_entry.options.get(f"scan_interval_tick_{section.value}", 1)
+
+            if not first_run and self._tick_counter % multiplier != 0:
+                _LOGGER.debug(
+                    "Skipping section '%s' this tick (multiplier=%d)",
+                    section.value,
+                    multiplier,
+                )
+                continue
+
+            request.extend(section_data)
+
+            _LOGGER.debug(
+                "Requesting section '%s' (multiplier=%d, position=%d)",
+                section.value,
+                multiplier,
+                getattr(self.position, section.value, 0),
+            )
+
         response: dict[str, ValueResponse] = await self._api_call_for_update(
             self.api.read_data(
-                request=self.request_data,
+                request=request,
                 position=self.position,
             ),
         )
+
+        if self.data:
+            previous_data: dict[str, ValueResponse] = deepcopy(self.data)
+
+            for section_id, previous_section_data in previous_data.items():
+                if not response[section_id]:
+                    response[section_id] = previous_section_data
 
         return response
 
@@ -369,7 +432,7 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
                 self._flash_issue_active = True
                 self._create_issue()
 
-        await self._api_call_for_user(write_fn())
+            await self._api_call_for_user(write_fn())
 
     async def async_write_data(self, request: dict[Section, Any], *, ignore_weekly_write_count: bool = False) -> None:
         """Write data to the NAND from the KEBA KeEnergy control unit."""

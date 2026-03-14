@@ -178,6 +178,17 @@ def config_entry(request: SubRequest) -> MockConfigEntry:
             CONF_SSL: False,
         },
         "unique_id": "12345678",
+        "options": {
+            "scan_interval": 20,
+            "scan_interval_tick_system": 1,
+            "scan_interval_tick_heat_pump": 1,
+            "scan_interval_tick_heat_circuit": 1,
+            "scan_interval_tick_solar_circuit": 1,
+            "scan_interval_tick_hot_water_tank": 1,
+            "scan_interval_tick_buffer_tank": 1,
+            "scan_interval_tick_switch_valve": 1,
+            "scan_interval_tick_external_heat_source": 1,
+        },
     }
 
     if hasattr(request, "param"):
