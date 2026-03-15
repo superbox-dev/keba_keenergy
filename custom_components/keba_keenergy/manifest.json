@@ -9,7 +9,7 @@
   "issue_tracker": "https://github.com/superbox-dev/keba_keenergy/issues",
   "loggers": ["keba_keenergy_api"],
   "requirements": ["keba_keenergy_api==2.10.1"],
-  "version": "1.9.0b4",
+  "version": "1.9.0",
   "zeroconf": [
     {
       "type": "_keba-device._tcp.local.",
