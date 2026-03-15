@@ -38,7 +38,6 @@ from .const import CONF_SOLAR_CIRCUIT_TICK
 from .const import CONF_SWITCH_VALVE_TICK
 from .const import CONF_SYSTEM_TICK
 from .const import DEFAULT_SCAN_INTERVAL
-from .const import DEFAULT_SSL
 from .const import DOMAIN
 from .const import MANUFACTURER
 from .const import MIN_SCAN_INTERVAL
@@ -50,13 +49,6 @@ if TYPE_CHECKING:
     from aiohttp import ClientSession
     from .coordinator import KebaKeEnergyConfigEntry
     from .coordinator import KebaKeEnergyDataUpdateCoordinator
-
-STEP_USER_DATA_SCHEMA: vol.Schema = vol.Schema(
-    {
-        vol.Required(CONF_HOST): str,
-        vol.Required(CONF_SSL, default=DEFAULT_SSL): bool,
-    },
-)
 
 STEP_AUTH_DATA_SCHEMA: vol.Schema = vol.Schema(
     {
@@ -142,7 +134,12 @@ class KebaKeEnergyConfigFlow(ConfigFlow, domain=DOMAIN):
 
         return self.async_show_form(
             step_id="user",
-            data_schema=STEP_USER_DATA_SCHEMA,
+            data_schema=vol.Schema(
+                {
+                    vol.Required(CONF_HOST, default=self.host): str,
+                    vol.Required(CONF_SSL, default=self.ssl): bool,
+                },
+            ),
             errors=errors,
             description_placeholders={
                 "name": f"{MANUFACTURER} {NAME}",
