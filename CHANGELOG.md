@@ -9,6 +9,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!--start-->
 
+## [1.9.1] - 2025-04-03
+
+### Security
+
+- Update `keba-keenergy-api`, as aiohttp is being updated from `3.13.3` to `3.13.4` [CVE-2026-34513][CVE-2026-34513]
+
+[CVE-2026-34513]: https://github.com/advisories/GHSA-hcc4-c3v8-rx92
+
 ## [1.9.0] - 2025-03-15
 
 ### Added
