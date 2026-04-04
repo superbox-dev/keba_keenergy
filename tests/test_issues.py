@@ -1,12 +1,13 @@
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
 from unittest.mock import patch
 
 from homeassistant.components.select import ATTR_OPTION
 from homeassistant.components.select import DOMAIN as SELECT_DOMAIN
 from homeassistant.components.select import SERVICE_SELECT_OPTION
 from homeassistant.const import ATTR_ENTITY_ID
-from homeassistant.core import HomeAssistant
 from homeassistant.helpers import issue_registry as ir
-from pytest_homeassistant_custom_component.common import MockConfigEntry
 
 from custom_components.keba_keenergy.const import DOMAIN
 from tests import init_translations
@@ -16,7 +17,11 @@ from tests.api_data import HEATING_CURVE_NAMES_RESPONSE
 from tests.api_data import MULTIPLE_POSITIONS_RESPONSE
 from tests.api_data import MULTIPLE_POSITION_DATA_RESPONSE_1
 from tests.api_data import get_multiple_position_fixed_data_response
-from tests.conftest import FakeKebaKeEnergyAPI
+
+if TYPE_CHECKING:
+    from homeassistant.core import HomeAssistant
+    from pytest_homeassistant_custom_component.common import MockConfigEntry
+    from tests.conftest import FakeKebaKeEnergyAPI
 
 
 async def test_issues(

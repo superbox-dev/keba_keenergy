@@ -1,7 +1,10 @@
+from __future__ import annotations
+
 from datetime import UTC
 from datetime import datetime
 from datetime import timedelta
 from typing import Any
+from typing import TYPE_CHECKING
 from unittest.mock import patch
 
 import pytest
@@ -49,7 +52,9 @@ from tests.api_data import MULTIPLE_POSITION_DATA_RESPONSE_1
 from tests.api_data import MULTIPLE_POSITION_DATA_RESPONSE_2
 from tests.api_data import get_multiple_position_fixed_data_response
 from tests.api_data import get_single_position_fixed_data_response
-from tests.conftest import FakeKebaKeEnergyAPI
+
+if TYPE_CHECKING:
+    from tests.conftest import FakeKebaKeEnergyAPI
 
 ENTITY_ID: str = "climate.keba_keenergy_12345678"
 ENTITY_ID_1: str = "climate.keba_keenergy_12345678_1"

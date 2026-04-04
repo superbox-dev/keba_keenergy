@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import json
 from datetime import timedelta
 from typing import Any
@@ -7,7 +9,6 @@ from unittest.mock import patch
 
 import pytest
 from homeassistant.const import CONF_HOST
-from homeassistant.core import HomeAssistant
 from homeassistant.exceptions import ConfigEntryAuthFailed
 from homeassistant.exceptions import HomeAssistantError
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
@@ -37,7 +38,10 @@ from tests.api_data import get_multiple_position_fixed_data_response
 from tests.conftest import FakeKebaKeEnergyAPI
 
 if TYPE_CHECKING:
+    from homeassistant.core import HomeAssistant
     from aiohttp import ClientSession
+    from pytest_homeassistant_custom_component.common import MockConfigEntry
+    from tests.conftest import FakeKebaKeEnergyAPI
 
 
 @pytest.mark.parametrize(

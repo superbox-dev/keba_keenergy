@@ -198,7 +198,7 @@ def is_int_value_list(value: object) -> TypeGuard[list[int]]:
 class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueResponse]]):
     """Class to manage fetching KEBA KeEnergy data API."""
 
-    _attr_has_entity_name = True
+    _attr_has_entity_name: bool = True
 
     def __init__(
         self,

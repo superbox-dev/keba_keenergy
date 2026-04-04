@@ -1,3 +1,6 @@
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
 from unittest.mock import patch
 
 import pytest
@@ -14,7 +17,6 @@ from homeassistant.exceptions import HomeAssistantError
 from homeassistant.setup import async_setup_component
 from keba_keenergy_api.api import KebaKeEnergyAPI
 from keba_keenergy_api.error import APIError
-from pytest_homeassistant_custom_component.common import MockConfigEntry
 
 from tests import init_translations
 from tests import setup_integration
@@ -24,7 +26,10 @@ from tests.api_data import HEATING_CURVE_NAMES_RESPONSE
 from tests.api_data import MULTIPLE_POSITIONS_RESPONSE
 from tests.api_data import MULTIPLE_POSITION_DATA_RESPONSE_1
 from tests.api_data import get_multiple_position_fixed_data_response
-from tests.conftest import FakeKebaKeEnergyAPI
+
+if TYPE_CHECKING:
+    from pytest_homeassistant_custom_component.common import MockConfigEntry
+    from tests.conftest import FakeKebaKeEnergyAPI
 
 
 async def test_entity_update(

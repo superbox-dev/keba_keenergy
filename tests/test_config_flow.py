@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from http import HTTPStatus
 from ipaddress import ip_address
 from typing import TYPE_CHECKING
@@ -10,12 +12,10 @@ from homeassistant.config_entries import SOURCE_USER
 from homeassistant.config_entries import SOURCE_ZEROCONF
 from homeassistant.const import CONF_HOST
 from homeassistant.const import CONF_SSL
-from homeassistant.core import HomeAssistant
 from homeassistant.data_entry_flow import FlowResultType
 from homeassistant.helpers.service_info.zeroconf import ZeroconfServiceInfo
 from keba_keenergy_api.endpoints import SystemEndpoints
 from keba_keenergy_api.error import APIError
-from pytest_homeassistant_custom_component.common import MockConfigEntry
 
 from custom_components.keba_keenergy.const import DOMAIN
 from tests import setup_integration
@@ -24,10 +24,12 @@ from tests.api_data import HEATING_CURVE_NAMES_RESPONSE
 from tests.api_data import MULTIPLE_POSITIONS_RESPONSE
 from tests.api_data import MULTIPLE_POSITION_DATA_RESPONSE_1
 from tests.api_data import get_multiple_position_fixed_data_response
-from tests.conftest import FakeKebaKeEnergyAPI
 
 if TYPE_CHECKING:
     from homeassistant.config_entries import ConfigFlowResult
+    from homeassistant.core import HomeAssistant
+    from pytest_homeassistant_custom_component.common import MockConfigEntry
+    from tests.conftest import FakeKebaKeEnergyAPI
 
 ZERO_CONF_SERVICE_INFO: ZeroconfServiceInfo = ZeroconfServiceInfo(
     ip_address=ip_address("10.0.0.100"),

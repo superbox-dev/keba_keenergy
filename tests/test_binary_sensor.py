@@ -1,3 +1,7 @@
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
+
 import pytest
 from homeassistant.const import ATTR_FRIENDLY_NAME
 from homeassistant.const import CONF_HOST
@@ -5,7 +9,6 @@ from homeassistant.const import STATE_OFF
 from homeassistant.const import STATE_ON
 from homeassistant.core import HomeAssistant
 from homeassistant.core import State
-from pytest_homeassistant_custom_component.common import MockConfigEntry
 
 from tests import setup_integration
 from tests.api_data import HEATING_CURVES_RESPONSE_1_1
@@ -13,7 +16,10 @@ from tests.api_data import HEATING_CURVE_NAMES_RESPONSE
 from tests.api_data import MULTIPLE_POSITIONS_RESPONSE
 from tests.api_data import MULTIPLE_POSITION_DATA_RESPONSE_1
 from tests.api_data import get_multiple_position_fixed_data_response
-from tests.conftest import FakeKebaKeEnergyAPI
+
+if TYPE_CHECKING:
+    from pytest_homeassistant_custom_component.common import MockConfigEntry
+    from tests.conftest import FakeKebaKeEnergyAPI
 
 
 @pytest.mark.usefixtures("entity_registry_enabled_by_default")

@@ -1,5 +1,8 @@
+from __future__ import annotations
+
 from datetime import timedelta
 from typing import Any
+from typing import TYPE_CHECKING
 
 import pytest
 import voluptuous as vol
@@ -21,7 +24,6 @@ from homeassistant.core import HomeAssistant
 from homeassistant.core import State
 from homeassistant.exceptions import ServiceValidationError
 from homeassistant.util import dt as dt_util
-from pytest_homeassistant_custom_component.common import MockConfigEntry
 from pytest_homeassistant_custom_component.common import async_fire_time_changed
 
 from tests import setup_integration
@@ -33,7 +35,10 @@ from tests.api_data import MULTIPLE_POSITIONS_RESPONSE
 from tests.api_data import MULTIPLE_POSITION_DATA_RESPONSE_1
 from tests.api_data import get_multiple_position_fixed_data_response
 from tests.api_data import get_single_position_fixed_data_response
-from tests.conftest import FakeKebaKeEnergyAPI
+
+if TYPE_CHECKING:
+    from pytest_homeassistant_custom_component.common import MockConfigEntry
+    from tests.conftest import FakeKebaKeEnergyAPI
 
 
 async def test_buffer_tank_numbers(

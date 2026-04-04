@@ -1,11 +1,12 @@
+from __future__ import annotations
+
 from typing import Any
+from typing import TYPE_CHECKING
 
 import pytest
 import voluptuous as vol
 from homeassistant.const import CONF_HOST
-from homeassistant.core import HomeAssistant
 from homeassistant.exceptions import ServiceValidationError
-from pytest_homeassistant_custom_component.common import MockConfigEntry
 
 from custom_components.keba_keenergy.const import ATTR_CONFIG_ENTRY
 from custom_components.keba_keenergy.const import DOMAIN
@@ -26,7 +27,11 @@ from tests.api_data import HEATING_CURVE_NAMES_RESPONSE
 from tests.api_data import MULTIPLE_POSITIONS_RESPONSE
 from tests.api_data import MULTIPLE_POSITION_DATA_RESPONSE_1
 from tests.api_data import get_multiple_position_fixed_data_response
-from tests.conftest import FakeKebaKeEnergyAPI
+
+if TYPE_CHECKING:
+    from homeassistant.core import HomeAssistant
+    from pytest_homeassistant_custom_component.common import MockConfigEntry
+    from tests.conftest import FakeKebaKeEnergyAPI
 
 
 async def test_set_away_range(
