@@ -350,15 +350,6 @@
                     "temporary_off": "Off (temporary)"
                 }
             },
-            "heat_circuit_mode": {
-                "name": "Mode",
-                "state": {
-                    "cooling": "Cooling",
-                    "heating": "Heating",
-                    "heating_and_active_cooling": "Heating and active cooling",
-                    "heating_and_cooling": "Heating and cooling"
-                }
-            },
             "heating_curve": {
                 "name": "Heating curve"
             },

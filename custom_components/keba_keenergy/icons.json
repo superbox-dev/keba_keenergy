@@ -93,13 +93,6 @@
                     "off": "mdi:fire-off"
                 }
             },
-            "heat_circuit_mode": {
-                "default": "mdi:sun-snowflake",
-                "state": {
-                    "cooling": "mdi:snowflake",
-                    "heating": "mdi:fire"
-                }
-            },
             "operating_mode_buffer_tank": {
                 "state": {
                     "heat_up": "mdi:fire",

@@ -27,7 +27,6 @@ from keba_keenergy_api.constants import BufferTankOperatingMode
 from keba_keenergy_api.constants import ExternalHeatSourceOperatingMode
 from keba_keenergy_api.constants import HeatCircuitCoolRequest
 from keba_keenergy_api.constants import HeatCircuitHeatRequest
-from keba_keenergy_api.constants import HeatCircuitMode
 from keba_keenergy_api.constants import HeatCircuitOperatingMode
 from keba_keenergy_api.constants import HeatPumpState
 from keba_keenergy_api.constants import HeatPumpSubState
@@ -52,6 +51,9 @@ T = TypeVar("T", bound=StateType)
 _LOGGER = logging.getLogger(__name__)
 
 PARALLEL_UPDATES: Final[int] = 0
+
+HEAT_CIRCUIT_COOLING_SENSORS: list[str] = ["cool_request"]
+HEAT_CIRCUIT_HEATING_SENSORS: list[str] = ["heat_request"]
 
 
 @dataclass(frozen=True)
@@ -192,14 +194,6 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
         ),
     ),
     SectionPrefix.HEAT_CIRCUIT: (
-        KebaKeEnergySensorEntityDescription[str](
-            device_class=SensorDeviceClass.ENUM,
-            key="mode",
-            key_index=None,
-            options=[_.name.lower() for _ in HeatCircuitMode],
-            translation_key="heat_circuit_mode",
-            value=lambda data: data,
-        ),
         KebaKeEnergySensorEntityDescription[float](
             device_class=SensorDeviceClass.TEMPERATURE,
             entity_registry_enabled_default=False,
@@ -1035,14 +1029,27 @@ async def async_setup_entry(
             for key, values in section_data.items():
                 if key == description.key:
                     device_numbers: int = len(values) if isinstance(values, list) else 1
-                    sensors += [
-                        KebaKeEnergySensorEntity(
-                            coordinator,
-                            description=description,
-                            entry=entry,
-                            section_id=section_id,
-                            index=index if device_numbers > 1 else None,
-                        )
-                        for index in range(device_numbers)
-                    ]
+
+                    for index in range(device_numbers):
+                        if (
+                            section_id == SectionPrefix.HEAT_CIRCUIT
+                            and key in HEAT_CIRCUIT_HEATING_SENSORS
+                            and coordinator.is_cooling_circuit(index=index)
+                        ) or (
+                            section_id == SectionPrefix.HEAT_CIRCUIT
+                            and key in HEAT_CIRCUIT_COOLING_SENSORS
+                            and not coordinator.is_cooling_circuit(index=index)
+                        ):
+                            continue
+
+                        sensors += [
+                            KebaKeEnergySensorEntity(
+                                coordinator,
+                                description=description,
+                                entry=entry,
+                                section_id=section_id,
+                                index=index if device_numbers > 1 else None,
+                            ),
+                        ]
+
     async_add_entities(sensors)

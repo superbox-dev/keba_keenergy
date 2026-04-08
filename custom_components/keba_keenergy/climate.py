@@ -24,7 +24,6 @@ from homeassistant.components.climate.const import PRESET_COMFORT
 from homeassistant.components.climate.const import PRESET_HOME
 from homeassistant.components.climate.const import PRESET_SLEEP
 from homeassistant.const import ATTR_TEMPERATURE
-from homeassistant.const import STATE_ON
 from homeassistant.const import UnitOfTemperature
 from homeassistant.core import HassJob
 from homeassistant.helpers.event import async_call_later
@@ -131,7 +130,7 @@ class KebaKeEnergyClimateEntity(KebaKeEnergyEntity, ClimateEntity):
         """Return the current temperature."""
         return (
             self.get_value("room_temperature", expected_type=float)
-            if self.coordinator.has_room_temperature(index=self.index or 0) == STATE_ON
+            if self.coordinator.has_room_temperature(index=self.index or 0)
             else None
         )
 
@@ -179,7 +178,7 @@ class KebaKeEnergyClimateEntity(KebaKeEnergyEntity, ClimateEntity):
         """Return the current humidity."""
         return (
             self.get_value("room_humidity", expected_type=float)
-            if self.coordinator.has_room_humidity(index=self.index or 0) == STATE_ON
+            if self.coordinator.has_room_humidity(index=self.index or 0)
             else None
         )
 

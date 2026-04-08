@@ -28,6 +28,9 @@ from keba_keenergy_api.api import KebaKeEnergyAPI
 from keba_keenergy_api.constants import BufferTank
 from keba_keenergy_api.constants import ExternalHeatSource
 from keba_keenergy_api.constants import HeatCircuit
+from keba_keenergy_api.constants import HeatCircuitHasRoomHumidity
+from keba_keenergy_api.constants import HeatCircuitHasRoomTemperature
+from keba_keenergy_api.constants import HeatCircuitMode
 from keba_keenergy_api.constants import HeatPump
 from keba_keenergy_api.constants import HeatPumpHasPassiveCooling
 from keba_keenergy_api.constants import HotWaterTank
@@ -68,7 +71,6 @@ REQUEST_DATA_GROUPS: dict[SectionPrefix, list[Section]] = {
         ExternalHeatSource.ACTIVATION_COUNTER,
     ],
     SectionPrefix.HEAT_CIRCUIT: [
-        HeatCircuit.MODE,
         HeatCircuit.ROOM_TEMPERATURE,
         HeatCircuit.ROOM_HUMIDITY,
         HeatCircuit.DEW_POINT,
@@ -324,6 +326,7 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
 
         self._fixed_data = await self.api.read_data(
             request=[
+                HeatCircuit.MODE,
                 HeatCircuit.HAS_ROOM_TEMPERATURE,
                 HeatCircuit.HAS_ROOM_HUMIDITY,
                 HeatPump.HAS_PASSIVE_COOLING,
@@ -567,17 +570,22 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
         """Return number of external heat sources."""
         return self.position.external_heat_source if self.position else 0
 
-    def has_room_temperature(self, *, index: int) -> str:
+    def has_room_temperature(self, *, index: int) -> bool:
         """Check if room temperature sensor is available."""
         data: list[Value] = cast("list[Value]", self._fixed_data[SectionPrefix.HEAT_CIRCUIT]["has_room_temperature"])
-        return str(data[index]["value"])
+        return bool(HeatCircuitHasRoomTemperature.ON.name.lower() == data[index]["value"])
 
-    def has_room_humidity(self, *, index: int) -> str:
+    def has_room_humidity(self, *, index: int) -> bool:
         """Check if room humidity sensor is available."""
         data: list[Value] = cast("list[Value]", self._fixed_data[SectionPrefix.HEAT_CIRCUIT]["has_room_humidity"])
-        return str(data[index]["value"])
+        return bool(HeatCircuitHasRoomHumidity.ON.name.lower() == data[index]["value"])
 
     def has_passive_cooling(self, *, index: int) -> bool:
         """Check if passive cooling is available."""
         data: list[Value] = cast("list[Value]", self._fixed_data[SectionPrefix.HEAT_PUMP]["has_passive_cooling"])
         return bool(HeatPumpHasPassiveCooling.ON.name.lower() == data[index]["value"])
+
+    def is_cooling_circuit(self, *, index: int) -> bool:
+        """Check if heating circuit mode is cooling."""
+        data: list[Value] = cast("list[Value]", self._fixed_data[SectionPrefix.HEAT_CIRCUIT]["mode"])
+        return bool(HeatCircuitMode.COOLING.name.lower() == data[index]["value"])

@@ -253,10 +253,6 @@ async def test_update_interval_ticks(
             "has_vfd_failure": [{"value": "off", "attributes": {}}],
         },
         "heat_circuit": {
-            "mode": [
-                {"value": "heating", "attributes": {"upper_limit": "3", "lower_limit": "0"}},
-                {"value": "cooling", "attributes": {"upper_limit": "3", "lower_limit": "0"}},
-            ],
             "room_temperature": [
                 {"value": 22.42, "attributes": {"upper_limit": "80", "lower_limit": "0"}},
                 {"value": 22.42, "attributes": {"upper_limit": "80", "lower_limit": "0"}},
@@ -524,10 +520,6 @@ async def test_update_interval_ticks(
             "has_vfd_failure": [{"value": "off", "attributes": {}}],
         },
         "heat_circuit": {
-            "mode": [
-                {"value": "heating", "attributes": {"upper_limit": "3", "lower_limit": "0"}},
-                {"value": "cooling", "attributes": {"upper_limit": "3", "lower_limit": "0"}},
-            ],
             "room_temperature": [
                 {"value": 22.42, "attributes": {"upper_limit": "80", "lower_limit": "0"}},
                 {"value": 22.42, "attributes": {"upper_limit": "80", "lower_limit": "0"}},
