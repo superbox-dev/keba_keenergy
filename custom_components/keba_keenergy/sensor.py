@@ -1031,16 +1031,15 @@ async def async_setup_entry(
                     device_numbers: int = len(values) if isinstance(values, list) else 1
 
                     for index in range(device_numbers):
-                        if (
-                            section_id == SectionPrefix.HEAT_CIRCUIT
-                            and key in HEAT_CIRCUIT_HEATING_SENSORS
-                            and coordinator.is_cooling_circuit(index=index)
-                        ) or (
-                            section_id == SectionPrefix.HEAT_CIRCUIT
-                            and key in HEAT_CIRCUIT_COOLING_SENSORS
-                            and not coordinator.is_cooling_circuit(index=index)
-                        ):
-                            continue
+                        # Only show cooling or heating sensors if the heating circuit mode support this
+                        if section_id == SectionPrefix.HEAT_CIRCUIT:
+                            is_heating: bool = coordinator.is_heating_circuit(index=index)
+                            is_cooling: bool = coordinator.is_cooling_circuit(index=index)
+
+                            if (key in HEAT_CIRCUIT_HEATING_SENSORS and is_cooling) or (
+                                key in HEAT_CIRCUIT_COOLING_SENSORS and is_heating
+                            ):
+                                continue
 
                         sensors += [
                             KebaKeEnergySensorEntity(

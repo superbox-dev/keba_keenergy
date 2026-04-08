@@ -589,3 +589,8 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
         """Check if heating circuit mode is cooling."""
         data: list[Value] = cast("list[Value]", self._fixed_data[SectionPrefix.HEAT_CIRCUIT]["mode"])
         return bool(HeatCircuitMode.COOLING.name.lower() == data[index]["value"])
+
+    def is_heating_circuit(self, *, index: int) -> bool:
+        """Check if heating circuit mode is heating."""
+        data: list[Value] = cast("list[Value]", self._fixed_data[SectionPrefix.HEAT_CIRCUIT]["mode"])
+        return bool(HeatCircuitMode.HEATING.name.lower() == data[index]["value"])
