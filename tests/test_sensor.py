@@ -68,7 +68,7 @@ async def test_system_sensors(
     assert operating_mode.attributes[CONF_DEVICE_CLASS] == SensorDeviceClass.ENUM
     assert operating_mode.attributes[ATTR_OPTIONS] == ["setup", "standby", "summer", "auto_heat", "auto_cool", "auto"]
     assert {
-        opt: translations[f"component.keba_keenergy.entity.sensor.operating_mode_system.state.{opt}"]
+        opt: translations[f"component.keba_keenergy.entity.sensor.system_operating_mode.state.{opt}"]
         for opt in operating_mode.attributes[ATTR_OPTIONS]
     } == {
         "auto": "Automatic",
@@ -149,7 +149,7 @@ async def test_system_sensors_translated(
     operating_mode: State | None = hass.states.get("sensor.keba_keenergy_12345678_operating_mode")
     assert isinstance(operating_mode, State)
     assert {
-        opt: translations[f"component.keba_keenergy.entity.sensor.operating_mode_system.state.{opt}"]
+        opt: translations[f"component.keba_keenergy.entity.sensor.system_operating_mode.state.{opt}"]
         for opt in operating_mode.attributes[ATTR_OPTIONS]
     } == {
         "auto": "Automatik",
@@ -238,7 +238,7 @@ async def test_buffer_tank_sensors(
     assert buffer_tank_operating_mode_1.attributes[CONF_DEVICE_CLASS] == SensorDeviceClass.ENUM
     assert buffer_tank_operating_mode_1.attributes[ATTR_OPTIONS] == ["off", "on", "heat_up"]
     assert {
-        opt: translations[f"component.keba_keenergy.entity.sensor.operating_mode_buffer_tank.state.{opt}"]
+        opt: translations[f"component.keba_keenergy.entity.sensor.buffer_tank_operating_mode.state.{opt}"]
         for opt in buffer_tank_operating_mode_1.attributes[ATTR_OPTIONS]
     } == {
         "heat_up": "Heat up",
@@ -309,7 +309,7 @@ async def test_buffer_tank_sensors_translations(
     )
     assert isinstance(buffer_tank_operating_mode_1, State)
     assert {
-        opt: translations[f"component.keba_keenergy.entity.sensor.operating_mode_buffer_tank.state.{opt}"]
+        opt: translations[f"component.keba_keenergy.entity.sensor.buffer_tank_operating_mode.state.{opt}"]
         for opt in buffer_tank_operating_mode_1.attributes[ATTR_OPTIONS]
     } == {
         "heat_up": "Aufheizen",
@@ -367,7 +367,7 @@ async def test_hot_water_tank_sensors(
     assert hot_water_tank_operating_mode_1.attributes[CONF_DEVICE_CLASS] == SensorDeviceClass.ENUM
     assert hot_water_tank_operating_mode_1.attributes[ATTR_OPTIONS] == ["off", "auto", "on", "heat_up"]
     assert {
-        opt: translations[f"component.keba_keenergy.entity.sensor.operating_mode_hot_water_tank.state.{opt}"]
+        opt: translations[f"component.keba_keenergy.entity.sensor.hot_water_tank_operating_mode.state.{opt}"]
         for opt in hot_water_tank_operating_mode_1.attributes[ATTR_OPTIONS]
     } == {
         "heat_up": "Heat up",
@@ -446,7 +446,7 @@ async def test_hot_water_tank_sensors_translations(
     )
     assert isinstance(hot_water_tank_operating_mode_1, State)
     assert {
-        opt: translations[f"component.keba_keenergy.entity.sensor.operating_mode_hot_water_tank.state.{opt}"]
+        opt: translations[f"component.keba_keenergy.entity.sensor.hot_water_tank_operating_mode.state.{opt}"]
         for opt in hot_water_tank_operating_mode_1.attributes[ATTR_OPTIONS]
     } == {
         "auto": "Auto",
@@ -1401,7 +1401,7 @@ async def test_heat_circuit_sensors(
         "room_control",
     ]
     assert {
-        opt: translations[f"component.keba_keenergy.entity.sensor.operating_mode_heat_circuit.state.{opt}"]
+        opt: translations[f"component.keba_keenergy.entity.sensor.heat_circuit_operating_mode.state.{opt}"]
         for opt in heat_circuit_operating_mode_1.attributes[ATTR_OPTIONS]
     } == {
         "auto": "Auto",
@@ -1584,7 +1584,7 @@ async def test_heat_circuit_sensors_translations(
     )
     assert isinstance(heat_circuit_operating_mode_1, State)
     assert {
-        opt: translations[f"component.keba_keenergy.entity.sensor.operating_mode_heat_circuit.state.{opt}"]
+        opt: translations[f"component.keba_keenergy.entity.sensor.heat_circuit_operating_mode.state.{opt}"]
         for opt in heat_circuit_operating_mode_1.attributes[ATTR_OPTIONS]
     } == {
         "auto": "Auto",
@@ -2014,7 +2014,7 @@ async def test_external_heat_source_sensors(
         "on",
     ]
     assert {
-        opt: translations[f"component.keba_keenergy.entity.sensor.operating_mode_external_heat_source.state.{opt}"]
+        opt: translations[f"component.keba_keenergy.entity.sensor.external_heat_source_operating_mode.state.{opt}"]
         for opt in external_heat_source_operating_mode_1.attributes[ATTR_OPTIONS]
     } == {
         "off": "Off",
@@ -2095,7 +2095,7 @@ async def test_external_heat_source_sensors_translated(
     )
     assert isinstance(external_heat_source_operating_mode_1, State)
     assert {
-        opt: translations[f"component.keba_keenergy.entity.sensor.operating_mode_external_heat_source.state.{opt}"]
+        opt: translations[f"component.keba_keenergy.entity.sensor.external_heat_source_operating_mode.state.{opt}"]
         for opt in external_heat_source_operating_mode_1.attributes[ATTR_OPTIONS]
     } == {
         "off": "Aus",

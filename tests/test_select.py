@@ -121,7 +121,7 @@ async def test_heat_circuit_selects(
     assert heat_circuit_operating_mode_1.attributes[ATTR_OPTIONS] == ["off", "auto", "day", "night", "holiday", "party"]
 
     assert {
-        opt: translations[f"component.keba_keenergy.entity.select.operating_mode_heat_circuit.state.{opt}"]
+        opt: translations[f"component.keba_keenergy.entity.select.heat_circuit_operating_mode.state.{opt}"]
         for opt in heat_circuit_operating_mode_1.attributes[ATTR_OPTIONS]
     } == {
         "auto": "Auto",
@@ -177,7 +177,7 @@ async def test_heat_circuit_selects_translated(
     assert isinstance(heat_circuit_operating_mode_1, State)
     assert heat_circuit_operating_mode_1.attributes[ATTR_FRIENDLY_NAME] == "Heizkreis 1 Betriebsart"
     assert {
-        opt: translations[f"component.keba_keenergy.entity.select.operating_mode_heat_circuit.state.{opt}"]
+        opt: translations[f"component.keba_keenergy.entity.select.heat_circuit_operating_mode.state.{opt}"]
         for opt in heat_circuit_operating_mode_1.attributes[ATTR_OPTIONS]
     } == {
         "auto": "Auto",
@@ -221,7 +221,7 @@ async def test_solar_circuit_selects(
     assert solar_circuit_operating_mode_1.attributes[ATTR_OPTIONS] == ["off", "on"]
 
     assert {
-        opt: translations[f"component.keba_keenergy.entity.select.operating_mode_solar_circuit.state.{opt}"]
+        opt: translations[f"component.keba_keenergy.entity.select.solar_circuit_operating_mode.state.{opt}"]
         for opt in solar_circuit_operating_mode_1.attributes[ATTR_OPTIONS]
     } == {
         "off": "Off",
@@ -237,7 +237,7 @@ async def test_solar_circuit_selects(
     assert solar_circuit_operating_mode_2.attributes[ATTR_OPTIONS] == ["off", "on"]
 
     assert {
-        opt: translations[f"component.keba_keenergy.entity.select.operating_mode_solar_circuit.state.{opt}"]
+        opt: translations[f"component.keba_keenergy.entity.select.solar_circuit_operating_mode.state.{opt}"]
         for opt in solar_circuit_operating_mode_2.attributes[ATTR_OPTIONS]
     } == {
         "off": "Off",
@@ -270,7 +270,7 @@ async def test_solar_circuit_selects_translated(
     assert solar_circuit_operating_mode_1.attributes[ATTR_FRIENDLY_NAME] == "Solarkreis 1 Betriebsart"
 
     assert {
-        opt: translations[f"component.keba_keenergy.entity.select.operating_mode_solar_circuit.state.{opt}"]
+        opt: translations[f"component.keba_keenergy.entity.select.solar_circuit_operating_mode.state.{opt}"]
         for opt in solar_circuit_operating_mode_1.attributes[ATTR_OPTIONS]
     } == {
         "off": "Aus",
@@ -284,7 +284,7 @@ async def test_solar_circuit_selects_translated(
     assert solar_circuit_operating_mode_2.attributes[ATTR_FRIENDLY_NAME] == "Solarkreis 2 Betriebsart"
 
     assert {
-        opt: translations[f"component.keba_keenergy.entity.select.operating_mode_solar_circuit.state.{opt}"]
+        opt: translations[f"component.keba_keenergy.entity.select.solar_circuit_operating_mode.state.{opt}"]
         for opt in solar_circuit_operating_mode_2.attributes[ATTR_OPTIONS]
     } == {
         "off": "Aus",
@@ -322,7 +322,7 @@ async def test_buffer_tank_selects(
     ]
 
     assert {
-        opt: translations[f"component.keba_keenergy.entity.select.operating_mode_buffer_tank.state.{opt}"]
+        opt: translations[f"component.keba_keenergy.entity.select.buffer_tank_operating_mode.state.{opt}"]
         for opt in buffer_tank_operating_mode_2.attributes[ATTR_OPTIONS]
     } == {
         "off": "Off",
@@ -356,7 +356,7 @@ async def test_buffer_tank_selects_translated(
     assert buffer_tank_operating_mode_2.attributes[ATTR_FRIENDLY_NAME] == "Pufferspeicher 2 Betriebsart"
 
     assert {
-        opt: translations[f"component.keba_keenergy.entity.select.operating_mode_buffer_tank.state.{opt}"]
+        opt: translations[f"component.keba_keenergy.entity.select.buffer_tank_operating_mode.state.{opt}"]
         for opt in buffer_tank_operating_mode_2.attributes[ATTR_OPTIONS]
     } == {
         "off": "Aus",
@@ -396,7 +396,7 @@ async def test_hot_water_tank_selects(
     ]
 
     assert {
-        opt: translations[f"component.keba_keenergy.entity.select.operating_mode_hot_water_tank.state.{opt}"]
+        opt: translations[f"component.keba_keenergy.entity.select.hot_water_tank_operating_mode.state.{opt}"]
         for opt in hot_water_tank_operating_mode_2.attributes[ATTR_OPTIONS]
     } == {
         "auto": "Schedule",
@@ -431,7 +431,7 @@ async def test_hot_water_tank_selects_translated(
     assert hot_water_tank_operating_mode_2.attributes[ATTR_FRIENDLY_NAME] == "Warmwasserspeicher 2 Betriebsart"
 
     assert {
-        opt: translations[f"component.keba_keenergy.entity.select.operating_mode_hot_water_tank.state.{opt}"]
+        opt: translations[f"component.keba_keenergy.entity.select.hot_water_tank_operating_mode.state.{opt}"]
         for opt in hot_water_tank_operating_mode_2.attributes[ATTR_OPTIONS]
     } == {
         "auto": "Zeitplan",
@@ -473,7 +473,7 @@ async def test_external_heat_source_selects(
     ]
 
     assert {
-        opt: translations[f"component.keba_keenergy.entity.select.operating_mode_external_heat_source.state.{opt}"]
+        opt: translations[f"component.keba_keenergy.entity.select.external_heat_source_operating_mode.state.{opt}"]
         for opt in external_heat_source_operating_mode_1.attributes[ATTR_OPTIONS]
     } == {
         "off": "Off",
@@ -507,7 +507,7 @@ async def test_external_heat_source_translated(
     assert external_heat_source_operating_mode_1.attributes[ATTR_FRIENDLY_NAME] == "Externe Wärmequelle 1 Betriebsart"
 
     assert {
-        opt: translations[f"component.keba_keenergy.entity.select.operating_mode_external_heat_source.state.{opt}"]
+        opt: translations[f"component.keba_keenergy.entity.select.external_heat_source_operating_mode.state.{opt}"]
         for opt in external_heat_source_operating_mode_1.attributes[ATTR_OPTIONS]
     } == {
         "off": "Aus",

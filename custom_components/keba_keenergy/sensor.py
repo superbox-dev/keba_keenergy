@@ -26,6 +26,7 @@ from homeassistant.helpers.typing import StateType
 from keba_keenergy_api.constants import BufferTankOperatingMode
 from keba_keenergy_api.constants import ExternalHeatSourceOperatingMode
 from keba_keenergy_api.constants import HeatCircuitHeatRequest
+from keba_keenergy_api.constants import HeatCircuitMode
 from keba_keenergy_api.constants import HeatCircuitOperatingMode
 from keba_keenergy_api.constants import HeatPumpState
 from keba_keenergy_api.constants import HeatPumpSubState
@@ -125,7 +126,7 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
             key="operating_mode",
             key_index=None,
             options=[_.name.lower() for _ in SystemOperatingMode],
-            translation_key="operating_mode_system",
+            translation_key="system_operating_mode",
             value=lambda data: data,
         ),
         KebaKeEnergySensorEntityDescription[float](
@@ -190,6 +191,14 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
         ),
     ),
     SectionPrefix.HEAT_CIRCUIT: (
+        KebaKeEnergySensorEntityDescription[str](
+            device_class=SensorDeviceClass.ENUM,
+            key="mode",
+            key_index=None,
+            options=[_.name.lower() for _ in HeatCircuitMode],
+            translation_key="heat_circuit_mode",
+            value=lambda data: data,
+        ),
         KebaKeEnergySensorEntityDescription[float](
             device_class=SensorDeviceClass.TEMPERATURE,
             entity_registry_enabled_default=False,
@@ -331,7 +340,7 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
             key="operating_mode",
             key_index=None,
             options=[_.name.lower() for _ in HeatCircuitOperatingMode],
-            translation_key="operating_mode_heat_circuit",
+            translation_key="heat_circuit_operating_mode",
             value=lambda data: data,
         ),
         KebaKeEnergySensorEntityDescription[str](
@@ -841,7 +850,7 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
             key="operating_mode",
             key_index=None,
             options=[_.name.lower() for _ in BufferTankOperatingMode],
-            translation_key="operating_mode_buffer_tank",
+            translation_key="buffer_tank_operating_mode",
             value=lambda data: data,
         ),
         KebaKeEnergySensorEntityDescription[float](
@@ -887,7 +896,7 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
             key="operating_mode",
             key_index=None,
             options=[_.name.lower() for _ in HotWaterTankOperatingMode],
-            translation_key="operating_mode_hot_water_tank",
+            translation_key="hot_water_tank_operating_mode",
             value=lambda data: data,
         ),
         KebaKeEnergySensorEntityDescription[float](
@@ -941,7 +950,7 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
             key="operating_mode",
             key_index=None,
             options=[_.name.lower() for _ in ExternalHeatSourceOperatingMode],
-            translation_key="operating_mode_external_heat_source",
+            translation_key="external_heat_source_operating_mode",
             value=lambda data: data,
         ),
         KebaKeEnergySensorEntityDescription[float](
