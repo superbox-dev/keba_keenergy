@@ -7,16 +7,16 @@
                     "on": "mdi:pump"
                 }
             },
-            "cool_request": {
-                "state": {
-                    "off": "mdi:power-off",
-                    "on": "mdi:snowflake"
-                }
-            },
             "compressor_failure": {
                 "state": {
                     "off": "mdi:check-circle",
                     "on": "mdi:alert-circle"
+                }
+            },
+            "cool_request": {
+                "state": {
+                    "off": "mdi:power-off",
+                    "on": "mdi:snowflake"
                 }
             },
             "heat_request": {
@@ -64,7 +64,7 @@
         },
         "sensor": {
             "circulation_pump": {
-              "default": "mdi:speedometer",
+                "default": "mdi:speedometer",
                 "range": {
                     "0": "mdi:speedometer-slow",
                     "50": "mdi:speedometer-medium",
@@ -98,6 +98,16 @@
                     "on": "mdi:power"
                 }
             },
+            "operating_mode_heat_circuit": {
+                "state": {
+                    "auto": "mdi:clock-outline",
+                    "day": "mdi:weather-sunny",
+                    "holiday": "mdi:bag-checked",
+                    "night": "mdi:weather-night",
+                    "off": "mdi:power-standby",
+                    "party": "mdi:glass-cocktail"
+                }
+            },
             "operating_mode_hot_water_tank": {
                 "state": {
                     "auto": "mdi:thermometer-auto",
@@ -106,24 +116,14 @@
                     "on": "mdi:power"
                 }
             },
-            "operating_mode_heat_circuit": {
-                "state": {
-                    "auto": "mdi:clock-outline",
-                    "day": "mdi:weather-sunny",
-                    "night": "mdi:weather-night",
-                    "holiday": "mdi:bag-checked",
-                    "off": "mdi:power-standby",
-                    "party": "mdi:glass-cocktail"
-                }
-            },
             "operating_mode_system": {
                 "default": "mdi:cog",
                 "state": {
-                    "standby": "mdi:power-standby",
-                    "summer": "mdi:water-thermometer",
-                    "auto_heat": "mdi:fire",
+                    "auto": "mdi:thermometer-auto",
                     "auto_cool": "mdi:snowflake",
-                    "auto": "mdi:thermometer-auto"
+                    "auto_heat": "mdi:fire",
+                    "standby": "mdi:power-standby",
+                    "summer": "mdi:water-thermometer"
                 }
             },
             "outdoor_temperature": {
