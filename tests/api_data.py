@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 import json
 from typing import Any
 
@@ -93,6 +94,20 @@ HEAT_CIRCUIT_HAS_ROOM_HUMIDITY: str = """
         "name": "APPL.CtrlAppl.sParam.options.heatCircuit[%s].hasRoomHumidity",
         "attributes": {
             "longText": "With room humidity sensor"
+        },
+        "value": "%s"
+    }
+"""
+
+HEAT_CIRCUIT_MODE: str = """
+    {
+        "name": "APPL.CtrlAppl.sParam.options.heatCircuit[%s].type",
+        "attributes": {
+            "formatId": "fmtHeatCircuitMode",
+            "longText": "Mode",
+            "unitId": "Enum",
+            "upperLimit": "3",
+            "lowerLimit": "0"
         },
         "value": "%s"
     }
@@ -1565,6 +1580,7 @@ DEFAULT_POSITION_DATA_RESPONSE: list[dict[str, Any]] = [
     json.loads(EXTERNAL_HEAT_SOURCE_OPERATING_TIME % ("0", "812999")),
     json.loads(EXTERNAL_HEAT_SOURCE_MAX_RUNTIME % ("0", "8129")),
     json.loads(EXTERNAL_HEAT_SOURCE_ACTIVATION_COUNTER % ("0", "812")),
+    json.loads(HEAT_CIRCUIT_MODE % ("0", "0")),
     json.loads(HEAT_CIRCUIT_ROOM_TEMPERATURE % ("0", "22.42")),
     json.loads(HEAT_CIRCUIT_ROOM_HUMIDITY % ("0", "53")),
     json.loads(HEAT_CIRCUIT_DEW_POINT % ("0", "13.1")),
@@ -1643,6 +1659,8 @@ ENTITY_UPDATED_DATA_RESPONSE: list[dict[str, Any]] = [
     json.loads(EXTERNAL_HEAT_SOURCE_MAX_RUNTIME % ("1", "8129")),
     json.loads(EXTERNAL_HEAT_SOURCE_ACTIVATION_COUNTER % ("0", "812")),
     json.loads(EXTERNAL_HEAT_SOURCE_ACTIVATION_COUNTER % ("1", "812")),
+    json.loads(HEAT_CIRCUIT_MODE % ("0", "0")),
+    json.loads(HEAT_CIRCUIT_MODE % ("1", "1")),
     json.loads(HEAT_CIRCUIT_ROOM_TEMPERATURE % ("0", "22.42")),
     json.loads(HEAT_CIRCUIT_ROOM_TEMPERATURE % ("1", "22.42")),
     json.loads(HEAT_CIRCUIT_ROOM_HUMIDITY % ("0", "53")),
@@ -1774,6 +1792,7 @@ def get_single_position_fixed_data_response(
         json.loads(EXTERNAL_HEAT_SOURCE_OPERATING_TIME % ("0", "812999")),
         json.loads(EXTERNAL_HEAT_SOURCE_MAX_RUNTIME % ("0", "8129")),
         json.loads(EXTERNAL_HEAT_SOURCE_ACTIVATION_COUNTER % ("0", "812")),
+        json.loads(HEAT_CIRCUIT_MODE % ("0", "0")),
         json.loads(HEAT_CIRCUIT_ROOM_TEMPERATURE % ("0", "22.42")),
         json.loads(HEAT_CIRCUIT_ROOM_HUMIDITY % ("0", "53")),
         json.loads(HEAT_CIRCUIT_DEW_POINT % ("0", "13.1")),
@@ -1853,6 +1872,8 @@ MULTIPLE_POSITION_DATA_RESPONSE_1: list[dict[str, Any]] = [
     json.loads(EXTERNAL_HEAT_SOURCE_MAX_RUNTIME % ("1", "8129")),
     json.loads(EXTERNAL_HEAT_SOURCE_ACTIVATION_COUNTER % ("0", "812")),
     json.loads(EXTERNAL_HEAT_SOURCE_ACTIVATION_COUNTER % ("1", "812")),
+    json.loads(HEAT_CIRCUIT_MODE % ("0", "0")),
+    json.loads(HEAT_CIRCUIT_MODE % ("1", "1")),
     json.loads(HEAT_CIRCUIT_ROOM_TEMPERATURE % ("0", "22.42")),
     json.loads(HEAT_CIRCUIT_ROOM_TEMPERATURE % ("1", "22.42")),
     json.loads(HEAT_CIRCUIT_ROOM_HUMIDITY % ("0", "53")),
@@ -1985,6 +2006,8 @@ MULTIPLE_POSITION_DATA_RESPONSE_2: list[dict[str, Any]] = [
     json.loads(EXTERNAL_HEAT_SOURCE_MAX_RUNTIME % ("1", "8129")),
     json.loads(EXTERNAL_HEAT_SOURCE_ACTIVATION_COUNTER % ("0", "812")),
     json.loads(EXTERNAL_HEAT_SOURCE_ACTIVATION_COUNTER % ("1", "812")),
+    json.loads(HEAT_CIRCUIT_MODE % ("0", "0")),
+    json.loads(HEAT_CIRCUIT_MODE % ("1", "1")),
     json.loads(HEAT_CIRCUIT_ROOM_TEMPERATURE % ("0", "22.42")),
     json.loads(HEAT_CIRCUIT_ROOM_TEMPERATURE % ("1", "22.42")),
     json.loads(HEAT_CIRCUIT_ROOM_HUMIDITY % ("0", "53")),
@@ -2175,6 +2198,8 @@ MULTIPLE_POSITION_DATA_RESPONSE_3_2: list[dict[str, Any]] = [
     json.loads(EXTERNAL_HEAT_SOURCE_MAX_RUNTIME % ("1", "8129")),
     json.loads(EXTERNAL_HEAT_SOURCE_ACTIVATION_COUNTER % ("0", "812")),
     json.loads(EXTERNAL_HEAT_SOURCE_ACTIVATION_COUNTER % ("1", "812")),
+    json.loads(HEAT_CIRCUIT_MODE % ("0", "0")),
+    json.loads(HEAT_CIRCUIT_MODE % ("1", "1")),
     json.loads(HEAT_CIRCUIT_ROOM_TEMPERATURE % ("0", "22.42")),
     json.loads(HEAT_CIRCUIT_ROOM_TEMPERATURE % ("1", "22.42")),
     json.loads(HEAT_CIRCUIT_ROOM_HUMIDITY % ("0", "53")),

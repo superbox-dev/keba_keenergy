@@ -68,6 +68,7 @@ REQUEST_DATA_GROUPS: dict[SectionPrefix, list[Section]] = {
         ExternalHeatSource.ACTIVATION_COUNTER,
     ],
     SectionPrefix.HEAT_CIRCUIT: [
+        HeatCircuit.MODE,
         HeatCircuit.ROOM_TEMPERATURE,
         HeatCircuit.ROOM_HUMIDITY,
         HeatCircuit.DEW_POINT,

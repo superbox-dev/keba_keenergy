@@ -338,6 +338,15 @@
                     "temporary_off": "Aus (Vorübergehend)"
                 }
             },
+            "heat_circuit_mode": {
+                "name": "Modus",
+                "state": {
+                    "cooling": "Kühlen",
+                    "heating": "Heizen",
+                    "heating_and_active_cooling": "Heizen und aktiv Kühlen",
+                    "heating_and_cooling": "Heizen und Kühlen"
+                }
+            },
             "heating_curve": {
                 "name": "Heizkurve"
             },
