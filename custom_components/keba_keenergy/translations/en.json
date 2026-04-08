@@ -270,6 +270,9 @@
                     "temporary_off": "Off (temporary)"
                 }
             },
+            "cooling_curve": {
+                "name": "Cooling curve"
+            },
             "cooling_energy": {
                 "name": "Cooling energy"
             },

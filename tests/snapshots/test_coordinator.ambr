@@ -1,0 +1,2371 @@
+# serializer version: 1
+# name: test_update_interval_ticks[config_entry0]
+  dict({
+    'buffer_tank': dict({
+      'cool_request': list([
+        dict({
+          'attributes': dict({
+          }),
+          'value': 'on',
+        }),
+        dict({
+          'attributes': dict({
+          }),
+          'value': 'off',
+        }),
+      ]),
+      'current_bottom_temperature': list([
+        dict({
+          'attributes': dict({
+            'lower_limit': '5',
+            'upper_limit': '90',
+          }),
+          'value': 15.67,
+        }),
+        dict({
+          'attributes': dict({
+            'lower_limit': '5',
+            'upper_limit': '90',
+          }),
+          'value': 25.67,
+        }),
+      ]),
+      'current_top_temperature': list([
+        dict({
+          'attributes': dict({
+            'lower_limit': '5',
+            'upper_limit': '90',
+          }),
+          'value': 45.67,
+        }),
+        dict({
+          'attributes': dict({
+            'lower_limit': '5',
+            'upper_limit': '90',
+          }),
+          'value': 35.67,
+        }),
+      ]),
+      'heat_request': list([
+        dict({
+          'attributes': dict({
+          }),
+          'value': 'off',
+        }),
+        dict({
+          'attributes': dict({
+          }),
+          'value': 'on',
+        }),
+      ]),
+      'operating_mode': list([
+        dict({
+          'attributes': dict({
+            'lower_limit': '0',
+            'upper_limit': '32767',
+          }),
+          'value': 'off',
+        }),
+        dict({
+          'attributes': dict({
+            'lower_limit': '0',
+            'upper_limit': '32767',
+          }),
+          'value': 'on',
+        }),
+      ]),
+      'standby_temperature': list([
+        dict({
+          'attributes': dict({
+            'lower_limit': '0',
+            'upper_limit': '90',
+          }),
+          'value': 10.0,
+        }),
+        dict({
+          'attributes': dict({
+            'lower_limit': '0',
+            'upper_limit': '90',
+          }),
+          'value': 11.0,
+        }),
+      ]),
+      'target_temperature': list([
+        dict({
+          'attributes': dict({
+            'lower_limit': '0',
+            'upper_limit': '100',
+          }),
+          'value': 44.0,
+        }),
+        dict({
+          'attributes': dict({
+            'lower_limit': '0',
+            'upper_limit': '100',
+          }),
+          'value': 43.0,
+        }),
+      ]),
+    }),
+    'external_heat_source': dict({
+      'activation_counter': list([
+        dict({
+          'attributes': dict({
+          }),
+          'value': 812,
+        }),
+        dict({
+          'attributes': dict({
+          }),
+          'value': 812,
+        }),
+      ]),
+      'heat_request': list([
+        dict({
+          'attributes': dict({
+          }),
+          'value': 'on',
+        }),
+        dict({
+          'attributes': dict({
+          }),
+          'value': 'on',
+        }),
+      ]),
+      'max_runtime': list([
+        dict({
+          'attributes': dict({
+          }),
+          'value': 8129,
+        }),
+        dict({
+          'attributes': dict({
+          }),
+          'value': 8129,
+        }),
+      ]),
+      'operating_mode': list([
+        dict({
+          'attributes': dict({
+            'lower_limit': '0',
+            'upper_limit': '2',
+          }),
+          'value': 'off',
+        }),
+        dict({
+          'attributes': dict({
+            'lower_limit': '0',
+            'upper_limit': '2',
+          }),
+          'value': 'on',
+        }),
+      ]),
+      'operating_time': list([
+        dict({
+          'attributes': dict({
+          }),
+          'value': 812999,
+        }),
+        dict({
+          'attributes': dict({
+          }),
+          'value': 812999,
+        }),
+      ]),
+      'target_temperature': list([
+        dict({
+          'attributes': dict({
+            'lower_limit': '20',
+            'upper_limit': '90',
+          }),
+          'value': 17.23,
+        }),
+        dict({
+          'attributes': dict({
+            'lower_limit': '20',
+            'upper_limit': '90',
+          }),
+          'value': 17.23,
+        }),
+      ]),
+    }),
+    'heat_circuit': dict({
+      'away_end_date': list([
+        dict({
+          'attributes': dict({
+            'lower_limit': '0',
+            'upper_limit': '86400',
+          }),
+          'value': 1769122799,
+        }),
+        dict({
+          'attributes': dict({
+            'lower_limit': '0',
+            'upper_limit': '86400',
+          }),
+          'value': 1769122799,
+        }),
+      ]),
+      'away_start_date': list([
+        dict({
+          'attributes': dict({
+            'lower_limit': '0',
+            'upper_limit': '86400',
+          }),
+          'value': 1769036400,
+        }),
+        dict({
+          'attributes': dict({
+            'lower_limit': '0',
+            'upper_limit': '86400',
+          }),
+          'value': 1769036400,
+        }),
+      ]),
+      'cool_request': list([
+        dict({
+          'attributes': dict({
+            'lower_limit': '0',
+            'upper_limit': '6',
+          }),
+          'value': 'off',
+        }),
+        dict({
+          'attributes': dict({
+            'lower_limit': '0',
+            'upper_limit': '6',
+          }),
+          'value': 'on',
+        }),
+      ]),
+      'cooling_curve': list([
+        dict({
+          'attributes': dict({
+          }),
+          'value': 'HC2',
+        }),
+        dict({
+          'attributes': dict({
+          }),
+          'value': 'HC2',
+        }),
+      ]),
+      'dew_point': list([
+        dict({
+          'attributes': dict({
+            'lower_limit': '-20.0',
+            'upper_limit': '50.0',
+          }),
+          'value': 13.1,
+        }),
+        dict({
+          'attributes': dict({
+            'lower_limit': '-20.0',
+            'upper_limit': '50.0',
+          }),
+          'value': 13.1,
+        }),
+      ]),
+      'flow_temperature': list([
+        dict({
+          'attributes': dict({
+            'lower_limit': '0',
+            'upper_limit': '100',
+          }),
+          'value': 24.34,
+        }),
+        dict({
+          'attributes': dict({
+            'lower_limit': '0',
+            'upper_limit': '100',
+          }),
+          'value': 24.34,
+        }),
+      ]),
+      'flow_temperature_setpoint': list([
+        dict({
+          'attributes': dict({
+            'lower_limit': '0',
+            'upper_limit': '100',
+          }),
+          'value': 26.55,
+        }),
+        dict({
+          'attributes': dict({
+            'lower_limit': '0',
+            'upper_limit': '100',
+          }),
+          'value': 26.55,
+        }),
+      ]),
+      'heat_request': list([
+        dict({
+          'attributes': dict({
+            'lower_limit': '0',
+            'upper_limit': '6',
+          }),
+          'value': 'on',
+        }),
+        dict({
+          'attributes': dict({
+            'lower_limit': '0',
+            'upper_limit': '6',
+          }),
+          'value': 'off',
+        }),
+      ]),
+      'heating_curve': list([
+        dict({
+          'attributes': dict({
+            'points': list([
+              dict({
+                'flow': 20.0,
+                'outdoor': -15.0,
+              }),
+              dict({
+                'flow': 20.0,
+                'outdoor': -15.0,
+              }),
+              dict({
+                'flow': 20.0,
+                'outdoor': -15.0,
+              }),
+              dict({
+                'flow': 20.0,
+                'outdoor': -15.0,
+              }),
+              dict({
+                'flow': 20.0,
+                'outdoor': -15.0,
+              }),
+              dict({
+                'flow': 20.0,
+                'outdoor': -15.0,
+              }),
+              dict({
+                'flow': 20.0,
+                'outdoor': -15.0,
+              }),
+            ]),
+          }),
+          'value': 'HC6',
+        }),
+        dict({
+          'attributes': dict({
+            'points': list([
+              dict({
+                'flow': 20.0,
+                'outdoor': -15.0,
+              }),
+              dict({
+                'flow': 20.0,
+                'outdoor': -15.0,
+              }),
+              dict({
+                'flow': 20.0,
+                'outdoor': -15.0,
+              }),
+              dict({
+                'flow': 20.0,
+                'outdoor': -15.0,
+              }),
+              dict({
+                'flow': 20.0,
+                'outdoor': -15.0,
+              }),
+              dict({
+                'flow': 20.0,
+                'outdoor': -15.0,
+              }),
+              dict({
+                'flow': 20.0,
+                'outdoor': -15.0,
+              }),
+            ]),
+          }),
+          'value': 'HC7',
+        }),
+      ]),
+      'heating_curve_offset': list([
+        dict({
+          'attributes': dict({
+            'lower_limit': '-10',
+            'upper_limit': '10',
+          }),
+          'value': 1.5,
+        }),
+        dict({
+          'attributes': dict({
+            'lower_limit': '-10',
+            'upper_limit': '10',
+          }),
+          'value': -1.5,
+        }),
+      ]),
+      'heating_curve_slope': list([
+        dict({
+          'attributes': dict({
+            'lower_limit': '0',
+            'upper_limit': '5',
+          }),
+          'value': 0.5,
+        }),
+        dict({
+          'attributes': dict({
+            'lower_limit': '0',
+            'upper_limit': '5',
+          }),
+          'value': 0.6,
+        }),
+      ]),
+      'heating_limit_day': list([
+        dict({
+          'attributes': dict({
+            'lower_limit': '-20',
+            'upper_limit': '100',
+          }),
+          'value': 20.0,
+        }),
+        dict({
+          'attributes': dict({
+            'lower_limit': '-20',
+            'upper_limit': '100',
+          }),
+          'value': 20.0,
+        }),
+      ]),
+      'heating_limit_night': list([
+        dict({
+          'attributes': dict({
+            'lower_limit': '-20',
+            'upper_limit': '100',
+          }),
+          'value': 18.0,
+        }),
+        dict({
+          'attributes': dict({
+            'lower_limit': '-20',
+            'upper_limit': '100',
+          }),
+          'value': 18.0,
+        }),
+      ]),
+      'operating_mode': list([
+        dict({
+          'attributes': dict({
+            'lower_limit': '0',
+            'upper_limit': '32767',
+          }),
+          'value': 'day',
+        }),
+        dict({
+          'attributes': dict({
+            'lower_limit': '0',
+            'upper_limit': '32767',
+          }),
+          'value': 'off',
+        }),
+      ]),
+      'pump_speed': list([
+        dict({
+          'attributes': dict({
+            'lower_limit': '0',
+            'upper_limit': '1',
+          }),
+          'value': 0.5,
+        }),
+        dict({
+          'attributes': dict({
+            'lower_limit': '0',
+            'upper_limit': '1',
+          }),
+          'value': 0.5,
+        }),
+      ]),
+      'return_flow_temperature': list([
+        dict({
+          'attributes': dict({
+            'lower_limit': '0',
+            'upper_limit': '100',
+          }),
+          'value': 22.21,
+        }),
+        dict({
+          'attributes': dict({
+            'lower_limit': '0',
+            'upper_limit': '100',
+          }),
+          'value': 22.21,
+        }),
+      ]),
+      'room_humidity': list([
+        dict({
+          'attributes': dict({
+            'lower_limit': '0',
+            'upper_limit': '100',
+          }),
+          'value': 53.0,
+        }),
+        dict({
+          'attributes': dict({
+            'lower_limit': '0',
+            'upper_limit': '100',
+          }),
+          'value': 53.0,
+        }),
+      ]),
+      'room_temperature': list([
+        dict({
+          'attributes': dict({
+            'lower_limit': '0',
+            'upper_limit': '80',
+          }),
+          'value': 22.42,
+        }),
+        dict({
+          'attributes': dict({
+            'lower_limit': '0',
+            'upper_limit': '80',
+          }),
+          'value': 22.42,
+        }),
+      ]),
+      'selected_target_temperature': list([
+        dict({
+          'attributes': dict({
+          }),
+          'value': 20.0,
+        }),
+        dict({
+          'attributes': dict({
+          }),
+          'value': 20.0,
+        }),
+      ]),
+      'target_temperature': list([
+        dict({
+          'attributes': dict({
+            'lower_limit': '10',
+            'upper_limit': '90',
+          }),
+          'value': 20.5,
+        }),
+        dict({
+          'attributes': dict({
+            'lower_limit': '10',
+            'upper_limit': '90',
+          }),
+          'value': 20.5,
+        }),
+      ]),
+      'target_temperature_away': list([
+        dict({
+          'attributes': dict({
+            'lower_limit': '10',
+            'upper_limit': '30',
+          }),
+          'value': 18.0,
+        }),
+        dict({
+          'attributes': dict({
+            'lower_limit': '10',
+            'upper_limit': '30',
+          }),
+          'value': 18.0,
+        }),
+      ]),
+      'target_temperature_day': list([
+        dict({
+          'attributes': dict({
+            'lower_limit': '10',
+            'upper_limit': '30',
+          }),
+          'value': 20.5,
+        }),
+        dict({
+          'attributes': dict({
+            'lower_limit': '10',
+            'upper_limit': '30',
+          }),
+          'value': 20.5,
+        }),
+      ]),
+      'target_temperature_night': list([
+        dict({
+          'attributes': dict({
+            'lower_limit': '10',
+            'upper_limit': '30',
+          }),
+          'value': 20.0,
+        }),
+        dict({
+          'attributes': dict({
+            'lower_limit': '10',
+            'upper_limit': '30',
+          }),
+          'value': 20.0,
+        }),
+      ]),
+      'target_temperature_offset': list([
+        dict({
+          'attributes': dict({
+            'lower_limit': '-2.5',
+            'upper_limit': '2.5',
+          }),
+          'value': 1.5,
+        }),
+        dict({
+          'attributes': dict({
+            'lower_limit': '-2.5',
+            'upper_limit': '2.5',
+          }),
+          'value': 0.0,
+        }),
+      ]),
+      'use_heating_curve': list([
+        dict({
+          'attributes': dict({
+          }),
+          'value': 'off',
+        }),
+        dict({
+          'attributes': dict({
+          }),
+          'value': 'on',
+        }),
+      ]),
+    }),
+    'heat_pump': dict({
+      'activation_counter': list([
+        dict({
+          'attributes': dict({
+          }),
+          'value': 477,
+        }),
+      ]),
+      'circulation_pump': list([
+        dict({
+          'attributes': dict({
+            'lower_limit': '0.0',
+            'upper_limit': '1',
+          }),
+          'value': 0.0,
+        }),
+      ]),
+      'compressor': list([
+        dict({
+          'attributes': dict({
+            'lower_limit': '0.0',
+            'upper_limit': '1',
+          }),
+          'value': 0.0,
+        }),
+      ]),
+      'compressor_input_temperature': list([
+        dict({
+          'attributes': dict({
+          }),
+          'value': 27.2,
+        }),
+      ]),
+      'compressor_night_speed': list([
+        dict({
+          'attributes': dict({
+            'lower_limit': '0.5',
+            'upper_limit': '1',
+          }),
+          'value': 0.5,
+        }),
+      ]),
+      'compressor_output_temperature': list([
+        dict({
+          'attributes': dict({
+          }),
+          'value': 27.2,
+        }),
+      ]),
+      'compressor_power': list([
+        dict({
+          'attributes': dict({
+          }),
+          'value': 5.52,
+        }),
+      ]),
+      'compressor_use_night_speed': list([
+        dict({
+          'attributes': dict({
+          }),
+          'value': 'on',
+        }),
+      ]),
+      'condenser_temperature': list([
+        dict({
+          'attributes': dict({
+            'lower_limit': '0',
+            'upper_limit': '200',
+          }),
+          'value': 31.51,
+        }),
+      ]),
+      'cooling_energy': list([
+        dict({
+          'attributes': dict({
+          }),
+          'value': 7.21,
+        }),
+      ]),
+      'cooling_energy_consumption': list([
+        dict({
+          'attributes': dict({
+          }),
+          'value': 8.72,
+        }),
+      ]),
+      'cooling_spf': list([
+        dict({
+          'attributes': dict({
+          }),
+          'value': 4.22,
+        }),
+      ]),
+      'cop': list([
+        dict({
+          'attributes': dict({
+          }),
+          'value': 2.55,
+        }),
+      ]),
+      'current_overheating': list([
+        dict({
+          'attributes': dict({
+          }),
+          'value': 18.68,
+        }),
+      ]),
+      'expansion_valve_position': list([
+        dict({
+          'attributes': dict({
+          }),
+          'value': 20,
+        }),
+      ]),
+      'flow_temperature': list([
+        dict({
+          'attributes': dict({
+          }),
+          'value': 24.8,
+        }),
+      ]),
+      'has_compressor_failure': list([
+        dict({
+          'attributes': dict({
+          }),
+          'value': 'off',
+        }),
+      ]),
+      'has_source_actuator_failure': list([
+        dict({
+          'attributes': dict({
+          }),
+          'value': 'off',
+        }),
+      ]),
+      'has_source_failure': list([
+        dict({
+          'attributes': dict({
+          }),
+          'value': 'off',
+        }),
+      ]),
+      'has_source_pressure_failure': list([
+        dict({
+          'attributes': dict({
+          }),
+          'value': 'off',
+        }),
+      ]),
+      'has_three_phase_failure': list([
+        dict({
+          'attributes': dict({
+          }),
+          'value': 'off',
+        }),
+      ]),
+      'has_vfd_failure': list([
+        dict({
+          'attributes': dict({
+          }),
+          'value': 'off',
+        }),
+      ]),
+      'heat_request': list([
+        dict({
+          'attributes': dict({
+          }),
+          'value': 'off',
+        }),
+      ]),
+      'heating_energy': list([
+        dict({
+          'attributes': dict({
+          }),
+          'value': 8.43,
+        }),
+      ]),
+      'heating_energy_consumption': list([
+        dict({
+          'attributes': dict({
+          }),
+          'value': 7.33,
+        }),
+      ]),
+      'heating_power': list([
+        dict({
+          'attributes': dict({
+          }),
+          'value': 3.22,
+        }),
+      ]),
+      'heating_spf': list([
+        dict({
+          'attributes': dict({
+          }),
+          'value': 3.32,
+        }),
+      ]),
+      'high_pressure': list([
+        dict({
+          'attributes': dict({
+          }),
+          'value': 15.62,
+        }),
+      ]),
+      'hot_water_energy': list([
+        dict({
+          'attributes': dict({
+          }),
+          'value': 7.86,
+        }),
+      ]),
+      'hot_water_energy_consumption': list([
+        dict({
+          'attributes': dict({
+          }),
+          'value': 2.77,
+        }),
+      ]),
+      'hot_water_power': list([
+        dict({
+          'attributes': dict({
+          }),
+          'value': 2.77,
+        }),
+      ]),
+      'hot_water_spf': list([
+        dict({
+          'attributes': dict({
+          }),
+          'value': 2.5,
+        }),
+      ]),
+      'low_pressure': list([
+        dict({
+          'attributes': dict({
+          }),
+          'value': 15.35,
+        }),
+      ]),
+      'max_runtime': list([
+        dict({
+          'attributes': dict({
+          }),
+          'value': 602403,
+        }),
+      ]),
+      'name': list([
+        dict({
+          'attributes': dict({
+          }),
+          'value': 'WPS26',
+        }),
+      ]),
+      'operating_time': list([
+        dict({
+          'attributes': dict({
+          }),
+          'value': 3809028,
+        }),
+      ]),
+      'return_flow_temperature': list([
+        dict({
+          'attributes': dict({
+          }),
+          'value': 23.9,
+        }),
+      ]),
+      'source_input_temperature': list([
+        dict({
+          'attributes': dict({
+          }),
+          'value': 25.7,
+        }),
+      ]),
+      'source_output_temperature': list([
+        dict({
+          'attributes': dict({
+          }),
+          'value': 24.9,
+        }),
+      ]),
+      'source_pump_speed': list([
+        dict({
+          'attributes': dict({
+            'lower_limit': '0.0',
+            'upper_limit': '1',
+          }),
+          'value': 0.45,
+        }),
+      ]),
+      'state': list([
+        dict({
+          'attributes': dict({
+            'lower_limit': '0',
+            'upper_limit': '32767',
+          }),
+          'value': 'standby',
+        }),
+      ]),
+      'substate': list([
+        dict({
+          'attributes': dict({
+            'lower_limit': '0',
+            'upper_limit': '32767',
+          }),
+          'value': 'oil_preheating',
+        }),
+      ]),
+      'target_overheating': list([
+        dict({
+          'attributes': dict({
+          }),
+          'value': 5.5,
+        }),
+      ]),
+      'total_energy_consumption': list([
+        dict({
+          'attributes': dict({
+          }),
+          'value': 5.21,
+        }),
+      ]),
+      'total_spf': list([
+        dict({
+          'attributes': dict({
+          }),
+          'value': 2.43,
+        }),
+      ]),
+      'total_thermal_energy': list([
+        dict({
+          'attributes': dict({
+          }),
+          'value': 8.22,
+        }),
+      ]),
+      'vaporizer_temperature': list([
+        dict({
+          'attributes': dict({
+          }),
+          'value': -4.56,
+        }),
+      ]),
+    }),
+    'hot_water_tank': dict({
+      'circulation_pump_state': list([
+        dict({
+          'attributes': dict({
+          }),
+          'value': 'on',
+        }),
+        dict({
+          'attributes': dict({
+          }),
+          'value': 'off',
+        }),
+      ]),
+      'circulation_return_temperature': list([
+        dict({
+          'attributes': dict({
+            'lower_limit': '-100',
+            'upper_limit': '100',
+          }),
+          'value': 30.45,
+        }),
+        dict({
+          'attributes': dict({
+            'lower_limit': '-100',
+            'upper_limit': '100',
+          }),
+          'value': 27.45,
+        }),
+      ]),
+      'current_temperature': list([
+        dict({
+          'attributes': dict({
+            'lower_limit': '20',
+            'upper_limit': '90',
+          }),
+          'value': 47.7,
+        }),
+        dict({
+          'attributes': dict({
+            'lower_limit': '20',
+            'upper_limit': '90',
+          }),
+          'value': 47.7,
+        }),
+      ]),
+      'fresh_water_module_temperature': list([
+        dict({
+          'attributes': dict({
+            'lower_limit': '0',
+            'upper_limit': '100',
+          }),
+          'value': 51.23,
+        }),
+        dict({
+          'attributes': dict({
+            'lower_limit': '0',
+            'upper_limit': '100',
+          }),
+          'value': 51.23,
+        }),
+      ]),
+      'heat_request': list([
+        dict({
+          'attributes': dict({
+          }),
+          'value': 'off',
+        }),
+        dict({
+          'attributes': dict({
+          }),
+          'value': 'on',
+        }),
+      ]),
+      'hot_water_flow': list([
+        dict({
+          'attributes': dict({
+          }),
+          'value': 'off',
+        }),
+        dict({
+          'attributes': dict({
+          }),
+          'value': 'on',
+        }),
+      ]),
+      'operating_mode': list([
+        dict({
+          'attributes': dict({
+            'lower_limit': '0',
+            'upper_limit': '32767',
+          }),
+          'value': 'heat_up',
+        }),
+        dict({
+          'attributes': dict({
+            'lower_limit': '0',
+            'upper_limit': '32767',
+          }),
+          'value': 'off',
+        }),
+      ]),
+      'standby_temperature': list([
+        dict({
+          'attributes': dict({
+            'lower_limit': '0',
+            'upper_limit': '52',
+          }),
+          'value': 32.5,
+        }),
+        dict({
+          'attributes': dict({
+            'lower_limit': '0',
+            'upper_limit': '52',
+          }),
+          'value': 32.5,
+        }),
+      ]),
+      'target_temperature': list([
+        dict({
+          'attributes': dict({
+            'lower_limit': '0',
+            'upper_limit': '52',
+          }),
+          'value': 51.0,
+        }),
+        dict({
+          'attributes': dict({
+            'lower_limit': '0',
+            'upper_limit': '52',
+          }),
+          'value': 51.0,
+        }),
+      ]),
+    }),
+    'photovoltaic': dict({
+    }),
+    'solar_circuit': dict({
+    }),
+    'switch_valve': dict({
+      'position': list([
+        dict({
+          'attributes': dict({
+            'lower_limit': '0',
+            'upper_limit': '2',
+          }),
+          'value': 'neutral',
+        }),
+        dict({
+          'attributes': dict({
+            'lower_limit': '0',
+            'upper_limit': '2',
+          }),
+          'value': 'open',
+        }),
+      ]),
+    }),
+    'system': dict({
+      'control_cpu_usage': dict({
+        'attributes': dict({
+        }),
+        'value': 7.0,
+      }),
+      'cpu_usage': dict({
+        'attributes': dict({
+        }),
+        'value': 27.0,
+      }),
+      'free_ram': dict({
+        'attributes': dict({
+        }),
+        'value': 100060,
+      }),
+      'operating_mode': dict({
+        'attributes': dict({
+          'lower_limit': '-1',
+          'upper_limit': '4',
+        }),
+        'value': 'auto_heat',
+      }),
+      'outdoor_temperature': dict({
+        'attributes': dict({
+          'lower_limit': '-100',
+          'upper_limit': '100',
+        }),
+        'value': 20.5,
+      }),
+      'ram_usage': dict({
+        'attributes': dict({
+        }),
+        'value': 6432,
+      }),
+      'webserver_cpu_usage': dict({
+        'attributes': dict({
+        }),
+        'value': 67.0,
+      }),
+      'webview_cpu_usage': dict({
+        'attributes': dict({
+        }),
+        'value': 34.0,
+      }),
+    }),
+  })
+# ---
+# name: test_update_interval_ticks[config_entry0].1
+  dict({
+    'buffer_tank': dict({
+      'cool_request': list([
+        dict({
+          'attributes': dict({
+          }),
+          'value': 'on',
+        }),
+        dict({
+          'attributes': dict({
+          }),
+          'value': 'off',
+        }),
+      ]),
+      'current_bottom_temperature': list([
+        dict({
+          'attributes': dict({
+            'lower_limit': '5',
+            'upper_limit': '90',
+          }),
+          'value': 15.67,
+        }),
+        dict({
+          'attributes': dict({
+            'lower_limit': '5',
+            'upper_limit': '90',
+          }),
+          'value': 25.67,
+        }),
+      ]),
+      'current_top_temperature': list([
+        dict({
+          'attributes': dict({
+            'lower_limit': '5',
+            'upper_limit': '90',
+          }),
+          'value': 45.67,
+        }),
+        dict({
+          'attributes': dict({
+            'lower_limit': '5',
+            'upper_limit': '90',
+          }),
+          'value': 35.67,
+        }),
+      ]),
+      'heat_request': list([
+        dict({
+          'attributes': dict({
+          }),
+          'value': 'off',
+        }),
+        dict({
+          'attributes': dict({
+          }),
+          'value': 'on',
+        }),
+      ]),
+      'operating_mode': list([
+        dict({
+          'attributes': dict({
+            'lower_limit': '0',
+            'upper_limit': '32767',
+          }),
+          'value': 'off',
+        }),
+        dict({
+          'attributes': dict({
+            'lower_limit': '0',
+            'upper_limit': '32767',
+          }),
+          'value': 'on',
+        }),
+      ]),
+      'standby_temperature': list([
+        dict({
+          'attributes': dict({
+            'lower_limit': '0',
+            'upper_limit': '90',
+          }),
+          'value': 10.0,
+        }),
+        dict({
+          'attributes': dict({
+            'lower_limit': '0',
+            'upper_limit': '90',
+          }),
+          'value': 11.0,
+        }),
+      ]),
+      'target_temperature': list([
+        dict({
+          'attributes': dict({
+            'lower_limit': '0',
+            'upper_limit': '100',
+          }),
+          'value': 42.0,
+        }),
+        dict({
+          'attributes': dict({
+            'lower_limit': '0',
+            'upper_limit': '100',
+          }),
+          'value': 43.0,
+        }),
+      ]),
+    }),
+    'external_heat_source': dict({
+      'activation_counter': list([
+        dict({
+          'attributes': dict({
+          }),
+          'value': 812,
+        }),
+        dict({
+          'attributes': dict({
+          }),
+          'value': 812,
+        }),
+      ]),
+      'heat_request': list([
+        dict({
+          'attributes': dict({
+          }),
+          'value': 'on',
+        }),
+        dict({
+          'attributes': dict({
+          }),
+          'value': 'on',
+        }),
+      ]),
+      'max_runtime': list([
+        dict({
+          'attributes': dict({
+          }),
+          'value': 8129,
+        }),
+        dict({
+          'attributes': dict({
+          }),
+          'value': 8129,
+        }),
+      ]),
+      'operating_mode': list([
+        dict({
+          'attributes': dict({
+            'lower_limit': '0',
+            'upper_limit': '2',
+          }),
+          'value': 'off',
+        }),
+        dict({
+          'attributes': dict({
+            'lower_limit': '0',
+            'upper_limit': '2',
+          }),
+          'value': 'on',
+        }),
+      ]),
+      'operating_time': list([
+        dict({
+          'attributes': dict({
+          }),
+          'value': 812999,
+        }),
+        dict({
+          'attributes': dict({
+          }),
+          'value': 812999,
+        }),
+      ]),
+      'target_temperature': list([
+        dict({
+          'attributes': dict({
+            'lower_limit': '20',
+            'upper_limit': '90',
+          }),
+          'value': 17.23,
+        }),
+        dict({
+          'attributes': dict({
+            'lower_limit': '20',
+            'upper_limit': '90',
+          }),
+          'value': 17.23,
+        }),
+      ]),
+    }),
+    'heat_circuit': dict({
+      'away_end_date': list([
+        dict({
+          'attributes': dict({
+            'lower_limit': '0',
+            'upper_limit': '86400',
+          }),
+          'value': 1769122799,
+        }),
+        dict({
+          'attributes': dict({
+            'lower_limit': '0',
+            'upper_limit': '86400',
+          }),
+          'value': 1769122799,
+        }),
+      ]),
+      'away_start_date': list([
+        dict({
+          'attributes': dict({
+            'lower_limit': '0',
+            'upper_limit': '86400',
+          }),
+          'value': 1769036400,
+        }),
+        dict({
+          'attributes': dict({
+            'lower_limit': '0',
+            'upper_limit': '86400',
+          }),
+          'value': 1769036400,
+        }),
+      ]),
+      'cool_request': list([
+        dict({
+          'attributes': dict({
+            'lower_limit': '0',
+            'upper_limit': '6',
+          }),
+          'value': 'off',
+        }),
+        dict({
+          'attributes': dict({
+            'lower_limit': '0',
+            'upper_limit': '6',
+          }),
+          'value': 'on',
+        }),
+      ]),
+      'cooling_curve': list([
+        dict({
+          'attributes': dict({
+          }),
+          'value': 'HC2',
+        }),
+        dict({
+          'attributes': dict({
+          }),
+          'value': 'HC2',
+        }),
+      ]),
+      'dew_point': list([
+        dict({
+          'attributes': dict({
+            'lower_limit': '-20.0',
+            'upper_limit': '50.0',
+          }),
+          'value': 13.1,
+        }),
+        dict({
+          'attributes': dict({
+            'lower_limit': '-20.0',
+            'upper_limit': '50.0',
+          }),
+          'value': 13.1,
+        }),
+      ]),
+      'flow_temperature': list([
+        dict({
+          'attributes': dict({
+            'lower_limit': '0',
+            'upper_limit': '100',
+          }),
+          'value': 24.34,
+        }),
+        dict({
+          'attributes': dict({
+            'lower_limit': '0',
+            'upper_limit': '100',
+          }),
+          'value': 24.34,
+        }),
+      ]),
+      'flow_temperature_setpoint': list([
+        dict({
+          'attributes': dict({
+            'lower_limit': '0',
+            'upper_limit': '100',
+          }),
+          'value': 26.55,
+        }),
+        dict({
+          'attributes': dict({
+            'lower_limit': '0',
+            'upper_limit': '100',
+          }),
+          'value': 26.55,
+        }),
+      ]),
+      'heat_request': list([
+        dict({
+          'attributes': dict({
+            'lower_limit': '0',
+            'upper_limit': '6',
+          }),
+          'value': 'on',
+        }),
+        dict({
+          'attributes': dict({
+            'lower_limit': '0',
+            'upper_limit': '6',
+          }),
+          'value': 'off',
+        }),
+      ]),
+      'heating_curve': list([
+        dict({
+          'attributes': dict({
+            'points': list([
+              dict({
+                'flow': 20.0,
+                'outdoor': -15.0,
+              }),
+              dict({
+                'flow': 20.0,
+                'outdoor': -15.0,
+              }),
+              dict({
+                'flow': 20.0,
+                'outdoor': -15.0,
+              }),
+              dict({
+                'flow': 20.0,
+                'outdoor': -15.0,
+              }),
+              dict({
+                'flow': 20.0,
+                'outdoor': -15.0,
+              }),
+              dict({
+                'flow': 20.0,
+                'outdoor': -15.0,
+              }),
+              dict({
+                'flow': 20.0,
+                'outdoor': -15.0,
+              }),
+            ]),
+          }),
+          'value': 'HC6',
+        }),
+        dict({
+          'attributes': dict({
+            'points': list([
+              dict({
+                'flow': 20.0,
+                'outdoor': -15.0,
+              }),
+              dict({
+                'flow': 20.0,
+                'outdoor': -15.0,
+              }),
+              dict({
+                'flow': 20.0,
+                'outdoor': -15.0,
+              }),
+              dict({
+                'flow': 20.0,
+                'outdoor': -15.0,
+              }),
+              dict({
+                'flow': 20.0,
+                'outdoor': -15.0,
+              }),
+              dict({
+                'flow': 20.0,
+                'outdoor': -15.0,
+              }),
+              dict({
+                'flow': 20.0,
+                'outdoor': -15.0,
+              }),
+            ]),
+          }),
+          'value': 'HC7',
+        }),
+      ]),
+      'heating_curve_offset': list([
+        dict({
+          'attributes': dict({
+            'lower_limit': '-10',
+            'upper_limit': '10',
+          }),
+          'value': 1.5,
+        }),
+        dict({
+          'attributes': dict({
+            'lower_limit': '-10',
+            'upper_limit': '10',
+          }),
+          'value': -1.5,
+        }),
+      ]),
+      'heating_curve_slope': list([
+        dict({
+          'attributes': dict({
+            'lower_limit': '0',
+            'upper_limit': '5',
+          }),
+          'value': 0.5,
+        }),
+        dict({
+          'attributes': dict({
+            'lower_limit': '0',
+            'upper_limit': '5',
+          }),
+          'value': 0.6,
+        }),
+      ]),
+      'heating_limit_day': list([
+        dict({
+          'attributes': dict({
+            'lower_limit': '-20',
+            'upper_limit': '100',
+          }),
+          'value': 20.0,
+        }),
+        dict({
+          'attributes': dict({
+            'lower_limit': '-20',
+            'upper_limit': '100',
+          }),
+          'value': 20.0,
+        }),
+      ]),
+      'heating_limit_night': list([
+        dict({
+          'attributes': dict({
+            'lower_limit': '-20',
+            'upper_limit': '100',
+          }),
+          'value': 18.0,
+        }),
+        dict({
+          'attributes': dict({
+            'lower_limit': '-20',
+            'upper_limit': '100',
+          }),
+          'value': 18.0,
+        }),
+      ]),
+      'operating_mode': list([
+        dict({
+          'attributes': dict({
+            'lower_limit': '0',
+            'upper_limit': '32767',
+          }),
+          'value': 'day',
+        }),
+        dict({
+          'attributes': dict({
+            'lower_limit': '0',
+            'upper_limit': '32767',
+          }),
+          'value': 'off',
+        }),
+      ]),
+      'pump_speed': list([
+        dict({
+          'attributes': dict({
+            'lower_limit': '0',
+            'upper_limit': '1',
+          }),
+          'value': 0.5,
+        }),
+        dict({
+          'attributes': dict({
+            'lower_limit': '0',
+            'upper_limit': '1',
+          }),
+          'value': 0.5,
+        }),
+      ]),
+      'return_flow_temperature': list([
+        dict({
+          'attributes': dict({
+            'lower_limit': '0',
+            'upper_limit': '100',
+          }),
+          'value': 22.21,
+        }),
+        dict({
+          'attributes': dict({
+            'lower_limit': '0',
+            'upper_limit': '100',
+          }),
+          'value': 22.21,
+        }),
+      ]),
+      'room_humidity': list([
+        dict({
+          'attributes': dict({
+            'lower_limit': '0',
+            'upper_limit': '100',
+          }),
+          'value': 53.0,
+        }),
+        dict({
+          'attributes': dict({
+            'lower_limit': '0',
+            'upper_limit': '100',
+          }),
+          'value': 53.0,
+        }),
+      ]),
+      'room_temperature': list([
+        dict({
+          'attributes': dict({
+            'lower_limit': '0',
+            'upper_limit': '80',
+          }),
+          'value': 22.42,
+        }),
+        dict({
+          'attributes': dict({
+            'lower_limit': '0',
+            'upper_limit': '80',
+          }),
+          'value': 22.42,
+        }),
+      ]),
+      'selected_target_temperature': list([
+        dict({
+          'attributes': dict({
+          }),
+          'value': 20.0,
+        }),
+        dict({
+          'attributes': dict({
+          }),
+          'value': 20.0,
+        }),
+      ]),
+      'target_temperature': list([
+        dict({
+          'attributes': dict({
+            'lower_limit': '10',
+            'upper_limit': '90',
+          }),
+          'value': 20.5,
+        }),
+        dict({
+          'attributes': dict({
+            'lower_limit': '10',
+            'upper_limit': '90',
+          }),
+          'value': 20.5,
+        }),
+      ]),
+      'target_temperature_away': list([
+        dict({
+          'attributes': dict({
+            'lower_limit': '10',
+            'upper_limit': '30',
+          }),
+          'value': 18.0,
+        }),
+        dict({
+          'attributes': dict({
+            'lower_limit': '10',
+            'upper_limit': '30',
+          }),
+          'value': 18.0,
+        }),
+      ]),
+      'target_temperature_day': list([
+        dict({
+          'attributes': dict({
+            'lower_limit': '10',
+            'upper_limit': '30',
+          }),
+          'value': 20.5,
+        }),
+        dict({
+          'attributes': dict({
+            'lower_limit': '10',
+            'upper_limit': '30',
+          }),
+          'value': 20.5,
+        }),
+      ]),
+      'target_temperature_night': list([
+        dict({
+          'attributes': dict({
+            'lower_limit': '10',
+            'upper_limit': '30',
+          }),
+          'value': 20.0,
+        }),
+        dict({
+          'attributes': dict({
+            'lower_limit': '10',
+            'upper_limit': '30',
+          }),
+          'value': 20.0,
+        }),
+      ]),
+      'target_temperature_offset': list([
+        dict({
+          'attributes': dict({
+            'lower_limit': '-2.5',
+            'upper_limit': '2.5',
+          }),
+          'value': 1.5,
+        }),
+        dict({
+          'attributes': dict({
+            'lower_limit': '-2.5',
+            'upper_limit': '2.5',
+          }),
+          'value': 0.0,
+        }),
+      ]),
+      'use_heating_curve': list([
+        dict({
+          'attributes': dict({
+          }),
+          'value': 'off',
+        }),
+        dict({
+          'attributes': dict({
+          }),
+          'value': 'on',
+        }),
+      ]),
+    }),
+    'heat_pump': dict({
+      'activation_counter': list([
+        dict({
+          'attributes': dict({
+          }),
+          'value': 477,
+        }),
+      ]),
+      'circulation_pump': list([
+        dict({
+          'attributes': dict({
+            'lower_limit': '0.0',
+            'upper_limit': '1',
+          }),
+          'value': 0.0,
+        }),
+      ]),
+      'compressor': list([
+        dict({
+          'attributes': dict({
+            'lower_limit': '0.0',
+            'upper_limit': '1',
+          }),
+          'value': 0.0,
+        }),
+      ]),
+      'compressor_input_temperature': list([
+        dict({
+          'attributes': dict({
+          }),
+          'value': 27.2,
+        }),
+      ]),
+      'compressor_night_speed': list([
+        dict({
+          'attributes': dict({
+            'lower_limit': '0.5',
+            'upper_limit': '1',
+          }),
+          'value': 0.5,
+        }),
+      ]),
+      'compressor_output_temperature': list([
+        dict({
+          'attributes': dict({
+          }),
+          'value': 27.2,
+        }),
+      ]),
+      'compressor_power': list([
+        dict({
+          'attributes': dict({
+          }),
+          'value': 5.52,
+        }),
+      ]),
+      'compressor_use_night_speed': list([
+        dict({
+          'attributes': dict({
+          }),
+          'value': 'on',
+        }),
+      ]),
+      'condenser_temperature': list([
+        dict({
+          'attributes': dict({
+            'lower_limit': '0',
+            'upper_limit': '200',
+          }),
+          'value': 31.51,
+        }),
+      ]),
+      'cooling_energy': list([
+        dict({
+          'attributes': dict({
+          }),
+          'value': 7.21,
+        }),
+      ]),
+      'cooling_energy_consumption': list([
+        dict({
+          'attributes': dict({
+          }),
+          'value': 8.72,
+        }),
+      ]),
+      'cooling_spf': list([
+        dict({
+          'attributes': dict({
+          }),
+          'value': 4.22,
+        }),
+      ]),
+      'cop': list([
+        dict({
+          'attributes': dict({
+          }),
+          'value': 2.55,
+        }),
+      ]),
+      'current_overheating': list([
+        dict({
+          'attributes': dict({
+          }),
+          'value': 18.68,
+        }),
+      ]),
+      'expansion_valve_position': list([
+        dict({
+          'attributes': dict({
+          }),
+          'value': 20,
+        }),
+      ]),
+      'flow_temperature': list([
+        dict({
+          'attributes': dict({
+          }),
+          'value': 24.8,
+        }),
+      ]),
+      'has_compressor_failure': list([
+        dict({
+          'attributes': dict({
+          }),
+          'value': 'off',
+        }),
+      ]),
+      'has_source_actuator_failure': list([
+        dict({
+          'attributes': dict({
+          }),
+          'value': 'off',
+        }),
+      ]),
+      'has_source_failure': list([
+        dict({
+          'attributes': dict({
+          }),
+          'value': 'off',
+        }),
+      ]),
+      'has_source_pressure_failure': list([
+        dict({
+          'attributes': dict({
+          }),
+          'value': 'off',
+        }),
+      ]),
+      'has_three_phase_failure': list([
+        dict({
+          'attributes': dict({
+          }),
+          'value': 'off',
+        }),
+      ]),
+      'has_vfd_failure': list([
+        dict({
+          'attributes': dict({
+          }),
+          'value': 'off',
+        }),
+      ]),
+      'heat_request': list([
+        dict({
+          'attributes': dict({
+          }),
+          'value': 'off',
+        }),
+      ]),
+      'heating_energy': list([
+        dict({
+          'attributes': dict({
+          }),
+          'value': 8.43,
+        }),
+      ]),
+      'heating_energy_consumption': list([
+        dict({
+          'attributes': dict({
+          }),
+          'value': 7.33,
+        }),
+      ]),
+      'heating_power': list([
+        dict({
+          'attributes': dict({
+          }),
+          'value': 3.22,
+        }),
+      ]),
+      'heating_spf': list([
+        dict({
+          'attributes': dict({
+          }),
+          'value': 3.32,
+        }),
+      ]),
+      'high_pressure': list([
+        dict({
+          'attributes': dict({
+          }),
+          'value': 15.62,
+        }),
+      ]),
+      'hot_water_energy': list([
+        dict({
+          'attributes': dict({
+          }),
+          'value': 7.86,
+        }),
+      ]),
+      'hot_water_energy_consumption': list([
+        dict({
+          'attributes': dict({
+          }),
+          'value': 2.77,
+        }),
+      ]),
+      'hot_water_power': list([
+        dict({
+          'attributes': dict({
+          }),
+          'value': 2.77,
+        }),
+      ]),
+      'hot_water_spf': list([
+        dict({
+          'attributes': dict({
+          }),
+          'value': 2.5,
+        }),
+      ]),
+      'low_pressure': list([
+        dict({
+          'attributes': dict({
+          }),
+          'value': 15.35,
+        }),
+      ]),
+      'max_runtime': list([
+        dict({
+          'attributes': dict({
+          }),
+          'value': 602403,
+        }),
+      ]),
+      'name': list([
+        dict({
+          'attributes': dict({
+          }),
+          'value': 'WPS26',
+        }),
+      ]),
+      'operating_time': list([
+        dict({
+          'attributes': dict({
+          }),
+          'value': 3809028,
+        }),
+      ]),
+      'return_flow_temperature': list([
+        dict({
+          'attributes': dict({
+          }),
+          'value': 23.9,
+        }),
+      ]),
+      'source_input_temperature': list([
+        dict({
+          'attributes': dict({
+          }),
+          'value': 25.7,
+        }),
+      ]),
+      'source_output_temperature': list([
+        dict({
+          'attributes': dict({
+          }),
+          'value': 24.9,
+        }),
+      ]),
+      'source_pump_speed': list([
+        dict({
+          'attributes': dict({
+            'lower_limit': '0.0',
+            'upper_limit': '1',
+          }),
+          'value': 0.45,
+        }),
+      ]),
+      'state': list([
+        dict({
+          'attributes': dict({
+            'lower_limit': '0',
+            'upper_limit': '32767',
+          }),
+          'value': 'standby',
+        }),
+      ]),
+      'substate': list([
+        dict({
+          'attributes': dict({
+            'lower_limit': '0',
+            'upper_limit': '32767',
+          }),
+          'value': 'oil_preheating',
+        }),
+      ]),
+      'target_overheating': list([
+        dict({
+          'attributes': dict({
+          }),
+          'value': 5.5,
+        }),
+      ]),
+      'total_energy_consumption': list([
+        dict({
+          'attributes': dict({
+          }),
+          'value': 5.21,
+        }),
+      ]),
+      'total_spf': list([
+        dict({
+          'attributes': dict({
+          }),
+          'value': 2.43,
+        }),
+      ]),
+      'total_thermal_energy': list([
+        dict({
+          'attributes': dict({
+          }),
+          'value': 8.22,
+        }),
+      ]),
+      'vaporizer_temperature': list([
+        dict({
+          'attributes': dict({
+          }),
+          'value': -4.56,
+        }),
+      ]),
+    }),
+    'hot_water_tank': dict({
+      'circulation_pump_state': list([
+        dict({
+          'attributes': dict({
+          }),
+          'value': 'on',
+        }),
+        dict({
+          'attributes': dict({
+          }),
+          'value': 'off',
+        }),
+      ]),
+      'circulation_return_temperature': list([
+        dict({
+          'attributes': dict({
+            'lower_limit': '-100',
+            'upper_limit': '100',
+          }),
+          'value': 30.45,
+        }),
+        dict({
+          'attributes': dict({
+            'lower_limit': '-100',
+            'upper_limit': '100',
+          }),
+          'value': 27.45,
+        }),
+      ]),
+      'current_temperature': list([
+        dict({
+          'attributes': dict({
+            'lower_limit': '20',
+            'upper_limit': '90',
+          }),
+          'value': 47.7,
+        }),
+        dict({
+          'attributes': dict({
+            'lower_limit': '20',
+            'upper_limit': '90',
+          }),
+          'value': 47.7,
+        }),
+      ]),
+      'fresh_water_module_temperature': list([
+        dict({
+          'attributes': dict({
+            'lower_limit': '0',
+            'upper_limit': '100',
+          }),
+          'value': 51.23,
+        }),
+        dict({
+          'attributes': dict({
+            'lower_limit': '0',
+            'upper_limit': '100',
+          }),
+          'value': 51.23,
+        }),
+      ]),
+      'heat_request': list([
+        dict({
+          'attributes': dict({
+          }),
+          'value': 'off',
+        }),
+        dict({
+          'attributes': dict({
+          }),
+          'value': 'on',
+        }),
+      ]),
+      'hot_water_flow': list([
+        dict({
+          'attributes': dict({
+          }),
+          'value': 'off',
+        }),
+        dict({
+          'attributes': dict({
+          }),
+          'value': 'on',
+        }),
+      ]),
+      'operating_mode': list([
+        dict({
+          'attributes': dict({
+            'lower_limit': '0',
+            'upper_limit': '32767',
+          }),
+          'value': 'heat_up',
+        }),
+        dict({
+          'attributes': dict({
+            'lower_limit': '0',
+            'upper_limit': '32767',
+          }),
+          'value': 'off',
+        }),
+      ]),
+      'standby_temperature': list([
+        dict({
+          'attributes': dict({
+            'lower_limit': '0',
+            'upper_limit': '52',
+          }),
+          'value': 32.5,
+        }),
+        dict({
+          'attributes': dict({
+            'lower_limit': '0',
+            'upper_limit': '52',
+          }),
+          'value': 32.5,
+        }),
+      ]),
+      'target_temperature': list([
+        dict({
+          'attributes': dict({
+            'lower_limit': '0',
+            'upper_limit': '52',
+          }),
+          'value': 51.0,
+        }),
+        dict({
+          'attributes': dict({
+            'lower_limit': '0',
+            'upper_limit': '52',
+          }),
+          'value': 51.0,
+        }),
+      ]),
+    }),
+    'photovoltaic': dict({
+    }),
+    'solar_circuit': dict({
+    }),
+    'switch_valve': dict({
+      'position': list([
+        dict({
+          'attributes': dict({
+            'lower_limit': '0',
+            'upper_limit': '2',
+          }),
+          'value': 'neutral',
+        }),
+        dict({
+          'attributes': dict({
+            'lower_limit': '0',
+            'upper_limit': '2',
+          }),
+          'value': 'open',
+        }),
+      ]),
+    }),
+    'system': dict({
+      'control_cpu_usage': dict({
+        'attributes': dict({
+        }),
+        'value': 7.0,
+      }),
+      'cpu_usage': dict({
+        'attributes': dict({
+        }),
+        'value': 27.0,
+      }),
+      'free_ram': dict({
+        'attributes': dict({
+        }),
+        'value': 100060,
+      }),
+      'operating_mode': dict({
+        'attributes': dict({
+          'lower_limit': '-1',
+          'upper_limit': '4',
+        }),
+        'value': 'auto_heat',
+      }),
+      'outdoor_temperature': dict({
+        'attributes': dict({
+          'lower_limit': '-100',
+          'upper_limit': '100',
+        }),
+        'value': 20.5,
+      }),
+      'ram_usage': dict({
+        'attributes': dict({
+        }),
+        'value': 6432,
+      }),
+      'webserver_cpu_usage': dict({
+        'attributes': dict({
+        }),
+        'value': 67.0,
+      }),
+      'webview_cpu_usage': dict({
+        'attributes': dict({
+        }),
+        'value': 34.0,
+      }),
+    }),
+  })
+# ---

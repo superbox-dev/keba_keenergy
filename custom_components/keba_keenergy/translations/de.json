@@ -270,6 +270,9 @@
                     "temporary_off": "Aus (Vorübergehend)"
                 }
             },
+            "cooling_curve": {
+                "name": "Kühlkurve"
+            },
             "cooling_energy": {
                 "name": "Kühlmenge"
             },

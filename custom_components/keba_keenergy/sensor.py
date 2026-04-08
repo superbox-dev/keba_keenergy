@@ -52,8 +52,15 @@ _LOGGER = logging.getLogger(__name__)
 
 PARALLEL_UPDATES: Final[int] = 0
 
-HEAT_CIRCUIT_COOLING_SENSORS: list[str] = ["cool_request"]
-HEAT_CIRCUIT_HEATING_SENSORS: list[str] = ["heat_request"]
+HEAT_CIRCUIT_COOLING_SENSORS: list[str] = [
+    "cool_request",
+    "cooling_curve",
+]
+
+HEAT_CIRCUIT_HEATING_SENSORS: list[str] = [
+    "heat_request",
+    "heating_curve",
+]
 
 
 @dataclass(frozen=True)
@@ -359,6 +366,13 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
             key="heating_curve",
             key_index=None,
             translation_key="heating_curve",
+            icon="mdi:chart-bell-curve-cumulative",
+            value=lambda data: data,
+        ),
+        KebaKeEnergySensorEntityDescription[str](
+            key="cooling_curve",
+            key_index=None,
+            translation_key="cooling_curve",
             icon="mdi:chart-bell-curve-cumulative",
             value=lambda data: data,
         ),

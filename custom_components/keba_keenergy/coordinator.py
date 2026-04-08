@@ -94,6 +94,7 @@ REQUEST_DATA_GROUPS: dict[SectionPrefix, list[Section]] = {
         HeatCircuit.HEATING_CURVE_SLOPE,
         HeatCircuit.USE_HEATING_CURVE,
         HeatCircuit.HEATING_CURVE,
+        HeatCircuit.COOLING_CURVE,
         HeatCircuit.PUMP_SPEED,
     ],
     SectionPrefix.SOLAR_CIRCUIT: [
