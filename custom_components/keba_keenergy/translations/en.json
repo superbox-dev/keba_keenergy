@@ -258,6 +258,18 @@
             "control_cpu_usage": {
                 "name": "Ctrl CPU usage"
             },
+            "cool_request": {
+                "name": "Cool request",
+                "state": {
+                    "flow_off": "Off (low flow temperature)",
+                    "inflow_off": "Off (high return flow temperature)",
+                    "off": "Off",
+                    "on": "On",
+                    "outdoor_off": "Off (high outside temperature)",
+                    "room_off": "Off (high room temperature)",
+                    "temporary_off": "Off (temporary)"
+                }
+            },
             "cooling_energy": {
                 "name": "Cooling energy"
             },

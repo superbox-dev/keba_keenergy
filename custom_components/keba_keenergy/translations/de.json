@@ -258,6 +258,18 @@
             "control_cpu_usage": {
                 "name": "Ctrl CPU-Auslastung"
             },
+            "cool_request": {
+                "name": "Kühlanforderung",
+                "state": {
+                    "flow_off": "Aus (Niedrige Vorlauftemperatur)",
+                    "inflow_off": "Aus (Hohe Rücklauftemperatur)",
+                    "off": "Aus",
+                    "on": "Ein",
+                    "outdoor_off": "Aus (Hohe Außentemperatur)",
+                    "room_off": "Aus (Hohe Raumtemperatur)",
+                    "temporary_off": "Aus (Vorübergehend)"
+                }
+            },
             "cooling_energy": {
                 "name": "Kühlmenge"
             },

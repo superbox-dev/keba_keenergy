@@ -79,6 +79,13 @@
                     "75": "mdi:sun-thermometer"
                 }
             },
+            "cool_request": {
+                "default": "mdi:snowflake",
+                "state": {
+                    "on": "mdi:snowflake",
+                    "off": "mdi:snowflake-off"
+                }
+            },
             "heat_request": {
                 "default": "mdi:fire",
                 "state": {

@@ -293,6 +293,10 @@ async def test_update_interval_ticks(
                 {"value": "on", "attributes": {"upper_limit": "6", "lower_limit": "0"}},
                 {"value": "off", "attributes": {"upper_limit": "6", "lower_limit": "0"}},
             ],
+            "cool_request": [
+                {"value": "off", "attributes": {"upper_limit": "6", "lower_limit": "0"}},
+                {"value": "on", "attributes": {"upper_limit": "6", "lower_limit": "0"}},
+            ],
             "target_temperature_away": [
                 {"value": 18.0, "attributes": {"upper_limit": "30", "lower_limit": "10"}},
                 {"value": 18.0, "attributes": {"upper_limit": "30", "lower_limit": "10"}},
@@ -559,6 +563,10 @@ async def test_update_interval_ticks(
             "heat_request": [
                 {"value": "on", "attributes": {"upper_limit": "6", "lower_limit": "0"}},
                 {"value": "off", "attributes": {"upper_limit": "6", "lower_limit": "0"}},
+            ],
+            "cool_request": [
+                {"value": "off", "attributes": {"upper_limit": "6", "lower_limit": "0"}},
+                {"value": "on", "attributes": {"upper_limit": "6", "lower_limit": "0"}},
             ],
             "target_temperature_away": [
                 {"value": 18.0, "attributes": {"upper_limit": "30", "lower_limit": "10"}},
