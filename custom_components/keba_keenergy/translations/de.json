@@ -46,7 +46,7 @@
                     "ssl": "SSL-Zertifikat verwenden"
                 },
                 "data_description": {
-                  "host": "The hostname or IP address of your {name} device."
+                    "host": "The hostname or IP address of your {name} device."
                 },
                 "description": "Konfiguriere dein {name}-Gerät."
             }
@@ -56,7 +56,7 @@
         "buffer_tank": {
             "name": "Pufferspeicher{position}"
         },
-        "control_unit":{
+        "control_unit": {
             "name": "Bedieneinheit"
         },
         "external_heat_source": {
@@ -83,11 +83,11 @@
             "circulation_pump_state": {
                 "name": "Zirkulationspumpe Status"
             },
-            "cool_request": {
-                "name": "Kühlanforderung"
-            },
             "compressor_failure": {
                 "name": "Kompressor"
+            },
+            "cool_request": {
+                "name": "Kühlanforderung"
             },
             "heat_request": {
                 "name": "Heizanforderung{counter}"
@@ -142,9 +142,6 @@
             "standby_temperature": {
                 "name": "Stütztemperatur"
             },
-            "target_temperature": {
-                "name": "Soll-Temperatur{counter}"
-            },
             "target_room_temperature": {
                 "name": "Soll-Raumtemperatur"
             },
@@ -159,13 +156,13 @@
             },
             "target_room_temperature_offset": {
                 "name": "Soll-Raumtemperatur (Offset)"
+            },
+            "target_temperature": {
+                "name": "Soll-Temperatur{counter}"
             }
         },
         "select": {
-            "heating_curve": {
-                "name": "Heizkurve"
-            },
-            "operating_mode_buffer_tank": {
+            "buffer_tank_operating_mode": {
                 "name": "Betriebsart",
                 "state": {
                     "heat_up": "Aufheizen",
@@ -173,25 +170,28 @@
                     "on": "Ein"
                 }
             },
-            "operating_mode_external_heat_source": {
+            "external_heat_source_operating_mode": {
                 "name": "Betriebsart",
                 "state": {
                     "off": "Aus",
                     "on": "Ein"
                 }
             },
-            "operating_mode_heat_circuit": {
+            "heat_circuit_operating_mode": {
                 "name": "Betriebsart",
                 "state": {
                     "auto": "Auto",
                     "day": "Tag",
-                    "night": "Nacht",
                     "holiday": "Urlaub",
+                    "night": "Nacht",
                     "off": "Aus",
                     "party": "Party"
                 }
             },
-            "operating_mode_hot_water_tank": {
+            "heating_curve": {
+                "name": "Heizkurve"
+            },
+            "hot_water_tank_operating_mode": {
                 "name": "Betriebsart",
                 "state": {
                     "auto": "Zeitplan",
@@ -200,22 +200,22 @@
                     "on": "Ein"
                 }
             },
-            "operating_mode_solar_circuit": {
+            "solar_circuit_operating_mode": {
                 "name": "Betriebsart",
                 "state": {
                     "off": "Aus",
                     "on": "Ein"
                 }
             },
-            "operating_mode_system": {
+            "system_operating_mode": {
                 "name": "Betriebsart",
                 "state": {
+                    "auto": "Automatik",
+                    "auto_cool": "Kühlen",
+                    "auto_heat": "Heizen",
                     "setup": "Einrichtung",
                     "standby": "Standby",
-                    "summer": "nur Warmwasser",
-                    "auto_heat": "Heizen",
-                    "auto_cool": "Kühlen",
-                    "auto": "Automatik"
+                    "summer": "nur Warmwasser"
                 }
             }
         },
@@ -226,14 +226,19 @@
             "actual_power": {
                 "name": "Leistung"
             },
+            "buffer_tank_operating_mode": {
+                "name": "Betriebsart",
+                "state": {
+                    "heat_up": "Aufheizen",
+                    "off": "Aus",
+                    "on": "Ein"
+                }
+            },
             "circulation_pump": {
                 "name": "Umwälzpumpedrehzahl"
             },
             "circulation_return_temperature": {
                 "name": "Zirkulations-Rücklauftemperatur"
-            },
-            "cpu_usage": {
-                "name": "CPU-Auslastung"
             },
             "compressor": {
                 "name": "Kompressordrehzahl"
@@ -246,6 +251,9 @@
             },
             "compressor_power": {
                 "name": "Leistung Kompressor"
+            },
+            "condenser_temperature": {
+                "name": "Kondensationstemperatur"
             },
             "control_cpu_usage": {
                 "name": "Ctrl CPU-Auslastung"
@@ -262,8 +270,8 @@
             "cop": {
                 "name": "Leistungszahl"
             },
-            "condenser_temperature": {
-                "name": "Kondensationstemperatur"
+            "cpu_usage": {
+                "name": "CPU-Auslastung"
             },
             "current_bottom_temperature": {
                 "name": "Ist-Temperatur (unten)"
@@ -286,17 +294,37 @@
             "expansion_valve_position": {
                 "name": "Expansionsventil"
             },
-            "free_ram": {
-                "name": "Freier RAM"
-            },
-            "fresh_water_module_temperature": {
-                "name": "Frischwassermodul-Temperatur"
+            "external_heat_source_operating_mode": {
+                "name": "Betriebsart",
+                "state": {
+                    "off": "Aus",
+                    "on": "Ein"
+                }
             },
             "flow_temperature": {
                 "name": "Vorlauftemperatur"
             },
             "flow_temperature_setpoint": {
                 "name": "Soll-Vorlauftemperatur"
+            },
+            "free_ram": {
+                "name": "Freier RAM"
+            },
+            "fresh_water_module_temperature": {
+                "name": "Frischwassermodul-Temperatur"
+            },
+            "heat_circuit_operating_mode": {
+                "name": "Betriebsart",
+                "state": {
+                    "auto": "Auto",
+                    "day": "Tag",
+                    "external": "Extern",
+                    "holiday": "Urlaub",
+                    "night": "Nacht",
+                    "off": "Aus",
+                    "party": "Party",
+                    "room_control": "Raumregelung"
+                }
             },
             "heat_request": {
                 "name": "Heizanforderung",
@@ -346,6 +374,15 @@
             "hot_water_spf": {
                 "name": "JAZ Warmwasser"
             },
+            "hot_water_tank_operating_mode": {
+                "name": "Betriebsart",
+                "state": {
+                    "auto": "Auto",
+                    "heat_up": "Aufheizen",
+                    "off": "Aus",
+                    "on": "Ein"
+                }
+            },
             "low_pressure": {
                 "name": "Niederdruck"
             },
@@ -354,61 +391,6 @@
             },
             "operating_hours": {
                 "name": "Betriebsstunden"
-            },
-            "operating_mode_buffer_tank": {
-                "name": "Betriebsart",
-                "state": {
-                    "heat_up": "Aufheizen",
-                    "off": "Aus",
-                    "on": "Ein"
-                }
-            },
-            "operating_mode_external_heat_source": {
-                "name": "Betriebsart",
-                "state": {
-                    "off": "Aus",
-                    "on": "Ein"
-                }
-            },
-            "operating_mode_heat_circuit": {
-                "name": "Betriebsart",
-                "state": {
-                    "auto": "Auto",
-                    "day": "Tag",
-                    "external": "Extern",
-                    "night": "Nacht",
-                    "holiday": "Urlaub",
-                    "off": "Aus",
-                    "party": "Party",
-                    "room_control": "Raumregelung"
-                }
-            },
-            "operating_mode_hot_water_tank": {
-                "name": "Betriebsart",
-                "state": {
-                    "auto": "Auto",
-                    "heat_up": "Aufheizen",
-                    "off": "Aus",
-                    "on": "Ein"
-                }
-            },
-            "operating_mode_solar_circuit": {
-                "name": "Betriebsart",
-                "state": {
-                    "off": "Aus",
-                    "on": "Ein"
-                }
-            },
-            "operating_mode_system": {
-                "name": "Betriebsart",
-                "state": {
-                    "auto_heat": "Heizen",
-                    "auto_cool": "Kühlen",
-                    "auto": "Automatik",
-                    "setup": "Einrichtung",
-                    "standby": "Standby",
-                    "summer": "Sommerbetrieb (nur Warmwasser)"
-                }
             },
             "outdoor_temperature": {
                 "name": "Außentemperatur"
@@ -437,20 +419,27 @@
             "selected_target_room_temperature": {
                 "name": "Soll-Raumtemperatur (ausgewählt)"
             },
+            "solar_circuit_operating_mode": {
+                "name": "Betriebsart",
+                "state": {
+                    "off": "Aus",
+                    "on": "Ein"
+                }
+            },
             "solar_circuit_pump_1": {
                 "name": "Pumpe 1"
             },
             "solar_circuit_pump_2": {
                 "name": "Pumpe 2"
             },
-            "source_pump_speed": {
-                "name": "Quellenpumpendrehzahl"
-            },
             "source_input_temperature": {
                 "name": "Quelle-Eingangstemperatur"
             },
             "source_output_temperature": {
                 "name": "Quelle-Ausgangstemperatur"
+            },
+            "source_pump_speed": {
+                "name": "Quellenpumpendrehzahl"
             },
             "source_temperature": {
                 "name": "Kollektortemperatur"
@@ -467,9 +456,9 @@
                     "error": "Fehler",
                     "flow": "Vorlauf",
                     "inflow": "Nachlauf",
+                    "pump_down": "Pump-Down-Vorgang",
                     "shutdown": "Herunterfahren",
-                    "standby": "Standby",
-                    "pump_down": "Pump-Down-Vorgang"
+                    "standby": "Standby"
                 }
             },
             "substate": {
@@ -495,8 +484,8 @@
                     "none": "-",
                     "oil_preheating": "Ölvorwärmung",
                     "open": "Öffnen",
-                    "pressure_equalization": "Druckausgleich",
                     "preheat_flow": "Heizvorlauf",
+                    "pressure_equalization": "Druckausgleich",
                     "pump_post_run": "Pumpennachlauf",
                     "pump_pre_run": "Pumpenvorlauf",
                     "random_delay": "Zufallsverzögerung",
@@ -511,16 +500,24 @@
             "switch_valve_position": {
                 "name": "Position",
                 "state": {
+                    "closed": "Position 2",
                     "neutral": "Neutral",
-                    "open": "Position 1",
-                    "closed": "Position 2"
+                    "open": "Position 1"
+                }
+            },
+            "system_operating_mode": {
+                "name": "Betriebsart",
+                "state": {
+                    "auto": "Automatik",
+                    "auto_cool": "Kühlen",
+                    "auto_heat": "Heizen",
+                    "setup": "Einrichtung",
+                    "standby": "Standby",
+                    "summer": "Sommerbetrieb (nur Warmwasser)"
                 }
             },
             "target_overheating": {
                 "name": "Sollüberhitzung"
-            },
-            "target_temperature": {
-                "name": "Soll-Temperatur{counter}"
             },
             "target_room_temperature": {
                 "name": "Soll-Raumtemperatur"
@@ -536,6 +533,9 @@
             },
             "target_room_temperature_offset": {
                 "name": "Soll-Raumtemperatur (Offset)"
+            },
+            "target_temperature": {
+                "name": "Soll-Temperatur{counter}"
             },
             "total_energy_consumption": {
                 "name": "Stromverbrauch gesamt"
@@ -556,7 +556,7 @@
                 "name": "WebView CPU-Auslastung"
             }
         },
-        "switch" : {
+        "switch": {
             "compressor_use_night_speed": {
                 "name": "Kompressor-Drehzahlbegrenzung (Nacht)"
             },
@@ -610,8 +610,8 @@
     },
     "issues": {
         "frequent_flash_writes": {
-            "title": "Viele Schreibzugriffe erkannt",
-            "description": "In dieser Woche wurden mehr als {limit} Schreibzugriffe auf das Gerät durchgeführt.\n\nSehr häufige Schreibzugriffe (zum Beispiel durch Automationen) können die Lebensdauer des Flash-Speichers des Geräts reduzieren."
+            "description": "In dieser Woche wurden mehr als {limit} Schreibzugriffe auf das Gerät durchgeführt.\n\nSehr häufige Schreibzugriffe (zum Beispiel durch Automationen) können die Lebensdauer des Flash-Speichers des Geräts reduzieren.",
+            "title": "Viele Schreibzugriffe erkannt"
         }
     },
     "options": {
@@ -622,8 +622,8 @@
             "init": {
                 "data": {
                     "scan_interval": "Scan-Intervall",
-                    "scan_interval_tick_external_heat_source": "Update-Multiplikator für die externe Wärmequelle",
                     "scan_interval_tick_buffer_tank": "Update-Multiplikator für den Pufferspeicher",
+                    "scan_interval_tick_external_heat_source": "Update-Multiplikator für die externe Wärmequelle",
                     "scan_interval_tick_heat_circuit": "Update-Multiplikator für den Heizkreis",
                     "scan_interval_tick_heat_pump": "Update-Multiplikator für die Wärmepumpe",
                     "scan_interval_tick_hot_water_tank": "Update-Multiplikator für den Warmwasserspeicher",
@@ -633,8 +633,8 @@
                 },
                 "data_description": {
                     "scan_interval": "Zeit in Sekunden zwischen den Updates",
-                    "scan_interval_tick_external_heat_source": "Aktualisierung alle X Scan-Intervalle",
                     "scan_interval_tick_buffer_tank": "Aktualisierung alle X Scan-Intervalle",
+                    "scan_interval_tick_external_heat_source": "Aktualisierung alle X Scan-Intervalle",
                     "scan_interval_tick_heat_circuit": "Aktualisierung alle X Scan-Intervalle",
                     "scan_interval_tick_heat_pump": "Aktualisierung alle X Scan-Intervalle",
                     "scan_interval_tick_hot_water_tank": "Aktualisierung alle X Scan-Intervalle",
@@ -647,25 +647,24 @@
     },
     "services": {
         "set_away_date_range": {
-            "name": "Datumsbereich für Abwesenheit festlegen",
             "description": "Start- und Enddatum für die Abwesenheit festlegen.",
             "fields": {
                 "config_entry": {
                     "description": "Die für diese Aktion zu verwendende Integration.",
                     "name": "Integration"
                 },
-                "start_date": {
-                    "description": "Datum, an dem die Abwesenheit beginnt.",
-                    "name": "Startdatum"
-                },
                 "end_date": {
                     "description": "Datum, an dem die Abwesenheit endet.",
                     "name": "Enddatum"
+                },
+                "start_date": {
+                    "description": "Datum, an dem die Abwesenheit beginnt.",
+                    "name": "Startdatum"
                 }
-            }
+            },
+            "name": "Datumsbereich für Abwesenheit festlegen"
         },
         "set_heating_curve_points": {
-            "name": "Heizkurvenpunkte setzen",
             "description": "Setzt die Punkte einer Heizkurve.",
             "fields": {
                 "config_entry": {
@@ -680,7 +679,8 @@
                     "description": "Liste der Heizkurvenpunkte mit Außentemperatur und zugehöriger Vorlauftemperatur.",
                     "name": "Punkte"
                 }
-            }
+            },
+            "name": "Heizkurvenpunkte setzen"
         }
     }
 }
