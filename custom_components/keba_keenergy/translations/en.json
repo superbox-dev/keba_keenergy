@@ -437,6 +437,9 @@
             "max_runtime": {
                 "name": "Maximum runtime"
             },
+            "mixer_flow_temperature": {
+                "name": "Flow temperature (mixer)"
+            },
             "operating_hours": {
                 "name": "Operating time"
             },

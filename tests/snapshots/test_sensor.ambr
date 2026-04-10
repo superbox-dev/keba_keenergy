@@ -504,7 +504,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'temperature',
-      'friendly_name': 'Heizkreis 1 Vorlauftemperatur',
+      'friendly_name': 'Heizkreis 1 Vorlauftemperatur (Mischer)',
       'lower_limit': '0',
       'state_class': <SensorStateClass.MEASUREMENT: 'measurement'>,
       'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
@@ -522,7 +522,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'temperature',
-      'friendly_name': 'Heizkreis 2 Vorlauftemperatur',
+      'friendly_name': 'Heizkreis 2 Vorlauftemperatur (Mischer)',
       'lower_limit': '0',
       'state_class': <SensorStateClass.MEASUREMENT: 'measurement'>,
       'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
@@ -2874,7 +2874,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'temperature',
-      'friendly_name': 'Heating circuit 1 Flow temperature',
+      'friendly_name': 'Heating circuit 1 Flow temperature (mixer)',
       'lower_limit': '0',
       'state_class': <SensorStateClass.MEASUREMENT: 'measurement'>,
       'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
@@ -2892,7 +2892,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'temperature',
-      'friendly_name': 'Heating circuit 2 Flow temperature',
+      'friendly_name': 'Heating circuit 2 Flow temperature (mixer)',
       'lower_limit': '0',
       'state_class': <SensorStateClass.MEASUREMENT: 'measurement'>,
       'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,

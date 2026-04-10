@@ -231,7 +231,7 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             new_key="mixer_flow_temperature",
             state_class=SensorStateClass.MEASUREMENT,
-            translation_key="flow_temperature",
+            translation_key="mixer_flow_temperature",
             value=lambda data: data,
         ),
         KebaKeEnergySensorEntityDescription[float](

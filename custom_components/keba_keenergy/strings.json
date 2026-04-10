@@ -437,6 +437,9 @@
             "max_runtime": {
                 "name": "Maximum runtime"
             },
+            "mixer_flow_temperature": {
+                "name": "Flow temperature (mixer)"
+            },
             "operating_hours": {
                 "name": "Operating time"
             },
@@ -564,6 +567,7 @@
                     "summer": "Summer mode (hot water only)"
                 }
             },
+
             "target_overheating": {
                 "name": "Target overheating"
             },
