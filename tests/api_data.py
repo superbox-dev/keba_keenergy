@@ -1153,6 +1153,16 @@ HEAT_PUMP_HAS_VFD_FAILURE: dict[str, Any] = {
     "value": "false",
 }
 
+HEAT_PUMP_HAS_ACTIVE_COOLING: str = """
+    {
+        "name": "APPL.CtrlAppl.sParam.options.heatpump[0].hasActiveCooling",
+        "attributes": {
+            "longText": "With active Cooling"
+        },
+        "value": "%s"
+    }
+"""
+
 HEAT_PUMP_HAS_PASSIVE_COOLING: str = """
     {
         "name": "APPL.CtrlAppl.sParam.options.heatpump[0].hasPassiveCooling",
@@ -1667,6 +1677,7 @@ DEFAULT_POSITION_FIXED_DATA_RESPONSE: list[dict[str, Any]] = [
     json.loads(HEAT_CIRCUIT_MODE % ("0", "0")),
     json.loads(HEAT_CIRCUIT_HAS_ROOM_TEMPERATURE % ("0", "true")),
     json.loads(HEAT_CIRCUIT_HAS_ROOM_HUMIDITY % ("0", "true")),
+    json.loads(HEAT_PUMP_HAS_ACTIVE_COOLING % "false"),
     json.loads(HEAT_PUMP_HAS_PASSIVE_COOLING % "true"),
 ]
 
@@ -1679,6 +1690,7 @@ def get_multiple_position_fixed_data_response(has_passive_cooling: str = "false"
         json.loads(HEAT_CIRCUIT_HAS_ROOM_TEMPERATURE % ("1", "false")),
         json.loads(HEAT_CIRCUIT_HAS_ROOM_HUMIDITY % ("0", "true")),
         json.loads(HEAT_CIRCUIT_HAS_ROOM_HUMIDITY % ("1", "false")),
+        json.loads(HEAT_PUMP_HAS_ACTIVE_COOLING % "false"),
         json.loads(HEAT_PUMP_HAS_PASSIVE_COOLING % f"{has_passive_cooling}"),
     ]
 

@@ -92,7 +92,9 @@ class KebaKeEnergySystemOperatingModeSelectEntity(KebaKeEnergySelectEntity):
         """Return a set of selectable options."""
         options: list[str] = super().options
 
-        if self.coordinator.has_passive_cooling(index=self.index or 0):
+        if self.coordinator.has_active_cooling(index=self.index) or self.coordinator.has_passive_cooling(
+            index=self.index,
+        ):
             return [
                 *options,
                 SystemOperatingMode.AUTO_COOL.name.lower(),
