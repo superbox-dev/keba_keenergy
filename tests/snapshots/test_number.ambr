@@ -1,0 +1,1005 @@
+# serializer version: 1
+# name: test_numbers[de-number.keba_keenergy_12345678_buffer_tank_standby_temperature_1]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'device_class': 'temperature',
+      'friendly_name': 'Pufferspeicher 1 Stütztemperatur',
+      'icon': 'mdi:thermometer-chevron-down',
+      'max': 90.0,
+      'min': 0.0,
+      'mode': <NumberMode.AUTO: 'auto'>,
+      'step': 0.5,
+      'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
+    }),
+    'context': <ANY>,
+    'entity_id': 'number.keba_keenergy_12345678_buffer_tank_standby_temperature_1',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': '10.0',
+  })
+# ---
+# name: test_numbers[de-number.keba_keenergy_12345678_buffer_tank_standby_temperature_2]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'device_class': 'temperature',
+      'friendly_name': 'Pufferspeicher 2 Stütztemperatur',
+      'icon': 'mdi:thermometer-chevron-down',
+      'max': 90.0,
+      'min': 0.0,
+      'mode': <NumberMode.AUTO: 'auto'>,
+      'step': 0.5,
+      'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
+    }),
+    'context': <ANY>,
+    'entity_id': 'number.keba_keenergy_12345678_buffer_tank_standby_temperature_2',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': '11.0',
+  })
+# ---
+# name: test_numbers[de-number.keba_keenergy_12345678_heat_circuit_cooling_curve_offset_2]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'device_class': 'temperature',
+      'friendly_name': 'Heizkreis 2 Kühlkurven-Offset',
+      'max': 10.0,
+      'min': -10.0,
+      'mode': <NumberMode.AUTO: 'auto'>,
+      'step': 0.1,
+      'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
+    }),
+    'context': <ANY>,
+    'entity_id': 'number.keba_keenergy_12345678_heat_circuit_cooling_curve_offset_2',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': '-1.5',
+  })
+# ---
+# name: test_numbers[de-number.keba_keenergy_12345678_heat_circuit_cooling_curve_slope_2]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'friendly_name': 'Heizkreis 2 Kühlkurven-Steigung',
+      'icon': 'mdi:slope-uphill',
+      'max': 5.0,
+      'min': 0.0,
+      'mode': <NumberMode.AUTO: 'auto'>,
+      'step': 0.01,
+    }),
+    'context': <ANY>,
+    'entity_id': 'number.keba_keenergy_12345678_heat_circuit_cooling_curve_slope_2',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': '0.6',
+  })
+# ---
+# name: test_numbers[de-number.keba_keenergy_12345678_heat_circuit_cooling_limit_day_2]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'device_class': 'temperature',
+      'friendly_name': 'Heizkreis 2 Kühlgrenze (Tag)',
+      'max': 100.0,
+      'min': -20.0,
+      'mode': <NumberMode.AUTO: 'auto'>,
+      'step': 0.5,
+      'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
+    }),
+    'context': <ANY>,
+    'entity_id': 'number.keba_keenergy_12345678_heat_circuit_cooling_limit_day_2',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': '20.0',
+  })
+# ---
+# name: test_numbers[de-number.keba_keenergy_12345678_heat_circuit_cooling_limit_night_2]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'device_class': 'temperature',
+      'friendly_name': 'Heizkreis 2 Kühlgrenze (Nacht)',
+      'max': 40.0,
+      'min': -20.0,
+      'mode': <NumberMode.AUTO: 'auto'>,
+      'step': 0.5,
+      'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
+    }),
+    'context': <ANY>,
+    'entity_id': 'number.keba_keenergy_12345678_heat_circuit_cooling_limit_night_2',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': '18.0',
+  })
+# ---
+# name: test_numbers[de-number.keba_keenergy_12345678_heat_circuit_heating_curve_offset_1]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'device_class': 'temperature',
+      'friendly_name': 'Heizkreis 1 Heizkurven-Offset',
+      'max': 10.0,
+      'min': -10.0,
+      'mode': <NumberMode.AUTO: 'auto'>,
+      'step': 0.1,
+      'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
+    }),
+    'context': <ANY>,
+    'entity_id': 'number.keba_keenergy_12345678_heat_circuit_heating_curve_offset_1',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': '1.5',
+  })
+# ---
+# name: test_numbers[de-number.keba_keenergy_12345678_heat_circuit_heating_curve_slope_1]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'friendly_name': 'Heizkreis 1 Heizkurven-Steigung',
+      'icon': 'mdi:slope-uphill',
+      'max': 5.0,
+      'min': 0.0,
+      'mode': <NumberMode.AUTO: 'auto'>,
+      'step': 0.01,
+    }),
+    'context': <ANY>,
+    'entity_id': 'number.keba_keenergy_12345678_heat_circuit_heating_curve_slope_1',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': '0.5',
+  })
+# ---
+# name: test_numbers[de-number.keba_keenergy_12345678_heat_circuit_heating_limit_day_1]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'device_class': 'temperature',
+      'friendly_name': 'Heizkreis 1 Heizgrenze (Tag)',
+      'max': 100.0,
+      'min': -20.0,
+      'mode': <NumberMode.AUTO: 'auto'>,
+      'step': 0.5,
+      'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
+    }),
+    'context': <ANY>,
+    'entity_id': 'number.keba_keenergy_12345678_heat_circuit_heating_limit_day_1',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': '20.0',
+  })
+# ---
+# name: test_numbers[de-number.keba_keenergy_12345678_heat_circuit_heating_limit_night_1]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'device_class': 'temperature',
+      'friendly_name': 'Heizkreis 1 Heizgrenze (Nacht)',
+      'max': 100.0,
+      'min': -20.0,
+      'mode': <NumberMode.AUTO: 'auto'>,
+      'step': 0.5,
+      'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
+    }),
+    'context': <ANY>,
+    'entity_id': 'number.keba_keenergy_12345678_heat_circuit_heating_limit_night_1',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': '18.0',
+  })
+# ---
+# name: test_numbers[de-number.keba_keenergy_12345678_heat_circuit_target_cooling_temperature_day_2]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'device_class': 'temperature',
+      'friendly_name': 'Heizkreis 2 Soll-Raumtemperatur (Kühlen Tag)',
+      'max': 30.0,
+      'min': 10.0,
+      'mode': <NumberMode.AUTO: 'auto'>,
+      'step': 0.5,
+      'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
+    }),
+    'context': <ANY>,
+    'entity_id': 'number.keba_keenergy_12345678_heat_circuit_target_cooling_temperature_day_2',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': '20.5',
+  })
+# ---
+# name: test_numbers[de-number.keba_keenergy_12345678_heat_circuit_target_cooling_temperature_night_2]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'device_class': 'temperature',
+      'friendly_name': 'Heizkreis 2 Soll-Raumtemperatur (Kühlen Nacht)',
+      'max': 30.0,
+      'min': 10.0,
+      'mode': <NumberMode.AUTO: 'auto'>,
+      'step': 0.5,
+      'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
+    }),
+    'context': <ANY>,
+    'entity_id': 'number.keba_keenergy_12345678_heat_circuit_target_cooling_temperature_night_2',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': '20.0',
+  })
+# ---
+# name: test_numbers[de-number.keba_keenergy_12345678_heat_circuit_target_temperature_away_1]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'device_class': 'temperature',
+      'friendly_name': 'Heizkreis 1 Soll-Raumtemperatur (Urlaub)',
+      'max': 30.0,
+      'min': 10.0,
+      'mode': <NumberMode.AUTO: 'auto'>,
+      'step': 0.5,
+      'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
+    }),
+    'context': <ANY>,
+    'entity_id': 'number.keba_keenergy_12345678_heat_circuit_target_temperature_away_1',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': '18.0',
+  })
+# ---
+# name: test_numbers[de-number.keba_keenergy_12345678_heat_circuit_target_temperature_day_1]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'device_class': 'temperature',
+      'friendly_name': 'Heizkreis 1 Soll-Raumtemperatur (Tag)',
+      'max': 30.0,
+      'min': 10.0,
+      'mode': <NumberMode.AUTO: 'auto'>,
+      'step': 0.5,
+      'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
+    }),
+    'context': <ANY>,
+    'entity_id': 'number.keba_keenergy_12345678_heat_circuit_target_temperature_day_1',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': '20.5',
+  })
+# ---
+# name: test_numbers[de-number.keba_keenergy_12345678_heat_circuit_target_temperature_night_1]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'device_class': 'temperature',
+      'friendly_name': 'Heizkreis 1 Soll-Raumtemperatur (Nacht)',
+      'max': 30.0,
+      'min': 10.0,
+      'mode': <NumberMode.AUTO: 'auto'>,
+      'step': 0.5,
+      'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
+    }),
+    'context': <ANY>,
+    'entity_id': 'number.keba_keenergy_12345678_heat_circuit_target_temperature_night_1',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': '20.0',
+  })
+# ---
+# name: test_numbers[de-number.keba_keenergy_12345678_heat_circuit_target_temperature_offset_1]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'device_class': 'temperature',
+      'friendly_name': 'Heizkreis 1 Soll-Raumtemperatur (Offset)',
+      'max': 2.5,
+      'min': -2.5,
+      'mode': <NumberMode.AUTO: 'auto'>,
+      'step': 0.5,
+      'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
+    }),
+    'context': <ANY>,
+    'entity_id': 'number.keba_keenergy_12345678_heat_circuit_target_temperature_offset_1',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': '1.5',
+  })
+# ---
+# name: test_numbers[de-number.keba_keenergy_12345678_heat_circuit_target_temperature_offset_2]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'device_class': 'temperature',
+      'friendly_name': 'Heizkreis 2 Soll-Raumtemperatur (Offset)',
+      'max': 2.5,
+      'min': -2.5,
+      'mode': <NumberMode.AUTO: 'auto'>,
+      'step': 0.5,
+      'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
+    }),
+    'context': <ANY>,
+    'entity_id': 'number.keba_keenergy_12345678_heat_circuit_target_temperature_offset_2',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': '0.0',
+  })
+# ---
+# name: test_numbers[de-number.keba_keenergy_12345678_heat_pump_compressor_night_speed]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'device_class': 'speed',
+      'friendly_name': 'Wärmepumpe Kompressordrehzahl (Nacht)',
+      'max': 100.0,
+      'min': 50.0,
+      'mode': <NumberMode.AUTO: 'auto'>,
+      'step': 1,
+      'unit_of_measurement': '%',
+    }),
+    'context': <ANY>,
+    'entity_id': 'number.keba_keenergy_12345678_heat_pump_compressor_night_speed',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': '50.0',
+  })
+# ---
+# name: test_numbers[de-number.keba_keenergy_12345678_hot_water_tank_standby_temperature_1]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'device_class': 'temperature',
+      'friendly_name': 'Warmwasserspeicher 1 Stütztemperatur',
+      'icon': 'mdi:thermometer-chevron-down',
+      'max': 52.0,
+      'min': 0.0,
+      'mode': <NumberMode.AUTO: 'auto'>,
+      'step': 0.5,
+      'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
+    }),
+    'context': <ANY>,
+    'entity_id': 'number.keba_keenergy_12345678_hot_water_tank_standby_temperature_1',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': '32.5',
+  })
+# ---
+# name: test_numbers[de-number.keba_keenergy_12345678_hot_water_tank_standby_temperature_2]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'device_class': 'temperature',
+      'friendly_name': 'Warmwasserspeicher 2 Stütztemperatur',
+      'icon': 'mdi:thermometer-chevron-down',
+      'max': 52.0,
+      'min': 0.0,
+      'mode': <NumberMode.AUTO: 'auto'>,
+      'step': 0.5,
+      'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
+    }),
+    'context': <ANY>,
+    'entity_id': 'number.keba_keenergy_12345678_hot_water_tank_standby_temperature_2',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': '32.5',
+  })
+# ---
+# name: test_numbers[de-number.keba_keenergy_12345678_hot_water_tank_target_temperature_1]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'device_class': 'temperature',
+      'friendly_name': 'Warmwasserspeicher 1 Soll-Temperatur',
+      'icon': 'mdi:thermometer-chevron-up',
+      'max': 52.0,
+      'min': 0.0,
+      'mode': <NumberMode.AUTO: 'auto'>,
+      'step': 0.5,
+      'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
+    }),
+    'context': <ANY>,
+    'entity_id': 'number.keba_keenergy_12345678_hot_water_tank_target_temperature_1',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': '51.0',
+  })
+# ---
+# name: test_numbers[de-number.keba_keenergy_12345678_hot_water_tank_target_temperature_2]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'device_class': 'temperature',
+      'friendly_name': 'Warmwasserspeicher 2 Soll-Temperatur',
+      'icon': 'mdi:thermometer-chevron-up',
+      'max': 52.0,
+      'min': 0.0,
+      'mode': <NumberMode.AUTO: 'auto'>,
+      'step': 0.5,
+      'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
+    }),
+    'context': <ANY>,
+    'entity_id': 'number.keba_keenergy_12345678_hot_water_tank_target_temperature_2',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': '51.0',
+  })
+# ---
+# name: test_numbers[de-number.keba_keenergy_12345678_solar_circuit_target_temperature_1_1]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'device_class': 'temperature',
+      'friendly_name': 'Solarkreis 1 Soll-Temperatur 1',
+      'icon': 'mdi:thermometer-water',
+      'max': 90.0,
+      'min': 0.0,
+      'mode': <NumberMode.AUTO: 'auto'>,
+      'step': 0.5,
+      'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
+    }),
+    'context': <ANY>,
+    'entity_id': 'number.keba_keenergy_12345678_solar_circuit_target_temperature_1_1',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': '55.0',
+  })
+# ---
+# name: test_numbers[de-number.keba_keenergy_12345678_solar_circuit_target_temperature_1_2]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'device_class': 'temperature',
+      'friendly_name': 'Solarkreis 2 Soll-Temperatur 1',
+      'icon': 'mdi:thermometer-water',
+      'max': 90.0,
+      'min': 0.0,
+      'mode': <NumberMode.AUTO: 'auto'>,
+      'step': 0.5,
+      'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
+    }),
+    'context': <ANY>,
+    'entity_id': 'number.keba_keenergy_12345678_solar_circuit_target_temperature_1_2',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': '53.0',
+  })
+# ---
+# name: test_numbers[de-number.keba_keenergy_12345678_solar_circuit_target_temperature_2_1]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'device_class': 'temperature',
+      'friendly_name': 'Solarkreis 1 Soll-Temperatur 2',
+      'icon': 'mdi:thermometer-water',
+      'max': 90.0,
+      'min': 0.0,
+      'mode': <NumberMode.AUTO: 'auto'>,
+      'step': 0.5,
+      'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
+    }),
+    'context': <ANY>,
+    'entity_id': 'number.keba_keenergy_12345678_solar_circuit_target_temperature_2_1',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': '54.0',
+  })
+# ---
+# name: test_numbers[de-number.keba_keenergy_12345678_solar_circuit_target_temperature_2_2]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'device_class': 'temperature',
+      'friendly_name': 'Solarkreis 2 Soll-Temperatur 2',
+      'icon': 'mdi:thermometer-water',
+      'max': 90.0,
+      'min': 0.0,
+      'mode': <NumberMode.AUTO: 'auto'>,
+      'step': 0.5,
+      'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
+    }),
+    'context': <ANY>,
+    'entity_id': 'number.keba_keenergy_12345678_solar_circuit_target_temperature_2_2',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': '52.0',
+  })
+# ---
+# name: test_numbers[en-number.keba_keenergy_12345678_buffer_tank_standby_temperature_1]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'device_class': 'temperature',
+      'friendly_name': 'Buffer tank 1 Standby temperature',
+      'icon': 'mdi:thermometer-chevron-down',
+      'max': 90.0,
+      'min': 0.0,
+      'mode': <NumberMode.AUTO: 'auto'>,
+      'step': 0.5,
+      'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
+    }),
+    'context': <ANY>,
+    'entity_id': 'number.keba_keenergy_12345678_buffer_tank_standby_temperature_1',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': '10.0',
+  })
+# ---
+# name: test_numbers[en-number.keba_keenergy_12345678_buffer_tank_standby_temperature_2]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'device_class': 'temperature',
+      'friendly_name': 'Buffer tank 2 Standby temperature',
+      'icon': 'mdi:thermometer-chevron-down',
+      'max': 90.0,
+      'min': 0.0,
+      'mode': <NumberMode.AUTO: 'auto'>,
+      'step': 0.5,
+      'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
+    }),
+    'context': <ANY>,
+    'entity_id': 'number.keba_keenergy_12345678_buffer_tank_standby_temperature_2',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': '11.0',
+  })
+# ---
+# name: test_numbers[en-number.keba_keenergy_12345678_heat_circuit_cooling_curve_offset_2]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'device_class': 'temperature',
+      'friendly_name': 'Heating circuit 2 Cooling curve offset',
+      'max': 10.0,
+      'min': -10.0,
+      'mode': <NumberMode.AUTO: 'auto'>,
+      'step': 0.1,
+      'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
+    }),
+    'context': <ANY>,
+    'entity_id': 'number.keba_keenergy_12345678_heat_circuit_cooling_curve_offset_2',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': '-1.5',
+  })
+# ---
+# name: test_numbers[en-number.keba_keenergy_12345678_heat_circuit_cooling_curve_slope_2]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'friendly_name': 'Heating circuit 2 Cooling curve slope',
+      'icon': 'mdi:slope-uphill',
+      'max': 5.0,
+      'min': 0.0,
+      'mode': <NumberMode.AUTO: 'auto'>,
+      'step': 0.01,
+    }),
+    'context': <ANY>,
+    'entity_id': 'number.keba_keenergy_12345678_heat_circuit_cooling_curve_slope_2',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': '0.6',
+  })
+# ---
+# name: test_numbers[en-number.keba_keenergy_12345678_heat_circuit_cooling_limit_day_2]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'device_class': 'temperature',
+      'friendly_name': 'Heating circuit 2 Cooling limit (Tag)',
+      'max': 100.0,
+      'min': -20.0,
+      'mode': <NumberMode.AUTO: 'auto'>,
+      'step': 0.5,
+      'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
+    }),
+    'context': <ANY>,
+    'entity_id': 'number.keba_keenergy_12345678_heat_circuit_cooling_limit_day_2',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': '20.0',
+  })
+# ---
+# name: test_numbers[en-number.keba_keenergy_12345678_heat_circuit_cooling_limit_night_2]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'device_class': 'temperature',
+      'friendly_name': 'Heating circuit 2 Cooling (Nacht)',
+      'max': 40.0,
+      'min': -20.0,
+      'mode': <NumberMode.AUTO: 'auto'>,
+      'step': 0.5,
+      'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
+    }),
+    'context': <ANY>,
+    'entity_id': 'number.keba_keenergy_12345678_heat_circuit_cooling_limit_night_2',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': '18.0',
+  })
+# ---
+# name: test_numbers[en-number.keba_keenergy_12345678_heat_circuit_heating_curve_offset_1]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'device_class': 'temperature',
+      'friendly_name': 'Heating circuit 1 Heating curve offset',
+      'max': 10.0,
+      'min': -10.0,
+      'mode': <NumberMode.AUTO: 'auto'>,
+      'step': 0.1,
+      'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
+    }),
+    'context': <ANY>,
+    'entity_id': 'number.keba_keenergy_12345678_heat_circuit_heating_curve_offset_1',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': '1.5',
+  })
+# ---
+# name: test_numbers[en-number.keba_keenergy_12345678_heat_circuit_heating_curve_slope_1]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'friendly_name': 'Heating circuit 1 Heating curve slope',
+      'icon': 'mdi:slope-uphill',
+      'max': 5.0,
+      'min': 0.0,
+      'mode': <NumberMode.AUTO: 'auto'>,
+      'step': 0.01,
+    }),
+    'context': <ANY>,
+    'entity_id': 'number.keba_keenergy_12345678_heat_circuit_heating_curve_slope_1',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': '0.5',
+  })
+# ---
+# name: test_numbers[en-number.keba_keenergy_12345678_heat_circuit_heating_limit_day_1]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'device_class': 'temperature',
+      'friendly_name': 'Heating circuit 1 Heating limit (day)',
+      'max': 100.0,
+      'min': -20.0,
+      'mode': <NumberMode.AUTO: 'auto'>,
+      'step': 0.5,
+      'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
+    }),
+    'context': <ANY>,
+    'entity_id': 'number.keba_keenergy_12345678_heat_circuit_heating_limit_day_1',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': '20.0',
+  })
+# ---
+# name: test_numbers[en-number.keba_keenergy_12345678_heat_circuit_heating_limit_night_1]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'device_class': 'temperature',
+      'friendly_name': 'Heating circuit 1 Heating limit (night)',
+      'max': 100.0,
+      'min': -20.0,
+      'mode': <NumberMode.AUTO: 'auto'>,
+      'step': 0.5,
+      'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
+    }),
+    'context': <ANY>,
+    'entity_id': 'number.keba_keenergy_12345678_heat_circuit_heating_limit_night_1',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': '18.0',
+  })
+# ---
+# name: test_numbers[en-number.keba_keenergy_12345678_heat_circuit_target_cooling_temperature_day_2]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'device_class': 'temperature',
+      'friendly_name': 'Heating circuit 2 Target room temperature (cooling day)',
+      'max': 30.0,
+      'min': 10.0,
+      'mode': <NumberMode.AUTO: 'auto'>,
+      'step': 0.5,
+      'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
+    }),
+    'context': <ANY>,
+    'entity_id': 'number.keba_keenergy_12345678_heat_circuit_target_cooling_temperature_day_2',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': '20.5',
+  })
+# ---
+# name: test_numbers[en-number.keba_keenergy_12345678_heat_circuit_target_cooling_temperature_night_2]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'device_class': 'temperature',
+      'friendly_name': 'Heating circuit 2 Target room temperature (cooling night)',
+      'max': 30.0,
+      'min': 10.0,
+      'mode': <NumberMode.AUTO: 'auto'>,
+      'step': 0.5,
+      'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
+    }),
+    'context': <ANY>,
+    'entity_id': 'number.keba_keenergy_12345678_heat_circuit_target_cooling_temperature_night_2',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': '20.0',
+  })
+# ---
+# name: test_numbers[en-number.keba_keenergy_12345678_heat_circuit_target_temperature_away_1]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'device_class': 'temperature',
+      'friendly_name': 'Heating circuit 1 Target temperature (away)',
+      'max': 30.0,
+      'min': 10.0,
+      'mode': <NumberMode.AUTO: 'auto'>,
+      'step': 0.5,
+      'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
+    }),
+    'context': <ANY>,
+    'entity_id': 'number.keba_keenergy_12345678_heat_circuit_target_temperature_away_1',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': '18.0',
+  })
+# ---
+# name: test_numbers[en-number.keba_keenergy_12345678_heat_circuit_target_temperature_day_1]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'device_class': 'temperature',
+      'friendly_name': 'Heating circuit 1 Target temperature (day)',
+      'max': 30.0,
+      'min': 10.0,
+      'mode': <NumberMode.AUTO: 'auto'>,
+      'step': 0.5,
+      'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
+    }),
+    'context': <ANY>,
+    'entity_id': 'number.keba_keenergy_12345678_heat_circuit_target_temperature_day_1',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': '20.5',
+  })
+# ---
+# name: test_numbers[en-number.keba_keenergy_12345678_heat_circuit_target_temperature_night_1]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'device_class': 'temperature',
+      'friendly_name': 'Heating circuit 1 Target temperature (night)',
+      'max': 30.0,
+      'min': 10.0,
+      'mode': <NumberMode.AUTO: 'auto'>,
+      'step': 0.5,
+      'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
+    }),
+    'context': <ANY>,
+    'entity_id': 'number.keba_keenergy_12345678_heat_circuit_target_temperature_night_1',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': '20.0',
+  })
+# ---
+# name: test_numbers[en-number.keba_keenergy_12345678_heat_circuit_target_temperature_offset_1]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'device_class': 'temperature',
+      'friendly_name': 'Heating circuit 1 Target temperature (offset)',
+      'max': 2.5,
+      'min': -2.5,
+      'mode': <NumberMode.AUTO: 'auto'>,
+      'step': 0.5,
+      'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
+    }),
+    'context': <ANY>,
+    'entity_id': 'number.keba_keenergy_12345678_heat_circuit_target_temperature_offset_1',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': '1.5',
+  })
+# ---
+# name: test_numbers[en-number.keba_keenergy_12345678_heat_circuit_target_temperature_offset_2]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'device_class': 'temperature',
+      'friendly_name': 'Heating circuit 2 Target temperature (offset)',
+      'max': 2.5,
+      'min': -2.5,
+      'mode': <NumberMode.AUTO: 'auto'>,
+      'step': 0.5,
+      'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
+    }),
+    'context': <ANY>,
+    'entity_id': 'number.keba_keenergy_12345678_heat_circuit_target_temperature_offset_2',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': '0.0',
+  })
+# ---
+# name: test_numbers[en-number.keba_keenergy_12345678_heat_pump_compressor_night_speed]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'device_class': 'speed',
+      'friendly_name': 'Heat pump Compressor speed (night)',
+      'max': 100.0,
+      'min': 50.0,
+      'mode': <NumberMode.AUTO: 'auto'>,
+      'step': 1,
+      'unit_of_measurement': '%',
+    }),
+    'context': <ANY>,
+    'entity_id': 'number.keba_keenergy_12345678_heat_pump_compressor_night_speed',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': '50.0',
+  })
+# ---
+# name: test_numbers[en-number.keba_keenergy_12345678_hot_water_tank_standby_temperature_1]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'device_class': 'temperature',
+      'friendly_name': 'Hot water tank 1 Standby temperature',
+      'icon': 'mdi:thermometer-chevron-down',
+      'max': 52.0,
+      'min': 0.0,
+      'mode': <NumberMode.AUTO: 'auto'>,
+      'step': 0.5,
+      'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
+    }),
+    'context': <ANY>,
+    'entity_id': 'number.keba_keenergy_12345678_hot_water_tank_standby_temperature_1',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': '32.5',
+  })
+# ---
+# name: test_numbers[en-number.keba_keenergy_12345678_hot_water_tank_standby_temperature_2]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'device_class': 'temperature',
+      'friendly_name': 'Hot water tank 2 Standby temperature',
+      'icon': 'mdi:thermometer-chevron-down',
+      'max': 52.0,
+      'min': 0.0,
+      'mode': <NumberMode.AUTO: 'auto'>,
+      'step': 0.5,
+      'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
+    }),
+    'context': <ANY>,
+    'entity_id': 'number.keba_keenergy_12345678_hot_water_tank_standby_temperature_2',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': '32.5',
+  })
+# ---
+# name: test_numbers[en-number.keba_keenergy_12345678_hot_water_tank_target_temperature_1]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'device_class': 'temperature',
+      'friendly_name': 'Hot water tank 1 Target temperature',
+      'icon': 'mdi:thermometer-chevron-up',
+      'max': 52.0,
+      'min': 0.0,
+      'mode': <NumberMode.AUTO: 'auto'>,
+      'step': 0.5,
+      'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
+    }),
+    'context': <ANY>,
+    'entity_id': 'number.keba_keenergy_12345678_hot_water_tank_target_temperature_1',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': '51.0',
+  })
+# ---
+# name: test_numbers[en-number.keba_keenergy_12345678_hot_water_tank_target_temperature_2]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'device_class': 'temperature',
+      'friendly_name': 'Hot water tank 2 Target temperature',
+      'icon': 'mdi:thermometer-chevron-up',
+      'max': 52.0,
+      'min': 0.0,
+      'mode': <NumberMode.AUTO: 'auto'>,
+      'step': 0.5,
+      'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
+    }),
+    'context': <ANY>,
+    'entity_id': 'number.keba_keenergy_12345678_hot_water_tank_target_temperature_2',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': '51.0',
+  })
+# ---
+# name: test_numbers[en-number.keba_keenergy_12345678_solar_circuit_target_temperature_1_1]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'device_class': 'temperature',
+      'friendly_name': 'Solar circuit 1 Target temperature 1',
+      'icon': 'mdi:thermometer-water',
+      'max': 90.0,
+      'min': 0.0,
+      'mode': <NumberMode.AUTO: 'auto'>,
+      'step': 0.5,
+      'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
+    }),
+    'context': <ANY>,
+    'entity_id': 'number.keba_keenergy_12345678_solar_circuit_target_temperature_1_1',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': '55.0',
+  })
+# ---
+# name: test_numbers[en-number.keba_keenergy_12345678_solar_circuit_target_temperature_1_2]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'device_class': 'temperature',
+      'friendly_name': 'Solar circuit 2 Target temperature 1',
+      'icon': 'mdi:thermometer-water',
+      'max': 90.0,
+      'min': 0.0,
+      'mode': <NumberMode.AUTO: 'auto'>,
+      'step': 0.5,
+      'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
+    }),
+    'context': <ANY>,
+    'entity_id': 'number.keba_keenergy_12345678_solar_circuit_target_temperature_1_2',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': '53.0',
+  })
+# ---
+# name: test_numbers[en-number.keba_keenergy_12345678_solar_circuit_target_temperature_2_1]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'device_class': 'temperature',
+      'friendly_name': 'Solar circuit 1 Target temperature 2',
+      'icon': 'mdi:thermometer-water',
+      'max': 90.0,
+      'min': 0.0,
+      'mode': <NumberMode.AUTO: 'auto'>,
+      'step': 0.5,
+      'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
+    }),
+    'context': <ANY>,
+    'entity_id': 'number.keba_keenergy_12345678_solar_circuit_target_temperature_2_1',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': '54.0',
+  })
+# ---
+# name: test_numbers[en-number.keba_keenergy_12345678_solar_circuit_target_temperature_2_2]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'device_class': 'temperature',
+      'friendly_name': 'Solar circuit 2 Target temperature 2',
+      'icon': 'mdi:thermometer-water',
+      'max': 90.0,
+      'min': 0.0,
+      'mode': <NumberMode.AUTO: 'auto'>,
+      'step': 0.5,
+      'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
+    }),
+    'context': <ANY>,
+    'entity_id': 'number.keba_keenergy_12345678_solar_circuit_target_temperature_2_2',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': '52.0',
+  })
+# ---

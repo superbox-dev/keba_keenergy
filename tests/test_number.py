@@ -6,20 +6,11 @@ from typing import TYPE_CHECKING
 
 import pytest
 import voluptuous as vol
-from homeassistant.components.input_number import ATTR_MAX
-from homeassistant.components.input_number import ATTR_MIN
-from homeassistant.components.input_number import ATTR_STEP
 from homeassistant.components.number import ATTR_VALUE
 from homeassistant.components.number import DOMAIN as NUMBER_DOMAIN
 from homeassistant.components.number.const import SERVICE_SET_VALUE
-from homeassistant.components.sensor import SensorDeviceClass
 from homeassistant.const import ATTR_ENTITY_ID
-from homeassistant.const import ATTR_FRIENDLY_NAME
-from homeassistant.const import CONF_DEVICE_CLASS
 from homeassistant.const import CONF_HOST
-from homeassistant.const import CONF_UNIT_OF_MEASUREMENT
-from homeassistant.const import PERCENTAGE
-from homeassistant.const import UnitOfTemperature
 from homeassistant.core import HomeAssistant
 from homeassistant.core import State
 from homeassistant.exceptions import ServiceValidationError
@@ -38,464 +29,71 @@ from tests.api_data import get_single_position_fixed_data_response
 
 if TYPE_CHECKING:
     from pytest_homeassistant_custom_component.common import MockConfigEntry
+    from syrupy.assertion import SnapshotAssertion
     from tests.conftest import FakeKebaKeEnergyAPI
 
 
-async def test_buffer_tank_numbers(
-    hass: HomeAssistant,
-    config_entry: MockConfigEntry,
-    fake_api: FakeKebaKeEnergyAPI,
-) -> None:
-    fake_api.responses = [
-        MULTIPLE_POSITIONS_RESPONSE,
-        HEATING_CURVE_NAMES_RESPONSE,
-        get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITION_DATA_RESPONSE_1,
-        *HEATING_CURVES_RESPONSE_1_1,
-    ]
-    fake_api.register_requests(config_entry.data[CONF_HOST])
-
-    await setup_integration(hass, config_entry)
-
-    buffer_tank_standby_temperature_1: State | None = hass.states.get(
+@pytest.mark.parametrize(
+    "entity",
+    [
+        # buffer tank
         "number.keba_keenergy_12345678_buffer_tank_standby_temperature_1",
-    )
-    assert isinstance(buffer_tank_standby_temperature_1, State)
-    assert buffer_tank_standby_temperature_1.attributes[ATTR_MIN] == 0.0
-    assert buffer_tank_standby_temperature_1.attributes[ATTR_MAX] == 90.0
-    assert buffer_tank_standby_temperature_1.attributes[ATTR_STEP] == 0.5
-    assert buffer_tank_standby_temperature_1.attributes[CONF_UNIT_OF_MEASUREMENT] == UnitOfTemperature.CELSIUS
-    assert buffer_tank_standby_temperature_1.attributes[CONF_DEVICE_CLASS] == SensorDeviceClass.TEMPERATURE
-    assert buffer_tank_standby_temperature_1.attributes[ATTR_FRIENDLY_NAME] == "Buffer tank 1 Standby temperature"
-
-
-async def test_buffer_tank_numbers_translated(
-    hass: HomeAssistant,
-    config_entry: MockConfigEntry,
-    fake_api: FakeKebaKeEnergyAPI,
-) -> None:
-    fake_api.responses = [
-        MULTIPLE_POSITIONS_RESPONSE,
-        HEATING_CURVE_NAMES_RESPONSE,
-        get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITION_DATA_RESPONSE_1,
-        *HEATING_CURVES_RESPONSE_1_1,
-        # Read API after services call
-        MULTIPLE_POSITION_DATA_RESPONSE_1,
-        *HEATING_CURVES_RESPONSE_1_1,
-    ]
-    fake_api.register_requests(config_entry.data[CONF_HOST])
-
-    hass.config.language = "de"
-    await setup_integration(hass, config_entry)
-
-    buffer_tank_standby_temperature_1: State | None = hass.states.get(
-        "number.keba_keenergy_12345678_buffer_tank_standby_temperature_1",
-    )
-    assert isinstance(buffer_tank_standby_temperature_1, State)
-    assert buffer_tank_standby_temperature_1.attributes[ATTR_FRIENDLY_NAME] == "Pufferspeicher 1 Stütztemperatur"
-
-
-async def test_hot_water_tank_numbers(
-    hass: HomeAssistant,
-    config_entry: MockConfigEntry,
-    fake_api: FakeKebaKeEnergyAPI,
-) -> None:
-    fake_api.responses = [
-        MULTIPLE_POSITIONS_RESPONSE,
-        HEATING_CURVE_NAMES_RESPONSE,
-        get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITION_DATA_RESPONSE_1,
-        *HEATING_CURVES_RESPONSE_1_1,
-        # Read API after services call
-        MULTIPLE_POSITION_DATA_RESPONSE_1,
-        *HEATING_CURVES_RESPONSE_1_1,
-    ]
-    fake_api.register_requests(config_entry.data[CONF_HOST])
-
-    await setup_integration(hass, config_entry)
-
-    hot_water_tank_standby_temperature_1: State | None = hass.states.get(
+        "number.keba_keenergy_12345678_buffer_tank_standby_temperature_2",
+        # hot water tank
         "number.keba_keenergy_12345678_hot_water_tank_standby_temperature_1",
-    )
-    assert isinstance(hot_water_tank_standby_temperature_1, State)
-    assert hot_water_tank_standby_temperature_1.attributes[ATTR_MIN] == 0.0
-    assert hot_water_tank_standby_temperature_1.attributes[ATTR_MAX] == 52.0
-    assert hot_water_tank_standby_temperature_1.attributes[ATTR_STEP] == 0.5
-    assert hot_water_tank_standby_temperature_1.attributes[CONF_UNIT_OF_MEASUREMENT] == UnitOfTemperature.CELSIUS
-    assert hot_water_tank_standby_temperature_1.attributes[CONF_DEVICE_CLASS] == SensorDeviceClass.TEMPERATURE
-    assert hot_water_tank_standby_temperature_1.attributes[ATTR_FRIENDLY_NAME] == "Hot water tank 1 Standby temperature"
-
-    hot_water_tank_target_temperature_1: State | None = hass.states.get(
+        "number.keba_keenergy_12345678_hot_water_tank_standby_temperature_2",
         "number.keba_keenergy_12345678_hot_water_tank_target_temperature_1",
-    )
-    assert isinstance(hot_water_tank_target_temperature_1, State)
-    assert hot_water_tank_target_temperature_1.attributes[ATTR_MIN] == 0.0
-    assert hot_water_tank_target_temperature_1.attributes[ATTR_MAX] == 52.0
-    assert hot_water_tank_target_temperature_1.attributes[ATTR_STEP] == 0.5
-    assert hot_water_tank_target_temperature_1.attributes[CONF_UNIT_OF_MEASUREMENT] == UnitOfTemperature.CELSIUS
-    assert hot_water_tank_target_temperature_1.attributes[CONF_DEVICE_CLASS] == SensorDeviceClass.TEMPERATURE
-    assert hot_water_tank_target_temperature_1.attributes[ATTR_FRIENDLY_NAME] == "Hot water tank 1 Target temperature"
-
-
-async def test_hot_water_tank_numbers_translated(
-    hass: HomeAssistant,
-    config_entry: MockConfigEntry,
-    fake_api: FakeKebaKeEnergyAPI,
-) -> None:
-    fake_api.responses = [
-        MULTIPLE_POSITIONS_RESPONSE,
-        HEATING_CURVE_NAMES_RESPONSE,
-        get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITION_DATA_RESPONSE_1,
-        *HEATING_CURVES_RESPONSE_1_1,
-        # Read API after services call
-        MULTIPLE_POSITION_DATA_RESPONSE_1,
-        *HEATING_CURVES_RESPONSE_1_1,
-    ]
-    fake_api.register_requests(config_entry.data[CONF_HOST])
-
-    hass.config.language = "de"
-    await setup_integration(hass, config_entry)
-
-    hot_water_tank_standby_temperature_1: State | None = hass.states.get(
-        "number.keba_keenergy_12345678_hot_water_tank_standby_temperature_1",
-    )
-    assert isinstance(hot_water_tank_standby_temperature_1, State)
-    assert hot_water_tank_standby_temperature_1.attributes[ATTR_FRIENDLY_NAME] == "Warmwasserspeicher 1 Stütztemperatur"
-
-    hot_water_tank_target_temperature_1: State | None = hass.states.get(
-        "number.keba_keenergy_12345678_hot_water_tank_target_temperature_1",
-    )
-    assert isinstance(hot_water_tank_target_temperature_1, State)
-    assert hot_water_tank_target_temperature_1.attributes[ATTR_FRIENDLY_NAME] == "Warmwasserspeicher 1 Soll-Temperatur"
-
-
-@pytest.mark.usefixtures("entity_registry_enabled_by_default")
-async def test_heat_pump_numbers(
-    hass: HomeAssistant,
-    config_entry: MockConfigEntry,
-    fake_api: FakeKebaKeEnergyAPI,
-) -> None:
-    fake_api.responses = [
-        MULTIPLE_POSITIONS_RESPONSE,
-        HEATING_CURVE_NAMES_RESPONSE,
-        get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITION_DATA_RESPONSE_1,
-        *HEATING_CURVES_RESPONSE_1_1,
-        # Read API after services call
-        MULTIPLE_POSITION_DATA_RESPONSE_1,
-        *HEATING_CURVES_RESPONSE_1_1,
-    ]
-    fake_api.register_requests(config_entry.data[CONF_HOST])
-
-    await setup_integration(hass, config_entry)
-
-    heat_pump_compressor_night_speed: State | None = hass.states.get(
+        "number.keba_keenergy_12345678_hot_water_tank_target_temperature_2",
+        # heat pump
         "number.keba_keenergy_12345678_heat_pump_compressor_night_speed",
-    )
-    assert isinstance(heat_pump_compressor_night_speed, State)
-    assert heat_pump_compressor_night_speed.attributes[ATTR_MIN] == 50.0
-    assert heat_pump_compressor_night_speed.attributes[ATTR_MAX] == 100.0
-    assert heat_pump_compressor_night_speed.attributes[ATTR_STEP] == 1
-    assert heat_pump_compressor_night_speed.attributes[CONF_UNIT_OF_MEASUREMENT] == PERCENTAGE
-    assert heat_pump_compressor_night_speed.attributes[CONF_DEVICE_CLASS] == SensorDeviceClass.SPEED
-    assert heat_pump_compressor_night_speed.attributes[ATTR_FRIENDLY_NAME] == "Heat pump Compressor speed (night)"
-
-
-@pytest.mark.usefixtures("entity_registry_enabled_by_default")
-async def test_heat_pump_numbers_translated(
-    hass: HomeAssistant,
-    config_entry: MockConfigEntry,
-    fake_api: FakeKebaKeEnergyAPI,
-) -> None:
-    fake_api.responses = [
-        MULTIPLE_POSITIONS_RESPONSE,
-        HEATING_CURVE_NAMES_RESPONSE,
-        get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITION_DATA_RESPONSE_1,
-        *HEATING_CURVES_RESPONSE_1_1,
-        # Read API after services call
-        MULTIPLE_POSITION_DATA_RESPONSE_1,
-        *HEATING_CURVES_RESPONSE_1_1,
-    ]
-    fake_api.register_requests(config_entry.data[CONF_HOST])
-
-    hass.config.language = "de"
-    await setup_integration(hass, config_entry)
-
-    heat_pump_compressor_night_speed: State | None = hass.states.get(
-        "number.keba_keenergy_12345678_heat_pump_compressor_night_speed",
-    )
-    assert isinstance(heat_pump_compressor_night_speed, State)
-    assert heat_pump_compressor_night_speed.attributes[ATTR_FRIENDLY_NAME] == "Wärmepumpe Kompressordrehzahl (Nacht)"
-
-
-@pytest.mark.usefixtures("entity_registry_enabled_by_default")
-async def test_heat_circuit_numbers(
-    hass: HomeAssistant,
-    config_entry: MockConfigEntry,
-    fake_api: FakeKebaKeEnergyAPI,
-) -> None:
-    fake_api.responses = [
-        MULTIPLE_POSITIONS_RESPONSE,
-        HEATING_CURVE_NAMES_RESPONSE,
-        get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITION_DATA_RESPONSE_1,
-        *HEATING_CURVES_RESPONSE_1_1,
-        # Read API after services call
-        MULTIPLE_POSITION_DATA_RESPONSE_1,
-        *HEATING_CURVES_RESPONSE_1_1,
-    ]
-    fake_api.register_requests(config_entry.data[CONF_HOST])
-
-    await setup_integration(hass, config_entry)
-
-    heat_circuit_heating_curve_offset_1: State | None = hass.states.get(
+        # heating circuit
+        "number.keba_keenergy_12345678_heat_circuit_cooling_curve_offset_2",
+        "number.keba_keenergy_12345678_heat_circuit_cooling_curve_slope_2",
+        "number.keba_keenergy_12345678_heat_circuit_cooling_limit_day_2",
+        "number.keba_keenergy_12345678_heat_circuit_cooling_limit_night_2",
         "number.keba_keenergy_12345678_heat_circuit_heating_curve_offset_1",
-    )
-    assert isinstance(heat_circuit_heating_curve_offset_1, State)
-    assert heat_circuit_heating_curve_offset_1.attributes[ATTR_MIN] == -10.0
-    assert heat_circuit_heating_curve_offset_1.attributes[ATTR_MAX] == 10.0
-    assert heat_circuit_heating_curve_offset_1.attributes[ATTR_STEP] == 0.1
-    assert heat_circuit_heating_curve_offset_1.attributes[CONF_UNIT_OF_MEASUREMENT] == UnitOfTemperature.CELSIUS
-    assert heat_circuit_heating_curve_offset_1.attributes[CONF_DEVICE_CLASS] == SensorDeviceClass.TEMPERATURE
-    assert (
-        heat_circuit_heating_curve_offset_1.attributes[ATTR_FRIENDLY_NAME] == "Heating circuit 1 Heating curve offset"
-    )
-
-    heat_circuit_heating_curve_slope_1: State | None = hass.states.get(
         "number.keba_keenergy_12345678_heat_circuit_heating_curve_slope_1",
-    )
-    assert isinstance(heat_circuit_heating_curve_slope_1, State)
-    assert heat_circuit_heating_curve_slope_1.attributes[ATTR_MIN] == 0.0
-    assert heat_circuit_heating_curve_slope_1.attributes[ATTR_MAX] == 5.0
-    assert heat_circuit_heating_curve_slope_1.attributes[ATTR_STEP] == 0.01
-    assert heat_circuit_heating_curve_slope_1.attributes[ATTR_FRIENDLY_NAME] == "Heating circuit 1 Heating curve slope"
-
-    heat_circuit_target_temperature_away_1: State | None = hass.states.get(
+        "number.keba_keenergy_12345678_heat_circuit_heating_limit_day_1",
+        "number.keba_keenergy_12345678_heat_circuit_heating_limit_night_1",
+        "number.keba_keenergy_12345678_heat_circuit_target_cooling_temperature_day_2",
+        "number.keba_keenergy_12345678_heat_circuit_target_cooling_temperature_night_2",
         "number.keba_keenergy_12345678_heat_circuit_target_temperature_away_1",
-    )
-    assert isinstance(heat_circuit_target_temperature_away_1, State)
-    assert heat_circuit_target_temperature_away_1.attributes[ATTR_MIN] == 10.0
-    assert heat_circuit_target_temperature_away_1.attributes[ATTR_MAX] == 30.0
-    assert heat_circuit_target_temperature_away_1.attributes[ATTR_STEP] == 0.5
-    assert heat_circuit_target_temperature_away_1.attributes[CONF_UNIT_OF_MEASUREMENT] == UnitOfTemperature.CELSIUS
-    assert heat_circuit_target_temperature_away_1.attributes[CONF_DEVICE_CLASS] == SensorDeviceClass.TEMPERATURE
-    assert (
-        heat_circuit_target_temperature_away_1.attributes[ATTR_FRIENDLY_NAME]
-        == "Heating circuit 1 Target temperature (away)"
-    )
-
-    heat_circuit_target_temperature_day_1: State | None = hass.states.get(
         "number.keba_keenergy_12345678_heat_circuit_target_temperature_day_1",
-    )
-    assert isinstance(heat_circuit_target_temperature_day_1, State)
-    assert heat_circuit_target_temperature_day_1.attributes[ATTR_MIN] == 10.0
-    assert heat_circuit_target_temperature_day_1.attributes[ATTR_MAX] == 30.0
-    assert heat_circuit_target_temperature_day_1.attributes[ATTR_STEP] == 0.5
-    assert heat_circuit_target_temperature_day_1.attributes[CONF_UNIT_OF_MEASUREMENT] == UnitOfTemperature.CELSIUS
-    assert heat_circuit_target_temperature_day_1.attributes[CONF_DEVICE_CLASS] == SensorDeviceClass.TEMPERATURE
-    assert (
-        heat_circuit_target_temperature_day_1.attributes[ATTR_FRIENDLY_NAME]
-        == "Heating circuit 1 Target temperature (day)"
-    )
-
-    heat_circuit_target_temperature_night_1: State | None = hass.states.get(
         "number.keba_keenergy_12345678_heat_circuit_target_temperature_night_1",
-    )
-    assert isinstance(heat_circuit_target_temperature_night_1, State)
-    assert heat_circuit_target_temperature_night_1.attributes[ATTR_MIN] == 10.0
-    assert heat_circuit_target_temperature_night_1.attributes[ATTR_MAX] == 30.0
-    assert heat_circuit_target_temperature_night_1.attributes[ATTR_STEP] == 0.5
-    assert heat_circuit_target_temperature_night_1.attributes[CONF_UNIT_OF_MEASUREMENT] == UnitOfTemperature.CELSIUS
-    assert heat_circuit_target_temperature_night_1.attributes[CONF_DEVICE_CLASS] == SensorDeviceClass.TEMPERATURE
-    assert (
-        heat_circuit_target_temperature_night_1.attributes[ATTR_FRIENDLY_NAME]
-        == "Heating circuit 1 Target temperature (night)"
-    )
-
-
-@pytest.mark.usefixtures("entity_registry_enabled_by_default")
-async def test_heat_circuit_numbers_translated(
-    hass: HomeAssistant,
-    config_entry: MockConfigEntry,
-    fake_api: FakeKebaKeEnergyAPI,
-) -> None:
-    fake_api.responses = [
-        MULTIPLE_POSITIONS_RESPONSE,
-        HEATING_CURVE_NAMES_RESPONSE,
-        get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITION_DATA_RESPONSE_1,
-        *HEATING_CURVES_RESPONSE_1_1,
-        # Read API after services call
-        MULTIPLE_POSITION_DATA_RESPONSE_1,
-        *HEATING_CURVES_RESPONSE_1_1,
-    ]
-    fake_api.register_requests(config_entry.data[CONF_HOST])
-
-    hass.config.language = "de"
-    await setup_integration(hass, config_entry)
-
-    heat_circuit_heating_curve_offset_1: State | None = hass.states.get(
-        "number.keba_keenergy_12345678_heat_circuit_heating_curve_offset_1",
-    )
-    assert isinstance(heat_circuit_heating_curve_offset_1, State)
-    assert heat_circuit_heating_curve_offset_1.attributes[ATTR_FRIENDLY_NAME] == "Heizkreis 1 Heizkurven-Offset"
-
-    heat_circuit_heating_curve_slope_1: State | None = hass.states.get(
-        "number.keba_keenergy_12345678_heat_circuit_heating_curve_slope_1",
-    )
-    assert isinstance(heat_circuit_heating_curve_slope_1, State)
-    assert heat_circuit_heating_curve_slope_1.attributes[ATTR_FRIENDLY_NAME] == "Heizkreis 1 Heizkurven-Steigung"
-
-    heat_circuit_target_temperature_away_1: State | None = hass.states.get(
-        "number.keba_keenergy_12345678_heat_circuit_target_temperature_away_1",
-    )
-    assert isinstance(heat_circuit_target_temperature_away_1, State)
-    assert (
-        heat_circuit_target_temperature_away_1.attributes[ATTR_FRIENDLY_NAME]
-        == "Heizkreis 1 Soll-Raumtemperatur (Urlaub)"
-    )
-
-    heat_circuit_target_temperature_day_1: State | None = hass.states.get(
-        "number.keba_keenergy_12345678_heat_circuit_target_temperature_day_1",
-    )
-    assert isinstance(heat_circuit_target_temperature_day_1, State)
-    assert (
-        heat_circuit_target_temperature_day_1.attributes[ATTR_FRIENDLY_NAME] == "Heizkreis 1 Soll-Raumtemperatur (Tag)"
-    )
-
-    heat_circuit_target_temperature_night_1: State | None = hass.states.get(
-        "number.keba_keenergy_12345678_heat_circuit_target_temperature_night_1",
-    )
-    assert isinstance(heat_circuit_target_temperature_night_1, State)
-    assert (
-        heat_circuit_target_temperature_night_1.attributes[ATTR_FRIENDLY_NAME]
-        == "Heizkreis 1 Soll-Raumtemperatur (Nacht)"
-    )
-
-    heat_circuit_target_temperature_offset_1: State | None = hass.states.get(
         "number.keba_keenergy_12345678_heat_circuit_target_temperature_offset_1",
-    )
-    assert isinstance(heat_circuit_target_temperature_offset_1, State)
-    assert (
-        heat_circuit_target_temperature_offset_1.attributes[ATTR_FRIENDLY_NAME]
-        == "Heizkreis 1 Soll-Raumtemperatur (Offset)"
-    )
-
-
-async def test_solar_circuit_numbers(
+        "number.keba_keenergy_12345678_heat_circuit_target_temperature_offset_2",
+        # solar circuit
+        "number.keba_keenergy_12345678_solar_circuit_target_temperature_1_1",
+        "number.keba_keenergy_12345678_solar_circuit_target_temperature_1_2",
+        "number.keba_keenergy_12345678_solar_circuit_target_temperature_2_1",
+        "number.keba_keenergy_12345678_solar_circuit_target_temperature_2_2",
+    ],
+)
+@pytest.mark.parametrize("language", ["en", "de"])
+@pytest.mark.usefixtures("entity_registry_enabled_by_default")
+async def test_numbers(
     hass: HomeAssistant,
     config_entry: MockConfigEntry,
     fake_api: FakeKebaKeEnergyAPI,
+    snapshot: SnapshotAssertion,
+    language: str,
+    entity: str,
 ) -> None:
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
         HEATING_CURVE_NAMES_RESPONSE,
-        get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITION_DATA_RESPONSE_1,
-        *HEATING_CURVES_RESPONSE_1_1,
-        # Read API after services call
+        get_multiple_position_fixed_data_response(has_passive_cooling="true"),
         MULTIPLE_POSITION_DATA_RESPONSE_1,
         *HEATING_CURVES_RESPONSE_1_1,
     ]
     fake_api.register_requests(config_entry.data[CONF_HOST])
+    hass.config.language = language
 
     await setup_integration(hass, config_entry)
 
-    solar_circuit_target_temperature_1_1: State | None = hass.states.get(
-        "number.keba_keenergy_12345678_solar_circuit_target_temperature_1_1",
-    )
-    assert isinstance(solar_circuit_target_temperature_1_1, State)
-    assert solar_circuit_target_temperature_1_1.state == "55.0"
-    assert solar_circuit_target_temperature_1_1.attributes[ATTR_MIN] == 0.0
-    assert solar_circuit_target_temperature_1_1.attributes[ATTR_MAX] == 90.0
-    assert solar_circuit_target_temperature_1_1.attributes[ATTR_STEP] == 0.5
-    assert solar_circuit_target_temperature_1_1.attributes[CONF_UNIT_OF_MEASUREMENT] == UnitOfTemperature.CELSIUS
-    assert solar_circuit_target_temperature_1_1.attributes[CONF_DEVICE_CLASS] == SensorDeviceClass.TEMPERATURE
-    assert solar_circuit_target_temperature_1_1.attributes[ATTR_FRIENDLY_NAME] == "Solar circuit 1 Target temperature 1"
-
-    solar_circuit_target_temperature_1_2: State | None = hass.states.get(
-        "number.keba_keenergy_12345678_solar_circuit_target_temperature_1_2",
-    )
-    assert isinstance(solar_circuit_target_temperature_1_2, State)
-    assert solar_circuit_target_temperature_1_2.state == "53.0"
-    assert solar_circuit_target_temperature_1_2.attributes[ATTR_MIN] == 0.0
-    assert solar_circuit_target_temperature_1_2.attributes[ATTR_MAX] == 90.0
-    assert solar_circuit_target_temperature_1_2.attributes[ATTR_STEP] == 0.5
-    assert solar_circuit_target_temperature_1_2.attributes[CONF_UNIT_OF_MEASUREMENT] == UnitOfTemperature.CELSIUS
-    assert solar_circuit_target_temperature_1_2.attributes[CONF_DEVICE_CLASS] == SensorDeviceClass.TEMPERATURE
-    assert solar_circuit_target_temperature_1_2.attributes[ATTR_FRIENDLY_NAME] == "Solar circuit 2 Target temperature 1"
-
-    solar_circuit_target_temperature_2_1: State | None = hass.states.get(
-        "number.keba_keenergy_12345678_solar_circuit_target_temperature_2_1",
-    )
-    assert isinstance(solar_circuit_target_temperature_2_1, State)
-    assert solar_circuit_target_temperature_2_1.state == "54.0"
-    assert solar_circuit_target_temperature_2_1.attributes[ATTR_MIN] == 0.0
-    assert solar_circuit_target_temperature_2_1.attributes[ATTR_MAX] == 90.0
-    assert solar_circuit_target_temperature_2_1.attributes[ATTR_STEP] == 0.5
-    assert solar_circuit_target_temperature_2_1.attributes[CONF_UNIT_OF_MEASUREMENT] == UnitOfTemperature.CELSIUS
-    assert solar_circuit_target_temperature_2_1.attributes[CONF_DEVICE_CLASS] == SensorDeviceClass.TEMPERATURE
-    assert solar_circuit_target_temperature_2_1.attributes[ATTR_FRIENDLY_NAME] == "Solar circuit 1 Target temperature 2"
-
-    solar_circuit_target_temperature_2_2: State | None = hass.states.get(
-        "number.keba_keenergy_12345678_solar_circuit_target_temperature_2_2",
-    )
-    assert isinstance(solar_circuit_target_temperature_2_2, State)
-    assert solar_circuit_target_temperature_2_2.state == "52.0"
-    assert solar_circuit_target_temperature_2_2.attributes[ATTR_MIN] == 0.0
-    assert solar_circuit_target_temperature_2_2.attributes[ATTR_MAX] == 90.0
-    assert solar_circuit_target_temperature_2_2.attributes[ATTR_STEP] == 0.5
-    assert solar_circuit_target_temperature_2_2.attributes[CONF_UNIT_OF_MEASUREMENT] == UnitOfTemperature.CELSIUS
-    assert solar_circuit_target_temperature_2_2.attributes[CONF_DEVICE_CLASS] == SensorDeviceClass.TEMPERATURE
-    assert solar_circuit_target_temperature_2_2.attributes[ATTR_FRIENDLY_NAME] == "Solar circuit 2 Target temperature 2"
-
-
-async def test_solar_circuit_numbers_translated(
-    hass: HomeAssistant,
-    config_entry: MockConfigEntry,
-    fake_api: FakeKebaKeEnergyAPI,
-) -> None:
-    fake_api.responses = [
-        MULTIPLE_POSITIONS_RESPONSE,
-        HEATING_CURVE_NAMES_RESPONSE,
-        get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITION_DATA_RESPONSE_1,
-        *HEATING_CURVES_RESPONSE_1_1,
-        # Read API after services call
-        MULTIPLE_POSITION_DATA_RESPONSE_1,
-        *HEATING_CURVES_RESPONSE_1_1,
-    ]
-    fake_api.register_requests(config_entry.data[CONF_HOST])
-
-    hass.config.language = "de"
-    await setup_integration(hass, config_entry)
-
-    solar_circuit_target_temperature_1_1: State | None = hass.states.get(
-        "number.keba_keenergy_12345678_solar_circuit_target_temperature_1_1",
-    )
-    assert isinstance(solar_circuit_target_temperature_1_1, State)
-    assert solar_circuit_target_temperature_1_1.attributes[ATTR_FRIENDLY_NAME] == "Solarkreis 1 Soll-Temperatur 1"
-
-    solar_circuit_target_temperature_1_2: State | None = hass.states.get(
-        "number.keba_keenergy_12345678_solar_circuit_target_temperature_1_2",
-    )
-    assert isinstance(solar_circuit_target_temperature_1_2, State)
-    assert solar_circuit_target_temperature_1_2.attributes[ATTR_FRIENDLY_NAME] == "Solarkreis 2 Soll-Temperatur 1"
-
-    solar_circuit_target_temperature_2_1: State | None = hass.states.get(
-        "number.keba_keenergy_12345678_solar_circuit_target_temperature_2_1",
-    )
-    assert isinstance(solar_circuit_target_temperature_2_1, State)
-    assert solar_circuit_target_temperature_2_1.attributes[ATTR_FRIENDLY_NAME] == "Solarkreis 1 Soll-Temperatur 2"
-
-    solar_circuit_target_temperature_2_2: State | None = hass.states.get(
-        "number.keba_keenergy_12345678_solar_circuit_target_temperature_2_2",
-    )
-    assert isinstance(solar_circuit_target_temperature_2_2, State)
-    assert solar_circuit_target_temperature_2_2.attributes[ATTR_FRIENDLY_NAME] == "Solarkreis 2 Soll-Temperatur 2"
+    _entity: State | None = hass.states.get(entity)
+    assert isinstance(_entity, State)
+    assert _entity == snapshot
 
 
 @pytest.mark.parametrize(
