@@ -1,0 +1,145 @@
+# serializer version: 1
+# name: test_binary_sensors[de-switch.keba_keenergy_12345678_heat_circuit_use_heating_curve_1]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'device_class': 'switch',
+      'friendly_name': 'Heizkreis 1 Heizkurve verwenden',
+      'icon': 'mdi:chart-bell-curve-cumulative',
+    }),
+    'context': <ANY>,
+    'entity_id': 'switch.keba_keenergy_12345678_heat_circuit_use_heating_curve_1',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': 'off',
+  })
+# ---
+# name: test_binary_sensors[de-switch.keba_keenergy_12345678_heat_circuit_use_heating_curve_2]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'device_class': 'switch',
+      'friendly_name': 'Heizkreis 2 Kühlkurve verwenden',
+      'icon': 'mdi:chart-bell-curve-cumulative',
+    }),
+    'context': <ANY>,
+    'entity_id': 'switch.keba_keenergy_12345678_heat_circuit_use_heating_curve_2',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': 'on',
+  })
+# ---
+# name: test_binary_sensors[de-switch.keba_keenergy_12345678_heat_pump_compressor_use_night_speed]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'device_class': 'switch',
+      'friendly_name': 'Wärmepumpe Kompressor-Drehzahlbegrenzung (Nacht)',
+    }),
+    'context': <ANY>,
+    'entity_id': 'switch.keba_keenergy_12345678_heat_pump_compressor_use_night_speed',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': 'on',
+  })
+# ---
+# name: test_binary_sensors[de-switch.keba_keenergy_12345678_solar_circuit_priority_1_before_2_1]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'device_class': 'switch',
+      'friendly_name': 'Solarkreis 1 Vorrang 1 vor 2',
+    }),
+    'context': <ANY>,
+    'entity_id': 'switch.keba_keenergy_12345678_solar_circuit_priority_1_before_2_1',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': 'off',
+  })
+# ---
+# name: test_binary_sensors[de-switch.keba_keenergy_12345678_solar_circuit_priority_1_before_2_2]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'device_class': 'switch',
+      'friendly_name': 'Solarkreis 2 Vorrang 1 vor 2',
+    }),
+    'context': <ANY>,
+    'entity_id': 'switch.keba_keenergy_12345678_solar_circuit_priority_1_before_2_2',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': 'on',
+  })
+# ---
+# name: test_binary_sensors[en-switch.keba_keenergy_12345678_heat_circuit_use_heating_curve_1]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'device_class': 'switch',
+      'friendly_name': 'Heating circuit 1 Use heating curve',
+      'icon': 'mdi:chart-bell-curve-cumulative',
+    }),
+    'context': <ANY>,
+    'entity_id': 'switch.keba_keenergy_12345678_heat_circuit_use_heating_curve_1',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': 'off',
+  })
+# ---
+# name: test_binary_sensors[en-switch.keba_keenergy_12345678_heat_circuit_use_heating_curve_2]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'device_class': 'switch',
+      'friendly_name': 'Heating circuit 2 Use cooling curve',
+      'icon': 'mdi:chart-bell-curve-cumulative',
+    }),
+    'context': <ANY>,
+    'entity_id': 'switch.keba_keenergy_12345678_heat_circuit_use_heating_curve_2',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': 'on',
+  })
+# ---
+# name: test_binary_sensors[en-switch.keba_keenergy_12345678_heat_pump_compressor_use_night_speed]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'device_class': 'switch',
+      'friendly_name': 'Heat pump Compressor speed limit (night)',
+    }),
+    'context': <ANY>,
+    'entity_id': 'switch.keba_keenergy_12345678_heat_pump_compressor_use_night_speed',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': 'on',
+  })
+# ---
+# name: test_binary_sensors[en-switch.keba_keenergy_12345678_solar_circuit_priority_1_before_2_1]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'device_class': 'switch',
+      'friendly_name': 'Solar circuit 1 Priority 1 before 2',
+    }),
+    'context': <ANY>,
+    'entity_id': 'switch.keba_keenergy_12345678_solar_circuit_priority_1_before_2_1',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': 'off',
+  })
+# ---
+# name: test_binary_sensors[en-switch.keba_keenergy_12345678_solar_circuit_priority_1_before_2_2]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'device_class': 'switch',
+      'friendly_name': 'Solar circuit 2 Priority 1 before 2',
+    }),
+    'context': <ANY>,
+    'entity_id': 'switch.keba_keenergy_12345678_solar_circuit_priority_1_before_2_2',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': 'on',
+  })
+# ---

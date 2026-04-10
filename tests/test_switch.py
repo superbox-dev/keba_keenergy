@@ -4,11 +4,8 @@ from typing import Any
 from typing import TYPE_CHECKING
 
 import pytest
-from homeassistant.components.switch import SwitchDeviceClass
 from homeassistant.components.switch.const import DOMAIN as SWITCH_DOMAIN
 from homeassistant.const import ATTR_ENTITY_ID
-from homeassistant.const import ATTR_FRIENDLY_NAME
-from homeassistant.const import CONF_DEVICE_CLASS
 from homeassistant.const import CONF_HOST
 from homeassistant.const import SERVICE_TURN_OFF
 from homeassistant.const import SERVICE_TURN_ON
@@ -25,179 +22,48 @@ from tests.api_data import get_multiple_position_fixed_data_response
 
 if TYPE_CHECKING:
     from pytest_homeassistant_custom_component.common import MockConfigEntry
+    from syrupy.assertion import SnapshotAssertion
     from tests.conftest import FakeKebaKeEnergyAPI
 
 
-@pytest.mark.usefixtures("entity_registry_enabled_by_default")
-async def test_heat_circuit_switches(
-    hass: HomeAssistant,
-    config_entry: MockConfigEntry,
-    fake_api: FakeKebaKeEnergyAPI,
-) -> None:
-    fake_api.responses = [
-        MULTIPLE_POSITIONS_RESPONSE,
-        HEATING_CURVE_NAMES_RESPONSE,
-        get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITION_DATA_RESPONSE_1,
-        *HEATING_CURVES_RESPONSE_1_1,
-        # Read API after services call
-        MULTIPLE_POSITION_DATA_RESPONSE_1,
-        *HEATING_CURVES_RESPONSE_1_1,
-    ]
-    fake_api.register_requests(config_entry.data[CONF_HOST])
-
-    await setup_integration(hass, config_entry)
-
-    heat_circuit_use_heating_curve_1: State | None = hass.states.get(
-        "switch.keba_keenergy_12345678_heat_circuit_use_heating_curve_1",
-    )
-    assert isinstance(heat_circuit_use_heating_curve_1, State)
-    assert heat_circuit_use_heating_curve_1.attributes[CONF_DEVICE_CLASS] == SwitchDeviceClass.SWITCH
-    assert heat_circuit_use_heating_curve_1.attributes[ATTR_FRIENDLY_NAME] == "Heating circuit 1 Use heating curve"
-
-
-@pytest.mark.usefixtures("entity_registry_enabled_by_default")
-async def test_heat_circuit_switches_translated(
-    hass: HomeAssistant,
-    config_entry: MockConfigEntry,
-    fake_api: FakeKebaKeEnergyAPI,
-) -> None:
-    fake_api.responses = [
-        MULTIPLE_POSITIONS_RESPONSE,
-        HEATING_CURVE_NAMES_RESPONSE,
-        get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITION_DATA_RESPONSE_1,
-        *HEATING_CURVES_RESPONSE_1_1,
-        # Read API after services call
-        MULTIPLE_POSITION_DATA_RESPONSE_1,
-        *HEATING_CURVES_RESPONSE_1_1,
-    ]
-    fake_api.register_requests(config_entry.data[CONF_HOST])
-
-    hass.config.language = "de"
-    await setup_integration(hass, config_entry)
-
-    heat_circuit_use_heating_curve_1: State | None = hass.states.get(
-        "switch.keba_keenergy_12345678_heat_circuit_use_heating_curve_1",
-    )
-    assert isinstance(heat_circuit_use_heating_curve_1, State)
-    assert heat_circuit_use_heating_curve_1.attributes[ATTR_FRIENDLY_NAME] == "Heizkreis 1 Heizkurve verwenden"
-
-
-async def test_solar_circuit_switches(
-    hass: HomeAssistant,
-    config_entry: MockConfigEntry,
-    fake_api: FakeKebaKeEnergyAPI,
-) -> None:
-    fake_api.responses = [
-        MULTIPLE_POSITIONS_RESPONSE,
-        HEATING_CURVE_NAMES_RESPONSE,
-        get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITION_DATA_RESPONSE_1,
-        *HEATING_CURVES_RESPONSE_1_1,
-        # Read API after services call
-        MULTIPLE_POSITION_DATA_RESPONSE_1,
-        *HEATING_CURVES_RESPONSE_1_1,
-    ]
-    fake_api.register_requests(config_entry.data[CONF_HOST])
-
-    await setup_integration(hass, config_entry)
-
-    solar_circuit_priority_1_before_2_1: State | None = hass.states.get(
-        "switch.keba_keenergy_12345678_solar_circuit_priority_1_before_2_1",
-    )
-    assert isinstance(solar_circuit_priority_1_before_2_1, State)
-    assert solar_circuit_priority_1_before_2_1.attributes[CONF_DEVICE_CLASS] == SwitchDeviceClass.SWITCH
-    assert solar_circuit_priority_1_before_2_1.attributes[ATTR_FRIENDLY_NAME] == "Solar circuit 1 Priority 1 before 2"
-
-
-async def test_solar_circuit_switches_translated(
-    hass: HomeAssistant,
-    config_entry: MockConfigEntry,
-    fake_api: FakeKebaKeEnergyAPI,
-) -> None:
-    fake_api.responses = [
-        MULTIPLE_POSITIONS_RESPONSE,
-        HEATING_CURVE_NAMES_RESPONSE,
-        get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITION_DATA_RESPONSE_1,
-        *HEATING_CURVES_RESPONSE_1_1,
-        # Read API after services call
-        MULTIPLE_POSITION_DATA_RESPONSE_1,
-        *HEATING_CURVES_RESPONSE_1_1,
-    ]
-    fake_api.register_requests(config_entry.data[CONF_HOST])
-
-    hass.config.language = "de"
-    await setup_integration(hass, config_entry)
-
-    solar_circuit_priority_1_before_2_1: State | None = hass.states.get(
-        "switch.keba_keenergy_12345678_solar_circuit_priority_1_before_2_1",
-    )
-    assert isinstance(solar_circuit_priority_1_before_2_1, State)
-    assert solar_circuit_priority_1_before_2_1.attributes[ATTR_FRIENDLY_NAME] == "Solarkreis 1 Vorrang 1 vor 2"
-
-
-@pytest.mark.usefixtures("entity_registry_enabled_by_default")
-async def test_heat_pump_switches(
-    hass: HomeAssistant,
-    config_entry: MockConfigEntry,
-    fake_api: FakeKebaKeEnergyAPI,
-) -> None:
-    fake_api.responses = [
-        MULTIPLE_POSITIONS_RESPONSE,
-        HEATING_CURVE_NAMES_RESPONSE,
-        get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITION_DATA_RESPONSE_1,
-        *HEATING_CURVES_RESPONSE_1_1,
-        # Read API after services call
-        MULTIPLE_POSITION_DATA_RESPONSE_1,
-        *HEATING_CURVES_RESPONSE_1_1,
-    ]
-    fake_api.register_requests(config_entry.data[CONF_HOST])
-
-    await setup_integration(hass, config_entry)
-
-    heat_pump_compressor_use_night_speed: State | None = hass.states.get(
+@pytest.mark.parametrize(
+    "entity",
+    [
+        # heat pump
         "switch.keba_keenergy_12345678_heat_pump_compressor_use_night_speed",
-    )
-    assert isinstance(heat_pump_compressor_use_night_speed, State)
-    assert heat_pump_compressor_use_night_speed.attributes[CONF_DEVICE_CLASS] == SwitchDeviceClass.SWITCH
-    assert (
-        heat_pump_compressor_use_night_speed.attributes[ATTR_FRIENDLY_NAME]
-        == "Heat pump Compressor speed limit (night)"
-    )
-
-
+        # heating circuit
+        "switch.keba_keenergy_12345678_heat_circuit_use_heating_curve_1",
+        "switch.keba_keenergy_12345678_heat_circuit_use_heating_curve_2",
+        # solar circuit
+        "switch.keba_keenergy_12345678_solar_circuit_priority_1_before_2_1",
+        "switch.keba_keenergy_12345678_solar_circuit_priority_1_before_2_2",
+    ],
+)
+@pytest.mark.parametrize("language", ["en", "de"])
 @pytest.mark.usefixtures("entity_registry_enabled_by_default")
-async def test_heat_pump_switches_translated(
+async def test_binary_sensors(
     hass: HomeAssistant,
     config_entry: MockConfigEntry,
     fake_api: FakeKebaKeEnergyAPI,
+    snapshot: SnapshotAssertion,
+    language: str,
+    entity: str,
 ) -> None:
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
         HEATING_CURVE_NAMES_RESPONSE,
-        get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITION_DATA_RESPONSE_1,
-        *HEATING_CURVES_RESPONSE_1_1,
-        # Read API after services call
+        get_multiple_position_fixed_data_response(has_passive_cooling="true"),
         MULTIPLE_POSITION_DATA_RESPONSE_1,
         *HEATING_CURVES_RESPONSE_1_1,
     ]
     fake_api.register_requests(config_entry.data[CONF_HOST])
+    hass.config.language = language
 
-    hass.config.language = "de"
     await setup_integration(hass, config_entry)
 
-    heat_pump_compressor_use_night_speed: State | None = hass.states.get(
-        "switch.keba_keenergy_12345678_heat_pump_compressor_use_night_speed",
-    )
-    assert isinstance(heat_pump_compressor_use_night_speed, State)
-    assert (
-        heat_pump_compressor_use_night_speed.attributes[ATTR_FRIENDLY_NAME]
-        == "Wärmepumpe Kompressor-Drehzahlbegrenzung (Nacht)"
-    )
+    _entity: State | None = hass.states.get(entity)
+    assert isinstance(_entity, State)
+    assert _entity == snapshot
 
 
 @pytest.mark.parametrize(
