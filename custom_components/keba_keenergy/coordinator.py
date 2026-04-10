@@ -29,6 +29,8 @@ from keba_keenergy_api.constants import BufferTank
 from keba_keenergy_api.constants import ExternalHeatSource
 from keba_keenergy_api.constants import HeatCircuit
 from keba_keenergy_api.constants import HeatCircuitHasMixer
+from keba_keenergy_api.constants import HeatCircuitHasPump
+from keba_keenergy_api.constants import HeatCircuitHasReturnFlowTemperature
 from keba_keenergy_api.constants import HeatCircuitHasRoomHumidity
 from keba_keenergy_api.constants import HeatCircuitHasRoomTemperature
 from keba_keenergy_api.constants import HeatCircuitMode
@@ -335,6 +337,8 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
                 HeatCircuit.HAS_ROOM_TEMPERATURE,
                 HeatCircuit.HAS_ROOM_HUMIDITY,
                 HeatCircuit.HAS_MIXER,
+                HeatCircuit.HAS_RETURN_FLOW_TEMPERATURE,
+                HeatCircuit.HAS_PUMP,
                 HeatPump.HAS_ACTIVE_COOLING,
                 HeatPump.HAS_PASSIVE_COOLING,
             ],
@@ -611,6 +615,23 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
 
         data: list[Value] = cast("list[Value]", self._fixed_data[SectionPrefix.HEAT_CIRCUIT]["has_mixer"])
         return bool(HeatCircuitHasMixer.ON.name.lower() == data[index]["value"])
+
+    def has_return_flow_temperature(self, *, index: int | None = None) -> bool:
+        """Check if heating circuit return flow temperature sensor is available."""
+        index = 0 if index is None else index
+
+        data: list[Value] = cast(
+            "list[Value]",
+            self._fixed_data[SectionPrefix.HEAT_CIRCUIT]["has_return_flow_temperature"],
+        )
+        return bool(HeatCircuitHasReturnFlowTemperature.ON.name.lower() == data[index]["value"])
+
+    def has_pump(self, *, index: int | None = None) -> bool:
+        """Check if heating circuit pump is available."""
+        index = 0 if index is None else index
+
+        data: list[Value] = cast("list[Value]", self._fixed_data[SectionPrefix.HEAT_CIRCUIT]["has_pump"])
+        return bool(HeatCircuitHasPump.ON.name.lower() == data[index]["value"])
 
     def has_active_cooling(self, *, index: int | None = None) -> bool:
         """Check if active cooling is available."""

@@ -236,6 +236,7 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
             value=lambda data: data,
         ),
         KebaKeEnergySensorEntityDescription[float](
+            condition=lambda coordinator, index: coordinator.has_return_flow_temperature(index=index),
             device_class=SensorDeviceClass.TEMPERATURE,
             entity_registry_enabled_default=False,
             key="return_flow_temperature",
@@ -392,6 +393,7 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
             value=lambda data: data,
         ),
         KebaKeEnergySensorEntityDescription[float](
+            condition=lambda coordinator, index: coordinator.has_pump(index=index),
             entity_registry_enabled_default=False,
             key="pump_speed",
             native_unit_of_measurement=PERCENTAGE,

@@ -109,6 +109,26 @@ HEAT_CIRCUIT_HAS_MIXER: str = """
     }
 """
 
+HEAT_CIRCUIT_HAS_RETURN_FLOW_TEMPERATURE: str = """
+    {
+        "name": "APPL.CtrlAppl.sParam.options.heatCircuit[%s].hasRefluxTemp",
+        "attributes": {
+            "longText": "With reflux sensor"
+        },
+        "value": "%s"
+    }
+"""
+
+HEAT_CIRCUIT_HAS_PUMP: str = """
+    {
+        "name": "APPL.CtrlAppl.sParam.options.heatCircuit[%s].hasVarSpeedPump",
+        "attributes": {
+            "longText": "Var.speed pump"
+        },
+        "value": "%s"
+    }
+"""
+
 HEAT_CIRCUIT_MODE: str = """
     {
         "name": "APPL.CtrlAppl.sParam.options.heatCircuit[%s].type",
@@ -1699,6 +1719,8 @@ DEFAULT_POSITION_FIXED_DATA_RESPONSE: list[dict[str, Any]] = [
     json.loads(HEAT_CIRCUIT_HAS_ROOM_TEMPERATURE % ("0", "true")),
     json.loads(HEAT_CIRCUIT_HAS_ROOM_HUMIDITY % ("0", "true")),
     json.loads(HEAT_CIRCUIT_HAS_MIXER % ("0", "true")),
+    json.loads(HEAT_CIRCUIT_HAS_RETURN_FLOW_TEMPERATURE % ("0", "true")),
+    json.loads(HEAT_CIRCUIT_HAS_PUMP % ("0", "true")),
     json.loads(HEAT_PUMP_HAS_ACTIVE_COOLING % "false"),
     json.loads(HEAT_PUMP_HAS_PASSIVE_COOLING % "true"),
 ]
@@ -1715,6 +1737,10 @@ def get_multiple_position_fixed_data_response(has_passive_cooling: str = "false"
         json.loads(HEAT_CIRCUIT_HAS_ROOM_HUMIDITY % ("1", "false")),
         json.loads(HEAT_CIRCUIT_HAS_MIXER % ("0", "true")),
         json.loads(HEAT_CIRCUIT_HAS_MIXER % ("1", "false")),
+        json.loads(HEAT_CIRCUIT_HAS_RETURN_FLOW_TEMPERATURE % ("0", "true")),
+        json.loads(HEAT_CIRCUIT_HAS_RETURN_FLOW_TEMPERATURE % ("1", "false")),
+        json.loads(HEAT_CIRCUIT_HAS_PUMP % ("0", "true")),
+        json.loads(HEAT_CIRCUIT_HAS_PUMP % ("1", "false")),
         json.loads(HEAT_PUMP_HAS_ACTIVE_COOLING % "false"),
         json.loads(HEAT_PUMP_HAS_PASSIVE_COOLING % f"{has_passive_cooling}"),
     ]
