@@ -9,16 +9,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!--start-->
 
-## [1.10.0] - 2025-04-10
+## [1.10.0´] - 2025-04-10
 
 ### Added
 
-- Add support for heating circuits with active and passive cooling feature [(Issue #30)][issue-47]
-- Add control for heating limits (day/night) [(Issue #30)][issue-46]
+- Add control for heating limits (day/night) [(Issue #46)][issue-46]
+- Add support for heating circuits with active and passive cooling feature [(Issue #47)][issue-47]
 
 ### Changed
 
-- Do not show sensors that are not available in the heat pump setup [(Issue #30)][issue-47]
+- Do not show sensors that are not available in the heat pump setup [(Issue #47)][issue-47]
 
 [issue-46]: https://github.com/superbox-dev/keba_keenergy/issues/46
 [issue-47]: https://github.com/superbox-dev/keba_keenergy/issues/47
