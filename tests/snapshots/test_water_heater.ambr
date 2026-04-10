@@ -1,0 +1,213 @@
+# serializer version: 1
+# name: test_water_heater[de-water_heater.keba_keenergy_12345678_1]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'current_temperature': 47.7,
+      'friendly_name': 'Warmwasserspeicher 1',
+      'max_temp': 52.0,
+      'min_temp': 0.0,
+      'operation_list': list([
+        'eco',
+        'performance',
+        'off',
+        'heat_pump',
+      ]),
+      'operation_mode': 'performance',
+      'supported_features': <WaterHeaterEntityFeature: 11>,
+      'target_temp_high': 51.0,
+      'target_temp_low': 32.5,
+      'temperature': 51.0,
+    }),
+    'context': <ANY>,
+    'entity_id': 'water_heater.keba_keenergy_12345678_1',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': 'performance',
+  })
+# ---
+# name: test_water_heater[de-water_heater.keba_keenergy_12345678_2]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'current_temperature': 47.7,
+      'friendly_name': 'Warmwasserspeicher 2',
+      'max_temp': 52.0,
+      'min_temp': 0.0,
+      'operation_list': list([
+        'eco',
+        'performance',
+        'off',
+        'heat_pump',
+      ]),
+      'operation_mode': 'off',
+      'supported_features': <WaterHeaterEntityFeature: 11>,
+      'target_temp_high': 51.0,
+      'target_temp_low': 32.5,
+      'temperature': 51.0,
+    }),
+    'context': <ANY>,
+    'entity_id': 'water_heater.keba_keenergy_12345678_2',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': 'off',
+  })
+# ---
+# name: test_water_heater[de-water_heater.keba_keenergy_12345678_buffer_tank_1]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'current_temperature': 45.7,
+      'friendly_name': 'Pufferspeicher 1',
+      'max_temp': 60.0,
+      'min_temp': 43.3,
+      'operation_list': list([
+        'performance',
+        'off',
+        'heat_pump',
+      ]),
+      'operation_mode': 'off',
+      'supported_features': <WaterHeaterEntityFeature: 10>,
+      'target_temp_high': 44.0,
+      'target_temp_low': 10.0,
+      'temperature': 44.0,
+    }),
+    'context': <ANY>,
+    'entity_id': 'water_heater.keba_keenergy_12345678_buffer_tank_1',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': 'off',
+  })
+# ---
+# name: test_water_heater[de-water_heater.keba_keenergy_12345678_buffer_tank_2]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'current_temperature': 35.7,
+      'friendly_name': 'Pufferspeicher 2',
+      'max_temp': 60.0,
+      'min_temp': 43.3,
+      'operation_list': list([
+        'performance',
+        'off',
+        'heat_pump',
+      ]),
+      'operation_mode': 'heat_pump',
+      'supported_features': <WaterHeaterEntityFeature: 10>,
+      'target_temp_high': 43.0,
+      'target_temp_low': 11.0,
+      'temperature': 43.0,
+    }),
+    'context': <ANY>,
+    'entity_id': 'water_heater.keba_keenergy_12345678_buffer_tank_2',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': 'heat_pump',
+  })
+# ---
+# name: test_water_heater[en-water_heater.keba_keenergy_12345678_1]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'current_temperature': 47.7,
+      'friendly_name': 'Hot water tank 1',
+      'max_temp': 52.0,
+      'min_temp': 0.0,
+      'operation_list': list([
+        'eco',
+        'performance',
+        'off',
+        'heat_pump',
+      ]),
+      'operation_mode': 'performance',
+      'supported_features': <WaterHeaterEntityFeature: 11>,
+      'target_temp_high': 51.0,
+      'target_temp_low': 32.5,
+      'temperature': 51.0,
+    }),
+    'context': <ANY>,
+    'entity_id': 'water_heater.keba_keenergy_12345678_1',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': 'performance',
+  })
+# ---
+# name: test_water_heater[en-water_heater.keba_keenergy_12345678_2]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'current_temperature': 47.7,
+      'friendly_name': 'Hot water tank 2',
+      'max_temp': 52.0,
+      'min_temp': 0.0,
+      'operation_list': list([
+        'eco',
+        'performance',
+        'off',
+        'heat_pump',
+      ]),
+      'operation_mode': 'off',
+      'supported_features': <WaterHeaterEntityFeature: 11>,
+      'target_temp_high': 51.0,
+      'target_temp_low': 32.5,
+      'temperature': 51.0,
+    }),
+    'context': <ANY>,
+    'entity_id': 'water_heater.keba_keenergy_12345678_2',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': 'off',
+  })
+# ---
+# name: test_water_heater[en-water_heater.keba_keenergy_12345678_buffer_tank_1]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'current_temperature': 45.7,
+      'friendly_name': 'Buffer tank 1',
+      'max_temp': 60.0,
+      'min_temp': 43.3,
+      'operation_list': list([
+        'performance',
+        'off',
+        'heat_pump',
+      ]),
+      'operation_mode': 'off',
+      'supported_features': <WaterHeaterEntityFeature: 10>,
+      'target_temp_high': 44.0,
+      'target_temp_low': 10.0,
+      'temperature': 44.0,
+    }),
+    'context': <ANY>,
+    'entity_id': 'water_heater.keba_keenergy_12345678_buffer_tank_1',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': 'off',
+  })
+# ---
+# name: test_water_heater[en-water_heater.keba_keenergy_12345678_buffer_tank_2]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'current_temperature': 35.7,
+      'friendly_name': 'Buffer tank 2',
+      'max_temp': 60.0,
+      'min_temp': 43.3,
+      'operation_list': list([
+        'performance',
+        'off',
+        'heat_pump',
+      ]),
+      'operation_mode': 'heat_pump',
+      'supported_features': <WaterHeaterEntityFeature: 10>,
+      'target_temp_high': 43.0,
+      'target_temp_low': 11.0,
+      'temperature': 43.0,
+    }),
+    'context': <ANY>,
+    'entity_id': 'water_heater.keba_keenergy_12345678_buffer_tank_2',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': 'heat_pump',
+  })
+# ---

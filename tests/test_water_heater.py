@@ -5,12 +5,7 @@ from typing import Any
 from typing import TYPE_CHECKING
 
 import pytest
-from homeassistant.components.water_heater import ATTR_CURRENT_TEMPERATURE
-from homeassistant.components.water_heater import ATTR_MAX_TEMP
-from homeassistant.components.water_heater import ATTR_MIN_TEMP
 from homeassistant.components.water_heater import ATTR_OPERATION_MODE
-from homeassistant.components.water_heater import ATTR_TARGET_TEMP_HIGH
-from homeassistant.components.water_heater import ATTR_TARGET_TEMP_LOW
 from homeassistant.components.water_heater import SERVICE_SET_OPERATION_MODE
 from homeassistant.components.water_heater import SERVICE_SET_TEMPERATURE
 from homeassistant.components.water_heater.const import DOMAIN as WATER_HEATER_DOMAIN
@@ -18,7 +13,6 @@ from homeassistant.components.water_heater.const import STATE_ECO
 from homeassistant.components.water_heater.const import STATE_HEAT_PUMP
 from homeassistant.components.water_heater.const import STATE_PERFORMANCE
 from homeassistant.const import ATTR_ENTITY_ID
-from homeassistant.const import ATTR_FRIENDLY_NAME
 from homeassistant.const import ATTR_TEMPERATURE
 from homeassistant.const import SERVICE_TURN_OFF
 from homeassistant.const import SERVICE_TURN_ON
@@ -42,6 +36,7 @@ from tests.api_data import get_multiple_position_fixed_data_response
 from tests.api_data import get_single_position_fixed_data_response
 
 if TYPE_CHECKING:
+    from syrupy.assertion import SnapshotAssertion
     from tests.conftest import FakeKebaKeEnergyAPI
 
 
@@ -93,10 +88,25 @@ async def test_water_heater_entities(
         assert isinstance(hass.states.get(entity), State)
 
 
+@pytest.mark.parametrize(
+    "entity",
+    [
+        # buffer tank
+        "water_heater.keba_keenergy_12345678_buffer_tank_1",
+        "water_heater.keba_keenergy_12345678_buffer_tank_2",
+        # hot water tank
+        "water_heater.keba_keenergy_12345678_1",
+        "water_heater.keba_keenergy_12345678_2",
+    ],
+)
+@pytest.mark.parametrize("language", ["en", "de"])
 async def test_water_heater(
     hass: HomeAssistant,
     config_entry: MockConfigEntry,
     fake_api: FakeKebaKeEnergyAPI,
+    snapshot: SnapshotAssertion,
+    language: str,
+    entity: str,
 ) -> None:
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
@@ -106,60 +116,13 @@ async def test_water_heater(
         *HEATING_CURVES_RESPONSE_1_1,
     ]
     fake_api.register_requests("10.0.0.100")
+    hass.config.language = language
 
     await setup_integration(hass, config_entry)
 
-    keba_keenergy_12345678_1: State | None = hass.states.get("water_heater.keba_keenergy_12345678_1")
-    assert isinstance(keba_keenergy_12345678_1, State)
-
-    assert keba_keenergy_12345678_1.attributes[ATTR_CURRENT_TEMPERATURE] == 47.7
-    assert keba_keenergy_12345678_1.attributes[ATTR_MIN_TEMP] == 0.0
-    assert keba_keenergy_12345678_1.attributes[ATTR_MAX_TEMP] == 52.0
-    assert keba_keenergy_12345678_1.attributes[ATTR_OPERATION_MODE] == STATE_PERFORMANCE
-    assert keba_keenergy_12345678_1.attributes[ATTR_TEMPERATURE] == 51.0
-    assert keba_keenergy_12345678_1.attributes[ATTR_TARGET_TEMP_LOW] == 32.5
-    assert keba_keenergy_12345678_1.attributes[ATTR_TARGET_TEMP_HIGH] == 51.0
-    assert keba_keenergy_12345678_1.attributes[ATTR_FRIENDLY_NAME] == "Hot water tank 1"
-
-    keba_keenergy_12345678_buffer_tank_1: State | None = hass.states.get(
-        "water_heater.keba_keenergy_12345678_buffer_tank_1",
-    )
-    assert isinstance(keba_keenergy_12345678_buffer_tank_1, State)
-
-    assert keba_keenergy_12345678_buffer_tank_1.attributes[ATTR_CURRENT_TEMPERATURE] == 45.7
-    assert keba_keenergy_12345678_buffer_tank_1.attributes[ATTR_OPERATION_MODE] == STATE_OFF
-    assert keba_keenergy_12345678_buffer_tank_1.attributes[ATTR_TEMPERATURE] == 44.0
-    assert keba_keenergy_12345678_buffer_tank_1.attributes[ATTR_TARGET_TEMP_LOW] == 10.0
-    assert keba_keenergy_12345678_buffer_tank_1.attributes[ATTR_TARGET_TEMP_HIGH] == 44.0
-    assert keba_keenergy_12345678_buffer_tank_1.attributes[ATTR_FRIENDLY_NAME] == "Buffer tank 1"
-
-
-async def test_water_heater_translations(
-    hass: HomeAssistant,
-    config_entry: MockConfigEntry,
-    fake_api: FakeKebaKeEnergyAPI,
-) -> None:
-    fake_api.responses = [
-        MULTIPLE_POSITIONS_RESPONSE,
-        HEATING_CURVE_NAMES_RESPONSE,
-        get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITION_DATA_RESPONSE_1,
-        *HEATING_CURVES_RESPONSE_1_1,
-    ]
-    fake_api.register_requests("10.0.0.100")
-
-    hass.config.language = "de"
-    await setup_integration(hass, config_entry)
-
-    keba_keenergy_12345678_1: State | None = hass.states.get("water_heater.keba_keenergy_12345678_1")
-    assert isinstance(keba_keenergy_12345678_1, State)
-    assert keba_keenergy_12345678_1.attributes[ATTR_FRIENDLY_NAME] == "Warmwasserspeicher 1"
-
-    keba_keenergy_12345678_buffer_tank_1: State | None = hass.states.get(
-        "water_heater.keba_keenergy_12345678_buffer_tank_1",
-    )
-    assert isinstance(keba_keenergy_12345678_buffer_tank_1, State)
-    assert keba_keenergy_12345678_buffer_tank_1.attributes[ATTR_FRIENDLY_NAME] == "Pufferspeicher 1"
+    _entity: State | None = hass.states.get(entity)
+    assert isinstance(_entity, State)
+    assert _entity == snapshot
 
 
 @pytest.mark.parametrize(
