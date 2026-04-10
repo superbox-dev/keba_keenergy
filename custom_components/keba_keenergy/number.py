@@ -372,7 +372,7 @@ async def async_setup_entry(
     for section_id, section_data in coordinator.data.items():
         for description in NUMBER_TYPES.get(section_id, ()):
             for key, values in section_data.items():
-                if key == description.key:
+                if key in [description.key, description.new_key]:
                     device_numbers: int = len(values) if isinstance(values, list) else 1
 
                     for index in range(device_numbers):

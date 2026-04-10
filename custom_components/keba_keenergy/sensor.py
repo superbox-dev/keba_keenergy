@@ -91,12 +91,14 @@ class KebaKeEnergySensorEntity(KebaKeEnergyEntity, SensorEntity):
     @property
     def native_value(self) -> StateType:
         """Return the state of the sensor."""
-        return self.entity_description.value(self.get_value(self.entity_description.key))
+        return self.entity_description.value(
+            self.get_value(self.entity_description.new_key or self.entity_description.key),
+        )
 
     @property
     def extra_state_attributes(self) -> dict[str, Any] | None:
         """Return extra state attributes."""
-        entity_data: Value | None = self.get_entity_data(self.entity_description.key)
+        entity_data: Value | None = self.get_entity_data(self.entity_description.new_key or self.entity_description.key)
         attributes: dict[str, Any] | None = None
 
         if isinstance(entity_data, dict):
@@ -227,6 +229,7 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
             entity_registry_enabled_default=False,
             key="flow_temperature",
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
+            new_key="mixer_flow_temperature",
             state_class=SensorStateClass.MEASUREMENT,
             translation_key="flow_temperature",
             value=lambda data: data,
@@ -991,7 +994,7 @@ async def async_setup_entry(
     for section_id, section_data in coordinator.data.items():
         for description in SENSOR_TYPES.get(section_id, ()):
             for key, values in section_data.items():
-                if key == description.key:
+                if key in [description.key, description.new_key]:
                     device_numbers: int = len(values) if isinstance(values, list) else 1
 
                     for index in range(device_numbers):

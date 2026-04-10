@@ -75,7 +75,7 @@ REQUEST_DATA_GROUPS: dict[SectionPrefix, list[Section]] = {
         HeatCircuit.ROOM_HUMIDITY,
         HeatCircuit.DEW_POINT,
         HeatCircuit.FLOW_TEMPERATURE_SETPOINT,
-        HeatCircuit.FLOW_TEMPERATURE,
+        HeatCircuit.MIXER_FLOW_TEMPERATURE,
         HeatCircuit.RETURN_FLOW_TEMPERATURE,
         HeatCircuit.TARGET_TEMPERATURE_DAY,
         HeatCircuit.TARGET_COOLING_TEMPERATURE_DAY,
@@ -176,7 +176,7 @@ REQUEST_DATA_GROUPS: dict[SectionPrefix, list[Section]] = {
     ],
     SectionPrefix.HOT_WATER_TANK: [
         HotWaterTank.HEAT_REQUEST,
-        HotWaterTank.HOT_WATER_FLOW,
+        HotWaterTank.FRESH_WATER_FLOW,
         HotWaterTank.FRESH_WATER_MODULE_TEMPERATURE,
         HotWaterTank.TARGET_TEMPERATURE,
         HotWaterTank.STANDBY_TEMPERATURE,

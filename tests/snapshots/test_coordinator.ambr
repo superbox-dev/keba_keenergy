@@ -330,22 +330,6 @@
           'value': 13.1,
         }),
       ]),
-      'flow_temperature': list([
-        dict({
-          'attributes': dict({
-            'lower_limit': '0',
-            'upper_limit': '100',
-          }),
-          'value': 24.34,
-        }),
-        dict({
-          'attributes': dict({
-            'lower_limit': '0',
-            'upper_limit': '100',
-          }),
-          'value': 24.34,
-        }),
-      ]),
       'flow_temperature_setpoint': list([
         dict({
           'attributes': dict({
@@ -512,6 +496,22 @@
             'upper_limit': '100',
           }),
           'value': 18.0,
+        }),
+      ]),
+      'mixer_flow_temperature': list([
+        dict({
+          'attributes': dict({
+            'lower_limit': '0',
+            'upper_limit': '100',
+          }),
+          'value': 24.34,
+        }),
+        dict({
+          'attributes': dict({
+            'lower_limit': '0',
+            'upper_limit': '100',
+          }),
+          'value': 24.34,
         }),
       ]),
       'operating_mode': list([
@@ -1121,6 +1121,18 @@
           'value': 47.7,
         }),
       ]),
+      'fresh_water_flow': list([
+        dict({
+          'attributes': dict({
+          }),
+          'value': 'off',
+        }),
+        dict({
+          'attributes': dict({
+          }),
+          'value': 'on',
+        }),
+      ]),
       'fresh_water_module_temperature': list([
         dict({
           'attributes': dict({
@@ -1138,18 +1150,6 @@
         }),
       ]),
       'heat_request': list([
-        dict({
-          'attributes': dict({
-          }),
-          'value': 'off',
-        }),
-        dict({
-          'attributes': dict({
-          }),
-          'value': 'on',
-        }),
-      ]),
-      'hot_water_flow': list([
         dict({
           'attributes': dict({
           }),
@@ -1611,22 +1611,6 @@
           'value': 13.1,
         }),
       ]),
-      'flow_temperature': list([
-        dict({
-          'attributes': dict({
-            'lower_limit': '0',
-            'upper_limit': '100',
-          }),
-          'value': 24.34,
-        }),
-        dict({
-          'attributes': dict({
-            'lower_limit': '0',
-            'upper_limit': '100',
-          }),
-          'value': 24.34,
-        }),
-      ]),
       'flow_temperature_setpoint': list([
         dict({
           'attributes': dict({
@@ -1793,6 +1777,22 @@
             'upper_limit': '100',
           }),
           'value': 18.0,
+        }),
+      ]),
+      'mixer_flow_temperature': list([
+        dict({
+          'attributes': dict({
+            'lower_limit': '0',
+            'upper_limit': '100',
+          }),
+          'value': 24.34,
+        }),
+        dict({
+          'attributes': dict({
+            'lower_limit': '0',
+            'upper_limit': '100',
+          }),
+          'value': 24.34,
         }),
       ]),
       'operating_mode': list([
@@ -2402,6 +2402,18 @@
           'value': 47.7,
         }),
       ]),
+      'fresh_water_flow': list([
+        dict({
+          'attributes': dict({
+          }),
+          'value': 'off',
+        }),
+        dict({
+          'attributes': dict({
+          }),
+          'value': 'on',
+        }),
+      ]),
       'fresh_water_module_temperature': list([
         dict({
           'attributes': dict({
@@ -2419,18 +2431,6 @@
         }),
       ]),
       'heat_request': list([
-        dict({
-          'attributes': dict({
-          }),
-          'value': 'off',
-        }),
-        dict({
-          'attributes': dict({
-          }),
-          'value': 'on',
-        }),
-      ]),
-      'hot_water_flow': list([
         dict({
           'attributes': dict({
           }),

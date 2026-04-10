@@ -47,7 +47,8 @@ class KebaKeEnergyEntityDescriptionMixin:
     """Required values for KEBA KeEnergy descriptions."""
 
     key_index: int | None = None
-    ref_key: str | None = None
+    new_key: str | None = None  # new key name (required for future migration of the entity id)
+    ref_key: str | None = None  # reference to another key (used for entity id)
     condition: Callable[[KebaKeEnergyDataUpdateCoordinator, int], bool] | None = None
 
 

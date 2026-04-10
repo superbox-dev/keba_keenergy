@@ -40,9 +40,9 @@ async def test_load_entry(
     await setup_integration(hass, config_entry)
 
     assert config_entry.state is ConfigEntryState.LOADED
-    assert hass.states.async_entity_ids_count() == 204
 
     assert set(hass.states.async_entity_ids()) == snapshot
+    assert hass.states.async_entity_ids_count() == 204
 
 
 @pytest.mark.parametrize(

@@ -148,6 +148,7 @@ BINARY_SENSOR_TYPES: dict[str, tuple[KebaKeEnergyBinarySensorEntityDescription, 
         KebaKeEnergyBinarySensorEntityDescription(
             entity_registry_enabled_default=False,
             key="hot_water_flow",
+            new_key="fresh_water_flow",
             translation_key="hot_water_flow",
         ),
         KebaKeEnergyBinarySensorEntityDescription(
@@ -185,7 +186,7 @@ async def async_setup_entry(
     for section_id, section_data in coordinator.data.items():
         for description in BINARY_SENSOR_TYPES.get(section_id, ()):
             for key, values in section_data.items():
-                if key == description.key:
+                if key in [description.key, description.new_key]:
                     device_numbers: int = len(values) if isinstance(values, list) else 1
                     binary_sensors += [
                         KebaKeEnergyBinarySensorEntity(
@@ -228,4 +229,4 @@ class KebaKeEnergyBinarySensorEntity(KebaKeEnergyEntity, BinarySensorEntity):
     @property
     def is_on(self) -> bool:
         """Return true if the binary sensor is on."""
-        return self.get_value(self.entity_description.key, expected_type=str) == "on"
+        return self.get_value(self.entity_description.new_key or self.entity_description.key, expected_type=str) == "on"
