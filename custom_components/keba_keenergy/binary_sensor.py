@@ -146,6 +146,7 @@ BINARY_SENSOR_TYPES: dict[str, tuple[KebaKeEnergyBinarySensorEntityDescription, 
             },
         ),
         KebaKeEnergyBinarySensorEntityDescription(
+            condition=lambda coordinator, index: coordinator.has_fresh_water_module(index=index),
             entity_registry_enabled_default=False,
             key="hot_water_flow",
             new_key="fresh_water_flow",
@@ -168,38 +169,6 @@ BINARY_SENSOR_TYPES: dict[str, tuple[KebaKeEnergyBinarySensorEntityDescription, 
         ),
     ),
 }
-
-
-async def async_setup_entry(
-    hass: HomeAssistant,  # noqa: ARG001
-    entry: KebaKeEnergyConfigEntry,
-    async_add_entities: AddEntitiesCallback,
-) -> None:
-    """Set up KEBA KeEnergy binary sensors from a config entry."""
-    coordinator: KebaKeEnergyDataUpdateCoordinator = entry.runtime_data
-    binary_sensors: list[KebaKeEnergyBinarySensorEntity] = []
-
-    # Loop over all device data and add an index to the binary sensor
-    # if there is more than one device of the same type
-    # e.g. buffer tank, hot water tank, heat circuit, solar circuit or heat pump.
-
-    for section_id, section_data in coordinator.data.items():
-        for description in BINARY_SENSOR_TYPES.get(section_id, ()):
-            for key, values in section_data.items():
-                if key in [description.key, description.new_key]:
-                    device_numbers: int = len(values) if isinstance(values, list) else 1
-                    binary_sensors += [
-                        KebaKeEnergyBinarySensorEntity(
-                            coordinator,
-                            description=description,
-                            entry=entry,
-                            section_id=section_id,
-                            index=index if device_numbers > 1 else None,
-                        )
-                        for index in range(device_numbers)
-                    ]
-
-    async_add_entities(binary_sensors)
 
 
 class KebaKeEnergyBinarySensorEntity(KebaKeEnergyEntity, BinarySensorEntity):
@@ -230,3 +199,39 @@ class KebaKeEnergyBinarySensorEntity(KebaKeEnergyEntity, BinarySensorEntity):
     def is_on(self) -> bool:
         """Return true if the binary sensor is on."""
         return self.get_value(self.entity_description.new_key or self.entity_description.key, expected_type=str) == "on"
+
+
+async def async_setup_entry(
+    hass: HomeAssistant,  # noqa: ARG001
+    entry: KebaKeEnergyConfigEntry,
+    async_add_entities: AddEntitiesCallback,
+) -> None:
+    """Set up KEBA KeEnergy binary sensors from a config entry."""
+    coordinator: KebaKeEnergyDataUpdateCoordinator = entry.runtime_data
+    binary_sensors: list[KebaKeEnergyBinarySensorEntity] = []
+
+    # Loop over all device data and add an index to the binary sensor
+    # if there is more than one device of the same type
+    # e.g. buffer tank, hot water tank, heat circuit, solar circuit or heat pump.
+
+    for section_id, section_data in coordinator.data.items():
+        for description in BINARY_SENSOR_TYPES.get(section_id, ()):
+            for key, values in section_data.items():
+                if key in [description.key, description.new_key]:
+                    device_numbers: int = len(values) if isinstance(values, list) else 1
+
+                    for index in range(device_numbers):
+                        if description.condition is not None and not description.condition(coordinator, index):
+                            continue
+
+                        binary_sensors += [
+                            KebaKeEnergyBinarySensorEntity(
+                                coordinator,
+                                description=description,
+                                entry=entry,
+                                section_id=section_id,
+                                index=index if device_numbers > 1 else None,
+                            ),
+                        ]
+
+    async_add_entities(binary_sensors)

@@ -51,7 +51,6 @@ if TYPE_CHECKING:
         "sensor.keba_keenergy_12345678_hot_water_tank_current_temperature_1",
         "sensor.keba_keenergy_12345678_hot_water_tank_current_temperature_2",
         "sensor.keba_keenergy_12345678_hot_water_tank_fresh_water_module_temperature_1",
-        "sensor.keba_keenergy_12345678_hot_water_tank_fresh_water_module_temperature_2",
         "sensor.keba_keenergy_12345678_hot_water_tank_operating_mode_1",
         "sensor.keba_keenergy_12345678_hot_water_tank_operating_mode_2",
         "sensor.keba_keenergy_12345678_hot_water_tank_standby_temperature_1",

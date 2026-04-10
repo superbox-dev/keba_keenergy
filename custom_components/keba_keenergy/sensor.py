@@ -893,6 +893,7 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
             value=lambda data: data,
         ),
         KebaKeEnergySensorEntityDescription[float](
+            condition=lambda coordinator, index: coordinator.has_fresh_water_module(index=index),
             device_class=SensorDeviceClass.TEMPERATURE,
             entity_registry_enabled_default=False,
             key="fresh_water_module_temperature",

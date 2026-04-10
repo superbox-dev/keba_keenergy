@@ -1367,7 +1367,7 @@ HOT_WATER_TANK_OPERATION_MODE: str = """
     }
 """
 
-HOT_WATER_CURRENT_TEMPERATURE: str = """
+HOT_WATER_TANK_CURRENT_TEMPERATURE: str = """
     {
         "name": "APPL.CtrlAppl.sParam.hotWaterTank[%s].topTemp.values.actValue",
         "attributes": {
@@ -1381,7 +1381,7 @@ HOT_WATER_CURRENT_TEMPERATURE: str = """
     }
 """
 
-HOT_WATER_CIRCULATION_RETURN_TEMPERATURE: str = """
+HOT_WATER_TANK_CIRCULATION_RETURN_TEMPERATURE: str = """
     {
         "name": "APPL.CtrlAppl.sParam.hotWaterTank[%s].circTemp.values.actValue",
         "attributes": {
@@ -1395,11 +1395,21 @@ HOT_WATER_CIRCULATION_RETURN_TEMPERATURE: str = """
     }
 """
 
-HOT_WATER_CIRCULATION_PUMP_STATE: str = """
+HOT_WATER_TANK_CIRCULATION_PUMP_STATE: str = """
     {
         "name": "APPL.CtrlAppl.sParam.hotWaterTank[%s].circPump.pump.values.setValueB",
         "attributes": {
             "longText": "Pumps nom. value Circ."
+        },
+        "value": "%s"
+    }
+"""
+
+HOT_WATER_TANK_HAS_FRESH_WATER_MODULE: str = """
+    {
+        "name": "APPL.CtrlAppl.sParam.options.hotWaterTank[%s].hasFreshWaterModule",
+        "attributes": {
+            "longText": "Fresh water module"
         },
         "value": "%s"
     }
@@ -1721,6 +1731,7 @@ DEFAULT_POSITION_FIXED_DATA_RESPONSE: list[dict[str, Any]] = [
     json.loads(HEAT_CIRCUIT_HAS_MIXER % ("0", "true")),
     json.loads(HEAT_CIRCUIT_HAS_RETURN_FLOW_TEMPERATURE % ("0", "true")),
     json.loads(HEAT_CIRCUIT_HAS_PUMP % ("0", "true")),
+    json.loads(HOT_WATER_TANK_HAS_FRESH_WATER_MODULE % ("0", "true")),
     json.loads(HEAT_PUMP_HAS_ACTIVE_COOLING % "false"),
     json.loads(HEAT_PUMP_HAS_PASSIVE_COOLING % "true"),
 ]
@@ -1741,6 +1752,8 @@ def get_multiple_position_fixed_data_response(has_passive_cooling: str = "false"
         json.loads(HEAT_CIRCUIT_HAS_RETURN_FLOW_TEMPERATURE % ("1", "false")),
         json.loads(HEAT_CIRCUIT_HAS_PUMP % ("0", "true")),
         json.loads(HEAT_CIRCUIT_HAS_PUMP % ("1", "false")),
+        json.loads(HOT_WATER_TANK_HAS_FRESH_WATER_MODULE % ("0", "true")),
+        json.loads(HOT_WATER_TANK_HAS_FRESH_WATER_MODULE % ("1", "false")),
         json.loads(HEAT_PUMP_HAS_ACTIVE_COOLING % "false"),
         json.loads(HEAT_PUMP_HAS_PASSIVE_COOLING % f"{has_passive_cooling}"),
     ]
@@ -1812,9 +1825,9 @@ DEFAULT_POSITION_DATA_RESPONSE: list[dict[str, Any]] = [
     json.loads(HOT_WATER_TANK_TARGET_TEMPERATURE % ("0", "51")),
     json.loads(HOT_WATER_TANK_STANDBY_TEMPERATURE % ("0", "32.5")),
     json.loads(HOT_WATER_TANK_OPERATION_MODE % ("0", "3")),
-    json.loads(HOT_WATER_CURRENT_TEMPERATURE % ("0", "47.700001")),
-    json.loads(HOT_WATER_CIRCULATION_RETURN_TEMPERATURE % ("0", "30.45")),
-    json.loads(HOT_WATER_CIRCULATION_PUMP_STATE % ("0", "false")),
+    json.loads(HOT_WATER_TANK_CURRENT_TEMPERATURE % ("0", "47.700001")),
+    json.loads(HOT_WATER_TANK_CIRCULATION_RETURN_TEMPERATURE % ("0", "30.45")),
+    json.loads(HOT_WATER_TANK_CIRCULATION_PUMP_STATE % ("0", "false")),
     json.loads(SWITCH_VALVE_POSITION % ("0", "1")),
     SYSTEM_OUTDOOR_TEMPERATURE,
     SYSTEM_OPERATING_MODE,
@@ -1956,12 +1969,12 @@ ENTITY_UPDATED_DATA_RESPONSE: list[dict[str, Any]] = [
     json.loads(HOT_WATER_TANK_STANDBY_TEMPERATURE % ("1", "32.5")),
     json.loads(HOT_WATER_TANK_OPERATION_MODE % ("0", "3")),
     json.loads(HOT_WATER_TANK_OPERATION_MODE % ("0", "0")),
-    json.loads(HOT_WATER_CURRENT_TEMPERATURE % ("0", "47.700001")),
-    json.loads(HOT_WATER_CURRENT_TEMPERATURE % ("1", "47.700001")),
-    json.loads(HOT_WATER_CIRCULATION_RETURN_TEMPERATURE % ("0", "30.45")),
-    json.loads(HOT_WATER_CIRCULATION_RETURN_TEMPERATURE % ("1", "32.45")),
-    json.loads(HOT_WATER_CIRCULATION_PUMP_STATE % ("0", "false")),
-    json.loads(HOT_WATER_CIRCULATION_PUMP_STATE % ("1", "true")),
+    json.loads(HOT_WATER_TANK_CURRENT_TEMPERATURE % ("0", "47.700001")),
+    json.loads(HOT_WATER_TANK_CURRENT_TEMPERATURE % ("1", "47.700001")),
+    json.loads(HOT_WATER_TANK_CIRCULATION_RETURN_TEMPERATURE % ("0", "30.45")),
+    json.loads(HOT_WATER_TANK_CIRCULATION_RETURN_TEMPERATURE % ("1", "32.45")),
+    json.loads(HOT_WATER_TANK_CIRCULATION_PUMP_STATE % ("0", "false")),
+    json.loads(HOT_WATER_TANK_CIRCULATION_PUMP_STATE % ("1", "true")),
     json.loads(SWITCH_VALVE_POSITION % ("0", "1")),
     json.loads(SWITCH_VALVE_POSITION % ("1", "0")),
     SYSTEM_OUTDOOR_TEMPERATURE,
@@ -2045,9 +2058,9 @@ def get_single_position_fixed_data_response(
         json.loads(HOT_WATER_TANK_TARGET_TEMPERATURE % ("0", hot_water_tank_target_temperature)),
         json.loads(HOT_WATER_TANK_STANDBY_TEMPERATURE % ("0", "32.5")),
         json.loads(HOT_WATER_TANK_OPERATION_MODE % ("0", "3")),
-        json.loads(HOT_WATER_CURRENT_TEMPERATURE % ("0", "47.700001")),
-        json.loads(HOT_WATER_CIRCULATION_RETURN_TEMPERATURE % ("0", "34.45")),
-        json.loads(HOT_WATER_CIRCULATION_PUMP_STATE % ("0", "false")),
+        json.loads(HOT_WATER_TANK_CURRENT_TEMPERATURE % ("0", "47.700001")),
+        json.loads(HOT_WATER_TANK_CIRCULATION_RETURN_TEMPERATURE % ("0", "34.45")),
+        json.loads(HOT_WATER_TANK_CIRCULATION_PUMP_STATE % ("0", "false")),
         json.loads(SWITCH_VALVE_POSITION % ("0", "1")),
         SYSTEM_OUTDOOR_TEMPERATURE,
         SYSTEM_OPERATING_MODE,
@@ -2190,12 +2203,12 @@ MULTIPLE_POSITION_DATA_RESPONSE_1: list[dict[str, Any]] = [
     json.loads(HOT_WATER_TANK_STANDBY_TEMPERATURE % ("1", "32.5")),
     json.loads(HOT_WATER_TANK_OPERATION_MODE % ("0", "3")),
     json.loads(HOT_WATER_TANK_OPERATION_MODE % ("1", "0")),
-    json.loads(HOT_WATER_CURRENT_TEMPERATURE % ("0", "47.700001")),
-    json.loads(HOT_WATER_CURRENT_TEMPERATURE % ("1", "47.700001")),
-    json.loads(HOT_WATER_CIRCULATION_RETURN_TEMPERATURE % ("0", "30.45")),
-    json.loads(HOT_WATER_CIRCULATION_RETURN_TEMPERATURE % ("1", "27.45")),
-    json.loads(HOT_WATER_CIRCULATION_PUMP_STATE % ("0", "true")),
-    json.loads(HOT_WATER_CIRCULATION_PUMP_STATE % ("1", "false")),
+    json.loads(HOT_WATER_TANK_CURRENT_TEMPERATURE % ("0", "47.700001")),
+    json.loads(HOT_WATER_TANK_CURRENT_TEMPERATURE % ("1", "47.700001")),
+    json.loads(HOT_WATER_TANK_CIRCULATION_RETURN_TEMPERATURE % ("0", "30.45")),
+    json.loads(HOT_WATER_TANK_CIRCULATION_RETURN_TEMPERATURE % ("1", "27.45")),
+    json.loads(HOT_WATER_TANK_CIRCULATION_PUMP_STATE % ("0", "true")),
+    json.loads(HOT_WATER_TANK_CIRCULATION_PUMP_STATE % ("1", "false")),
     json.loads(SWITCH_VALVE_POSITION % ("0", "0")),
     json.loads(SWITCH_VALVE_POSITION % ("1", "1")),
     SYSTEM_OUTDOOR_TEMPERATURE,
@@ -2338,12 +2351,12 @@ MULTIPLE_POSITION_DATA_RESPONSE_2: list[dict[str, Any]] = [
     json.loads(HOT_WATER_TANK_STANDBY_TEMPERATURE % ("1", "32.5")),
     json.loads(HOT_WATER_TANK_OPERATION_MODE % ("0", "2")),
     json.loads(HOT_WATER_TANK_OPERATION_MODE % ("1", "1")),
-    json.loads(HOT_WATER_CURRENT_TEMPERATURE % ("0", "47.700001")),
-    json.loads(HOT_WATER_CURRENT_TEMPERATURE % ("1", "47.700001")),
-    json.loads(HOT_WATER_CIRCULATION_RETURN_TEMPERATURE % ("0", "30.45")),
-    json.loads(HOT_WATER_CIRCULATION_RETURN_TEMPERATURE % ("1", "36.45")),
-    json.loads(HOT_WATER_CIRCULATION_PUMP_STATE % ("0", "false")),
-    json.loads(HOT_WATER_CIRCULATION_PUMP_STATE % ("1", "true")),
+    json.loads(HOT_WATER_TANK_CURRENT_TEMPERATURE % ("0", "47.700001")),
+    json.loads(HOT_WATER_TANK_CURRENT_TEMPERATURE % ("1", "47.700001")),
+    json.loads(HOT_WATER_TANK_CIRCULATION_RETURN_TEMPERATURE % ("0", "30.45")),
+    json.loads(HOT_WATER_TANK_CIRCULATION_RETURN_TEMPERATURE % ("1", "36.45")),
+    json.loads(HOT_WATER_TANK_CIRCULATION_PUMP_STATE % ("0", "false")),
+    json.loads(HOT_WATER_TANK_CIRCULATION_PUMP_STATE % ("1", "true")),
     json.loads(SWITCH_VALVE_POSITION % ("0", "0")),
     json.loads(SWITCH_VALVE_POSITION % ("1", "1")),
     SYSTEM_OUTDOOR_TEMPERATURE,
@@ -2396,12 +2409,12 @@ MULTIPLE_POSITION_DATA_RESPONSE_3_1: list[dict[str, Any]] = [
     json.loads(HOT_WATER_TANK_STANDBY_TEMPERATURE % ("1", "32.5")),
     json.loads(HOT_WATER_TANK_OPERATION_MODE % ("0", "3")),
     json.loads(HOT_WATER_TANK_OPERATION_MODE % ("1", "0")),
-    json.loads(HOT_WATER_CURRENT_TEMPERATURE % ("0", "47.700001")),
-    json.loads(HOT_WATER_CURRENT_TEMPERATURE % ("1", "47.700001")),
-    json.loads(HOT_WATER_CIRCULATION_RETURN_TEMPERATURE % ("0", "30.45")),
-    json.loads(HOT_WATER_CIRCULATION_RETURN_TEMPERATURE % ("1", "27.45")),
-    json.loads(HOT_WATER_CIRCULATION_PUMP_STATE % ("0", "true")),
-    json.loads(HOT_WATER_CIRCULATION_PUMP_STATE % ("1", "false")),
+    json.loads(HOT_WATER_TANK_CURRENT_TEMPERATURE % ("0", "47.700001")),
+    json.loads(HOT_WATER_TANK_CURRENT_TEMPERATURE % ("1", "47.700001")),
+    json.loads(HOT_WATER_TANK_CIRCULATION_RETURN_TEMPERATURE % ("0", "30.45")),
+    json.loads(HOT_WATER_TANK_CIRCULATION_RETURN_TEMPERATURE % ("1", "27.45")),
+    json.loads(HOT_WATER_TANK_CIRCULATION_PUMP_STATE % ("0", "true")),
+    json.loads(HOT_WATER_TANK_CIRCULATION_PUMP_STATE % ("1", "false")),
     json.loads(SWITCH_VALVE_POSITION % ("0", "0")),
     json.loads(SWITCH_VALVE_POSITION % ("1", "1")),
     SYSTEM_OUTDOOR_TEMPERATURE,
@@ -2516,12 +2529,12 @@ MULTIPLE_POSITION_DATA_RESPONSE_3_2: list[dict[str, Any]] = [
     json.loads(HOT_WATER_TANK_STANDBY_TEMPERATURE % ("1", "32.5")),
     json.loads(HOT_WATER_TANK_OPERATION_MODE % ("0", "3")),
     json.loads(HOT_WATER_TANK_OPERATION_MODE % ("1", "0")),
-    json.loads(HOT_WATER_CURRENT_TEMPERATURE % ("0", "47.700001")),
-    json.loads(HOT_WATER_CURRENT_TEMPERATURE % ("1", "47.700001")),
-    json.loads(HOT_WATER_CIRCULATION_RETURN_TEMPERATURE % ("0", "30.45")),
-    json.loads(HOT_WATER_CIRCULATION_RETURN_TEMPERATURE % ("1", "27.45")),
-    json.loads(HOT_WATER_CIRCULATION_PUMP_STATE % ("0", "true")),
-    json.loads(HOT_WATER_CIRCULATION_PUMP_STATE % ("1", "false")),
+    json.loads(HOT_WATER_TANK_CURRENT_TEMPERATURE % ("0", "47.700001")),
+    json.loads(HOT_WATER_TANK_CURRENT_TEMPERATURE % ("1", "47.700001")),
+    json.loads(HOT_WATER_TANK_CIRCULATION_RETURN_TEMPERATURE % ("0", "30.45")),
+    json.loads(HOT_WATER_TANK_CIRCULATION_RETURN_TEMPERATURE % ("1", "27.45")),
+    json.loads(HOT_WATER_TANK_CIRCULATION_PUMP_STATE % ("0", "true")),
+    json.loads(HOT_WATER_TANK_CIRCULATION_PUMP_STATE % ("1", "false")),
     json.loads(SWITCH_VALVE_POSITION % ("0", "0")),
     json.loads(SWITCH_VALVE_POSITION % ("1", "1")),
     SYSTEM_OUTDOOR_TEMPERATURE,

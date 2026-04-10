@@ -241,19 +241,6 @@
     'state': 'off',
   })
 # ---
-# name: test_binary_sensors[de-binary_sensor.keba_keenergy_12345678_hot_water_tank_hot_water_flow_2]
-  StateSnapshot({
-    'attributes': ReadOnlyDict({
-      'friendly_name': 'Warmwasserspeicher 2 Warmwasser läuft',
-    }),
-    'context': <ANY>,
-    'entity_id': 'binary_sensor.keba_keenergy_12345678_hot_water_tank_hot_water_flow_2',
-    'last_changed': <ANY>,
-    'last_reported': <ANY>,
-    'last_updated': <ANY>,
-    'state': 'on',
-  })
-# ---
 # name: test_binary_sensors[de-binary_sensor.keba_keenergy_12345678_solar_circuit_heat_request_1_1]
   StateSnapshot({
     'attributes': ReadOnlyDict({
@@ -546,19 +533,6 @@
     'last_reported': <ANY>,
     'last_updated': <ANY>,
     'state': 'off',
-  })
-# ---
-# name: test_binary_sensors[en-binary_sensor.keba_keenergy_12345678_hot_water_tank_hot_water_flow_2]
-  StateSnapshot({
-    'attributes': ReadOnlyDict({
-      'friendly_name': 'Hot water tank 2 Hot water flow',
-    }),
-    'context': <ANY>,
-    'entity_id': 'binary_sensor.keba_keenergy_12345678_hot_water_tank_hot_water_flow_2',
-    'last_changed': <ANY>,
-    'last_reported': <ANY>,
-    'last_updated': <ANY>,
-    'state': 'on',
   })
 # ---
 # name: test_binary_sensors[en-binary_sensor.keba_keenergy_12345678_solar_circuit_heat_request_1_1]

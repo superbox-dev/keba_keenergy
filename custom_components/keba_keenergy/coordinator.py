@@ -38,6 +38,7 @@ from keba_keenergy_api.constants import HeatPump
 from keba_keenergy_api.constants import HeatPumpHasActiveCooling
 from keba_keenergy_api.constants import HeatPumpHasPassiveCooling
 from keba_keenergy_api.constants import HotWaterTank
+from keba_keenergy_api.constants import HotWaterTankHasFreshWaterModule
 from keba_keenergy_api.constants import Section
 from keba_keenergy_api.constants import SectionPrefix
 from keba_keenergy_api.constants import SolarCircuit
@@ -339,6 +340,7 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
                 HeatCircuit.HAS_MIXER,
                 HeatCircuit.HAS_RETURN_FLOW_TEMPERATURE,
                 HeatCircuit.HAS_PUMP,
+                HotWaterTank.HAS_FRESH_WATER_MODULE,
                 HeatPump.HAS_ACTIVE_COOLING,
                 HeatPump.HAS_PASSIVE_COOLING,
             ],
@@ -632,6 +634,16 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
 
         data: list[Value] = cast("list[Value]", self._fixed_data[SectionPrefix.HEAT_CIRCUIT]["has_pump"])
         return bool(HeatCircuitHasPump.ON.name.lower() == data[index]["value"])
+
+    def has_fresh_water_module(self, *, index: int | None = None) -> bool:
+        """Check if fresh water module is available."""
+        index = 0 if index is None else index
+
+        data: list[Value] = cast(
+            "list[Value]",
+            self._fixed_data[SectionPrefix.HOT_WATER_TANK]["has_fresh_water_module"],
+        )
+        return bool(HotWaterTankHasFreshWaterModule.ON.name.lower() == data[index]["value"])
 
     def has_active_cooling(self, *, index: int | None = None) -> bool:
         """Check if active cooling is available."""

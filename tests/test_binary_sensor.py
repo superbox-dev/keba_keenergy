@@ -34,7 +34,6 @@ if TYPE_CHECKING:
         "binary_sensor.keba_keenergy_12345678_hot_water_tank_heat_request_1",
         "binary_sensor.keba_keenergy_12345678_hot_water_tank_heat_request_2",
         "binary_sensor.keba_keenergy_12345678_hot_water_tank_hot_water_flow_1",
-        "binary_sensor.keba_keenergy_12345678_hot_water_tank_hot_water_flow_2",
         # heat pump
         "binary_sensor.keba_keenergy_12345678_heat_pump_has_compressor_failure",
         "binary_sensor.keba_keenergy_12345678_heat_pump_has_source_actuator_failure",
