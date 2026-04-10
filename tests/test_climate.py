@@ -8,18 +8,9 @@ from typing import TYPE_CHECKING
 from unittest.mock import patch
 
 import pytest
-from homeassistant.components.climate.const import ATTR_CURRENT_HUMIDITY
-from homeassistant.components.climate.const import ATTR_CURRENT_TEMPERATURE
-from homeassistant.components.climate.const import ATTR_HVAC_ACTION
 from homeassistant.components.climate.const import ATTR_HVAC_MODE
-from homeassistant.components.climate.const import ATTR_HVAC_MODES
-from homeassistant.components.climate.const import ATTR_MAX_TEMP
-from homeassistant.components.climate.const import ATTR_MIN_TEMP
 from homeassistant.components.climate.const import ATTR_PRESET_MODE
-from homeassistant.components.climate.const import ATTR_PRESET_MODES
-from homeassistant.components.climate.const import ATTR_TARGET_TEMP_STEP
 from homeassistant.components.climate.const import DOMAIN as CLIMATE_DOMAIN
-from homeassistant.components.climate.const import HVACAction
 from homeassistant.components.climate.const import HVACMode
 from homeassistant.components.climate.const import PRESET_AWAY
 from homeassistant.components.climate.const import PRESET_BOOST
@@ -30,7 +21,6 @@ from homeassistant.components.climate.const import SERVICE_SET_HVAC_MODE
 from homeassistant.components.climate.const import SERVICE_SET_PRESET_MODE
 from homeassistant.components.climate.const import SERVICE_SET_TEMPERATURE
 from homeassistant.const import ATTR_ENTITY_ID
-from homeassistant.const import ATTR_FRIENDLY_NAME
 from homeassistant.const import ATTR_TEMPERATURE
 from homeassistant.const import SERVICE_TURN_OFF
 from homeassistant.const import SERVICE_TURN_ON
@@ -54,6 +44,7 @@ from tests.api_data import get_multiple_position_fixed_data_response
 from tests.api_data import get_single_position_fixed_data_response
 
 if TYPE_CHECKING:
+    from syrupy.assertion import SnapshotAssertion
     from tests.conftest import FakeKebaKeEnergyAPI
 
 ENTITY_ID: str = "climate.keba_keenergy_12345678"
@@ -102,10 +93,21 @@ async def test_climate_entities(
         assert isinstance(hass.states.get(entity), State)
 
 
+@pytest.mark.parametrize(
+    "entity",
+    [
+        "climate.keba_keenergy_12345678_1",
+        "climate.keba_keenergy_12345678_2",
+    ],
+)
+@pytest.mark.parametrize("language", ["en", "de"])
 async def test_climate(
     hass: HomeAssistant,
     config_entry: MockConfigEntry,
     fake_api: FakeKebaKeEnergyAPI,
+    snapshot: SnapshotAssertion,
+    language: str,
+    entity: str,
 ) -> None:
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
@@ -115,63 +117,13 @@ async def test_climate(
         *HEATING_CURVES_RESPONSE_1_1,
     ]
     fake_api.register_requests("10.0.0.100")
+    hass.config.language = language
 
     await setup_integration(hass, config_entry)
 
-    state_1: State | None = hass.states.get(ENTITY_ID_1)
-    assert isinstance(state_1, State)
-
-    assert state_1.attributes[ATTR_CURRENT_TEMPERATURE] == 22.4
-    assert state_1.attributes[ATTR_CURRENT_HUMIDITY] == 53.0
-    assert state_1.attributes[ATTR_TARGET_TEMP_STEP] == 0.5
-    assert state_1.attributes[ATTR_PRESET_MODES] == ["home", "away", "comfort", "sleep", "boost"]
-    assert state_1.attributes[ATTR_TEMPERATURE] == 21.5
-    assert state_1.attributes[ATTR_CURRENT_TEMPERATURE] == 22.4
-    assert state_1.attributes[ATTR_CURRENT_HUMIDITY] == 53.0
-    assert state_1.attributes[ATTR_HVAC_ACTION] == HVACAction.HEATING
-    assert state_1.attributes[ATTR_PRESET_MODE] == "comfort"
-    assert state_1.attributes[ATTR_FRIENDLY_NAME] == "Heating circuit 1"
-
-    state_2: State | None = hass.states.get(ENTITY_ID_2)
-    assert isinstance(state_2, State)
-
-    assert state_2.attributes[ATTR_HVAC_MODES] == [HVACMode.AUTO, HVACMode.HEAT, HVACMode.OFF]
-    assert state_2.attributes[ATTR_MIN_TEMP] == 17.5
-    assert state_2.attributes[ATTR_MAX_TEMP] == 22.5
-    assert state_2.attributes[ATTR_TARGET_TEMP_STEP] == 0.5
-    assert state_2.attributes[ATTR_PRESET_MODES] == ["home", "comfort", "sleep", "boost"]
-    assert state_2.attributes[ATTR_TEMPERATURE] == 20.0
-    assert not state_2.attributes.get(ATTR_CURRENT_TEMPERATURE)
-    assert not state_2.attributes.get(ATTR_CURRENT_HUMIDITY)
-    assert state_2.attributes[ATTR_HVAC_ACTION] == HVACAction.COOLING
-    assert state_2.attributes[ATTR_PRESET_MODE] == "home"
-    assert state_2.attributes[ATTR_FRIENDLY_NAME] == "Heating circuit 2"
-
-
-async def test_climate_translations(
-    hass: HomeAssistant,
-    config_entry: MockConfigEntry,
-    fake_api: FakeKebaKeEnergyAPI,
-) -> None:
-    fake_api.responses = [
-        MULTIPLE_POSITIONS_RESPONSE,
-        HEATING_CURVE_NAMES_RESPONSE,
-        get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITION_DATA_RESPONSE_1,
-        *HEATING_CURVES_RESPONSE_1_1,
-    ]
-    fake_api.register_requests("10.0.0.100")
-
-    hass.config.language = "de"
-    await setup_integration(hass, config_entry)
-
-    state_1: State | None = hass.states.get(ENTITY_ID_1)
-    assert isinstance(state_1, State)
-    assert state_1.attributes[ATTR_FRIENDLY_NAME] == "Heizkreis 1"
-
-    state_2: State | None = hass.states.get(ENTITY_ID_2)
-    assert isinstance(state_2, State)
-    assert state_2.attributes[ATTR_FRIENDLY_NAME] == "Heizkreis 2"
+    _entity: State | None = hass.states.get(entity)
+    assert isinstance(_entity, State)
+    assert _entity == snapshot
 
 
 @pytest.mark.parametrize(

@@ -85,12 +85,6 @@ class KebaKeEnergyClimateEntity(KebaKeEnergyBaseEntity, ClimateEntity):
         | ClimateEntityFeature.TURN_ON
     )
 
-    _attr_hvac_modes: list[HVACMode] = [  # noqa: RUF012
-        HVACMode.AUTO,
-        HVACMode.HEAT,
-        HVACMode.OFF,
-    ]
-
     _attr_target_temperature_step: float = 0.5
     _attr_temperature_unit: str = UnitOfTemperature.CELSIUS
     _attr_name = None
@@ -118,19 +112,56 @@ class KebaKeEnergyClimateEntity(KebaKeEnergyBaseEntity, ClimateEntity):
         self._pending_section = HeatCircuit.TARGET_TEMPERATURE_OFFSET
         self._pending_device_numbers = self.coordinator.heat_circuit_numbers
 
+    @cached_property
+    def _is_heating(self) -> bool:
+        return self.coordinator.is_heating_circuit(index=self.index) and not self.coordinator.is_cooling_circuit(
+            index=self.index,
+        )
+
+    @cached_property
+    def _is_cooling(self) -> bool:
+        return self.coordinator.is_cooling_circuit(index=self.index) and not self.coordinator.is_heating_circuit(
+            index=self.index,
+        )
+
     @property
     def icon(self) -> str | None:
         """Return the icon to use in the frontend, if any."""
         return "mdi:hvac" if self.hvac_mode == HVACMode.HEAT else "mdi:hvac-off"
 
     @cached_property
+    def hvac_modes(self) -> list[HVACMode]:
+        """Return the list of available hvac operation modes."""
+        hvac_modes: list[HVACMode]
+
+        if self._is_heating:
+            hvac_modes = [
+                HVACMode.AUTO,
+                HVACMode.HEAT,
+                HVACMode.OFF,
+            ]
+        elif self._is_cooling:
+            hvac_modes = [
+                HVACMode.AUTO,
+                HVACMode.COOL,
+                HVACMode.OFF,
+            ]
+        else:  # pragma: nocover
+            # untested: I don't know what a heating circuit with heating and cooling support do.
+            hvac_modes = [
+                HVACMode.AUTO,
+                HVACMode.HEAT_COOL,
+                HVACMode.OFF,
+            ]
+
+        return hvac_modes
+
+    @cached_property
     def preset_modes(self) -> list[str] | None:
         """Return available preset modes."""
         preset_to_ha: dict[int, str] = HEATING_CIRCUIT_PRESET_TO_HA
 
-        if self.coordinator.is_cooling_circuit(index=self.index) and not self.coordinator.is_heating_circuit(
-            index=self.index,
-        ):
+        if self._is_cooling:
             preset_to_ha = COOLING_CIRCUIT_PRESET_TO_HA
 
         return list(preset_to_ha.values())
@@ -207,7 +238,13 @@ class KebaKeEnergyClimateEntity(KebaKeEnergyBaseEntity, ClimateEntity):
                 HeatCircuitOperatingMode.NIGHT.value,
                 HeatCircuitOperatingMode.PARTY.value,
             ]:
-                hvac_mode = HVACMode.HEAT
+                if self._is_heating:
+                    hvac_mode = HVACMode.HEAT
+                elif self._is_cooling:
+                    hvac_mode = HVACMode.COOL
+                else:  # pragma: nocover
+                    # untested: I don't know what a heating circuit with heating and cooling support do.
+                    hvac_mode = HVACMode.HEAT_COOL
             else:
                 hvac_mode = HVACMode.OFF
 
@@ -265,7 +302,7 @@ class KebaKeEnergyClimateEntity(KebaKeEnergyBaseEntity, ClimateEntity):
             operating_mode_status = HeatCircuitOperatingMode.AUTO.value
             await self._async_set_away_date_range(PRESET_HOME)
             self._attr_preset_mode = PRESET_HOME
-        elif hvac_mode in [HVACMode.HEAT, HVACMode.COOL]:
+        elif hvac_mode in [HVACMode.HEAT, HVACMode.COOL, HVACMode.HEAT_COOL]:
             operating_mode_status = HeatCircuitOperatingMode.DAY.value
         elif hvac_mode == HVACMode.OFF:
             operating_mode_status = HeatCircuitOperatingMode.OFF.value

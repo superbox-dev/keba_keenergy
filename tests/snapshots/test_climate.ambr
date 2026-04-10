@@ -1,0 +1,137 @@
+# serializer version: 1
+# name: test_climate[de-climate.keba_keenergy_12345678_1]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'current_humidity': 53.0,
+      'current_temperature': 22.4,
+      'friendly_name': 'Heizkreis 1',
+      'hvac_action': <HVACAction.HEATING: 'heating'>,
+      'hvac_modes': list([
+        <HVACMode.AUTO: 'auto'>,
+        <HVACMode.HEAT: 'heat'>,
+        <HVACMode.OFF: 'off'>,
+      ]),
+      'icon': 'mdi:hvac',
+      'max_temp': 22.5,
+      'min_temp': 17.5,
+      'preset_mode': 'comfort',
+      'preset_modes': list([
+        'home',
+        'away',
+        'comfort',
+        'sleep',
+        'boost',
+      ]),
+      'supported_features': <ClimateEntityFeature: 401>,
+      'target_temp_step': 0.5,
+      'temperature': 21.5,
+    }),
+    'context': <ANY>,
+    'entity_id': 'climate.keba_keenergy_12345678_1',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': 'heat',
+  })
+# ---
+# name: test_climate[de-climate.keba_keenergy_12345678_2]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'current_temperature': None,
+      'friendly_name': 'Heizkreis 2',
+      'hvac_action': <HVACAction.COOLING: 'cooling'>,
+      'hvac_modes': list([
+        <HVACMode.AUTO: 'auto'>,
+        <HVACMode.COOL: 'cool'>,
+        <HVACMode.OFF: 'off'>,
+      ]),
+      'icon': 'mdi:hvac-off',
+      'max_temp': 22.5,
+      'min_temp': 17.5,
+      'preset_mode': 'home',
+      'preset_modes': list([
+        'home',
+        'comfort',
+        'sleep',
+        'boost',
+      ]),
+      'supported_features': <ClimateEntityFeature: 401>,
+      'target_temp_step': 0.5,
+      'temperature': 20.0,
+    }),
+    'context': <ANY>,
+    'entity_id': 'climate.keba_keenergy_12345678_2',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': 'auto',
+  })
+# ---
+# name: test_climate[en-climate.keba_keenergy_12345678_1]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'current_humidity': 53.0,
+      'current_temperature': 22.4,
+      'friendly_name': 'Heating circuit 1',
+      'hvac_action': <HVACAction.HEATING: 'heating'>,
+      'hvac_modes': list([
+        <HVACMode.AUTO: 'auto'>,
+        <HVACMode.HEAT: 'heat'>,
+        <HVACMode.OFF: 'off'>,
+      ]),
+      'icon': 'mdi:hvac',
+      'max_temp': 22.5,
+      'min_temp': 17.5,
+      'preset_mode': 'comfort',
+      'preset_modes': list([
+        'home',
+        'away',
+        'comfort',
+        'sleep',
+        'boost',
+      ]),
+      'supported_features': <ClimateEntityFeature: 401>,
+      'target_temp_step': 0.5,
+      'temperature': 21.5,
+    }),
+    'context': <ANY>,
+    'entity_id': 'climate.keba_keenergy_12345678_1',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': 'heat',
+  })
+# ---
+# name: test_climate[en-climate.keba_keenergy_12345678_2]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'current_temperature': None,
+      'friendly_name': 'Heating circuit 2',
+      'hvac_action': <HVACAction.COOLING: 'cooling'>,
+      'hvac_modes': list([
+        <HVACMode.AUTO: 'auto'>,
+        <HVACMode.COOL: 'cool'>,
+        <HVACMode.OFF: 'off'>,
+      ]),
+      'icon': 'mdi:hvac-off',
+      'max_temp': 22.5,
+      'min_temp': 17.5,
+      'preset_mode': 'home',
+      'preset_modes': list([
+        'home',
+        'comfort',
+        'sleep',
+        'boost',
+      ]),
+      'supported_features': <ClimateEntityFeature: 401>,
+      'target_temp_step': 0.5,
+      'temperature': 20.0,
+    }),
+    'context': <ANY>,
+    'entity_id': 'climate.keba_keenergy_12345678_2',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': 'auto',
+  })
+# ---
