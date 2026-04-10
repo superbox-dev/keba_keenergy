@@ -1,0 +1,25 @@
+# serializer version: 1
+# name: test_set_away_range_with_invalid_config_entry[de]
+  'Ungültige Integration angegeben. {config_entry_id} erhalten.'
+# ---
+# name: test_set_away_range_with_invalid_config_entry[en]
+  'Invalid integration provided. Got {config_entry_id}.'
+# ---
+# name: test_set_away_range_with_unloaded_config_entry[de]
+  'Ungültige Integration angegeben. {config_entry_id} ist nicht geladen.'
+# ---
+# name: test_set_away_range_with_unloaded_config_entry[en]
+  'Invalid integration provided. {config_entry_id} is not loaded.'
+# ---
+# name: test_set_heating_curve_points_with_duplicate_outdoor_temperatures[de]
+  'Doppelte Außentemperatur-Werte gefunden.'
+# ---
+# name: test_set_heating_curve_points_with_duplicate_outdoor_temperatures[en]
+  'Duplicate outdoor temperature values found.'
+# ---
+# name: test_set_heating_curve_points_with_invalid_heating_curve[de]
+  'Heizkurve "{heating_curve}" nicht gefunden.'
+# ---
+# name: test_set_heating_curve_points_with_invalid_heating_curve[en]
+  'Can not find heating curve "{heating_curve}".'
+# ---

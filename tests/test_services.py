@@ -31,6 +31,7 @@ from tests.api_data import get_multiple_position_fixed_data_response
 if TYPE_CHECKING:
     from homeassistant.core import HomeAssistant
     from pytest_homeassistant_custom_component.common import MockConfigEntry
+    from syrupy.assertion import SnapshotAssertion
     from tests.conftest import FakeKebaKeEnergyAPI
 
 
@@ -114,19 +115,13 @@ async def test_set_away_range_with_invalid_start_and_end_date(
     )
 
 
-@pytest.mark.parametrize(
-    ("language", "expected"),
-    [
-        ("en", "Invalid integration provided. Got {config_entry_id}."),
-        ("de", "Ungültige Integration angegeben. {config_entry_id} erhalten."),
-    ],
-)
+@pytest.mark.parametrize("language", ["en", "de"])
 async def test_set_away_range_with_invalid_config_entry(
     hass: HomeAssistant,
     config_entry: MockConfigEntry,
     fake_api: FakeKebaKeEnergyAPI,
+    snapshot: SnapshotAssertion,
     language: str,
-    expected: str,
 ) -> None:
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
@@ -156,22 +151,16 @@ async def test_set_away_range_with_invalid_config_entry(
             blocking=True,
         )
 
-    assert translations["component.keba_keenergy.exceptions.invalid_config_entry.message"] == expected
+    assert translations["component.keba_keenergy.exceptions.invalid_config_entry.message"] == snapshot
 
 
-@pytest.mark.parametrize(
-    ("language", "expected"),
-    [
-        ("en", "Invalid integration provided. {config_entry_id} is not loaded."),
-        ("de", "Ungültige Integration angegeben. {config_entry_id} ist nicht geladen."),
-    ],
-)
+@pytest.mark.parametrize("language", ["en", "de"])
 async def test_set_away_range_with_unloaded_config_entry(
     hass: HomeAssistant,
     config_entry: MockConfigEntry,
     fake_api: FakeKebaKeEnergyAPI,
+    snapshot: SnapshotAssertion,
     language: str,
-    expected: str,
 ) -> None:
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
@@ -205,7 +194,7 @@ async def test_set_away_range_with_unloaded_config_entry(
             blocking=True,
         )
 
-    assert translations["component.keba_keenergy.exceptions.unloaded_config_entry.message"] == expected
+    assert translations["component.keba_keenergy.exceptions.unloaded_config_entry.message"] == snapshot
 
 
 async def test_set_heating_curve_points(
@@ -286,19 +275,13 @@ async def test_set_heating_curve_points(
     )
 
 
-@pytest.mark.parametrize(
-    ("language", "expected"),
-    [
-        ("en", 'Can not find heating curve "{heating_curve}".'),
-        ("de", 'Heizkurve "{heating_curve}" nicht gefunden.'),
-    ],
-)
+@pytest.mark.parametrize("language", ["en", "de"])
 async def test_set_heating_curve_points_with_invalid_heating_curve(
     hass: HomeAssistant,
     config_entry: MockConfigEntry,
     fake_api: FakeKebaKeEnergyAPI,
+    snapshot: SnapshotAssertion,
     language: str,
-    expected: str,
 ) -> None:
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
@@ -341,22 +324,16 @@ async def test_set_heating_curve_points_with_invalid_heating_curve(
             blocking=True,
         )
 
-    assert translations["component.keba_keenergy.exceptions.cannot_find_heating_curve.message"] == expected
+    assert translations["component.keba_keenergy.exceptions.cannot_find_heating_curve.message"] == snapshot
 
 
-@pytest.mark.parametrize(
-    ("language", "expected"),
-    [
-        ("en", "Duplicate outdoor temperature values found."),
-        ("de", "Doppelte Außentemperatur-Werte gefunden."),
-    ],
-)
+@pytest.mark.parametrize("language", ["en", "de"])
 async def test_set_heating_curve_points_with_duplicate_outdoor_temperatures(
     hass: HomeAssistant,
     config_entry: MockConfigEntry,
     fake_api: FakeKebaKeEnergyAPI,
+    snapshot: SnapshotAssertion,
     language: str,
-    expected: str,
 ) -> None:
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
@@ -399,7 +376,7 @@ async def test_set_heating_curve_points_with_duplicate_outdoor_temperatures(
             blocking=True,
         )
 
-    assert translations["component.keba_keenergy.exceptions.duplicate_outdoor_temperature_values.message"] == expected
+    assert translations["component.keba_keenergy.exceptions.duplicate_outdoor_temperature_values.message"] == snapshot
 
 
 def test_away_date_range_schema_valid() -> None:
