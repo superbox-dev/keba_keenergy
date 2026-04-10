@@ -10,7 +10,6 @@ from homeassistant.components.select import ATTR_OPTION
 from homeassistant.components.select import DOMAIN as SELECT_DOMAIN
 from homeassistant.components.select import SERVICE_SELECT_OPTION
 from homeassistant.const import ATTR_ENTITY_ID
-from homeassistant.const import STATE_OFF
 from homeassistant.core import HomeAssistant
 from homeassistant.core import State
 from homeassistant.exceptions import HomeAssistantError
@@ -55,7 +54,7 @@ async def test_entity_update(
     entity_id: str = "sensor.keba_keenergy_12345678_heat_circuit_operating_mode_2"
     heat_circuit_operating_mode_1: State | None = hass.states.get(entity_id)
     assert isinstance(heat_circuit_operating_mode_1, State)
-    assert heat_circuit_operating_mode_1.state == STATE_OFF
+    assert heat_circuit_operating_mode_1.state == "auto"
 
     await hass.services.async_call(
         domain=HA_DOMAIN,

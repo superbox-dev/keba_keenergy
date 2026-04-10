@@ -211,6 +211,20 @@ HEAT_CIRCUIT_TARGET_TEMPERATURE_DAY: str = """
     }
 """
 
+HEAT_CIRCUIT_TARGET_COOLING_TEMPERATURE_DAY: str = """
+    {
+        "name": "APPL.CtrlAppl.sParam.heatCircuit[%s].param.normalCoolSetTemp",
+        "attributes": {
+            "formatId": "fmtTemp",
+            "longText": "Room temp. Day",
+            "unitId": "Temp",
+            "upperLimit": "30",
+            "lowerLimit": "10"
+        },
+        "value": "%s"
+    }
+"""
+
 HEAT_CIRCUIT_HEATING_LIMIT_DAY: str = """
     {
         "name": "APPL.CtrlAppl.sParam.heatCircuit[%s].param.thresholdDayTemp.value",
@@ -220,6 +234,20 @@ HEAT_CIRCUIT_HEATING_LIMIT_DAY: str = """
             "unitId": "Temp",
             "upperLimit": "100",
             "lowerLimit": "-20"
+        },
+        "value": "%s"
+    }
+"""
+
+HEAT_CIRCUIT_COOLING_LIMIT_DAY: str = """
+    {
+        "name": "APPL.CtrlAppl.sParam.heatCircuit[%s].param.thresholdDayTemp.value",
+        "attributes": {
+            "formatId": "fmtTemp",
+            "longText": "Heating limit Day",
+            "lowerLimit": "-20",
+            "unitId": "Temp",
+            "upperLimit": "100"
         },
         "value": "%s"
     }
@@ -281,6 +309,20 @@ HEAT_CIRCUIT_TARGET_TEMPERATURE_NIGHT: str = """
     }
 """
 
+HEAT_CIRCUIT_TARGET_COOLING_TEMPERATURE_NIGHT: str = """
+    {
+        "name": "APPL.CtrlAppl.sParam.heatCircuit[%s].param.reducedCoolSetTemp",
+        "attributes": {
+            "formatId": "fmtTemp",
+            "longText": "Room temp. Night",
+            "unitId": "Temp",
+            "upperLimit": "30",
+            "lowerLimit": "10"
+        },
+        "value": "%s"
+    }
+"""
+
 HEAT_CIRCUIT_HEATING_LIMIT_NIGHT: str = """
     {
         "name": "APPL.CtrlAppl.sParam.heatCircuit[%s].param.thresholdNightTemp.value",
@@ -289,6 +331,20 @@ HEAT_CIRCUIT_HEATING_LIMIT_NIGHT: str = """
             "longText": "Heat limit Night",
             "unitId": "Temp",
             "upperLimit": "100",
+            "lowerLimit": "-20"
+        },
+        "value": "%s"
+    }
+"""
+
+HEAT_CIRCUIT_COOLING_LIMIT_NIGHT: str = """
+    {
+        "name": "APPL.CtrlAppl.sParam.heatCircuit[%s].param.thresholdNightCoolTemp.value",
+        "attributes": {
+            "formatId": "fmtTemp",
+            "longText": "Cooling limit night",
+            "unitId": "Temp",
+            "upperLimit": "40",
             "lowerLimit": "-20"
         },
         "value": "%s"
@@ -386,12 +442,39 @@ HEAT_CIRCUIT_HEATING_CURVE_OFFSET: str = """
     }
 """
 
+HEAT_CIRCUIT_COOLING_CURVE_OFFSET: str = """
+    {
+        "name": "APPL.CtrlAppl.sParam.heatCircuit[%s].param.coolCurveOffset",
+        "attributes": {
+            "formatId": "fmtTemp",
+            "longText": "Cool curve offset",
+            "unitId": "TempRel",
+            "upperLimit": "10",
+            "lowerLimit": "-10"
+        },
+        "value": "%s"
+    }
+"""
+
 HEAT_CIRCUIT_HEATING_CURVE_SLOPE: str = """
     {
         "name": "APPL.CtrlAppl.sParam.heatCircuit[%s].param.heatCurveGradient",
         "attributes": {
             "formatId": "fmt3p2",
             "longText": "Heat curve grad.",
+            "upperLimit": "5",
+            "lowerLimit": "0"
+        },
+        "value": "%s"
+    }
+"""
+
+HEAT_CIRCUIT_COOLING_CURVE_SLOPE: str = """
+    {
+        "name": "APPL.CtrlAppl.sParam.heatCircuit[%s].param.coolCurveGradient",
+        "attributes": {
+            "formatId": "fmt3p2",
+            "longText": "Cool curve grad.",
             "upperLimit": "5",
             "lowerLimit": "0"
         },
@@ -1614,12 +1697,16 @@ DEFAULT_POSITION_DATA_RESPONSE: list[dict[str, Any]] = [
     json.loads(HEAT_CIRCUIT_FLOW_TEMPERATURE % ("0", "24.33543")),
     json.loads(HEAT_CIRCUIT_RETURN_FLOW_TEMPERATURE % ("0", "22.2143")),
     json.loads(HEAT_CIRCUIT_TARGET_TEMPERATURE_DAY % ("0", "20.5")),
+    json.loads(HEAT_CIRCUIT_TARGET_COOLING_TEMPERATURE_DAY % ("0", "20.5")),
     json.loads(HEAT_CIRCUIT_HEATING_LIMIT_DAY % ("0", "20")),
+    json.loads(HEAT_CIRCUIT_COOLING_LIMIT_DAY % ("0", "20")),
     json.loads(HEAT_CIRCUIT_HEAT_REQUEST % ("0", "1")),
     json.loads(HEAT_CIRCUIT_COOL_REQUEST % ("0", "0")),
     json.loads(HEAT_CIRCUIT_TARGET_TEMPERATURE_AWAY % ("0", "18")),
     json.loads(HEAT_CIRCUIT_TARGET_TEMPERATURE_NIGHT % ("0", "20")),
+    json.loads(HEAT_CIRCUIT_TARGET_COOLING_TEMPERATURE_NIGHT % ("0", "20")),
     json.loads(HEAT_CIRCUIT_HEATING_LIMIT_NIGHT % ("0", "18")),
+    json.loads(HEAT_CIRCUIT_COOLING_LIMIT_NIGHT % ("0", "18")),
     json.loads(HEAT_CIRCUIT_OPERATION_MODE % ("0", "3")),
     json.loads(HEAT_CIRCUIT_SELECTED_TARGET_TEMPERATURE % ("0", "20")),
     json.loads(HEAT_CIRCUIT_TARGET_TEMPERATURE % ("0", "20.5")),
@@ -1627,7 +1714,9 @@ DEFAULT_POSITION_DATA_RESPONSE: list[dict[str, Any]] = [
     json.loads(HEAT_CIRCUIT_AWAY_START_DATE % ("0", "1769036400")),
     json.loads(HEAT_CIRCUIT_AWAY_END_DATE % ("0", "1769122799")),
     json.loads(HEAT_CIRCUIT_HEATING_CURVE_OFFSET % ("0", "0.5")),
+    json.loads(HEAT_CIRCUIT_COOLING_CURVE_OFFSET % ("0", "0.5")),
     json.loads(HEAT_CIRCUIT_HEATING_CURVE_SLOPE % ("0", "0.1")),
+    json.loads(HEAT_CIRCUIT_COOLING_CURVE_SLOPE % ("0", "0.1")),
     json.loads(HEAT_CIRCUIT_USE_HEATING_CURVE % ("0", "true")),
     json.loads(HEAT_CIRCUIT_HEATING_CURVE % ("0", "HC1")),
     json.loads(HEAT_CIRCUIT_COOLING_CURVE % ("0", "HC2")),
@@ -1701,8 +1790,12 @@ ENTITY_UPDATED_DATA_RESPONSE: list[dict[str, Any]] = [
     json.loads(HEAT_CIRCUIT_RETURN_FLOW_TEMPERATURE % ("1", "22.2143")),
     json.loads(HEAT_CIRCUIT_TARGET_TEMPERATURE_DAY % ("0", "20.5")),
     json.loads(HEAT_CIRCUIT_TARGET_TEMPERATURE_DAY % ("1", "20.5")),
+    json.loads(HEAT_CIRCUIT_TARGET_COOLING_TEMPERATURE_DAY % ("0", "20.5")),
+    json.loads(HEAT_CIRCUIT_TARGET_COOLING_TEMPERATURE_DAY % ("1", "20.5")),
     json.loads(HEAT_CIRCUIT_HEATING_LIMIT_DAY % ("0", "20")),
     json.loads(HEAT_CIRCUIT_HEATING_LIMIT_DAY % ("1", "20")),
+    json.loads(HEAT_CIRCUIT_COOLING_LIMIT_DAY % ("0", "20")),
+    json.loads(HEAT_CIRCUIT_COOLING_LIMIT_DAY % ("1", "20")),
     json.loads(HEAT_CIRCUIT_HEAT_REQUEST % ("0", "1")),
     json.loads(HEAT_CIRCUIT_HEAT_REQUEST % ("1", "0")),
     json.loads(HEAT_CIRCUIT_COOL_REQUEST % ("0", "0")),
@@ -1711,8 +1804,12 @@ ENTITY_UPDATED_DATA_RESPONSE: list[dict[str, Any]] = [
     json.loads(HEAT_CIRCUIT_TARGET_TEMPERATURE_AWAY % ("1", "18")),
     json.loads(HEAT_CIRCUIT_TARGET_TEMPERATURE_NIGHT % ("0", "20")),
     json.loads(HEAT_CIRCUIT_TARGET_TEMPERATURE_NIGHT % ("1", "20")),
+    json.loads(HEAT_CIRCUIT_TARGET_COOLING_TEMPERATURE_NIGHT % ("0", "20")),
+    json.loads(HEAT_CIRCUIT_TARGET_COOLING_TEMPERATURE_NIGHT % ("1", "20")),
     json.loads(HEAT_CIRCUIT_HEATING_LIMIT_NIGHT % ("0", "18")),
     json.loads(HEAT_CIRCUIT_HEATING_LIMIT_NIGHT % ("1", "18")),
+    json.loads(HEAT_CIRCUIT_COOLING_LIMIT_NIGHT % ("0", "18")),
+    json.loads(HEAT_CIRCUIT_COOLING_LIMIT_NIGHT % ("1", "18")),
     json.loads(HEAT_CIRCUIT_OPERATION_MODE % ("0", "3")),
     json.loads(HEAT_CIRCUIT_OPERATION_MODE % ("1", "1")),
     json.loads(HEAT_CIRCUIT_SELECTED_TARGET_TEMPERATURE % ("0", "20")),
@@ -1727,8 +1824,12 @@ ENTITY_UPDATED_DATA_RESPONSE: list[dict[str, Any]] = [
     json.loads(HEAT_CIRCUIT_AWAY_END_DATE % ("1", "1769122799")),
     json.loads(HEAT_CIRCUIT_HEATING_CURVE_OFFSET % ("0", "0.5")),
     json.loads(HEAT_CIRCUIT_HEATING_CURVE_OFFSET % ("1", "-0.5")),
+    json.loads(HEAT_CIRCUIT_COOLING_CURVE_OFFSET % ("0", "0.5")),
+    json.loads(HEAT_CIRCUIT_COOLING_CURVE_OFFSET % ("1", "-0.5")),
     json.loads(HEAT_CIRCUIT_HEATING_CURVE_SLOPE % ("0", "0.2")),
     json.loads(HEAT_CIRCUIT_HEATING_CURVE_SLOPE % ("1", "0.3")),
+    json.loads(HEAT_CIRCUIT_COOLING_CURVE_SLOPE % ("0", "0.2")),
+    json.loads(HEAT_CIRCUIT_COOLING_CURVE_SLOPE % ("1", "0.3")),
     json.loads(HEAT_CIRCUIT_USE_HEATING_CURVE % ("0", "true")),
     json.loads(HEAT_CIRCUIT_USE_HEATING_CURVE % ("1", "false")),
     json.loads(HEAT_CIRCUIT_HEATING_CURVE % ("0", "HC2")),
@@ -1829,12 +1930,16 @@ def get_single_position_fixed_data_response(
         json.loads(HEAT_CIRCUIT_FLOW_TEMPERATURE % ("0", "24.33543")),
         json.loads(HEAT_CIRCUIT_RETURN_FLOW_TEMPERATURE % ("0", "22.2143")),
         json.loads(HEAT_CIRCUIT_TARGET_TEMPERATURE_DAY % ("0", "20.5")),
+        json.loads(HEAT_CIRCUIT_TARGET_COOLING_TEMPERATURE_DAY % ("0", "20.5")),
         json.loads(HEAT_CIRCUIT_HEATING_LIMIT_DAY % ("0", "20")),
+        json.loads(HEAT_CIRCUIT_COOLING_LIMIT_DAY % ("1", "20")),
         json.loads(HEAT_CIRCUIT_HEAT_REQUEST % ("0", "1")),
         json.loads(HEAT_CIRCUIT_COOL_REQUEST % ("1", "1")),
         json.loads(HEAT_CIRCUIT_TARGET_TEMPERATURE_AWAY % ("0", "18")),
         json.loads(HEAT_CIRCUIT_TARGET_TEMPERATURE_NIGHT % ("0", "20")),
+        json.loads(HEAT_CIRCUIT_TARGET_COOLING_TEMPERATURE_NIGHT % ("0", "20")),
         json.loads(HEAT_CIRCUIT_HEATING_LIMIT_NIGHT % ("0", "18")),
+        json.loads(HEAT_CIRCUIT_COOLING_LIMIT_NIGHT % ("0", "18")),
         json.loads(HEAT_CIRCUIT_OPERATION_MODE % ("0", "3")),
         json.loads(HEAT_CIRCUIT_SELECTED_TARGET_TEMPERATURE % ("0", "20")),
         json.loads(HEAT_CIRCUIT_TARGET_TEMPERATURE % ("0", "20.5")),
@@ -1842,7 +1947,9 @@ def get_single_position_fixed_data_response(
         json.loads(HEAT_CIRCUIT_AWAY_START_DATE % ("0", "1769036400")),
         json.loads(HEAT_CIRCUIT_AWAY_END_DATE % ("0", "1769122799")),
         json.loads(HEAT_CIRCUIT_HEATING_CURVE_OFFSET % ("0", "0.5")),
+        json.loads(HEAT_CIRCUIT_COOLING_CURVE_OFFSET % ("0", "0.5")),
         json.loads(HEAT_CIRCUIT_HEATING_CURVE_SLOPE % ("0", "0.4")),
+        json.loads(HEAT_CIRCUIT_COOLING_CURVE_SLOPE % ("1", "0.4")),
         json.loads(HEAT_CIRCUIT_USE_HEATING_CURVE % ("0", "false")),
         json.loads(HEAT_CIRCUIT_HEATING_CURVE % ("0", "HC4")),
         json.loads(HEAT_CIRCUIT_COOLING_CURVE % ("0", "HC2")),
@@ -1917,8 +2024,12 @@ MULTIPLE_POSITION_DATA_RESPONSE_1: list[dict[str, Any]] = [
     json.loads(HEAT_CIRCUIT_RETURN_FLOW_TEMPERATURE % ("1", "22.2143")),
     json.loads(HEAT_CIRCUIT_TARGET_TEMPERATURE_DAY % ("0", "20.5")),
     json.loads(HEAT_CIRCUIT_TARGET_TEMPERATURE_DAY % ("1", "20.5")),
+    json.loads(HEAT_CIRCUIT_TARGET_COOLING_TEMPERATURE_DAY % ("0", "20.5")),
+    json.loads(HEAT_CIRCUIT_TARGET_COOLING_TEMPERATURE_DAY % ("1", "20.5")),
     json.loads(HEAT_CIRCUIT_HEATING_LIMIT_DAY % ("0", "20")),
     json.loads(HEAT_CIRCUIT_HEATING_LIMIT_DAY % ("1", "20")),
+    json.loads(HEAT_CIRCUIT_COOLING_LIMIT_DAY % ("0", "20")),
+    json.loads(HEAT_CIRCUIT_COOLING_LIMIT_DAY % ("1", "20")),
     json.loads(HEAT_CIRCUIT_HEAT_REQUEST % ("0", "1")),
     json.loads(HEAT_CIRCUIT_HEAT_REQUEST % ("1", "0")),
     json.loads(HEAT_CIRCUIT_COOL_REQUEST % ("0", "0")),
@@ -1927,10 +2038,14 @@ MULTIPLE_POSITION_DATA_RESPONSE_1: list[dict[str, Any]] = [
     json.loads(HEAT_CIRCUIT_TARGET_TEMPERATURE_AWAY % ("1", "18")),
     json.loads(HEAT_CIRCUIT_TARGET_TEMPERATURE_NIGHT % ("0", "20")),
     json.loads(HEAT_CIRCUIT_TARGET_TEMPERATURE_NIGHT % ("1", "20")),
+    json.loads(HEAT_CIRCUIT_TARGET_COOLING_TEMPERATURE_NIGHT % ("0", "20")),
+    json.loads(HEAT_CIRCUIT_TARGET_COOLING_TEMPERATURE_NIGHT % ("1", "20")),
     json.loads(HEAT_CIRCUIT_HEATING_LIMIT_NIGHT % ("0", "18")),
     json.loads(HEAT_CIRCUIT_HEATING_LIMIT_NIGHT % ("1", "18")),
+    json.loads(HEAT_CIRCUIT_COOLING_LIMIT_NIGHT % ("0", "18")),
+    json.loads(HEAT_CIRCUIT_COOLING_LIMIT_NIGHT % ("1", "18")),
     json.loads(HEAT_CIRCUIT_OPERATION_MODE % ("0", "2")),
-    json.loads(HEAT_CIRCUIT_OPERATION_MODE % ("1", "0")),
+    json.loads(HEAT_CIRCUIT_OPERATION_MODE % ("1", "1")),
     json.loads(HEAT_CIRCUIT_SELECTED_TARGET_TEMPERATURE % ("0", "20")),
     json.loads(HEAT_CIRCUIT_SELECTED_TARGET_TEMPERATURE % ("1", "20")),
     json.loads(HEAT_CIRCUIT_TARGET_TEMPERATURE % ("0", "20.5")),
@@ -1943,8 +2058,12 @@ MULTIPLE_POSITION_DATA_RESPONSE_1: list[dict[str, Any]] = [
     json.loads(HEAT_CIRCUIT_AWAY_END_DATE % ("1", "1769122799")),
     json.loads(HEAT_CIRCUIT_HEATING_CURVE_OFFSET % ("0", "1.5")),
     json.loads(HEAT_CIRCUIT_HEATING_CURVE_OFFSET % ("1", "-1.5")),
+    json.loads(HEAT_CIRCUIT_COOLING_CURVE_OFFSET % ("0", "0.5")),
+    json.loads(HEAT_CIRCUIT_COOLING_CURVE_OFFSET % ("1", "-1.5")),
     json.loads(HEAT_CIRCUIT_HEATING_CURVE_SLOPE % ("0", "0.5")),
     json.loads(HEAT_CIRCUIT_HEATING_CURVE_SLOPE % ("1", "0.6")),
+    json.loads(HEAT_CIRCUIT_COOLING_CURVE_SLOPE % ("0", "0.5")),
+    json.loads(HEAT_CIRCUIT_COOLING_CURVE_SLOPE % ("1", "0.6")),
     json.loads(HEAT_CIRCUIT_USE_HEATING_CURVE % ("0", "false")),
     json.loads(HEAT_CIRCUIT_USE_HEATING_CURVE % ("1", "true")),
     json.loads(HEAT_CIRCUIT_HEATING_CURVE % ("0", "HC6")),
@@ -2053,8 +2172,12 @@ MULTIPLE_POSITION_DATA_RESPONSE_2: list[dict[str, Any]] = [
     json.loads(HEAT_CIRCUIT_RETURN_FLOW_TEMPERATURE % ("1", "22.2143")),
     json.loads(HEAT_CIRCUIT_TARGET_TEMPERATURE_DAY % ("0", "20.5")),
     json.loads(HEAT_CIRCUIT_TARGET_TEMPERATURE_DAY % ("1", "20.5")),
+    json.loads(HEAT_CIRCUIT_TARGET_COOLING_TEMPERATURE_DAY % ("0", "20.5")),
+    json.loads(HEAT_CIRCUIT_TARGET_COOLING_TEMPERATURE_DAY % ("1", "20.5")),
     json.loads(HEAT_CIRCUIT_HEATING_LIMIT_DAY % ("0", "20")),
     json.loads(HEAT_CIRCUIT_HEATING_LIMIT_DAY % ("1", "20")),
+    json.loads(HEAT_CIRCUIT_COOLING_LIMIT_DAY % ("0", "20")),
+    json.loads(HEAT_CIRCUIT_COOLING_LIMIT_DAY % ("1", "20")),
     json.loads(HEAT_CIRCUIT_HEAT_REQUEST % ("0", "1")),
     json.loads(HEAT_CIRCUIT_HEAT_REQUEST % ("1", "0")),
     json.loads(HEAT_CIRCUIT_COOL_REQUEST % ("0", "0")),
@@ -2063,8 +2186,12 @@ MULTIPLE_POSITION_DATA_RESPONSE_2: list[dict[str, Any]] = [
     json.loads(HEAT_CIRCUIT_TARGET_TEMPERATURE_AWAY % ("1", "18")),
     json.loads(HEAT_CIRCUIT_TARGET_TEMPERATURE_NIGHT % ("0", "20")),
     json.loads(HEAT_CIRCUIT_TARGET_TEMPERATURE_NIGHT % ("1", "20")),
+    json.loads(HEAT_CIRCUIT_TARGET_COOLING_TEMPERATURE_NIGHT % ("0", "20")),
+    json.loads(HEAT_CIRCUIT_TARGET_COOLING_TEMPERATURE_NIGHT % ("1", "20")),
     json.loads(HEAT_CIRCUIT_HEATING_LIMIT_NIGHT % ("0", "18")),
     json.loads(HEAT_CIRCUIT_HEATING_LIMIT_NIGHT % ("1", "18")),
+    json.loads(HEAT_CIRCUIT_COOLING_LIMIT_NIGHT % ("0", "18")),
+    json.loads(HEAT_CIRCUIT_COOLING_LIMIT_NIGHT % ("1", "18")),
     json.loads(HEAT_CIRCUIT_OPERATION_MODE % ("0", "4")),
     json.loads(HEAT_CIRCUIT_OPERATION_MODE % ("1", "4")),
     json.loads(HEAT_CIRCUIT_SELECTED_TARGET_TEMPERATURE % ("0", "20")),
@@ -2079,8 +2206,12 @@ MULTIPLE_POSITION_DATA_RESPONSE_2: list[dict[str, Any]] = [
     json.loads(HEAT_CIRCUIT_AWAY_END_DATE % ("1", "1769122799")),
     json.loads(HEAT_CIRCUIT_HEATING_CURVE_OFFSET % ("0", "4.5")),
     json.loads(HEAT_CIRCUIT_HEATING_CURVE_OFFSET % ("1", "-4.5")),
+    json.loads(HEAT_CIRCUIT_COOLING_CURVE_OFFSET % ("0", "4.5")),
+    json.loads(HEAT_CIRCUIT_COOLING_CURVE_OFFSET % ("1", "-4.5")),
     json.loads(HEAT_CIRCUIT_HEATING_CURVE_SLOPE % ("0", "0.7")),
     json.loads(HEAT_CIRCUIT_HEATING_CURVE_SLOPE % ("1", "0.8")),
+    json.loads(HEAT_CIRCUIT_COOLING_CURVE_SLOPE % ("0", "0.7")),
+    json.loads(HEAT_CIRCUIT_COOLING_CURVE_SLOPE % ("1", "0.8")),
     json.loads(HEAT_CIRCUIT_USE_HEATING_CURVE % ("0", "false")),
     json.loads(HEAT_CIRCUIT_USE_HEATING_CURVE % ("1", "true")),
     json.loads(HEAT_CIRCUIT_HEATING_CURVE % ("0", "HC FBH")),
@@ -2247,8 +2378,12 @@ MULTIPLE_POSITION_DATA_RESPONSE_3_2: list[dict[str, Any]] = [
     json.loads(HEAT_CIRCUIT_RETURN_FLOW_TEMPERATURE % ("1", "22.2143")),
     json.loads(HEAT_CIRCUIT_TARGET_TEMPERATURE_DAY % ("0", "20.5")),
     json.loads(HEAT_CIRCUIT_TARGET_TEMPERATURE_DAY % ("1", "20.5")),
+    json.loads(HEAT_CIRCUIT_TARGET_COOLING_TEMPERATURE_DAY % ("0", "20.5")),
+    json.loads(HEAT_CIRCUIT_TARGET_COOLING_TEMPERATURE_DAY % ("1", "20.5")),
     json.loads(HEAT_CIRCUIT_HEATING_LIMIT_DAY % ("0", "20")),
     json.loads(HEAT_CIRCUIT_HEATING_LIMIT_DAY % ("1", "20")),
+    json.loads(HEAT_CIRCUIT_COOLING_LIMIT_DAY % ("0", "20")),
+    json.loads(HEAT_CIRCUIT_COOLING_LIMIT_DAY % ("1", "20")),
     json.loads(HEAT_CIRCUIT_HEAT_REQUEST % ("0", "1")),
     json.loads(HEAT_CIRCUIT_HEAT_REQUEST % ("1", "0")),
     json.loads(HEAT_CIRCUIT_COOL_REQUEST % ("0", "0")),
@@ -2257,8 +2392,12 @@ MULTIPLE_POSITION_DATA_RESPONSE_3_2: list[dict[str, Any]] = [
     json.loads(HEAT_CIRCUIT_TARGET_TEMPERATURE_AWAY % ("1", "18")),
     json.loads(HEAT_CIRCUIT_TARGET_TEMPERATURE_NIGHT % ("0", "20")),
     json.loads(HEAT_CIRCUIT_TARGET_TEMPERATURE_NIGHT % ("1", "20")),
+    json.loads(HEAT_CIRCUIT_TARGET_COOLING_TEMPERATURE_NIGHT % ("0", "20")),
+    json.loads(HEAT_CIRCUIT_TARGET_COOLING_TEMPERATURE_NIGHT % ("1", "20")),
     json.loads(HEAT_CIRCUIT_HEATING_LIMIT_NIGHT % ("0", "18")),
     json.loads(HEAT_CIRCUIT_HEATING_LIMIT_NIGHT % ("1", "18")),
+    json.loads(HEAT_CIRCUIT_COOLING_LIMIT_NIGHT % ("0", "18")),
+    json.loads(HEAT_CIRCUIT_COOLING_LIMIT_NIGHT % ("1", "18")),
     json.loads(HEAT_CIRCUIT_OPERATION_MODE % ("0", "2")),
     json.loads(HEAT_CIRCUIT_OPERATION_MODE % ("1", "0")),
     json.loads(HEAT_CIRCUIT_SELECTED_TARGET_TEMPERATURE % ("0", "20")),
@@ -2273,8 +2412,12 @@ MULTIPLE_POSITION_DATA_RESPONSE_3_2: list[dict[str, Any]] = [
     json.loads(HEAT_CIRCUIT_AWAY_END_DATE % ("1", "1769122799")),
     json.loads(HEAT_CIRCUIT_HEATING_CURVE_OFFSET % ("0", "1.5")),
     json.loads(HEAT_CIRCUIT_HEATING_CURVE_OFFSET % ("1", "-1.5")),
+    json.loads(HEAT_CIRCUIT_COOLING_CURVE_OFFSET % ("0", "1.5")),
+    json.loads(HEAT_CIRCUIT_COOLING_CURVE_OFFSET % ("1", "-1.5")),
     json.loads(HEAT_CIRCUIT_HEATING_CURVE_SLOPE % ("0", "0.5")),
     json.loads(HEAT_CIRCUIT_HEATING_CURVE_SLOPE % ("1", "0.6")),
+    json.loads(HEAT_CIRCUIT_COOLING_CURVE_SLOPE % ("0", "0.5")),
+    json.loads(HEAT_CIRCUIT_COOLING_CURVE_SLOPE % ("1", "0.6")),
     json.loads(HEAT_CIRCUIT_USE_HEATING_CURVE % ("0", "false")),
     json.loads(HEAT_CIRCUIT_USE_HEATING_CURVE % ("1", "true")),
     json.loads(HEAT_CIRCUIT_HEATING_CURVE % ("0", "HC6")),

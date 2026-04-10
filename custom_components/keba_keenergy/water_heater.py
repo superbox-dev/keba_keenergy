@@ -30,7 +30,7 @@ from keba_keenergy_api.constants import SectionPrefix
 
 from .const import DOMAIN
 from .const import FLASH_WRITE_DELAY
-from .entity import KebaKeEnergyEntity
+from .entity import KebaKeEnergyBaseEntity
 
 if TYPE_CHECKING:
     from homeassistant.helpers.entity_platform import AddEntitiesCallback
@@ -53,7 +53,7 @@ BUFFER_TANK_STATE_TO_HA: Final[dict[int, str]] = {
 }
 
 
-class KebaKeEnergyWaterHeaterTankEntity(KebaKeEnergyEntity, WaterHeaterEntity):
+class KebaKeEnergyWaterHeaterTankEntity(KebaKeEnergyBaseEntity, WaterHeaterEntity):
     """KEBA KeEnergy water heat entity."""
 
     _attr_temperature_unit: str = UnitOfTemperature.CELSIUS

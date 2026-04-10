@@ -15,7 +15,8 @@ from homeassistant.const import EntityCategory
 from keba_keenergy_api.constants import SectionPrefix
 
 from .const import DOMAIN
-from .entity import KebaKeEnergyExtendedEntity
+from .entity import KebaKeEnergyEntity
+from .entity import KebaKeEnergyEntityDescriptionMixin
 
 if TYPE_CHECKING:
     from homeassistant.core import HomeAssistant
@@ -29,17 +30,10 @@ _LOGGER = logging.getLogger(__name__)
 PARALLEL_UPDATES: Final[int] = 0
 
 
-@dataclass(frozen=True)
-class KebaKeEnergyBinarySensorEntityDescriptionMixin:
-    """Required values for KEBA KeEnergy binary sensors."""
-
-    key_index: int | None
-
-
-@dataclass(frozen=True)
+@dataclass(frozen=True, kw_only=True)
 class KebaKeEnergyBinarySensorEntityDescription(
     BinarySensorEntityDescription,
-    KebaKeEnergyBinarySensorEntityDescriptionMixin,
+    KebaKeEnergyEntityDescriptionMixin,
 ):
     """Class describing KEBA KeEnergy binary sensor entities."""
 
@@ -66,7 +60,6 @@ BINARY_SENSOR_TYPES: dict[str, tuple[KebaKeEnergyBinarySensorEntityDescription, 
     SectionPrefix.HEAT_PUMP: (
         KebaKeEnergyBinarySensorEntityDescription(
             key="heat_request",
-            key_index=None,
             translation_key="heat_request",
             translation_placeholders={
                 "counter": "",
@@ -76,7 +69,6 @@ BINARY_SENSOR_TYPES: dict[str, tuple[KebaKeEnergyBinarySensorEntityDescription, 
             device_class=BinarySensorDeviceClass.PROBLEM,
             entity_category=EntityCategory.DIAGNOSTIC,
             key="has_compressor_failure",
-            key_index=None,
             translation_key="compressor_failure",
             translation_placeholders={
                 "counter": "",
@@ -86,7 +78,6 @@ BINARY_SENSOR_TYPES: dict[str, tuple[KebaKeEnergyBinarySensorEntityDescription, 
             device_class=BinarySensorDeviceClass.PROBLEM,
             entity_category=EntityCategory.DIAGNOSTIC,
             key="has_source_failure",
-            key_index=None,
             translation_key="source_failure",
             translation_placeholders={
                 "counter": "",
@@ -96,7 +87,6 @@ BINARY_SENSOR_TYPES: dict[str, tuple[KebaKeEnergyBinarySensorEntityDescription, 
             device_class=BinarySensorDeviceClass.PROBLEM,
             entity_category=EntityCategory.DIAGNOSTIC,
             key="has_source_actuator_failure",
-            key_index=None,
             translation_key="source_actuator_failure",
             translation_placeholders={
                 "counter": "",
@@ -106,7 +96,6 @@ BINARY_SENSOR_TYPES: dict[str, tuple[KebaKeEnergyBinarySensorEntityDescription, 
             device_class=BinarySensorDeviceClass.PROBLEM,
             entity_category=EntityCategory.DIAGNOSTIC,
             key="has_three_phase_failure",
-            key_index=None,
             translation_key="three_phase_failure",
             translation_placeholders={
                 "counter": "",
@@ -116,7 +105,6 @@ BINARY_SENSOR_TYPES: dict[str, tuple[KebaKeEnergyBinarySensorEntityDescription, 
             device_class=BinarySensorDeviceClass.PROBLEM,
             entity_category=EntityCategory.DIAGNOSTIC,
             key="has_source_pressure_failure",
-            key_index=None,
             translation_key="source_pressure_failure",
             translation_placeholders={
                 "counter": "",
@@ -126,7 +114,6 @@ BINARY_SENSOR_TYPES: dict[str, tuple[KebaKeEnergyBinarySensorEntityDescription, 
             device_class=BinarySensorDeviceClass.PROBLEM,
             entity_category=EntityCategory.DIAGNOSTIC,
             key="has_vfd_failure",
-            key_index=None,
             translation_key="vfd_failure",
             translation_placeholders={
                 "counter": "",
@@ -136,7 +123,6 @@ BINARY_SENSOR_TYPES: dict[str, tuple[KebaKeEnergyBinarySensorEntityDescription, 
     SectionPrefix.BUFFER_TANK: (
         KebaKeEnergyBinarySensorEntityDescription(
             key="heat_request",
-            key_index=None,
             translation_key="heat_request",
             translation_placeholders={
                 "counter": "",
@@ -145,7 +131,6 @@ BINARY_SENSOR_TYPES: dict[str, tuple[KebaKeEnergyBinarySensorEntityDescription, 
         KebaKeEnergyBinarySensorEntityDescription(
             entity_registry_enabled_default=False,
             key="cool_request",
-            key_index=None,
             translation_key="cool_request",
             translation_placeholders={
                 "counter": "",
@@ -155,7 +140,6 @@ BINARY_SENSOR_TYPES: dict[str, tuple[KebaKeEnergyBinarySensorEntityDescription, 
     SectionPrefix.HOT_WATER_TANK: (
         KebaKeEnergyBinarySensorEntityDescription(
             key="heat_request",
-            key_index=None,
             translation_key="heat_request",
             translation_placeholders={
                 "counter": "",
@@ -164,21 +148,18 @@ BINARY_SENSOR_TYPES: dict[str, tuple[KebaKeEnergyBinarySensorEntityDescription, 
         KebaKeEnergyBinarySensorEntityDescription(
             entity_registry_enabled_default=False,
             key="hot_water_flow",
-            key_index=None,
             translation_key="hot_water_flow",
         ),
         KebaKeEnergyBinarySensorEntityDescription(
             device_class=BinarySensorDeviceClass.RUNNING,
             entity_registry_enabled_default=False,
             key="circulation_pump_state",
-            key_index=None,
             translation_key="circulation_pump_state",
         ),
     ),
     SectionPrefix.EXTERNAL_HEAT_SOURCE: (
         KebaKeEnergyBinarySensorEntityDescription(
             key="heat_request",
-            key_index=None,
             translation_key="heat_request",
             translation_placeholders={
                 "counter": "",
@@ -220,7 +201,7 @@ async def async_setup_entry(
     async_add_entities(binary_sensors)
 
 
-class KebaKeEnergyBinarySensorEntity(KebaKeEnergyExtendedEntity, BinarySensorEntity):
+class KebaKeEnergyBinarySensorEntity(KebaKeEnergyEntity, BinarySensorEntity):
     """KEBA KeEnergy sensor entity."""
 
     def __init__(

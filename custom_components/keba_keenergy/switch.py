@@ -16,7 +16,8 @@ from homeassistant.const import EntityCategory
 from keba_keenergy_api.constants import SectionPrefix
 
 from .const import DOMAIN
-from .entity import KebaKeEnergyExtendedEntity
+from .entity import KebaKeEnergyEntity
+from .entity import KebaKeEnergyEntityDescriptionMixin
 
 if TYPE_CHECKING:
     from homeassistant.core import HomeAssistant
@@ -29,36 +30,33 @@ _LOGGER = logging.getLogger(__name__)
 PARALLEL_UPDATES: Final[int] = 0
 
 
-@dataclass(frozen=True)
-class KebaKeEnergySwitchEntityDescriptionMixin:
-    """Required values for KEBA KeEnergy switches."""
-
-    key_index: int | None
-
-
-@dataclass(frozen=True)
+@dataclass(frozen=True, kw_only=True)
 class KebaKeEnergySwitchEntityDescription(
     SwitchEntityDescription,
-    KebaKeEnergySwitchEntityDescriptionMixin,
+    KebaKeEnergyEntityDescriptionMixin,
 ):
     """Class describing KEBA KeEnergy number entities."""
 
 
-class KebaKeEnergySwitchEntity(KebaKeEnergyExtendedEntity, SwitchEntity):
+class KebaKeEnergySwitchEntity(KebaKeEnergyEntity, SwitchEntity):
     """KEBA KeEnergy switch entity."""
 
     def __init__(
         self,
         coordinator: KebaKeEnergyDataUpdateCoordinator,
-        description: SwitchEntityDescription,
+        description: KebaKeEnergySwitchEntityDescription,
         entry: KebaKeEnergyConfigEntry,
         section_id: str,
         index: int | None,
     ) -> None:
         """Initialize the entity."""
-        self.entity_description: SwitchEntityDescription = description
+        self.entity_description: KebaKeEnergySwitchEntityDescription = description
         super().__init__(coordinator, entry=entry, section_id=section_id, index=index)
+
         self.entity_id: str = f"{SWITCH_DOMAIN}.{DOMAIN}_{self._attr_unique_id}"
+        self._attr_unique_id: str | None = self.get_unique_id(
+            self.entity_description.ref_key or self.entity_description.key,
+        )
 
     @property
     def is_on(self) -> bool:
@@ -87,12 +85,22 @@ class KebaKeEnergySwitchEntity(KebaKeEnergyExtendedEntity, SwitchEntity):
 SWITCH_TYPES: dict[str, tuple[KebaKeEnergySwitchEntityDescription, ...]] = {
     SectionPrefix.HEAT_CIRCUIT: (
         KebaKeEnergySwitchEntityDescription(
+            condition=lambda coordinator, index: coordinator.is_heating_circuit(index=index),
             device_class=SwitchDeviceClass.SWITCH,
             entity_category=EntityCategory.CONFIG,
             entity_registry_enabled_default=False,
             key="use_heating_curve",
-            key_index=None,
             translation_key="use_heating_curve",
+            icon="mdi:chart-bell-curve-cumulative",
+        ),
+        KebaKeEnergySwitchEntityDescription(
+            condition=lambda coordinator, index: coordinator.is_cooling_circuit(index=index),
+            device_class=SwitchDeviceClass.SWITCH,
+            entity_category=EntityCategory.CONFIG,
+            entity_registry_enabled_default=False,
+            key="use_heating_curve",
+            ref_key="use_cooling_curve",
+            translation_key="use_cooling_curve",
             icon="mdi:chart-bell-curve-cumulative",
         ),
     ),
@@ -101,7 +109,6 @@ SWITCH_TYPES: dict[str, tuple[KebaKeEnergySwitchEntityDescription, ...]] = {
             device_class=SwitchDeviceClass.SWITCH,
             entity_category=EntityCategory.CONFIG,
             key="priority_1_before_2",
-            key_index=None,
             translation_key="priority_1_before_2",
         ),
     ),
@@ -111,7 +118,6 @@ SWITCH_TYPES: dict[str, tuple[KebaKeEnergySwitchEntityDescription, ...]] = {
             entity_category=EntityCategory.CONFIG,
             entity_registry_enabled_default=False,
             key="compressor_use_night_speed",
-            key_index=None,
             translation_key="compressor_use_night_speed",
         ),
     ),
@@ -136,15 +142,19 @@ async def async_setup_entry(
             for key, values in section_data.items():
                 if key == description.key:
                     device_numbers: int = len(values) if isinstance(values, list) else 1
-                    numbers += [
-                        KebaKeEnergySwitchEntity(
-                            coordinator,
-                            description=description,
-                            entry=entry,
-                            section_id=section_id,
-                            index=index if device_numbers > 1 else None,
-                        )
-                        for index in range(device_numbers)
-                    ]
+
+                    for index in range(device_numbers):
+                        if description.condition is not None and not description.condition(coordinator, index):
+                            continue
+
+                        numbers += [
+                            KebaKeEnergySwitchEntity(
+                                coordinator,
+                                description=description,
+                                entry=entry,
+                                section_id=section_id,
+                                index=index if device_numbers > 1 else None,
+                            ),
+                        ]
 
     async_add_entities(numbers)

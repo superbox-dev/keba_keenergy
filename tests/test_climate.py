@@ -123,6 +123,14 @@ async def test_climate(
 
     assert state_1.attributes[ATTR_CURRENT_TEMPERATURE] == 22.4
     assert state_1.attributes[ATTR_CURRENT_HUMIDITY] == 53.0
+    assert state_1.attributes[ATTR_TARGET_TEMP_STEP] == 0.5
+    assert state_1.attributes[ATTR_PRESET_MODES] == ["home", "away", "comfort", "sleep", "boost"]
+    assert state_1.attributes[ATTR_TEMPERATURE] == 21.5
+    assert state_1.attributes[ATTR_CURRENT_TEMPERATURE] == 22.4
+    assert state_1.attributes[ATTR_CURRENT_HUMIDITY] == 53.0
+    assert state_1.attributes[ATTR_HVAC_ACTION] == HVACAction.HEATING
+    assert state_1.attributes[ATTR_PRESET_MODE] == "comfort"
+    assert state_1.attributes[ATTR_FRIENDLY_NAME] == "Heating circuit 1"
 
     state_2: State | None = hass.states.get(ENTITY_ID_2)
     assert isinstance(state_2, State)
@@ -131,11 +139,11 @@ async def test_climate(
     assert state_2.attributes[ATTR_MIN_TEMP] == 17.5
     assert state_2.attributes[ATTR_MAX_TEMP] == 22.5
     assert state_2.attributes[ATTR_TARGET_TEMP_STEP] == 0.5
-    assert state_2.attributes[ATTR_PRESET_MODES] == ["home", "away", "comfort", "sleep", "boost"]
+    assert state_2.attributes[ATTR_PRESET_MODES] == ["home", "comfort", "sleep", "boost"]
     assert state_2.attributes[ATTR_TEMPERATURE] == 20.0
     assert not state_2.attributes.get(ATTR_CURRENT_TEMPERATURE)
     assert not state_2.attributes.get(ATTR_CURRENT_HUMIDITY)
-    assert state_2.attributes[ATTR_HVAC_ACTION] == HVACAction.OFF
+    assert state_2.attributes[ATTR_HVAC_ACTION] == HVACAction.COOLING
     assert state_2.attributes[ATTR_PRESET_MODE] == "home"
     assert state_2.attributes[ATTR_FRIENDLY_NAME] == "Heating circuit 2"
 

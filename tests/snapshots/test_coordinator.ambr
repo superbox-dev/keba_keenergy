@@ -250,6 +250,70 @@
           'value': 'HC2',
         }),
       ]),
+      'cooling_curve_offset': list([
+        dict({
+          'attributes': dict({
+            'lower_limit': '-10',
+            'upper_limit': '10',
+          }),
+          'value': 1.5,
+        }),
+        dict({
+          'attributes': dict({
+            'lower_limit': '-10',
+            'upper_limit': '10',
+          }),
+          'value': -1.5,
+        }),
+      ]),
+      'cooling_curve_slope': list([
+        dict({
+          'attributes': dict({
+            'lower_limit': '0',
+            'upper_limit': '5',
+          }),
+          'value': 0.5,
+        }),
+        dict({
+          'attributes': dict({
+            'lower_limit': '0',
+            'upper_limit': '5',
+          }),
+          'value': 0.6,
+        }),
+      ]),
+      'cooling_limit_day': list([
+        dict({
+          'attributes': dict({
+            'lower_limit': '-20',
+            'upper_limit': '100',
+          }),
+          'value': 20.0,
+        }),
+        dict({
+          'attributes': dict({
+            'lower_limit': '-20',
+            'upper_limit': '100',
+          }),
+          'value': 20.0,
+        }),
+      ]),
+      'cooling_limit_night': list([
+        dict({
+          'attributes': dict({
+            'lower_limit': '-20',
+            'upper_limit': '40',
+          }),
+          'value': 18.0,
+        }),
+        dict({
+          'attributes': dict({
+            'lower_limit': '-20',
+            'upper_limit': '40',
+          }),
+          'value': 18.0,
+        }),
+      ]),
       'dew_point': list([
         dict({
           'attributes': dict({
@@ -538,6 +602,38 @@
         }),
         dict({
           'attributes': dict({
+          }),
+          'value': 20.0,
+        }),
+      ]),
+      'target_cooling_temperature_day': list([
+        dict({
+          'attributes': dict({
+            'lower_limit': '10',
+            'upper_limit': '30',
+          }),
+          'value': 20.5,
+        }),
+        dict({
+          'attributes': dict({
+            'lower_limit': '10',
+            'upper_limit': '30',
+          }),
+          'value': 20.5,
+        }),
+      ]),
+      'target_cooling_temperature_night': list([
+        dict({
+          'attributes': dict({
+            'lower_limit': '10',
+            'upper_limit': '30',
+          }),
+          'value': 20.0,
+        }),
+        dict({
+          'attributes': dict({
+            'lower_limit': '10',
+            'upper_limit': '30',
           }),
           'value': 20.0,
         }),
@@ -1435,6 +1531,70 @@
           'value': 'HC2',
         }),
       ]),
+      'cooling_curve_offset': list([
+        dict({
+          'attributes': dict({
+            'lower_limit': '-10',
+            'upper_limit': '10',
+          }),
+          'value': 1.5,
+        }),
+        dict({
+          'attributes': dict({
+            'lower_limit': '-10',
+            'upper_limit': '10',
+          }),
+          'value': -1.5,
+        }),
+      ]),
+      'cooling_curve_slope': list([
+        dict({
+          'attributes': dict({
+            'lower_limit': '0',
+            'upper_limit': '5',
+          }),
+          'value': 0.5,
+        }),
+        dict({
+          'attributes': dict({
+            'lower_limit': '0',
+            'upper_limit': '5',
+          }),
+          'value': 0.6,
+        }),
+      ]),
+      'cooling_limit_day': list([
+        dict({
+          'attributes': dict({
+            'lower_limit': '-20',
+            'upper_limit': '100',
+          }),
+          'value': 20.0,
+        }),
+        dict({
+          'attributes': dict({
+            'lower_limit': '-20',
+            'upper_limit': '100',
+          }),
+          'value': 20.0,
+        }),
+      ]),
+      'cooling_limit_night': list([
+        dict({
+          'attributes': dict({
+            'lower_limit': '-20',
+            'upper_limit': '40',
+          }),
+          'value': 18.0,
+        }),
+        dict({
+          'attributes': dict({
+            'lower_limit': '-20',
+            'upper_limit': '40',
+          }),
+          'value': 18.0,
+        }),
+      ]),
       'dew_point': list([
         dict({
           'attributes': dict({
@@ -1723,6 +1883,38 @@
         }),
         dict({
           'attributes': dict({
+          }),
+          'value': 20.0,
+        }),
+      ]),
+      'target_cooling_temperature_day': list([
+        dict({
+          'attributes': dict({
+            'lower_limit': '10',
+            'upper_limit': '30',
+          }),
+          'value': 20.5,
+        }),
+        dict({
+          'attributes': dict({
+            'lower_limit': '10',
+            'upper_limit': '30',
+          }),
+          'value': 20.5,
+        }),
+      ]),
+      'target_cooling_temperature_night': list([
+        dict({
+          'attributes': dict({
+            'lower_limit': '10',
+            'upper_limit': '30',
+          }),
+          'value': 20.0,
+        }),
+        dict({
+          'attributes': dict({
+            'lower_limit': '10',
+            'upper_limit': '30',
           }),
           'value': 20.0,
         }),

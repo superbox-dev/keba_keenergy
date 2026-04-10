@@ -7,6 +7,7 @@ from datetime import date
 from datetime import datetime
 from datetime import time
 from datetime import timedelta
+from functools import cached_property
 from typing import Any
 from typing import Final
 from typing import TYPE_CHECKING
@@ -29,6 +30,7 @@ from homeassistant.core import HassJob
 from homeassistant.helpers.event import async_call_later
 from homeassistant.util import dt as dt_util
 from keba_keenergy_api.constants import HeatCircuit
+from keba_keenergy_api.constants import HeatCircuitCoolRequest
 from keba_keenergy_api.constants import HeatCircuitHeatRequest
 from keba_keenergy_api.constants import HeatCircuitOperatingMode
 from keba_keenergy_api.constants import SectionPrefix
@@ -36,7 +38,7 @@ from keba_keenergy_api.constants import SectionPrefix
 from .const import ATTR_OFFSET
 from .const import DOMAIN
 from .const import FLASH_WRITE_DELAY
-from .entity import KebaKeEnergyEntity
+from .entity import KebaKeEnergyBaseEntity
 
 if TYPE_CHECKING:
     from homeassistant.core import HomeAssistant
@@ -49,7 +51,7 @@ _LOGGER = logging.getLogger(__name__)
 
 PARALLEL_UPDATES: Final[int] = 0
 
-HEAT_CIRCUIT_PRESET_TO_HA: Final[dict[int, str]] = {
+HEATING_CIRCUIT_PRESET_TO_HA: Final[dict[int, str]] = {
     HeatCircuitOperatingMode.AUTO.value: PRESET_HOME,
     HeatCircuitOperatingMode.HOLIDAY.value: PRESET_AWAY,
     HeatCircuitOperatingMode.DAY.value: PRESET_COMFORT,
@@ -57,14 +59,11 @@ HEAT_CIRCUIT_PRESET_TO_HA: Final[dict[int, str]] = {
     HeatCircuitOperatingMode.PARTY.value: PRESET_BOOST,
 }
 
-HEAT_CIRCUIT_HVAC_ACTION_TO_HA: Final[dict[int, HVACAction]] = {
-    HeatCircuitHeatRequest.OFF.value: HVACAction.IDLE,
-    HeatCircuitHeatRequest.ON.value: HVACAction.HEATING,
-    HeatCircuitHeatRequest.FLOW_OFF.value: HVACAction.IDLE,
-    HeatCircuitHeatRequest.TEMPORARY_OFF.value: HVACAction.IDLE,
-    HeatCircuitHeatRequest.ROOM_OFF.value: HVACAction.IDLE,
-    HeatCircuitHeatRequest.OUTDOOR_OFF.value: HVACAction.IDLE,
-    HeatCircuitHeatRequest.INFLOW_OFF.value: HVACAction.IDLE,
+COOLING_CIRCUIT_PRESET_TO_HA: Final[dict[int, str]] = {
+    HeatCircuitOperatingMode.AUTO.value: PRESET_HOME,
+    HeatCircuitOperatingMode.DAY.value: PRESET_COMFORT,
+    HeatCircuitOperatingMode.NIGHT.value: PRESET_SLEEP,
+    HeatCircuitOperatingMode.PARTY.value: PRESET_BOOST,
 }
 
 TEMPERATURE_OFFSET_SCHEMA = {
@@ -76,7 +75,7 @@ TEMPERATURE_SCHEMA = {
 }
 
 
-class KebaKeEnergyClimateEntity(KebaKeEnergyEntity, ClimateEntity):
+class KebaKeEnergyClimateEntity(KebaKeEnergyBaseEntity, ClimateEntity):
     """KEBA KeEnergy climate entity."""
 
     _attr_supported_features: ClimateEntityFeature = (
@@ -91,7 +90,6 @@ class KebaKeEnergyClimateEntity(KebaKeEnergyEntity, ClimateEntity):
         HVACMode.HEAT,
         HVACMode.OFF,
     ]
-    _attr_preset_modes: list[str] = list(HEAT_CIRCUIT_PRESET_TO_HA.values())  # noqa: RUF012
 
     _attr_target_temperature_step: float = 0.5
     _attr_temperature_unit: str = UnitOfTemperature.CELSIUS
@@ -124,6 +122,18 @@ class KebaKeEnergyClimateEntity(KebaKeEnergyEntity, ClimateEntity):
     def icon(self) -> str | None:
         """Return the icon to use in the frontend, if any."""
         return "mdi:hvac" if self.hvac_mode == HVACMode.HEAT else "mdi:hvac-off"
+
+    @cached_property
+    def preset_modes(self) -> list[str] | None:
+        """Return available preset modes."""
+        preset_to_ha: dict[int, str] = HEATING_CIRCUIT_PRESET_TO_HA
+
+        if self.coordinator.is_cooling_circuit(index=self.index) and not self.coordinator.is_heating_circuit(
+            index=self.index,
+        ):
+            preset_to_ha = COOLING_CIRCUIT_PRESET_TO_HA
+
+        return list(preset_to_ha.values())
 
     @property
     def current_temperature(self) -> float | None:
@@ -206,15 +216,22 @@ class KebaKeEnergyClimateEntity(KebaKeEnergyEntity, ClimateEntity):
     @property
     def hvac_action(self) -> HVACAction | None:
         """Return the current running hvac operation if supported."""
-        hvac_action: HVACAction | None = None
+        hvac_action: HVACAction = HVACAction.IDLE
 
         if self.hvac_mode == HVACMode.OFF:
             hvac_action = HVACAction.OFF
         else:
-            heat_request: str | None = self.get_value("heat_request", expected_type=str)
+            has_heat_request: bool = bool(
+                HeatCircuitHeatRequest.ON.name.lower() == self.get_value("heat_request", expected_type=str),
+            )
+            has_cool_request: bool = bool(
+                HeatCircuitCoolRequest.ON.name.lower() == self.get_value("cool_request", expected_type=str),
+            )
 
-            if heat_request:
-                hvac_action = HEAT_CIRCUIT_HVAC_ACTION_TO_HA[HeatCircuitHeatRequest[heat_request.upper()].value]
+            if has_heat_request:
+                hvac_action = HVACAction.HEATING
+            elif has_cool_request:
+                hvac_action = HVACAction.COOLING
 
         return hvac_action
 
@@ -228,7 +245,7 @@ class KebaKeEnergyClimateEntity(KebaKeEnergyEntity, ClimateEntity):
             operating_mode
             and HeatCircuitOperatingMode[operating_mode.upper()].value != HeatCircuitOperatingMode.OFF.value
         ):
-            preset_mode = HEAT_CIRCUIT_PRESET_TO_HA[HeatCircuitOperatingMode[operating_mode.upper()].value]
+            preset_mode = HEATING_CIRCUIT_PRESET_TO_HA[HeatCircuitOperatingMode[operating_mode.upper()].value]
 
         return preset_mode
 
@@ -248,7 +265,7 @@ class KebaKeEnergyClimateEntity(KebaKeEnergyEntity, ClimateEntity):
             operating_mode_status = HeatCircuitOperatingMode.AUTO.value
             await self._async_set_away_date_range(PRESET_HOME)
             self._attr_preset_mode = PRESET_HOME
-        elif hvac_mode == HVACMode.HEAT:
+        elif hvac_mode in [HVACMode.HEAT, HVACMode.COOL]:
             operating_mode_status = HeatCircuitOperatingMode.DAY.value
         elif hvac_mode == HVACMode.OFF:
             operating_mode_status = HeatCircuitOperatingMode.OFF.value
@@ -266,7 +283,7 @@ class KebaKeEnergyClimateEntity(KebaKeEnergyEntity, ClimateEntity):
         """Set preset mode for heat circuit."""
         await self._async_set_away_date_range(preset_mode)
 
-        for key, value in HEAT_CIRCUIT_PRESET_TO_HA.items():
+        for key, value in HEATING_CIRCUIT_PRESET_TO_HA.items():
             if value == preset_mode and preset_mode not in (self.preset_mode, PRESET_AWAY):
                 await self._async_write_data(
                     key,

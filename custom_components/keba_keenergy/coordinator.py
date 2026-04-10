@@ -78,12 +78,16 @@ REQUEST_DATA_GROUPS: dict[SectionPrefix, list[Section]] = {
         HeatCircuit.FLOW_TEMPERATURE,
         HeatCircuit.RETURN_FLOW_TEMPERATURE,
         HeatCircuit.TARGET_TEMPERATURE_DAY,
+        HeatCircuit.TARGET_COOLING_TEMPERATURE_DAY,
         HeatCircuit.HEATING_LIMIT_DAY,
+        HeatCircuit.COOLING_LIMIT_DAY,
         HeatCircuit.HEAT_REQUEST,
         HeatCircuit.COOL_REQUEST,
         HeatCircuit.TARGET_TEMPERATURE_AWAY,
         HeatCircuit.TARGET_TEMPERATURE_NIGHT,
+        HeatCircuit.TARGET_COOLING_TEMPERATURE_NIGHT,
         HeatCircuit.HEATING_LIMIT_NIGHT,
+        HeatCircuit.COOLING_LIMIT_NIGHT,
         HeatCircuit.OPERATING_MODE,
         HeatCircuit.SELECTED_TARGET_TEMPERATURE,
         HeatCircuit.TARGET_TEMPERATURE,
@@ -91,7 +95,9 @@ REQUEST_DATA_GROUPS: dict[SectionPrefix, list[Section]] = {
         HeatCircuit.AWAY_START_DATE,
         HeatCircuit.AWAY_END_DATE,
         HeatCircuit.HEATING_CURVE_OFFSET,
+        HeatCircuit.COOLING_CURVE_OFFSET,
         HeatCircuit.HEATING_CURVE_SLOPE,
+        HeatCircuit.COOLING_CURVE_SLOPE,
         HeatCircuit.USE_HEATING_CURVE,
         HeatCircuit.HEATING_CURVE,
         HeatCircuit.COOLING_CURVE,
@@ -586,12 +592,30 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
         data: list[Value] = cast("list[Value]", self._fixed_data[SectionPrefix.HEAT_PUMP]["has_passive_cooling"])
         return bool(HeatPumpHasPassiveCooling.ON.name.lower() == data[index]["value"])
 
-    def is_cooling_circuit(self, *, index: int) -> bool:
+    def is_cooling_circuit(self, *, index: int | None = None) -> bool:
         """Check if heating circuit mode is cooling."""
-        data: list[Value] = cast("list[Value]", self._fixed_data[SectionPrefix.HEAT_CIRCUIT]["mode"])
-        return bool(HeatCircuitMode.COOLING.name.lower() == data[index]["value"])
+        index = 0 if index is None else index
 
-    def is_heating_circuit(self, *, index: int) -> bool:
-        """Check if heating circuit mode is heating."""
         data: list[Value] = cast("list[Value]", self._fixed_data[SectionPrefix.HEAT_CIRCUIT]["mode"])
-        return bool(HeatCircuitMode.HEATING.name.lower() == data[index]["value"])
+        return bool(
+            data[index]["value"]
+            in [
+                HeatCircuitMode.COOLING.name.lower(),
+                HeatCircuitMode.HEATING_AND_COOLING.name.lower(),
+                HeatCircuitMode.HEATING_AND_ACTIVE_COOLING.name.lower(),
+            ],
+        )
+
+    def is_heating_circuit(self, *, index: int | None = None) -> bool:
+        """Check if heating circuit mode is heating."""
+        index = 0 if index is None else index
+
+        data: list[Value] = cast("list[Value]", self._fixed_data[SectionPrefix.HEAT_CIRCUIT]["mode"])
+        return bool(
+            data[index]["value"]
+            in [
+                HeatCircuitMode.HEATING.name.lower(),
+                HeatCircuitMode.HEATING_AND_COOLING.name.lower(),
+                HeatCircuitMode.HEATING_AND_ACTIVE_COOLING.name.lower(),
+            ],
+        )

@@ -133,14 +133,38 @@
             "compressor_night_speed": {
                 "name": "Compressor speed (night)"
             },
+            "cooling_curve_offset": {
+                "name": "Cooling curve offset"
+            },
+            "cooling_curve_slope": {
+                "name": "Cooling curve slope"
+            },
+            "cooling_limit_day": {
+                "name": "Cooling limit (Tag)"
+            },
+            "cooling_limit_night": {
+                "name": "Cooling (Nacht)"
+            },
             "heating_curve_offset": {
                 "name": "Heating curve offset"
             },
             "heating_curve_slope": {
                 "name": "Heating curve slope"
             },
+            "heating_limit_day": {
+                "name": "Heating limit (day)"
+            },
+            "heating_limit_night": {
+                "name": "Heating limit (night)"
+            },
             "standby_temperature": {
                 "name": "Standby temperature"
+            },
+            "target_room_cooling_temperature_day": {
+                "name": "Target room temperature (cooling day)"
+            },
+            "target_room_cooling_temperature_night": {
+                "name": "Target room temperature (cooling night)"
             },
             "target_room_temperature": {
                 "name": "Target temperature"
@@ -169,6 +193,9 @@
                     "off": "Off",
                     "on": "On"
                 }
+            },
+            "cooling_curve": {
+                "name": "Cooling curve"
             },
             "external_heat_source_operating_mode": {
                 "name": "Operating mode",
@@ -278,6 +305,12 @@
             },
             "cooling_energy_consumption": {
                 "name": "Cooling energy consumption"
+            },
+            "cooling_limit_day": {
+                "name": "Cooling limit (Tag)"
+            },
+            "cooling_limit_night": {
+                "name": "Cooling (Nacht)"
             },
             "cooling_spf": {
                 "name": "Cooling SPF"
@@ -531,8 +564,15 @@
                     "summer": "Summer mode (hot water only)"
                 }
             },
+
             "target_overheating": {
                 "name": "Target overheating"
+            },
+            "target_room_cooling_temperature_day": {
+                "name": "Target room temperature (cooling day)"
+            },
+            "target_room_cooling_temperature_night": {
+                "name": "Target room temperature (cooling night)"
             },
             "target_room_temperature": {
                 "name": "Target room temperature"
@@ -577,6 +617,9 @@
             },
             "priority_1_before_2": {
                 "name": "Priority 1 before 2"
+            },
+            "use_cooling_curve": {
+                "name": "Use cooling curve"
             },
             "use_heating_curve": {
                 "name": "Use heating curve"

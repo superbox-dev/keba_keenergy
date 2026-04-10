@@ -133,14 +133,38 @@
             "compressor_night_speed": {
                 "name": "Kompressordrehzahl (Nacht)"
             },
+            "cooling_curve_offset": {
+                "name": "Kühlkurven-Offset"
+            },
+            "cooling_curve_slope": {
+                "name": "Kühlkurven-Steigung"
+            },
+            "cooling_limit_day": {
+                "name": "Kühlgrenze (Tag)"
+            },
+            "cooling_limit_night": {
+                "name": "Kühlgrenze (Nacht)"
+            },
             "heating_curve_offset": {
                 "name": "Heizkurven-Offset"
             },
             "heating_curve_slope": {
                 "name": "Heizkurven-Steigung"
             },
+            "heating_limit_day": {
+                "name": "Heizgrenze (Tag)"
+            },
+            "heating_limit_night": {
+                "name": "Heizgrenze (Nacht)"
+            },
             "standby_temperature": {
                 "name": "Stütztemperatur"
+            },
+            "target_room_cooling_temperature_day": {
+                "name": "Soll-Raumtemperatur (Kühlen Tag)"
+            },
+            "target_room_cooling_temperature_night": {
+                "name": "Soll-Raumtemperatur (Kühlen Nacht)"
             },
             "target_room_temperature": {
                 "name": "Soll-Raumtemperatur"
@@ -169,6 +193,9 @@
                     "off": "Aus",
                     "on": "Ein"
                 }
+            },
+            "cooling_curve": {
+                "name": "Kühlkurve"
             },
             "external_heat_source_operating_mode": {
                 "name": "Betriebsart",
@@ -278,6 +305,12 @@
             },
             "cooling_energy_consumption": {
                 "name": "Energieverbrauch Kühlen"
+            },
+            "cooling_limit_day": {
+                "name": "Kühlgrenze (Tag)"
+            },
+            "cooling_limit_night": {
+                "name": "Kühlgrenze (Nacht)"
             },
             "cooling_spf": {
                 "name": "JAZ Kühlen"
@@ -534,6 +567,12 @@
             "target_overheating": {
                 "name": "Sollüberhitzung"
             },
+            "target_room_cooling_temperature_day": {
+                "name": "Soll-Raumtemperatur (Kühlen Tag)"
+            },
+            "target_room_cooling_temperature_night": {
+                "name": "Soll-Raumtemperatur (Kühlen Nacht)"
+            },
             "target_room_temperature": {
                 "name": "Soll-Raumtemperatur"
             },
@@ -577,6 +616,9 @@
             },
             "priority_1_before_2": {
                 "name": "Vorrang 1 vor 2"
+            },
+            "use_cooling_curve": {
+                "name": "Kühlkurve verwenden"
             },
             "use_heating_curve": {
                 "name": "Heizkurve verwenden"

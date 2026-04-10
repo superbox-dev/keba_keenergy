@@ -21,7 +21,8 @@ from keba_keenergy_api.constants import SolarCircuitOperatingMode
 from keba_keenergy_api.constants import SystemOperatingMode
 
 from .const import DOMAIN
-from .entity import KebaKeEnergyExtendedEntity
+from .entity import KebaKeEnergyEntity
+from .entity import KebaKeEnergyEntityDescriptionMixin
 
 if TYPE_CHECKING:
     from collections.abc import Callable
@@ -36,23 +37,18 @@ _LOGGER = logging.getLogger(__name__)
 PARALLEL_UPDATES: Final[int] = 0
 
 
-@dataclass(frozen=True)
-class KebaKeEnergySelectEntityDescriptionMixin:
-    """Required values for KEBA KeEnergy selects."""
+@dataclass(frozen=True, kw_only=True)
+class KebaKeEnergySelectEntityDescription(
+    SelectEntityDescription,
+    KebaKeEnergyEntityDescriptionMixin,
+):
+    """Class describing KEBA KeEnergy select entities."""
 
     entity_class: type[KebaKeEnergySelectEntity]
     value: Callable[[str], str | int]
 
 
-@dataclass(frozen=True)
-class KebaKeEnergySelectEntityDescription(
-    SelectEntityDescription,
-    KebaKeEnergySelectEntityDescriptionMixin,
-):
-    """Class describing KEBA KeEnergy select entities."""
-
-
-class KebaKeEnergySelectEntity(KebaKeEnergyExtendedEntity, SelectEntity):
+class KebaKeEnergySelectEntity(KebaKeEnergyEntity, SelectEntity):
     """KEBA KeEnergy select entity."""
 
     def __init__(
@@ -106,7 +102,24 @@ class KebaKeEnergySystemOperatingModeSelectEntity(KebaKeEnergySelectEntity):
         return options
 
 
-class KebaKeEnergyHeatingCurveSelectEntity(KebaKeEnergySelectEntity):
+class KebaKeEnergyHeatCircuitOperatingModeSelectEntity(KebaKeEnergySelectEntity):
+    """KEBA KeEnergy heating circuit operating mode select entity."""
+
+    @cached_property
+    def options(self) -> list[str]:
+        """Return a set of selectable options."""
+        options: list[str] = super().options
+
+        if self.coordinator.is_heating_circuit(index=self.index or 0):
+            return [
+                *options,
+                HeatCircuitOperatingMode.HOLIDAY.name.lower(),
+            ]
+
+        return options
+
+
+class KebaKeEnergyHeatingCircuitHeatingCurveSelectEntity(KebaKeEnergySelectEntity):
     """KEBA KeEnergy heating curve select entity."""
 
     @cached_property
@@ -133,7 +146,7 @@ SELECT_TYPES: dict[str, tuple[KebaKeEnergySelectEntityDescription, ...]] = {
     ),
     SectionPrefix.HEAT_CIRCUIT: (
         KebaKeEnergySelectEntityDescription(
-            entity_class=KebaKeEnergySelectEntity,
+            entity_class=KebaKeEnergyHeatCircuitOperatingModeSelectEntity,
             entity_category=EntityCategory.CONFIG,
             key="operating_mode",
             options=[
@@ -141,7 +154,6 @@ SELECT_TYPES: dict[str, tuple[KebaKeEnergySelectEntityDescription, ...]] = {
                 HeatCircuitOperatingMode.AUTO.name.lower(),
                 HeatCircuitOperatingMode.DAY.name.lower(),
                 HeatCircuitOperatingMode.NIGHT.name.lower(),
-                HeatCircuitOperatingMode.HOLIDAY.name.lower(),
                 HeatCircuitOperatingMode.PARTY.name.lower(),
             ],
             translation_key="heat_circuit_operating_mode",
@@ -149,11 +161,22 @@ SELECT_TYPES: dict[str, tuple[KebaKeEnergySelectEntityDescription, ...]] = {
             value=lambda data: HeatCircuitOperatingMode[data.upper()].value,
         ),
         KebaKeEnergySelectEntityDescription(
-            entity_class=KebaKeEnergyHeatingCurveSelectEntity,
+            condition=lambda coordinator, index: coordinator.is_heating_circuit(index=index),
+            entity_class=KebaKeEnergyHeatingCircuitHeatingCurveSelectEntity,
             entity_category=EntityCategory.CONFIG,
             entity_registry_enabled_default=False,
             key="heating_curve",
             translation_key="heating_curve",
+            icon="mdi:chart-bell-curve-cumulative",
+            value=lambda data: data,
+        ),
+        KebaKeEnergySelectEntityDescription(
+            condition=lambda coordinator, index: coordinator.is_cooling_circuit(index=index),
+            entity_class=KebaKeEnergyHeatingCircuitHeatingCurveSelectEntity,
+            entity_category=EntityCategory.CONFIG,
+            entity_registry_enabled_default=False,
+            key="cooling_curve",
+            translation_key="cooling_curve",
             icon="mdi:chart-bell-curve-cumulative",
             value=lambda data: data,
         ),
@@ -225,15 +248,18 @@ async def async_setup_entry(
                 if key == description.key:
                     device_numbers: int = len(values) if isinstance(values, list) else 1
 
-                    selects += [
-                        description.entity_class(
-                            coordinator,
-                            description=description,
-                            entry=entry,
-                            section_id=section_id,
-                            index=index if device_numbers > 1 else None,
-                        )
-                        for index in range(device_numbers)
-                    ]
+                    for index in range(device_numbers):
+                        if description.condition is not None and not description.condition(coordinator, index):
+                            continue
+
+                        selects += [
+                            description.entity_class(
+                                coordinator,
+                                description=description,
+                                entry=entry,
+                                section_id=section_id,
+                                index=index if device_numbers > 1 else None,
+                            ),
+                        ]
 
     async_add_entities(selects)

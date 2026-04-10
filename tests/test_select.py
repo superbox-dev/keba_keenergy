@@ -118,7 +118,7 @@ async def test_heat_circuit_selects(
     assert isinstance(heat_circuit_operating_mode_1, State)
     assert heat_circuit_operating_mode_1.state == "day"
     assert heat_circuit_operating_mode_1.attributes[ATTR_FRIENDLY_NAME] == "Heating circuit 1 Operating mode"
-    assert heat_circuit_operating_mode_1.attributes[ATTR_OPTIONS] == ["off", "auto", "day", "night", "holiday", "party"]
+    assert heat_circuit_operating_mode_1.attributes[ATTR_OPTIONS] == ["off", "auto", "day", "night", "party", "holiday"]
 
     assert {
         opt: translations[f"component.keba_keenergy.entity.select.heat_circuit_operating_mode.state.{opt}"]
@@ -127,6 +127,25 @@ async def test_heat_circuit_selects(
         "auto": "Auto",
         "day": "Day",
         "holiday": "Away",
+        "night": "Night",
+        "off": "Off",
+        "party": "Party",
+    }
+
+    heat_circuit_operating_mode_2: State | None = hass.states.get(
+        "select.keba_keenergy_12345678_heat_circuit_operating_mode_2",
+    )
+    assert isinstance(heat_circuit_operating_mode_2, State)
+    assert heat_circuit_operating_mode_2.state == "auto"
+    assert heat_circuit_operating_mode_2.attributes[ATTR_FRIENDLY_NAME] == "Heating circuit 2 Operating mode"
+    assert heat_circuit_operating_mode_2.attributes[ATTR_OPTIONS] == ["off", "auto", "day", "night", "party"]
+
+    assert {
+        opt: translations[f"component.keba_keenergy.entity.select.heat_circuit_operating_mode.state.{opt}"]
+        for opt in heat_circuit_operating_mode_2.attributes[ATTR_OPTIONS]
+    } == {
+        "auto": "Auto",
+        "day": "Day",
         "night": "Night",
         "off": "Off",
         "party": "Party",

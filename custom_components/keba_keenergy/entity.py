@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import logging
+from dataclasses import dataclass
 from functools import cached_property
 from typing import Any
 from typing import TYPE_CHECKING
@@ -29,6 +30,7 @@ from .coordinator import KebaKeEnergyConfigEntry
 from .coordinator import KebaKeEnergyDataUpdateCoordinator
 
 if TYPE_CHECKING:
+    from collections.abc import Callable
     from collections.abc import Mapping
     from datetime import datetime
     from homeassistant.core import CALLBACK_TYPE
@@ -40,7 +42,16 @@ _LOGGER = logging.getLogger(__name__)
 T = TypeVar("T", str, int, float)
 
 
-class KebaKeEnergyEntity(
+@dataclass(frozen=True)
+class KebaKeEnergyEntityDescriptionMixin:
+    """Required values for KEBA KeEnergy descriptions."""
+
+    key_index: int | None = None
+    ref_key: str | None = None
+    condition: Callable[[KebaKeEnergyDataUpdateCoordinator, int], bool] | None = None
+
+
+class KebaKeEnergyBaseEntity(
     CoordinatorEntity[KebaKeEnergyDataUpdateCoordinator],
 ):
     """KEBA KeEnergy base entity."""
@@ -316,7 +327,7 @@ class KebaKeEnergyEntity(
         return value
 
 
-class KebaKeEnergyExtendedEntity(KebaKeEnergyEntity):
+class KebaKeEnergyEntity(KebaKeEnergyBaseEntity):
     """KEBA KeEnergy base extended entity."""
 
     def __init__(
@@ -329,18 +340,24 @@ class KebaKeEnergyExtendedEntity(KebaKeEnergyEntity):
     ) -> None:
         """Initialize the KEBA KeEnergy extended entity."""
         super().__init__(coordinator, entry=entry, section_id=section_id, index=index, key_index=key_index)
-        self._attr_unique_id: str | None = f"{self.entry.unique_id}_{self.section_id}_{self.entity_description.key}"
+
+        self._attr_unique_id: str | None = self.get_unique_id(self.entity_description.key)
+        self.device_numbers: int | None = None
+
+    def get_unique_id(self, key: str, /) -> str | None:
+        """Generate unique id."""
+        unique_id: str | None = f"{self.entry.unique_id}_{self.section_id}_{key}"
 
         if self.is_system_device:
-            self._attr_unique_id = f"{self.entry.unique_id}_{self.entity_description.key}"
+            unique_id = f"{self.entry.unique_id}_{key}"
 
         if self.key_index is not None:
-            self._attr_unique_id = f"{self._attr_unique_id}_{self.key_index + 1}"
+            unique_id = f"{unique_id}_{self.key_index + 1}"
 
         if self.position is not None:
-            self._attr_unique_id = f"{self._attr_unique_id}_{self.position}"
+            unique_id = f"{unique_id}_{self.position}"
 
-        self.device_numbers: int | None = None
+        return unique_id
 
     @property
     def section(self) -> Section | None:
