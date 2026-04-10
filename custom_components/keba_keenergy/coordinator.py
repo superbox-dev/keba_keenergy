@@ -28,6 +28,7 @@ from keba_keenergy_api.api import KebaKeEnergyAPI
 from keba_keenergy_api.constants import BufferTank
 from keba_keenergy_api.constants import ExternalHeatSource
 from keba_keenergy_api.constants import HeatCircuit
+from keba_keenergy_api.constants import HeatCircuitHasMixer
 from keba_keenergy_api.constants import HeatCircuitHasRoomHumidity
 from keba_keenergy_api.constants import HeatCircuitHasRoomTemperature
 from keba_keenergy_api.constants import HeatCircuitMode
@@ -40,6 +41,7 @@ from keba_keenergy_api.constants import SectionPrefix
 from keba_keenergy_api.constants import SolarCircuit
 from keba_keenergy_api.constants import SwitchValve
 from keba_keenergy_api.constants import System
+from keba_keenergy_api.constants import SystemHasOutdoorTemperature
 from keba_keenergy_api.endpoints import Position
 from keba_keenergy_api.endpoints import Value
 from keba_keenergy_api.endpoints import ValueResponse
@@ -326,22 +328,27 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
             position=self.position,
         )
 
-        self.request_data_groups = {
-            prefix: [section for section in sections if section in self.request_data]
-            for prefix, sections in REQUEST_DATA_GROUPS.items()
-            if prefix == SectionPrefix.SYSTEM or (self.position and getattr(self.position, prefix.value, 0) > 0)
-        }
-
         self._fixed_data = await self.api.read_data(
             request=[
+                System.HAS_OUTDOOR_TEMPERATURE,
                 HeatCircuit.MODE,
                 HeatCircuit.HAS_ROOM_TEMPERATURE,
                 HeatCircuit.HAS_ROOM_HUMIDITY,
+                HeatCircuit.HAS_MIXER,
                 HeatPump.HAS_ACTIVE_COOLING,
                 HeatPump.HAS_PASSIVE_COOLING,
             ],
             position=self.position,
         )
+
+        if System.OUTDOOR_TEMPERATURE in self.request_data and not self.has_outdoor_temperature():
+            self.request_data.remove(System.OUTDOOR_TEMPERATURE)
+
+        self.request_data_groups = {
+            prefix: [section for section in sections if section in self.request_data]
+            for prefix, sections in REQUEST_DATA_GROUPS.items()
+            if prefix == SectionPrefix.SYSTEM or (self.position and getattr(self.position, prefix.value, 0) > 0)
+        }
 
     async def _async_update_data(self) -> dict[str, ValueResponse]:
         """Read all values from API to update coordinator data."""
@@ -579,6 +586,11 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
         """Return number of external heat sources."""
         return self.position.external_heat_source if self.position else 0
 
+    def has_outdoor_temperature(self) -> bool:
+        """Check if outdoor temperature sensor is available."""
+        data: Value = cast("Value", self._fixed_data[SectionPrefix.SYSTEM]["has_outdoor_temperature"])
+        return bool(SystemHasOutdoorTemperature.ON.name.lower() == data["value"])
+
     def has_room_temperature(self, *, index: int | None = None) -> bool:
         """Check if room temperature sensor is available."""
         index = 0 if index is None else index
@@ -592,6 +604,13 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
 
         data: list[Value] = cast("list[Value]", self._fixed_data[SectionPrefix.HEAT_CIRCUIT]["has_room_humidity"])
         return bool(HeatCircuitHasRoomHumidity.ON.name.lower() == data[index]["value"])
+
+    def has_mixer(self, *, index: int | None = None) -> bool:
+        """Check if heating circuit mixer is available."""
+        index = 0 if index is None else index
+
+        data: list[Value] = cast("list[Value]", self._fixed_data[SectionPrefix.HEAT_CIRCUIT]["has_mixer"])
+        return bool(HeatCircuitHasMixer.ON.name.lower() == data[index]["value"])
 
     def has_active_cooling(self, *, index: int | None = None) -> bool:
         """Check if active cooling is available."""

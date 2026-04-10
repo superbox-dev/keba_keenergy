@@ -518,24 +518,6 @@
     'state': '24.34',
   })
 # ---
-# name: test_sensors[de-sensor.keba_keenergy_12345678_heat_circuit_flow_temperature_2]
-  StateSnapshot({
-    'attributes': ReadOnlyDict({
-      'device_class': 'temperature',
-      'friendly_name': 'Heizkreis 2 Vorlauftemperatur (Mischer)',
-      'lower_limit': '0',
-      'state_class': <SensorStateClass.MEASUREMENT: 'measurement'>,
-      'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
-      'upper_limit': '100',
-    }),
-    'context': <ANY>,
-    'entity_id': 'sensor.keba_keenergy_12345678_heat_circuit_flow_temperature_2',
-    'last_changed': <ANY>,
-    'last_reported': <ANY>,
-    'last_updated': <ANY>,
-    'state': '24.34',
-  })
-# ---
 # name: test_sensors[de-sensor.keba_keenergy_12345678_heat_circuit_flow_temperature_setpoint_1]
   StateSnapshot({
     'attributes': ReadOnlyDict({
@@ -2882,24 +2864,6 @@
     }),
     'context': <ANY>,
     'entity_id': 'sensor.keba_keenergy_12345678_heat_circuit_flow_temperature_1',
-    'last_changed': <ANY>,
-    'last_reported': <ANY>,
-    'last_updated': <ANY>,
-    'state': '24.34',
-  })
-# ---
-# name: test_sensors[en-sensor.keba_keenergy_12345678_heat_circuit_flow_temperature_2]
-  StateSnapshot({
-    'attributes': ReadOnlyDict({
-      'device_class': 'temperature',
-      'friendly_name': 'Heating circuit 2 Flow temperature (mixer)',
-      'lower_limit': '0',
-      'state_class': <SensorStateClass.MEASUREMENT: 'measurement'>,
-      'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
-      'upper_limit': '100',
-    }),
-    'context': <ANY>,
-    'entity_id': 'sensor.keba_keenergy_12345678_heat_circuit_flow_temperature_2',
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,

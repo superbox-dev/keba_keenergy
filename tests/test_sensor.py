@@ -103,7 +103,6 @@ if TYPE_CHECKING:
         "sensor.keba_keenergy_12345678_heat_circuit_cooling_limit_night_2",
         "sensor.keba_keenergy_12345678_heat_circuit_dew_point_1",
         "sensor.keba_keenergy_12345678_heat_circuit_flow_temperature_1",
-        "sensor.keba_keenergy_12345678_heat_circuit_flow_temperature_2",
         "sensor.keba_keenergy_12345678_heat_circuit_flow_temperature_setpoint_1",
         "sensor.keba_keenergy_12345678_heat_circuit_flow_temperature_setpoint_2",
         "sensor.keba_keenergy_12345678_heat_circuit_heat_request_1",

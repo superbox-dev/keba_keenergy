@@ -99,6 +99,16 @@ HEAT_CIRCUIT_HAS_ROOM_HUMIDITY: str = """
     }
 """
 
+HEAT_CIRCUIT_HAS_MIXER: str = """
+    {
+        "name": "APPL.CtrlAppl.sParam.options.heatCircuit[%s].hasMixer",
+        "attributes": {
+            "longText": "HC mixer"
+        },
+        "value": "%s"
+    }
+"""
+
 HEAT_CIRCUIT_MODE: str = """
     {
         "name": "APPL.CtrlAppl.sParam.options.heatCircuit[%s].type",
@@ -1375,6 +1385,16 @@ HOT_WATER_CIRCULATION_PUMP_STATE: str = """
     }
 """
 
+SYSTEM_HAS_OUTDOOR_TEMPERATURE: str = """
+    {
+        "name": "APPL.CtrlAppl.sParam.options.hasOutdoorTemp",
+        "attributes": {
+            "longText": "With exterior sensor"
+        },
+        "value": "%s"
+    }
+"""
+
 SYSTEM_HEAT_CIRCUIT_NUMBERS: str = """
     {
         "name": "APPL.CtrlAppl.sParam.options.systemNumberOfHeatingCircuits",
@@ -1674,9 +1694,11 @@ def get_heat_pump_data(compressor_night_speed: str = "true") -> list[dict[str, A
 
 
 DEFAULT_POSITION_FIXED_DATA_RESPONSE: list[dict[str, Any]] = [
+    json.loads(SYSTEM_HAS_OUTDOOR_TEMPERATURE % "true"),
     json.loads(HEAT_CIRCUIT_MODE % ("0", "0")),
     json.loads(HEAT_CIRCUIT_HAS_ROOM_TEMPERATURE % ("0", "true")),
     json.loads(HEAT_CIRCUIT_HAS_ROOM_HUMIDITY % ("0", "true")),
+    json.loads(HEAT_CIRCUIT_HAS_MIXER % ("0", "true")),
     json.loads(HEAT_PUMP_HAS_ACTIVE_COOLING % "false"),
     json.loads(HEAT_PUMP_HAS_PASSIVE_COOLING % "true"),
 ]
@@ -1684,12 +1706,15 @@ DEFAULT_POSITION_FIXED_DATA_RESPONSE: list[dict[str, Any]] = [
 
 def get_multiple_position_fixed_data_response(has_passive_cooling: str = "false") -> list[dict[str, Any]]:
     return [
+        json.loads(SYSTEM_HAS_OUTDOOR_TEMPERATURE % "true"),
         json.loads(HEAT_CIRCUIT_MODE % ("0", "0")),
         json.loads(HEAT_CIRCUIT_MODE % ("1", "1")),
         json.loads(HEAT_CIRCUIT_HAS_ROOM_TEMPERATURE % ("0", "true")),
         json.loads(HEAT_CIRCUIT_HAS_ROOM_TEMPERATURE % ("1", "false")),
         json.loads(HEAT_CIRCUIT_HAS_ROOM_HUMIDITY % ("0", "true")),
         json.loads(HEAT_CIRCUIT_HAS_ROOM_HUMIDITY % ("1", "false")),
+        json.loads(HEAT_CIRCUIT_HAS_MIXER % ("0", "true")),
+        json.loads(HEAT_CIRCUIT_HAS_MIXER % ("1", "false")),
         json.loads(HEAT_PUMP_HAS_ACTIVE_COOLING % "false"),
         json.loads(HEAT_PUMP_HAS_PASSIVE_COOLING % f"{has_passive_cooling}"),
     ]
