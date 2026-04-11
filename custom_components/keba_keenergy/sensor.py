@@ -803,6 +803,7 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
             value=lambda data: data,
         ),
         KebaKeEnergySensorEntityDescription[int](
+            entity_category=EntityCategory.DIAGNOSTIC,
             device_class=SensorDeviceClass.DURATION,
             key="operating_time",
             native_unit_of_measurement=UnitOfTime.HOURS,
@@ -811,6 +812,7 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
             value=lambda data: round(data / 3600, 2),
         ),
         KebaKeEnergySensorEntityDescription[int](
+            entity_category=EntityCategory.DIAGNOSTIC,
             device_class=SensorDeviceClass.DURATION,
             key="max_runtime",
             native_unit_of_measurement=UnitOfTime.HOURS,
@@ -819,6 +821,7 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
             value=lambda data: round(data / 3600, 2),
         ),
         KebaKeEnergySensorEntityDescription[int](
+            entity_category=EntityCategory.DIAGNOSTIC,
             key="activation_counter",
             state_class=SensorStateClass.TOTAL_INCREASING,
             suggested_display_precision=0,
@@ -962,6 +965,7 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
             value=lambda data: data,
         ),
         KebaKeEnergySensorEntityDescription[int](
+            entity_category=EntityCategory.DIAGNOSTIC,
             key="operating_time",
             native_unit_of_measurement=UnitOfTime.HOURS,
             device_class=SensorDeviceClass.DURATION,
@@ -970,6 +974,7 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
             value=lambda data: round(data / 3600, 2),
         ),
         KebaKeEnergySensorEntityDescription[int](
+            entity_category=EntityCategory.DIAGNOSTIC,
             entity_registry_enabled_default=False,
             key="max_runtime",
             native_unit_of_measurement=UnitOfTime.HOURS,
@@ -979,6 +984,7 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
             value=lambda data: round(data / 3600, 2),
         ),
         KebaKeEnergySensorEntityDescription[int](
+            entity_category=EntityCategory.DIAGNOSTIC,
             entity_registry_enabled_default=False,
             key="activation_counter",
             state_class=SensorStateClass.TOTAL_INCREASING,
