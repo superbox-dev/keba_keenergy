@@ -261,7 +261,7 @@
                     "on": "Ein"
                 }
             },
-            "circulation_pump": {
+            "circulation_pump_speed": {
                 "name": "Umwälzpumpedrehzahl"
             },
             "circulation_return_temperature": {

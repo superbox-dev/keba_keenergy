@@ -124,7 +124,7 @@ REQUEST_DATA_GROUPS: dict[SectionPrefix, list[Section]] = {
         SolarCircuit.PRIORITY_1_BEFORE_2,
     ],
     SectionPrefix.HEAT_PUMP: [
-        HeatPump.CIRCULATION_PUMP,
+        HeatPump.CIRCULATION_PUMP_SPEED,
         HeatPump.SOURCE_PUMP_SPEED,
         HeatPump.COMPRESSOR,
         HeatPump.COMPRESSOR_NIGHT_SPEED,

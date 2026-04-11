@@ -537,8 +537,9 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
         KebaKeEnergySensorEntityDescription[float](
             key="circulation_pump",
             native_unit_of_measurement=PERCENTAGE,
+            new_key="circulation_pump_speed",
             state_class=SensorStateClass.MEASUREMENT,
-            translation_key="circulation_pump",
+            translation_key="circulation_pump_speed",
             value=lambda data: data * 100,
         ),
         KebaKeEnergySensorEntityDescription[float](
@@ -711,6 +712,7 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
             value=lambda data: data,
         ),
         KebaKeEnergySensorEntityDescription[float](
+            entity_category=EntityCategory.DIAGNOSTIC,
             entity_registry_enabled_default=False,
             key="heating_spf",
             state_class=SensorStateClass.MEASUREMENT,
@@ -737,6 +739,7 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
             value=lambda data: data,
         ),
         KebaKeEnergySensorEntityDescription[float](
+            entity_category=EntityCategory.DIAGNOSTIC,
             entity_registry_enabled_default=False,
             key="cooling_spf",
             state_class=SensorStateClass.MEASUREMENT,
@@ -763,6 +766,7 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
             value=lambda data: data,
         ),
         KebaKeEnergySensorEntityDescription[float](
+            entity_category=EntityCategory.DIAGNOSTIC,
             entity_registry_enabled_default=False,
             key="hot_water_spf",
             state_class=SensorStateClass.MEASUREMENT,
@@ -789,6 +793,7 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
             value=lambda data: data,
         ),
         KebaKeEnergySensorEntityDescription[float](
+            entity_category=EntityCategory.DIAGNOSTIC,
             entity_registry_enabled_default=False,
             key="total_spf",
             state_class=SensorStateClass.MEASUREMENT,

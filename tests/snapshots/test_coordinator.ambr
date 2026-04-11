@@ -755,7 +755,7 @@
           'value': 477,
         }),
       ]),
-      'circulation_pump': list([
+      'circulation_pump_speed': list([
         dict({
           'attributes': dict({
             'lower_limit': '0.0',
@@ -2052,7 +2052,7 @@
           'value': 477,
         }),
       ]),
-      'circulation_pump': list([
+      'circulation_pump_speed': list([
         dict({
           'attributes': dict({
             'lower_limit': '0.0',

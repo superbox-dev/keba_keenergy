@@ -261,7 +261,7 @@
                     "on": "On"
                 }
             },
-            "circulation_pump": {
+            "circulation_pump_speed": {
                 "name": "Circulation pump speed"
             },
             "circulation_return_temperature": {
