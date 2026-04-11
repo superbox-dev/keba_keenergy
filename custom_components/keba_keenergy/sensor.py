@@ -686,6 +686,7 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
             value=lambda data: data,
         ),
         KebaKeEnergySensorEntityDescription[float](
+            entity_category=EntityCategory.DIAGNOSTIC,
             entity_registry_enabled_default=False,
             key="cop",
             state_class=SensorStateClass.MEASUREMENT,
