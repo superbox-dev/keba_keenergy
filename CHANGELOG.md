@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Add control for heating limits (day/night) [(Issue #46)][issue-46]
 - Add support for heating circuits with active and passive cooling feature [(Issue #47)][issue-47]
+- Add sensor for "Return flow temperature (mixer)" to the heating circuit
 
 ### Changed
 

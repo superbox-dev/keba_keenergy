@@ -440,6 +440,9 @@
             "mixer_flow_temperature": {
                 "name": "Vorlauftemperatur (Mischer)"
             },
+            "mixer_return_flow_temperature": {
+                "name": "Rücklauftemperatur (Mischer)"
+            },
             "operating_hours": {
                 "name": "Betriebsstunden"
             },

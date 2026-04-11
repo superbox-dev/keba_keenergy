@@ -743,7 +743,7 @@
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': '22.21',
+    'state': '20.21',
   })
 # ---
 # name: test_sensors[de-sensor.keba_keenergy_12345678_heat_circuit_room_humidity_1]
@@ -3041,7 +3041,7 @@
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': '22.21',
+    'state': '20.21',
   })
 # ---
 # name: test_sensors[en-sensor.keba_keenergy_12345678_heat_circuit_room_humidity_1]

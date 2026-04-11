@@ -236,6 +236,17 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
             value=lambda data: data,
         ),
         KebaKeEnergySensorEntityDescription[float](
+            condition=lambda coordinator, index: coordinator.has_mixer(index=index),
+            device_class=SensorDeviceClass.TEMPERATURE,
+            entity_registry_enabled_default=False,
+            key="mixer_return_flow_temperature",
+            native_unit_of_measurement=UnitOfTemperature.CELSIUS,
+            new_key="mixer_return_flow_temperature",
+            state_class=SensorStateClass.MEASUREMENT,
+            translation_key="mixer_return_flow_temperature",
+            value=lambda data: data,
+        ),
+        KebaKeEnergySensorEntityDescription[float](
             condition=lambda coordinator, index: coordinator.has_return_flow_temperature(index=index),
             device_class=SensorDeviceClass.TEMPERATURE,
             entity_registry_enabled_default=False,

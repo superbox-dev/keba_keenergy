@@ -440,6 +440,9 @@
             "mixer_flow_temperature": {
                 "name": "Flow temperature (mixer)"
             },
+            "mixer_return_flow_temperature": {
+                "name": "Return flow temperature (mixer)"
+            },
             "operating_hours": {
                 "name": "Operating time"
             },

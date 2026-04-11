@@ -82,6 +82,7 @@ REQUEST_DATA_GROUPS: dict[SectionPrefix, list[Section]] = {
         HeatCircuit.DEW_POINT,
         HeatCircuit.FLOW_TEMPERATURE_SETPOINT,
         HeatCircuit.MIXER_FLOW_TEMPERATURE,
+        HeatCircuit.MIXER_RETURN_FLOW_TEMPERATURE,
         HeatCircuit.RETURN_FLOW_TEMPERATURE,
         HeatCircuit.TARGET_TEMPERATURE_DAY,
         HeatCircuit.TARGET_COOLING_TEMPERATURE_DAY,

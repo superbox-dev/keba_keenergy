@@ -99,6 +99,7 @@
     'sensor.keba_keenergy_12345678_heat_circuit_heating_curve_1',
     'sensor.keba_keenergy_12345678_heat_circuit_heating_limit_day_1',
     'sensor.keba_keenergy_12345678_heat_circuit_heating_limit_night_1',
+    'sensor.keba_keenergy_12345678_heat_circuit_mixer_return_flow_temperature_1',
     'sensor.keba_keenergy_12345678_heat_circuit_operating_mode_1',
     'sensor.keba_keenergy_12345678_heat_circuit_operating_mode_2',
     'sensor.keba_keenergy_12345678_heat_circuit_pump_speed_1',
