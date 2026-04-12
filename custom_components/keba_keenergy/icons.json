@@ -63,7 +63,7 @@
             }
         },
         "sensor": {
-            "circulation_pump": {
+            "circulation_pump_speed": {
                 "default": "mdi:speedometer",
                 "range": {
                     "0": "mdi:speedometer-slow",

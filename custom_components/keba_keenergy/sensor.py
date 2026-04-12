@@ -861,6 +861,7 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
             key="mixer_flow_temperature",
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             translation_key="mixer_flow_temperature",
+            icon="mdi:snowflake-thermometer",
             value=lambda data: data,
         ),
         KebaKeEnergySensorEntityDescription[float](
