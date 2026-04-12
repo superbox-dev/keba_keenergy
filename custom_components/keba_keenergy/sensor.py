@@ -842,7 +842,7 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
             device_class=SensorDeviceClass.ENUM,
             key="switch_valve_position",
             options=[_.name.lower() for _ in SwitchValvePosition],
-            translation_key="switch_valve_position",
+            translation_key="passive_cooling_valve_position",
             value=lambda data: data,
         ),
         KebaKeEnergySensorEntityDescription[float](

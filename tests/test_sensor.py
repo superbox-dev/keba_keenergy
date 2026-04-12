@@ -95,6 +95,12 @@ if TYPE_CHECKING:
         "sensor.keba_keenergy_12345678_heat_pump_total_spf",
         "sensor.keba_keenergy_12345678_heat_pump_total_thermal_energy",
         "sensor.keba_keenergy_12345678_heat_pump_vaporizer_temperature",
+        # passive cooling
+        "sensor.keba_keenergy_12345678_passive_cooling_circulation_pump_speed",
+        "sensor.keba_keenergy_12345678_passive_cooling_mixer_flow_temperature",
+        "sensor.keba_keenergy_12345678_passive_cooling_mixer_target_temperature",
+        "sensor.keba_keenergy_12345678_passive_cooling_switch_valve_position",
+        "sensor.keba_keenergy_12345678_passive_cooling_temperature",
         # heating circuit
         "sensor.keba_keenergy_12345678_heat_circuit_cool_request_2",
         "sensor.keba_keenergy_12345678_heat_circuit_cooling_curve_2",

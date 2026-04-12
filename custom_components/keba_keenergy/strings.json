@@ -71,6 +71,9 @@
         "hot_water_tank": {
             "name": "Hot water tank{position}"
         },
+        "passive_cooling": {
+            "name": "Passive cooling{position}"
+        },
         "solar_circuit": {
             "name": "Solar circuit{position}"
         },
@@ -451,6 +454,14 @@
             },
             "outdoor_temperature": {
                 "name": "Outdoor temperature"
+            },
+            "passive_cooling_valve_position": {
+                "name": "Switch valve position",
+                "state": {
+                    "closed": "Position 2",
+                    "neutral": "Neutral",
+                    "open": "Position 1"
+                }
             },
             "pump_speed": {
                 "name": "Pump speed"

@@ -1860,6 +1860,96 @@
     'state': '20.5',
   })
 # ---
+# name: test_sensors[de-sensor.keba_keenergy_12345678_passive_cooling_circulation_pump_speed]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'friendly_name': 'Passivkühlung Umwälzpumpedrehzahl',
+      'lower_limit': '0.0',
+      'state_class': <SensorStateClass.MEASUREMENT: 'measurement'>,
+      'unit_of_measurement': '%',
+      'upper_limit': '1',
+    }),
+    'context': <ANY>,
+    'entity_id': 'sensor.keba_keenergy_12345678_passive_cooling_circulation_pump_speed',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': '23.0',
+  })
+# ---
+# name: test_sensors[de-sensor.keba_keenergy_12345678_passive_cooling_mixer_flow_temperature]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'device_class': 'temperature',
+      'friendly_name': 'Passivkühlung Vorlauftemperatur (Mischer)',
+      'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
+    }),
+    'context': <ANY>,
+    'entity_id': 'sensor.keba_keenergy_12345678_passive_cooling_mixer_flow_temperature',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': '19.22',
+  })
+# ---
+# name: test_sensors[de-sensor.keba_keenergy_12345678_passive_cooling_mixer_target_temperature]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'device_class': 'temperature',
+      'friendly_name': 'Passivkühlung Soll-Temperatur (Mischer)',
+      'lower_limit': '0',
+      'state_class': <SensorStateClass.MEASUREMENT: 'measurement'>,
+      'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
+      'upper_limit': '100',
+    }),
+    'context': <ANY>,
+    'entity_id': 'sensor.keba_keenergy_12345678_passive_cooling_mixer_target_temperature',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': '24.26',
+  })
+# ---
+# name: test_sensors[de-sensor.keba_keenergy_12345678_passive_cooling_switch_valve_position]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'device_class': 'enum',
+      'friendly_name': 'Passivkühlung Umschaltventilposition',
+      'lower_limit': '0',
+      'options': list([
+        'neutral',
+        'open',
+        'closed',
+      ]),
+      'upper_limit': '2',
+    }),
+    'context': <ANY>,
+    'entity_id': 'sensor.keba_keenergy_12345678_passive_cooling_switch_valve_position',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': 'open',
+  })
+# ---
+# name: test_sensors[de-sensor.keba_keenergy_12345678_passive_cooling_temperature]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'device_class': 'temperature',
+      'friendly_name': 'Passivkühlung Temperatur',
+      'icon': 'mdi:snowflake-thermometer',
+      'lower_limit': '-100',
+      'state_class': <SensorStateClass.MEASUREMENT: 'measurement'>,
+      'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
+      'upper_limit': '100',
+    }),
+    'context': <ANY>,
+    'entity_id': 'sensor.keba_keenergy_12345678_passive_cooling_temperature',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': '22.34',
+  })
+# ---
 # name: test_sensors[de-sensor.keba_keenergy_12345678_ram_usage]
   StateSnapshot({
     'attributes': ReadOnlyDict({
@@ -4156,6 +4246,96 @@
     'last_reported': <ANY>,
     'last_updated': <ANY>,
     'state': '20.5',
+  })
+# ---
+# name: test_sensors[en-sensor.keba_keenergy_12345678_passive_cooling_circulation_pump_speed]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'friendly_name': 'Passive cooling Circulation pump speed',
+      'lower_limit': '0.0',
+      'state_class': <SensorStateClass.MEASUREMENT: 'measurement'>,
+      'unit_of_measurement': '%',
+      'upper_limit': '1',
+    }),
+    'context': <ANY>,
+    'entity_id': 'sensor.keba_keenergy_12345678_passive_cooling_circulation_pump_speed',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': '23.0',
+  })
+# ---
+# name: test_sensors[en-sensor.keba_keenergy_12345678_passive_cooling_mixer_flow_temperature]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'device_class': 'temperature',
+      'friendly_name': 'Passive cooling Flow temperature (mixer)',
+      'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
+    }),
+    'context': <ANY>,
+    'entity_id': 'sensor.keba_keenergy_12345678_passive_cooling_mixer_flow_temperature',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': '19.22',
+  })
+# ---
+# name: test_sensors[en-sensor.keba_keenergy_12345678_passive_cooling_mixer_target_temperature]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'device_class': 'temperature',
+      'friendly_name': 'Passive cooling Target temperature (mixer)',
+      'lower_limit': '0',
+      'state_class': <SensorStateClass.MEASUREMENT: 'measurement'>,
+      'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
+      'upper_limit': '100',
+    }),
+    'context': <ANY>,
+    'entity_id': 'sensor.keba_keenergy_12345678_passive_cooling_mixer_target_temperature',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': '24.26',
+  })
+# ---
+# name: test_sensors[en-sensor.keba_keenergy_12345678_passive_cooling_switch_valve_position]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'device_class': 'enum',
+      'friendly_name': 'Passive cooling Switch valve position',
+      'lower_limit': '0',
+      'options': list([
+        'neutral',
+        'open',
+        'closed',
+      ]),
+      'upper_limit': '2',
+    }),
+    'context': <ANY>,
+    'entity_id': 'sensor.keba_keenergy_12345678_passive_cooling_switch_valve_position',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': 'open',
+  })
+# ---
+# name: test_sensors[en-sensor.keba_keenergy_12345678_passive_cooling_temperature]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'device_class': 'temperature',
+      'friendly_name': 'Passive cooling Temperature',
+      'icon': 'mdi:snowflake-thermometer',
+      'lower_limit': '-100',
+      'state_class': <SensorStateClass.MEASUREMENT: 'measurement'>,
+      'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
+      'upper_limit': '100',
+    }),
+    'context': <ANY>,
+    'entity_id': 'sensor.keba_keenergy_12345678_passive_cooling_temperature',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': '22.34',
   })
 # ---
 # name: test_sensors[en-sensor.keba_keenergy_12345678_ram_usage]
