@@ -31,7 +31,7 @@ async def test_load_entry(
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
         HEATING_CURVE_NAMES_RESPONSE,
-        get_multiple_position_fixed_data_response(),
+        get_multiple_position_fixed_data_response(has_passive_cooling="true"),
         MULTIPLE_POSITION_DATA_RESPONSE_1,
         *HEATING_CURVES_RESPONSE_1_1,
     ]
