@@ -134,6 +134,11 @@ class KebaKeEnergyBaseEntity(
         """Return True if the entity is part of a switch valves else False."""
         return self.section_id == SectionPrefix.SWITCH_VALVE
 
+    @property
+    def is_passive_cooling(self) -> bool:
+        """Return True if the entity is part of a switch valves else False."""
+        return self.section_id == SectionPrefix.PASSIVE_COOLING
+
     @cached_property
     def device_identifier(self) -> str:
         """Return the device identifier."""
@@ -198,6 +203,8 @@ class KebaKeEnergyBaseEntity(
             translation_key = "external_heat_source"
         elif self.is_switch_valve:
             translation_key = "switch_valve"
+        elif self.is_passive_cooling:
+            translation_key = "passive_cooling"
 
         return translation_key
 

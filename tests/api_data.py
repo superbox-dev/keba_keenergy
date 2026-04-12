@@ -1429,6 +1429,61 @@ HOT_WATER_TANK_HAS_FRESH_WATER_MODULE: str = """
     }
 """
 
+PASSIVE_COOLING_TEMPERATURE: dict[str, Any] = {
+    "name": "APPL.CtrlAppl.sParam.passivecooling[0].TempCoolPassive.values.actValue",
+    "attributes": {
+        "formatId": "fmtTemp",
+        "longText": "Temp. passive cool",
+        "unitId": "Temp",
+        "upperLimit": "100",
+        "lowerLimit": "-100",
+    },
+    "value": "22.34",
+}
+
+PASSIVE_COOLING_SWITCH_VALVE_POSITION: dict[str, Any] = {
+    "name": "APPL.CtrlAppl.sParam.passivecooling[0].SwitchValvePassiveCool.values.actPosition",
+    "attributes": {
+        "formatId": "fmtSwitchValveState",
+        "longText": "Act. Pos.",
+        "unitId": "Enum",
+        "upperLimit": "2",
+        "lowerLimit": "0",
+    },
+    "value": "1",
+}
+
+PASSIVE_COOLING_CIRCULATION_PUMP_SPEED: dict[str, Any] = {
+    "name": "APPL.CtrlAppl.sParam.passivecooling[0].Pump.values.setValueScaled",
+    "attributes": {
+        "formatId": "fmt3p0",
+        "longText": "CP speed",
+        "unitId": "Pct100",
+        "upperLimit": "1",
+        "lowerLimit": "0.0",
+    },
+    "value": "0.23",
+}
+
+
+PASSIVE_COOLING_MIXER_TARGET_TEMPERATURE: dict[str, Any] = {
+    "name": "APPL.CtrlAppl.sParam.passivecooling[0].Mixer.values.setValue",
+    "attributes": {"longText": "Set temp"},
+    "value": "19.22",
+}
+
+PASSIVE_COOLING_MIXER_FLOW_TEMPERATURE: dict[str, Any] = {
+    "name": "APPL.CtrlAppl.sParam.passivecooling[0].Mixer.flowTemp.values.actValue",
+    "attributes": {
+        "formatId": "fmtTemp",
+        "longText": "Inflow temp. act.",
+        "unitId": "Temp",
+        "upperLimit": "100",
+        "lowerLimit": "0",
+    },
+    "value": "24.26",
+}
+
 SYSTEM_HAS_OUTDOOR_TEMPERATURE: str = """
     {
         "name": "APPL.CtrlAppl.sParam.options.hasOutdoorTemp",
@@ -1734,6 +1789,11 @@ def get_heat_pump_data(compressor_night_speed: str = "true") -> list[dict[str, A
         HEAT_PUMP_HAS_THREE_PHASE_FAILURE,
         HEAT_PUMP_HAS_SOURCE_PRESSURE_FAILURE,
         HEAT_PUMP_HAS_VFD_FAILURE,
+        PASSIVE_COOLING_TEMPERATURE,
+        PASSIVE_COOLING_SWITCH_VALVE_POSITION,
+        PASSIVE_COOLING_CIRCULATION_PUMP_SPEED,
+        PASSIVE_COOLING_MIXER_TARGET_TEMPERATURE,
+        PASSIVE_COOLING_MIXER_FLOW_TEMPERATURE,
     ]
 
 

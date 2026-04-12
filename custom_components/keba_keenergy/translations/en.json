@@ -443,6 +443,9 @@
             "mixer_return_flow_temperature": {
                 "name": "Return flow temperature (mixer)"
             },
+            "mixer_target_temperature": {
+                "name": "Target temperature (mixer)"
+            },
             "operating_hours": {
                 "name": "Operating time"
             },
@@ -597,6 +600,9 @@
             },
             "target_temperature": {
                 "name": "Target temperature{counter}"
+            },
+            "temperature": {
+                "name": "Temperature"
             },
             "total_energy_consumption": {
                 "name": "Total energy consumption"

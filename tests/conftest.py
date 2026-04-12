@@ -192,6 +192,7 @@ def config_entry(request: SubRequest) -> MockConfigEntry:
             "scan_interval_tick_hot_water_tank": 1,
             "scan_interval_tick_buffer_tank": 1,
             "scan_interval_tick_switch_valve": 1,
+            "scan_interval_tick_passive_cooling": 1,
             "scan_interval_tick_external_heat_source": 1,
         },
     }

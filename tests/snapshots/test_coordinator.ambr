@@ -1226,6 +1226,51 @@
         }),
       ]),
     }),
+    'passive_cooling': dict({
+      'circulation_pump_speed': list([
+        dict({
+          'attributes': dict({
+            'lower_limit': '0.0',
+            'upper_limit': '1',
+          }),
+          'value': 0.23,
+        }),
+      ]),
+      'mixer_flow_temperature': list([
+        dict({
+          'attributes': dict({
+          }),
+          'value': 19.22,
+        }),
+      ]),
+      'mixer_target_temperature': list([
+        dict({
+          'attributes': dict({
+            'lower_limit': '0',
+            'upper_limit': '100',
+          }),
+          'value': 24.26,
+        }),
+      ]),
+      'switch_valve_position': list([
+        dict({
+          'attributes': dict({
+            'lower_limit': '0',
+            'upper_limit': '2',
+          }),
+          'value': 'open',
+        }),
+      ]),
+      'temperature': list([
+        dict({
+          'attributes': dict({
+            'lower_limit': '-100',
+            'upper_limit': '100',
+          }),
+          'value': 22.34,
+        }),
+      ]),
+    }),
     'photovoltaic': dict({
     }),
     'solar_circuit': dict({
@@ -2520,6 +2565,51 @@
             'upper_limit': '52',
           }),
           'value': 51.0,
+        }),
+      ]),
+    }),
+    'passive_cooling': dict({
+      'circulation_pump_speed': list([
+        dict({
+          'attributes': dict({
+            'lower_limit': '0.0',
+            'upper_limit': '1',
+          }),
+          'value': 0.23,
+        }),
+      ]),
+      'mixer_flow_temperature': list([
+        dict({
+          'attributes': dict({
+          }),
+          'value': 19.22,
+        }),
+      ]),
+      'mixer_target_temperature': list([
+        dict({
+          'attributes': dict({
+            'lower_limit': '0',
+            'upper_limit': '100',
+          }),
+          'value': 24.26,
+        }),
+      ]),
+      'switch_valve_position': list([
+        dict({
+          'attributes': dict({
+            'lower_limit': '0',
+            'upper_limit': '2',
+          }),
+          'value': 'open',
+        }),
+      ]),
+      'temperature': list([
+        dict({
+          'attributes': dict({
+            'lower_limit': '-100',
+            'upper_limit': '100',
+          }),
+          'value': 22.34,
         }),
       ]),
     }),

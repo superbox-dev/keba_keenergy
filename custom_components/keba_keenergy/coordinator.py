@@ -39,6 +39,7 @@ from keba_keenergy_api.constants import HeatPumpHasActiveCooling
 from keba_keenergy_api.constants import HeatPumpHasPassiveCooling
 from keba_keenergy_api.constants import HotWaterTank
 from keba_keenergy_api.constants import HotWaterTankHasFreshWaterModule
+from keba_keenergy_api.constants import PassiveCooling
 from keba_keenergy_api.constants import Section
 from keba_keenergy_api.constants import SectionPrefix
 from keba_keenergy_api.constants import SolarCircuit
@@ -171,6 +172,13 @@ REQUEST_DATA_GROUPS: dict[SectionPrefix, list[Section]] = {
         HeatPump.HAS_THREE_PHASE_FAILURE,
         HeatPump.HAS_SOURCE_PRESSURE_FAILURE,
         HeatPump.HAS_VFD_FAILURE,
+        # Passive cooling has not an own group for the ticks
+        # It is always a part of heat pumps
+        PassiveCooling.TEMPERATURE,
+        PassiveCooling.SWITCH_VALVE_POSITION,
+        PassiveCooling.CIRCULATION_PUMP_SPEED,
+        PassiveCooling.MIXER_FLOW_TEMPERATURE,
+        PassiveCooling.MIXER_TARGET_TEMPERATURE,
     ],
     SectionPrefix.BUFFER_TANK: [
         BufferTank.CURRENT_TOP_TEMPERATURE,
