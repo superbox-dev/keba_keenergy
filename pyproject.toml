@@ -60,7 +60,7 @@ dev = [
     { include-group = "test" },
 ]
 audit = [
-    "pip-audit>=2.9.0",
+    "pip-audit>=2.10.0",
 ]
 docs = [
     "mkdocs>=1.6.1",
