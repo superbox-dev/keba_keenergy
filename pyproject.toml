@@ -64,7 +64,7 @@ audit = [
 ]
 docs = [
     "mkdocs>=1.6.1",
-    "mkdocs-include-markdown-plugin>=7.2.0",
+    "mkdocs-include-markdown-plugin>=7.2.2",
     "mkdocs-material>=9.7.1",
 ]
 lint = [
