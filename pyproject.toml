@@ -73,7 +73,7 @@ lint = [
     "pre-commit>=4.5.1",
     "ruff>=0.12.9",
     "rumdl>=0.0.120",
-    "types-PyYAML>=6.0.12.20250809",
+    "types-PyYAML>=6.0.12.20260408",
     "yamllint>=1.37.1",
 ]
 test = [
