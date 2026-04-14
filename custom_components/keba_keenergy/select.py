@@ -72,13 +72,11 @@ class KebaKeEnergySelectEntity(KebaKeEnergyEntity, SelectEntity):
     @property
     def current_option(self) -> str | None:
         """Return current select option."""
-        return self._attr_current_option or self.get_value(self.entity_description.key, expected_type=str)
+        return self.get_value(self.entity_description.key, expected_type=str)
 
     async def async_select_option(self, option: str) -> None:
         """Select new option."""
         if option != self.current_option:
-            self._attr_current_option = option
-
             await self._async_write_data(
                 self.entity_description.value(option),
                 section=self.section,

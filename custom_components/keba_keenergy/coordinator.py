@@ -372,6 +372,8 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
 
         request: list[Section] = []
 
+        _LOGGER.debug(self.data)
+
         for section, section_data in self.request_data_groups.items():
             multiplier: int = self.config_entry.options.get(f"scan_interval_tick_{section.value}", 1)
 
@@ -434,6 +436,8 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
                 value_by_index[key_index]["value"] = value
             elif isinstance(value_by_index, dict):
                 value_by_index["value"] = value
+        elif isinstance(values, dict):
+            values["value"] = value
 
         self.async_set_updated_data(data)
 
