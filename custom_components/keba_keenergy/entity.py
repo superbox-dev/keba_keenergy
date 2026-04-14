@@ -267,6 +267,8 @@ class KebaKeEnergyBaseEntity(
                 ),
             }
 
+            self.async_write_ha_state()
+
             self.coordinator.async_update_value(
                 value,
                 section_id=self.section_id,
