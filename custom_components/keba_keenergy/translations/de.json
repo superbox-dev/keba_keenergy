@@ -295,8 +295,8 @@
                     "inflow_off": "Aus (Hohe Rücklauftemperatur)",
                     "off": "Aus",
                     "on": "Ein",
-                    "outdoor_off": "Aus (Hohe Außentemperatur)",
-                    "room_off": "Aus (Hohe Raumtemperatur)",
+                    "outdoor_off": "Aus (Niedrige Außentemperatur)",
+                    "room_off": "Aus (Niedrige Raumtemperatur)",
                     "temporary_off": "Aus (Vorübergehend)"
                 }
             },
