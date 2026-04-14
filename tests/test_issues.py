@@ -72,7 +72,7 @@ async def test_issues(
             service=SERVICE_SELECT_OPTION,
             service_data={
                 ATTR_ENTITY_ID: "select.keba_keenergy_12345678_buffer_tank_operating_mode_1",
-                ATTR_OPTION: "on",
+                ATTR_OPTION: "off",
             },
             blocking=True,
         )
@@ -149,7 +149,7 @@ async def test_issues_translated(
             service=SERVICE_SELECT_OPTION,
             service_data={
                 ATTR_ENTITY_ID: "select.keba_keenergy_12345678_buffer_tank_operating_mode_1",
-                ATTR_OPTION: "on",
+                ATTR_OPTION: "off",
             },
             blocking=True,
         )

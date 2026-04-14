@@ -267,8 +267,6 @@ class KebaKeEnergyBaseEntity(
                 ),
             }
 
-            await self.coordinator.async_write_data(request=request, ignore_weekly_write_count=ignore_daily_write_count)
-
             self.coordinator.async_update_value(
                 value,
                 section_id=self.section_id,
@@ -277,7 +275,7 @@ class KebaKeEnergyBaseEntity(
                 key_index=self.key_index,
             )
 
-            await self.coordinator.async_request_refresh()
+            await self.coordinator.async_write_data(request=request, ignore_weekly_write_count=ignore_daily_write_count)
 
     async def _async_debounced_write_data(self, _: datetime) -> None:
         """Write data (debounced) to the KEBA KeEnergy API."""
