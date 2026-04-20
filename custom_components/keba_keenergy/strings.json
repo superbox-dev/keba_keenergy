@@ -151,6 +151,9 @@
             "excess_energy_target_temperature": {
                 "name": "Target temperature (excess energy)"
             },
+            "excess_energy_target_temperature_hysteresis": {
+                "name": "Target temperature hysteresis (excess energy)"
+            },
             "heating_curve_offset": {
                 "name": "Heating curve offset"
             },

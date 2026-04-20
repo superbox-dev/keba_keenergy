@@ -186,6 +186,7 @@ REQUEST_DATA_GROUPS: dict[SectionPrefix, list[Section]] = {
         BufferTank.CURRENT_TOP_TEMPERATURE,
         BufferTank.CURRENT_BOTTOM_TEMPERATURE,
         BufferTank.EXCESS_ENERGY_TARGET_TEMPERATURE,
+        BufferTank.EXCESS_ENERGY_TARGET_TEMPERATURE_HYSTERESIS,
         BufferTank.OPERATING_MODE,
         BufferTank.STANDBY_TEMPERATURE,
         BufferTank.TARGET_TEMPERATURE,

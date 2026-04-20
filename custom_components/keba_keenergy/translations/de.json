@@ -151,6 +151,9 @@
             "excess_energy_target_temperature": {
                 "name": "Soll-Temperatur (Überschussenergie)"
             },
+            "excess_energy_target_temperature_hysteresis": {
+                "name": "Soll-Temperatur-Hysterese (Überschussenergie)"
+            },
             "heating_curve_offset": {
                 "name": "Heizkurven-Offset"
             },
