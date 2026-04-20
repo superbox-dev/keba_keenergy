@@ -122,6 +122,18 @@
           'value': 43.0,
         }),
       ]),
+      'use_excess_energy': list([
+        dict({
+          'attributes': dict({
+          }),
+          'value': 'on',
+        }),
+        dict({
+          'attributes': dict({
+          }),
+          'value': 'off',
+        }),
+      ]),
     }),
     'external_heat_source': dict({
       'activation_counter': list([
@@ -1494,6 +1506,18 @@
             'upper_limit': '100',
           }),
           'value': 43.0,
+        }),
+      ]),
+      'use_excess_energy': list([
+        dict({
+          'attributes': dict({
+          }),
+          'value': 'on',
+        }),
+        dict({
+          'attributes': dict({
+          }),
+          'value': 'off',
         }),
       ]),
     }),

@@ -190,6 +190,7 @@ REQUEST_DATA_GROUPS: dict[SectionPrefix, list[Section]] = {
         BufferTank.TARGET_TEMPERATURE,
         BufferTank.HEAT_REQUEST,
         BufferTank.COOL_REQUEST,
+        BufferTank.USE_EXCESS_ENERGY,
     ],
     SectionPrefix.HOT_WATER_TANK: [
         HotWaterTank.EXCESS_ENERGY_TARGET_TEMPERATURE,

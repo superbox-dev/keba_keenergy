@@ -650,6 +650,9 @@
             "use_cooling_curve": {
                 "name": "Use cooling curve"
             },
+            "use_excess_energy": {
+                "name": "Use excess energy"
+            },
             "use_heating_curve": {
                 "name": "Use heating curve"
             }

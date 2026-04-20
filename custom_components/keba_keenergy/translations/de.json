@@ -649,6 +649,9 @@
             "use_cooling_curve": {
                 "name": "Kühlkurve verwenden"
             },
+            "use_excess_energy": {
+                "name": "Überschuss Energie verwenden"
+            },
             "use_heating_curve": {
                 "name": "Heizkurve verwenden"
             }
