@@ -1336,6 +1336,20 @@ BUFFER_TANK_USE_EXCESS_ENERGY: str = """
     }
 """
 
+BUFFER_TANK_OUTDOOR_TEMPERATURE_EXCESS_ENERGY_LIMIT: str = """
+    {
+        "name": "APPL.CtrlAppl.sParam.bufferTank[%s].param.thresholdOutTempExcessEnergy.value",
+        "attributes": {
+            "formatId": "fmtTemp",
+            "longText": "Außentemp. ÜE Grenze",
+            "unitId": "Temp",
+            "upperLimit": "50.0",
+            "lowerLimit": "0"
+        },
+        "value": "%s"
+    }
+"""
+
 HOT_WATER_TANK_EXCESS_ENERGY_TARGET_TEMPERATURE: str = """
     {
         "name": "APPL.CtrlAppl.sParam.hotWaterTank[%s].param.excessEnergyTemp.value",
@@ -1954,6 +1968,7 @@ DEFAULT_POSITION_DATA_RESPONSE: list[dict[str, Any]] = [
     json.loads(BUFFER_TANK_HEAT_REQUEST % ("0", "false")),
     json.loads(BUFFER_TANK_COOL_REQUEST % ("0", "true")),
     json.loads(BUFFER_TANK_USE_EXCESS_ENERGY % ("0", "true")),
+    json.loads(BUFFER_TANK_OUTDOOR_TEMPERATURE_EXCESS_ENERGY_LIMIT % ("0", "25.00")),
     json.loads(HOT_WATER_TANK_EXCESS_ENERGY_TARGET_TEMPERATURE % ("0", "75.00")),
     json.loads(HOT_WATER_TANK_HEAT_REQUEST % ("0", "false")),
     json.loads(HOT_WATER_TANK_FRESH_WATER_FLOW % ("0", "false")),
@@ -2099,6 +2114,8 @@ ENTITY_UPDATED_DATA_RESPONSE: list[dict[str, Any]] = [
     json.loads(BUFFER_TANK_COOL_REQUEST % ("1", "false")),
     json.loads(BUFFER_TANK_USE_EXCESS_ENERGY % ("0", "true")),
     json.loads(BUFFER_TANK_USE_EXCESS_ENERGY % ("1", "false")),
+    json.loads(BUFFER_TANK_OUTDOOR_TEMPERATURE_EXCESS_ENERGY_LIMIT % ("0", "25.00")),
+    json.loads(BUFFER_TANK_OUTDOOR_TEMPERATURE_EXCESS_ENERGY_LIMIT % ("1", "25.00")),
     json.loads(HOT_WATER_TANK_EXCESS_ENERGY_TARGET_TEMPERATURE % ("0", "75.00")),
     json.loads(HOT_WATER_TANK_EXCESS_ENERGY_TARGET_TEMPERATURE % ("1", "75.00")),
     json.loads(HOT_WATER_TANK_HEAT_REQUEST % ("0", "false")),
@@ -2199,6 +2216,7 @@ def get_single_position_fixed_data_response(
         json.loads(BUFFER_TANK_HEAT_REQUEST % ("0", "false")),
         json.loads(BUFFER_TANK_COOL_REQUEST % ("0", "true")),
         json.loads(BUFFER_TANK_USE_EXCESS_ENERGY % ("0", "true")),
+        json.loads(BUFFER_TANK_OUTDOOR_TEMPERATURE_EXCESS_ENERGY_LIMIT % ("0", "25.00")),
         json.loads(HOT_WATER_TANK_EXCESS_ENERGY_TARGET_TEMPERATURE % ("0", "75.00")),
         json.loads(HOT_WATER_TANK_HEAT_REQUEST % ("0", "false")),
         json.loads(HOT_WATER_TANK_FRESH_WATER_FLOW % ("0", "true")),
@@ -2345,6 +2363,8 @@ MULTIPLE_POSITION_DATA_RESPONSE_1: list[dict[str, Any]] = [
     json.loads(BUFFER_TANK_COOL_REQUEST % ("1", "false")),
     json.loads(BUFFER_TANK_USE_EXCESS_ENERGY % ("0", "true")),
     json.loads(BUFFER_TANK_USE_EXCESS_ENERGY % ("1", "false")),
+    json.loads(BUFFER_TANK_OUTDOOR_TEMPERATURE_EXCESS_ENERGY_LIMIT % ("0", "25.00")),
+    json.loads(BUFFER_TANK_OUTDOOR_TEMPERATURE_EXCESS_ENERGY_LIMIT % ("1", "25.00")),
     json.loads(HOT_WATER_TANK_EXCESS_ENERGY_TARGET_TEMPERATURE % ("0", "75.00")),
     json.loads(HOT_WATER_TANK_EXCESS_ENERGY_TARGET_TEMPERATURE % ("1", "75.00")),
     json.loads(HOT_WATER_TANK_HEAT_REQUEST % ("0", "false")),
@@ -2501,6 +2521,8 @@ MULTIPLE_POSITION_DATA_RESPONSE_2: list[dict[str, Any]] = [
     json.loads(BUFFER_TANK_COOL_REQUEST % ("1", "false")),
     json.loads(BUFFER_TANK_USE_EXCESS_ENERGY % ("0", "true")),
     json.loads(BUFFER_TANK_USE_EXCESS_ENERGY % ("1", "false")),
+    json.loads(BUFFER_TANK_OUTDOOR_TEMPERATURE_EXCESS_ENERGY_LIMIT % ("0", "25.00")),
+    json.loads(BUFFER_TANK_OUTDOOR_TEMPERATURE_EXCESS_ENERGY_LIMIT % ("1", "25.00")),
     json.loads(HOT_WATER_TANK_EXCESS_ENERGY_TARGET_TEMPERATURE % ("0", "75.00")),
     json.loads(HOT_WATER_TANK_EXCESS_ENERGY_TARGET_TEMPERATURE % ("1", "75.00")),
     json.loads(HOT_WATER_TANK_HEAT_REQUEST % ("0", "false")),
@@ -2565,6 +2587,8 @@ MULTIPLE_POSITION_DATA_RESPONSE_3_1: list[dict[str, Any]] = [
     json.loads(BUFFER_TANK_COOL_REQUEST % ("1", "false")),
     json.loads(BUFFER_TANK_USE_EXCESS_ENERGY % ("0", "true")),
     json.loads(BUFFER_TANK_USE_EXCESS_ENERGY % ("1", "false")),
+    json.loads(BUFFER_TANK_OUTDOOR_TEMPERATURE_EXCESS_ENERGY_LIMIT % ("0", "25.00")),
+    json.loads(BUFFER_TANK_OUTDOOR_TEMPERATURE_EXCESS_ENERGY_LIMIT % ("1", "25.00")),
     json.loads(HOT_WATER_TANK_EXCESS_ENERGY_TARGET_TEMPERATURE % ("0", "75.00")),
     json.loads(HOT_WATER_TANK_EXCESS_ENERGY_TARGET_TEMPERATURE % ("1", "75.00")),
     json.loads(HOT_WATER_TANK_HEAT_REQUEST % ("0", "false")),
@@ -2693,6 +2717,8 @@ MULTIPLE_POSITION_DATA_RESPONSE_3_2: list[dict[str, Any]] = [
     json.loads(BUFFER_TANK_COOL_REQUEST % ("1", "false")),
     json.loads(BUFFER_TANK_USE_EXCESS_ENERGY % ("0", "true")),
     json.loads(BUFFER_TANK_USE_EXCESS_ENERGY % ("1", "false")),
+    json.loads(BUFFER_TANK_OUTDOOR_TEMPERATURE_EXCESS_ENERGY_LIMIT % ("0", "25.00")),
+    json.loads(BUFFER_TANK_OUTDOOR_TEMPERATURE_EXCESS_ENERGY_LIMIT % ("1", "25.00")),
     json.loads(HOT_WATER_TANK_EXCESS_ENERGY_TARGET_TEMPERATURE % ("0", "75.00")),
     json.loads(HOT_WATER_TANK_EXCESS_ENERGY_TARGET_TEMPERATURE % ("1", "75.00")),
     json.loads(HOT_WATER_TANK_HEAT_REQUEST % ("0", "false")),

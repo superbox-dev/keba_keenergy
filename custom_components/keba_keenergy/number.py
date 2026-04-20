@@ -339,6 +339,18 @@ NUMBER_TYPES: dict[str, tuple[KebaKeEnergyNumberEntityDescription, ...]] = {
             icon="mdi:thermometer-chevron-down",
             scale=1,
         ),
+        KebaKeEnergyNumberEntityDescription(
+            condition=lambda coordinator, _: coordinator.has_photovoltaics(),
+            entity_category=EntityCategory.CONFIG,
+            entity_registry_enabled_default=False,
+            device_class=NumberDeviceClass.TEMPERATURE,
+            key="outdoor_temperature_excess_energy_limit",
+            native_unit_of_measurement=UnitOfTemperature.CELSIUS,
+            native_step=0.5,
+            translation_key="outdoor_temperature_excess_energy_limit",
+            icon="mdi:thermometer",
+            scale=1,
+        ),
     ),
     SectionPrefix.HOT_WATER_TANK: (
         KebaKeEnergyNumberEntityDescription(

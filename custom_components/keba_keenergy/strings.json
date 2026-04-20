@@ -163,6 +163,9 @@
             "heating_limit_night": {
                 "name": "Heating limit (night)"
             },
+            "outdoor_temperature_excess_energy_limit": {
+                "name": "Outdoor temperature limit (excess energy usage)"
+            },
             "standby_temperature": {
                 "name": "Standby temperature"
             },
