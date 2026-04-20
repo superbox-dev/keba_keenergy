@@ -1,4 +1,44 @@
 # serializer version: 1
+# name: test_numbers[de-number.keba_keenergy_12345678_buffer_tank_excess_energy_target_temperature_1]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'device_class': 'temperature',
+      'friendly_name': 'Pufferspeicher 1 Soll-Temperatur (Überschuss Energie)',
+      'icon': 'mdi:thermometer-plus',
+      'max': 95.0,
+      'min': 0.0,
+      'mode': <NumberMode.AUTO: 'auto'>,
+      'step': 0.5,
+      'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
+    }),
+    'context': <ANY>,
+    'entity_id': 'number.keba_keenergy_12345678_buffer_tank_excess_energy_target_temperature_1',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': '75.0',
+  })
+# ---
+# name: test_numbers[de-number.keba_keenergy_12345678_buffer_tank_excess_energy_target_temperature_2]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'device_class': 'temperature',
+      'friendly_name': 'Pufferspeicher 2 Soll-Temperatur (Überschuss Energie)',
+      'icon': 'mdi:thermometer-plus',
+      'max': 95.0,
+      'min': 0.0,
+      'mode': <NumberMode.AUTO: 'auto'>,
+      'step': 0.5,
+      'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
+    }),
+    'context': <ANY>,
+    'entity_id': 'number.keba_keenergy_12345678_buffer_tank_excess_energy_target_temperature_2',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': '75.0',
+  })
+# ---
 # name: test_numbers[de-number.keba_keenergy_12345678_buffer_tank_standby_temperature_1]
   StateSnapshot({
     'attributes': ReadOnlyDict({
@@ -539,6 +579,46 @@
     'last_reported': <ANY>,
     'last_updated': <ANY>,
     'state': '52.0',
+  })
+# ---
+# name: test_numbers[en-number.keba_keenergy_12345678_buffer_tank_excess_energy_target_temperature_1]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'device_class': 'temperature',
+      'friendly_name': 'Buffer tank 1 Target temperature (excess energy)',
+      'icon': 'mdi:thermometer-plus',
+      'max': 95.0,
+      'min': 0.0,
+      'mode': <NumberMode.AUTO: 'auto'>,
+      'step': 0.5,
+      'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
+    }),
+    'context': <ANY>,
+    'entity_id': 'number.keba_keenergy_12345678_buffer_tank_excess_energy_target_temperature_1',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': '75.0',
+  })
+# ---
+# name: test_numbers[en-number.keba_keenergy_12345678_buffer_tank_excess_energy_target_temperature_2]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'device_class': 'temperature',
+      'friendly_name': 'Buffer tank 2 Target temperature (excess energy)',
+      'icon': 'mdi:thermometer-plus',
+      'max': 95.0,
+      'min': 0.0,
+      'mode': <NumberMode.AUTO: 'auto'>,
+      'step': 0.5,
+      'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
+    }),
+    'context': <ANY>,
+    'entity_id': 'number.keba_keenergy_12345678_buffer_tank_excess_energy_target_temperature_2',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': '75.0',
   })
 # ---
 # name: test_numbers[en-number.keba_keenergy_12345678_buffer_tank_standby_temperature_1]

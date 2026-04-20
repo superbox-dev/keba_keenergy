@@ -899,6 +899,16 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
             icon="mdi:thermometer-water",
             value=lambda data: data,
         ),
+        KebaKeEnergySensorEntityDescription[float](
+            condition=lambda coordinator, _: coordinator.has_photovoltaics(),
+            device_class=SensorDeviceClass.TEMPERATURE,
+            key="excess_energy_target_temperature",
+            native_unit_of_measurement=UnitOfTemperature.CELSIUS,
+            state_class=SensorStateClass.MEASUREMENT,
+            translation_key="excess_energy_target_temperature",
+            icon="mdi:thermometer-plus",
+            value=lambda data: data,
+        ),
         KebaKeEnergySensorEntityDescription[str](
             device_class=SensorDeviceClass.ENUM,
             key="operating_mode",

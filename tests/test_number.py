@@ -37,6 +37,8 @@ if TYPE_CHECKING:
     "entity",
     [
         # buffer tank
+        "number.keba_keenergy_12345678_buffer_tank_excess_energy_target_temperature_1",
+        "number.keba_keenergy_12345678_buffer_tank_excess_energy_target_temperature_2",
         "number.keba_keenergy_12345678_buffer_tank_standby_temperature_1",
         "number.keba_keenergy_12345678_buffer_tank_standby_temperature_2",
         # hot water tank

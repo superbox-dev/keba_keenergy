@@ -1246,6 +1246,20 @@ BUFFER_TANK_CURRENT_BOTTOM_TEMPERATURE: str = """
     }
 """
 
+BUFFER_TANK_EXCESS_ENERGY_TARGET_TEMPERATURE: str = """
+    {
+        "name": "APPL.CtrlAppl.sParam.bufferTank[%s].param.excessEnergyTemp.value",
+        "attributes": {
+            "formatId": "fmtTemp",
+            "longText": "Set heat temp.",
+            "unitId": "Temp",
+            "upperLimit": "95",
+            "lowerLimit": "0"
+        },
+        "value": "%s"
+    }
+"""
+
 BUFFER_TANK_OPERATING_MODE: str = """
     {
         "name": "APPL.CtrlAppl.sParam.bufferTank[%s].param.operatingMode",
@@ -1914,6 +1928,7 @@ DEFAULT_POSITION_DATA_RESPONSE: list[dict[str, Any]] = [
     *get_heat_pump_data(compressor_night_speed="true"),
     json.loads(BUFFER_TANK_CURRENT_TOP_TEMPERATURE % ("0", "45.67")),
     json.loads(BUFFER_TANK_CURRENT_BOTTOM_TEMPERATURE % ("0", "25.67")),
+    json.loads(BUFFER_TANK_EXCESS_ENERGY_TARGET_TEMPERATURE % ("0", "75.0")),
     json.loads(BUFFER_TANK_OPERATING_MODE % ("0", "0")),
     json.loads(BUFFER_TANK_STANDBY_TEMPERATURE % ("0", "10.00")),
     json.loads(BUFFER_TANK_TARGET_TEMPERATURE % ("0", "44.00")),
@@ -2050,6 +2065,8 @@ ENTITY_UPDATED_DATA_RESPONSE: list[dict[str, Any]] = [
     json.loads(BUFFER_TANK_CURRENT_TOP_TEMPERATURE % ("1", "37.67")),
     json.loads(BUFFER_TANK_CURRENT_BOTTOM_TEMPERATURE % ("0", "25.67")),
     json.loads(BUFFER_TANK_CURRENT_BOTTOM_TEMPERATURE % ("1", "15.67")),
+    json.loads(BUFFER_TANK_EXCESS_ENERGY_TARGET_TEMPERATURE % ("0", "75.0")),
+    json.loads(BUFFER_TANK_EXCESS_ENERGY_TARGET_TEMPERATURE % ("1", "75.0")),
     json.loads(BUFFER_TANK_OPERATING_MODE % ("0", "0")),
     json.loads(BUFFER_TANK_OPERATING_MODE % ("1", "1")),
     json.loads(BUFFER_TANK_STANDBY_TEMPERATURE % ("0", "10.00")),
@@ -2153,6 +2170,7 @@ def get_single_position_fixed_data_response(
         *get_heat_pump_data(compressor_night_speed="true"),
         json.loads(BUFFER_TANK_CURRENT_TOP_TEMPERATURE % ("0", "45.67")),
         json.loads(BUFFER_TANK_CURRENT_BOTTOM_TEMPERATURE % ("0", "25.67")),
+        json.loads(BUFFER_TANK_EXCESS_ENERGY_TARGET_TEMPERATURE % ("0", "75.0")),
         json.loads(BUFFER_TANK_OPERATING_MODE % ("0", "0")),
         json.loads(BUFFER_TANK_STANDBY_TEMPERATURE % ("0", "10.00")),
         json.loads(BUFFER_TANK_TARGET_TEMPERATURE % ("0", "44.00")),
@@ -2290,6 +2308,8 @@ MULTIPLE_POSITION_DATA_RESPONSE_1: list[dict[str, Any]] = [
     json.loads(BUFFER_TANK_CURRENT_TOP_TEMPERATURE % ("1", "35.67")),
     json.loads(BUFFER_TANK_CURRENT_BOTTOM_TEMPERATURE % ("0", "15.67")),
     json.loads(BUFFER_TANK_CURRENT_BOTTOM_TEMPERATURE % ("1", "25.67")),
+    json.loads(BUFFER_TANK_EXCESS_ENERGY_TARGET_TEMPERATURE % ("0", "75.0")),
+    json.loads(BUFFER_TANK_EXCESS_ENERGY_TARGET_TEMPERATURE % ("1", "75.0")),
     json.loads(BUFFER_TANK_OPERATING_MODE % ("0", "0")),
     json.loads(BUFFER_TANK_OPERATING_MODE % ("1", "1")),
     json.loads(BUFFER_TANK_STANDBY_TEMPERATURE % ("0", "10.00")),
@@ -2442,6 +2462,8 @@ MULTIPLE_POSITION_DATA_RESPONSE_2: list[dict[str, Any]] = [
     json.loads(BUFFER_TANK_CURRENT_TOP_TEMPERATURE % ("1", "35.67")),
     json.loads(BUFFER_TANK_CURRENT_BOTTOM_TEMPERATURE % ("0", "15.67")),
     json.loads(BUFFER_TANK_CURRENT_BOTTOM_TEMPERATURE % ("1", "25.67")),
+    json.loads(BUFFER_TANK_EXCESS_ENERGY_TARGET_TEMPERATURE % ("0", "75.0")),
+    json.loads(BUFFER_TANK_EXCESS_ENERGY_TARGET_TEMPERATURE % ("1", "75.0")),
     json.loads(BUFFER_TANK_OPERATING_MODE % ("0", "1")),
     json.loads(BUFFER_TANK_OPERATING_MODE % ("1", "2")),
     json.loads(BUFFER_TANK_STANDBY_TEMPERATURE % ("0", "10.00")),
@@ -2502,6 +2524,8 @@ MULTIPLE_POSITION_DATA_RESPONSE_3_1: list[dict[str, Any]] = [
     json.loads(BUFFER_TANK_CURRENT_TOP_TEMPERATURE % ("1", "35.67")),
     json.loads(BUFFER_TANK_CURRENT_BOTTOM_TEMPERATURE % ("0", "15.67")),
     json.loads(BUFFER_TANK_CURRENT_BOTTOM_TEMPERATURE % ("1", "25.67")),
+    json.loads(BUFFER_TANK_EXCESS_ENERGY_TARGET_TEMPERATURE % ("0", "75.0")),
+    json.loads(BUFFER_TANK_EXCESS_ENERGY_TARGET_TEMPERATURE % ("1", "75.0")),
     json.loads(BUFFER_TANK_OPERATING_MODE % ("0", "0")),
     json.loads(BUFFER_TANK_OPERATING_MODE % ("1", "1")),
     json.loads(BUFFER_TANK_STANDBY_TEMPERATURE % ("0", "10.00")),
@@ -2626,6 +2650,8 @@ MULTIPLE_POSITION_DATA_RESPONSE_3_2: list[dict[str, Any]] = [
     json.loads(BUFFER_TANK_CURRENT_TOP_TEMPERATURE % ("1", "35.67")),
     json.loads(BUFFER_TANK_CURRENT_BOTTOM_TEMPERATURE % ("0", "15.67")),
     json.loads(BUFFER_TANK_CURRENT_BOTTOM_TEMPERATURE % ("1", "25.67")),
+    json.loads(BUFFER_TANK_EXCESS_ENERGY_TARGET_TEMPERATURE % ("0", "75.0")),
+    json.loads(BUFFER_TANK_EXCESS_ENERGY_TARGET_TEMPERATURE % ("1", "75.0")),
     json.loads(BUFFER_TANK_OPERATING_MODE % ("0", "0")),
     json.loads(BUFFER_TANK_OPERATING_MODE % ("1", "1")),
     json.loads(BUFFER_TANK_STANDBY_TEMPERATURE % ("0", "10.00")),

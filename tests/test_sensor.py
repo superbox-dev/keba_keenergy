@@ -39,6 +39,8 @@ if TYPE_CHECKING:
         "sensor.keba_keenergy_12345678_buffer_tank_current_bottom_temperature_2",
         "sensor.keba_keenergy_12345678_buffer_tank_current_top_temperature_1",
         "sensor.keba_keenergy_12345678_buffer_tank_current_top_temperature_2",
+        "sensor.keba_keenergy_12345678_buffer_tank_excess_energy_target_temperature_1",
+        "sensor.keba_keenergy_12345678_buffer_tank_excess_energy_target_temperature_2",
         "sensor.keba_keenergy_12345678_buffer_tank_operating_mode_1",
         "sensor.keba_keenergy_12345678_buffer_tank_operating_mode_2",
         "sensor.keba_keenergy_12345678_buffer_tank_standby_temperature_1",
