@@ -847,6 +847,13 @@
           'value': 31.51,
         }),
       ]),
+      'consuming_excess_energy': list([
+        dict({
+          'attributes': dict({
+          }),
+          'value': 'on',
+        }),
+      ]),
       'cooling_energy': list([
         dict({
           'attributes': dict({
@@ -2231,6 +2238,13 @@
             'upper_limit': '200',
           }),
           'value': 31.51,
+        }),
+      ]),
+      'consuming_excess_energy': list([
+        dict({
+          'attributes': dict({
+          }),
+          'value': 'on',
         }),
       ]),
       'cooling_energy': list([

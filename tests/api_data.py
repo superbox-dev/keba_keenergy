@@ -737,6 +737,14 @@ SOLAR_CIRCUIT_PRIORITY_1_BEFORE_2: str = """
     }
 """
 
+HEAT_PUMP_CONSUMING_EXCESS_ENERGY: dict[str, Any] = {
+    "name": "APPL.CtrlAppl.sParam.heatpump[0].values.consumingExcessEnergy",
+    "attributes": {
+        "longText": "HP 1 with excess energy",
+    },
+    "value": "true",
+}
+
 HEAT_PUMP_CIRCULATION_PUMP_SPEED: dict[str, Any] = {
     "name": "APPL.CtrlAppl.sParam.heatpump[0].CircPump.values.setValueScaled",
     "attributes": {
@@ -1789,6 +1797,7 @@ MULTIPLE_POSITIONS_RESPONSE: list[dict[str, Any]] = [
 
 def get_heat_pump_data(compressor_night_speed: str = "true") -> list[dict[str, Any]]:
     return [
+        HEAT_PUMP_CONSUMING_EXCESS_ENERGY,
         HEAT_PUMP_CIRCULATION_PUMP_SPEED,
         HEAT_PUMP_SOURCE_PUMP_SPEED,
         HEAT_PUMP_COMPRESSOR,

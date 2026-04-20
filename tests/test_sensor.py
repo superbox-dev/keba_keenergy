@@ -69,6 +69,7 @@ if TYPE_CHECKING:
         "sensor.keba_keenergy_12345678_heat_pump_compressor_output_temperature",
         "sensor.keba_keenergy_12345678_heat_pump_compressor_power",
         "sensor.keba_keenergy_12345678_heat_pump_condenser_temperature",
+        "sensor.keba_keenergy_12345678_heat_pump_consuming_excess_energy",
         "sensor.keba_keenergy_12345678_heat_pump_cooling_energy",
         "sensor.keba_keenergy_12345678_heat_pump_cooling_energy_consumption",
         "sensor.keba_keenergy_12345678_heat_pump_cooling_spf",

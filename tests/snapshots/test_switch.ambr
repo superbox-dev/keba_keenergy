@@ -3,7 +3,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'switch',
-      'friendly_name': 'Pufferspeicher 1 Überschuss Energie verwenden',
+      'friendly_name': 'Pufferspeicher 1 Überschussenergie verwenden',
     }),
     'context': <ANY>,
     'entity_id': 'switch.keba_keenergy_12345678_buffer_tank_use_excess_energy_1',
@@ -17,7 +17,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'switch',
-      'friendly_name': 'Pufferspeicher 2 Überschuss Energie verwenden',
+      'friendly_name': 'Pufferspeicher 2 Überschussenergie verwenden',
     }),
     'context': <ANY>,
     'entity_id': 'switch.keba_keenergy_12345678_buffer_tank_use_excess_energy_2',

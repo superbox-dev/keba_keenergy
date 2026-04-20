@@ -3,7 +3,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'temperature',
-      'friendly_name': 'Pufferspeicher 1 Soll-Temperatur (Überschuss Energie)',
+      'friendly_name': 'Pufferspeicher 1 Soll-Temperatur (Überschussenergie)',
       'icon': 'mdi:thermometer-plus',
       'max': 95.0,
       'min': 0.0,
@@ -23,7 +23,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'temperature',
-      'friendly_name': 'Pufferspeicher 2 Soll-Temperatur (Überschuss Energie)',
+      'friendly_name': 'Pufferspeicher 2 Soll-Temperatur (Überschussenergie)',
       'icon': 'mdi:thermometer-plus',
       'max': 95.0,
       'min': 0.0,
@@ -385,7 +385,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'temperature',
-      'friendly_name': 'Warmwasserspeicher 1 Soll-Temperatur (Überschuss Energie)',
+      'friendly_name': 'Warmwasserspeicher 1 Soll-Temperatur (Überschussenergie)',
       'icon': 'mdi:thermometer-plus',
       'max': 95.0,
       'min': 0.0,
@@ -405,7 +405,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'temperature',
-      'friendly_name': 'Warmwasserspeicher 2 Soll-Temperatur (Überschuss Energie)',
+      'friendly_name': 'Warmwasserspeicher 2 Soll-Temperatur (Überschussenergie)',
       'icon': 'mdi:thermometer-plus',
       'max': 95.0,
       'min': 0.0,
