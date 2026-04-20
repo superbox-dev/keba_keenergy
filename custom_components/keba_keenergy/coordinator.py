@@ -46,6 +46,7 @@ from keba_keenergy_api.constants import SolarCircuit
 from keba_keenergy_api.constants import SwitchValve
 from keba_keenergy_api.constants import System
 from keba_keenergy_api.constants import SystemHasOutdoorTemperature
+from keba_keenergy_api.constants import SystemHasPhotovoltaics
 from keba_keenergy_api.endpoints import Position
 from keba_keenergy_api.endpoints import Value
 from keba_keenergy_api.endpoints import ValueResponse
@@ -190,6 +191,7 @@ REQUEST_DATA_GROUPS: dict[SectionPrefix, list[Section]] = {
         BufferTank.COOL_REQUEST,
     ],
     SectionPrefix.HOT_WATER_TANK: [
+        HotWaterTank.EXCESS_ENERGY_TARGET_TEMPERATURE,
         HotWaterTank.HEAT_REQUEST,
         HotWaterTank.FRESH_WATER_FLOW,
         HotWaterTank.FRESH_WATER_MODULE_TEMPERATURE,
@@ -343,6 +345,7 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
         self._fixed_data = await self.api.read_data(
             request=[
                 System.HAS_OUTDOOR_TEMPERATURE,
+                System.HAS_PHOTOVOLTAICS,
                 HeatCircuit.MODE,
                 HeatCircuit.HAS_ROOM_TEMPERATURE,
                 HeatCircuit.HAS_ROOM_HUMIDITY,
@@ -621,6 +624,11 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
 
         data: list[Value] = cast("list[Value]", self._fixed_data[SectionPrefix.HEAT_CIRCUIT]["has_room_humidity"])
         return bool(HeatCircuitHasRoomHumidity.ON.name.lower() == data[index]["value"])
+
+    def has_photovoltaics(self) -> bool:
+        """Check if photovoltaics is available."""
+        data: Value = cast("Value", self._fixed_data[SectionPrefix.SYSTEM]["has_photovoltaics"])
+        return bool(SystemHasPhotovoltaics.ON.name.lower() == data["value"])
 
     def has_mixer(self, *, index: int | None = None) -> bool:
         """Check if heating circuit mixer is available."""

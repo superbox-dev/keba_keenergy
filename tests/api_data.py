@@ -297,6 +297,7 @@ HEAT_CIRCUIT_COOLING_LIMIT_DAY: str = """
     }
 """
 
+
 HEAT_CIRCUIT_HEAT_REQUEST: str = """
     {
         "name": "APPL.CtrlAppl.sParam.heatCircuit[%s].values.heatRequest",
@@ -1303,6 +1304,20 @@ BUFFER_TANK_COOL_REQUEST: str = """
     }
 """
 
+HOT_WATER_TANK_EXCESS_ENERGY_TARGET_TEMPERATURE: str = """
+    {
+        "name": "APPL.CtrlAppl.sParam.hotWaterTank[%s].param.excessEnergyTemp.value",
+        "attributes": {
+            "formatId": "fmtTemp",
+            "longText": "Set heat temp.",
+            "unitId": "Temp",
+            "upperLimit": "95",
+            "lowerLimit": "0"
+        },
+        "value": "%s"
+    }
+"""
+
 HOT_WATER_TANK_HEAT_REQUEST: str = """
     {
         "name": "APPL.CtrlAppl.sParam.hotWaterTank[%s].values.heatRequestTop",
@@ -1621,6 +1636,14 @@ SYSTEM_OPERATING_MODE: dict[str, Any] = {
     "value": "2",
 }
 
+SYSTEM_HAS_PHOTOVOLTAIC: str = """
+    {
+        "name": "APPL.CtrlAppl.sParam.options.hasPhotovoltaics",
+        "attributes": {"longText": "With photovoltaics"},
+        "value": "%s"
+    }
+"""
+
 SWITCH_VALVE_POSITION: str = """
     {
         "name": "APPL.CtrlAppl.sParam.switchvalve[%s].values.actPosition",
@@ -1799,6 +1822,7 @@ def get_heat_pump_data(compressor_night_speed: str = "true") -> list[dict[str, A
 
 DEFAULT_POSITION_FIXED_DATA_RESPONSE: list[dict[str, Any]] = [
     json.loads(SYSTEM_HAS_OUTDOOR_TEMPERATURE % "true"),
+    json.loads(SYSTEM_HAS_PHOTOVOLTAIC % "true"),
     json.loads(HEAT_CIRCUIT_MODE % ("0", "0")),
     json.loads(HEAT_CIRCUIT_HAS_ROOM_TEMPERATURE % ("0", "true")),
     json.loads(HEAT_CIRCUIT_HAS_ROOM_HUMIDITY % ("0", "true")),
@@ -1814,6 +1838,7 @@ DEFAULT_POSITION_FIXED_DATA_RESPONSE: list[dict[str, Any]] = [
 def get_multiple_position_fixed_data_response(has_passive_cooling: str = "false") -> list[dict[str, Any]]:
     return [
         json.loads(SYSTEM_HAS_OUTDOOR_TEMPERATURE % "true"),
+        json.loads(SYSTEM_HAS_PHOTOVOLTAIC % "true"),
         json.loads(HEAT_CIRCUIT_MODE % ("0", "0")),
         json.loads(HEAT_CIRCUIT_MODE % ("1", "1")),
         json.loads(HEAT_CIRCUIT_HAS_ROOM_TEMPERATURE % ("0", "true")),
@@ -1894,6 +1919,7 @@ DEFAULT_POSITION_DATA_RESPONSE: list[dict[str, Any]] = [
     json.loads(BUFFER_TANK_TARGET_TEMPERATURE % ("0", "44.00")),
     json.loads(BUFFER_TANK_HEAT_REQUEST % ("0", "false")),
     json.loads(BUFFER_TANK_COOL_REQUEST % ("0", "true")),
+    json.loads(HOT_WATER_TANK_EXCESS_ENERGY_TARGET_TEMPERATURE % ("0", "75.00")),
     json.loads(HOT_WATER_TANK_HEAT_REQUEST % ("0", "false")),
     json.loads(HOT_WATER_TANK_FRESH_WATER_FLOW % ("0", "false")),
     json.loads(HOT_WATER_TANK_FRESH_WATER_MODULE_TEMPERATURE % ("0", "51")),
@@ -2034,6 +2060,8 @@ ENTITY_UPDATED_DATA_RESPONSE: list[dict[str, Any]] = [
     json.loads(BUFFER_TANK_HEAT_REQUEST % ("1", "true")),
     json.loads(BUFFER_TANK_COOL_REQUEST % ("0", "true")),
     json.loads(BUFFER_TANK_COOL_REQUEST % ("1", "false")),
+    json.loads(HOT_WATER_TANK_EXCESS_ENERGY_TARGET_TEMPERATURE % ("0", "75.00")),
+    json.loads(HOT_WATER_TANK_EXCESS_ENERGY_TARGET_TEMPERATURE % ("1", "75.00")),
     json.loads(HOT_WATER_TANK_HEAT_REQUEST % ("0", "false")),
     json.loads(HOT_WATER_TANK_HEAT_REQUEST % ("1", "true")),
     json.loads(HOT_WATER_TANK_FRESH_WATER_FLOW % ("0", "false")),
@@ -2130,6 +2158,7 @@ def get_single_position_fixed_data_response(
         json.loads(BUFFER_TANK_TARGET_TEMPERATURE % ("0", "44.00")),
         json.loads(BUFFER_TANK_HEAT_REQUEST % ("0", "false")),
         json.loads(BUFFER_TANK_COOL_REQUEST % ("0", "true")),
+        json.loads(HOT_WATER_TANK_EXCESS_ENERGY_TARGET_TEMPERATURE % ("0", "75.00")),
         json.loads(HOT_WATER_TANK_HEAT_REQUEST % ("0", "false")),
         json.loads(HOT_WATER_TANK_FRESH_WATER_FLOW % ("0", "true")),
         json.loads(HOT_WATER_TANK_FRESH_WATER_MODULE_TEMPERATURE % ("0", "51")),
@@ -2271,6 +2300,8 @@ MULTIPLE_POSITION_DATA_RESPONSE_1: list[dict[str, Any]] = [
     json.loads(BUFFER_TANK_HEAT_REQUEST % ("1", "true")),
     json.loads(BUFFER_TANK_COOL_REQUEST % ("0", "true")),
     json.loads(BUFFER_TANK_COOL_REQUEST % ("1", "false")),
+    json.loads(HOT_WATER_TANK_EXCESS_ENERGY_TARGET_TEMPERATURE % ("0", "75.00")),
+    json.loads(HOT_WATER_TANK_EXCESS_ENERGY_TARGET_TEMPERATURE % ("1", "75.00")),
     json.loads(HOT_WATER_TANK_HEAT_REQUEST % ("0", "false")),
     json.loads(HOT_WATER_TANK_HEAT_REQUEST % ("1", "true")),
     json.loads(HOT_WATER_TANK_FRESH_WATER_FLOW % ("0", "false")),
@@ -2421,6 +2452,8 @@ MULTIPLE_POSITION_DATA_RESPONSE_2: list[dict[str, Any]] = [
     json.loads(BUFFER_TANK_HEAT_REQUEST % ("1", "true")),
     json.loads(BUFFER_TANK_COOL_REQUEST % ("0", "true")),
     json.loads(BUFFER_TANK_COOL_REQUEST % ("1", "false")),
+    json.loads(HOT_WATER_TANK_EXCESS_ENERGY_TARGET_TEMPERATURE % ("0", "75.00")),
+    json.loads(HOT_WATER_TANK_EXCESS_ENERGY_TARGET_TEMPERATURE % ("1", "75.00")),
     json.loads(HOT_WATER_TANK_HEAT_REQUEST % ("0", "false")),
     json.loads(HOT_WATER_TANK_HEAT_REQUEST % ("1", "true")),
     json.loads(HOT_WATER_TANK_FRESH_WATER_FLOW % ("0", "false")),
@@ -2479,6 +2512,8 @@ MULTIPLE_POSITION_DATA_RESPONSE_3_1: list[dict[str, Any]] = [
     json.loads(BUFFER_TANK_HEAT_REQUEST % ("1", "true")),
     json.loads(BUFFER_TANK_COOL_REQUEST % ("0", "true")),
     json.loads(BUFFER_TANK_COOL_REQUEST % ("1", "false")),
+    json.loads(HOT_WATER_TANK_EXCESS_ENERGY_TARGET_TEMPERATURE % ("0", "75.00")),
+    json.loads(HOT_WATER_TANK_EXCESS_ENERGY_TARGET_TEMPERATURE % ("1", "75.00")),
     json.loads(HOT_WATER_TANK_HEAT_REQUEST % ("0", "false")),
     json.loads(HOT_WATER_TANK_HEAT_REQUEST % ("1", "true")),
     json.loads(HOT_WATER_TANK_FRESH_WATER_FLOW % ("0", "false")),
@@ -2601,6 +2636,8 @@ MULTIPLE_POSITION_DATA_RESPONSE_3_2: list[dict[str, Any]] = [
     json.loads(BUFFER_TANK_HEAT_REQUEST % ("1", "true")),
     json.loads(BUFFER_TANK_COOL_REQUEST % ("0", "true")),
     json.loads(BUFFER_TANK_COOL_REQUEST % ("1", "false")),
+    json.loads(HOT_WATER_TANK_EXCESS_ENERGY_TARGET_TEMPERATURE % ("0", "75.00")),
+    json.loads(HOT_WATER_TANK_EXCESS_ENERGY_TARGET_TEMPERATURE % ("1", "75.00")),
     json.loads(HOT_WATER_TANK_HEAT_REQUEST % ("0", "false")),
     json.loads(HOT_WATER_TANK_HEAT_REQUEST % ("1", "true")),
     json.loads(HOT_WATER_TANK_FRESH_WATER_FLOW % ("0", "false")),

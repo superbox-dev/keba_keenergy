@@ -148,6 +148,9 @@
             "cooling_limit_night": {
                 "name": "Kühlgrenze (Nacht)"
             },
+            "excess_energy_target_temperature": {
+                "name": "Soll-Temperatur (Überschuss Energie)"
+            },
             "heating_curve_offset": {
                 "name": "Heizkurven-Offset"
             },
@@ -341,6 +344,9 @@
             },
             "dew_point": {
                 "name": "Taupunkt"
+            },
+            "excess_energy_target_temperature": {
+                "name": "Soll-Temperatur (Überschuss Energie)"
             },
             "expansion_valve_position": {
                 "name": "Expansionsventil"

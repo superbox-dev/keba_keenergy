@@ -1137,6 +1137,22 @@
           'value': 47.7,
         }),
       ]),
+      'excess_energy_target_temperature': list([
+        dict({
+          'attributes': dict({
+            'lower_limit': '0',
+            'upper_limit': '95',
+          }),
+          'value': 75.0,
+        }),
+        dict({
+          'attributes': dict({
+            'lower_limit': '0',
+            'upper_limit': '95',
+          }),
+          'value': 75.0,
+        }),
+      ]),
       'fresh_water_flow': list([
         dict({
           'attributes': dict({
@@ -2477,6 +2493,22 @@
             'upper_limit': '90',
           }),
           'value': 47.7,
+        }),
+      ]),
+      'excess_energy_target_temperature': list([
+        dict({
+          'attributes': dict({
+            'lower_limit': '0',
+            'upper_limit': '95',
+          }),
+          'value': 75.0,
+        }),
+        dict({
+          'attributes': dict({
+            'lower_limit': '0',
+            'upper_limit': '95',
+          }),
+          'value': 75.0,
         }),
       ]),
       'fresh_water_flow': list([

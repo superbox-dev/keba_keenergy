@@ -148,6 +148,9 @@
             "cooling_limit_night": {
                 "name": "Cooling (Nacht)"
             },
+            "excess_energy_target_temperature": {
+                "name": "Target temperature (excess energy)"
+            },
             "heating_curve_offset": {
                 "name": "Heating curve offset"
             },
@@ -341,6 +344,9 @@
             },
             "dew_point": {
                 "name": "Dew point"
+            },
+            "excess_energy_target_temperature": {
+                "name": "Target temperature (excess energy)"
             },
             "expansion_valve_position": {
                 "name": "Expansion valve position"
