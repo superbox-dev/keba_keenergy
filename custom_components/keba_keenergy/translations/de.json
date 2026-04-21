@@ -89,6 +89,12 @@
             "compressor_failure": {
                 "name": "Kompressor"
             },
+            "consuming_excess_energy": {
+                "name": "Verbraucht Überschussenergie"
+            },
+            "excess_energy_available": {
+                "name": "Überschussenergie vorhanden"
+            },
             "cool_request": {
                 "name": "Kühlanforderung"
             },
@@ -293,9 +299,6 @@
             },
             "condenser_temperature": {
                 "name": "Kondensationstemperatur"
-            },
-            "consuming_excess_energy": {
-                "name": "Verbraucht Überschussenergie"
             },
             "control_cpu_usage": {
                 "name": "Ctrl CPU-Auslastung"

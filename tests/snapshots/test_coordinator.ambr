@@ -46,6 +46,22 @@
           'value': 35.67,
         }),
       ]),
+      'excess_energy_available': list([
+        dict({
+          'attributes': dict({
+            'lower_limit': '0',
+            'upper_limit': '2',
+          }),
+          'value': 'on',
+        }),
+        dict({
+          'attributes': dict({
+            'lower_limit': '0',
+            'upper_limit': '2',
+          }),
+          'value': 'off',
+        }),
+      ]),
       'excess_energy_target_temperature': list([
         dict({
           'attributes': dict({
@@ -1469,6 +1485,22 @@
             'upper_limit': '90',
           }),
           'value': 35.67,
+        }),
+      ]),
+      'excess_energy_available': list([
+        dict({
+          'attributes': dict({
+            'lower_limit': '0',
+            'upper_limit': '2',
+          }),
+          'value': 'on',
+        }),
+        dict({
+          'attributes': dict({
+            'lower_limit': '0',
+            'upper_limit': '2',
+          }),
+          'value': 'off',
         }),
       ]),
       'excess_energy_target_temperature': list([

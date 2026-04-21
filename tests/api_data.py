@@ -1282,6 +1282,20 @@ BUFFER_TANK_EXCESS_ENERGY_TARGET_TEMPERATURE_HYSTERESIS: str = """
     }
 """
 
+BUFFER_TANK_EXCESS_ENERGY_AVAILABLE: str = """
+    {
+        "name": "APPL.CtrlAppl.sParam.bufferTank[%s].values.useExcessEnergy",
+        "attributes": {
+            "formatId": "fmtExcessEnergyInfo",
+            "longText": "Excess energy buffer 1",
+            "unitId": "Enum",
+            "upperLimit": "2",
+            "lowerLimit": "0"
+        },
+        "value": "%s"
+    }
+"""
+
 BUFFER_TANK_OPERATING_MODE: str = """
     {
         "name": "APPL.CtrlAppl.sParam.bufferTank[%s].param.operatingMode",
@@ -1977,6 +1991,7 @@ DEFAULT_POSITION_DATA_RESPONSE: list[dict[str, Any]] = [
     json.loads(BUFFER_TANK_CURRENT_BOTTOM_TEMPERATURE % ("0", "25.67")),
     json.loads(BUFFER_TANK_EXCESS_ENERGY_TARGET_TEMPERATURE % ("0", "75.0")),
     json.loads(BUFFER_TANK_EXCESS_ENERGY_TARGET_TEMPERATURE_HYSTERESIS % ("0", "2.00")),
+    json.loads(BUFFER_TANK_EXCESS_ENERGY_AVAILABLE % ("0", "true")),
     json.loads(BUFFER_TANK_OPERATING_MODE % ("0", "0")),
     json.loads(BUFFER_TANK_STANDBY_TEMPERATURE % ("0", "10.00")),
     json.loads(BUFFER_TANK_TARGET_TEMPERATURE % ("0", "44.00")),
@@ -2119,6 +2134,8 @@ ENTITY_UPDATED_DATA_RESPONSE: list[dict[str, Any]] = [
     json.loads(BUFFER_TANK_EXCESS_ENERGY_TARGET_TEMPERATURE % ("1", "75.0")),
     json.loads(BUFFER_TANK_EXCESS_ENERGY_TARGET_TEMPERATURE_HYSTERESIS % ("0", "2.00")),
     json.loads(BUFFER_TANK_EXCESS_ENERGY_TARGET_TEMPERATURE_HYSTERESIS % ("1", "2.00")),
+    json.loads(BUFFER_TANK_EXCESS_ENERGY_AVAILABLE % ("0", "true")),
+    json.loads(BUFFER_TANK_EXCESS_ENERGY_AVAILABLE % ("1", "false")),
     json.loads(BUFFER_TANK_OPERATING_MODE % ("0", "0")),
     json.loads(BUFFER_TANK_OPERATING_MODE % ("1", "1")),
     json.loads(BUFFER_TANK_STANDBY_TEMPERATURE % ("0", "10.00")),
@@ -2228,6 +2245,7 @@ def get_single_position_fixed_data_response(
         json.loads(BUFFER_TANK_CURRENT_BOTTOM_TEMPERATURE % ("0", "25.67")),
         json.loads(BUFFER_TANK_EXCESS_ENERGY_TARGET_TEMPERATURE % ("0", "75.0")),
         json.loads(BUFFER_TANK_EXCESS_ENERGY_TARGET_TEMPERATURE_HYSTERESIS % ("0", "2.00")),
+        json.loads(BUFFER_TANK_EXCESS_ENERGY_AVAILABLE % ("0", "true")),
         json.loads(BUFFER_TANK_OPERATING_MODE % ("0", "0")),
         json.loads(BUFFER_TANK_STANDBY_TEMPERATURE % ("0", "10.00")),
         json.loads(BUFFER_TANK_TARGET_TEMPERATURE % ("0", "44.00")),
@@ -2371,6 +2389,8 @@ MULTIPLE_POSITION_DATA_RESPONSE_1: list[dict[str, Any]] = [
     json.loads(BUFFER_TANK_EXCESS_ENERGY_TARGET_TEMPERATURE % ("1", "75.0")),
     json.loads(BUFFER_TANK_EXCESS_ENERGY_TARGET_TEMPERATURE_HYSTERESIS % ("0", "2.00")),
     json.loads(BUFFER_TANK_EXCESS_ENERGY_TARGET_TEMPERATURE_HYSTERESIS % ("1", "2.00")),
+    json.loads(BUFFER_TANK_EXCESS_ENERGY_AVAILABLE % ("0", "true")),
+    json.loads(BUFFER_TANK_EXCESS_ENERGY_AVAILABLE % ("1", "false")),
     json.loads(BUFFER_TANK_OPERATING_MODE % ("0", "0")),
     json.loads(BUFFER_TANK_OPERATING_MODE % ("1", "1")),
     json.loads(BUFFER_TANK_STANDBY_TEMPERATURE % ("0", "10.00")),
@@ -2531,6 +2551,8 @@ MULTIPLE_POSITION_DATA_RESPONSE_2: list[dict[str, Any]] = [
     json.loads(BUFFER_TANK_EXCESS_ENERGY_TARGET_TEMPERATURE % ("1", "75.0")),
     json.loads(BUFFER_TANK_EXCESS_ENERGY_TARGET_TEMPERATURE_HYSTERESIS % ("0", "2.00")),
     json.loads(BUFFER_TANK_EXCESS_ENERGY_TARGET_TEMPERATURE_HYSTERESIS % ("1", "2.00")),
+    json.loads(BUFFER_TANK_EXCESS_ENERGY_AVAILABLE % ("0", "true")),
+    json.loads(BUFFER_TANK_EXCESS_ENERGY_AVAILABLE % ("1", "false")),
     json.loads(BUFFER_TANK_OPERATING_MODE % ("0", "1")),
     json.loads(BUFFER_TANK_OPERATING_MODE % ("1", "2")),
     json.loads(BUFFER_TANK_STANDBY_TEMPERATURE % ("0", "10.00")),
@@ -2599,6 +2621,8 @@ MULTIPLE_POSITION_DATA_RESPONSE_3_1: list[dict[str, Any]] = [
     json.loads(BUFFER_TANK_EXCESS_ENERGY_TARGET_TEMPERATURE % ("1", "75.0")),
     json.loads(BUFFER_TANK_EXCESS_ENERGY_TARGET_TEMPERATURE_HYSTERESIS % ("0", "2.00")),
     json.loads(BUFFER_TANK_EXCESS_ENERGY_TARGET_TEMPERATURE_HYSTERESIS % ("1", "2.00")),
+    json.loads(BUFFER_TANK_EXCESS_ENERGY_AVAILABLE % ("0", "true")),
+    json.loads(BUFFER_TANK_EXCESS_ENERGY_AVAILABLE % ("1", "false")),
     json.loads(BUFFER_TANK_OPERATING_MODE % ("0", "0")),
     json.loads(BUFFER_TANK_OPERATING_MODE % ("1", "1")),
     json.loads(BUFFER_TANK_STANDBY_TEMPERATURE % ("0", "10.00")),
@@ -2731,6 +2755,8 @@ MULTIPLE_POSITION_DATA_RESPONSE_3_2: list[dict[str, Any]] = [
     json.loads(BUFFER_TANK_EXCESS_ENERGY_TARGET_TEMPERATURE % ("1", "75.0")),
     json.loads(BUFFER_TANK_EXCESS_ENERGY_TARGET_TEMPERATURE_HYSTERESIS % ("0", "2.00")),
     json.loads(BUFFER_TANK_EXCESS_ENERGY_TARGET_TEMPERATURE_HYSTERESIS % ("1", "2.00")),
+    json.loads(BUFFER_TANK_EXCESS_ENERGY_AVAILABLE % ("0", "true")),
+    json.loads(BUFFER_TANK_EXCESS_ENERGY_AVAILABLE % ("1", "false")),
     json.loads(BUFFER_TANK_OPERATING_MODE % ("0", "0")),
     json.loads(BUFFER_TANK_OPERATING_MODE % ("1", "1")),
     json.loads(BUFFER_TANK_STANDBY_TEMPERATURE % ("0", "10.00")),

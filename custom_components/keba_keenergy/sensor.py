@@ -28,7 +28,6 @@ from keba_keenergy_api.constants import ExternalHeatSourceOperatingMode
 from keba_keenergy_api.constants import HeatCircuitCoolRequest
 from keba_keenergy_api.constants import HeatCircuitHeatRequest
 from keba_keenergy_api.constants import HeatCircuitOperatingMode
-from keba_keenergy_api.constants import HeatPumpConsumingExcessEnergy
 from keba_keenergy_api.constants import HeatPumpState
 from keba_keenergy_api.constants import HeatPumpSubState
 from keba_keenergy_api.constants import HotWaterTankOperatingMode
@@ -518,15 +517,6 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
         ),
     ),
     SectionPrefix.HEAT_PUMP: (
-        KebaKeEnergySensorEntityDescription[str](
-            condition=lambda coordinator, _: coordinator.has_photovoltaics(),
-            device_class=SensorDeviceClass.ENUM,
-            key="consuming_excess_energy",
-            options=[_.name.lower() for _ in HeatPumpConsumingExcessEnergy],
-            translation_key="consuming_excess_energy",
-            icon="mdi:lightning-bolt",
-            value=lambda data: data,
-        ),
         KebaKeEnergySensorEntityDescription[str](
             device_class=SensorDeviceClass.ENUM,
             key="state",

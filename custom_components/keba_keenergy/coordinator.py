@@ -187,6 +187,7 @@ REQUEST_DATA_GROUPS: dict[SectionPrefix, list[Section]] = {
         BufferTank.CURRENT_BOTTOM_TEMPERATURE,
         BufferTank.EXCESS_ENERGY_TARGET_TEMPERATURE,
         BufferTank.EXCESS_ENERGY_TARGET_TEMPERATURE_HYSTERESIS,
+        BufferTank.EXCESS_ENERGY_AVAILABLE,
         BufferTank.OPERATING_MODE,
         BufferTank.STANDBY_TEMPERATURE,
         BufferTank.TARGET_TEMPERATURE,
@@ -364,7 +365,7 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
             position=self.position,
         )
 
-        if System.OUTDOOR_TEMPERATURE in self.request_data and not self.has_outdoor_temperature():
+        if System.OUTDOOR_TEMPERATURE in self.request_data and not self.has_outdoor_temperature():  # pragma: nocover
             self.request_data.remove(System.OUTDOOR_TEMPERATURE)
 
         self.request_data_groups = {

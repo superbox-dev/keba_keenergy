@@ -1129,25 +1129,6 @@
     'state': '31.51',
   })
 # ---
-# name: test_sensors[de-sensor.keba_keenergy_12345678_heat_pump_consuming_excess_energy]
-  StateSnapshot({
-    'attributes': ReadOnlyDict({
-      'device_class': 'enum',
-      'friendly_name': 'Wärmepumpe Verbraucht Überschussenergie',
-      'icon': 'mdi:lightning-bolt',
-      'options': list([
-        'off',
-        'on',
-      ]),
-    }),
-    'context': <ANY>,
-    'entity_id': 'sensor.keba_keenergy_12345678_heat_pump_consuming_excess_energy',
-    'last_changed': <ANY>,
-    'last_reported': <ANY>,
-    'last_updated': <ANY>,
-    'state': 'on',
-  })
-# ---
 # name: test_sensors[de-sensor.keba_keenergy_12345678_heat_pump_cooling_energy]
   StateSnapshot({
     'attributes': ReadOnlyDict({
@@ -3611,25 +3592,6 @@
     'last_reported': <ANY>,
     'last_updated': <ANY>,
     'state': '31.51',
-  })
-# ---
-# name: test_sensors[en-sensor.keba_keenergy_12345678_heat_pump_consuming_excess_energy]
-  StateSnapshot({
-    'attributes': ReadOnlyDict({
-      'device_class': 'enum',
-      'friendly_name': 'Heat pump Consuming excess energy',
-      'icon': 'mdi:lightning-bolt',
-      'options': list([
-        'off',
-        'on',
-      ]),
-    }),
-    'context': <ANY>,
-    'entity_id': 'sensor.keba_keenergy_12345678_heat_pump_consuming_excess_energy',
-    'last_changed': <ANY>,
-    'last_reported': <ANY>,
-    'last_updated': <ANY>,
-    'state': 'on',
   })
 # ---
 # name: test_sensors[en-sensor.keba_keenergy_12345678_heat_pump_cooling_energy]

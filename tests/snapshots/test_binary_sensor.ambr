@@ -25,6 +25,34 @@
     'state': 'off',
   })
 # ---
+# name: test_binary_sensors[de-binary_sensor.keba_keenergy_12345678_buffer_tank_excess_energy_available_1]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'friendly_name': 'Pufferspeicher 1 Überschussenergie vorhanden',
+      'icon': 'mdi:solar-power',
+    }),
+    'context': <ANY>,
+    'entity_id': 'binary_sensor.keba_keenergy_12345678_buffer_tank_excess_energy_available_1',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': 'on',
+  })
+# ---
+# name: test_binary_sensors[de-binary_sensor.keba_keenergy_12345678_buffer_tank_excess_energy_available_2]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'friendly_name': 'Pufferspeicher 2 Überschussenergie vorhanden',
+      'icon': 'mdi:solar-power',
+    }),
+    'context': <ANY>,
+    'entity_id': 'binary_sensor.keba_keenergy_12345678_buffer_tank_excess_energy_available_2',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': 'off',
+  })
+# ---
 # name: test_binary_sensors[de-binary_sensor.keba_keenergy_12345678_buffer_tank_heat_request_1]
   StateSnapshot({
     'attributes': ReadOnlyDict({
@@ -71,6 +99,20 @@
     }),
     'context': <ANY>,
     'entity_id': 'binary_sensor.keba_keenergy_12345678_external_heat_source_heat_request_2',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': 'on',
+  })
+# ---
+# name: test_binary_sensors[de-binary_sensor.keba_keenergy_12345678_heat_pump_consuming_excess_energy]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'friendly_name': 'Wärmepumpe Verbraucht Überschussenergie',
+      'icon': 'mdi:solar-power',
+    }),
+    'context': <ANY>,
+    'entity_id': 'binary_sensor.keba_keenergy_12345678_heat_pump_consuming_excess_energy',
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
@@ -319,6 +361,34 @@
     'state': 'off',
   })
 # ---
+# name: test_binary_sensors[en-binary_sensor.keba_keenergy_12345678_buffer_tank_excess_energy_available_1]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'friendly_name': 'Buffer tank 1 Excess energy available',
+      'icon': 'mdi:solar-power',
+    }),
+    'context': <ANY>,
+    'entity_id': 'binary_sensor.keba_keenergy_12345678_buffer_tank_excess_energy_available_1',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': 'on',
+  })
+# ---
+# name: test_binary_sensors[en-binary_sensor.keba_keenergy_12345678_buffer_tank_excess_energy_available_2]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'friendly_name': 'Buffer tank 2 Excess energy available',
+      'icon': 'mdi:solar-power',
+    }),
+    'context': <ANY>,
+    'entity_id': 'binary_sensor.keba_keenergy_12345678_buffer_tank_excess_energy_available_2',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': 'off',
+  })
+# ---
 # name: test_binary_sensors[en-binary_sensor.keba_keenergy_12345678_buffer_tank_heat_request_1]
   StateSnapshot({
     'attributes': ReadOnlyDict({
@@ -365,6 +435,20 @@
     }),
     'context': <ANY>,
     'entity_id': 'binary_sensor.keba_keenergy_12345678_external_heat_source_heat_request_2',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': 'on',
+  })
+# ---
+# name: test_binary_sensors[en-binary_sensor.keba_keenergy_12345678_heat_pump_consuming_excess_energy]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'friendly_name': 'Heat pump Consuming excess energy',
+      'icon': 'mdi:solar-power',
+    }),
+    'context': <ANY>,
+    'entity_id': 'binary_sensor.keba_keenergy_12345678_heat_pump_consuming_excess_energy',
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
