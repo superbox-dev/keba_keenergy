@@ -35,6 +35,8 @@ if TYPE_CHECKING:
         # heat pump
         "switch.keba_keenergy_12345678_heat_pump_compressor_use_night_speed",
         # heating circuit
+        "switch.keba_keenergy_12345678_heat_circuit_use_excess_energy_1",
+        "switch.keba_keenergy_12345678_heat_circuit_use_excess_energy_2",
         "switch.keba_keenergy_12345678_heat_circuit_use_heating_curve_1",
         "switch.keba_keenergy_12345678_heat_circuit_use_heating_curve_2",
         # solar circuit

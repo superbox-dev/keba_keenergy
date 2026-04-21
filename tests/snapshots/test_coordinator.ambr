@@ -938,6 +938,18 @@
           'value': 0.0,
         }),
       ]),
+      'use_excess_energy': list([
+        dict({
+          'attributes': dict({
+          }),
+          'value': 'on',
+        }),
+        dict({
+          'attributes': dict({
+          }),
+          'value': 'off',
+        }),
+      ]),
       'use_heating_curve': list([
         dict({
           'attributes': dict({
@@ -2505,6 +2517,18 @@
             'upper_limit': '2.5',
           }),
           'value': 0.0,
+        }),
+      ]),
+      'use_excess_energy': list([
+        dict({
+          'attributes': dict({
+          }),
+          'value': 'on',
+        }),
+        dict({
+          'attributes': dict({
+          }),
+          'value': 'off',
         }),
       ]),
       'use_heating_curve': list([

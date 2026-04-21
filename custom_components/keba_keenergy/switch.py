@@ -85,6 +85,14 @@ class KebaKeEnergySwitchEntity(KebaKeEnergyEntity, SwitchEntity):
 SWITCH_TYPES: dict[str, tuple[KebaKeEnergySwitchEntityDescription, ...]] = {
     SectionPrefix.HEAT_CIRCUIT: (
         KebaKeEnergySwitchEntityDescription(
+            condition=lambda coordinator, _: coordinator.has_photovoltaics(),
+            device_class=SwitchDeviceClass.SWITCH,
+            entity_category=EntityCategory.CONFIG,
+            entity_registry_enabled_default=False,
+            key="use_excess_energy",
+            translation_key="use_excess_energy",
+        ),
+        KebaKeEnergySwitchEntityDescription(
             condition=lambda coordinator, index: coordinator.is_heating_circuit(index=index),
             device_class=SwitchDeviceClass.SWITCH,
             entity_category=EntityCategory.CONFIG,
