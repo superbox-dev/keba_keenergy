@@ -274,6 +274,46 @@
     'state': '30.0',
   })
 # ---
+# name: test_numbers[de-number.keba_keenergy_12345678_heat_circuit_excess_energy_target_temperature_hysteresis_1]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'device_class': 'temperature',
+      'friendly_name': 'Heizkreis 1 Soll-Temperatur-Hysterese (Überschussenergie)',
+      'icon': 'mdi:thermometer',
+      'max': 2.0,
+      'min': 0.0,
+      'mode': <NumberMode.AUTO: 'auto'>,
+      'step': 0.1,
+      'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
+    }),
+    'context': <ANY>,
+    'entity_id': 'number.keba_keenergy_12345678_heat_circuit_excess_energy_target_temperature_hysteresis_1',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': '0.7',
+  })
+# ---
+# name: test_numbers[de-number.keba_keenergy_12345678_heat_circuit_excess_energy_target_temperature_hysteresis_2]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'device_class': 'temperature',
+      'friendly_name': 'Heizkreis 2 Soll-Temperatur-Hysterese (Überschussenergie)',
+      'icon': 'mdi:thermometer',
+      'max': 2.0,
+      'min': 0.0,
+      'mode': <NumberMode.AUTO: 'auto'>,
+      'step': 0.1,
+      'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
+    }),
+    'context': <ANY>,
+    'entity_id': 'number.keba_keenergy_12345678_heat_circuit_excess_energy_target_temperature_hysteresis_2',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': '0.7',
+  })
+# ---
 # name: test_numbers[de-number.keba_keenergy_12345678_heat_circuit_heating_curve_offset_1]
   StateSnapshot({
     'attributes': ReadOnlyDict({
@@ -974,6 +1014,46 @@
     'last_reported': <ANY>,
     'last_updated': <ANY>,
     'state': '30.0',
+  })
+# ---
+# name: test_numbers[en-number.keba_keenergy_12345678_heat_circuit_excess_energy_target_temperature_hysteresis_1]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'device_class': 'temperature',
+      'friendly_name': 'Heating circuit 1 Target temperature hysteresis (excess energy)',
+      'icon': 'mdi:thermometer',
+      'max': 2.0,
+      'min': 0.0,
+      'mode': <NumberMode.AUTO: 'auto'>,
+      'step': 0.1,
+      'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
+    }),
+    'context': <ANY>,
+    'entity_id': 'number.keba_keenergy_12345678_heat_circuit_excess_energy_target_temperature_hysteresis_1',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': '0.7',
+  })
+# ---
+# name: test_numbers[en-number.keba_keenergy_12345678_heat_circuit_excess_energy_target_temperature_hysteresis_2]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'device_class': 'temperature',
+      'friendly_name': 'Heating circuit 2 Target temperature hysteresis (excess energy)',
+      'icon': 'mdi:thermometer',
+      'max': 2.0,
+      'min': 0.0,
+      'mode': <NumberMode.AUTO: 'auto'>,
+      'step': 0.1,
+      'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
+    }),
+    'context': <ANY>,
+    'entity_id': 'number.keba_keenergy_12345678_heat_circuit_excess_energy_target_temperature_hysteresis_2',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': '0.7',
   })
 # ---
 # name: test_numbers[en-number.keba_keenergy_12345678_heat_circuit_heating_curve_offset_1]

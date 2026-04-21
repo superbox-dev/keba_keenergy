@@ -422,6 +422,22 @@
           'value': 30.0,
         }),
       ]),
+      'excess_energy_target_temperature_hysteresis': list([
+        dict({
+          'attributes': dict({
+            'lower_limit': '0',
+            'upper_limit': '2',
+          }),
+          'value': 0.7,
+        }),
+        dict({
+          'attributes': dict({
+            'lower_limit': '0',
+            'upper_limit': '2',
+          }),
+          'value': 0.7,
+        }),
+      ]),
       'flow_temperature_setpoint': list([
         dict({
           'attributes': dict({
@@ -1877,6 +1893,22 @@
             'upper_limit': '30',
           }),
           'value': 30.0,
+        }),
+      ]),
+      'excess_energy_target_temperature_hysteresis': list([
+        dict({
+          'attributes': dict({
+            'lower_limit': '0',
+            'upper_limit': '2',
+          }),
+          'value': 0.7,
+        }),
+        dict({
+          'attributes': dict({
+            'lower_limit': '0',
+            'upper_limit': '2',
+          }),
+          'value': 0.7,
         }),
       ]),
       'flow_temperature_setpoint': list([

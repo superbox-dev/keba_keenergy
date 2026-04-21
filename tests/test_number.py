@@ -61,6 +61,8 @@ if TYPE_CHECKING:
         "number.keba_keenergy_12345678_heat_circuit_cooling_limit_night_2",
         "number.keba_keenergy_12345678_heat_circuit_excess_energy_target_temperature_1",
         "number.keba_keenergy_12345678_heat_circuit_excess_energy_target_temperature_2",
+        "number.keba_keenergy_12345678_heat_circuit_excess_energy_target_temperature_hysteresis_1",
+        "number.keba_keenergy_12345678_heat_circuit_excess_energy_target_temperature_hysteresis_2",
         "number.keba_keenergy_12345678_heat_circuit_heating_curve_offset_1",
         "number.keba_keenergy_12345678_heat_circuit_heating_curve_slope_1",
         "number.keba_keenergy_12345678_heat_circuit_heating_limit_day_1",
