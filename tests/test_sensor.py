@@ -111,6 +111,8 @@ if TYPE_CHECKING:
         "sensor.keba_keenergy_12345678_heat_circuit_cooling_limit_day_2",
         "sensor.keba_keenergy_12345678_heat_circuit_cooling_limit_night_2",
         "sensor.keba_keenergy_12345678_heat_circuit_dew_point_1",
+        "sensor.keba_keenergy_12345678_heat_circuit_excess_energy_cooling_limit_day_2",
+        "sensor.keba_keenergy_12345678_heat_circuit_excess_energy_heating_limit_day_1",
         "sensor.keba_keenergy_12345678_heat_circuit_excess_energy_target_cooling_temperature_1",
         "sensor.keba_keenergy_12345678_heat_circuit_excess_energy_target_cooling_temperature_2",
         "sensor.keba_keenergy_12345678_heat_circuit_excess_energy_target_temperature_1",

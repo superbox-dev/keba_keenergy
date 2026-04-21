@@ -41,7 +41,7 @@ from tests.api_data import MULTIPLE_POSITIONS_RESPONSE
 from tests.api_data import MULTIPLE_POSITION_DATA_RESPONSE_1
 from tests.api_data import MULTIPLE_POSITION_DATA_RESPONSE_2
 from tests.api_data import get_multiple_position_fixed_data_response
-from tests.api_data import get_single_position_fixed_data_response
+from tests.api_data import get_single_position_data_response
 
 if TYPE_CHECKING:
     from syrupy.assertion import SnapshotAssertion
@@ -130,7 +130,7 @@ async def test_climate(
     ("responses", "expected_target_temperature"),
     [
         (
-            get_single_position_fixed_data_response(heat_circuit_target_temperature_offset="1.5"),
+            get_single_position_data_response(heat_circuit_target_temperature_offset="1.5"),
             21.5,
         ),  # Selected target temperature 20.0 + Offset 1.5
     ],
@@ -168,7 +168,7 @@ async def test_target_temperature_uses_pending_value(
         DEFAULT_POSITION_RESPONSE,
         HEATING_CURVE_NAMES_RESPONSE,
         DEFAULT_POSITION_FIXED_DATA_RESPONSE,
-        get_single_position_fixed_data_response(heat_circuit_target_temperature_offset="1.5"),
+        get_single_position_data_response(heat_circuit_target_temperature_offset="1.5"),
         *HEATING_CURVES_RESPONSE_1_1,
     ]
     fake_api.register_requests("10.0.0.100")

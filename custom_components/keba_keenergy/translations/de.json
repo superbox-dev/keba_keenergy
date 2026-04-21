@@ -154,17 +154,23 @@
             "cooling_limit_night": {
                 "name": "Kühlgrenze (Nacht)"
             },
+            "excess_energy_cooling_limit_day": {
+                "name": "Kühlgrenze für Überschussenergie (Tag)"
+            },
+            "excess_energy_heating_limit_day": {
+                "name": "Heizgrenze für Überschussenergie (Tag)"
+            },
             "excess_energy_target_cooling_temperature": {
-                "name": "Soll-Temperatur (Überschussenergie)"
+                "name": "Soll-Temperatur für Überschussenergie"
             },
             "excess_energy_target_cooling_temperature_hysteresis": {
-                "name": "Soll-Temperatur-Hysterese (Überschussenergie)"
+                "name": "Soll-Temperatur-Hysterese für Überschussenergie"
             },
             "excess_energy_target_temperature": {
-                "name": "Soll-Temperatur (Überschussenergie)"
+                "name": "Soll-Temperatur für Überschussenergie"
             },
             "excess_energy_target_temperature_hysteresis": {
-                "name": "Soll-Temperatur-Hysterese (Überschussenergie)"
+                "name": "Soll-Temperatur-Hysterese für Überschussenergie"
             },
             "heating_curve_offset": {
                 "name": "Heizkurven-Offset"
@@ -179,7 +185,7 @@
                 "name": "Heizgrenze (Nacht)"
             },
             "outdoor_temperature_excess_energy_limit": {
-                "name": "Außentemperatur-Grenze (Überschussnutzung)"
+                "name": "Außentemperatur-Grenze für Überschussenergie"
             },
             "standby_temperature": {
                 "name": "Stütztemperatur"
@@ -363,11 +369,17 @@
             "dew_point": {
                 "name": "Taupunkt"
             },
+            "excess_energy_cooling_limit_day": {
+                "name": "Kühlgrenze für Überschussenergie (Tag)"
+            },
+            "excess_energy_heating_limit_day": {
+                "name": "Heizgrenze für Überschussenergie (Tag)"
+            },
             "excess_energy_target_cooling_temperature": {
-                "name": "Soll-Temperatur (Überschussenergie)"
+                "name": "Soll-Temperatur für Überschussenergie"
             },
             "excess_energy_target_temperature": {
-                "name": "Soll-Temperatur (Überschussenergie)"
+                "name": "Soll-Temperatur für Überschussenergie"
             },
             "expansion_valve_position": {
                 "name": "Expansionsventil"
