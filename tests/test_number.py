@@ -89,6 +89,9 @@ if TYPE_CHECKING:
         "number.keba_keenergy_12345678_solar_circuit_target_temperature_1_2",
         "number.keba_keenergy_12345678_solar_circuit_target_temperature_2_1",
         "number.keba_keenergy_12345678_solar_circuit_target_temperature_2_2",
+        # external heat source
+        "number.keba_keenergy_12345678_external_heat_source_min_runtime_excess_energy_1",
+        "number.keba_keenergy_12345678_external_heat_source_min_runtime_excess_energy_2",
     ],
 )
 @pytest.mark.parametrize("language", ["en", "de"])

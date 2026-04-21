@@ -45,6 +45,9 @@ if TYPE_CHECKING:
         # solar circuit
         "switch.keba_keenergy_12345678_solar_circuit_priority_1_before_2_1",
         "switch.keba_keenergy_12345678_solar_circuit_priority_1_before_2_2",
+        # external heat source
+        "switch.keba_keenergy_12345678_external_heat_source_use_excess_energy_1",
+        "switch.keba_keenergy_12345678_external_heat_source_use_excess_energy_2",
     ],
 )
 @pytest.mark.parametrize("language", ["en", "de"])

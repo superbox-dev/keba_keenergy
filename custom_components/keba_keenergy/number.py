@@ -15,6 +15,7 @@ from homeassistant.components.number import NumberEntityDescription
 from homeassistant.const import EntityCategory
 from homeassistant.const import PERCENTAGE
 from homeassistant.const import UnitOfTemperature
+from homeassistant.const import UnitOfTime
 from homeassistant.core import HassJob
 from homeassistant.helpers.event import async_call_later
 from keba_keenergy_api.constants import SectionPrefix
@@ -536,6 +537,17 @@ NUMBER_TYPES: dict[str, tuple[KebaKeEnergyNumberEntityDescription, ...]] = {
             native_step=0.1,
             translation_key="excess_energy_target_temperature_hysteresis",
             icon="mdi:thermometer",
+            scale=1,
+        ),
+    ),
+    SectionPrefix.EXTERNAL_HEAT_SOURCE: (
+        KebaKeEnergyNumberEntityDescription(
+            entity_category=EntityCategory.CONFIG,
+            device_class=NumberDeviceClass.DURATION,
+            key="min_runtime_excess_energy",
+            native_unit_of_measurement=UnitOfTime.MINUTES,
+            native_step=1,
+            translation_key="min_runtime_excess_energy",
             scale=1,
         ),
     ),

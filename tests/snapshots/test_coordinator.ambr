@@ -220,6 +220,22 @@
           'value': 8129,
         }),
       ]),
+      'min_runtime_excess_energy': list([
+        dict({
+          'attributes': dict({
+            'lower_limit': '0',
+            'upper_limit': '10800',
+          }),
+          'value': 5,
+        }),
+        dict({
+          'attributes': dict({
+            'lower_limit': '0',
+            'upper_limit': '10800',
+          }),
+          'value': 5,
+        }),
+      ]),
       'operating_mode': list([
         dict({
           'attributes': dict({
@@ -262,6 +278,18 @@
             'upper_limit': '90',
           }),
           'value': 17.23,
+        }),
+      ]),
+      'use_excess_energy': list([
+        dict({
+          'attributes': dict({
+          }),
+          'value': 'on',
+        }),
+        dict({
+          'attributes': dict({
+          }),
+          'value': 'off',
         }),
       ]),
     }),
@@ -1861,6 +1889,22 @@
           'value': 8129,
         }),
       ]),
+      'min_runtime_excess_energy': list([
+        dict({
+          'attributes': dict({
+            'lower_limit': '0',
+            'upper_limit': '10800',
+          }),
+          'value': 5,
+        }),
+        dict({
+          'attributes': dict({
+            'lower_limit': '0',
+            'upper_limit': '10800',
+          }),
+          'value': 5,
+        }),
+      ]),
       'operating_mode': list([
         dict({
           'attributes': dict({
@@ -1903,6 +1947,18 @@
             'upper_limit': '90',
           }),
           'value': 17.23,
+        }),
+      ]),
+      'use_excess_energy': list([
+        dict({
+          'attributes': dict({
+          }),
+          'value': 'on',
+        }),
+        dict({
+          'attributes': dict({
+          }),
+          'value': 'off',
         }),
       ]),
     }),

@@ -149,6 +149,16 @@ SWITCH_TYPES: dict[str, tuple[KebaKeEnergySwitchEntityDescription, ...]] = {
             translation_key="use_excess_energy",
         ),
     ),
+    SectionPrefix.EXTERNAL_HEAT_SOURCE: (
+        KebaKeEnergySwitchEntityDescription(
+            condition=lambda coordinator, _: coordinator.has_photovoltaics(),
+            device_class=SwitchDeviceClass.SWITCH,
+            entity_category=EntityCategory.CONFIG,
+            entity_registry_enabled_default=False,
+            key="use_excess_energy",
+            translation_key="use_excess_energy",
+        ),
+    ),
 }
 
 

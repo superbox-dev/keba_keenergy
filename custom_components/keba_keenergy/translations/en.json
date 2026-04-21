@@ -187,6 +187,9 @@
             "heating_limit_night": {
                 "name": "Heating limit (night)"
             },
+            "min_runtime_excess_energy": {
+                "name": "Minimum runtime with excess energy"
+            },
             "outdoor_temperature_excess_energy_limit": {
                 "name": "Outdoor temperature limit for excess energy"
             },

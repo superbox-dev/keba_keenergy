@@ -77,6 +77,8 @@ REQUEST_DATA_GROUPS: dict[SectionPrefix, list[Section]] = {
         ExternalHeatSource.OPERATING_TIME,
         ExternalHeatSource.MAX_RUNTIME,
         ExternalHeatSource.ACTIVATION_COUNTER,
+        ExternalHeatSource.USE_EXCESS_ENERGY,
+        ExternalHeatSource.MIN_RUNTIME_EXCESS_ENERGY,
     ],
     SectionPrefix.HEAT_CIRCUIT: [
         HeatCircuit.ROOM_TEMPERATURE,
