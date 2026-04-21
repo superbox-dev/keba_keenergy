@@ -86,6 +86,14 @@
                     "off": "mdi:snowflake-off"
                 }
             },
+            "excess_energy_mode": {
+                "default": "mdi:lightning-bolt",
+                "state": {
+                    "off": "mdi:lightning-bolt",
+                    "heating": "mdi:fire",
+                    "cooling": "mdi:snowflake"
+                }
+            },
             "heat_request": {
                 "default": "mdi:fire",
                 "state": {

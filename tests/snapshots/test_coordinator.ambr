@@ -1376,6 +1376,22 @@
           'value': 47.7,
         }),
       ]),
+      'excess_energy_mode': list([
+        dict({
+          'attributes': dict({
+            'lower_limit': '0',
+            'upper_limit': '2',
+          }),
+          'value': 'heating',
+        }),
+        dict({
+          'attributes': dict({
+            'lower_limit': '0',
+            'upper_limit': '2',
+          }),
+          'value': 'off',
+        }),
+      ]),
       'excess_energy_target_temperature': list([
         dict({
           'attributes': dict({
@@ -1494,6 +1510,18 @@
             'upper_limit': '52',
           }),
           'value': 51.0,
+        }),
+      ]),
+      'use_excess_energy': list([
+        dict({
+          'attributes': dict({
+          }),
+          'value': 'on',
+        }),
+        dict({
+          'attributes': dict({
+          }),
+          'value': 'off',
         }),
       ]),
     }),
@@ -2989,6 +3017,22 @@
           'value': 47.7,
         }),
       ]),
+      'excess_energy_mode': list([
+        dict({
+          'attributes': dict({
+            'lower_limit': '0',
+            'upper_limit': '2',
+          }),
+          'value': 'heating',
+        }),
+        dict({
+          'attributes': dict({
+            'lower_limit': '0',
+            'upper_limit': '2',
+          }),
+          'value': 'off',
+        }),
+      ]),
       'excess_energy_target_temperature': list([
         dict({
           'attributes': dict({
@@ -3107,6 +3151,18 @@
             'upper_limit': '52',
           }),
           'value': 51.0,
+        }),
+      ]),
+      'use_excess_energy': list([
+        dict({
+          'attributes': dict({
+          }),
+          'value': 'on',
+        }),
+        dict({
+          'attributes': dict({
+          }),
+          'value': 'off',
         }),
       ]),
     }),

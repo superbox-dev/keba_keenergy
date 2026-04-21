@@ -1949,6 +1949,48 @@
     'state': '47.7',
   })
 # ---
+# name: test_sensors[de-sensor.keba_keenergy_12345678_hot_water_tank_excess_energy_mode_1]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'device_class': 'enum',
+      'friendly_name': 'Warmwasserspeicher 1 Überschussenergie',
+      'lower_limit': '0',
+      'options': list([
+        'off',
+        'heating',
+        'cooling',
+      ]),
+      'upper_limit': '2',
+    }),
+    'context': <ANY>,
+    'entity_id': 'sensor.keba_keenergy_12345678_hot_water_tank_excess_energy_mode_1',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': 'heating',
+  })
+# ---
+# name: test_sensors[de-sensor.keba_keenergy_12345678_hot_water_tank_excess_energy_mode_2]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'device_class': 'enum',
+      'friendly_name': 'Warmwasserspeicher 2 Überschussenergie',
+      'lower_limit': '0',
+      'options': list([
+        'off',
+        'heating',
+        'cooling',
+      ]),
+      'upper_limit': '2',
+    }),
+    'context': <ANY>,
+    'entity_id': 'sensor.keba_keenergy_12345678_hot_water_tank_excess_energy_mode_2',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': 'off',
+  })
+# ---
 # name: test_sensors[de-sensor.keba_keenergy_12345678_hot_water_tank_excess_energy_target_temperature_1]
   StateSnapshot({
     'attributes': ReadOnlyDict({
@@ -4644,6 +4686,48 @@
     'last_reported': <ANY>,
     'last_updated': <ANY>,
     'state': '47.7',
+  })
+# ---
+# name: test_sensors[en-sensor.keba_keenergy_12345678_hot_water_tank_excess_energy_mode_1]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'device_class': 'enum',
+      'friendly_name': 'Hot water tank 1 Excess energy',
+      'lower_limit': '0',
+      'options': list([
+        'off',
+        'heating',
+        'cooling',
+      ]),
+      'upper_limit': '2',
+    }),
+    'context': <ANY>,
+    'entity_id': 'sensor.keba_keenergy_12345678_hot_water_tank_excess_energy_mode_1',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': 'heating',
+  })
+# ---
+# name: test_sensors[en-sensor.keba_keenergy_12345678_hot_water_tank_excess_energy_mode_2]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'device_class': 'enum',
+      'friendly_name': 'Hot water tank 2 Excess energy',
+      'lower_limit': '0',
+      'options': list([
+        'off',
+        'heating',
+        'cooling',
+      ]),
+      'upper_limit': '2',
+    }),
+    'context': <ANY>,
+    'entity_id': 'sensor.keba_keenergy_12345678_hot_water_tank_excess_energy_mode_2',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': 'off',
   })
 # ---
 # name: test_sensors[en-sensor.keba_keenergy_12345678_hot_water_tank_excess_energy_target_temperature_1]

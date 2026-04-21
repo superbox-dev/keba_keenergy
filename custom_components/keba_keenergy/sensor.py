@@ -32,6 +32,7 @@ from keba_keenergy_api.constants import HeatCircuitHeatRequest
 from keba_keenergy_api.constants import HeatCircuitOperatingMode
 from keba_keenergy_api.constants import HeatPumpState
 from keba_keenergy_api.constants import HeatPumpSubState
+from keba_keenergy_api.constants import HotWaterTankExcessEnergyMode
 from keba_keenergy_api.constants import HotWaterTankOperatingMode
 from keba_keenergy_api.constants import SectionPrefix
 from keba_keenergy_api.constants import SwitchValvePosition
@@ -1106,6 +1107,13 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
             state_class=SensorStateClass.MEASUREMENT,
             translation_key="excess_energy_target_temperature",
             icon="mdi:thermometer-plus",
+            value=lambda data: data,
+        ),
+        KebaKeEnergySensorEntityDescription[str](
+            device_class=SensorDeviceClass.ENUM,
+            key="excess_energy_mode",
+            options=[_.name.lower() for _ in HotWaterTankExcessEnergyMode],
+            translation_key="excess_energy_mode",
             value=lambda data: data,
         ),
         KebaKeEnergySensorEntityDescription[float](

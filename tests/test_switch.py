@@ -32,6 +32,9 @@ if TYPE_CHECKING:
         # buffer tank
         "switch.keba_keenergy_12345678_buffer_tank_use_excess_energy_1",
         "switch.keba_keenergy_12345678_buffer_tank_use_excess_energy_2",
+        # hot water tank
+        "switch.keba_keenergy_12345678_hot_water_tank_use_excess_energy_1",
+        "switch.keba_keenergy_12345678_hot_water_tank_use_excess_energy_2",
         # heat pump
         "switch.keba_keenergy_12345678_heat_pump_compressor_use_night_speed",
         # heating circuit

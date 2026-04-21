@@ -99,6 +99,34 @@
     'state': 'on',
   })
 # ---
+# name: test_binary_sensors[de-switch.keba_keenergy_12345678_hot_water_tank_use_excess_energy_1]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'device_class': 'switch',
+      'friendly_name': 'Warmwasserspeicher 1 Überschussenergie verwenden',
+    }),
+    'context': <ANY>,
+    'entity_id': 'switch.keba_keenergy_12345678_hot_water_tank_use_excess_energy_1',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': 'on',
+  })
+# ---
+# name: test_binary_sensors[de-switch.keba_keenergy_12345678_hot_water_tank_use_excess_energy_2]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'device_class': 'switch',
+      'friendly_name': 'Warmwasserspeicher 2 Überschussenergie verwenden',
+    }),
+    'context': <ANY>,
+    'entity_id': 'switch.keba_keenergy_12345678_hot_water_tank_use_excess_energy_2',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': 'off',
+  })
+# ---
 # name: test_binary_sensors[de-switch.keba_keenergy_12345678_solar_circuit_priority_1_before_2_1]
   StateSnapshot({
     'attributes': ReadOnlyDict({
@@ -225,6 +253,34 @@
     'last_reported': <ANY>,
     'last_updated': <ANY>,
     'state': 'on',
+  })
+# ---
+# name: test_binary_sensors[en-switch.keba_keenergy_12345678_hot_water_tank_use_excess_energy_1]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'device_class': 'switch',
+      'friendly_name': 'Hot water tank 1 Use excess energy',
+    }),
+    'context': <ANY>,
+    'entity_id': 'switch.keba_keenergy_12345678_hot_water_tank_use_excess_energy_1',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': 'on',
+  })
+# ---
+# name: test_binary_sensors[en-switch.keba_keenergy_12345678_hot_water_tank_use_excess_energy_2]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'device_class': 'switch',
+      'friendly_name': 'Hot water tank 2 Use excess energy',
+    }),
+    'context': <ANY>,
+    'entity_id': 'switch.keba_keenergy_12345678_hot_water_tank_use_excess_energy_2',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': 'off',
   })
 # ---
 # name: test_binary_sensors[en-switch.keba_keenergy_12345678_solar_circuit_priority_1_before_2_1]

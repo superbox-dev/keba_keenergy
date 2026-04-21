@@ -207,8 +207,10 @@ REQUEST_DATA_GROUPS: dict[SectionPrefix, list[Section]] = {
         BufferTank.OUTDOOR_TEMPERATURE_EXCESS_ENERGY_LIMIT,
     ],
     SectionPrefix.HOT_WATER_TANK: [
+        HotWaterTank.USE_EXCESS_ENERGY,
         HotWaterTank.EXCESS_ENERGY_TARGET_TEMPERATURE,
         HotWaterTank.EXCESS_ENERGY_TARGET_TEMPERATURE_HYSTERESIS,
+        HotWaterTank.EXCESS_ENERGY_MODE,
         HotWaterTank.HEAT_REQUEST,
         HotWaterTank.FRESH_WATER_FLOW,
         HotWaterTank.FRESH_WATER_MODULE_TEMPERATURE,
