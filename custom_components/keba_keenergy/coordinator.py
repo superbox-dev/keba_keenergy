@@ -99,6 +99,8 @@ REQUEST_DATA_GROUPS: dict[SectionPrefix, list[Section]] = {
         HeatCircuit.TARGET_COOLING_TEMPERATURE_NIGHT,
         HeatCircuit.HEATING_LIMIT_NIGHT,
         HeatCircuit.COOLING_LIMIT_NIGHT,
+        HeatCircuit.EXCESS_ENERGY_HEATING_LIMIT_NIGHT,
+        HeatCircuit.EXCESS_ENERGY_COOLING_LIMIT_NIGHT,
         HeatCircuit.OPERATING_MODE,
         HeatCircuit.SELECTED_TARGET_TEMPERATURE,
         HeatCircuit.TARGET_TEMPERATURE,

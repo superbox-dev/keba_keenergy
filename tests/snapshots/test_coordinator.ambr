@@ -422,6 +422,22 @@
           'value': 10.0,
         }),
       ]),
+      'excess_energy_cooling_limit_night': list([
+        dict({
+          'attributes': dict({
+            'lower_limit': '-20',
+            'upper_limit': '100',
+          }),
+          'value': 28.0,
+        }),
+        dict({
+          'attributes': dict({
+            'lower_limit': '-20',
+            'upper_limit': '100',
+          }),
+          'value': 28.0,
+        }),
+      ]),
       'excess_energy_heating_limit_day': list([
         dict({
           'attributes': dict({
@@ -436,6 +452,22 @@
             'upper_limit': '100',
           }),
           'value': 30.0,
+        }),
+      ]),
+      'excess_energy_heating_limit_night': list([
+        dict({
+          'attributes': dict({
+            'lower_limit': '-20',
+            'upper_limit': '100',
+          }),
+          'value': 28.0,
+        }),
+        dict({
+          'attributes': dict({
+            'lower_limit': '-20',
+            'upper_limit': '100',
+          }),
+          'value': 28.0,
         }),
       ]),
       'excess_energy_target_cooling_temperature': list([
@@ -1959,6 +1991,22 @@
           'value': 10.0,
         }),
       ]),
+      'excess_energy_cooling_limit_night': list([
+        dict({
+          'attributes': dict({
+            'lower_limit': '-20',
+            'upper_limit': '100',
+          }),
+          'value': 28.0,
+        }),
+        dict({
+          'attributes': dict({
+            'lower_limit': '-20',
+            'upper_limit': '100',
+          }),
+          'value': 28.0,
+        }),
+      ]),
       'excess_energy_heating_limit_day': list([
         dict({
           'attributes': dict({
@@ -1973,6 +2021,22 @@
             'upper_limit': '100',
           }),
           'value': 30.0,
+        }),
+      ]),
+      'excess_energy_heating_limit_night': list([
+        dict({
+          'attributes': dict({
+            'lower_limit': '-20',
+            'upper_limit': '100',
+          }),
+          'value': 28.0,
+        }),
+        dict({
+          'attributes': dict({
+            'lower_limit': '-20',
+            'upper_limit': '100',
+          }),
+          'value': 28.0,
         }),
       ]),
       'excess_energy_target_cooling_temperature': list([

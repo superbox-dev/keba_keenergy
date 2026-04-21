@@ -253,6 +253,25 @@
     'state': '10.0',
   })
 # ---
+# name: test_numbers[de-number.keba_keenergy_12345678_heat_circuit_excess_energy_cooling_limit_night_2]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'device_class': 'temperature',
+      'friendly_name': 'Heizkreis 2 Kühlgrenze für Überschussenergie (Nacht)',
+      'max': 100.0,
+      'min': -20.0,
+      'mode': <NumberMode.AUTO: 'auto'>,
+      'step': 0.5,
+      'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
+    }),
+    'context': <ANY>,
+    'entity_id': 'number.keba_keenergy_12345678_heat_circuit_excess_energy_cooling_limit_night_2',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': '28.0',
+  })
+# ---
 # name: test_numbers[de-number.keba_keenergy_12345678_heat_circuit_excess_energy_heating_limit_day_1]
   StateSnapshot({
     'attributes': ReadOnlyDict({
@@ -270,6 +289,25 @@
     'last_reported': <ANY>,
     'last_updated': <ANY>,
     'state': '30.0',
+  })
+# ---
+# name: test_numbers[de-number.keba_keenergy_12345678_heat_circuit_excess_energy_heating_limit_night_1]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'device_class': 'temperature',
+      'friendly_name': 'Heizkreis 1 Heizgrenze für Überschussenergie (Nacht)',
+      'max': 100.0,
+      'min': -20.0,
+      'mode': <NumberMode.AUTO: 'auto'>,
+      'step': 0.5,
+      'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
+    }),
+    'context': <ANY>,
+    'entity_id': 'number.keba_keenergy_12345678_heat_circuit_excess_energy_heating_limit_night_1',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': '28.0',
   })
 # ---
 # name: test_numbers[de-number.keba_keenergy_12345678_heat_circuit_excess_energy_target_cooling_temperature_1]
@@ -1113,6 +1151,25 @@
     'state': '10.0',
   })
 # ---
+# name: test_numbers[en-number.keba_keenergy_12345678_heat_circuit_excess_energy_cooling_limit_night_2]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'device_class': 'temperature',
+      'friendly_name': 'Heating circuit 2 Cooling limit for excess energy (night)',
+      'max': 100.0,
+      'min': -20.0,
+      'mode': <NumberMode.AUTO: 'auto'>,
+      'step': 0.5,
+      'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
+    }),
+    'context': <ANY>,
+    'entity_id': 'number.keba_keenergy_12345678_heat_circuit_excess_energy_cooling_limit_night_2',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': '28.0',
+  })
+# ---
 # name: test_numbers[en-number.keba_keenergy_12345678_heat_circuit_excess_energy_heating_limit_day_1]
   StateSnapshot({
     'attributes': ReadOnlyDict({
@@ -1130,6 +1187,25 @@
     'last_reported': <ANY>,
     'last_updated': <ANY>,
     'state': '30.0',
+  })
+# ---
+# name: test_numbers[en-number.keba_keenergy_12345678_heat_circuit_excess_energy_heating_limit_night_1]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'device_class': 'temperature',
+      'friendly_name': 'Heating circuit 1 Heating limit for excess energy (night)',
+      'max': 100.0,
+      'min': -20.0,
+      'mode': <NumberMode.AUTO: 'auto'>,
+      'step': 0.5,
+      'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
+    }),
+    'context': <ANY>,
+    'entity_id': 'number.keba_keenergy_12345678_heat_circuit_excess_energy_heating_limit_night_1',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': '28.0',
   })
 # ---
 # name: test_numbers[en-number.keba_keenergy_12345678_heat_circuit_excess_energy_target_cooling_temperature_1]

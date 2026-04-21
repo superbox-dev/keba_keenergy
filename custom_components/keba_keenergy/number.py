@@ -168,7 +168,10 @@ NUMBER_TYPES: dict[str, tuple[KebaKeEnergyNumberEntityDescription, ...]] = {
             scale=1,
         ),
         KebaKeEnergyNumberEntityDescription(
-            condition=lambda coordinator, index: coordinator.is_heating_circuit(index=index),
+            condition=(
+                lambda coordinator, index: coordinator.is_heating_circuit(index=index)
+                and coordinator.has_photovoltaics()
+            ),
             device_class=NumberDeviceClass.TEMPERATURE,
             entity_category=EntityCategory.CONFIG,
             entity_registry_enabled_default=False,
@@ -179,7 +182,10 @@ NUMBER_TYPES: dict[str, tuple[KebaKeEnergyNumberEntityDescription, ...]] = {
             scale=1,
         ),
         KebaKeEnergyNumberEntityDescription(
-            condition=lambda coordinator, index: coordinator.is_cooling_circuit(index=index),
+            condition=(
+                lambda coordinator, index: coordinator.is_cooling_circuit(index=index)
+                and coordinator.has_photovoltaics()
+            ),
             device_class=NumberDeviceClass.TEMPERATURE,
             entity_category=EntityCategory.CONFIG,
             entity_registry_enabled_default=False,
@@ -231,6 +237,34 @@ NUMBER_TYPES: dict[str, tuple[KebaKeEnergyNumberEntityDescription, ...]] = {
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             native_step=0.5,
             translation_key="cooling_limit_night",
+            scale=1,
+        ),
+        KebaKeEnergyNumberEntityDescription(
+            condition=(
+                lambda coordinator, index: coordinator.is_heating_circuit(index=index)
+                and coordinator.has_photovoltaics()
+            ),
+            device_class=NumberDeviceClass.TEMPERATURE,
+            entity_category=EntityCategory.CONFIG,
+            entity_registry_enabled_default=False,
+            key="excess_energy_heating_limit_night",
+            native_unit_of_measurement=UnitOfTemperature.CELSIUS,
+            native_step=0.5,
+            translation_key="excess_energy_heating_limit_night",
+            scale=1,
+        ),
+        KebaKeEnergyNumberEntityDescription(
+            condition=(
+                lambda coordinator, index: coordinator.is_cooling_circuit(index=index)
+                and coordinator.has_photovoltaics()
+            ),
+            device_class=NumberDeviceClass.TEMPERATURE,
+            entity_category=EntityCategory.CONFIG,
+            entity_registry_enabled_default=False,
+            key="excess_energy_cooling_limit_night",
+            native_unit_of_measurement=UnitOfTemperature.CELSIUS,
+            native_step=0.5,
+            translation_key="excess_energy_cooling_limit_night",
             scale=1,
         ),
         KebaKeEnergyNumberEntityDescription(

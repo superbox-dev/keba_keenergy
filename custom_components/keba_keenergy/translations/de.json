@@ -157,8 +157,14 @@
             "excess_energy_cooling_limit_day": {
                 "name": "Kühlgrenze für Überschussenergie (Tag)"
             },
+            "excess_energy_cooling_limit_night": {
+                "name": "Kühlgrenze für Überschussenergie (Nacht)"
+            },
             "excess_energy_heating_limit_day": {
                 "name": "Heizgrenze für Überschussenergie (Tag)"
+            },
+            "excess_energy_heating_limit_night": {
+                "name": "Heizgrenze für Überschussenergie (Nacht)"
             },
             "excess_energy_target_cooling_temperature": {
                 "name": "Soll-Temperatur für Überschussenergie"
@@ -372,8 +378,14 @@
             "excess_energy_cooling_limit_day": {
                 "name": "Kühlgrenze für Überschussenergie (Tag)"
             },
+            "excess_energy_cooling_limit_night": {
+                "name": "Kühlgrenze für Überschussenergie (Nacht)"
+            },
             "excess_energy_heating_limit_day": {
                 "name": "Heizgrenze für Überschussenergie (Tag)"
+            },
+            "excess_energy_heating_limit_night": {
+                "name": "Heizgrenze für Überschussenergie (Nacht)"
             },
             "excess_energy_target_cooling_temperature": {
                 "name": "Soll-Temperatur für Überschussenergie"

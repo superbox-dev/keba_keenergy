@@ -423,6 +423,34 @@ HEAT_CIRCUIT_COOLING_LIMIT_NIGHT: str = """
     }
 """
 
+HEAT_CIRCUIT_EXCESS_ENERGY_HEATING_LIMIT_NIGHT: str = """
+    {
+        "name": "APPL.CtrlAppl.sParam.heatCircuit[%s].param.excessEnergy.thresholdNightTemp",
+        "attributes": {
+            "formatId": "fmtTemp",
+            "longText": "Cooling limit night",
+            "unitId": "Temp",
+            "upperLimit": "100",
+            "lowerLimit": "-20"
+        },
+        "value": "%s"
+    }
+"""
+
+HEAT_CIRCUIT_EXCESS_ENERGY_COOLING_LIMIT_NIGHT: str = """
+    {
+        "name": "APPL.CtrlAppl.sParam.heatCircuit[%s].param.excessEnergy.thresholdNightCoolTemp",
+        "attributes": {
+            "formatId": "fmtTemp",
+            "longText": "Cooling limit night",
+            "unitId": "Temp",
+            "upperLimit": "100",
+            "lowerLimit": "-20"
+        },
+        "value": "%s"
+    }
+"""
+
 HEAT_CIRCUIT_OPERATION_MODE: str = """
     {
         "name": "APPL.CtrlAppl.sParam.heatCircuit[%s].param.operatingMode",
@@ -2043,6 +2071,8 @@ DEFAULT_POSITION_DATA_RESPONSE: list[dict[str, Any]] = [
     json.loads(HEAT_CIRCUIT_TARGET_COOLING_TEMPERATURE_NIGHT % ("0", "20")),
     json.loads(HEAT_CIRCUIT_HEATING_LIMIT_NIGHT % ("0", "18")),
     json.loads(HEAT_CIRCUIT_COOLING_LIMIT_NIGHT % ("0", "18")),
+    json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_HEATING_LIMIT_NIGHT % ("0", "28")),
+    json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_COOLING_LIMIT_NIGHT % ("0", "28")),
     json.loads(HEAT_CIRCUIT_OPERATION_MODE % ("0", "3")),
     json.loads(HEAT_CIRCUIT_SELECTED_TARGET_TEMPERATURE % ("0", "20")),
     json.loads(HEAT_CIRCUIT_TARGET_TEMPERATURE % ("0", "20.5")),
@@ -2162,6 +2192,10 @@ ENTITY_UPDATED_DATA_RESPONSE: list[dict[str, Any]] = [
     json.loads(HEAT_CIRCUIT_HEATING_LIMIT_NIGHT % ("1", "18")),
     json.loads(HEAT_CIRCUIT_COOLING_LIMIT_NIGHT % ("0", "18")),
     json.loads(HEAT_CIRCUIT_COOLING_LIMIT_NIGHT % ("1", "18")),
+    json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_HEATING_LIMIT_NIGHT % ("0", "28")),
+    json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_HEATING_LIMIT_NIGHT % ("1", "28")),
+    json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_COOLING_LIMIT_NIGHT % ("0", "28")),
+    json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_COOLING_LIMIT_NIGHT % ("1", "28")),
     json.loads(HEAT_CIRCUIT_OPERATION_MODE % ("0", "3")),
     json.loads(HEAT_CIRCUIT_OPERATION_MODE % ("1", "1")),
     json.loads(HEAT_CIRCUIT_SELECTED_TARGET_TEMPERATURE % ("0", "20")),
@@ -2305,16 +2339,18 @@ def get_single_position_data_response(
         json.loads(HEAT_CIRCUIT_TARGET_TEMPERATURE_DAY % ("0", "20.5")),
         json.loads(HEAT_CIRCUIT_TARGET_COOLING_TEMPERATURE_DAY % ("0", "20.5")),
         json.loads(HEAT_CIRCUIT_HEATING_LIMIT_DAY % ("0", "20")),
-        json.loads(HEAT_CIRCUIT_COOLING_LIMIT_DAY % ("1", "20")),
+        json.loads(HEAT_CIRCUIT_COOLING_LIMIT_DAY % ("0", "20")),
         json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_HEATING_LIMIT_DAY % ("0", "30")),
         json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_COOLING_LIMIT_DAY % ("1", "10")),
         json.loads(HEAT_CIRCUIT_HEAT_REQUEST % ("0", "1")),
-        json.loads(HEAT_CIRCUIT_COOL_REQUEST % ("1", "1")),
+        json.loads(HEAT_CIRCUIT_COOL_REQUEST % ("0", "1")),
         json.loads(HEAT_CIRCUIT_TARGET_TEMPERATURE_AWAY % ("0", "18")),
         json.loads(HEAT_CIRCUIT_TARGET_TEMPERATURE_NIGHT % ("0", "20")),
         json.loads(HEAT_CIRCUIT_TARGET_COOLING_TEMPERATURE_NIGHT % ("0", "20")),
         json.loads(HEAT_CIRCUIT_HEATING_LIMIT_NIGHT % ("0", "18")),
         json.loads(HEAT_CIRCUIT_COOLING_LIMIT_NIGHT % ("0", "18")),
+        json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_HEATING_LIMIT_NIGHT % ("0", "28")),
+        json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_COOLING_LIMIT_NIGHT % ("0", "28")),
         json.loads(HEAT_CIRCUIT_OPERATION_MODE % ("0", "3")),
         json.loads(HEAT_CIRCUIT_SELECTED_TARGET_TEMPERATURE % ("0", "20")),
         json.loads(HEAT_CIRCUIT_TARGET_TEMPERATURE % ("0", "20.5")),
@@ -2435,6 +2471,10 @@ MULTIPLE_POSITION_DATA_RESPONSE_1: list[dict[str, Any]] = [
     json.loads(HEAT_CIRCUIT_HEATING_LIMIT_NIGHT % ("1", "18")),
     json.loads(HEAT_CIRCUIT_COOLING_LIMIT_NIGHT % ("0", "18")),
     json.loads(HEAT_CIRCUIT_COOLING_LIMIT_NIGHT % ("1", "18")),
+    json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_HEATING_LIMIT_NIGHT % ("0", "28")),
+    json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_HEATING_LIMIT_NIGHT % ("1", "28")),
+    json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_COOLING_LIMIT_NIGHT % ("0", "28")),
+    json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_COOLING_LIMIT_NIGHT % ("1", "28")),
     json.loads(HEAT_CIRCUIT_OPERATION_MODE % ("0", "2")),
     json.loads(HEAT_CIRCUIT_OPERATION_MODE % ("1", "1")),
     json.loads(HEAT_CIRCUIT_SELECTED_TARGET_TEMPERATURE % ("0", "20")),
@@ -2609,6 +2649,10 @@ MULTIPLE_POSITION_DATA_RESPONSE_2: list[dict[str, Any]] = [
     json.loads(HEAT_CIRCUIT_HEATING_LIMIT_NIGHT % ("1", "18")),
     json.loads(HEAT_CIRCUIT_COOLING_LIMIT_NIGHT % ("0", "18")),
     json.loads(HEAT_CIRCUIT_COOLING_LIMIT_NIGHT % ("1", "18")),
+    json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_HEATING_LIMIT_NIGHT % ("0", "28")),
+    json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_HEATING_LIMIT_NIGHT % ("1", "28")),
+    json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_COOLING_LIMIT_NIGHT % ("0", "28")),
+    json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_COOLING_LIMIT_NIGHT % ("1", "28")),
     json.loads(HEAT_CIRCUIT_OPERATION_MODE % ("0", "4")),
     json.loads(HEAT_CIRCUIT_OPERATION_MODE % ("1", "4")),
     json.loads(HEAT_CIRCUIT_SELECTED_TARGET_TEMPERATURE % ("0", "20")),
@@ -2853,6 +2897,10 @@ MULTIPLE_POSITION_DATA_RESPONSE_3_2: list[dict[str, Any]] = [
     json.loads(HEAT_CIRCUIT_HEATING_LIMIT_NIGHT % ("1", "18")),
     json.loads(HEAT_CIRCUIT_COOLING_LIMIT_NIGHT % ("0", "18")),
     json.loads(HEAT_CIRCUIT_COOLING_LIMIT_NIGHT % ("1", "18")),
+    json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_HEATING_LIMIT_NIGHT % ("0", "28")),
+    json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_HEATING_LIMIT_NIGHT % ("1", "28")),
+    json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_COOLING_LIMIT_NIGHT % ("0", "28")),
+    json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_COOLING_LIMIT_NIGHT % ("1", "28")),
     json.loads(HEAT_CIRCUIT_OPERATION_MODE % ("0", "2")),
     json.loads(HEAT_CIRCUIT_OPERATION_MODE % ("1", "0")),
     json.loads(HEAT_CIRCUIT_SELECTED_TARGET_TEMPERATURE % ("0", "20")),

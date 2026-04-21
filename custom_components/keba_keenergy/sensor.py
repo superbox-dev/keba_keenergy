@@ -310,7 +310,10 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
             value=lambda data: data,
         ),
         KebaKeEnergySensorEntityDescription[float](
-            condition=lambda coordinator, index: coordinator.is_heating_circuit(index=index),
+            condition=(
+                lambda coordinator, index: coordinator.is_heating_circuit(index=index)
+                and coordinator.has_photovoltaics()
+            ),
             device_class=SensorDeviceClass.TEMPERATURE,
             entity_registry_enabled_default=False,
             key="excess_energy_heating_limit_day",
@@ -320,7 +323,10 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
             value=lambda data: data,
         ),
         KebaKeEnergySensorEntityDescription[float](
-            condition=lambda coordinator, index: coordinator.is_cooling_circuit(index=index),
+            condition=(
+                lambda coordinator, index: coordinator.is_cooling_circuit(index=index)
+                and coordinator.has_photovoltaics()
+            ),
             device_class=SensorDeviceClass.TEMPERATURE,
             entity_registry_enabled_default=False,
             key="excess_energy_cooling_limit_day",
@@ -365,6 +371,32 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             state_class=SensorStateClass.MEASUREMENT,
             translation_key="cooling_limit_night",
+            value=lambda data: data,
+        ),
+        KebaKeEnergySensorEntityDescription[float](
+            condition=(
+                lambda coordinator, index: coordinator.is_heating_circuit(index=index)
+                and coordinator.has_photovoltaics()
+            ),
+            device_class=SensorDeviceClass.TEMPERATURE,
+            entity_registry_enabled_default=False,
+            key="excess_energy_heating_limit_night",
+            native_unit_of_measurement=UnitOfTemperature.CELSIUS,
+            state_class=SensorStateClass.MEASUREMENT,
+            translation_key="excess_energy_heating_limit_night",
+            value=lambda data: data,
+        ),
+        KebaKeEnergySensorEntityDescription[float](
+            condition=(
+                lambda coordinator, index: coordinator.is_cooling_circuit(index=index)
+                and coordinator.has_photovoltaics()
+            ),
+            device_class=SensorDeviceClass.TEMPERATURE,
+            entity_registry_enabled_default=False,
+            key="excess_energy_cooling_limit_night",
+            native_unit_of_measurement=UnitOfTemperature.CELSIUS,
+            state_class=SensorStateClass.MEASUREMENT,
+            translation_key="excess_energy_cooling_limit_night",
             value=lambda data: data,
         ),
         KebaKeEnergySensorEntityDescription[float](

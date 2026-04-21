@@ -157,8 +157,14 @@
             "excess_energy_cooling_limit_day": {
                 "name": "Cooling limit for excess energy (day)"
             },
+            "excess_energy_cooling_limit_night": {
+                "name": "Cooling limit for excess energy (night)"
+            },
             "excess_energy_heating_limit_day": {
                 "name": "Heating limit for excess energy (day)"
+            },
+            "excess_energy_heating_limit_night": {
+                "name": "Heating limit for excess energy (night)"
             },
             "excess_energy_target_cooling_temperature": {
                 "name": "Target temperature for excess energy"
@@ -372,8 +378,14 @@
             "excess_energy_cooling_limit_day": {
                 "name": "Cooling limit for excess energy (day)"
             },
+            "excess_energy_cooling_limit_night": {
+                "name": "Cooling limit for excess energy (night)"
+            },
             "excess_energy_heating_limit_day": {
                 "name": "Heating limit for excess energy (day)"
+            },
+            "excess_energy_heating_limit_night": {
+                "name": "Heating limit for excess energy (night)"
             },
             "excess_energy_target_cooling_temperature": {
                 "name": "Target temperature for excess energy"
