@@ -26,8 +26,6 @@ if TYPE_CHECKING:
         # buffer tank
         "binary_sensor.keba_keenergy_12345678_buffer_tank_cool_request_1",
         "binary_sensor.keba_keenergy_12345678_buffer_tank_cool_request_2",
-        "binary_sensor.keba_keenergy_12345678_buffer_tank_excess_energy_available_1",
-        "binary_sensor.keba_keenergy_12345678_buffer_tank_excess_energy_available_2",
         "binary_sensor.keba_keenergy_12345678_buffer_tank_heat_request_1",
         "binary_sensor.keba_keenergy_12345678_buffer_tank_heat_request_2",
         # hot water tank
@@ -45,9 +43,6 @@ if TYPE_CHECKING:
         "binary_sensor.keba_keenergy_12345678_heat_pump_has_three_phase_failure",
         "binary_sensor.keba_keenergy_12345678_heat_pump_has_vfd_failure",
         "binary_sensor.keba_keenergy_12345678_heat_pump_heat_request",
-        # heating circuit
-        "binary_sensor.keba_keenergy_12345678_heat_circuit_excess_energy_available_1",
-        "binary_sensor.keba_keenergy_12345678_heat_circuit_excess_energy_available_2",
         # solar circuit
         "binary_sensor.keba_keenergy_12345678_solar_circuit_heat_request_1_1",
         "binary_sensor.keba_keenergy_12345678_solar_circuit_heat_request_1_2",

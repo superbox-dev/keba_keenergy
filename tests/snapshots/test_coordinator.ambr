@@ -46,13 +46,13 @@
           'value': 35.67,
         }),
       ]),
-      'excess_energy_available': list([
+      'excess_energy_mode': list([
         dict({
           'attributes': dict({
             'lower_limit': '0',
             'upper_limit': '2',
           }),
-          'value': 'on',
+          'value': 'heating',
         }),
         dict({
           'attributes': dict({
@@ -406,22 +406,6 @@
           'value': 13.1,
         }),
       ]),
-      'excess_energy_available': list([
-        dict({
-          'attributes': dict({
-            'lower_limit': '0',
-            'upper_limit': '2',
-          }),
-          'value': 'on',
-        }),
-        dict({
-          'attributes': dict({
-            'lower_limit': '0',
-            'upper_limit': '2',
-          }),
-          'value': 'off',
-        }),
-      ]),
       'excess_energy_cooling_limit_day': list([
         dict({
           'attributes': dict({
@@ -484,6 +468,22 @@
             'upper_limit': '100',
           }),
           'value': 28.0,
+        }),
+      ]),
+      'excess_energy_mode': list([
+        dict({
+          'attributes': dict({
+            'lower_limit': '0',
+            'upper_limit': '2',
+          }),
+          'value': 'heating',
+        }),
+        dict({
+          'attributes': dict({
+            'lower_limit': '0',
+            'upper_limit': '2',
+          }),
+          'value': 'off',
         }),
       ]),
       'excess_energy_target_cooling_temperature': list([
@@ -1659,13 +1659,13 @@
           'value': 35.67,
         }),
       ]),
-      'excess_energy_available': list([
+      'excess_energy_mode': list([
         dict({
           'attributes': dict({
             'lower_limit': '0',
             'upper_limit': '2',
           }),
-          'value': 'on',
+          'value': 'heating',
         }),
         dict({
           'attributes': dict({
@@ -2019,22 +2019,6 @@
           'value': 13.1,
         }),
       ]),
-      'excess_energy_available': list([
-        dict({
-          'attributes': dict({
-            'lower_limit': '0',
-            'upper_limit': '2',
-          }),
-          'value': 'on',
-        }),
-        dict({
-          'attributes': dict({
-            'lower_limit': '0',
-            'upper_limit': '2',
-          }),
-          'value': 'off',
-        }),
-      ]),
       'excess_energy_cooling_limit_day': list([
         dict({
           'attributes': dict({
@@ -2097,6 +2081,22 @@
             'upper_limit': '100',
           }),
           'value': 28.0,
+        }),
+      ]),
+      'excess_energy_mode': list([
+        dict({
+          'attributes': dict({
+            'lower_limit': '0',
+            'upper_limit': '2',
+          }),
+          'value': 'heating',
+        }),
+        dict({
+          'attributes': dict({
+            'lower_limit': '0',
+            'upper_limit': '2',
+          }),
+          'value': 'off',
         }),
       ]),
       'excess_energy_target_cooling_temperature': list([

@@ -568,7 +568,7 @@ HEAT_CIRCUIT_EXCESS_ENERGY_TARGET_COOLING_TEMPERATURE_HYSTERESIS: str = """
     }
 """
 
-HEAT_CIRCUIT_EXCESS_ENERGY_AVAILABLE: str = """
+HEAT_CIRCUIT_EXCESS_ENERGY_MODE: str = """
     {
         "name": "APPL.CtrlAppl.sParam.heatCircuit[%s].values.useExcessEnergy",
         "attributes": {
@@ -1417,7 +1417,7 @@ BUFFER_TANK_EXCESS_ENERGY_TARGET_TEMPERATURE_HYSTERESIS: str = """
     }
 """
 
-BUFFER_TANK_EXCESS_ENERGY_AVAILABLE: str = """
+BUFFER_TANK_EXCESS_ENERGY_MODE: str = """
     {
         "name": "APPL.CtrlAppl.sParam.bufferTank[%s].values.useExcessEnergy",
         "attributes": {
@@ -1513,6 +1513,16 @@ BUFFER_TANK_OUTDOOR_TEMPERATURE_EXCESS_ENERGY_LIMIT: str = """
     }
 """
 
+HOT_WATER_TANK_USE_EXCESS_ENERGY: str = """
+    {
+        "name": "APPL.CtrlAppl.sParam.hotWaterTank[%s].param.useExcessEnergy",
+        "attributes": {
+            "longText": "Use excess en."
+        },
+        "value": "%s"
+    }
+"""
+
 HOT_WATER_TANK_EXCESS_ENERGY_TARGET_TEMPERATURE: str = """
     {
         "name": "APPL.CtrlAppl.sParam.hotWaterTank[%s].param.excessEnergyTemp.value",
@@ -1535,6 +1545,21 @@ HOT_WATER_TANK_EXCESS_ENERGY_TARGET_TEMPERATURE_HYSTERESIS: str = """
             "longText": "Hyst. heat temp.",
             "unitId": "TempRel",
             "upperLimit": "5",
+            "lowerLimit": "0"
+        },
+        "value": "%s"
+    }
+"""
+
+
+HOT_WATER_TANK_EXCESS_ENERGY_MODE: str = """
+    {
+        "name": "APPL.CtrlAppl.sParam.hotWaterTank[%s].values.useExcessEnergy",
+        "attributes": {
+            "formatId": "fmtExcessEnergyInfo",
+            "longText": "Excess energy HWT 1",
+            "unitId": "Enum",
+            "upperLimit": "2",
             "lowerLimit": "0"
         },
         "value": "%s"
@@ -2120,7 +2145,7 @@ DEFAULT_POSITION_DATA_RESPONSE: list[dict[str, Any]] = [
     json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_TARGET_TEMPERATURE_HYSTERESIS % ("0", "0.7")),
     json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_TARGET_COOLING_TEMPERATURE % ("0", "10")),
     json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_TARGET_COOLING_TEMPERATURE_HYSTERESIS % ("0", "0.7")),
-    json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_AVAILABLE % ("0", "true")),
+    json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_MODE % ("0", "1")),
     json.loads(HEAT_CIRCUIT_AWAY_START_DATE % ("0", "1769036400")),
     json.loads(HEAT_CIRCUIT_AWAY_END_DATE % ("0", "1769122799")),
     json.loads(HEAT_CIRCUIT_HEATING_CURVE_OFFSET % ("0", "0.5")),
@@ -2150,7 +2175,7 @@ DEFAULT_POSITION_DATA_RESPONSE: list[dict[str, Any]] = [
     json.loads(BUFFER_TANK_CURRENT_BOTTOM_TEMPERATURE % ("0", "25.67")),
     json.loads(BUFFER_TANK_EXCESS_ENERGY_TARGET_TEMPERATURE % ("0", "75.0")),
     json.loads(BUFFER_TANK_EXCESS_ENERGY_TARGET_TEMPERATURE_HYSTERESIS % ("0", "2.00")),
-    json.loads(BUFFER_TANK_EXCESS_ENERGY_AVAILABLE % ("0", "true")),
+    json.loads(BUFFER_TANK_EXCESS_ENERGY_MODE % ("0", "1")),
     json.loads(BUFFER_TANK_OPERATING_MODE % ("0", "0")),
     json.loads(BUFFER_TANK_STANDBY_TEMPERATURE % ("0", "10.00")),
     json.loads(BUFFER_TANK_TARGET_TEMPERATURE % ("0", "44.00")),
@@ -2255,8 +2280,8 @@ ENTITY_UPDATED_DATA_RESPONSE: list[dict[str, Any]] = [
     json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_TARGET_COOLING_TEMPERATURE % ("1", "10")),
     json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_TARGET_COOLING_TEMPERATURE_HYSTERESIS % ("0", "0.7")),
     json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_TARGET_COOLING_TEMPERATURE_HYSTERESIS % ("1", "0.7")),
-    json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_AVAILABLE % ("0", "true")),
-    json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_AVAILABLE % ("1", "false")),
+    json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_MODE % ("0", "1")),
+    json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_MODE % ("1", "0")),
     json.loads(HEAT_CIRCUIT_AWAY_START_DATE % ("0", "1769036400")),
     json.loads(HEAT_CIRCUIT_AWAY_START_DATE % ("1", "1769036400")),
     json.loads(HEAT_CIRCUIT_AWAY_END_DATE % ("0", "1769122799")),
@@ -2314,8 +2339,8 @@ ENTITY_UPDATED_DATA_RESPONSE: list[dict[str, Any]] = [
     json.loads(BUFFER_TANK_EXCESS_ENERGY_TARGET_TEMPERATURE % ("1", "75.0")),
     json.loads(BUFFER_TANK_EXCESS_ENERGY_TARGET_TEMPERATURE_HYSTERESIS % ("0", "2.00")),
     json.loads(BUFFER_TANK_EXCESS_ENERGY_TARGET_TEMPERATURE_HYSTERESIS % ("1", "2.00")),
-    json.loads(BUFFER_TANK_EXCESS_ENERGY_AVAILABLE % ("0", "true")),
-    json.loads(BUFFER_TANK_EXCESS_ENERGY_AVAILABLE % ("1", "false")),
+    json.loads(BUFFER_TANK_EXCESS_ENERGY_MODE % ("0", "1")),
+    json.loads(BUFFER_TANK_EXCESS_ENERGY_MODE % ("1", "0")),
     json.loads(BUFFER_TANK_OPERATING_MODE % ("0", "0")),
     json.loads(BUFFER_TANK_OPERATING_MODE % ("1", "1")),
     json.loads(BUFFER_TANK_STANDBY_TEMPERATURE % ("0", "10.00")),
@@ -2407,7 +2432,7 @@ def get_single_position_data_response(
         json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_TARGET_TEMPERATURE_HYSTERESIS % ("0", "0.7")),
         json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_TARGET_COOLING_TEMPERATURE % ("0", "10")),
         json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_TARGET_COOLING_TEMPERATURE_HYSTERESIS % ("0", "0.7")),
-        json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_AVAILABLE % ("0", "true")),
+        json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_MODE % ("0", "1")),
         json.loads(HEAT_CIRCUIT_AWAY_START_DATE % ("0", "1769036400")),
         json.loads(HEAT_CIRCUIT_AWAY_END_DATE % ("0", "1769122799")),
         json.loads(HEAT_CIRCUIT_HEATING_CURVE_OFFSET % ("0", "0.5")),
@@ -2437,7 +2462,7 @@ def get_single_position_data_response(
         json.loads(BUFFER_TANK_CURRENT_BOTTOM_TEMPERATURE % ("0", "25.67")),
         json.loads(BUFFER_TANK_EXCESS_ENERGY_TARGET_TEMPERATURE % ("0", "75.0")),
         json.loads(BUFFER_TANK_EXCESS_ENERGY_TARGET_TEMPERATURE_HYSTERESIS % ("0", "2.00")),
-        json.loads(BUFFER_TANK_EXCESS_ENERGY_AVAILABLE % ("0", "true")),
+        json.loads(BUFFER_TANK_EXCESS_ENERGY_MODE % ("0", "1")),
         json.loads(BUFFER_TANK_OPERATING_MODE % ("0", "0")),
         json.loads(BUFFER_TANK_STANDBY_TEMPERATURE % ("0", "10.00")),
         json.loads(BUFFER_TANK_TARGET_TEMPERATURE % ("0", "44.00")),
@@ -2543,8 +2568,8 @@ MULTIPLE_POSITION_DATA_RESPONSE_1: list[dict[str, Any]] = [
     json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_TARGET_COOLING_TEMPERATURE % ("1", "10")),
     json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_TARGET_COOLING_TEMPERATURE_HYSTERESIS % ("0", "0.7")),
     json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_TARGET_COOLING_TEMPERATURE_HYSTERESIS % ("1", "0.7")),
-    json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_AVAILABLE % ("0", "true")),
-    json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_AVAILABLE % ("1", "false")),
+    json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_MODE % ("0", "1")),
+    json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_MODE % ("1", "0")),
     json.loads(HEAT_CIRCUIT_AWAY_START_DATE % ("0", "1769036400")),
     json.loads(HEAT_CIRCUIT_AWAY_START_DATE % ("1", "1769036400")),
     json.loads(HEAT_CIRCUIT_AWAY_END_DATE % ("0", "1769122799")),
@@ -2602,8 +2627,8 @@ MULTIPLE_POSITION_DATA_RESPONSE_1: list[dict[str, Any]] = [
     json.loads(BUFFER_TANK_EXCESS_ENERGY_TARGET_TEMPERATURE % ("1", "75.0")),
     json.loads(BUFFER_TANK_EXCESS_ENERGY_TARGET_TEMPERATURE_HYSTERESIS % ("0", "2.00")),
     json.loads(BUFFER_TANK_EXCESS_ENERGY_TARGET_TEMPERATURE_HYSTERESIS % ("1", "2.00")),
-    json.loads(BUFFER_TANK_EXCESS_ENERGY_AVAILABLE % ("0", "true")),
-    json.loads(BUFFER_TANK_EXCESS_ENERGY_AVAILABLE % ("1", "false")),
+    json.loads(BUFFER_TANK_EXCESS_ENERGY_MODE % ("0", "1")),
+    json.loads(BUFFER_TANK_EXCESS_ENERGY_MODE % ("1", "0")),
     json.loads(BUFFER_TANK_OPERATING_MODE % ("0", "0")),
     json.loads(BUFFER_TANK_OPERATING_MODE % ("1", "1")),
     json.loads(BUFFER_TANK_STANDBY_TEMPERATURE % ("0", "10.00")),
@@ -2727,8 +2752,8 @@ MULTIPLE_POSITION_DATA_RESPONSE_2: list[dict[str, Any]] = [
     json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_TARGET_COOLING_TEMPERATURE % ("1", "10")),
     json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_TARGET_COOLING_TEMPERATURE_HYSTERESIS % ("0", "0.7")),
     json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_TARGET_COOLING_TEMPERATURE_HYSTERESIS % ("1", "0.7")),
-    json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_AVAILABLE % ("0", "true")),
-    json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_AVAILABLE % ("1", "false")),
+    json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_MODE % ("0", "1")),
+    json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_MODE % ("1", "0")),
     json.loads(HEAT_CIRCUIT_AWAY_START_DATE % ("0", "1769036400")),
     json.loads(HEAT_CIRCUIT_AWAY_START_DATE % ("1", "1769036400")),
     json.loads(HEAT_CIRCUIT_AWAY_END_DATE % ("0", "1769122799")),
@@ -2786,8 +2811,8 @@ MULTIPLE_POSITION_DATA_RESPONSE_2: list[dict[str, Any]] = [
     json.loads(BUFFER_TANK_EXCESS_ENERGY_TARGET_TEMPERATURE % ("1", "75.0")),
     json.loads(BUFFER_TANK_EXCESS_ENERGY_TARGET_TEMPERATURE_HYSTERESIS % ("0", "2.00")),
     json.loads(BUFFER_TANK_EXCESS_ENERGY_TARGET_TEMPERATURE_HYSTERESIS % ("1", "2.00")),
-    json.loads(BUFFER_TANK_EXCESS_ENERGY_AVAILABLE % ("0", "true")),
-    json.loads(BUFFER_TANK_EXCESS_ENERGY_AVAILABLE % ("1", "false")),
+    json.loads(BUFFER_TANK_EXCESS_ENERGY_MODE % ("0", "1")),
+    json.loads(BUFFER_TANK_EXCESS_ENERGY_MODE % ("1", "0")),
     json.loads(BUFFER_TANK_OPERATING_MODE % ("0", "1")),
     json.loads(BUFFER_TANK_OPERATING_MODE % ("1", "2")),
     json.loads(BUFFER_TANK_STANDBY_TEMPERATURE % ("0", "10.00")),
@@ -2858,8 +2883,8 @@ MULTIPLE_POSITION_DATA_RESPONSE_3_1: list[dict[str, Any]] = [
     json.loads(BUFFER_TANK_EXCESS_ENERGY_TARGET_TEMPERATURE % ("1", "75.0")),
     json.loads(BUFFER_TANK_EXCESS_ENERGY_TARGET_TEMPERATURE_HYSTERESIS % ("0", "2.00")),
     json.loads(BUFFER_TANK_EXCESS_ENERGY_TARGET_TEMPERATURE_HYSTERESIS % ("1", "2.00")),
-    json.loads(BUFFER_TANK_EXCESS_ENERGY_AVAILABLE % ("0", "true")),
-    json.loads(BUFFER_TANK_EXCESS_ENERGY_AVAILABLE % ("1", "false")),
+    json.loads(BUFFER_TANK_EXCESS_ENERGY_MODE % ("0", "1")),
+    json.loads(BUFFER_TANK_EXCESS_ENERGY_MODE % ("1", "0")),
     json.loads(BUFFER_TANK_OPERATING_MODE % ("0", "0")),
     json.loads(BUFFER_TANK_OPERATING_MODE % ("1", "1")),
     json.loads(BUFFER_TANK_STANDBY_TEMPERATURE % ("0", "10.00")),
@@ -2983,8 +3008,8 @@ MULTIPLE_POSITION_DATA_RESPONSE_3_2: list[dict[str, Any]] = [
     json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_TARGET_COOLING_TEMPERATURE % ("1", "10")),
     json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_TARGET_COOLING_TEMPERATURE_HYSTERESIS % ("0", "0.7")),
     json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_TARGET_COOLING_TEMPERATURE_HYSTERESIS % ("1", "0.7")),
-    json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_AVAILABLE % ("0", "true")),
-    json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_AVAILABLE % ("1", "false")),
+    json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_MODE % ("0", "1")),
+    json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_MODE % ("1", "0")),
     json.loads(HEAT_CIRCUIT_AWAY_START_DATE % ("0", "1769036400")),
     json.loads(HEAT_CIRCUIT_AWAY_START_DATE % ("1", "1769036400")),
     json.loads(HEAT_CIRCUIT_AWAY_END_DATE % ("0", "1769122799")),
@@ -3014,8 +3039,8 @@ MULTIPLE_POSITION_DATA_RESPONSE_3_2: list[dict[str, Any]] = [
     json.loads(BUFFER_TANK_EXCESS_ENERGY_TARGET_TEMPERATURE % ("1", "75.0")),
     json.loads(BUFFER_TANK_EXCESS_ENERGY_TARGET_TEMPERATURE_HYSTERESIS % ("0", "2.00")),
     json.loads(BUFFER_TANK_EXCESS_ENERGY_TARGET_TEMPERATURE_HYSTERESIS % ("1", "2.00")),
-    json.loads(BUFFER_TANK_EXCESS_ENERGY_AVAILABLE % ("0", "true")),
-    json.loads(BUFFER_TANK_EXCESS_ENERGY_AVAILABLE % ("1", "false")),
+    json.loads(BUFFER_TANK_EXCESS_ENERGY_MODE % ("0", "1")),
+    json.loads(BUFFER_TANK_EXCESS_ENERGY_MODE % ("1", "0")),
     json.loads(BUFFER_TANK_OPERATING_MODE % ("0", "0")),
     json.loads(BUFFER_TANK_OPERATING_MODE % ("1", "1")),
     json.loads(BUFFER_TANK_STANDBY_TEMPERATURE % ("0", "10.00")),

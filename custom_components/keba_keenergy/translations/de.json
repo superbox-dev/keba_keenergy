@@ -92,9 +92,6 @@
             "consuming_excess_energy": {
                 "name": "Verbraucht Überschussenergie"
             },
-            "excess_energy_available": {
-                "name": "Überschussenergie vorhanden"
-            },
             "cool_request": {
                 "name": "Kühlanforderung"
             },
@@ -386,6 +383,9 @@
             },
             "excess_energy_heating_limit_night": {
                 "name": "Heizgrenze für Überschussenergie (Nacht)"
+            },
+            "excess_energy_mode": {
+                "name": "Überschussenergie"
             },
             "excess_energy_target_cooling_temperature": {
                 "name": "Soll-Temperatur für Überschussenergie"

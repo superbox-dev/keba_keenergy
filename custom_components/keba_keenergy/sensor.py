@@ -23,9 +23,11 @@ from homeassistant.const import UnitOfPressure
 from homeassistant.const import UnitOfTemperature
 from homeassistant.const import UnitOfTime
 from homeassistant.helpers.typing import StateType
+from keba_keenergy_api.constants import BufferTankExcessEnergyMode
 from keba_keenergy_api.constants import BufferTankOperatingMode
 from keba_keenergy_api.constants import ExternalHeatSourceOperatingMode
 from keba_keenergy_api.constants import HeatCircuitCoolRequest
+from keba_keenergy_api.constants import HeatCircuitExcessEnergyMode
 from keba_keenergy_api.constants import HeatCircuitHeatRequest
 from keba_keenergy_api.constants import HeatCircuitOperatingMode
 from keba_keenergy_api.constants import HeatPumpState
@@ -454,6 +456,13 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
             state_class=SensorStateClass.MEASUREMENT,
             translation_key="excess_energy_target_cooling_temperature",
             icon="mdi:thermometer-minus",
+            value=lambda data: data,
+        ),
+        KebaKeEnergySensorEntityDescription[str](
+            device_class=SensorDeviceClass.ENUM,
+            key="excess_energy_mode",
+            options=[_.name.lower() for _ in HeatCircuitExcessEnergyMode],
+            translation_key="excess_energy_mode",
             value=lambda data: data,
         ),
         KebaKeEnergySensorEntityDescription[str](
@@ -999,6 +1008,13 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
             state_class=SensorStateClass.MEASUREMENT,
             translation_key="excess_energy_target_temperature",
             icon="mdi:thermometer-plus",
+            value=lambda data: data,
+        ),
+        KebaKeEnergySensorEntityDescription[str](
+            device_class=SensorDeviceClass.ENUM,
+            key="excess_energy_mode",
+            options=[_.name.lower() for _ in BufferTankExcessEnergyMode],
+            translation_key="excess_energy_mode",
             value=lambda data: data,
         ),
         KebaKeEnergySensorEntityDescription[str](

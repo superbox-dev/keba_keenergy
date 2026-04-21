@@ -95,9 +95,6 @@
             "cool_request": {
                 "name": "Cool request"
             },
-            "excess_energy_available": {
-                "name": "Excess energy available"
-            },
             "heat_request": {
                 "name": "Heat request{counter}"
             },
@@ -386,6 +383,9 @@
             },
             "excess_energy_heating_limit_night": {
                 "name": "Heating limit for excess energy (night)"
+            },
+            "excess_energy_mode": {
+                "name": "Excess energy"
             },
             "excess_energy_target_cooling_temperature": {
                 "name": "Target temperature for excess energy"
