@@ -90,7 +90,7 @@
                 "name": "Compressor"
             },
             "consuming_excess_energy": {
-                "name": "Consuming excess energy"
+                "name": "Excess energy"
             },
             "cool_request": {
                 "name": "Cool request"

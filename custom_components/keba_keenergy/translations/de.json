@@ -90,7 +90,7 @@
                 "name": "Kompressor"
             },
             "consuming_excess_energy": {
-                "name": "Verbraucht Überschussenergie"
+                "name": "Überschussenergie"
             },
             "cool_request": {
                 "name": "Kühlanforderung"
