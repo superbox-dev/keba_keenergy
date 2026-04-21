@@ -149,10 +149,10 @@
                 "name": "Cooling curve slope"
             },
             "cooling_limit_day": {
-                "name": "Cooling limit (Tag)"
+                "name": "Cooling limit (day)"
             },
             "cooling_limit_night": {
-                "name": "Cooling (Nacht)"
+                "name": "Cooling limit (night)"
             },
             "excess_energy_target_cooling_temperature": {
                 "name": "Target temperature (excess energy)"
@@ -185,10 +185,10 @@
                 "name": "Standby temperature"
             },
             "target_room_cooling_temperature_day": {
-                "name": "Target room temperature (cooling day)"
+                "name": "Target room temperature (day)"
             },
             "target_room_cooling_temperature_night": {
-                "name": "Target room temperature (cooling night)"
+                "name": "Target room temperature (night)"
             },
             "target_room_temperature": {
                 "name": "Target temperature"
@@ -331,10 +331,10 @@
                 "name": "Cooling energy consumption"
             },
             "cooling_limit_day": {
-                "name": "Cooling limit (Tag)"
+                "name": "Cooling limit (day)"
             },
             "cooling_limit_night": {
-                "name": "Cooling (Nacht)"
+                "name": "Cooling limit (night)"
             },
             "cooling_spf": {
                 "name": "Cooling SPF"
@@ -616,10 +616,10 @@
                 "name": "Target overheating"
             },
             "target_room_cooling_temperature_day": {
-                "name": "Target room temperature (cooling day)"
+                "name": "Target room temperature (day)"
             },
             "target_room_cooling_temperature_night": {
-                "name": "Target room temperature (cooling night)"
+                "name": "Target room temperature (night)"
             },
             "target_room_temperature": {
                 "name": "Target room temperature"

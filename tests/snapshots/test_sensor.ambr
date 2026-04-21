@@ -933,7 +933,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'temperature',
-      'friendly_name': 'Heizkreis 2 Soll-Raumtemperatur (Kühlen Tag)',
+      'friendly_name': 'Heizkreis 2 Soll-Raumtemperatur (Tag)',
       'lower_limit': '10',
       'state_class': <SensorStateClass.MEASUREMENT: 'measurement'>,
       'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
@@ -951,7 +951,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'temperature',
-      'friendly_name': 'Heizkreis 2 Soll-Raumtemperatur (Kühlen Nacht)',
+      'friendly_name': 'Heizkreis 2 Soll-Raumtemperatur (Nacht)',
       'lower_limit': '10',
       'state_class': <SensorStateClass.MEASUREMENT: 'measurement'>,
       'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
@@ -3028,7 +3028,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'temperature',
-      'friendly_name': 'Heating circuit 2 Cooling limit (Tag)',
+      'friendly_name': 'Heating circuit 2 Cooling limit (day)',
       'lower_limit': '-20',
       'state_class': <SensorStateClass.MEASUREMENT: 'measurement'>,
       'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
@@ -3046,7 +3046,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'temperature',
-      'friendly_name': 'Heating circuit 2 Cooling (Nacht)',
+      'friendly_name': 'Heating circuit 2 Cooling limit (night)',
       'lower_limit': '-20',
       'state_class': <SensorStateClass.MEASUREMENT: 'measurement'>,
       'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
@@ -3474,7 +3474,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'temperature',
-      'friendly_name': 'Heating circuit 2 Target room temperature (cooling day)',
+      'friendly_name': 'Heating circuit 2 Target room temperature (day)',
       'lower_limit': '10',
       'state_class': <SensorStateClass.MEASUREMENT: 'measurement'>,
       'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
@@ -3492,7 +3492,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'temperature',
-      'friendly_name': 'Heating circuit 2 Target room temperature (cooling night)',
+      'friendly_name': 'Heating circuit 2 Target room temperature (night)',
       'lower_limit': '10',
       'state_class': <SensorStateClass.MEASUREMENT: 'measurement'>,
       'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,

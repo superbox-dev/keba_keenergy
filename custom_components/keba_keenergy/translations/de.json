@@ -185,10 +185,10 @@
                 "name": "Stütztemperatur"
             },
             "target_room_cooling_temperature_day": {
-                "name": "Soll-Raumtemperatur (Kühlen Tag)"
+                "name": "Soll-Raumtemperatur (Tag)"
             },
             "target_room_cooling_temperature_night": {
-                "name": "Soll-Raumtemperatur (Kühlen Nacht)"
+                "name": "Soll-Raumtemperatur (Nacht)"
             },
             "target_room_temperature": {
                 "name": "Soll-Raumtemperatur"
@@ -615,10 +615,10 @@
                 "name": "Sollüberhitzung"
             },
             "target_room_cooling_temperature_day": {
-                "name": "Soll-Raumtemperatur (Kühlen Tag)"
+                "name": "Soll-Raumtemperatur (Tag)"
             },
             "target_room_cooling_temperature_night": {
-                "name": "Soll-Raumtemperatur (Kühlen Nacht)"
+                "name": "Soll-Raumtemperatur (Nacht)"
             },
             "target_room_temperature": {
                 "name": "Soll-Raumtemperatur"

@@ -473,7 +473,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'temperature',
-      'friendly_name': 'Heizkreis 2 Soll-Raumtemperatur (Kühlen Tag)',
+      'friendly_name': 'Heizkreis 2 Soll-Raumtemperatur (Tag)',
       'max': 30.0,
       'min': 10.0,
       'mode': <NumberMode.AUTO: 'auto'>,
@@ -492,7 +492,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'temperature',
-      'friendly_name': 'Heizkreis 2 Soll-Raumtemperatur (Kühlen Nacht)',
+      'friendly_name': 'Heizkreis 2 Soll-Raumtemperatur (Nacht)',
       'max': 30.0,
       'min': 10.0,
       'mode': <NumberMode.AUTO: 'auto'>,
@@ -1022,7 +1022,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'temperature',
-      'friendly_name': 'Heating circuit 2 Cooling limit (Tag)',
+      'friendly_name': 'Heating circuit 2 Cooling limit (day)',
       'max': 100.0,
       'min': -20.0,
       'mode': <NumberMode.AUTO: 'auto'>,
@@ -1041,7 +1041,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'temperature',
-      'friendly_name': 'Heating circuit 2 Cooling (Nacht)',
+      'friendly_name': 'Heating circuit 2 Cooling limit (night)',
       'max': 40.0,
       'min': -20.0,
       'mode': <NumberMode.AUTO: 'auto'>,
@@ -1295,7 +1295,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'temperature',
-      'friendly_name': 'Heating circuit 2 Target room temperature (cooling day)',
+      'friendly_name': 'Heating circuit 2 Target room temperature (day)',
       'max': 30.0,
       'min': 10.0,
       'mode': <NumberMode.AUTO: 'auto'>,
@@ -1314,7 +1314,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'temperature',
-      'friendly_name': 'Heating circuit 2 Target room temperature (cooling night)',
+      'friendly_name': 'Heating circuit 2 Target room temperature (night)',
       'max': 30.0,
       'min': 10.0,
       'mode': <NumberMode.AUTO: 'auto'>,
