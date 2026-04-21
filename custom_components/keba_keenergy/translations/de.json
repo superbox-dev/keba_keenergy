@@ -154,6 +154,12 @@
             "cooling_limit_night": {
                 "name": "Kühlgrenze (Nacht)"
             },
+            "excess_energy_target_cooling_temperature": {
+                "name": "Soll-Temperatur (Überschussenergie)"
+            },
+            "excess_energy_target_cooling_temperature_hysteresis": {
+                "name": "Soll-Temperatur-Hysterese (Überschussenergie)"
+            },
             "excess_energy_target_temperature": {
                 "name": "Soll-Temperatur (Überschussenergie)"
             },
@@ -356,6 +362,9 @@
             },
             "dew_point": {
                 "name": "Taupunkt"
+            },
+            "excess_energy_target_cooling_temperature": {
+                "name": "Soll-Temperatur (Überschussenergie)"
             },
             "excess_energy_target_temperature": {
                 "name": "Soll-Temperatur (Überschussenergie)"

@@ -154,6 +154,12 @@
             "cooling_limit_night": {
                 "name": "Cooling (Nacht)"
             },
+            "excess_energy_target_cooling_temperature": {
+                "name": "Target temperature (excess energy)"
+            },
+            "excess_energy_target_cooling_temperature_hysteresis": {
+                "name": "Target temperature hysteresis (excess energy)"
+            },
             "excess_energy_target_temperature": {
                 "name": "Target temperature (excess energy)"
             },
@@ -356,6 +362,9 @@
             },
             "dew_point": {
                 "name": "Dew point"
+            },
+            "excess_energy_target_cooling_temperature": {
+                "name": "Target temperature (excess energy)"
             },
             "excess_energy_target_temperature": {
                 "name": "Target temperature (excess energy)"

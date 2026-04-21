@@ -406,6 +406,38 @@
           'value': 13.1,
         }),
       ]),
+      'excess_energy_target_cooling_temperature': list([
+        dict({
+          'attributes': dict({
+            'lower_limit': '10',
+            'upper_limit': '30',
+          }),
+          'value': 10.0,
+        }),
+        dict({
+          'attributes': dict({
+            'lower_limit': '10',
+            'upper_limit': '30',
+          }),
+          'value': 10.0,
+        }),
+      ]),
+      'excess_energy_target_cooling_temperature_hysteresis': list([
+        dict({
+          'attributes': dict({
+            'lower_limit': '0',
+            'upper_limit': '2',
+          }),
+          'value': 0.7,
+        }),
+        dict({
+          'attributes': dict({
+            'lower_limit': '0',
+            'upper_limit': '2',
+          }),
+          'value': 0.7,
+        }),
+      ]),
       'excess_energy_target_temperature': list([
         dict({
           'attributes': dict({
@@ -1877,6 +1909,38 @@
             'upper_limit': '50.0',
           }),
           'value': 13.1,
+        }),
+      ]),
+      'excess_energy_target_cooling_temperature': list([
+        dict({
+          'attributes': dict({
+            'lower_limit': '10',
+            'upper_limit': '30',
+          }),
+          'value': 10.0,
+        }),
+        dict({
+          'attributes': dict({
+            'lower_limit': '10',
+            'upper_limit': '30',
+          }),
+          'value': 10.0,
+        }),
+      ]),
+      'excess_energy_target_cooling_temperature_hysteresis': list([
+        dict({
+          'attributes': dict({
+            'lower_limit': '0',
+            'upper_limit': '2',
+          }),
+          'value': 0.7,
+        }),
+        dict({
+          'attributes': dict({
+            'lower_limit': '0',
+            'upper_limit': '2',
+          }),
+          'value': 0.7,
         }),
       ]),
       'excess_energy_target_temperature': list([
