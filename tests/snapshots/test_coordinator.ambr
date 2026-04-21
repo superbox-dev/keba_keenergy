@@ -1392,6 +1392,22 @@
           'value': 75.0,
         }),
       ]),
+      'excess_energy_target_temperature_hysteresis': list([
+        dict({
+          'attributes': dict({
+            'lower_limit': '0',
+            'upper_limit': '5',
+          }),
+          'value': 4.0,
+        }),
+        dict({
+          'attributes': dict({
+            'lower_limit': '0',
+            'upper_limit': '5',
+          }),
+          'value': 4.0,
+        }),
+      ]),
       'fresh_water_flow': list([
         dict({
           'attributes': dict({
@@ -2987,6 +3003,22 @@
             'upper_limit': '95',
           }),
           'value': 75.0,
+        }),
+      ]),
+      'excess_energy_target_temperature_hysteresis': list([
+        dict({
+          'attributes': dict({
+            'lower_limit': '0',
+            'upper_limit': '5',
+          }),
+          'value': 4.0,
+        }),
+        dict({
+          'attributes': dict({
+            'lower_limit': '0',
+            'upper_limit': '5',
+          }),
+          'value': 4.0,
         }),
       ]),
       'fresh_water_flow': list([

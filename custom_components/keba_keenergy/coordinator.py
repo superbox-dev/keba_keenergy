@@ -208,6 +208,7 @@ REQUEST_DATA_GROUPS: dict[SectionPrefix, list[Section]] = {
     ],
     SectionPrefix.HOT_WATER_TANK: [
         HotWaterTank.EXCESS_ENERGY_TARGET_TEMPERATURE,
+        HotWaterTank.EXCESS_ENERGY_TARGET_TEMPERATURE_HYSTERESIS,
         HotWaterTank.HEAT_REQUEST,
         HotWaterTank.FRESH_WATER_FLOW,
         HotWaterTank.FRESH_WATER_MODULE_TEMPERATURE,

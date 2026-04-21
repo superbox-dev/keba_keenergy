@@ -48,6 +48,8 @@ if TYPE_CHECKING:
         # hot water tank
         "number.keba_keenergy_12345678_hot_water_tank_excess_energy_target_temperature_1",
         "number.keba_keenergy_12345678_hot_water_tank_excess_energy_target_temperature_2",
+        "number.keba_keenergy_12345678_hot_water_tank_excess_energy_target_temperature_hysteresis_1",
+        "number.keba_keenergy_12345678_hot_water_tank_excess_energy_target_temperature_hysteresis_2",
         "number.keba_keenergy_12345678_hot_water_tank_standby_temperature_1",
         "number.keba_keenergy_12345678_hot_water_tank_standby_temperature_2",
         "number.keba_keenergy_12345678_hot_water_tank_target_temperature_1",

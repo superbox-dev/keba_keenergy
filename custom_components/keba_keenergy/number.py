@@ -526,6 +526,18 @@ NUMBER_TYPES: dict[str, tuple[KebaKeEnergyNumberEntityDescription, ...]] = {
             icon="mdi:thermometer-plus",
             scale=1,
         ),
+        KebaKeEnergyNumberEntityDescription(
+            condition=lambda coordinator, _: coordinator.has_photovoltaics(),
+            entity_category=EntityCategory.CONFIG,
+            entity_registry_enabled_default=False,
+            device_class=NumberDeviceClass.TEMPERATURE,
+            key="excess_energy_target_temperature_hysteresis",
+            native_unit_of_measurement=UnitOfTemperature.CELSIUS,
+            native_step=0.1,
+            translation_key="excess_energy_target_temperature_hysteresis",
+            icon="mdi:thermometer",
+            scale=1,
+        ),
     ),
 }
 
