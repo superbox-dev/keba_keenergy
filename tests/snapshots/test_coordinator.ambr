@@ -406,6 +406,22 @@
           'value': 13.1,
         }),
       ]),
+      'excess_energy_available': list([
+        dict({
+          'attributes': dict({
+            'lower_limit': '0',
+            'upper_limit': '2',
+          }),
+          'value': 'on',
+        }),
+        dict({
+          'attributes': dict({
+            'lower_limit': '0',
+            'upper_limit': '2',
+          }),
+          'value': 'off',
+        }),
+      ]),
       'excess_energy_cooling_limit_day': list([
         dict({
           'attributes': dict({
@@ -1985,6 +2001,22 @@
             'upper_limit': '50.0',
           }),
           'value': 13.1,
+        }),
+      ]),
+      'excess_energy_available': list([
+        dict({
+          'attributes': dict({
+            'lower_limit': '0',
+            'upper_limit': '2',
+          }),
+          'value': 'on',
+        }),
+        dict({
+          'attributes': dict({
+            'lower_limit': '0',
+            'upper_limit': '2',
+          }),
+          'value': 'off',
         }),
       ]),
       'excess_energy_cooling_limit_day': list([

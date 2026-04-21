@@ -39,6 +39,15 @@ class KebaKeEnergyBinarySensorEntityDescription(
 
 
 BINARY_SENSOR_TYPES: dict[str, tuple[KebaKeEnergyBinarySensorEntityDescription, ...]] = {
+    SectionPrefix.HEAT_CIRCUIT: (
+        KebaKeEnergyBinarySensorEntityDescription(
+            condition=lambda coordinator, _: coordinator.has_photovoltaics(),
+            entity_registry_enabled_default=False,
+            key="excess_energy_available",
+            translation_key="excess_energy_available",
+            icon="mdi:solar-power",
+        ),
+    ),
     SectionPrefix.SOLAR_CIRCUIT: (
         KebaKeEnergyBinarySensorEntityDescription(
             key="heat_request",

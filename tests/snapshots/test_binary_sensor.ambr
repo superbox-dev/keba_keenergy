@@ -105,6 +105,34 @@
     'state': 'on',
   })
 # ---
+# name: test_binary_sensors[de-binary_sensor.keba_keenergy_12345678_heat_circuit_excess_energy_available_1]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'friendly_name': 'Heizkreis 1 Überschussenergie vorhanden',
+      'icon': 'mdi:solar-power',
+    }),
+    'context': <ANY>,
+    'entity_id': 'binary_sensor.keba_keenergy_12345678_heat_circuit_excess_energy_available_1',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': 'on',
+  })
+# ---
+# name: test_binary_sensors[de-binary_sensor.keba_keenergy_12345678_heat_circuit_excess_energy_available_2]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'friendly_name': 'Heizkreis 2 Überschussenergie vorhanden',
+      'icon': 'mdi:solar-power',
+    }),
+    'context': <ANY>,
+    'entity_id': 'binary_sensor.keba_keenergy_12345678_heat_circuit_excess_energy_available_2',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': 'off',
+  })
+# ---
 # name: test_binary_sensors[de-binary_sensor.keba_keenergy_12345678_heat_pump_consuming_excess_energy]
   StateSnapshot({
     'attributes': ReadOnlyDict({
@@ -439,6 +467,34 @@
     'last_reported': <ANY>,
     'last_updated': <ANY>,
     'state': 'on',
+  })
+# ---
+# name: test_binary_sensors[en-binary_sensor.keba_keenergy_12345678_heat_circuit_excess_energy_available_1]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'friendly_name': 'Heating circuit 1 Excess energy available',
+      'icon': 'mdi:solar-power',
+    }),
+    'context': <ANY>,
+    'entity_id': 'binary_sensor.keba_keenergy_12345678_heat_circuit_excess_energy_available_1',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': 'on',
+  })
+# ---
+# name: test_binary_sensors[en-binary_sensor.keba_keenergy_12345678_heat_circuit_excess_energy_available_2]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'friendly_name': 'Heating circuit 2 Excess energy available',
+      'icon': 'mdi:solar-power',
+    }),
+    'context': <ANY>,
+    'entity_id': 'binary_sensor.keba_keenergy_12345678_heat_circuit_excess_energy_available_2',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': 'off',
   })
 # ---
 # name: test_binary_sensors[en-binary_sensor.keba_keenergy_12345678_heat_pump_consuming_excess_energy]

@@ -568,6 +568,20 @@ HEAT_CIRCUIT_EXCESS_ENERGY_TARGET_COOLING_TEMPERATURE_HYSTERESIS: str = """
     }
 """
 
+HEAT_CIRCUIT_EXCESS_ENERGY_AVAILABLE: str = """
+    {
+        "name": "APPL.CtrlAppl.sParam.heatCircuit[%s].values.useExcessEnergy",
+        "attributes": {
+            "formatId": "fmtExcessEnergyInfo",
+            "longText": "Excess energy HC 1",
+            "unitId": "Enum",
+            "upperLimit": "2",
+            "lowerLimit": "0"
+        },
+        "value": "%s"
+    }
+"""
+
 HEAT_CIRCUIT_AWAY_START_DATE: str = """
     {
         "name": "APPL.CtrlAppl.sParam.heatCircuit[%s].param.holiday.start",
@@ -2092,6 +2106,7 @@ DEFAULT_POSITION_DATA_RESPONSE: list[dict[str, Any]] = [
     json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_TARGET_TEMPERATURE_HYSTERESIS % ("0", "0.7")),
     json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_TARGET_COOLING_TEMPERATURE % ("0", "10")),
     json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_TARGET_COOLING_TEMPERATURE_HYSTERESIS % ("0", "0.7")),
+    json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_AVAILABLE % ("0", "true")),
     json.loads(HEAT_CIRCUIT_AWAY_START_DATE % ("0", "1769036400")),
     json.loads(HEAT_CIRCUIT_AWAY_END_DATE % ("0", "1769122799")),
     json.loads(HEAT_CIRCUIT_HEATING_CURVE_OFFSET % ("0", "0.5")),
@@ -2225,6 +2240,8 @@ ENTITY_UPDATED_DATA_RESPONSE: list[dict[str, Any]] = [
     json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_TARGET_COOLING_TEMPERATURE % ("1", "10")),
     json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_TARGET_COOLING_TEMPERATURE_HYSTERESIS % ("0", "0.7")),
     json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_TARGET_COOLING_TEMPERATURE_HYSTERESIS % ("1", "0.7")),
+    json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_AVAILABLE % ("0", "true")),
+    json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_AVAILABLE % ("1", "false")),
     json.loads(HEAT_CIRCUIT_AWAY_START_DATE % ("0", "1769036400")),
     json.loads(HEAT_CIRCUIT_AWAY_START_DATE % ("1", "1769036400")),
     json.loads(HEAT_CIRCUIT_AWAY_END_DATE % ("0", "1769122799")),
@@ -2373,6 +2390,7 @@ def get_single_position_data_response(
         json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_TARGET_TEMPERATURE_HYSTERESIS % ("0", "0.7")),
         json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_TARGET_COOLING_TEMPERATURE % ("0", "10")),
         json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_TARGET_COOLING_TEMPERATURE_HYSTERESIS % ("0", "0.7")),
+        json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_AVAILABLE % ("0", "true")),
         json.loads(HEAT_CIRCUIT_AWAY_START_DATE % ("0", "1769036400")),
         json.loads(HEAT_CIRCUIT_AWAY_END_DATE % ("0", "1769122799")),
         json.loads(HEAT_CIRCUIT_HEATING_CURVE_OFFSET % ("0", "0.5")),
@@ -2507,6 +2525,8 @@ MULTIPLE_POSITION_DATA_RESPONSE_1: list[dict[str, Any]] = [
     json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_TARGET_COOLING_TEMPERATURE % ("1", "10")),
     json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_TARGET_COOLING_TEMPERATURE_HYSTERESIS % ("0", "0.7")),
     json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_TARGET_COOLING_TEMPERATURE_HYSTERESIS % ("1", "0.7")),
+    json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_AVAILABLE % ("0", "true")),
+    json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_AVAILABLE % ("1", "false")),
     json.loads(HEAT_CIRCUIT_AWAY_START_DATE % ("0", "1769036400")),
     json.loads(HEAT_CIRCUIT_AWAY_START_DATE % ("1", "1769036400")),
     json.loads(HEAT_CIRCUIT_AWAY_END_DATE % ("0", "1769122799")),
@@ -2687,6 +2707,8 @@ MULTIPLE_POSITION_DATA_RESPONSE_2: list[dict[str, Any]] = [
     json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_TARGET_COOLING_TEMPERATURE % ("1", "10")),
     json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_TARGET_COOLING_TEMPERATURE_HYSTERESIS % ("0", "0.7")),
     json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_TARGET_COOLING_TEMPERATURE_HYSTERESIS % ("1", "0.7")),
+    json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_AVAILABLE % ("0", "true")),
+    json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_AVAILABLE % ("1", "false")),
     json.loads(HEAT_CIRCUIT_AWAY_START_DATE % ("0", "1769036400")),
     json.loads(HEAT_CIRCUIT_AWAY_START_DATE % ("1", "1769036400")),
     json.loads(HEAT_CIRCUIT_AWAY_END_DATE % ("0", "1769122799")),
@@ -2937,6 +2959,8 @@ MULTIPLE_POSITION_DATA_RESPONSE_3_2: list[dict[str, Any]] = [
     json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_TARGET_COOLING_TEMPERATURE % ("1", "10")),
     json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_TARGET_COOLING_TEMPERATURE_HYSTERESIS % ("0", "0.7")),
     json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_TARGET_COOLING_TEMPERATURE_HYSTERESIS % ("1", "0.7")),
+    json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_AVAILABLE % ("0", "true")),
+    json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_AVAILABLE % ("1", "false")),
     json.loads(HEAT_CIRCUIT_AWAY_START_DATE % ("0", "1769036400")),
     json.loads(HEAT_CIRCUIT_AWAY_START_DATE % ("1", "1769036400")),
     json.loads(HEAT_CIRCUIT_AWAY_END_DATE % ("0", "1769122799")),
