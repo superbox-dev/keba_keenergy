@@ -311,7 +311,10 @@ NUMBER_TYPES: dict[str, tuple[KebaKeEnergyNumberEntityDescription, ...]] = {
             scale=1,
         ),
         KebaKeEnergyNumberEntityDescription(
-            condition=lambda coordinator, _: coordinator.has_photovoltaics(),
+            condition=(
+                lambda coordinator, index: coordinator.is_heating_circuit(index=index)
+                and coordinator.has_photovoltaics()
+            ),
             entity_category=EntityCategory.CONFIG,
             entity_registry_enabled_default=False,
             device_class=NumberDeviceClass.TEMPERATURE,
@@ -323,7 +326,10 @@ NUMBER_TYPES: dict[str, tuple[KebaKeEnergyNumberEntityDescription, ...]] = {
             scale=1,
         ),
         KebaKeEnergyNumberEntityDescription(
-            condition=lambda coordinator, _: coordinator.has_photovoltaics(),
+            condition=(
+                lambda coordinator, index: coordinator.is_heating_circuit(index=index)
+                and coordinator.has_photovoltaics()
+            ),
             entity_category=EntityCategory.CONFIG,
             entity_registry_enabled_default=False,
             device_class=NumberDeviceClass.TEMPERATURE,
@@ -335,7 +341,10 @@ NUMBER_TYPES: dict[str, tuple[KebaKeEnergyNumberEntityDescription, ...]] = {
             scale=1,
         ),
         KebaKeEnergyNumberEntityDescription(
-            condition=lambda coordinator, _: coordinator.has_photovoltaics(),
+            condition=(
+                lambda coordinator, index: coordinator.is_cooling_circuit(index=index)
+                and coordinator.has_photovoltaics()
+            ),
             entity_category=EntityCategory.CONFIG,
             entity_registry_enabled_default=False,
             device_class=NumberDeviceClass.TEMPERATURE,
@@ -347,7 +356,10 @@ NUMBER_TYPES: dict[str, tuple[KebaKeEnergyNumberEntityDescription, ...]] = {
             scale=1,
         ),
         KebaKeEnergyNumberEntityDescription(
-            condition=lambda coordinator, _: coordinator.has_photovoltaics(),
+            condition=(
+                lambda coordinator, index: coordinator.is_cooling_circuit(index=index)
+                and coordinator.has_photovoltaics()
+            ),
             entity_category=EntityCategory.CONFIG,
             entity_registry_enabled_default=False,
             device_class=NumberDeviceClass.TEMPERATURE,
