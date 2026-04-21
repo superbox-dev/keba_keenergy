@@ -25,7 +25,7 @@ from tests.api_data import HEATING_CURVE_NAMES_RESPONSE
 from tests.api_data import MULTIPLE_POSITIONS_RESPONSE
 from tests.api_data import MULTIPLE_POSITION_DATA_RESPONSE_1
 from tests.api_data import get_multiple_position_fixed_data_response
-from tests.api_data import get_single_position_fixed_data_response
+from tests.api_data import get_single_position_data_response
 
 if TYPE_CHECKING:
     from pytest_homeassistant_custom_component.common import MockConfigEntry
@@ -59,6 +59,8 @@ if TYPE_CHECKING:
         "number.keba_keenergy_12345678_heat_circuit_cooling_curve_slope_2",
         "number.keba_keenergy_12345678_heat_circuit_cooling_limit_day_2",
         "number.keba_keenergy_12345678_heat_circuit_cooling_limit_night_2",
+        "number.keba_keenergy_12345678_heat_circuit_excess_energy_cooling_limit_day_2",
+        "number.keba_keenergy_12345678_heat_circuit_excess_energy_heating_limit_day_1",
         "number.keba_keenergy_12345678_heat_circuit_excess_energy_target_cooling_temperature_1",
         "number.keba_keenergy_12345678_heat_circuit_excess_energy_target_cooling_temperature_2",
         "number.keba_keenergy_12345678_heat_circuit_excess_energy_target_cooling_temperature_hysteresis_1",
@@ -342,11 +344,11 @@ async def test_number_native_value_uses_pending_value(
         DEFAULT_POSITION_RESPONSE,
         HEATING_CURVE_NAMES_RESPONSE,
         DEFAULT_POSITION_FIXED_DATA_RESPONSE,
-        get_single_position_fixed_data_response(heat_circuit_target_temperature_offset="1.5"),
+        get_single_position_data_response(heat_circuit_target_temperature_offset="1.5"),
         *HEATING_CURVES_RESPONSE_1_1,
-        get_single_position_fixed_data_response(heat_circuit_target_temperature_offset="1.0"),
+        get_single_position_data_response(heat_circuit_target_temperature_offset="1.0"),
         *HEATING_CURVES_RESPONSE_1_1,
-        get_single_position_fixed_data_response(heat_circuit_target_temperature_offset="0.5"),
+        get_single_position_data_response(heat_circuit_target_temperature_offset="0.5"),
         *HEATING_CURVES_RESPONSE_1_1,
     ]
     fake_api.register_requests(config_entry.data["host"])

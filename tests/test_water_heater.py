@@ -33,7 +33,7 @@ from tests.api_data import MULTIPLE_POSITIONS_RESPONSE
 from tests.api_data import MULTIPLE_POSITION_DATA_RESPONSE_1
 from tests.api_data import MULTIPLE_POSITION_DATA_RESPONSE_2
 from tests.api_data import get_multiple_position_fixed_data_response
-from tests.api_data import get_single_position_fixed_data_response
+from tests.api_data import get_single_position_data_response
 
 if TYPE_CHECKING:
     from syrupy.assertion import SnapshotAssertion
@@ -362,11 +362,11 @@ async def test_target_temperature_uses_pending_value(
         DEFAULT_POSITION_RESPONSE,
         HEATING_CURVE_NAMES_RESPONSE,
         DEFAULT_POSITION_FIXED_DATA_RESPONSE,
-        get_single_position_fixed_data_response(hot_water_tank_target_temperature="51"),
+        get_single_position_data_response(hot_water_tank_target_temperature="51"),
         *HEATING_CURVES_RESPONSE_1_1,
-        get_single_position_fixed_data_response(hot_water_tank_target_temperature="45"),
+        get_single_position_data_response(hot_water_tank_target_temperature="45"),
         *HEATING_CURVES_RESPONSE_1_1,
-        get_single_position_fixed_data_response(hot_water_tank_target_temperature="44"),
+        get_single_position_data_response(hot_water_tank_target_temperature="44"),
         *HEATING_CURVES_RESPONSE_1_1,
     ]
     fake_api.register_requests("10.0.0.100")

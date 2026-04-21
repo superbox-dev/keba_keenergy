@@ -297,6 +297,33 @@ HEAT_CIRCUIT_COOLING_LIMIT_DAY: str = """
     }
 """
 
+HEAT_CIRCUIT_EXCESS_ENERGY_HEATING_LIMIT_DAY: str = """
+    {
+        "name": "APPL.CtrlAppl.sParam.heatCircuit[%s].param.excessEnergy.thresholdDayTemp",
+        "attributes": {
+            "formatId": "fmtTemp",
+            "longText": "Heating limit day",
+            "unitId": "Temp",
+            "upperLimit": "100",
+            "lowerLimit": "-20"
+        },
+        "value": "%s"
+    }
+"""
+
+HEAT_CIRCUIT_EXCESS_ENERGY_COOLING_LIMIT_DAY: str = """
+    {
+        "name": "APPL.CtrlAppl.sParam.heatCircuit[%s].param.excessEnergy.thresholdDayCoolTemp",
+        "attributes": {
+            "formatId": "fmtTemp",
+            "longText": "Cooling limit day",
+            "unitId": "Temp",
+            "upperLimit": "100",
+            "lowerLimit": "-20"
+        },
+        "value": "%s"
+    }
+"""
 
 HEAT_CIRCUIT_HEAT_REQUEST: str = """
     {
@@ -2007,6 +2034,8 @@ DEFAULT_POSITION_DATA_RESPONSE: list[dict[str, Any]] = [
     json.loads(HEAT_CIRCUIT_TARGET_COOLING_TEMPERATURE_DAY % ("0", "20.5")),
     json.loads(HEAT_CIRCUIT_HEATING_LIMIT_DAY % ("0", "20")),
     json.loads(HEAT_CIRCUIT_COOLING_LIMIT_DAY % ("0", "20")),
+    json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_HEATING_LIMIT_DAY % ("0", "30")),
+    json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_COOLING_LIMIT_DAY % ("0", "10")),
     json.loads(HEAT_CIRCUIT_HEAT_REQUEST % ("0", "1")),
     json.loads(HEAT_CIRCUIT_COOL_REQUEST % ("0", "0")),
     json.loads(HEAT_CIRCUIT_TARGET_TEMPERATURE_AWAY % ("0", "18")),
@@ -2115,6 +2144,10 @@ ENTITY_UPDATED_DATA_RESPONSE: list[dict[str, Any]] = [
     json.loads(HEAT_CIRCUIT_HEATING_LIMIT_DAY % ("1", "20")),
     json.loads(HEAT_CIRCUIT_COOLING_LIMIT_DAY % ("0", "20")),
     json.loads(HEAT_CIRCUIT_COOLING_LIMIT_DAY % ("1", "20")),
+    json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_HEATING_LIMIT_DAY % ("0", "30")),
+    json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_HEATING_LIMIT_DAY % ("1", "30")),
+    json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_COOLING_LIMIT_DAY % ("0", "10")),
+    json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_COOLING_LIMIT_DAY % ("1", "10")),
     json.loads(HEAT_CIRCUIT_HEAT_REQUEST % ("0", "1")),
     json.loads(HEAT_CIRCUIT_HEAT_REQUEST % ("1", "0")),
     json.loads(HEAT_CIRCUIT_COOL_REQUEST % ("0", "0")),
@@ -2251,7 +2284,7 @@ ENTITY_UPDATED_DATA_RESPONSE: list[dict[str, Any]] = [
 ]
 
 
-def get_single_position_fixed_data_response(
+def get_single_position_data_response(
     heat_circuit_target_temperature_offset: str = "0",
     hot_water_tank_target_temperature: str = "51",
 ) -> list[dict[str, Any]]:
@@ -2273,6 +2306,8 @@ def get_single_position_fixed_data_response(
         json.loads(HEAT_CIRCUIT_TARGET_COOLING_TEMPERATURE_DAY % ("0", "20.5")),
         json.loads(HEAT_CIRCUIT_HEATING_LIMIT_DAY % ("0", "20")),
         json.loads(HEAT_CIRCUIT_COOLING_LIMIT_DAY % ("1", "20")),
+        json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_HEATING_LIMIT_DAY % ("0", "30")),
+        json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_COOLING_LIMIT_DAY % ("1", "10")),
         json.loads(HEAT_CIRCUIT_HEAT_REQUEST % ("0", "1")),
         json.loads(HEAT_CIRCUIT_COOL_REQUEST % ("1", "1")),
         json.loads(HEAT_CIRCUIT_TARGET_TEMPERATURE_AWAY % ("0", "18")),
@@ -2382,6 +2417,10 @@ MULTIPLE_POSITION_DATA_RESPONSE_1: list[dict[str, Any]] = [
     json.loads(HEAT_CIRCUIT_HEATING_LIMIT_DAY % ("1", "20")),
     json.loads(HEAT_CIRCUIT_COOLING_LIMIT_DAY % ("0", "20")),
     json.loads(HEAT_CIRCUIT_COOLING_LIMIT_DAY % ("1", "20")),
+    json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_HEATING_LIMIT_DAY % ("0", "30")),
+    json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_HEATING_LIMIT_DAY % ("1", "30")),
+    json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_COOLING_LIMIT_DAY % ("0", "10")),
+    json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_COOLING_LIMIT_DAY % ("1", "10")),
     json.loads(HEAT_CIRCUIT_HEAT_REQUEST % ("0", "1")),
     json.loads(HEAT_CIRCUIT_HEAT_REQUEST % ("1", "0")),
     json.loads(HEAT_CIRCUIT_COOL_REQUEST % ("0", "0")),
@@ -2552,6 +2591,10 @@ MULTIPLE_POSITION_DATA_RESPONSE_2: list[dict[str, Any]] = [
     json.loads(HEAT_CIRCUIT_HEATING_LIMIT_DAY % ("1", "20")),
     json.loads(HEAT_CIRCUIT_COOLING_LIMIT_DAY % ("0", "20")),
     json.loads(HEAT_CIRCUIT_COOLING_LIMIT_DAY % ("1", "20")),
+    json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_HEATING_LIMIT_DAY % ("0", "30")),
+    json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_HEATING_LIMIT_DAY % ("1", "30")),
+    json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_COOLING_LIMIT_DAY % ("0", "10")),
+    json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_COOLING_LIMIT_DAY % ("1", "10")),
     json.loads(HEAT_CIRCUIT_HEAT_REQUEST % ("0", "1")),
     json.loads(HEAT_CIRCUIT_HEAT_REQUEST % ("1", "0")),
     json.loads(HEAT_CIRCUIT_COOL_REQUEST % ("0", "0")),
@@ -2792,6 +2835,10 @@ MULTIPLE_POSITION_DATA_RESPONSE_3_2: list[dict[str, Any]] = [
     json.loads(HEAT_CIRCUIT_HEATING_LIMIT_DAY % ("1", "20")),
     json.loads(HEAT_CIRCUIT_COOLING_LIMIT_DAY % ("0", "20")),
     json.loads(HEAT_CIRCUIT_COOLING_LIMIT_DAY % ("1", "20")),
+    json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_HEATING_LIMIT_DAY % ("0", "30")),
+    json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_HEATING_LIMIT_DAY % ("1", "30")),
+    json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_COOLING_LIMIT_DAY % ("0", "10")),
+    json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_COOLING_LIMIT_DAY % ("1", "10")),
     json.loads(HEAT_CIRCUIT_HEAT_REQUEST % ("0", "1")),
     json.loads(HEAT_CIRCUIT_HEAT_REQUEST % ("1", "0")),
     json.loads(HEAT_CIRCUIT_COOL_REQUEST % ("0", "0")),

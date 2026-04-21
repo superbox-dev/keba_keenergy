@@ -154,17 +154,23 @@
             "cooling_limit_night": {
                 "name": "Cooling limit (night)"
             },
+            "excess_energy_cooling_limit_day": {
+                "name": "Cooling limit for excess energy (day)"
+            },
+            "excess_energy_heating_limit_day": {
+                "name": "Heating limit for excess energy (day)"
+            },
             "excess_energy_target_cooling_temperature": {
-                "name": "Target temperature (excess energy)"
+                "name": "Target temperature for excess energy"
             },
             "excess_energy_target_cooling_temperature_hysteresis": {
-                "name": "Target temperature hysteresis (excess energy)"
+                "name": "Target temperature hysteresis for excess energy"
             },
             "excess_energy_target_temperature": {
-                "name": "Target temperature (excess energy)"
+                "name": "Target temperature for excess energy"
             },
             "excess_energy_target_temperature_hysteresis": {
-                "name": "Target temperature hysteresis (excess energy)"
+                "name": "Target temperature hysteresis for excess energy"
             },
             "heating_curve_offset": {
                 "name": "Heating curve offset"
@@ -179,7 +185,7 @@
                 "name": "Heating limit (night)"
             },
             "outdoor_temperature_excess_energy_limit": {
-                "name": "Outdoor temperature limit (excess energy usage)"
+                "name": "Outdoor temperature limit for excess energy"
             },
             "standby_temperature": {
                 "name": "Standby temperature"
@@ -363,11 +369,17 @@
             "dew_point": {
                 "name": "Dew point"
             },
+            "excess_energy_cooling_limit_day": {
+                "name": "Cooling limit for excess energy (day)"
+            },
+            "excess_energy_heating_limit_day": {
+                "name": "Heating limit for excess energy (day)"
+            },
             "excess_energy_target_cooling_temperature": {
-                "name": "Target temperature (excess energy)"
+                "name": "Target temperature for excess energy"
             },
             "excess_energy_target_temperature": {
-                "name": "Target temperature (excess energy)"
+                "name": "Target temperature for excess energy"
             },
             "expansion_valve_position": {
                 "name": "Expansion valve position"
