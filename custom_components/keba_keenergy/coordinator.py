@@ -101,6 +101,7 @@ REQUEST_DATA_GROUPS: dict[SectionPrefix, list[Section]] = {
         HeatCircuit.SELECTED_TARGET_TEMPERATURE,
         HeatCircuit.TARGET_TEMPERATURE,
         HeatCircuit.TARGET_TEMPERATURE_OFFSET,
+        HeatCircuit.EXCESS_ENERGY_TARGET_TEMPERATURE,
         HeatCircuit.AWAY_START_DATE,
         HeatCircuit.AWAY_END_DATE,
         HeatCircuit.HEATING_CURVE_OFFSET,

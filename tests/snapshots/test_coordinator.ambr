@@ -406,6 +406,22 @@
           'value': 13.1,
         }),
       ]),
+      'excess_energy_target_temperature': list([
+        dict({
+          'attributes': dict({
+            'lower_limit': '10',
+            'upper_limit': '30',
+          }),
+          'value': 30.0,
+        }),
+        dict({
+          'attributes': dict({
+            'lower_limit': '10',
+            'upper_limit': '30',
+          }),
+          'value': 30.0,
+        }),
+      ]),
       'flow_temperature_setpoint': list([
         dict({
           'attributes': dict({
@@ -1845,6 +1861,22 @@
             'upper_limit': '50.0',
           }),
           'value': 13.1,
+        }),
+      ]),
+      'excess_energy_target_temperature': list([
+        dict({
+          'attributes': dict({
+            'lower_limit': '10',
+            'upper_limit': '30',
+          }),
+          'value': 30.0,
+        }),
+        dict({
+          'attributes': dict({
+            'lower_limit': '10',
+            'upper_limit': '30',
+          }),
+          'value': 30.0,
         }),
       ]),
       'flow_temperature_setpoint': list([
