@@ -1630,7 +1630,7 @@
       'daily_energy': dict({
         'attributes': dict({
         }),
-        'value': 437.7,
+        'value': 1575720000.0,
       }),
       'excess_energy_active': dict({
         'attributes': dict({
@@ -1645,7 +1645,7 @@
       'total_energy': dict({
         'attributes': dict({
         }),
-        'value': 437.7,
+        'value': 1575720000.0,
       }),
     }),
     'solar_circuit': dict({
@@ -3347,7 +3347,7 @@
       'daily_energy': dict({
         'attributes': dict({
         }),
-        'value': 437.7,
+        'value': 1575720000.0,
       }),
       'excess_energy_active': dict({
         'attributes': dict({
@@ -3362,7 +3362,7 @@
       'total_energy': dict({
         'attributes': dict({
         }),
-        'value': 437.7,
+        'value': 1575720000.0,
       }),
     }),
     'solar_circuit': dict({
