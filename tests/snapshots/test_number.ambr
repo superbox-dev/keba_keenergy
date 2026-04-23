@@ -4,7 +4,7 @@
     'attributes': ReadOnlyDict({
       'device_class': 'temperature',
       'friendly_name': 'Pufferspeicher 1 Soll-Temperatur für PV-Überschuss',
-      'icon': 'mdi:thermometer-plus',
+      'icon': 'mdi:sun-thermometer',
       'max': 95.0,
       'min': 0.0,
       'mode': <NumberMode.AUTO: 'auto'>,
@@ -24,7 +24,7 @@
     'attributes': ReadOnlyDict({
       'device_class': 'temperature',
       'friendly_name': 'Pufferspeicher 2 Soll-Temperatur für PV-Überschuss',
-      'icon': 'mdi:thermometer-plus',
+      'icon': 'mdi:sun-thermometer',
       'max': 95.0,
       'min': 0.0,
       'mode': <NumberMode.AUTO: 'auto'>,
@@ -44,7 +44,7 @@
     'attributes': ReadOnlyDict({
       'device_class': 'temperature',
       'friendly_name': 'Pufferspeicher 1 Soll-Temperatur-Hysterese für PV-Überschuss',
-      'icon': 'mdi:thermometer',
+      'icon': 'mdi:thermometer-lines',
       'max': 5.0,
       'min': 0.0,
       'mode': <NumberMode.AUTO: 'auto'>,
@@ -64,7 +64,7 @@
     'attributes': ReadOnlyDict({
       'device_class': 'temperature',
       'friendly_name': 'Pufferspeicher 2 Soll-Temperatur-Hysterese für PV-Überschuss',
-      'icon': 'mdi:thermometer',
+      'icon': 'mdi:thermometer-lines',
       'max': 5.0,
       'min': 0.0,
       'mode': <NumberMode.AUTO: 'auto'>,
@@ -353,7 +353,7 @@
     'attributes': ReadOnlyDict({
       'device_class': 'temperature',
       'friendly_name': 'Heizkreis 2 Soll-Temperatur für PV-Überschuss',
-      'icon': 'mdi:thermometer-minus',
+      'icon': 'mdi:sun-thermometer',
       'max': 30.0,
       'min': 10.0,
       'mode': <NumberMode.AUTO: 'auto'>,
@@ -373,7 +373,7 @@
     'attributes': ReadOnlyDict({
       'device_class': 'temperature',
       'friendly_name': 'Heizkreis 2 Soll-Temperatur-Hysterese für PV-Überschuss',
-      'icon': 'mdi:thermometer',
+      'icon': 'mdi:thermometer-lines',
       'max': 2.0,
       'min': 0.0,
       'mode': <NumberMode.AUTO: 'auto'>,
@@ -393,7 +393,7 @@
     'attributes': ReadOnlyDict({
       'device_class': 'temperature',
       'friendly_name': 'Heizkreis 1 Soll-Temperatur für PV-Überschuss',
-      'icon': 'mdi:thermometer-plus',
+      'icon': 'mdi:sun-thermometer',
       'max': 30.0,
       'min': 10.0,
       'mode': <NumberMode.AUTO: 'auto'>,
@@ -413,7 +413,7 @@
     'attributes': ReadOnlyDict({
       'device_class': 'temperature',
       'friendly_name': 'Heizkreis 1 Soll-Temperatur-Hysterese für PV-Überschuss',
-      'icon': 'mdi:thermometer',
+      'icon': 'mdi:thermometer-lines',
       'max': 2.0,
       'min': 0.0,
       'mode': <NumberMode.AUTO: 'auto'>,
@@ -660,7 +660,7 @@
     'attributes': ReadOnlyDict({
       'device_class': 'temperature',
       'friendly_name': 'Warmwasserspeicher 1 Soll-Temperatur für PV-Überschuss',
-      'icon': 'mdi:thermometer-plus',
+      'icon': 'mdi:sun-thermometer',
       'max': 95.0,
       'min': 0.0,
       'mode': <NumberMode.AUTO: 'auto'>,
@@ -680,7 +680,7 @@
     'attributes': ReadOnlyDict({
       'device_class': 'temperature',
       'friendly_name': 'Warmwasserspeicher 2 Soll-Temperatur für PV-Überschuss',
-      'icon': 'mdi:thermometer-plus',
+      'icon': 'mdi:sun-thermometer',
       'max': 95.0,
       'min': 0.0,
       'mode': <NumberMode.AUTO: 'auto'>,
@@ -700,7 +700,7 @@
     'attributes': ReadOnlyDict({
       'device_class': 'temperature',
       'friendly_name': 'Warmwasserspeicher 1 Soll-Temperatur-Hysterese für PV-Überschuss',
-      'icon': 'mdi:thermometer',
+      'icon': 'mdi:thermometer-lines',
       'max': 5.0,
       'min': 0.0,
       'mode': <NumberMode.AUTO: 'auto'>,
@@ -720,7 +720,7 @@
     'attributes': ReadOnlyDict({
       'device_class': 'temperature',
       'friendly_name': 'Warmwasserspeicher 2 Soll-Temperatur-Hysterese für PV-Überschuss',
-      'icon': 'mdi:thermometer',
+      'icon': 'mdi:thermometer-lines',
       'max': 5.0,
       'min': 0.0,
       'mode': <NumberMode.AUTO: 'auto'>,
@@ -900,7 +900,7 @@
     'attributes': ReadOnlyDict({
       'device_class': 'temperature',
       'friendly_name': 'Buffer tank 1 Target temperature for PV surplus',
-      'icon': 'mdi:thermometer-plus',
+      'icon': 'mdi:sun-thermometer',
       'max': 95.0,
       'min': 0.0,
       'mode': <NumberMode.AUTO: 'auto'>,
@@ -920,7 +920,7 @@
     'attributes': ReadOnlyDict({
       'device_class': 'temperature',
       'friendly_name': 'Buffer tank 2 Target temperature for PV surplus',
-      'icon': 'mdi:thermometer-plus',
+      'icon': 'mdi:sun-thermometer',
       'max': 95.0,
       'min': 0.0,
       'mode': <NumberMode.AUTO: 'auto'>,
@@ -940,7 +940,7 @@
     'attributes': ReadOnlyDict({
       'device_class': 'temperature',
       'friendly_name': 'Buffer tank 1 Target temperature hysteresis for PV surplus',
-      'icon': 'mdi:thermometer',
+      'icon': 'mdi:thermometer-lines',
       'max': 5.0,
       'min': 0.0,
       'mode': <NumberMode.AUTO: 'auto'>,
@@ -960,7 +960,7 @@
     'attributes': ReadOnlyDict({
       'device_class': 'temperature',
       'friendly_name': 'Buffer tank 2 Target temperature hysteresis for PV surplus',
-      'icon': 'mdi:thermometer',
+      'icon': 'mdi:thermometer-lines',
       'max': 5.0,
       'min': 0.0,
       'mode': <NumberMode.AUTO: 'auto'>,
@@ -1249,7 +1249,7 @@
     'attributes': ReadOnlyDict({
       'device_class': 'temperature',
       'friendly_name': 'Heating circuit 2 Target temperature for PV surplus',
-      'icon': 'mdi:thermometer-minus',
+      'icon': 'mdi:sun-thermometer',
       'max': 30.0,
       'min': 10.0,
       'mode': <NumberMode.AUTO: 'auto'>,
@@ -1269,7 +1269,7 @@
     'attributes': ReadOnlyDict({
       'device_class': 'temperature',
       'friendly_name': 'Heating circuit 2 Target temperature hysteresis for PV surplus',
-      'icon': 'mdi:thermometer',
+      'icon': 'mdi:thermometer-lines',
       'max': 2.0,
       'min': 0.0,
       'mode': <NumberMode.AUTO: 'auto'>,
@@ -1289,7 +1289,7 @@
     'attributes': ReadOnlyDict({
       'device_class': 'temperature',
       'friendly_name': 'Heating circuit 1 Target temperature for PV surplus',
-      'icon': 'mdi:thermometer-plus',
+      'icon': 'mdi:sun-thermometer',
       'max': 30.0,
       'min': 10.0,
       'mode': <NumberMode.AUTO: 'auto'>,
@@ -1309,7 +1309,7 @@
     'attributes': ReadOnlyDict({
       'device_class': 'temperature',
       'friendly_name': 'Heating circuit 1 Target temperature hysteresis for PV surplus',
-      'icon': 'mdi:thermometer',
+      'icon': 'mdi:thermometer-lines',
       'max': 2.0,
       'min': 0.0,
       'mode': <NumberMode.AUTO: 'auto'>,
@@ -1556,7 +1556,7 @@
     'attributes': ReadOnlyDict({
       'device_class': 'temperature',
       'friendly_name': 'Hot water tank 1 Target temperature for PV surplus',
-      'icon': 'mdi:thermometer-plus',
+      'icon': 'mdi:sun-thermometer',
       'max': 95.0,
       'min': 0.0,
       'mode': <NumberMode.AUTO: 'auto'>,
@@ -1576,7 +1576,7 @@
     'attributes': ReadOnlyDict({
       'device_class': 'temperature',
       'friendly_name': 'Hot water tank 2 Target temperature for PV surplus',
-      'icon': 'mdi:thermometer-plus',
+      'icon': 'mdi:sun-thermometer',
       'max': 95.0,
       'min': 0.0,
       'mode': <NumberMode.AUTO: 'auto'>,
@@ -1596,7 +1596,7 @@
     'attributes': ReadOnlyDict({
       'device_class': 'temperature',
       'friendly_name': 'Hot water tank 1 Target temperature hysteresis for PV surplus',
-      'icon': 'mdi:thermometer',
+      'icon': 'mdi:thermometer-lines',
       'max': 5.0,
       'min': 0.0,
       'mode': <NumberMode.AUTO: 'auto'>,
@@ -1616,7 +1616,7 @@
     'attributes': ReadOnlyDict({
       'device_class': 'temperature',
       'friendly_name': 'Hot water tank 2 Target temperature hysteresis for PV surplus',
-      'icon': 'mdi:thermometer',
+      'icon': 'mdi:thermometer-lines',
       'max': 5.0,
       'min': 0.0,
       'mode': <NumberMode.AUTO: 'auto'>,
