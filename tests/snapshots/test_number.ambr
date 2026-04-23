@@ -3,7 +3,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'temperature',
-      'friendly_name': 'Pufferspeicher 1 Soll-Temperatur für PV-Überschuss',
+      'friendly_name': 'Pufferspeicher 1 Soll-Temperatur bei PV-Überschuss',
       'icon': 'mdi:sun-thermometer',
       'max': 95.0,
       'min': 0.0,
@@ -23,7 +23,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'temperature',
-      'friendly_name': 'Pufferspeicher 2 Soll-Temperatur für PV-Überschuss',
+      'friendly_name': 'Pufferspeicher 2 Soll-Temperatur bei PV-Überschuss',
       'icon': 'mdi:sun-thermometer',
       'max': 95.0,
       'min': 0.0,
@@ -43,7 +43,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'temperature',
-      'friendly_name': 'Pufferspeicher 1 Soll-Temperatur-Hysterese für PV-Überschuss',
+      'friendly_name': 'Pufferspeicher 1 Soll-Temperatur-Hysterese bei PV-Überschuss',
       'icon': 'mdi:thermometer-lines',
       'max': 5.0,
       'min': 0.0,
@@ -63,7 +63,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'temperature',
-      'friendly_name': 'Pufferspeicher 2 Soll-Temperatur-Hysterese für PV-Überschuss',
+      'friendly_name': 'Pufferspeicher 2 Soll-Temperatur-Hysterese bei PV-Überschuss',
       'icon': 'mdi:thermometer-lines',
       'max': 5.0,
       'min': 0.0,
@@ -83,7 +83,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'temperature',
-      'friendly_name': 'Pufferspeicher 1 Außentemperatur-Grenze für PV-Überschuss',
+      'friendly_name': 'Pufferspeicher 1 Außentemperatur-Grenze bei PV-Überschuss',
       'icon': 'mdi:thermometer',
       'max': 50.0,
       'min': 0.0,
@@ -103,7 +103,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'temperature',
-      'friendly_name': 'Pufferspeicher 2 Außentemperatur-Grenze für PV-Überschuss',
+      'friendly_name': 'Pufferspeicher 2 Außentemperatur-Grenze bei PV-Überschuss',
       'icon': 'mdi:thermometer',
       'max': 50.0,
       'min': 0.0,
@@ -276,7 +276,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'temperature',
-      'friendly_name': 'Heizkreis 2 Kühlgrenze für PV-Überschuss (Tag)',
+      'friendly_name': 'Heizkreis 2 Kühlgrenze bei PV-Überschuss (Tag)',
       'max': 100.0,
       'min': -20.0,
       'mode': <NumberMode.AUTO: 'auto'>,
@@ -295,7 +295,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'temperature',
-      'friendly_name': 'Heizkreis 2 Kühlgrenze für PV-Überschuss (Nacht)',
+      'friendly_name': 'Heizkreis 2 Kühlgrenze bei PV-Überschuss (Nacht)',
       'max': 100.0,
       'min': -20.0,
       'mode': <NumberMode.AUTO: 'auto'>,
@@ -314,7 +314,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'temperature',
-      'friendly_name': 'Heizkreis 1 Heizgrenze für PV-Überschuss (Tag)',
+      'friendly_name': 'Heizkreis 1 Heizgrenze bei PV-Überschuss (Tag)',
       'max': 100.0,
       'min': -20.0,
       'mode': <NumberMode.AUTO: 'auto'>,
@@ -333,7 +333,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'temperature',
-      'friendly_name': 'Heizkreis 1 Heizgrenze für PV-Überschuss (Nacht)',
+      'friendly_name': 'Heizkreis 1 Heizgrenze bei PV-Überschuss (Nacht)',
       'max': 100.0,
       'min': -20.0,
       'mode': <NumberMode.AUTO: 'auto'>,
@@ -352,7 +352,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'temperature',
-      'friendly_name': 'Heizkreis 2 Soll-Temperatur für PV-Überschuss',
+      'friendly_name': 'Heizkreis 2 Soll-Temperatur bei PV-Überschuss',
       'icon': 'mdi:sun-thermometer',
       'max': 30.0,
       'min': 10.0,
@@ -372,7 +372,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'temperature',
-      'friendly_name': 'Heizkreis 2 Soll-Temperatur-Hysterese für PV-Überschuss',
+      'friendly_name': 'Heizkreis 2 Soll-Temperatur-Hysterese bei PV-Überschuss',
       'icon': 'mdi:thermometer-lines',
       'max': 2.0,
       'min': 0.0,
@@ -392,7 +392,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'temperature',
-      'friendly_name': 'Heizkreis 1 Soll-Temperatur für PV-Überschuss',
+      'friendly_name': 'Heizkreis 1 Soll-Temperatur bei PV-Überschuss',
       'icon': 'mdi:sun-thermometer',
       'max': 30.0,
       'min': 10.0,
@@ -412,7 +412,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'temperature',
-      'friendly_name': 'Heizkreis 1 Soll-Temperatur-Hysterese für PV-Überschuss',
+      'friendly_name': 'Heizkreis 1 Soll-Temperatur-Hysterese bei PV-Überschuss',
       'icon': 'mdi:thermometer-lines',
       'max': 2.0,
       'min': 0.0,
@@ -659,7 +659,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'temperature',
-      'friendly_name': 'Warmwasserspeicher 1 Soll-Temperatur für PV-Überschuss',
+      'friendly_name': 'Warmwasserspeicher 1 Soll-Temperatur bei PV-Überschuss',
       'icon': 'mdi:sun-thermometer',
       'max': 95.0,
       'min': 0.0,
@@ -679,7 +679,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'temperature',
-      'friendly_name': 'Warmwasserspeicher 2 Soll-Temperatur für PV-Überschuss',
+      'friendly_name': 'Warmwasserspeicher 2 Soll-Temperatur bei PV-Überschuss',
       'icon': 'mdi:sun-thermometer',
       'max': 95.0,
       'min': 0.0,
@@ -699,7 +699,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'temperature',
-      'friendly_name': 'Warmwasserspeicher 1 Soll-Temperatur-Hysterese für PV-Überschuss',
+      'friendly_name': 'Warmwasserspeicher 1 Soll-Temperatur-Hysterese bei PV-Überschuss',
       'icon': 'mdi:thermometer-lines',
       'max': 5.0,
       'min': 0.0,
@@ -719,7 +719,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'temperature',
-      'friendly_name': 'Warmwasserspeicher 2 Soll-Temperatur-Hysterese für PV-Überschuss',
+      'friendly_name': 'Warmwasserspeicher 2 Soll-Temperatur-Hysterese bei PV-Überschuss',
       'icon': 'mdi:thermometer-lines',
       'max': 5.0,
       'min': 0.0,
@@ -899,7 +899,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'temperature',
-      'friendly_name': 'Buffer tank 1 Target temperature for PV surplus',
+      'friendly_name': 'Buffer tank 1 Target temperature during PV surplus',
       'icon': 'mdi:sun-thermometer',
       'max': 95.0,
       'min': 0.0,
@@ -919,7 +919,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'temperature',
-      'friendly_name': 'Buffer tank 2 Target temperature for PV surplus',
+      'friendly_name': 'Buffer tank 2 Target temperature during PV surplus',
       'icon': 'mdi:sun-thermometer',
       'max': 95.0,
       'min': 0.0,
@@ -939,7 +939,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'temperature',
-      'friendly_name': 'Buffer tank 1 Target temperature hysteresis for PV surplus',
+      'friendly_name': 'Buffer tank 1 Target temperature hysteresis during PV surplus',
       'icon': 'mdi:thermometer-lines',
       'max': 5.0,
       'min': 0.0,
@@ -959,7 +959,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'temperature',
-      'friendly_name': 'Buffer tank 2 Target temperature hysteresis for PV surplus',
+      'friendly_name': 'Buffer tank 2 Target temperature hysteresis during PV surplus',
       'icon': 'mdi:thermometer-lines',
       'max': 5.0,
       'min': 0.0,
@@ -979,7 +979,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'temperature',
-      'friendly_name': 'Buffer tank 1 Outdoor temperature limit for PV surplus',
+      'friendly_name': 'Buffer tank 1 Outdoor temperature limit during PV surplus',
       'icon': 'mdi:thermometer',
       'max': 50.0,
       'min': 0.0,
@@ -999,7 +999,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'temperature',
-      'friendly_name': 'Buffer tank 2 Outdoor temperature limit for PV surplus',
+      'friendly_name': 'Buffer tank 2 Outdoor temperature limit during PV surplus',
       'icon': 'mdi:thermometer',
       'max': 50.0,
       'min': 0.0,
@@ -1059,7 +1059,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'duration',
-      'friendly_name': 'External heat source 1 Minimum runtime with PV surplus',
+      'friendly_name': 'External heat source 1 Minimum runtime during PV surplus',
       'max': 10800.0,
       'min': 0.0,
       'mode': <NumberMode.AUTO: 'auto'>,
@@ -1078,7 +1078,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'duration',
-      'friendly_name': 'External heat source 2 Minimum runtime with PV surplus',
+      'friendly_name': 'External heat source 2 Minimum runtime during PV surplus',
       'max': 10800.0,
       'min': 0.0,
       'mode': <NumberMode.AUTO: 'auto'>,
@@ -1172,7 +1172,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'temperature',
-      'friendly_name': 'Heating circuit 2 Cooling limit for PV surplus (day)',
+      'friendly_name': 'Heating circuit 2 Cooling limit during PV surplus (day)',
       'max': 100.0,
       'min': -20.0,
       'mode': <NumberMode.AUTO: 'auto'>,
@@ -1191,7 +1191,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'temperature',
-      'friendly_name': 'Heating circuit 2 Cooling limit for PV surplus (night)',
+      'friendly_name': 'Heating circuit 2 Cooling limit during PV surplus (night)',
       'max': 100.0,
       'min': -20.0,
       'mode': <NumberMode.AUTO: 'auto'>,
@@ -1210,7 +1210,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'temperature',
-      'friendly_name': 'Heating circuit 1 Heating limit for PV surplus (day)',
+      'friendly_name': 'Heating circuit 1 Heating limit during PV surplus (day)',
       'max': 100.0,
       'min': -20.0,
       'mode': <NumberMode.AUTO: 'auto'>,
@@ -1229,7 +1229,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'temperature',
-      'friendly_name': 'Heating circuit 1 Heating limit for PV surplus (night)',
+      'friendly_name': 'Heating circuit 1 Heating limit during PV surplus (night)',
       'max': 100.0,
       'min': -20.0,
       'mode': <NumberMode.AUTO: 'auto'>,
@@ -1248,7 +1248,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'temperature',
-      'friendly_name': 'Heating circuit 2 Target temperature for PV surplus',
+      'friendly_name': 'Heating circuit 2 Target temperature during PV surplus',
       'icon': 'mdi:sun-thermometer',
       'max': 30.0,
       'min': 10.0,
@@ -1268,7 +1268,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'temperature',
-      'friendly_name': 'Heating circuit 2 Target temperature hysteresis for PV surplus',
+      'friendly_name': 'Heating circuit 2 Target temperature hysteresis during PV surplus',
       'icon': 'mdi:thermometer-lines',
       'max': 2.0,
       'min': 0.0,
@@ -1288,7 +1288,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'temperature',
-      'friendly_name': 'Heating circuit 1 Target temperature for PV surplus',
+      'friendly_name': 'Heating circuit 1 Target temperature during PV surplus',
       'icon': 'mdi:sun-thermometer',
       'max': 30.0,
       'min': 10.0,
@@ -1308,7 +1308,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'temperature',
-      'friendly_name': 'Heating circuit 1 Target temperature hysteresis for PV surplus',
+      'friendly_name': 'Heating circuit 1 Target temperature hysteresis during PV surplus',
       'icon': 'mdi:thermometer-lines',
       'max': 2.0,
       'min': 0.0,
@@ -1555,7 +1555,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'temperature',
-      'friendly_name': 'Hot water tank 1 Target temperature for PV surplus',
+      'friendly_name': 'Hot water tank 1 Target temperature during PV surplus',
       'icon': 'mdi:sun-thermometer',
       'max': 95.0,
       'min': 0.0,
@@ -1575,7 +1575,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'temperature',
-      'friendly_name': 'Hot water tank 2 Target temperature for PV surplus',
+      'friendly_name': 'Hot water tank 2 Target temperature during PV surplus',
       'icon': 'mdi:sun-thermometer',
       'max': 95.0,
       'min': 0.0,
@@ -1595,7 +1595,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'temperature',
-      'friendly_name': 'Hot water tank 1 Target temperature hysteresis for PV surplus',
+      'friendly_name': 'Hot water tank 1 Target temperature hysteresis during PV surplus',
       'icon': 'mdi:thermometer-lines',
       'max': 5.0,
       'min': 0.0,
@@ -1615,7 +1615,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'temperature',
-      'friendly_name': 'Hot water tank 2 Target temperature hysteresis for PV surplus',
+      'friendly_name': 'Hot water tank 2 Target temperature hysteresis during PV surplus',
       'icon': 'mdi:thermometer-lines',
       'max': 5.0,
       'min': 0.0,

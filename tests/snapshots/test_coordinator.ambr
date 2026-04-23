@@ -1100,6 +1100,13 @@
           'value': 8.72,
         }),
       ]),
+      'cooling_excess_energy_consumption': list([
+        dict({
+          'attributes': dict({
+          }),
+          'value': 10.0,
+        }),
+      ]),
       'cooling_spf': list([
         dict({
           'attributes': dict({
@@ -1119,6 +1126,13 @@
           'attributes': dict({
           }),
           'value': 18.68,
+        }),
+      ]),
+      'excess_energy_consumption': list([
+        dict({
+          'attributes': dict({
+          }),
+          'value': 10.0,
         }),
       ]),
       'expansion_valve_position': list([
@@ -1198,6 +1212,13 @@
           'value': 7.33,
         }),
       ]),
+      'heating_excess_energy_consumption': list([
+        dict({
+          'attributes': dict({
+          }),
+          'value': 10.0,
+        }),
+      ]),
       'heating_power': list([
         dict({
           'attributes': dict({
@@ -1231,6 +1252,13 @@
           'attributes': dict({
           }),
           'value': 2.77,
+        }),
+      ]),
+      'hot_water_excess_energy_consumption': list([
+        dict({
+          'attributes': dict({
+          }),
+          'value': 10.0,
         }),
       ]),
       'hot_water_power': list([
@@ -2789,6 +2817,13 @@
           'value': 8.72,
         }),
       ]),
+      'cooling_excess_energy_consumption': list([
+        dict({
+          'attributes': dict({
+          }),
+          'value': 10.0,
+        }),
+      ]),
       'cooling_spf': list([
         dict({
           'attributes': dict({
@@ -2808,6 +2843,13 @@
           'attributes': dict({
           }),
           'value': 18.68,
+        }),
+      ]),
+      'excess_energy_consumption': list([
+        dict({
+          'attributes': dict({
+          }),
+          'value': 10.0,
         }),
       ]),
       'expansion_valve_position': list([
@@ -2887,6 +2929,13 @@
           'value': 7.33,
         }),
       ]),
+      'heating_excess_energy_consumption': list([
+        dict({
+          'attributes': dict({
+          }),
+          'value': 10.0,
+        }),
+      ]),
       'heating_power': list([
         dict({
           'attributes': dict({
@@ -2920,6 +2969,13 @@
           'attributes': dict({
           }),
           'value': 2.77,
+        }),
+      ]),
+      'hot_water_excess_energy_consumption': list([
+        dict({
+          'attributes': dict({
+          }),
+          'value': 10.0,
         }),
       ]),
       'hot_water_power': list([

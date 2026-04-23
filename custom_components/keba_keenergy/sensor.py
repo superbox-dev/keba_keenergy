@@ -460,6 +460,7 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
             value=lambda data: data,
         ),
         KebaKeEnergySensorEntityDescription[str](
+            condition=lambda coordinator, _: coordinator.has_photovoltaics(),
             device_class=SensorDeviceClass.ENUM,
             key="excess_energy_mode",
             options=[_.name.lower() for _ in HeatCircuitExcessEnergyMode],
@@ -903,6 +904,51 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
             translation_key="total_spf",
             value=lambda data: data,
         ),
+        KebaKeEnergySensorEntityDescription[float](
+            condition=lambda coordinator, _: coordinator.has_photovoltaics(),
+            device_class=SensorDeviceClass.ENERGY,
+            entity_registry_enabled_default=False,
+            key="excess_energy_consumption",
+            native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
+            state_class=SensorStateClass.TOTAL,
+            translation_key="excess_energy_consumption",
+            value=lambda data: data,
+        ),
+        KebaKeEnergySensorEntityDescription[float](
+            condition=lambda coordinator, _: coordinator.has_photovoltaics(),
+            device_class=SensorDeviceClass.ENERGY,
+            entity_registry_enabled_default=False,
+            key="heating_excess_energy_consumption",
+            native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
+            state_class=SensorStateClass.TOTAL,
+            translation_key="heating_excess_energy_consumption",
+            value=lambda data: data,
+        ),
+        KebaKeEnergySensorEntityDescription[float](
+            condition=(
+                lambda coordinator, index: (
+                    coordinator.has_active_cooling(index=index) or coordinator.has_passive_cooling(index=index)
+                )
+                and coordinator.has_photovoltaics()
+            ),
+            device_class=SensorDeviceClass.ENERGY,
+            entity_registry_enabled_default=False,
+            key="cooling_excess_energy_consumption",
+            native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
+            state_class=SensorStateClass.TOTAL,
+            translation_key="cooling_excess_energy_consumption",
+            value=lambda data: data,
+        ),
+        KebaKeEnergySensorEntityDescription[float](
+            condition=lambda coordinator, _: coordinator.has_photovoltaics(),
+            device_class=SensorDeviceClass.ENERGY,
+            entity_registry_enabled_default=False,
+            key="hot_water_excess_energy_consumption",
+            native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
+            state_class=SensorStateClass.TOTAL,
+            translation_key="hot_water_excess_energy_consumption",
+            value=lambda data: data,
+        ),
         KebaKeEnergySensorEntityDescription[int](
             entity_category=EntityCategory.DIAGNOSTIC,
             device_class=SensorDeviceClass.DURATION,
@@ -1012,6 +1058,7 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
             value=lambda data: data,
         ),
         KebaKeEnergySensorEntityDescription[str](
+            condition=lambda coordinator, _: coordinator.has_photovoltaics(),
             device_class=SensorDeviceClass.ENUM,
             key="excess_energy_mode",
             options=[_.name.lower() for _ in BufferTankExcessEnergyMode],
@@ -1110,6 +1157,7 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
             value=lambda data: data,
         ),
         KebaKeEnergySensorEntityDescription[str](
+            condition=lambda coordinator, _: coordinator.has_photovoltaics(),
             device_class=SensorDeviceClass.ENUM,
             key="excess_energy_mode",
             options=[_.name.lower() for _ in HotWaterTankExcessEnergyMode],

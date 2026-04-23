@@ -1285,6 +1285,45 @@ HEAT_PUMP_TOTAL_SPF: dict[str, Any] = {
     "value": "2.43",
 }
 
+HEAT_PUMP_EXCESS_ENERGY_CONSUMPTION: dict[str, Any] = {
+    "name": "APPL.CtrlAppl.sStatisticalData.heatpump[0].consumption.consumedExcessEnergy",
+    "attributes": {
+        "formatId": "fmt4p0",
+        "longText": "Consumed ex. energy",
+        "unitId": "kWhwithoutConv",
+    },
+    "value": "10.00",
+}
+
+HEAT_PUMP_HEATING_EXCESS_ENERGY_CONSUMPTION: dict[str, Any] = {
+    "name": "APPL.CtrlAppl.sStatisticalData.heatpump[0].consumption.heating.consumedExcessEnergy",
+    "attributes": {
+        "formatId": "fmt4p0",
+        "longText": "Heat excess energy",
+        "unitId": "kWhwithoutConv",
+    },
+    "value": "10.00",
+}
+
+HEAT_PUMP_COOLING_EXCESS_ENERGY_CONSUMPTION: dict[str, Any] = {
+    "name": "APPL.CtrlAppl.sStatisticalData.heatpump[0].consumption.cooling.consumedExcessEnergy",
+    "attributes": {
+        "formatId": "fmt4p0",
+        "longText": "Cool excess energy",
+        "unitId": "kWhwithoutConv",
+    },
+    "value": "10.00",
+}
+
+HEAT_PUMP_HOT_WATER_EXCESS_ENERGY_CONSUMPTION: dict[str, Any] = {
+    "name": "APPL.CtrlAppl.sStatisticalData.heatpump[0].consumption.domHotWater.consumedExcessEnergy",
+    "attributes": {
+        "formatId": "fmt4p0",
+        "longText": "Dom. HW excess en.",
+        "unitId": "kWhwithoutConv",
+    },
+    "value": "10.00",
+}
 
 HEAT_PUMP_OPERATING_TIME: dict[str, Any] = {
     "name": "APPL.CtrlAppl.sParam.heatpump[0].operationalData.operationalTimeS",
@@ -2122,6 +2161,10 @@ def get_heat_pump_data(compressor_night_speed: str = "true") -> list[dict[str, A
         HEAT_PUMP_TOTAL_THERMAL_ENERGY,
         HEAT_PUMP_TOTAL_ENERGY_CONSUMPTION,
         HEAT_PUMP_TOTAL_SPF,
+        HEAT_PUMP_EXCESS_ENERGY_CONSUMPTION,
+        HEAT_PUMP_HEATING_EXCESS_ENERGY_CONSUMPTION,
+        HEAT_PUMP_COOLING_EXCESS_ENERGY_CONSUMPTION,
+        HEAT_PUMP_HOT_WATER_EXCESS_ENERGY_CONSUMPTION,
         HEAT_PUMP_OPERATING_TIME,
         HEAT_PUMP_MAX_RUNTIME,
         HEAT_PUMP_ACTIVATION_COUNTER,
