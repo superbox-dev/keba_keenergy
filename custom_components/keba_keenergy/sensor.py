@@ -446,7 +446,7 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             state_class=SensorStateClass.MEASUREMENT,
             translation_key="excess_energy_target_temperature",
-            icon="mdi:thermometer-plus",
+            icon="mdi:sun-thermometer",
             value=lambda data: data,
         ),
         KebaKeEnergySensorEntityDescription[float](
@@ -456,7 +456,7 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             state_class=SensorStateClass.MEASUREMENT,
             translation_key="excess_energy_target_cooling_temperature",
-            icon="mdi:thermometer-minus",
+            icon="mdi:sun-thermometer",
             value=lambda data: data,
         ),
         KebaKeEnergySensorEntityDescription[str](
@@ -1008,7 +1008,7 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             state_class=SensorStateClass.MEASUREMENT,
             translation_key="excess_energy_target_temperature",
-            icon="mdi:thermometer-plus",
+            icon="mdi:sun-thermometer",
             value=lambda data: data,
         ),
         KebaKeEnergySensorEntityDescription[str](
@@ -1106,7 +1106,7 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             state_class=SensorStateClass.MEASUREMENT,
             translation_key="excess_energy_target_temperature",
-            icon="mdi:thermometer-plus",
+            icon="mdi:sun-thermometer",
             value=lambda data: data,
         ),
         KebaKeEnergySensorEntityDescription[str](
