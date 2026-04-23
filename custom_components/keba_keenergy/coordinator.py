@@ -40,6 +40,7 @@ from keba_keenergy_api.constants import HeatPumpHasPassiveCooling
 from keba_keenergy_api.constants import HotWaterTank
 from keba_keenergy_api.constants import HotWaterTankHasFreshWaterModule
 from keba_keenergy_api.constants import PassiveCooling
+from keba_keenergy_api.constants import Photovoltaics
 from keba_keenergy_api.constants import Section
 from keba_keenergy_api.constants import SectionPrefix
 from keba_keenergy_api.constants import SolarCircuit
@@ -226,6 +227,12 @@ REQUEST_DATA_GROUPS: dict[SectionPrefix, list[Section]] = {
     SectionPrefix.SWITCH_VALVE: [
         SwitchValve.POSITION,
     ],
+    SectionPrefix.PHOTOVOLTAICS: [
+        Photovoltaics.EXCESS_ENERGY_ACTIVE,
+        Photovoltaics.EXCESS_POWER,
+        Photovoltaics.DAILY_ENERGY,
+        Photovoltaics.TOTAL_ENERGY,
+    ],
     SectionPrefix.SYSTEM: [
         System.OUTDOOR_TEMPERATURE,
         System.OPERATING_MODE,
@@ -383,10 +390,16 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
         if System.OUTDOOR_TEMPERATURE in self.request_data and not self.has_outdoor_temperature():  # pragma: nocover
             self.request_data.remove(System.OUTDOOR_TEMPERATURE)
 
+        # Group request data by device but only add data that are available for the heat pump setup
         self.request_data_groups = {
             prefix: [section for section in sections if section in self.request_data]
             for prefix, sections in REQUEST_DATA_GROUPS.items()
-            if prefix == SectionPrefix.SYSTEM or (self.position and getattr(self.position, prefix.value, 0) > 0)
+            # Add the system device (control unit), this is always required and has no position
+            if prefix == SectionPrefix.SYSTEM
+            # Add photovoltaics device if available
+            or (prefix == SectionPrefix.PHOTOVOLTAICS and self.has_photovoltaics())
+            # Add data for a device if available
+            or (self.position and getattr(self.position, prefix.value, 0) > 0)
         }
 
     async def _async_update_data(self) -> dict[str, ValueResponse]:

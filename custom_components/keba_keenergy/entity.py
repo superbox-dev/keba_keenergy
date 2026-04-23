@@ -17,6 +17,7 @@ from keba_keenergy_api.constants import ExternalHeatSource
 from keba_keenergy_api.constants import HeatCircuit
 from keba_keenergy_api.constants import HeatPump
 from keba_keenergy_api.constants import HotWaterTank
+from keba_keenergy_api.constants import Photovoltaics
 from keba_keenergy_api.constants import Section
 from keba_keenergy_api.constants import SectionPrefix
 from keba_keenergy_api.constants import SolarCircuit
@@ -130,6 +131,11 @@ class KebaKeEnergyBaseEntity(
         return self.section_id == SectionPrefix.EXTERNAL_HEAT_SOURCE
 
     @property
+    def is_photovoltaics(self) -> bool:
+        """Return True if the entity is part of a photovoltaics else False."""
+        return self.section_id == SectionPrefix.PHOTOVOLTAICS
+
+    @property
     def is_switch_valve(self) -> bool:
         """Return True if the entity is part of a switch valves else False."""
         return self.section_id == SectionPrefix.SWITCH_VALVE
@@ -184,7 +190,7 @@ class KebaKeEnergyBaseEntity(
         return _device_model
 
     @cached_property
-    def _translation_key(self) -> str | None:
+    def _translation_key(self) -> str | None:  #  noqa: C901
         translation_key: str | None = None
 
         if self.is_system_device:
@@ -205,6 +211,8 @@ class KebaKeEnergyBaseEntity(
             translation_key = "switch_valve"
         elif self.is_passive_cooling:
             translation_key = "passive_cooling"
+        elif self.is_photovoltaics:
+            translation_key = "photovoltaics"
 
         return translation_key
 
@@ -390,5 +398,7 @@ class KebaKeEnergyEntity(KebaKeEnergyBaseEntity):
         elif self.is_external_heat_source:
             section = ExternalHeatSource[self.entity_description.key.upper()]
             self.device_numbers = self.coordinator.external_heat_source_numbers
+        elif self.is_photovoltaics:
+            section = Photovoltaics[self.entity_description.key.upper()]
 
         return section

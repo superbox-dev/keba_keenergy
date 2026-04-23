@@ -184,6 +184,10 @@ if TYPE_CHECKING:
         # switch valve
         "sensor.keba_keenergy_12345678_switch_valve_position_1",
         "sensor.keba_keenergy_12345678_switch_valve_position_2",
+        # photovoltaics
+        "sensor.keba_keenergy_12345678_photovoltaics_daily_energy",
+        "sensor.keba_keenergy_12345678_photovoltaics_excess_power",
+        "sensor.keba_keenergy_12345678_photovoltaics_total_energy",
     ],
 )
 @pytest.mark.parametrize("language", ["en", "de"])

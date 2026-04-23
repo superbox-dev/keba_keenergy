@@ -3,7 +3,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'temperature',
-      'friendly_name': 'Pufferspeicher 1 Soll-Temperatur für Überschussenergie',
+      'friendly_name': 'Pufferspeicher 1 Soll-Temperatur für PV-Überschuss',
       'icon': 'mdi:thermometer-plus',
       'max': 95.0,
       'min': 0.0,
@@ -23,7 +23,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'temperature',
-      'friendly_name': 'Pufferspeicher 2 Soll-Temperatur für Überschussenergie',
+      'friendly_name': 'Pufferspeicher 2 Soll-Temperatur für PV-Überschuss',
       'icon': 'mdi:thermometer-plus',
       'max': 95.0,
       'min': 0.0,
@@ -43,7 +43,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'temperature',
-      'friendly_name': 'Pufferspeicher 1 Soll-Temperatur-Hysterese für Überschussenergie',
+      'friendly_name': 'Pufferspeicher 1 Soll-Temperatur-Hysterese für PV-Überschuss',
       'icon': 'mdi:thermometer',
       'max': 5.0,
       'min': 0.0,
@@ -63,7 +63,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'temperature',
-      'friendly_name': 'Pufferspeicher 2 Soll-Temperatur-Hysterese für Überschussenergie',
+      'friendly_name': 'Pufferspeicher 2 Soll-Temperatur-Hysterese für PV-Überschuss',
       'icon': 'mdi:thermometer',
       'max': 5.0,
       'min': 0.0,
@@ -83,7 +83,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'temperature',
-      'friendly_name': 'Pufferspeicher 1 Außentemperatur-Grenze für Überschussenergie',
+      'friendly_name': 'Pufferspeicher 1 Außentemperatur-Grenze für PV-Überschuss',
       'icon': 'mdi:thermometer',
       'max': 50.0,
       'min': 0.0,
@@ -103,7 +103,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'temperature',
-      'friendly_name': 'Pufferspeicher 2 Außentemperatur-Grenze für Überschussenergie',
+      'friendly_name': 'Pufferspeicher 2 Außentemperatur-Grenze für PV-Überschuss',
       'icon': 'mdi:thermometer',
       'max': 50.0,
       'min': 0.0,
@@ -163,7 +163,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'duration',
-      'friendly_name': 'Externe Wärmequelle 1 Mindestlaufzeit bei Überschussenergie',
+      'friendly_name': 'Externe Wärmequelle 1 Mindestlaufzeit bei PV-Überschuss',
       'max': 10800.0,
       'min': 0.0,
       'mode': <NumberMode.AUTO: 'auto'>,
@@ -182,7 +182,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'duration',
-      'friendly_name': 'Externe Wärmequelle 2 Mindestlaufzeit bei Überschussenergie',
+      'friendly_name': 'Externe Wärmequelle 2 Mindestlaufzeit bei PV-Überschuss',
       'max': 10800.0,
       'min': 0.0,
       'mode': <NumberMode.AUTO: 'auto'>,
@@ -276,7 +276,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'temperature',
-      'friendly_name': 'Heizkreis 2 Kühlgrenze für Überschussenergie (Tag)',
+      'friendly_name': 'Heizkreis 2 Kühlgrenze für PV-Überschuss (Tag)',
       'max': 100.0,
       'min': -20.0,
       'mode': <NumberMode.AUTO: 'auto'>,
@@ -295,7 +295,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'temperature',
-      'friendly_name': 'Heizkreis 2 Kühlgrenze für Überschussenergie (Nacht)',
+      'friendly_name': 'Heizkreis 2 Kühlgrenze für PV-Überschuss (Nacht)',
       'max': 100.0,
       'min': -20.0,
       'mode': <NumberMode.AUTO: 'auto'>,
@@ -314,7 +314,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'temperature',
-      'friendly_name': 'Heizkreis 1 Heizgrenze für Überschussenergie (Tag)',
+      'friendly_name': 'Heizkreis 1 Heizgrenze für PV-Überschuss (Tag)',
       'max': 100.0,
       'min': -20.0,
       'mode': <NumberMode.AUTO: 'auto'>,
@@ -333,7 +333,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'temperature',
-      'friendly_name': 'Heizkreis 1 Heizgrenze für Überschussenergie (Nacht)',
+      'friendly_name': 'Heizkreis 1 Heizgrenze für PV-Überschuss (Nacht)',
       'max': 100.0,
       'min': -20.0,
       'mode': <NumberMode.AUTO: 'auto'>,
@@ -348,31 +348,11 @@
     'state': '28.0',
   })
 # ---
-# name: test_numbers[de-number.keba_keenergy_12345678_heat_circuit_excess_energy_target_cooling_temperature_1]
-  StateSnapshot({
-    'attributes': ReadOnlyDict({
-      'device_class': 'temperature',
-      'friendly_name': 'Heizkreis 1 Soll-Temperatur für Überschussenergie',
-      'icon': 'mdi:thermometer-minus',
-      'max': 30.0,
-      'min': 10.0,
-      'mode': <NumberMode.AUTO: 'auto'>,
-      'step': 0.5,
-      'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
-    }),
-    'context': <ANY>,
-    'entity_id': 'number.keba_keenergy_12345678_heat_circuit_excess_energy_target_cooling_temperature_1',
-    'last_changed': <ANY>,
-    'last_reported': <ANY>,
-    'last_updated': <ANY>,
-    'state': '10.0',
-  })
-# ---
 # name: test_numbers[de-number.keba_keenergy_12345678_heat_circuit_excess_energy_target_cooling_temperature_2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'temperature',
-      'friendly_name': 'Heizkreis 2 Soll-Temperatur für Überschussenergie',
+      'friendly_name': 'Heizkreis 2 Soll-Temperatur für PV-Überschuss',
       'icon': 'mdi:thermometer-minus',
       'max': 30.0,
       'min': 10.0,
@@ -388,31 +368,11 @@
     'state': '10.0',
   })
 # ---
-# name: test_numbers[de-number.keba_keenergy_12345678_heat_circuit_excess_energy_target_cooling_temperature_hysteresis_1]
-  StateSnapshot({
-    'attributes': ReadOnlyDict({
-      'device_class': 'temperature',
-      'friendly_name': 'Heizkreis 1 Soll-Temperatur-Hysterese für Überschussenergie',
-      'icon': 'mdi:thermometer',
-      'max': 2.0,
-      'min': 0.0,
-      'mode': <NumberMode.AUTO: 'auto'>,
-      'step': 0.1,
-      'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
-    }),
-    'context': <ANY>,
-    'entity_id': 'number.keba_keenergy_12345678_heat_circuit_excess_energy_target_cooling_temperature_hysteresis_1',
-    'last_changed': <ANY>,
-    'last_reported': <ANY>,
-    'last_updated': <ANY>,
-    'state': '0.7',
-  })
-# ---
 # name: test_numbers[de-number.keba_keenergy_12345678_heat_circuit_excess_energy_target_cooling_temperature_hysteresis_2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'temperature',
-      'friendly_name': 'Heizkreis 2 Soll-Temperatur-Hysterese für Überschussenergie',
+      'friendly_name': 'Heizkreis 2 Soll-Temperatur-Hysterese für PV-Überschuss',
       'icon': 'mdi:thermometer',
       'max': 2.0,
       'min': 0.0,
@@ -432,7 +392,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'temperature',
-      'friendly_name': 'Heizkreis 1 Soll-Temperatur für Überschussenergie',
+      'friendly_name': 'Heizkreis 1 Soll-Temperatur für PV-Überschuss',
       'icon': 'mdi:thermometer-plus',
       'max': 30.0,
       'min': 10.0,
@@ -448,31 +408,11 @@
     'state': '30.0',
   })
 # ---
-# name: test_numbers[de-number.keba_keenergy_12345678_heat_circuit_excess_energy_target_temperature_2]
-  StateSnapshot({
-    'attributes': ReadOnlyDict({
-      'device_class': 'temperature',
-      'friendly_name': 'Heizkreis 2 Soll-Temperatur für Überschussenergie',
-      'icon': 'mdi:thermometer-plus',
-      'max': 30.0,
-      'min': 10.0,
-      'mode': <NumberMode.AUTO: 'auto'>,
-      'step': 0.5,
-      'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
-    }),
-    'context': <ANY>,
-    'entity_id': 'number.keba_keenergy_12345678_heat_circuit_excess_energy_target_temperature_2',
-    'last_changed': <ANY>,
-    'last_reported': <ANY>,
-    'last_updated': <ANY>,
-    'state': '30.0',
-  })
-# ---
 # name: test_numbers[de-number.keba_keenergy_12345678_heat_circuit_excess_energy_target_temperature_hysteresis_1]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'temperature',
-      'friendly_name': 'Heizkreis 1 Soll-Temperatur-Hysterese für Überschussenergie',
+      'friendly_name': 'Heizkreis 1 Soll-Temperatur-Hysterese für PV-Überschuss',
       'icon': 'mdi:thermometer',
       'max': 2.0,
       'min': 0.0,
@@ -482,26 +422,6 @@
     }),
     'context': <ANY>,
     'entity_id': 'number.keba_keenergy_12345678_heat_circuit_excess_energy_target_temperature_hysteresis_1',
-    'last_changed': <ANY>,
-    'last_reported': <ANY>,
-    'last_updated': <ANY>,
-    'state': '0.7',
-  })
-# ---
-# name: test_numbers[de-number.keba_keenergy_12345678_heat_circuit_excess_energy_target_temperature_hysteresis_2]
-  StateSnapshot({
-    'attributes': ReadOnlyDict({
-      'device_class': 'temperature',
-      'friendly_name': 'Heizkreis 2 Soll-Temperatur-Hysterese für Überschussenergie',
-      'icon': 'mdi:thermometer',
-      'max': 2.0,
-      'min': 0.0,
-      'mode': <NumberMode.AUTO: 'auto'>,
-      'step': 0.1,
-      'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
-    }),
-    'context': <ANY>,
-    'entity_id': 'number.keba_keenergy_12345678_heat_circuit_excess_energy_target_temperature_hysteresis_2',
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
@@ -739,7 +659,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'temperature',
-      'friendly_name': 'Warmwasserspeicher 1 Soll-Temperatur für Überschussenergie',
+      'friendly_name': 'Warmwasserspeicher 1 Soll-Temperatur für PV-Überschuss',
       'icon': 'mdi:thermometer-plus',
       'max': 95.0,
       'min': 0.0,
@@ -759,7 +679,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'temperature',
-      'friendly_name': 'Warmwasserspeicher 2 Soll-Temperatur für Überschussenergie',
+      'friendly_name': 'Warmwasserspeicher 2 Soll-Temperatur für PV-Überschuss',
       'icon': 'mdi:thermometer-plus',
       'max': 95.0,
       'min': 0.0,
@@ -779,7 +699,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'temperature',
-      'friendly_name': 'Warmwasserspeicher 1 Soll-Temperatur-Hysterese für Überschussenergie',
+      'friendly_name': 'Warmwasserspeicher 1 Soll-Temperatur-Hysterese für PV-Überschuss',
       'icon': 'mdi:thermometer',
       'max': 5.0,
       'min': 0.0,
@@ -799,7 +719,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'temperature',
-      'friendly_name': 'Warmwasserspeicher 2 Soll-Temperatur-Hysterese für Überschussenergie',
+      'friendly_name': 'Warmwasserspeicher 2 Soll-Temperatur-Hysterese für PV-Überschuss',
       'icon': 'mdi:thermometer',
       'max': 5.0,
       'min': 0.0,
@@ -979,7 +899,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'temperature',
-      'friendly_name': 'Buffer tank 1 Target temperature for excess energy',
+      'friendly_name': 'Buffer tank 1 Target temperature for PV surplus',
       'icon': 'mdi:thermometer-plus',
       'max': 95.0,
       'min': 0.0,
@@ -999,7 +919,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'temperature',
-      'friendly_name': 'Buffer tank 2 Target temperature for excess energy',
+      'friendly_name': 'Buffer tank 2 Target temperature for PV surplus',
       'icon': 'mdi:thermometer-plus',
       'max': 95.0,
       'min': 0.0,
@@ -1019,7 +939,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'temperature',
-      'friendly_name': 'Buffer tank 1 Target temperature hysteresis for excess energy',
+      'friendly_name': 'Buffer tank 1 Target temperature hysteresis for PV surplus',
       'icon': 'mdi:thermometer',
       'max': 5.0,
       'min': 0.0,
@@ -1039,7 +959,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'temperature',
-      'friendly_name': 'Buffer tank 2 Target temperature hysteresis for excess energy',
+      'friendly_name': 'Buffer tank 2 Target temperature hysteresis for PV surplus',
       'icon': 'mdi:thermometer',
       'max': 5.0,
       'min': 0.0,
@@ -1059,7 +979,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'temperature',
-      'friendly_name': 'Buffer tank 1 Outdoor temperature limit for excess energy',
+      'friendly_name': 'Buffer tank 1 Outdoor temperature limit for PV surplus',
       'icon': 'mdi:thermometer',
       'max': 50.0,
       'min': 0.0,
@@ -1079,7 +999,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'temperature',
-      'friendly_name': 'Buffer tank 2 Outdoor temperature limit for excess energy',
+      'friendly_name': 'Buffer tank 2 Outdoor temperature limit for PV surplus',
       'icon': 'mdi:thermometer',
       'max': 50.0,
       'min': 0.0,
@@ -1139,7 +1059,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'duration',
-      'friendly_name': 'External heat source 1 Minimum runtime with excess energy',
+      'friendly_name': 'External heat source 1 Minimum runtime with PV surplus',
       'max': 10800.0,
       'min': 0.0,
       'mode': <NumberMode.AUTO: 'auto'>,
@@ -1158,7 +1078,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'duration',
-      'friendly_name': 'External heat source 2 Minimum runtime with excess energy',
+      'friendly_name': 'External heat source 2 Minimum runtime with PV surplus',
       'max': 10800.0,
       'min': 0.0,
       'mode': <NumberMode.AUTO: 'auto'>,
@@ -1252,7 +1172,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'temperature',
-      'friendly_name': 'Heating circuit 2 Cooling limit for excess energy (day)',
+      'friendly_name': 'Heating circuit 2 Cooling limit for PV surplus (day)',
       'max': 100.0,
       'min': -20.0,
       'mode': <NumberMode.AUTO: 'auto'>,
@@ -1271,7 +1191,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'temperature',
-      'friendly_name': 'Heating circuit 2 Cooling limit for excess energy (night)',
+      'friendly_name': 'Heating circuit 2 Cooling limit for PV surplus (night)',
       'max': 100.0,
       'min': -20.0,
       'mode': <NumberMode.AUTO: 'auto'>,
@@ -1290,7 +1210,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'temperature',
-      'friendly_name': 'Heating circuit 1 Heating limit for excess energy (day)',
+      'friendly_name': 'Heating circuit 1 Heating limit for PV surplus (day)',
       'max': 100.0,
       'min': -20.0,
       'mode': <NumberMode.AUTO: 'auto'>,
@@ -1309,7 +1229,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'temperature',
-      'friendly_name': 'Heating circuit 1 Heating limit for excess energy (night)',
+      'friendly_name': 'Heating circuit 1 Heating limit for PV surplus (night)',
       'max': 100.0,
       'min': -20.0,
       'mode': <NumberMode.AUTO: 'auto'>,
@@ -1324,31 +1244,11 @@
     'state': '28.0',
   })
 # ---
-# name: test_numbers[en-number.keba_keenergy_12345678_heat_circuit_excess_energy_target_cooling_temperature_1]
-  StateSnapshot({
-    'attributes': ReadOnlyDict({
-      'device_class': 'temperature',
-      'friendly_name': 'Heating circuit 1 Target temperature for excess energy',
-      'icon': 'mdi:thermometer-minus',
-      'max': 30.0,
-      'min': 10.0,
-      'mode': <NumberMode.AUTO: 'auto'>,
-      'step': 0.5,
-      'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
-    }),
-    'context': <ANY>,
-    'entity_id': 'number.keba_keenergy_12345678_heat_circuit_excess_energy_target_cooling_temperature_1',
-    'last_changed': <ANY>,
-    'last_reported': <ANY>,
-    'last_updated': <ANY>,
-    'state': '10.0',
-  })
-# ---
 # name: test_numbers[en-number.keba_keenergy_12345678_heat_circuit_excess_energy_target_cooling_temperature_2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'temperature',
-      'friendly_name': 'Heating circuit 2 Target temperature for excess energy',
+      'friendly_name': 'Heating circuit 2 Target temperature for PV surplus',
       'icon': 'mdi:thermometer-minus',
       'max': 30.0,
       'min': 10.0,
@@ -1364,31 +1264,11 @@
     'state': '10.0',
   })
 # ---
-# name: test_numbers[en-number.keba_keenergy_12345678_heat_circuit_excess_energy_target_cooling_temperature_hysteresis_1]
-  StateSnapshot({
-    'attributes': ReadOnlyDict({
-      'device_class': 'temperature',
-      'friendly_name': 'Heating circuit 1 Target temperature hysteresis for excess energy',
-      'icon': 'mdi:thermometer',
-      'max': 2.0,
-      'min': 0.0,
-      'mode': <NumberMode.AUTO: 'auto'>,
-      'step': 0.1,
-      'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
-    }),
-    'context': <ANY>,
-    'entity_id': 'number.keba_keenergy_12345678_heat_circuit_excess_energy_target_cooling_temperature_hysteresis_1',
-    'last_changed': <ANY>,
-    'last_reported': <ANY>,
-    'last_updated': <ANY>,
-    'state': '0.7',
-  })
-# ---
 # name: test_numbers[en-number.keba_keenergy_12345678_heat_circuit_excess_energy_target_cooling_temperature_hysteresis_2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'temperature',
-      'friendly_name': 'Heating circuit 2 Target temperature hysteresis for excess energy',
+      'friendly_name': 'Heating circuit 2 Target temperature hysteresis for PV surplus',
       'icon': 'mdi:thermometer',
       'max': 2.0,
       'min': 0.0,
@@ -1408,7 +1288,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'temperature',
-      'friendly_name': 'Heating circuit 1 Target temperature for excess energy',
+      'friendly_name': 'Heating circuit 1 Target temperature for PV surplus',
       'icon': 'mdi:thermometer-plus',
       'max': 30.0,
       'min': 10.0,
@@ -1424,31 +1304,11 @@
     'state': '30.0',
   })
 # ---
-# name: test_numbers[en-number.keba_keenergy_12345678_heat_circuit_excess_energy_target_temperature_2]
-  StateSnapshot({
-    'attributes': ReadOnlyDict({
-      'device_class': 'temperature',
-      'friendly_name': 'Heating circuit 2 Target temperature for excess energy',
-      'icon': 'mdi:thermometer-plus',
-      'max': 30.0,
-      'min': 10.0,
-      'mode': <NumberMode.AUTO: 'auto'>,
-      'step': 0.5,
-      'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
-    }),
-    'context': <ANY>,
-    'entity_id': 'number.keba_keenergy_12345678_heat_circuit_excess_energy_target_temperature_2',
-    'last_changed': <ANY>,
-    'last_reported': <ANY>,
-    'last_updated': <ANY>,
-    'state': '30.0',
-  })
-# ---
 # name: test_numbers[en-number.keba_keenergy_12345678_heat_circuit_excess_energy_target_temperature_hysteresis_1]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'temperature',
-      'friendly_name': 'Heating circuit 1 Target temperature hysteresis for excess energy',
+      'friendly_name': 'Heating circuit 1 Target temperature hysteresis for PV surplus',
       'icon': 'mdi:thermometer',
       'max': 2.0,
       'min': 0.0,
@@ -1458,26 +1318,6 @@
     }),
     'context': <ANY>,
     'entity_id': 'number.keba_keenergy_12345678_heat_circuit_excess_energy_target_temperature_hysteresis_1',
-    'last_changed': <ANY>,
-    'last_reported': <ANY>,
-    'last_updated': <ANY>,
-    'state': '0.7',
-  })
-# ---
-# name: test_numbers[en-number.keba_keenergy_12345678_heat_circuit_excess_energy_target_temperature_hysteresis_2]
-  StateSnapshot({
-    'attributes': ReadOnlyDict({
-      'device_class': 'temperature',
-      'friendly_name': 'Heating circuit 2 Target temperature hysteresis for excess energy',
-      'icon': 'mdi:thermometer',
-      'max': 2.0,
-      'min': 0.0,
-      'mode': <NumberMode.AUTO: 'auto'>,
-      'step': 0.1,
-      'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
-    }),
-    'context': <ANY>,
-    'entity_id': 'number.keba_keenergy_12345678_heat_circuit_excess_energy_target_temperature_hysteresis_2',
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
@@ -1715,7 +1555,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'temperature',
-      'friendly_name': 'Hot water tank 1 Target temperature for excess energy',
+      'friendly_name': 'Hot water tank 1 Target temperature for PV surplus',
       'icon': 'mdi:thermometer-plus',
       'max': 95.0,
       'min': 0.0,
@@ -1735,7 +1575,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'temperature',
-      'friendly_name': 'Hot water tank 2 Target temperature for excess energy',
+      'friendly_name': 'Hot water tank 2 Target temperature for PV surplus',
       'icon': 'mdi:thermometer-plus',
       'max': 95.0,
       'min': 0.0,
@@ -1755,7 +1595,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'temperature',
-      'friendly_name': 'Hot water tank 1 Target temperature hysteresis for excess energy',
+      'friendly_name': 'Hot water tank 1 Target temperature hysteresis for PV surplus',
       'icon': 'mdi:thermometer',
       'max': 5.0,
       'min': 0.0,
@@ -1775,7 +1615,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'temperature',
-      'friendly_name': 'Hot water tank 2 Target temperature hysteresis for excess energy',
+      'friendly_name': 'Hot water tank 2 Target temperature hysteresis for PV surplus',
       'icon': 'mdi:thermometer',
       'max': 5.0,
       'min': 0.0,

@@ -51,6 +51,8 @@ if TYPE_CHECKING:
         # external heat source
         "binary_sensor.keba_keenergy_12345678_external_heat_source_heat_request_1",
         "binary_sensor.keba_keenergy_12345678_external_heat_source_heat_request_2",
+        # photovoltaics
+        "binary_sensor.keba_keenergy_12345678_photovoltaics_excess_energy_active",
     ],
 )
 @pytest.mark.parametrize("language", ["en", "de"])

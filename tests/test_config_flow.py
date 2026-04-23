@@ -577,6 +577,7 @@ async def test_option_flow(
         "scan_interval_tick_buffer_tank",
         "scan_interval_tick_switch_valve",
         "scan_interval_tick_external_heat_source",
+        "scan_interval_tick_photovoltaics",
     ]
 
     result_create_entry: ConfigFlowResult = await hass.config_entries.options.async_configure(
@@ -591,6 +592,7 @@ async def test_option_flow(
             "scan_interval_tick_buffer_tank": 16,
             "scan_interval_tick_switch_valve": 2,
             "scan_interval_tick_external_heat_source": 4,
+            "scan_interval_tick_photovoltaics": 2,
         },
     )
 
@@ -605,6 +607,7 @@ async def test_option_flow(
         "scan_interval_tick_buffer_tank": 8,
         "scan_interval_tick_switch_valve": 1,
         "scan_interval_tick_external_heat_source": 2,
+        "scan_interval_tick_photovoltaics": 1,
     }
 
 

@@ -26,6 +26,7 @@ from homeassistant.helpers.selector import NumberSelector
 from homeassistant.helpers.selector import NumberSelectorConfig
 from homeassistant.helpers.selector import NumberSelectorMode
 from keba_keenergy_api.api import KebaKeEnergyAPI
+from keba_keenergy_api.constants import SectionPrefix
 from keba_keenergy_api.error import APIError
 
 from .const import CONFIG_ENTRY_VERSION
@@ -34,6 +35,7 @@ from .const import CONF_EXTERNAL_HEAT_SOURCE_TICK
 from .const import CONF_HEAT_CIRCUIT_TICK
 from .const import CONF_HEAT_PUMP_TICK
 from .const import CONF_HOT_WATER_TANK_TICK
+from .const import CONF_PHOTOVOLTAICS_TICK
 from .const import CONF_SOLAR_CIRCUIT_TICK
 from .const import CONF_SWITCH_VALVE_TICK
 from .const import CONF_SYSTEM_TICK
@@ -307,6 +309,7 @@ class KebaKeEnergyOptionsFlow(OptionsFlowWithReload):
             CONF_BUFFER_TANK_TICK,
             CONF_SWITCH_VALVE_TICK,
             CONF_EXTERNAL_HEAT_SOURCE_TICK,
+            CONF_PHOTOVOLTAICS_TICK,
         ]
 
         ticks: list[int] = [int(user_input.get(k, 1)) for k in tick_keys if k in user_input]
@@ -380,10 +383,14 @@ class KebaKeEnergyOptionsFlow(OptionsFlowWithReload):
             CONF_BUFFER_TANK_TICK: "buffer_tank",
             CONF_SWITCH_VALVE_TICK: "switch_valve",
             CONF_EXTERNAL_HEAT_SOURCE_TICK: "external_heat_source",
+            CONF_PHOTOVOLTAICS_TICK: "photovoltaics",
         }
 
-        for conf_key, position_attr in tick_mapping.items():
-            if getattr(coordinator.position, position_attr):
+        for conf_key, prefix in tick_mapping.items():
+            if (prefix == SectionPrefix.PHOTOVOLTAICS and coordinator.has_photovoltaics()) or getattr(
+                coordinator.position,
+                prefix,
+            ):
                 schema_fields[
                     vol.Required(
                         conf_key,

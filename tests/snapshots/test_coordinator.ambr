@@ -1598,7 +1598,27 @@
         }),
       ]),
     }),
-    'photovoltaic': dict({
+    'photovoltaics': dict({
+      'daily_energy': dict({
+        'attributes': dict({
+        }),
+        'value': 437.7,
+      }),
+      'excess_energy_active': dict({
+        'attributes': dict({
+        }),
+        'value': 'on',
+      }),
+      'excess_power': dict({
+        'attributes': dict({
+        }),
+        'value': 437.7,
+      }),
+      'total_energy': dict({
+        'attributes': dict({
+        }),
+        'value': 437.7,
+      }),
     }),
     'solar_circuit': dict({
     }),
@@ -3267,7 +3287,27 @@
         }),
       ]),
     }),
-    'photovoltaic': dict({
+    'photovoltaics': dict({
+      'daily_energy': dict({
+        'attributes': dict({
+        }),
+        'value': 437.7,
+      }),
+      'excess_energy_active': dict({
+        'attributes': dict({
+        }),
+        'value': 'on',
+      }),
+      'excess_power': dict({
+        'attributes': dict({
+        }),
+        'value': 437.7,
+      }),
+      'total_energy': dict({
+        'attributes': dict({
+        }),
+        'value': 437.7,
+      }),
     }),
     'solar_circuit': dict({
     }),

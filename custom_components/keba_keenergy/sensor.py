@@ -1183,6 +1183,32 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
             value=lambda data: data,
         ),
     ),
+    SectionPrefix.PHOTOVOLTAICS: (
+        KebaKeEnergySensorEntityDescription[float](
+            device_class=SensorDeviceClass.POWER,
+            key="excess_power",
+            native_unit_of_measurement=UnitOfPower.WATT,
+            state_class=SensorStateClass.MEASUREMENT,
+            translation_key="excess_power",
+            value=lambda data: data,
+        ),
+        KebaKeEnergySensorEntityDescription[float](
+            device_class=SensorDeviceClass.ENERGY,
+            key="daily_energy",
+            native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
+            state_class=SensorStateClass.TOTAL,
+            translation_key="daily_energy",
+            value=lambda data: data,
+        ),
+        KebaKeEnergySensorEntityDescription[float](
+            device_class=SensorDeviceClass.ENERGY,
+            key="total_energy",
+            native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
+            state_class=SensorStateClass.TOTAL_INCREASING,
+            translation_key="total_energy",
+            value=lambda data: data,
+        ),
+    ),
 }
 
 

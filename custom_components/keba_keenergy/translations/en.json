@@ -74,6 +74,9 @@
         "passive_cooling": {
             "name": "Passive cooling{position}"
         },
+        "photovoltaics": {
+            "name": "Photovoltaics{position}"
+        },
         "solar_circuit": {
             "name": "Solar circuit{position}"
         },
@@ -89,17 +92,20 @@
             "compressor_failure": {
                 "name": "Compressor"
             },
-            "consuming_excess_energy": {
-                "name": "Excess energy"
-            },
             "cool_request": {
                 "name": "Cool request"
+            },
+            "excess_energy": {
+                "name": "PV surplus"
             },
             "heat_request": {
                 "name": "Heat request{counter}"
             },
             "hot_water_flow": {
                 "name": "Hot water flow"
+            },
+            "pv_excess_energy": {
+                "name": "Surplus"
             },
             "source_actuator_failure": {
                 "name": "Source actuator"
@@ -152,28 +158,28 @@
                 "name": "Cooling limit (night)"
             },
             "excess_energy_cooling_limit_day": {
-                "name": "Cooling limit for excess energy (day)"
+                "name": "Cooling limit for PV surplus (day)"
             },
             "excess_energy_cooling_limit_night": {
-                "name": "Cooling limit for excess energy (night)"
+                "name": "Cooling limit for PV surplus (night)"
             },
             "excess_energy_heating_limit_day": {
-                "name": "Heating limit for excess energy (day)"
+                "name": "Heating limit for PV surplus (day)"
             },
             "excess_energy_heating_limit_night": {
-                "name": "Heating limit for excess energy (night)"
+                "name": "Heating limit for PV surplus (night)"
             },
             "excess_energy_target_cooling_temperature": {
-                "name": "Target temperature for excess energy"
+                "name": "Target temperature for PV surplus"
             },
             "excess_energy_target_cooling_temperature_hysteresis": {
-                "name": "Target temperature hysteresis for excess energy"
+                "name": "Target temperature hysteresis for PV surplus"
             },
             "excess_energy_target_temperature": {
-                "name": "Target temperature for excess energy"
+                "name": "Target temperature for PV surplus"
             },
             "excess_energy_target_temperature_hysteresis": {
-                "name": "Target temperature hysteresis for excess energy"
+                "name": "Target temperature hysteresis for PV surplus"
             },
             "heating_curve_offset": {
                 "name": "Heating curve offset"
@@ -188,10 +194,10 @@
                 "name": "Heating limit (night)"
             },
             "min_runtime_excess_energy": {
-                "name": "Minimum runtime with excess energy"
+                "name": "Minimum runtime with PV surplus"
             },
             "outdoor_temperature_excess_energy_limit": {
-                "name": "Outdoor temperature limit for excess energy"
+                "name": "Outdoor temperature limit for PV surplus"
             },
             "standby_temperature": {
                 "name": "Standby temperature"
@@ -376,25 +382,28 @@
                 "name": "Dew point"
             },
             "excess_energy_cooling_limit_day": {
-                "name": "Cooling limit for excess energy (day)"
+                "name": "Cooling limit for PV surplus (day)"
             },
             "excess_energy_cooling_limit_night": {
-                "name": "Cooling limit for excess energy (night)"
+                "name": "Cooling limit for PV surplus (night)"
             },
             "excess_energy_heating_limit_day": {
-                "name": "Heating limit for excess energy (day)"
+                "name": "Heating limit for PV surplus (day)"
             },
             "excess_energy_heating_limit_night": {
-                "name": "Heating limit for excess energy (night)"
+                "name": "Heating limit for PV surplus (night)"
             },
             "excess_energy_mode": {
-                "name": "Excess energy"
+                "name": "PV surplus"
+            },
+            "excess_power": {
+                "name": "Excess power"
             },
             "excess_energy_target_cooling_temperature": {
-                "name": "Target temperature for excess energy"
+                "name": "Target temperature for PV surplus"
             },
             "excess_energy_target_temperature": {
-                "name": "Target temperature for excess energy"
+                "name": "Target temperature for PV surplus"
             },
             "expansion_valve_position": {
                 "name": "Expansion valve position"
@@ -519,12 +528,6 @@
             },
             "pump_speed": {
                 "name": "Pump speed"
-            },
-            "pv_excess_power": {
-                "name": "Excess power"
-            },
-            "pv_total_energy": {
-                "name": "Total energy"
             },
             "ram_usage": {
                 "name": "RAM usage"
@@ -669,6 +672,9 @@
             "temperature": {
                 "name": "Temperature"
             },
+            "total_energy": {
+                "name": "Total energy"
+            },
             "total_energy_consumption": {
                 "name": "Total energy consumption"
             },
@@ -699,7 +705,7 @@
                 "name": "Use cooling curve"
             },
             "use_excess_energy": {
-                "name": "Use excess energy"
+                "name": "Use PV surplus"
             },
             "use_heating_curve": {
                 "name": "Use heating curve"

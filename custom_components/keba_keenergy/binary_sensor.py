@@ -61,7 +61,7 @@ BINARY_SENSOR_TYPES: dict[str, tuple[KebaKeEnergyBinarySensorEntityDescription, 
         KebaKeEnergyBinarySensorEntityDescription(
             condition=lambda coordinator, _: coordinator.has_photovoltaics(),
             key="consuming_excess_energy",
-            translation_key="consuming_excess_energy",
+            translation_key="excess_energy",
             icon="mdi:solar-power",
         ),
         KebaKeEnergyBinarySensorEntityDescription(
@@ -76,54 +76,36 @@ BINARY_SENSOR_TYPES: dict[str, tuple[KebaKeEnergyBinarySensorEntityDescription, 
             entity_category=EntityCategory.DIAGNOSTIC,
             key="has_compressor_failure",
             translation_key="compressor_failure",
-            translation_placeholders={
-                "counter": "",
-            },
         ),
         KebaKeEnergyBinarySensorEntityDescription(
             device_class=BinarySensorDeviceClass.PROBLEM,
             entity_category=EntityCategory.DIAGNOSTIC,
             key="has_source_failure",
             translation_key="source_failure",
-            translation_placeholders={
-                "counter": "",
-            },
         ),
         KebaKeEnergyBinarySensorEntityDescription(
             device_class=BinarySensorDeviceClass.PROBLEM,
             entity_category=EntityCategory.DIAGNOSTIC,
             key="has_source_actuator_failure",
             translation_key="source_actuator_failure",
-            translation_placeholders={
-                "counter": "",
-            },
         ),
         KebaKeEnergyBinarySensorEntityDescription(
             device_class=BinarySensorDeviceClass.PROBLEM,
             entity_category=EntityCategory.DIAGNOSTIC,
             key="has_three_phase_failure",
             translation_key="three_phase_failure",
-            translation_placeholders={
-                "counter": "",
-            },
         ),
         KebaKeEnergyBinarySensorEntityDescription(
             device_class=BinarySensorDeviceClass.PROBLEM,
             entity_category=EntityCategory.DIAGNOSTIC,
             key="has_source_pressure_failure",
             translation_key="source_pressure_failure",
-            translation_placeholders={
-                "counter": "",
-            },
         ),
         KebaKeEnergyBinarySensorEntityDescription(
             device_class=BinarySensorDeviceClass.PROBLEM,
             entity_category=EntityCategory.DIAGNOSTIC,
             key="has_vfd_failure",
             translation_key="vfd_failure",
-            translation_placeholders={
-                "counter": "",
-            },
         ),
     ),
     SectionPrefix.BUFFER_TANK: (
@@ -172,6 +154,12 @@ BINARY_SENSOR_TYPES: dict[str, tuple[KebaKeEnergyBinarySensorEntityDescription, 
             translation_placeholders={
                 "counter": "",
             },
+        ),
+    ),
+    SectionPrefix.PHOTOVOLTAICS: (
+        KebaKeEnergyBinarySensorEntityDescription(
+            key="excess_energy_active",
+            translation_key="pv_excess_energy",
         ),
     ),
 }

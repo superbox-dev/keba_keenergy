@@ -1771,6 +1771,52 @@ PASSIVE_COOLING_MIXER_FLOW_TEMPERATURE: dict[str, Any] = {
     "value": "24.26",
 }
 
+PHOTOVOLTAIC_EXCESS_ENERGY_ACTIVE: str = """
+    {
+        "name": "APPL.CtrlAppl.sParam.photovoltaics.values.excessEnergyActive",
+        "attributes": {
+            "longText": "Excess energy PV"
+        },
+        "value": "%s"
+    }
+"""
+
+PHOTOVOLTAIC_EXCESS_POWER: str = """
+    {
+        "name": "APPL.CtrlAppl.sParam.photovoltaics.ElectricEnergyMeter.values.power",
+        "attributes": {
+            "formatId": "fmt3p2",
+            "longText": "Actual excess power",
+            "unitId": "Pwr"
+        },
+        "value": "%s"
+    }
+"""
+
+PHOTOVOLTAIC_DAILY_ENERGY: str = """
+    {
+        "name": "APPL.CtrlAppl.sParam.photovoltaics.ElectricEnergyMeter.values.heatDay",
+        "attributes": {
+            "formatId": "fmt6p1",
+            "longText": "Energy per day",
+            "unitId": "kWh"
+        },
+        "value": "%s"
+    }
+"""
+
+PHOTOVOLTAIC_TOTAL_ENERGY: str = """
+    {
+        "name": "APPL.CtrlAppl.sParam.photovoltaics.ElectricEnergyMeter.values.accumulatedHeat",
+        "attributes": {
+            "formatId": "fmt6p0",
+            "longText": "Acc. energy",
+            "unitId": "kWh"
+        },
+        "value": "%s"
+    }
+"""
+
 SYSTEM_HAS_OUTDOOR_TEMPERATURE: str = """
     {
         "name": "APPL.CtrlAppl.sParam.options.hasOutdoorTemp",
@@ -1908,7 +1954,7 @@ SYSTEM_OPERATING_MODE: dict[str, Any] = {
     "value": "2",
 }
 
-SYSTEM_HAS_PHOTOVOLTAIC: str = """
+SYSTEM_HAS_PHOTOVOLTAICS: str = """
     {
         "name": "APPL.CtrlAppl.sParam.options.hasPhotovoltaics",
         "attributes": {"longText": "With photovoltaics"},
@@ -2095,7 +2141,7 @@ def get_heat_pump_data(compressor_night_speed: str = "true") -> list[dict[str, A
 
 DEFAULT_POSITION_FIXED_DATA_RESPONSE: list[dict[str, Any]] = [
     json.loads(SYSTEM_HAS_OUTDOOR_TEMPERATURE % "true"),
-    json.loads(SYSTEM_HAS_PHOTOVOLTAIC % "true"),
+    json.loads(SYSTEM_HAS_PHOTOVOLTAICS % "true"),
     json.loads(HEAT_CIRCUIT_MODE % ("0", "0")),
     json.loads(HEAT_CIRCUIT_HAS_ROOM_TEMPERATURE % ("0", "true")),
     json.loads(HEAT_CIRCUIT_HAS_ROOM_HUMIDITY % ("0", "true")),
@@ -2111,7 +2157,7 @@ DEFAULT_POSITION_FIXED_DATA_RESPONSE: list[dict[str, Any]] = [
 def get_multiple_position_fixed_data_response(has_passive_cooling: str = "false") -> list[dict[str, Any]]:
     return [
         json.loads(SYSTEM_HAS_OUTDOOR_TEMPERATURE % "true"),
-        json.loads(SYSTEM_HAS_PHOTOVOLTAIC % "true"),
+        json.loads(SYSTEM_HAS_PHOTOVOLTAICS % "true"),
         json.loads(HEAT_CIRCUIT_MODE % ("0", "0")),
         json.loads(HEAT_CIRCUIT_MODE % ("1", "1")),
         json.loads(HEAT_CIRCUIT_HAS_ROOM_TEMPERATURE % ("0", "true")),
@@ -2223,6 +2269,10 @@ DEFAULT_POSITION_DATA_RESPONSE: list[dict[str, Any]] = [
     json.loads(HOT_WATER_TANK_CIRCULATION_RETURN_TEMPERATURE % ("0", "30.45")),
     json.loads(HOT_WATER_TANK_CIRCULATION_PUMP_STATE % ("0", "false")),
     json.loads(SWITCH_VALVE_POSITION % ("0", "1")),
+    json.loads(PHOTOVOLTAIC_EXCESS_ENERGY_ACTIVE % "true"),
+    json.loads(PHOTOVOLTAIC_EXCESS_POWER % "437.700001"),
+    json.loads(PHOTOVOLTAIC_DAILY_ENERGY % "437.700001"),
+    json.loads(PHOTOVOLTAIC_TOTAL_ENERGY % "437.700001"),
     SYSTEM_OUTDOOR_TEMPERATURE,
     SYSTEM_OPERATING_MODE,
     SYSTEM_CPU_USAGE,
@@ -2414,6 +2464,10 @@ ENTITY_UPDATED_DATA_RESPONSE: list[dict[str, Any]] = [
     json.loads(HOT_WATER_TANK_CIRCULATION_PUMP_STATE % ("1", "true")),
     json.loads(SWITCH_VALVE_POSITION % ("0", "1")),
     json.loads(SWITCH_VALVE_POSITION % ("1", "0")),
+    json.loads(PHOTOVOLTAIC_EXCESS_ENERGY_ACTIVE % "true"),
+    json.loads(PHOTOVOLTAIC_EXCESS_POWER % "437.700001"),
+    json.loads(PHOTOVOLTAIC_DAILY_ENERGY % "437.700001"),
+    json.loads(PHOTOVOLTAIC_TOTAL_ENERGY % "437.700001"),
     SYSTEM_OUTDOOR_TEMPERATURE,
     SYSTEM_OPERATING_MODE,
     SYSTEM_CPU_USAGE,
@@ -2521,6 +2575,10 @@ def get_single_position_data_response(
         json.loads(HOT_WATER_TANK_CIRCULATION_RETURN_TEMPERATURE % ("0", "34.45")),
         json.loads(HOT_WATER_TANK_CIRCULATION_PUMP_STATE % ("0", "false")),
         json.loads(SWITCH_VALVE_POSITION % ("0", "1")),
+        json.loads(PHOTOVOLTAIC_EXCESS_ENERGY_ACTIVE % "true"),
+        json.loads(PHOTOVOLTAIC_EXCESS_POWER % "437.700001"),
+        json.loads(PHOTOVOLTAIC_DAILY_ENERGY % "437.700001"),
+        json.loads(PHOTOVOLTAIC_TOTAL_ENERGY % "437.700001"),
         SYSTEM_OUTDOOR_TEMPERATURE,
         SYSTEM_OPERATING_MODE,
         SYSTEM_CPU_USAGE,
@@ -2714,6 +2772,10 @@ MULTIPLE_POSITION_DATA_RESPONSE_1: list[dict[str, Any]] = [
     json.loads(HOT_WATER_TANK_CIRCULATION_PUMP_STATE % ("1", "false")),
     json.loads(SWITCH_VALVE_POSITION % ("0", "0")),
     json.loads(SWITCH_VALVE_POSITION % ("1", "1")),
+    json.loads(PHOTOVOLTAIC_EXCESS_ENERGY_ACTIVE % "true"),
+    json.loads(PHOTOVOLTAIC_EXCESS_POWER % "437.700001"),
+    json.loads(PHOTOVOLTAIC_DAILY_ENERGY % "437.700001"),
+    json.loads(PHOTOVOLTAIC_TOTAL_ENERGY % "437.700001"),
     SYSTEM_OUTDOOR_TEMPERATURE,
     SYSTEM_OPERATING_MODE,
     SYSTEM_CPU_USAGE,
@@ -2906,6 +2968,10 @@ MULTIPLE_POSITION_DATA_RESPONSE_2: list[dict[str, Any]] = [
     json.loads(HOT_WATER_TANK_CIRCULATION_PUMP_STATE % ("1", "true")),
     json.loads(SWITCH_VALVE_POSITION % ("0", "0")),
     json.loads(SWITCH_VALVE_POSITION % ("1", "1")),
+    json.loads(PHOTOVOLTAIC_EXCESS_ENERGY_ACTIVE % "true"),
+    json.loads(PHOTOVOLTAIC_EXCESS_POWER % "437.700001"),
+    json.loads(PHOTOVOLTAIC_DAILY_ENERGY % "437.700001"),
+    json.loads(PHOTOVOLTAIC_TOTAL_ENERGY % "437.700001"),
     SYSTEM_OUTDOOR_TEMPERATURE,
     SYSTEM_OPERATING_MODE,
     SYSTEM_CPU_USAGE,
@@ -2986,6 +3052,10 @@ MULTIPLE_POSITION_DATA_RESPONSE_3_1: list[dict[str, Any]] = [
     json.loads(HOT_WATER_TANK_CIRCULATION_PUMP_STATE % ("1", "false")),
     json.loads(SWITCH_VALVE_POSITION % ("0", "0")),
     json.loads(SWITCH_VALVE_POSITION % ("1", "1")),
+    json.loads(PHOTOVOLTAIC_EXCESS_ENERGY_ACTIVE % "true"),
+    json.loads(PHOTOVOLTAIC_EXCESS_POWER % "437.700001"),
+    json.loads(PHOTOVOLTAIC_DAILY_ENERGY % "437.700001"),
+    json.loads(PHOTOVOLTAIC_TOTAL_ENERGY % "437.700001"),
     SYSTEM_OUTDOOR_TEMPERATURE,
     SYSTEM_OPERATING_MODE,
     SYSTEM_CPU_USAGE,
@@ -3150,6 +3220,10 @@ MULTIPLE_POSITION_DATA_RESPONSE_3_2: list[dict[str, Any]] = [
     json.loads(HOT_WATER_TANK_CIRCULATION_PUMP_STATE % ("1", "false")),
     json.loads(SWITCH_VALVE_POSITION % ("0", "0")),
     json.loads(SWITCH_VALVE_POSITION % ("1", "1")),
+    json.loads(PHOTOVOLTAIC_EXCESS_ENERGY_ACTIVE % "true"),
+    json.loads(PHOTOVOLTAIC_EXCESS_POWER % "437.700001"),
+    json.loads(PHOTOVOLTAIC_DAILY_ENERGY % "437.700001"),
+    json.loads(PHOTOVOLTAIC_TOTAL_ENERGY % "437.700001"),
     SYSTEM_OUTDOOR_TEMPERATURE,
     SYSTEM_OPERATING_MODE,
     SYSTEM_CPU_USAGE,

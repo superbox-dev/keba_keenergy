@@ -80,7 +80,7 @@
 # name: test_binary_sensors[de-binary_sensor.keba_keenergy_12345678_heat_pump_consuming_excess_energy]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      'friendly_name': 'Wärmepumpe Verbraucht Überschussenergie',
+      'friendly_name': 'Wärmepumpe PV-Überschuss',
       'icon': 'mdi:solar-power',
     }),
     'context': <ANY>,
@@ -255,6 +255,19 @@
     'state': 'off',
   })
 # ---
+# name: test_binary_sensors[de-binary_sensor.keba_keenergy_12345678_photovoltaics_excess_energy_active]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'friendly_name': 'Photovoltaik Überschuss',
+    }),
+    'context': <ANY>,
+    'entity_id': 'binary_sensor.keba_keenergy_12345678_photovoltaics_excess_energy_active',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': 'on',
+  })
+# ---
 # name: test_binary_sensors[de-binary_sensor.keba_keenergy_12345678_solar_circuit_heat_request_1_1]
   StateSnapshot({
     'attributes': ReadOnlyDict({
@@ -388,7 +401,7 @@
 # name: test_binary_sensors[en-binary_sensor.keba_keenergy_12345678_heat_pump_consuming_excess_energy]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      'friendly_name': 'Heat pump Consuming excess energy',
+      'friendly_name': 'Heat pump PV surplus',
       'icon': 'mdi:solar-power',
     }),
     'context': <ANY>,
@@ -561,6 +574,19 @@
     'last_reported': <ANY>,
     'last_updated': <ANY>,
     'state': 'off',
+  })
+# ---
+# name: test_binary_sensors[en-binary_sensor.keba_keenergy_12345678_photovoltaics_excess_energy_active]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'friendly_name': 'Photovoltaics Surplus',
+    }),
+    'context': <ANY>,
+    'entity_id': 'binary_sensor.keba_keenergy_12345678_photovoltaics_excess_energy_active',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': 'on',
   })
 # ---
 # name: test_binary_sensors[en-binary_sensor.keba_keenergy_12345678_solar_circuit_heat_request_1_1]

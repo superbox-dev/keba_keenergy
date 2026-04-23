@@ -74,6 +74,9 @@
         "passive_cooling": {
             "name": "Passivkühlung{position}"
         },
+        "photovoltaics": {
+            "name": "Photovoltaik{position}"
+        },
         "solar_circuit": {
             "name": "Solarkreis{position}"
         },
@@ -89,17 +92,20 @@
             "compressor_failure": {
                 "name": "Kompressor"
             },
-            "consuming_excess_energy": {
-                "name": "Überschussenergie"
-            },
             "cool_request": {
                 "name": "Kühlanforderung"
+            },
+            "excess_energy": {
+                "name": "PV-Überschuss"
             },
             "heat_request": {
                 "name": "Heizanforderung{counter}"
             },
             "hot_water_flow": {
                 "name": "Warmwasser läuft"
+            },
+            "pv_excess_energy": {
+                "name": "Überschuss"
             },
             "source_actuator_failure": {
                 "name": "Quellenaktor"
@@ -152,28 +158,28 @@
                 "name": "Kühlgrenze (Nacht)"
             },
             "excess_energy_cooling_limit_day": {
-                "name": "Kühlgrenze für Überschussenergie (Tag)"
+                "name": "Kühlgrenze für PV-Überschuss (Tag)"
             },
             "excess_energy_cooling_limit_night": {
-                "name": "Kühlgrenze für Überschussenergie (Nacht)"
+                "name": "Kühlgrenze für PV-Überschuss (Nacht)"
             },
             "excess_energy_heating_limit_day": {
-                "name": "Heizgrenze für Überschussenergie (Tag)"
+                "name": "Heizgrenze für PV-Überschuss (Tag)"
             },
             "excess_energy_heating_limit_night": {
-                "name": "Heizgrenze für Überschussenergie (Nacht)"
+                "name": "Heizgrenze für PV-Überschuss (Nacht)"
             },
             "excess_energy_target_cooling_temperature": {
-                "name": "Soll-Temperatur für Überschussenergie"
+                "name": "Soll-Temperatur für PV-Überschuss"
             },
             "excess_energy_target_cooling_temperature_hysteresis": {
-                "name": "Soll-Temperatur-Hysterese für Überschussenergie"
+                "name": "Soll-Temperatur-Hysterese für PV-Überschuss"
             },
             "excess_energy_target_temperature": {
-                "name": "Soll-Temperatur für Überschussenergie"
+                "name": "Soll-Temperatur für PV-Überschuss"
             },
             "excess_energy_target_temperature_hysteresis": {
-                "name": "Soll-Temperatur-Hysterese für Überschussenergie"
+                "name": "Soll-Temperatur-Hysterese für PV-Überschuss"
             },
             "heating_curve_offset": {
                 "name": "Heizkurven-Offset"
@@ -188,10 +194,10 @@
                 "name": "Heizgrenze (Nacht)"
             },
             "min_runtime_excess_energy": {
-                "name": "Mindestlaufzeit bei Überschussenergie"
+                "name": "Mindestlaufzeit bei PV-Überschuss"
             },
             "outdoor_temperature_excess_energy_limit": {
-                "name": "Außentemperatur-Grenze für Überschussenergie"
+                "name": "Außentemperatur-Grenze für PV-Überschuss"
             },
             "standby_temperature": {
                 "name": "Stütztemperatur"
@@ -376,25 +382,28 @@
                 "name": "Taupunkt"
             },
             "excess_energy_cooling_limit_day": {
-                "name": "Kühlgrenze für Überschussenergie (Tag)"
+                "name": "Kühlgrenze für PV-Überschuss (Tag)"
             },
             "excess_energy_cooling_limit_night": {
-                "name": "Kühlgrenze für Überschussenergie (Nacht)"
+                "name": "Kühlgrenze für PV-Überschuss (Nacht)"
             },
             "excess_energy_heating_limit_day": {
-                "name": "Heizgrenze für Überschussenergie (Tag)"
+                "name": "Heizgrenze für PV-Überschuss (Tag)"
             },
             "excess_energy_heating_limit_night": {
-                "name": "Heizgrenze für Überschussenergie (Nacht)"
+                "name": "Heizgrenze für PV-Überschuss (Nacht)"
             },
             "excess_energy_mode": {
-                "name": "Überschussenergie"
+                "name": "PV-Überschuss"
+            },
+            "excess_power": {
+                "name": "Überschussleistung"
             },
             "excess_energy_target_cooling_temperature": {
-                "name": "Soll-Temperatur für Überschussenergie"
+                "name": "Soll-Temperatur für PV-Überschuss"
             },
             "excess_energy_target_temperature": {
-                "name": "Soll-Temperatur für Überschussenergie"
+                "name": "Soll-Temperatur für PV-Überschuss"
             },
             "expansion_valve_position": {
                 "name": "Expansionsventil"
@@ -519,12 +528,6 @@
             },
             "pump_speed": {
                 "name": "Pumpendrehzahl"
-            },
-            "pv_excess_power": {
-                "name": "Überschussleistung"
-            },
-            "pv_total_energy": {
-                "name": "Gesamtenergie"
             },
             "ram_usage": {
                 "name": "RAM-Verbrauch"
@@ -668,6 +671,9 @@
             "temperature": {
                 "name": "Temperatur"
             },
+            "total_energy": {
+                "name": "Gesamtenergie"
+            },
             "total_energy_consumption": {
                 "name": "Stromverbrauch gesamt"
             },
@@ -698,7 +704,7 @@
                 "name": "Kühlkurve verwenden"
             },
             "use_excess_energy": {
-                "name": "Überschussenergie verwenden"
+                "name": "PV-Überschuss verwenden"
             },
             "use_heating_curve": {
                 "name": "Heizkurve verwenden"

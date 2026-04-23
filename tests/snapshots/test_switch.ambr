@@ -3,7 +3,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'switch',
-      'friendly_name': 'Pufferspeicher 1 Überschussenergie verwenden',
+      'friendly_name': 'Pufferspeicher 1 PV-Überschuss verwenden',
     }),
     'context': <ANY>,
     'entity_id': 'switch.keba_keenergy_12345678_buffer_tank_use_excess_energy_1',
@@ -17,7 +17,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'switch',
-      'friendly_name': 'Pufferspeicher 2 Überschussenergie verwenden',
+      'friendly_name': 'Pufferspeicher 2 PV-Überschuss verwenden',
     }),
     'context': <ANY>,
     'entity_id': 'switch.keba_keenergy_12345678_buffer_tank_use_excess_energy_2',
@@ -31,7 +31,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'switch',
-      'friendly_name': 'Externe Wärmequelle 1 Überschussenergie verwenden',
+      'friendly_name': 'Externe Wärmequelle 1 PV-Überschuss verwenden',
     }),
     'context': <ANY>,
     'entity_id': 'switch.keba_keenergy_12345678_external_heat_source_use_excess_energy_1',
@@ -45,7 +45,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'switch',
-      'friendly_name': 'Externe Wärmequelle 2 Überschussenergie verwenden',
+      'friendly_name': 'Externe Wärmequelle 2 PV-Überschuss verwenden',
     }),
     'context': <ANY>,
     'entity_id': 'switch.keba_keenergy_12345678_external_heat_source_use_excess_energy_2',
@@ -59,7 +59,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'switch',
-      'friendly_name': 'Heizkreis 1 Überschussenergie verwenden',
+      'friendly_name': 'Heizkreis 1 PV-Überschuss verwenden',
     }),
     'context': <ANY>,
     'entity_id': 'switch.keba_keenergy_12345678_heat_circuit_use_excess_energy_1',
@@ -73,7 +73,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'switch',
-      'friendly_name': 'Heizkreis 2 Überschussenergie verwenden',
+      'friendly_name': 'Heizkreis 2 PV-Überschuss verwenden',
     }),
     'context': <ANY>,
     'entity_id': 'switch.keba_keenergy_12345678_heat_circuit_use_excess_energy_2',
@@ -131,7 +131,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'switch',
-      'friendly_name': 'Warmwasserspeicher 1 Überschussenergie verwenden',
+      'friendly_name': 'Warmwasserspeicher 1 PV-Überschuss verwenden',
     }),
     'context': <ANY>,
     'entity_id': 'switch.keba_keenergy_12345678_hot_water_tank_use_excess_energy_1',
@@ -145,7 +145,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'switch',
-      'friendly_name': 'Warmwasserspeicher 2 Überschussenergie verwenden',
+      'friendly_name': 'Warmwasserspeicher 2 PV-Überschuss verwenden',
     }),
     'context': <ANY>,
     'entity_id': 'switch.keba_keenergy_12345678_hot_water_tank_use_excess_energy_2',
@@ -187,7 +187,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'switch',
-      'friendly_name': 'Buffer tank 1 Use excess energy',
+      'friendly_name': 'Buffer tank 1 Use PV surplus',
     }),
     'context': <ANY>,
     'entity_id': 'switch.keba_keenergy_12345678_buffer_tank_use_excess_energy_1',
@@ -201,7 +201,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'switch',
-      'friendly_name': 'Buffer tank 2 Use excess energy',
+      'friendly_name': 'Buffer tank 2 Use PV surplus',
     }),
     'context': <ANY>,
     'entity_id': 'switch.keba_keenergy_12345678_buffer_tank_use_excess_energy_2',
@@ -215,7 +215,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'switch',
-      'friendly_name': 'External heat source 1 Use excess energy',
+      'friendly_name': 'External heat source 1 Use PV surplus',
     }),
     'context': <ANY>,
     'entity_id': 'switch.keba_keenergy_12345678_external_heat_source_use_excess_energy_1',
@@ -229,7 +229,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'switch',
-      'friendly_name': 'External heat source 2 Use excess energy',
+      'friendly_name': 'External heat source 2 Use PV surplus',
     }),
     'context': <ANY>,
     'entity_id': 'switch.keba_keenergy_12345678_external_heat_source_use_excess_energy_2',
@@ -243,7 +243,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'switch',
-      'friendly_name': 'Heating circuit 1 Use excess energy',
+      'friendly_name': 'Heating circuit 1 Use PV surplus',
     }),
     'context': <ANY>,
     'entity_id': 'switch.keba_keenergy_12345678_heat_circuit_use_excess_energy_1',
@@ -257,7 +257,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'switch',
-      'friendly_name': 'Heating circuit 2 Use excess energy',
+      'friendly_name': 'Heating circuit 2 Use PV surplus',
     }),
     'context': <ANY>,
     'entity_id': 'switch.keba_keenergy_12345678_heat_circuit_use_excess_energy_2',
@@ -315,7 +315,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'switch',
-      'friendly_name': 'Hot water tank 1 Use excess energy',
+      'friendly_name': 'Hot water tank 1 Use PV surplus',
     }),
     'context': <ANY>,
     'entity_id': 'switch.keba_keenergy_12345678_hot_water_tank_use_excess_energy_1',
@@ -329,7 +329,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'switch',
-      'friendly_name': 'Hot water tank 2 Use excess energy',
+      'friendly_name': 'Hot water tank 2 Use PV surplus',
     }),
     'context': <ANY>,
     'entity_id': 'switch.keba_keenergy_12345678_hot_water_tank_use_excess_energy_2',
