@@ -9,13 +9,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!--start-->
 
-## [1.10.0] - 2025-04-12
+## [1.10.0] - 2025-04-23
 
 ### Added
 
 - Add control for heating limits (day/night) [(Issue #46)][issue-46]
-- Add support for heating circuits with active and passive cooling feature [(Issue #47)][issue-47]
+- Add support for heating circuits with active or passive cooling feature [(Issue #47)][issue-47]
 - Add sensor for "Return flow temperature (mixer)" to the heating circuit
+- Add device for photovoltaics [(Issue #55)][issue-55]
+- Add entities to control or monitor excess energy from photovoltaics [(Issue #55)][issue-55]
 
 ### Changed
 
@@ -27,6 +29,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 [issue-46]: https://github.com/superbox-dev/keba_keenergy/issues/46
 [issue-47]: https://github.com/superbox-dev/keba_keenergy/issues/47
+[issue-55]: https://github.com/superbox-dev/keba_keenergy/issues/55
 
 ## [1.9.1] - 2025-04-03
 

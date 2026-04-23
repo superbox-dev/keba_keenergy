@@ -1841,7 +1841,7 @@ wheels = [
 
 [[package]]
 name = "keba-keenergy"
-version = "1.10.0b5"
+version = "1.10.0b6"
 source = { editable = "." }
 dependencies = [
     { name = "homeassistant", version = "2026.2.3", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.14.2'" },
@@ -1896,7 +1896,7 @@ test = [
 [package.metadata]
 requires-dist = [
     { name = "homeassistant", specifier = ">=2025.8.2" },
-    { name = "keba-keenergy-api", specifier = "~=2.12.0b1" },
+    { name = "keba-keenergy-api", specifier = "~=2.12.0b5" },
 ]
 
 [package.metadata.requires-dev]
