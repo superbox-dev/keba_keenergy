@@ -170,10 +170,10 @@
                 "name": "Heating limit during PV surplus (night)"
             },
             "excess_energy_target_cooling_temperature": {
-                "name": "Target temperature during PV surplus"
+                "name": "Target temperature during PV surplus (cooling)"
             },
             "excess_energy_target_cooling_temperature_hysteresis": {
-                "name": "Target temperature hysteresis during PV surplus"
+                "name": "Target temperature hysteresis during PV surplus (cooling)"
             },
             "excess_energy_target_temperature": {
                 "name": "Target temperature during PV surplus"
@@ -203,10 +203,10 @@
                 "name": "Standby temperature"
             },
             "target_room_cooling_temperature_day": {
-                "name": "Target room temperature (day)"
+                "name": "Target room temperature (cooling, day)"
             },
             "target_room_cooling_temperature_night": {
-                "name": "Target room temperature (night)"
+                "name": "Target room temperature (cooling, night)"
             },
             "target_room_temperature": {
                 "name": "Target temperature"
@@ -415,7 +415,7 @@
                 "name": "Excess power"
             },
             "excess_energy_target_cooling_temperature": {
-                "name": "Target temperature during PV surplus"
+                "name": "Target temperature during PV surplus (cooling)"
             },
             "excess_energy_target_temperature": {
                 "name": "Target temperature during PV surplus"
@@ -667,10 +667,10 @@
                 "name": "Target overheating"
             },
             "target_room_cooling_temperature_day": {
-                "name": "Target room temperature (day)"
+                "name": "Target room temperature (cooling, day)"
             },
             "target_room_cooling_temperature_night": {
-                "name": "Target room temperature (night)"
+                "name": "Target room temperature (cooling, night)"
             },
             "target_room_temperature": {
                 "name": "Target room temperature"

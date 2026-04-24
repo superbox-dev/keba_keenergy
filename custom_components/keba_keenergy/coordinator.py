@@ -394,6 +394,10 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
                 HotWaterTank.HAS_FRESH_WATER_MODULE,
                 HeatPump.HAS_ACTIVE_COOLING,
                 HeatPump.HAS_PASSIVE_COOLING,
+                HeatPump.ELECTRIC_ENERGY_METER_TYPE,
+                HeatPump.HEAT_METER_TYPE,
+                HeatPump.COOL_METER_TYPE,
+                HeatPump.HOT_WATER_METER_TYPE,
             ],
             position=self.position,
         )
@@ -708,6 +712,46 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
             self._fixed_data[SectionPrefix.HOT_WATER_TANK]["has_fresh_water_module"],
         )
         return bool(HotWaterTankHasFreshWaterModule.ON.name.lower() == data[index]["value"])
+
+    def has_electrical_energy_meter(self, *, index: int | None = None) -> bool:
+        """Check if electrical energy meter is available."""
+        index = 0 if index is None else index
+
+        data: list[Value] = cast(
+            "list[Value]",
+            self._fixed_data[SectionPrefix.HEAT_PUMP]["electric_energy_meter_type"],
+        )
+        return bool(data[index]["value"] > 0)
+
+    def has_heat_meter(self, *, index: int | None = None) -> bool:
+        """Check if heat meter is available."""
+        index = 0 if index is None else index
+
+        data: list[Value] = cast(
+            "list[Value]",
+            self._fixed_data[SectionPrefix.HEAT_PUMP]["heat_meter_type"],
+        )
+        return bool(data[index]["value"] > 0)
+
+    def has_cool_meter(self, *, index: int | None = None) -> bool:
+        """Check if cool meter is available."""
+        index = 0 if index is None else index
+
+        data: list[Value] = cast(
+            "list[Value]",
+            self._fixed_data[SectionPrefix.HEAT_PUMP]["cool_meter_type"],
+        )
+        return bool(data[index]["value"] > 0)
+
+    def has_hot_water_meter(self, *, index: int | None = None) -> bool:
+        """Check if hot water meter is available."""
+        index = 0 if index is None else index
+
+        data: list[Value] = cast(
+            "list[Value]",
+            self._fixed_data[SectionPrefix.HEAT_PUMP]["hot_water_meter_type"],
+        )
+        return bool(data[index]["value"] > 0)
 
     def has_active_cooling(self, *, index: int | None = None) -> bool:
         """Check if active cooling is available."""

@@ -170,10 +170,10 @@
                 "name": "Heizgrenze bei PV-Überschuss (Nacht)"
             },
             "excess_energy_target_cooling_temperature": {
-                "name": "Soll-Temperatur bei PV-Überschuss"
+                "name": "Soll-Temperatur bei PV-Überschuss (Kühlen)"
             },
             "excess_energy_target_cooling_temperature_hysteresis": {
-                "name": "Soll-Temperatur-Hysterese bei PV-Überschuss"
+                "name": "Soll-Temperatur-Hysterese bei PV-Überschuss (Kühlen)"
             },
             "excess_energy_target_temperature": {
                 "name": "Soll-Temperatur bei PV-Überschuss"
@@ -203,10 +203,10 @@
                 "name": "Stütztemperatur"
             },
             "target_room_cooling_temperature_day": {
-                "name": "Soll-Raumtemperatur (Tag)"
+                "name": "Soll-Raumtemperatur (Kühlen, Tag)"
             },
             "target_room_cooling_temperature_night": {
-                "name": "Soll-Raumtemperatur (Nacht)"
+                "name": "Soll-Raumtemperatur (Kühlen, Nacht)"
             },
             "target_room_temperature": {
                 "name": "Soll-Raumtemperatur"
@@ -415,7 +415,7 @@
                 "name": "Überschussleistung"
             },
             "excess_energy_target_cooling_temperature": {
-                "name": "Soll-Temperatur bei PV-Überschuss"
+                "name": "Soll-Temperatur bei PV-Überschuss (Kühlen)"
             },
             "excess_energy_target_temperature": {
                 "name": "Soll-Temperatur bei PV-Überschuss"
@@ -666,10 +666,10 @@
                 "name": "Sollüberhitzung"
             },
             "target_room_cooling_temperature_day": {
-                "name": "Soll-Raumtemperatur (Tag)"
+                "name": "Soll-Raumtemperatur (Kühlen, Tag)"
             },
             "target_room_cooling_temperature_night": {
-                "name": "Soll-Raumtemperatur (Nacht)"
+                "name": "Soll-Raumtemperatur (Kühlen, Nacht)"
             },
             "target_room_temperature": {
                 "name": "Soll-Raumtemperatur"

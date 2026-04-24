@@ -134,7 +134,6 @@
     'sensor.keba_keenergy_12345678_heat_circuit_excess_energy_mode_2',
     'sensor.keba_keenergy_12345678_heat_circuit_excess_energy_target_cooling_temperature_2',
     'sensor.keba_keenergy_12345678_heat_circuit_excess_energy_target_temperature_1',
-    'sensor.keba_keenergy_12345678_heat_circuit_excess_energy_target_temperature_2',
     'sensor.keba_keenergy_12345678_heat_circuit_flow_temperature_1',
     'sensor.keba_keenergy_12345678_heat_circuit_flow_temperature_setpoint_1',
     'sensor.keba_keenergy_12345678_heat_circuit_flow_temperature_setpoint_2',

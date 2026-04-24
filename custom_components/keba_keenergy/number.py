@@ -197,7 +197,10 @@ NUMBER_TYPES: dict[str, tuple[KebaKeEnergyNumberEntityDescription, ...]] = {
             scale=1,
         ),
         KebaKeEnergyNumberEntityDescription(
-            condition=lambda coordinator, index: coordinator.is_heating_circuit(index=index),
+            condition=(
+                lambda coordinator, index: coordinator.is_heating_circuit(index=index)
+                and coordinator.has_photovoltaics()
+            ),
             device_class=NumberDeviceClass.TEMPERATURE,
             entity_category=EntityCategory.CONFIG,
             entity_registry_enabled_default=False,
@@ -208,7 +211,10 @@ NUMBER_TYPES: dict[str, tuple[KebaKeEnergyNumberEntityDescription, ...]] = {
             scale=1,
         ),
         KebaKeEnergyNumberEntityDescription(
-            condition=lambda coordinator, index: coordinator.is_cooling_circuit(index=index),
+            condition=(
+                lambda coordinator, index: coordinator.is_cooling_circuit(index=index)
+                and coordinator.has_photovoltaics()
+            ),
             device_class=NumberDeviceClass.TEMPERATURE,
             entity_category=EntityCategory.CONFIG,
             entity_registry_enabled_default=False,

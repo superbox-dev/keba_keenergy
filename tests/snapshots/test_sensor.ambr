@@ -790,7 +790,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'temperature',
-      'friendly_name': 'Heizkreis 2 Soll-Temperatur bei PV-Überschuss',
+      'friendly_name': 'Heizkreis 2 Soll-Temperatur bei PV-Überschuss (Kühlen)',
       'icon': 'mdi:sun-thermometer',
       'lower_limit': '10',
       'state_class': <SensorStateClass.MEASUREMENT: 'measurement'>,
@@ -818,25 +818,6 @@
     }),
     'context': <ANY>,
     'entity_id': 'sensor.keba_keenergy_12345678_heat_circuit_excess_energy_target_temperature_1',
-    'last_changed': <ANY>,
-    'last_reported': <ANY>,
-    'last_updated': <ANY>,
-    'state': '30.0',
-  })
-# ---
-# name: test_sensors[de-sensor.keba_keenergy_12345678_heat_circuit_excess_energy_target_temperature_2]
-  StateSnapshot({
-    'attributes': ReadOnlyDict({
-      'device_class': 'temperature',
-      'friendly_name': 'Heizkreis 2 Soll-Temperatur bei PV-Überschuss',
-      'icon': 'mdi:sun-thermometer',
-      'lower_limit': '10',
-      'state_class': <SensorStateClass.MEASUREMENT: 'measurement'>,
-      'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
-      'upper_limit': '30',
-    }),
-    'context': <ANY>,
-    'entity_id': 'sensor.keba_keenergy_12345678_heat_circuit_excess_energy_target_temperature_2',
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
@@ -1162,7 +1143,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'temperature',
-      'friendly_name': 'Heizkreis 2 Soll-Raumtemperatur (Tag)',
+      'friendly_name': 'Heizkreis 2 Soll-Raumtemperatur (Kühlen, Tag)',
       'lower_limit': '10',
       'state_class': <SensorStateClass.MEASUREMENT: 'measurement'>,
       'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
@@ -1180,7 +1161,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'temperature',
-      'friendly_name': 'Heizkreis 2 Soll-Raumtemperatur (Nacht)',
+      'friendly_name': 'Heizkreis 2 Soll-Raumtemperatur (Kühlen, Nacht)',
       'lower_limit': '10',
       'state_class': <SensorStateClass.MEASUREMENT: 'measurement'>,
       'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
@@ -3760,7 +3741,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'temperature',
-      'friendly_name': 'Heating circuit 2 Target temperature during PV surplus',
+      'friendly_name': 'Heating circuit 2 Target temperature during PV surplus (cooling)',
       'icon': 'mdi:sun-thermometer',
       'lower_limit': '10',
       'state_class': <SensorStateClass.MEASUREMENT: 'measurement'>,
@@ -3788,25 +3769,6 @@
     }),
     'context': <ANY>,
     'entity_id': 'sensor.keba_keenergy_12345678_heat_circuit_excess_energy_target_temperature_1',
-    'last_changed': <ANY>,
-    'last_reported': <ANY>,
-    'last_updated': <ANY>,
-    'state': '30.0',
-  })
-# ---
-# name: test_sensors[en-sensor.keba_keenergy_12345678_heat_circuit_excess_energy_target_temperature_2]
-  StateSnapshot({
-    'attributes': ReadOnlyDict({
-      'device_class': 'temperature',
-      'friendly_name': 'Heating circuit 2 Target temperature during PV surplus',
-      'icon': 'mdi:sun-thermometer',
-      'lower_limit': '10',
-      'state_class': <SensorStateClass.MEASUREMENT: 'measurement'>,
-      'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
-      'upper_limit': '30',
-    }),
-    'context': <ANY>,
-    'entity_id': 'sensor.keba_keenergy_12345678_heat_circuit_excess_energy_target_temperature_2',
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
@@ -4132,7 +4094,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'temperature',
-      'friendly_name': 'Heating circuit 2 Target room temperature (day)',
+      'friendly_name': 'Heating circuit 2 Target room temperature (cooling, day)',
       'lower_limit': '10',
       'state_class': <SensorStateClass.MEASUREMENT: 'measurement'>,
       'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
@@ -4150,7 +4112,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'temperature',
-      'friendly_name': 'Heating circuit 2 Target room temperature (night)',
+      'friendly_name': 'Heating circuit 2 Target room temperature (cooling, night)',
       'lower_limit': '10',
       'state_class': <SensorStateClass.MEASUREMENT: 'measurement'>,
       'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,

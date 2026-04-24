@@ -1498,6 +1498,62 @@ HEAT_PUMP_HAS_PASSIVE_COOLING: str = """
     }
 """
 
+HEAT_PUMP_ELECTRIC_ENERGY_METER_TYPE: str = """
+    {
+        "name": "APPL.CtrlAppl.sParam.options.heatpump[0].ElectricEnergyMeter.type",
+        "attributes": {
+          "formatId": "fmtElMeterType",
+          "longText": "El. energy meter",
+          "unitId": "Enum",
+          "upperLimit": "4",
+          "lowerLimit": "0"
+        },
+        "value": "%s"
+    }
+"""
+
+HEAT_PUMP_HEAT_METER_TYPE: str = """
+    {
+        "name":"APPL.CtrlAppl.sParam.options.heatpump[0].HeatMeter.type",
+        "attributes": {
+            "formatId": "fmtHeatMeterType",
+            "longText": "Heat meter",
+            "unitId": "Enum",
+            "upperLimit":"4",
+            "lowerLimit":"0"
+        },
+        "value": "%s"
+    }
+"""
+
+HEAT_PUMP_COOL_METER_TYPE: str = """
+    {
+        "name": "APPL.CtrlAppl.sParam.options.heatpump[0].CoolMeter.type",
+        "attributes": {
+          "formatId": "fmtHeatMeterType",
+          "longText": "Cool meter",
+          "unitId": "Enum",
+          "upperLimit": "4",
+          "lowerLimit": "0"
+        },
+        "value": "%s"
+    }
+"""
+
+HEAT_PUMP_HOT_WATER_METER_TYPE: str = """
+    {
+        "name": "APPL.CtrlAppl.sParam.options.heatpump[0].HotWaterMeter.type",
+        "attributes": {
+          "formatId": "fmtHeatMeterType",
+          "longText": "Dom. HW heat meter",
+          "unitId": "Enum",
+          "upperLimit": "4",
+          "lowerLimit": "0"
+        },
+        "value": "%s"
+    }
+"""
+
 BUFFER_TANK_CURRENT_TOP_TEMPERATURE: str = """
     {
         "name": "APPL.CtrlAppl.sParam.bufferTank[%s].topTemp.values.actValue",
@@ -2271,6 +2327,10 @@ DEFAULT_POSITION_FIXED_DATA_RESPONSE: list[dict[str, Any]] = [
     json.loads(HOT_WATER_TANK_HAS_FRESH_WATER_MODULE % ("0", "true")),
     json.loads(HEAT_PUMP_HAS_ACTIVE_COOLING % "false"),
     json.loads(HEAT_PUMP_HAS_PASSIVE_COOLING % "true"),
+    json.loads(HEAT_PUMP_ELECTRIC_ENERGY_METER_TYPE % "1"),
+    json.loads(HEAT_PUMP_HEAT_METER_TYPE % "1"),
+    json.loads(HEAT_PUMP_COOL_METER_TYPE % "1"),
+    json.loads(HEAT_PUMP_HOT_WATER_METER_TYPE % "1"),
 ]
 
 
@@ -2294,6 +2354,10 @@ def get_multiple_position_fixed_data_response(has_passive_cooling: str = "false"
         json.loads(HOT_WATER_TANK_HAS_FRESH_WATER_MODULE % ("1", "false")),
         json.loads(HEAT_PUMP_HAS_ACTIVE_COOLING % "false"),
         json.loads(HEAT_PUMP_HAS_PASSIVE_COOLING % f"{has_passive_cooling}"),
+        json.loads(HEAT_PUMP_ELECTRIC_ENERGY_METER_TYPE % "1"),
+        json.loads(HEAT_PUMP_HEAT_METER_TYPE % "1"),
+        json.loads(HEAT_PUMP_COOL_METER_TYPE % "1"),
+        json.loads(HEAT_PUMP_HOT_WATER_METER_TYPE % "1"),
     ]
 
 

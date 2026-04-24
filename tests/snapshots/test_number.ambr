@@ -352,7 +352,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'temperature',
-      'friendly_name': 'Heizkreis 2 Soll-Temperatur bei PV-Überschuss',
+      'friendly_name': 'Heizkreis 2 Soll-Temperatur bei PV-Überschuss (Kühlen)',
       'icon': 'mdi:sun-thermometer',
       'max': 30.0,
       'min': 10.0,
@@ -372,7 +372,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'temperature',
-      'friendly_name': 'Heizkreis 2 Soll-Temperatur-Hysterese bei PV-Überschuss',
+      'friendly_name': 'Heizkreis 2 Soll-Temperatur-Hysterese bei PV-Überschuss (Kühlen)',
       'icon': 'mdi:thermometer-lines',
       'max': 2.0,
       'min': 0.0,
@@ -507,7 +507,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'temperature',
-      'friendly_name': 'Heizkreis 2 Soll-Raumtemperatur (Tag)',
+      'friendly_name': 'Heizkreis 2 Soll-Raumtemperatur (Kühlen, Tag)',
       'max': 30.0,
       'min': 10.0,
       'mode': <NumberMode.AUTO: 'auto'>,
@@ -526,7 +526,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'temperature',
-      'friendly_name': 'Heizkreis 2 Soll-Raumtemperatur (Nacht)',
+      'friendly_name': 'Heizkreis 2 Soll-Raumtemperatur (Kühlen, Nacht)',
       'max': 30.0,
       'min': 10.0,
       'mode': <NumberMode.AUTO: 'auto'>,
@@ -1248,7 +1248,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'temperature',
-      'friendly_name': 'Heating circuit 2 Target temperature during PV surplus',
+      'friendly_name': 'Heating circuit 2 Target temperature during PV surplus (cooling)',
       'icon': 'mdi:sun-thermometer',
       'max': 30.0,
       'min': 10.0,
@@ -1268,7 +1268,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'temperature',
-      'friendly_name': 'Heating circuit 2 Target temperature hysteresis during PV surplus',
+      'friendly_name': 'Heating circuit 2 Target temperature hysteresis during PV surplus (cooling)',
       'icon': 'mdi:thermometer-lines',
       'max': 2.0,
       'min': 0.0,
@@ -1403,7 +1403,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'temperature',
-      'friendly_name': 'Heating circuit 2 Target room temperature (day)',
+      'friendly_name': 'Heating circuit 2 Target room temperature (cooling, day)',
       'max': 30.0,
       'min': 10.0,
       'mode': <NumberMode.AUTO: 'auto'>,
@@ -1422,7 +1422,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'temperature',
-      'friendly_name': 'Heating circuit 2 Target room temperature (night)',
+      'friendly_name': 'Heating circuit 2 Target room temperature (cooling, night)',
       'max': 30.0,
       'min': 10.0,
       'mode': <NumberMode.AUTO: 'auto'>,

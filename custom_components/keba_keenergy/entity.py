@@ -17,7 +17,6 @@ from keba_keenergy_api.constants import ExternalHeatSource
 from keba_keenergy_api.constants import HeatCircuit
 from keba_keenergy_api.constants import HeatPump
 from keba_keenergy_api.constants import HotWaterTank
-from keba_keenergy_api.constants import Photovoltaics
 from keba_keenergy_api.constants import Section
 from keba_keenergy_api.constants import SectionPrefix
 from keba_keenergy_api.constants import SolarCircuit
@@ -398,7 +397,5 @@ class KebaKeEnergyEntity(KebaKeEnergyBaseEntity):
         elif self.is_external_heat_source:
             section = ExternalHeatSource[self.entity_description.key.upper()]
             self.device_numbers = self.coordinator.external_heat_source_numbers
-        elif self.is_photovoltaics:
-            section = Photovoltaics[self.entity_description.key.upper()]
 
         return section
