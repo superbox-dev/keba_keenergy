@@ -10,6 +10,7 @@ from homeassistant.const import CONF_PASSWORD
 from homeassistant.const import CONF_SSL
 from homeassistant.const import CONF_USERNAME
 from homeassistant.const import Platform
+from homeassistant.helpers import config_validation as cv
 from homeassistant.helpers import device_registry as dr
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 
@@ -23,6 +24,8 @@ if TYPE_CHECKING:
     from aiohttp import ClientSession
     from homeassistant.core import HomeAssistant
     from homeassistant.helpers.typing import ConfigType
+
+CONFIG_SCHEMA = cv.config_entry_only_config_schema(DOMAIN)
 
 PLATFORMS: list[Platform] = [
     Platform.BINARY_SENSOR,
