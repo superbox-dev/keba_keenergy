@@ -103,6 +103,51 @@ EXTERNAL_HEAT_SOURCE_MIN_RUNTIME_EXCESS_ENERGY: str = """
     }
 """
 
+EXTERNAL_HEAT_SOURCE_CONSUMING_EXCESS_ENERGY: str = """
+    {
+        "name": "APPL.CtrlAppl.sParam.extHeatSource[%s].values.consumingExcessEnergy",
+        "attributes": {
+            "longText": "Ext. HS with excess en."
+        },
+        "value": "%s"
+    }
+"""
+
+EXTERNAL_HEAT_SOURCE_EXCESS_ENERGY_OPERATING_TIME: str = """
+    {
+        "name": "APPL.CtrlAppl.sParam.extHeatSource[%s].operationalDataExcessEnergy.operationalTimeS",
+        "attributes": {
+            "formatId": "fmt6p0",
+            "longText": "Ext. HS with excess en.",
+            "unitId": "TimeHour"
+        },
+        "value": "%s"
+    }
+"""
+
+EXTERNAL_HEAT_SOURCE_EXCESS_ENERGY_MAX_RUNTIME: str = """
+    {
+        "name": "APPL.CtrlAppl.sParam.extHeatSource[%s].operationalDataExcessEnergy.maxRunTimeS",
+        "attributes": {
+            "formatId": "fmt6p1",
+            "longText": "Max run-time",
+            "unitId": "TimeHour"
+        },
+        "value": "%s"
+    }
+"""
+
+EXTERNAL_HEAT_SOURCE_EXCESS_ENERGY_ACTIVATION_COUNTER: str = """
+    {
+        "name": "APPL.CtrlAppl.sParam.extHeatSource[%s].operationalDataExcessEnergy.activationCounter",
+        "attributes": {
+            "formatId": "fmt6p0",
+            "longText": "Turn-on cycles"
+        },
+        "value": "%s"
+    }
+"""
+
 HEAT_CIRCUIT_HAS_ROOM_TEMPERATURE: str = """
     {
         "name": "APPL.CtrlAppl.sParam.options.heatCircuit[%s].hasRoomTemp",
@@ -902,6 +947,35 @@ HEAT_PUMP_CONSUMING_EXCESS_ENERGY: dict[str, Any] = {
         "longText": "HP 1 with excess energy",
     },
     "value": "true",
+}
+
+HEAT_PUMP_EXCESS_ENERGY_OPERATING_TIME: dict[str, Any] = {
+    "name": "APPL.CtrlAppl.sParam.heatpump[0].operationalDataExcessEnergy.operationalTimeS",
+    "attributes": {
+        "formatId": "fmt6p0",
+        "longText": "HP 1 with excess energy",
+        "unitId": "TimeHour",
+    },
+    "value": "3600",
+}
+
+HEAT_PUMP_EXCESS_ENERGY_MAX_RUNTIME: dict[str, Any] = {
+    "name": "APPL.CtrlAppl.sParam.heatpump[0].operationalDataExcessEnergy.maxRunTimeS",
+    "attributes": {
+        "formatId": "fmt6p1",
+        "longText": "Max run-time",
+        "unitId": "TimeHour",
+    },
+    "value": "3600",
+}
+
+HEAT_PUMP_EXCESS_ENERGY_ACTIVATION_COUNTER: dict[str, Any] = {
+    "name": "APPL.CtrlAppl.sParam.heatpump[0].operationalDataExcessEnergy.activationCounter",
+    "attributes": {
+        "formatId": "fmt6p0",
+        "longText": "Turn-on cycles",
+    },
+    "value": "3600",
 }
 
 HEAT_PUMP_CIRCULATION_PUMP_SPEED: dict[str, Any] = {
@@ -2123,6 +2197,9 @@ MULTIPLE_POSITIONS_RESPONSE: list[dict[str, Any]] = [
 def get_heat_pump_data(compressor_night_speed: str = "true") -> list[dict[str, Any]]:
     return [
         HEAT_PUMP_CONSUMING_EXCESS_ENERGY,
+        HEAT_PUMP_EXCESS_ENERGY_OPERATING_TIME,
+        HEAT_PUMP_EXCESS_ENERGY_MAX_RUNTIME,
+        HEAT_PUMP_EXCESS_ENERGY_ACTIVATION_COUNTER,
         HEAT_PUMP_CIRCULATION_PUMP_SPEED,
         HEAT_PUMP_SOURCE_PUMP_SPEED,
         HEAT_PUMP_COMPRESSOR,
@@ -2229,6 +2306,10 @@ DEFAULT_POSITION_DATA_RESPONSE: list[dict[str, Any]] = [
     json.loads(EXTERNAL_HEAT_SOURCE_ACTIVATION_COUNTER % ("0", "812")),
     json.loads(EXTERNAL_HEAT_SOURCE_USE_EXCESS_ENERGY % ("0", "true")),
     json.loads(EXTERNAL_HEAT_SOURCE_MIN_RUNTIME_EXCESS_ENERGY % ("0", "5")),
+    json.loads(EXTERNAL_HEAT_SOURCE_CONSUMING_EXCESS_ENERGY % ("0", "true")),
+    json.loads(EXTERNAL_HEAT_SOURCE_EXCESS_ENERGY_OPERATING_TIME % ("0", "3600")),
+    json.loads(EXTERNAL_HEAT_SOURCE_EXCESS_ENERGY_MAX_RUNTIME % ("0", "3600")),
+    json.loads(EXTERNAL_HEAT_SOURCE_EXCESS_ENERGY_ACTIVATION_COUNTER % ("0", "23")),
     json.loads(HEAT_CIRCUIT_ROOM_TEMPERATURE % ("0", "22.42")),
     json.loads(HEAT_CIRCUIT_ROOM_HUMIDITY % ("0", "53")),
     json.loads(HEAT_CIRCUIT_DEW_POINT % ("0", "13.1")),
@@ -2342,6 +2423,14 @@ ENTITY_UPDATED_DATA_RESPONSE: list[dict[str, Any]] = [
     json.loads(EXTERNAL_HEAT_SOURCE_USE_EXCESS_ENERGY % ("1", "false")),
     json.loads(EXTERNAL_HEAT_SOURCE_MIN_RUNTIME_EXCESS_ENERGY % ("0", "5")),
     json.loads(EXTERNAL_HEAT_SOURCE_MIN_RUNTIME_EXCESS_ENERGY % ("1", "5")),
+    json.loads(EXTERNAL_HEAT_SOURCE_CONSUMING_EXCESS_ENERGY % ("0", "true")),
+    json.loads(EXTERNAL_HEAT_SOURCE_CONSUMING_EXCESS_ENERGY % ("1", "true")),
+    json.loads(EXTERNAL_HEAT_SOURCE_EXCESS_ENERGY_OPERATING_TIME % ("0", "3600")),
+    json.loads(EXTERNAL_HEAT_SOURCE_EXCESS_ENERGY_OPERATING_TIME % ("1", "3600")),
+    json.loads(EXTERNAL_HEAT_SOURCE_EXCESS_ENERGY_MAX_RUNTIME % ("0", "3600")),
+    json.loads(EXTERNAL_HEAT_SOURCE_EXCESS_ENERGY_MAX_RUNTIME % ("1", "3600")),
+    json.loads(EXTERNAL_HEAT_SOURCE_EXCESS_ENERGY_ACTIVATION_COUNTER % ("0", "23")),
+    json.loads(EXTERNAL_HEAT_SOURCE_EXCESS_ENERGY_ACTIVATION_COUNTER % ("1", "23")),
     json.loads(HEAT_CIRCUIT_ROOM_TEMPERATURE % ("0", "22.42")),
     json.loads(HEAT_CIRCUIT_ROOM_TEMPERATURE % ("1", "22.42")),
     json.loads(HEAT_CIRCUIT_ROOM_HUMIDITY % ("0", "53")),
@@ -2535,6 +2624,10 @@ def get_single_position_data_response(
         json.loads(EXTERNAL_HEAT_SOURCE_ACTIVATION_COUNTER % ("0", "812")),
         json.loads(EXTERNAL_HEAT_SOURCE_USE_EXCESS_ENERGY % ("0", "true")),
         json.loads(EXTERNAL_HEAT_SOURCE_MIN_RUNTIME_EXCESS_ENERGY % ("0", "5")),
+        json.loads(EXTERNAL_HEAT_SOURCE_CONSUMING_EXCESS_ENERGY % ("0", "true")),
+        json.loads(EXTERNAL_HEAT_SOURCE_EXCESS_ENERGY_OPERATING_TIME % ("0", "3600")),
+        json.loads(EXTERNAL_HEAT_SOURCE_EXCESS_ENERGY_MAX_RUNTIME % ("0", "3600")),
+        json.loads(EXTERNAL_HEAT_SOURCE_EXCESS_ENERGY_ACTIVATION_COUNTER % ("0", "23")),
         json.loads(HEAT_CIRCUIT_ROOM_TEMPERATURE % ("0", "22.42")),
         json.loads(HEAT_CIRCUIT_ROOM_HUMIDITY % ("0", "53")),
         json.loads(HEAT_CIRCUIT_DEW_POINT % ("0", "13.1")),
@@ -2650,6 +2743,14 @@ MULTIPLE_POSITION_DATA_RESPONSE_1: list[dict[str, Any]] = [
     json.loads(EXTERNAL_HEAT_SOURCE_USE_EXCESS_ENERGY % ("1", "true")),
     json.loads(EXTERNAL_HEAT_SOURCE_MIN_RUNTIME_EXCESS_ENERGY % ("0", "5")),
     json.loads(EXTERNAL_HEAT_SOURCE_MIN_RUNTIME_EXCESS_ENERGY % ("1", "5")),
+    json.loads(EXTERNAL_HEAT_SOURCE_CONSUMING_EXCESS_ENERGY % ("0", "true")),
+    json.loads(EXTERNAL_HEAT_SOURCE_CONSUMING_EXCESS_ENERGY % ("1", "true")),
+    json.loads(EXTERNAL_HEAT_SOURCE_EXCESS_ENERGY_OPERATING_TIME % ("0", "3600")),
+    json.loads(EXTERNAL_HEAT_SOURCE_EXCESS_ENERGY_OPERATING_TIME % ("1", "3600")),
+    json.loads(EXTERNAL_HEAT_SOURCE_EXCESS_ENERGY_MAX_RUNTIME % ("0", "3600")),
+    json.loads(EXTERNAL_HEAT_SOURCE_EXCESS_ENERGY_MAX_RUNTIME % ("1", "3600")),
+    json.loads(EXTERNAL_HEAT_SOURCE_EXCESS_ENERGY_ACTIVATION_COUNTER % ("0", "23")),
+    json.loads(EXTERNAL_HEAT_SOURCE_EXCESS_ENERGY_ACTIVATION_COUNTER % ("1", "23")),
     json.loads(HEAT_CIRCUIT_ROOM_TEMPERATURE % ("0", "22.42")),
     json.loads(HEAT_CIRCUIT_ROOM_TEMPERATURE % ("1", "22.42")),
     json.loads(HEAT_CIRCUIT_ROOM_HUMIDITY % ("0", "53")),
@@ -2846,6 +2947,14 @@ MULTIPLE_POSITION_DATA_RESPONSE_2: list[dict[str, Any]] = [
     json.loads(EXTERNAL_HEAT_SOURCE_USE_EXCESS_ENERGY % ("1", "false")),
     json.loads(EXTERNAL_HEAT_SOURCE_MIN_RUNTIME_EXCESS_ENERGY % ("0", "5")),
     json.loads(EXTERNAL_HEAT_SOURCE_MIN_RUNTIME_EXCESS_ENERGY % ("1", "5")),
+    json.loads(EXTERNAL_HEAT_SOURCE_CONSUMING_EXCESS_ENERGY % ("0", "true")),
+    json.loads(EXTERNAL_HEAT_SOURCE_CONSUMING_EXCESS_ENERGY % ("1", "true")),
+    json.loads(EXTERNAL_HEAT_SOURCE_EXCESS_ENERGY_OPERATING_TIME % ("0", "3600")),
+    json.loads(EXTERNAL_HEAT_SOURCE_EXCESS_ENERGY_OPERATING_TIME % ("1", "3600")),
+    json.loads(EXTERNAL_HEAT_SOURCE_EXCESS_ENERGY_MAX_RUNTIME % ("0", "3600")),
+    json.loads(EXTERNAL_HEAT_SOURCE_EXCESS_ENERGY_MAX_RUNTIME % ("1", "3600")),
+    json.loads(EXTERNAL_HEAT_SOURCE_EXCESS_ENERGY_ACTIVATION_COUNTER % ("0", "23")),
+    json.loads(EXTERNAL_HEAT_SOURCE_EXCESS_ENERGY_ACTIVATION_COUNTER % ("1", "23")),
     json.loads(HEAT_CIRCUIT_ROOM_TEMPERATURE % ("0", "22.42")),
     json.loads(HEAT_CIRCUIT_ROOM_TEMPERATURE % ("1", "22.42")),
     json.loads(HEAT_CIRCUIT_ROOM_HUMIDITY % ("0", "53")),
@@ -3042,6 +3151,14 @@ MULTIPLE_POSITION_DATA_RESPONSE_3_1: list[dict[str, Any]] = [
     json.loads(EXTERNAL_HEAT_SOURCE_USE_EXCESS_ENERGY % ("1", "false")),
     json.loads(EXTERNAL_HEAT_SOURCE_MIN_RUNTIME_EXCESS_ENERGY % ("0", "5")),
     json.loads(EXTERNAL_HEAT_SOURCE_MIN_RUNTIME_EXCESS_ENERGY % ("1", "5")),
+    json.loads(EXTERNAL_HEAT_SOURCE_CONSUMING_EXCESS_ENERGY % ("0", "true")),
+    json.loads(EXTERNAL_HEAT_SOURCE_CONSUMING_EXCESS_ENERGY % ("1", "true")),
+    json.loads(EXTERNAL_HEAT_SOURCE_EXCESS_ENERGY_OPERATING_TIME % ("0", "3600")),
+    json.loads(EXTERNAL_HEAT_SOURCE_EXCESS_ENERGY_OPERATING_TIME % ("1", "3600")),
+    json.loads(EXTERNAL_HEAT_SOURCE_EXCESS_ENERGY_MAX_RUNTIME % ("0", "3600")),
+    json.loads(EXTERNAL_HEAT_SOURCE_EXCESS_ENERGY_MAX_RUNTIME % ("1", "3600")),
+    json.loads(EXTERNAL_HEAT_SOURCE_EXCESS_ENERGY_ACTIVATION_COUNTER % ("0", "23")),
+    json.loads(EXTERNAL_HEAT_SOURCE_EXCESS_ENERGY_ACTIVATION_COUNTER % ("1", "23")),
     *get_heat_pump_data(compressor_night_speed="true"),
     json.loads(BUFFER_TANK_CURRENT_TOP_TEMPERATURE % ("0", "45.67")),
     json.loads(BUFFER_TANK_CURRENT_TOP_TEMPERATURE % ("1", "35.67")),
@@ -3126,6 +3243,14 @@ MULTIPLE_POSITION_DATA_RESPONSE_3_2: list[dict[str, Any]] = [
     json.loads(EXTERNAL_HEAT_SOURCE_USE_EXCESS_ENERGY % ("1", "false")),
     json.loads(EXTERNAL_HEAT_SOURCE_MIN_RUNTIME_EXCESS_ENERGY % ("0", "5")),
     json.loads(EXTERNAL_HEAT_SOURCE_MIN_RUNTIME_EXCESS_ENERGY % ("1", "5")),
+    json.loads(EXTERNAL_HEAT_SOURCE_CONSUMING_EXCESS_ENERGY % ("0", "true")),
+    json.loads(EXTERNAL_HEAT_SOURCE_CONSUMING_EXCESS_ENERGY % ("1", "true")),
+    json.loads(EXTERNAL_HEAT_SOURCE_EXCESS_ENERGY_OPERATING_TIME % ("0", "3600")),
+    json.loads(EXTERNAL_HEAT_SOURCE_EXCESS_ENERGY_OPERATING_TIME % ("1", "3600")),
+    json.loads(EXTERNAL_HEAT_SOURCE_EXCESS_ENERGY_MAX_RUNTIME % ("0", "3600")),
+    json.loads(EXTERNAL_HEAT_SOURCE_EXCESS_ENERGY_MAX_RUNTIME % ("1", "3600")),
+    json.loads(EXTERNAL_HEAT_SOURCE_EXCESS_ENERGY_ACTIVATION_COUNTER % ("0", "23")),
+    json.loads(EXTERNAL_HEAT_SOURCE_EXCESS_ENERGY_ACTIVATION_COUNTER % ("1", "23")),
     json.loads(HEAT_CIRCUIT_ROOM_TEMPERATURE % ("0", "22.42")),
     json.loads(HEAT_CIRCUIT_ROOM_TEMPERATURE % ("1", "22.42")),
     json.loads(HEAT_CIRCUIT_ROOM_HUMIDITY % ("0", "53")),

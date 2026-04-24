@@ -80,6 +80,10 @@ REQUEST_DATA_GROUPS: dict[SectionPrefix, list[Section]] = {
         ExternalHeatSource.ACTIVATION_COUNTER,
         ExternalHeatSource.USE_EXCESS_ENERGY,
         ExternalHeatSource.MIN_RUNTIME_EXCESS_ENERGY,
+        ExternalHeatSource.CONSUMING_EXCESS_ENERGY,
+        ExternalHeatSource.EXCESS_ENERGY_OPERATING_TIME,
+        ExternalHeatSource.EXCESS_ENERGY_MAX_RUNTIME,
+        ExternalHeatSource.EXCESS_ENERGY_ACTIVATION_COUNTER,
     ],
     SectionPrefix.HEAT_CIRCUIT: [
         HeatCircuit.ROOM_TEMPERATURE,
@@ -140,6 +144,9 @@ REQUEST_DATA_GROUPS: dict[SectionPrefix, list[Section]] = {
     ],
     SectionPrefix.HEAT_PUMP: [
         HeatPump.CONSUMING_EXCESS_ENERGY,
+        HeatPump.EXCESS_ENERGY_OPERATING_TIME,
+        HeatPump.EXCESS_ENERGY_MAX_RUNTIME,
+        HeatPump.EXCESS_ENERGY_ACTIVATION_COUNTER,
         HeatPump.CIRCULATION_PUMP_SPEED,
         HeatPump.SOURCE_PUMP_SPEED,
         HeatPump.COMPRESSOR,

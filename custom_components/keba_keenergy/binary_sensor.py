@@ -149,6 +149,12 @@ BINARY_SENSOR_TYPES: dict[str, tuple[KebaKeEnergyBinarySensorEntityDescription, 
     ),
     SectionPrefix.EXTERNAL_HEAT_SOURCE: (
         KebaKeEnergyBinarySensorEntityDescription(
+            condition=lambda coordinator, _: coordinator.has_photovoltaics(),
+            key="consuming_excess_energy",
+            translation_key="excess_energy",
+            icon="mdi:solar-power",
+        ),
+        KebaKeEnergyBinarySensorEntityDescription(
             key="heat_request",
             translation_key="heat_request",
             translation_placeholders={

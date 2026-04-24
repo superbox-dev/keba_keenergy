@@ -196,6 +196,54 @@
           'value': 812,
         }),
       ]),
+      'consuming_excess_energy': list([
+        dict({
+          'attributes': dict({
+          }),
+          'value': 'on',
+        }),
+        dict({
+          'attributes': dict({
+          }),
+          'value': 'on',
+        }),
+      ]),
+      'excess_energy_activation_counter': list([
+        dict({
+          'attributes': dict({
+          }),
+          'value': 23,
+        }),
+        dict({
+          'attributes': dict({
+          }),
+          'value': 23,
+        }),
+      ]),
+      'excess_energy_max_runtime': list([
+        dict({
+          'attributes': dict({
+          }),
+          'value': 3600,
+        }),
+        dict({
+          'attributes': dict({
+          }),
+          'value': 3600,
+        }),
+      ]),
+      'excess_energy_operating_time': list([
+        dict({
+          'attributes': dict({
+          }),
+          'value': 3600,
+        }),
+        dict({
+          'attributes': dict({
+          }),
+          'value': 3600,
+        }),
+      ]),
       'heat_request': list([
         dict({
           'attributes': dict({
@@ -1128,11 +1176,32 @@
           'value': 18.68,
         }),
       ]),
+      'excess_energy_activation_counter': list([
+        dict({
+          'attributes': dict({
+          }),
+          'value': 3600,
+        }),
+      ]),
       'excess_energy_consumption': list([
         dict({
           'attributes': dict({
           }),
           'value': 10.0,
+        }),
+      ]),
+      'excess_energy_max_runtime': list([
+        dict({
+          'attributes': dict({
+          }),
+          'value': 3600,
+        }),
+      ]),
+      'excess_energy_operating_time': list([
+        dict({
+          'attributes': dict({
+          }),
+          'value': 3600,
         }),
       ]),
       'expansion_valve_position': list([
@@ -1913,6 +1982,54 @@
           'value': 812,
         }),
       ]),
+      'consuming_excess_energy': list([
+        dict({
+          'attributes': dict({
+          }),
+          'value': 'on',
+        }),
+        dict({
+          'attributes': dict({
+          }),
+          'value': 'on',
+        }),
+      ]),
+      'excess_energy_activation_counter': list([
+        dict({
+          'attributes': dict({
+          }),
+          'value': 23,
+        }),
+        dict({
+          'attributes': dict({
+          }),
+          'value': 23,
+        }),
+      ]),
+      'excess_energy_max_runtime': list([
+        dict({
+          'attributes': dict({
+          }),
+          'value': 3600,
+        }),
+        dict({
+          'attributes': dict({
+          }),
+          'value': 3600,
+        }),
+      ]),
+      'excess_energy_operating_time': list([
+        dict({
+          'attributes': dict({
+          }),
+          'value': 3600,
+        }),
+        dict({
+          'attributes': dict({
+          }),
+          'value': 3600,
+        }),
+      ]),
       'heat_request': list([
         dict({
           'attributes': dict({
@@ -2845,11 +2962,32 @@
           'value': 18.68,
         }),
       ]),
+      'excess_energy_activation_counter': list([
+        dict({
+          'attributes': dict({
+          }),
+          'value': 3600,
+        }),
+      ]),
       'excess_energy_consumption': list([
         dict({
           'attributes': dict({
           }),
           'value': 10.0,
+        }),
+      ]),
+      'excess_energy_max_runtime': list([
+        dict({
+          'attributes': dict({
+          }),
+          'value': 3600,
+        }),
+      ]),
+      'excess_energy_operating_time': list([
+        dict({
+          'attributes': dict({
+          }),
+          'value': 3600,
         }),
       ]),
       'expansion_valve_position': list([

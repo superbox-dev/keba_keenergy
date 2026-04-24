@@ -384,6 +384,9 @@
             "dew_point": {
                 "name": "Taupunkt"
             },
+            "excess_energy_activation_counter": {
+                "name": "Einschaltvorgänge bei PV-Überschuss"
+            },
             "excess_energy_consumption": {
                 "name": "Energieverbrauch bei PV-Überschuss"
             },
@@ -399,8 +402,14 @@
             "excess_energy_heating_limit_night": {
                 "name": "Heizgrenze bei PV-Überschuss (Nacht)"
             },
+            "excess_energy_max_runtime": {
+                "name": "Maximale Laufzeit bei PV-Überschuss"
+            },
             "excess_energy_mode": {
                 "name": "PV-Überschuss"
+            },
+            "excess_energy_operating_time": {
+                "name": "Betriebsstunden bei PV-Überschuss"
             },
             "excess_power": {
                 "name": "Überschussleistung"
@@ -524,7 +533,7 @@
             "mixer_target_temperature": {
                 "name": "Soll-Temperatur (Mischer)"
             },
-            "operating_hours": {
+            "operating_time": {
                 "name": "Betriebsstunden"
             },
             "outdoor_temperature": {

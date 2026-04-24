@@ -384,6 +384,9 @@
             "dew_point": {
                 "name": "Dew point"
             },
+            "excess_energy_activation_counter": {
+                "name": "Activation counter during PV surplus"
+            },
             "excess_energy_consumption": {
                 "name": "Energy consumption during PV surplus"
             },
@@ -399,8 +402,14 @@
             "excess_energy_heating_limit_night": {
                 "name": "Heating limit during PV surplus (night)"
             },
+            "excess_energy_max_runtime": {
+                "name": "Maximum runtime during PV surplus"
+            },
             "excess_energy_mode": {
                 "name": "PV surplus"
+            },
+            "excess_energy_operating_time": {
+                "name": "Operating hours during PV surplus"
             },
             "excess_power": {
                 "name": "Excess power"
@@ -524,8 +533,8 @@
             "mixer_target_temperature": {
                 "name": "Target temperature (mixer)"
             },
-            "operating_hours": {
-                "name": "Operating time"
+            "operating_time": {
+                "name": "Operating hours"
             },
             "outdoor_temperature": {
                 "name": "Outdoor temperature"

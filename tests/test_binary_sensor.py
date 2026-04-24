@@ -49,6 +49,8 @@ if TYPE_CHECKING:
         "binary_sensor.keba_keenergy_12345678_solar_circuit_heat_request_2_1",
         "binary_sensor.keba_keenergy_12345678_solar_circuit_heat_request_2_2",
         # external heat source
+        "binary_sensor.keba_keenergy_12345678_external_heat_source_consuming_excess_energy_1",
+        "binary_sensor.keba_keenergy_12345678_external_heat_source_consuming_excess_energy_2",
         "binary_sensor.keba_keenergy_12345678_external_heat_source_heat_request_1",
         "binary_sensor.keba_keenergy_12345678_external_heat_source_heat_request_2",
         # photovoltaics

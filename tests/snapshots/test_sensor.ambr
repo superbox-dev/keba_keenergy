@@ -331,6 +331,98 @@
     'state': '812',
   })
 # ---
+# name: test_sensors[de-sensor.keba_keenergy_12345678_external_heat_source_excess_energy_activation_counter_1]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'friendly_name': 'Externe Wärmequelle 1 Einschaltvorgänge bei PV-Überschuss',
+      'state_class': <SensorStateClass.TOTAL_INCREASING: 'total_increasing'>,
+    }),
+    'context': <ANY>,
+    'entity_id': 'sensor.keba_keenergy_12345678_external_heat_source_excess_energy_activation_counter_1',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': '23',
+  })
+# ---
+# name: test_sensors[de-sensor.keba_keenergy_12345678_external_heat_source_excess_energy_activation_counter_2]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'friendly_name': 'Externe Wärmequelle 2 Einschaltvorgänge bei PV-Überschuss',
+      'state_class': <SensorStateClass.TOTAL_INCREASING: 'total_increasing'>,
+    }),
+    'context': <ANY>,
+    'entity_id': 'sensor.keba_keenergy_12345678_external_heat_source_excess_energy_activation_counter_2',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': '23',
+  })
+# ---
+# name: test_sensors[de-sensor.keba_keenergy_12345678_external_heat_source_excess_energy_max_runtime_1]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'device_class': 'duration',
+      'friendly_name': 'Externe Wärmequelle 1 Maximale Laufzeit bei PV-Überschuss',
+      'state_class': <SensorStateClass.MEASUREMENT: 'measurement'>,
+      'unit_of_measurement': <UnitOfTime.HOURS: 'h'>,
+    }),
+    'context': <ANY>,
+    'entity_id': 'sensor.keba_keenergy_12345678_external_heat_source_excess_energy_max_runtime_1',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': '1.0',
+  })
+# ---
+# name: test_sensors[de-sensor.keba_keenergy_12345678_external_heat_source_excess_energy_max_runtime_2]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'device_class': 'duration',
+      'friendly_name': 'Externe Wärmequelle 2 Maximale Laufzeit bei PV-Überschuss',
+      'state_class': <SensorStateClass.MEASUREMENT: 'measurement'>,
+      'unit_of_measurement': <UnitOfTime.HOURS: 'h'>,
+    }),
+    'context': <ANY>,
+    'entity_id': 'sensor.keba_keenergy_12345678_external_heat_source_excess_energy_max_runtime_2',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': '1.0',
+  })
+# ---
+# name: test_sensors[de-sensor.keba_keenergy_12345678_external_heat_source_excess_energy_operating_time_1]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'device_class': 'duration',
+      'friendly_name': 'Externe Wärmequelle 1 Betriebsstunden bei PV-Überschuss',
+      'state_class': <SensorStateClass.TOTAL_INCREASING: 'total_increasing'>,
+      'unit_of_measurement': <UnitOfTime.HOURS: 'h'>,
+    }),
+    'context': <ANY>,
+    'entity_id': 'sensor.keba_keenergy_12345678_external_heat_source_excess_energy_operating_time_1',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': '1.0',
+  })
+# ---
+# name: test_sensors[de-sensor.keba_keenergy_12345678_external_heat_source_excess_energy_operating_time_2]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'device_class': 'duration',
+      'friendly_name': 'Externe Wärmequelle 2 Betriebsstunden bei PV-Überschuss',
+      'state_class': <SensorStateClass.TOTAL_INCREASING: 'total_increasing'>,
+      'unit_of_measurement': <UnitOfTime.HOURS: 'h'>,
+    }),
+    'context': <ANY>,
+    'entity_id': 'sensor.keba_keenergy_12345678_external_heat_source_excess_energy_operating_time_2',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': '1.0',
+  })
+# ---
 # name: test_sensors[de-sensor.keba_keenergy_12345678_external_heat_source_max_runtime_1]
   StateSnapshot({
     'attributes': ReadOnlyDict({
@@ -1453,6 +1545,20 @@
     'state': '18.68',
   })
 # ---
+# name: test_sensors[de-sensor.keba_keenergy_12345678_heat_pump_excess_energy_activation_counter]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'friendly_name': 'Wärmepumpe Einschaltvorgänge bei PV-Überschuss',
+      'state_class': <SensorStateClass.TOTAL_INCREASING: 'total_increasing'>,
+    }),
+    'context': <ANY>,
+    'entity_id': 'sensor.keba_keenergy_12345678_heat_pump_excess_energy_activation_counter',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': '3600',
+  })
+# ---
 # name: test_sensors[de-sensor.keba_keenergy_12345678_heat_pump_excess_energy_consumption]
   StateSnapshot({
     'attributes': ReadOnlyDict({
@@ -1467,6 +1573,38 @@
     'last_reported': <ANY>,
     'last_updated': <ANY>,
     'state': '10.0',
+  })
+# ---
+# name: test_sensors[de-sensor.keba_keenergy_12345678_heat_pump_excess_energy_max_runtime]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'device_class': 'duration',
+      'friendly_name': 'Wärmepumpe Maximale Laufzeit bei PV-Überschuss',
+      'state_class': <SensorStateClass.MEASUREMENT: 'measurement'>,
+      'unit_of_measurement': <UnitOfTime.HOURS: 'h'>,
+    }),
+    'context': <ANY>,
+    'entity_id': 'sensor.keba_keenergy_12345678_heat_pump_excess_energy_max_runtime',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': '1.0',
+  })
+# ---
+# name: test_sensors[de-sensor.keba_keenergy_12345678_heat_pump_excess_energy_operating_time]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'device_class': 'duration',
+      'friendly_name': 'Wärmepumpe Betriebsstunden bei PV-Überschuss',
+      'state_class': <SensorStateClass.TOTAL_INCREASING: 'total_increasing'>,
+      'unit_of_measurement': <UnitOfTime.HOURS: 'h'>,
+    }),
+    'context': <ANY>,
+    'entity_id': 'sensor.keba_keenergy_12345678_heat_pump_excess_energy_operating_time',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': '1.0',
   })
 # ---
 # name: test_sensors[de-sensor.keba_keenergy_12345678_heat_pump_expansion_valve_position]
@@ -3182,6 +3320,98 @@
     'state': '812',
   })
 # ---
+# name: test_sensors[en-sensor.keba_keenergy_12345678_external_heat_source_excess_energy_activation_counter_1]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'friendly_name': 'External heat source 1 Activation counter during PV surplus',
+      'state_class': <SensorStateClass.TOTAL_INCREASING: 'total_increasing'>,
+    }),
+    'context': <ANY>,
+    'entity_id': 'sensor.keba_keenergy_12345678_external_heat_source_excess_energy_activation_counter_1',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': '23',
+  })
+# ---
+# name: test_sensors[en-sensor.keba_keenergy_12345678_external_heat_source_excess_energy_activation_counter_2]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'friendly_name': 'External heat source 2 Activation counter during PV surplus',
+      'state_class': <SensorStateClass.TOTAL_INCREASING: 'total_increasing'>,
+    }),
+    'context': <ANY>,
+    'entity_id': 'sensor.keba_keenergy_12345678_external_heat_source_excess_energy_activation_counter_2',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': '23',
+  })
+# ---
+# name: test_sensors[en-sensor.keba_keenergy_12345678_external_heat_source_excess_energy_max_runtime_1]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'device_class': 'duration',
+      'friendly_name': 'External heat source 1 Maximum runtime during PV surplus',
+      'state_class': <SensorStateClass.MEASUREMENT: 'measurement'>,
+      'unit_of_measurement': <UnitOfTime.HOURS: 'h'>,
+    }),
+    'context': <ANY>,
+    'entity_id': 'sensor.keba_keenergy_12345678_external_heat_source_excess_energy_max_runtime_1',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': '1.0',
+  })
+# ---
+# name: test_sensors[en-sensor.keba_keenergy_12345678_external_heat_source_excess_energy_max_runtime_2]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'device_class': 'duration',
+      'friendly_name': 'External heat source 2 Maximum runtime during PV surplus',
+      'state_class': <SensorStateClass.MEASUREMENT: 'measurement'>,
+      'unit_of_measurement': <UnitOfTime.HOURS: 'h'>,
+    }),
+    'context': <ANY>,
+    'entity_id': 'sensor.keba_keenergy_12345678_external_heat_source_excess_energy_max_runtime_2',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': '1.0',
+  })
+# ---
+# name: test_sensors[en-sensor.keba_keenergy_12345678_external_heat_source_excess_energy_operating_time_1]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'device_class': 'duration',
+      'friendly_name': 'External heat source 1 Operating hours during PV surplus',
+      'state_class': <SensorStateClass.TOTAL_INCREASING: 'total_increasing'>,
+      'unit_of_measurement': <UnitOfTime.HOURS: 'h'>,
+    }),
+    'context': <ANY>,
+    'entity_id': 'sensor.keba_keenergy_12345678_external_heat_source_excess_energy_operating_time_1',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': '1.0',
+  })
+# ---
+# name: test_sensors[en-sensor.keba_keenergy_12345678_external_heat_source_excess_energy_operating_time_2]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'device_class': 'duration',
+      'friendly_name': 'External heat source 2 Operating hours during PV surplus',
+      'state_class': <SensorStateClass.TOTAL_INCREASING: 'total_increasing'>,
+      'unit_of_measurement': <UnitOfTime.HOURS: 'h'>,
+    }),
+    'context': <ANY>,
+    'entity_id': 'sensor.keba_keenergy_12345678_external_heat_source_excess_energy_operating_time_2',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': '1.0',
+  })
+# ---
 # name: test_sensors[en-sensor.keba_keenergy_12345678_external_heat_source_max_runtime_1]
   StateSnapshot({
     'attributes': ReadOnlyDict({
@@ -3258,7 +3488,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'duration',
-      'friendly_name': 'External heat source 1 Operating time',
+      'friendly_name': 'External heat source 1 Operating hours',
       'state_class': <SensorStateClass.TOTAL_INCREASING: 'total_increasing'>,
       'unit_of_measurement': <UnitOfTime.HOURS: 'h'>,
     }),
@@ -3274,7 +3504,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'duration',
-      'friendly_name': 'External heat source 2 Operating time',
+      'friendly_name': 'External heat source 2 Operating hours',
       'state_class': <SensorStateClass.TOTAL_INCREASING: 'total_increasing'>,
       'unit_of_measurement': <UnitOfTime.HOURS: 'h'>,
     }),
@@ -4304,6 +4534,20 @@
     'state': '18.68',
   })
 # ---
+# name: test_sensors[en-sensor.keba_keenergy_12345678_heat_pump_excess_energy_activation_counter]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'friendly_name': 'Heat pump Activation counter during PV surplus',
+      'state_class': <SensorStateClass.TOTAL_INCREASING: 'total_increasing'>,
+    }),
+    'context': <ANY>,
+    'entity_id': 'sensor.keba_keenergy_12345678_heat_pump_excess_energy_activation_counter',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': '3600',
+  })
+# ---
 # name: test_sensors[en-sensor.keba_keenergy_12345678_heat_pump_excess_energy_consumption]
   StateSnapshot({
     'attributes': ReadOnlyDict({
@@ -4318,6 +4562,38 @@
     'last_reported': <ANY>,
     'last_updated': <ANY>,
     'state': '10.0',
+  })
+# ---
+# name: test_sensors[en-sensor.keba_keenergy_12345678_heat_pump_excess_energy_max_runtime]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'device_class': 'duration',
+      'friendly_name': 'Heat pump Maximum runtime during PV surplus',
+      'state_class': <SensorStateClass.MEASUREMENT: 'measurement'>,
+      'unit_of_measurement': <UnitOfTime.HOURS: 'h'>,
+    }),
+    'context': <ANY>,
+    'entity_id': 'sensor.keba_keenergy_12345678_heat_pump_excess_energy_max_runtime',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': '1.0',
+  })
+# ---
+# name: test_sensors[en-sensor.keba_keenergy_12345678_heat_pump_excess_energy_operating_time]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'device_class': 'duration',
+      'friendly_name': 'Heat pump Operating hours during PV surplus',
+      'state_class': <SensorStateClass.TOTAL_INCREASING: 'total_increasing'>,
+      'unit_of_measurement': <UnitOfTime.HOURS: 'h'>,
+    }),
+    'context': <ANY>,
+    'entity_id': 'sensor.keba_keenergy_12345678_heat_pump_excess_energy_operating_time',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': '1.0',
   })
 # ---
 # name: test_sensors[en-sensor.keba_keenergy_12345678_heat_pump_expansion_valve_position]
@@ -4557,7 +4833,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'duration',
-      'friendly_name': 'Heat pump Operating time',
+      'friendly_name': 'Heat pump Operating hours',
       'state_class': <SensorStateClass.TOTAL_INCREASING: 'total_increasing'>,
       'unit_of_measurement': <UnitOfTime.HOURS: 'h'>,
     }),

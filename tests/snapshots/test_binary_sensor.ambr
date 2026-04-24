@@ -51,6 +51,34 @@
     'state': 'on',
   })
 # ---
+# name: test_binary_sensors[de-binary_sensor.keba_keenergy_12345678_external_heat_source_consuming_excess_energy_1]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'friendly_name': 'Externe Wärmequelle 1 PV-Überschuss',
+      'icon': 'mdi:solar-power',
+    }),
+    'context': <ANY>,
+    'entity_id': 'binary_sensor.keba_keenergy_12345678_external_heat_source_consuming_excess_energy_1',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': 'on',
+  })
+# ---
+# name: test_binary_sensors[de-binary_sensor.keba_keenergy_12345678_external_heat_source_consuming_excess_energy_2]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'friendly_name': 'Externe Wärmequelle 2 PV-Überschuss',
+      'icon': 'mdi:solar-power',
+    }),
+    'context': <ANY>,
+    'entity_id': 'binary_sensor.keba_keenergy_12345678_external_heat_source_consuming_excess_energy_2',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': 'on',
+  })
+# ---
 # name: test_binary_sensors[de-binary_sensor.keba_keenergy_12345678_external_heat_source_heat_request_1]
   StateSnapshot({
     'attributes': ReadOnlyDict({
@@ -366,6 +394,34 @@
     }),
     'context': <ANY>,
     'entity_id': 'binary_sensor.keba_keenergy_12345678_buffer_tank_heat_request_2',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': 'on',
+  })
+# ---
+# name: test_binary_sensors[en-binary_sensor.keba_keenergy_12345678_external_heat_source_consuming_excess_energy_1]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'friendly_name': 'External heat source 1 PV surplus',
+      'icon': 'mdi:solar-power',
+    }),
+    'context': <ANY>,
+    'entity_id': 'binary_sensor.keba_keenergy_12345678_external_heat_source_consuming_excess_energy_1',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': 'on',
+  })
+# ---
+# name: test_binary_sensors[en-binary_sensor.keba_keenergy_12345678_external_heat_source_consuming_excess_energy_2]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'friendly_name': 'External heat source 2 PV surplus',
+      'icon': 'mdi:solar-power',
+    }),
+    'context': <ANY>,
+    'entity_id': 'binary_sensor.keba_keenergy_12345678_external_heat_source_consuming_excess_energy_2',
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
