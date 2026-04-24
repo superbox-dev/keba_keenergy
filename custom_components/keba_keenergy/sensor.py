@@ -961,6 +961,7 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
         KebaKeEnergySensorEntityDescription[int](
             device_class=SensorDeviceClass.DURATION,
             entity_category=EntityCategory.DIAGNOSTIC,
+            entity_registry_enabled_default=False,
             key="max_runtime",
             native_unit_of_measurement=UnitOfTime.HOURS,
             state_class=SensorStateClass.MEASUREMENT,
@@ -969,6 +970,7 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
         ),
         KebaKeEnergySensorEntityDescription[int](
             entity_category=EntityCategory.DIAGNOSTIC,
+            entity_registry_enabled_default=False,
             key="activation_counter",
             state_class=SensorStateClass.TOTAL_INCREASING,
             suggested_display_precision=0,
@@ -989,6 +991,7 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
             condition=lambda coordinator, _: coordinator.has_photovoltaics(),
             device_class=SensorDeviceClass.DURATION,
             entity_category=EntityCategory.DIAGNOSTIC,
+            entity_registry_enabled_default=False,
             key="excess_energy_max_runtime",
             native_unit_of_measurement=UnitOfTime.HOURS,
             state_class=SensorStateClass.MEASUREMENT,
@@ -997,6 +1000,7 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
         ),
         KebaKeEnergySensorEntityDescription[int](
             condition=lambda coordinator, _: coordinator.has_photovoltaics(),
+            entity_registry_enabled_default=False,
             entity_category=EntityCategory.DIAGNOSTIC,
             key="excess_energy_activation_counter",
             state_class=SensorStateClass.TOTAL_INCREASING,
@@ -1263,6 +1267,7 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
         KebaKeEnergySensorEntityDescription[int](
             condition=lambda coordinator, _: coordinator.has_photovoltaics(),
             entity_category=EntityCategory.DIAGNOSTIC,
+            entity_registry_enabled_default=False,
             device_class=SensorDeviceClass.DURATION,
             key="excess_energy_max_runtime",
             native_unit_of_measurement=UnitOfTime.HOURS,
@@ -1273,6 +1278,7 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
         KebaKeEnergySensorEntityDescription[int](
             condition=lambda coordinator, _: coordinator.has_photovoltaics(),
             entity_category=EntityCategory.DIAGNOSTIC,
+            entity_registry_enabled_default=False,
             key="excess_energy_activation_counter",
             state_class=SensorStateClass.TOTAL_INCREASING,
             suggested_display_precision=0,
