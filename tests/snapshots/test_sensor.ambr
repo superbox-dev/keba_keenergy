@@ -121,7 +121,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'temperature',
-      'friendly_name': 'Pufferspeicher 1 Soll-Temperatur bei PV-Überschuss',
+      'friendly_name': 'Pufferspeicher 1 Soll-Temperatur (PV-Überschuss)',
       'icon': 'mdi:sun-thermometer',
       'lower_limit': '0',
       'state_class': <SensorStateClass.MEASUREMENT: 'measurement'>,
@@ -140,7 +140,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'temperature',
-      'friendly_name': 'Pufferspeicher 2 Soll-Temperatur bei PV-Überschuss',
+      'friendly_name': 'Pufferspeicher 2 Soll-Temperatur (PV-Überschuss)',
       'icon': 'mdi:sun-thermometer',
       'lower_limit': '0',
       'state_class': <SensorStateClass.MEASUREMENT: 'measurement'>,
@@ -276,7 +276,7 @@
 # name: test_sensors[de-sensor.keba_keenergy_12345678_control_cpu_usage]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      'friendly_name': 'Bedieneinheit Ctrl CPU-Auslastung',
+      'friendly_name': 'Bedieneinheit CPU-Auslastung Steuerung',
       'state_class': <SensorStateClass.MEASUREMENT: 'measurement'>,
       'unit_of_measurement': '%',
     }),
@@ -334,7 +334,7 @@
 # name: test_sensors[de-sensor.keba_keenergy_12345678_external_heat_source_excess_energy_activation_counter_1]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      'friendly_name': 'Externe Wärmequelle 1 Einschaltvorgänge bei PV-Überschuss',
+      'friendly_name': 'Externe Wärmequelle 1 Einschaltvorgänge (PV-Überschuss)',
       'state_class': <SensorStateClass.TOTAL_INCREASING: 'total_increasing'>,
     }),
     'context': <ANY>,
@@ -348,7 +348,7 @@
 # name: test_sensors[de-sensor.keba_keenergy_12345678_external_heat_source_excess_energy_activation_counter_2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      'friendly_name': 'Externe Wärmequelle 2 Einschaltvorgänge bei PV-Überschuss',
+      'friendly_name': 'Externe Wärmequelle 2 Einschaltvorgänge (PV-Überschuss)',
       'state_class': <SensorStateClass.TOTAL_INCREASING: 'total_increasing'>,
     }),
     'context': <ANY>,
@@ -363,7 +363,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'duration',
-      'friendly_name': 'Externe Wärmequelle 1 Maximale Laufzeit bei PV-Überschuss',
+      'friendly_name': 'Externe Wärmequelle 1 Maximale Laufzeit (PV-Überschuss)',
       'state_class': <SensorStateClass.MEASUREMENT: 'measurement'>,
       'unit_of_measurement': <UnitOfTime.HOURS: 'h'>,
     }),
@@ -379,7 +379,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'duration',
-      'friendly_name': 'Externe Wärmequelle 2 Maximale Laufzeit bei PV-Überschuss',
+      'friendly_name': 'Externe Wärmequelle 2 Maximale Laufzeit (PV-Überschuss)',
       'state_class': <SensorStateClass.MEASUREMENT: 'measurement'>,
       'unit_of_measurement': <UnitOfTime.HOURS: 'h'>,
     }),
@@ -395,7 +395,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'duration',
-      'friendly_name': 'Externe Wärmequelle 1 Betriebsstunden bei PV-Überschuss',
+      'friendly_name': 'Externe Wärmequelle 1 Betriebsstunden (PV-Überschuss)',
       'state_class': <SensorStateClass.TOTAL_INCREASING: 'total_increasing'>,
       'unit_of_measurement': <UnitOfTime.HOURS: 'h'>,
     }),
@@ -411,7 +411,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'duration',
-      'friendly_name': 'Externe Wärmequelle 2 Betriebsstunden bei PV-Überschuss',
+      'friendly_name': 'Externe Wärmequelle 2 Betriebsstunden (PV-Überschuss)',
       'state_class': <SensorStateClass.TOTAL_INCREASING: 'total_increasing'>,
       'unit_of_measurement': <UnitOfTime.HOURS: 'h'>,
     }),
@@ -676,7 +676,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'temperature',
-      'friendly_name': 'Heizkreis 2 Kühlgrenze bei PV-Überschuss (Tag)',
+      'friendly_name': 'Heizkreis 2 Kühlgrenze (PV-Überschuss, Tag)',
       'lower_limit': '-20',
       'state_class': <SensorStateClass.MEASUREMENT: 'measurement'>,
       'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
@@ -694,7 +694,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'temperature',
-      'friendly_name': 'Heizkreis 2 Kühlgrenze bei PV-Überschuss (Nacht)',
+      'friendly_name': 'Heizkreis 2 Kühlgrenze (PV-Überschuss, Nacht)',
       'lower_limit': '-20',
       'state_class': <SensorStateClass.MEASUREMENT: 'measurement'>,
       'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
@@ -712,7 +712,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'temperature',
-      'friendly_name': 'Heizkreis 1 Heizgrenze bei PV-Überschuss (Tag)',
+      'friendly_name': 'Heizkreis 1 Heizgrenze (PV-Überschuss, Tag)',
       'lower_limit': '-20',
       'state_class': <SensorStateClass.MEASUREMENT: 'measurement'>,
       'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
@@ -730,7 +730,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'temperature',
-      'friendly_name': 'Heizkreis 1 Heizgrenze bei PV-Überschuss (Nacht)',
+      'friendly_name': 'Heizkreis 1 Heizgrenze (PV-Überschuss, Nacht)',
       'lower_limit': '-20',
       'state_class': <SensorStateClass.MEASUREMENT: 'measurement'>,
       'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
@@ -790,7 +790,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'temperature',
-      'friendly_name': 'Heizkreis 2 Soll-Temperatur bei PV-Überschuss (Kühlen)',
+      'friendly_name': 'Heizkreis 2 Soll-Temperatur Kühlen (PV-Überschuss)',
       'icon': 'mdi:sun-thermometer',
       'lower_limit': '10',
       'state_class': <SensorStateClass.MEASUREMENT: 'measurement'>,
@@ -809,7 +809,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'temperature',
-      'friendly_name': 'Heizkreis 1 Soll-Temperatur bei PV-Überschuss',
+      'friendly_name': 'Heizkreis 1 Soll-Temperatur (PV-Überschuss)',
       'icon': 'mdi:sun-thermometer',
       'lower_limit': '10',
       'state_class': <SensorStateClass.MEASUREMENT: 'measurement'>,
@@ -1143,7 +1143,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'temperature',
-      'friendly_name': 'Heizkreis 2 Soll-Raumtemperatur (Kühlen, Tag)',
+      'friendly_name': 'Heizkreis 2 Soll-Raumtemperatur Kühlen (Tag)',
       'lower_limit': '10',
       'state_class': <SensorStateClass.MEASUREMENT: 'measurement'>,
       'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
@@ -1161,7 +1161,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'temperature',
-      'friendly_name': 'Heizkreis 2 Soll-Raumtemperatur (Kühlen, Nacht)',
+      'friendly_name': 'Heizkreis 2 Soll-Raumtemperatur Kühlen (Nacht)',
       'lower_limit': '10',
       'state_class': <SensorStateClass.MEASUREMENT: 'measurement'>,
       'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
@@ -1435,7 +1435,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'energy',
-      'friendly_name': 'Wärmepumpe Energieverbrauch Kühlen',
+      'friendly_name': 'Wärmepumpe Stromverbrauch Kühlen',
       'state_class': <SensorStateClass.TOTAL: 'total'>,
       'unit_of_measurement': <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
     }),
@@ -1451,7 +1451,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'energy',
-      'friendly_name': 'Wärmepumpe Energieverbrauch Kühlen bei PV-Überschuss',
+      'friendly_name': 'Wärmepumpe Stromverbrauch Kühlen (PV-Überschuss)',
       'state_class': <SensorStateClass.TOTAL: 'total'>,
       'unit_of_measurement': <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
     }),
@@ -1495,7 +1495,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'temperature',
-      'friendly_name': 'Wärmepumpe Istüberhitzung',
+      'friendly_name': 'Wärmepumpe Ist-Überhitzung',
       'state_class': <SensorStateClass.MEASUREMENT: 'measurement'>,
       'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
     }),
@@ -1510,7 +1510,7 @@
 # name: test_sensors[de-sensor.keba_keenergy_12345678_heat_pump_excess_energy_activation_counter]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      'friendly_name': 'Wärmepumpe Einschaltvorgänge bei PV-Überschuss',
+      'friendly_name': 'Wärmepumpe Einschaltvorgänge (PV-Überschuss)',
       'state_class': <SensorStateClass.TOTAL_INCREASING: 'total_increasing'>,
     }),
     'context': <ANY>,
@@ -1525,7 +1525,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'energy',
-      'friendly_name': 'Wärmepumpe Energieverbrauch bei PV-Überschuss',
+      'friendly_name': 'Wärmepumpe Stromverbrauch (PV-Überschuss)',
       'state_class': <SensorStateClass.TOTAL: 'total'>,
       'unit_of_measurement': <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
     }),
@@ -1541,7 +1541,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'duration',
-      'friendly_name': 'Wärmepumpe Maximale Laufzeit bei PV-Überschuss',
+      'friendly_name': 'Wärmepumpe Maximale Laufzeit (PV-Überschuss)',
       'state_class': <SensorStateClass.MEASUREMENT: 'measurement'>,
       'unit_of_measurement': <UnitOfTime.HOURS: 'h'>,
     }),
@@ -1557,7 +1557,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'duration',
-      'friendly_name': 'Wärmepumpe Betriebsstunden bei PV-Überschuss',
+      'friendly_name': 'Wärmepumpe Betriebsstunden (PV-Überschuss)',
       'state_class': <SensorStateClass.TOTAL_INCREASING: 'total_increasing'>,
       'unit_of_measurement': <UnitOfTime.HOURS: 'h'>,
     }),
@@ -1618,7 +1618,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'energy',
-      'friendly_name': 'Wärmepumpe Energieverbrauch Heizen',
+      'friendly_name': 'Wärmepumpe Stromverbrauch Heizen',
       'state_class': <SensorStateClass.TOTAL: 'total'>,
       'unit_of_measurement': <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
     }),
@@ -1634,7 +1634,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'energy',
-      'friendly_name': 'Wärmepumpe Energieverbrauch Heizen bei PV-Überschuss',
+      'friendly_name': 'Wärmepumpe Stromverbrauch Heizen (PV-Überschuss)',
       'state_class': <SensorStateClass.TOTAL: 'total'>,
       'unit_of_measurement': <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
     }),
@@ -1712,7 +1712,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'energy',
-      'friendly_name': 'Wärmepumpe Energieverbrauch Warmwasser',
+      'friendly_name': 'Wärmepumpe Stromverbrauch Warmwasser',
       'state_class': <SensorStateClass.TOTAL: 'total'>,
       'unit_of_measurement': <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
     }),
@@ -1728,7 +1728,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'energy',
-      'friendly_name': 'Wärmepumpe Energieverbrauch Warmwasser bei PV-Überschuss',
+      'friendly_name': 'Wärmepumpe Stromverbrauch Warmwasser (PV-Überschuss)',
       'state_class': <SensorStateClass.TOTAL: 'total'>,
       'unit_of_measurement': <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
     }),
@@ -2159,7 +2159,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'temperature',
-      'friendly_name': 'Warmwasserspeicher 1 Soll-Temperatur bei PV-Überschuss',
+      'friendly_name': 'Warmwasserspeicher 1 Soll-Temperatur (PV-Überschuss)',
       'icon': 'mdi:sun-thermometer',
       'lower_limit': '0',
       'state_class': <SensorStateClass.MEASUREMENT: 'measurement'>,
@@ -2178,7 +2178,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'temperature',
-      'friendly_name': 'Warmwasserspeicher 2 Soll-Temperatur bei PV-Überschuss',
+      'friendly_name': 'Warmwasserspeicher 2 Soll-Temperatur (PV-Überschuss)',
       'icon': 'mdi:sun-thermometer',
       'lower_limit': '0',
       'state_class': <SensorStateClass.MEASUREMENT: 'measurement'>,
@@ -2923,7 +2923,7 @@
 # name: test_sensors[de-sensor.keba_keenergy_12345678_webserver_cpu_usage]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      'friendly_name': 'Bedieneinheit WebServer CPU-Auslastung',
+      'friendly_name': 'Bedieneinheit CPU-Auslastung WebServer',
       'state_class': <SensorStateClass.MEASUREMENT: 'measurement'>,
       'unit_of_measurement': '%',
     }),
@@ -2938,7 +2938,7 @@
 # name: test_sensors[de-sensor.keba_keenergy_12345678_webview_cpu_usage]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      'friendly_name': 'Bedieneinheit WebView CPU-Auslastung',
+      'friendly_name': 'Bedieneinheit CPU-Auslastung WebView',
       'state_class': <SensorStateClass.MEASUREMENT: 'measurement'>,
       'unit_of_measurement': '%',
     }),
@@ -3072,7 +3072,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'temperature',
-      'friendly_name': 'Buffer tank 1 Target temperature during PV surplus',
+      'friendly_name': 'Buffer tank 1 Target temperature (PV surplus)',
       'icon': 'mdi:sun-thermometer',
       'lower_limit': '0',
       'state_class': <SensorStateClass.MEASUREMENT: 'measurement'>,
@@ -3091,7 +3091,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'temperature',
-      'friendly_name': 'Buffer tank 2 Target temperature during PV surplus',
+      'friendly_name': 'Buffer tank 2 Target temperature (PV surplus)',
       'icon': 'mdi:sun-thermometer',
       'lower_limit': '0',
       'state_class': <SensorStateClass.MEASUREMENT: 'measurement'>,
@@ -3227,7 +3227,7 @@
 # name: test_sensors[en-sensor.keba_keenergy_12345678_control_cpu_usage]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      'friendly_name': 'Control unit Ctrl CPU usage',
+      'friendly_name': 'Control unit Control CPU usage',
       'state_class': <SensorStateClass.MEASUREMENT: 'measurement'>,
       'unit_of_measurement': '%',
     }),
@@ -3285,7 +3285,7 @@
 # name: test_sensors[en-sensor.keba_keenergy_12345678_external_heat_source_excess_energy_activation_counter_1]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      'friendly_name': 'External heat source 1 Activation counter during PV surplus',
+      'friendly_name': 'External heat source 1 Activation counter (PV surplus)',
       'state_class': <SensorStateClass.TOTAL_INCREASING: 'total_increasing'>,
     }),
     'context': <ANY>,
@@ -3299,7 +3299,7 @@
 # name: test_sensors[en-sensor.keba_keenergy_12345678_external_heat_source_excess_energy_activation_counter_2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      'friendly_name': 'External heat source 2 Activation counter during PV surplus',
+      'friendly_name': 'External heat source 2 Activation counter (PV surplus)',
       'state_class': <SensorStateClass.TOTAL_INCREASING: 'total_increasing'>,
     }),
     'context': <ANY>,
@@ -3314,7 +3314,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'duration',
-      'friendly_name': 'External heat source 1 Maximum runtime during PV surplus',
+      'friendly_name': 'External heat source 1 Maximum runtime (PV surplus)',
       'state_class': <SensorStateClass.MEASUREMENT: 'measurement'>,
       'unit_of_measurement': <UnitOfTime.HOURS: 'h'>,
     }),
@@ -3330,7 +3330,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'duration',
-      'friendly_name': 'External heat source 2 Maximum runtime during PV surplus',
+      'friendly_name': 'External heat source 2 Maximum runtime (PV surplus)',
       'state_class': <SensorStateClass.MEASUREMENT: 'measurement'>,
       'unit_of_measurement': <UnitOfTime.HOURS: 'h'>,
     }),
@@ -3346,7 +3346,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'duration',
-      'friendly_name': 'External heat source 1 Operating hours during PV surplus',
+      'friendly_name': 'External heat source 1 Operating hours (PV surplus)',
       'state_class': <SensorStateClass.TOTAL_INCREASING: 'total_increasing'>,
       'unit_of_measurement': <UnitOfTime.HOURS: 'h'>,
     }),
@@ -3362,7 +3362,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'duration',
-      'friendly_name': 'External heat source 2 Operating hours during PV surplus',
+      'friendly_name': 'External heat source 2 Operating hours (PV surplus)',
       'state_class': <SensorStateClass.TOTAL_INCREASING: 'total_increasing'>,
       'unit_of_measurement': <UnitOfTime.HOURS: 'h'>,
     }),
@@ -3627,7 +3627,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'temperature',
-      'friendly_name': 'Heating circuit 2 Cooling limit during PV surplus (day)',
+      'friendly_name': 'Heating circuit 2 Cooling limit (PV surplus, day)',
       'lower_limit': '-20',
       'state_class': <SensorStateClass.MEASUREMENT: 'measurement'>,
       'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
@@ -3645,7 +3645,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'temperature',
-      'friendly_name': 'Heating circuit 2 Cooling limit during PV surplus (night)',
+      'friendly_name': 'Heating circuit 2 Cooling limit (PV surplus, night)',
       'lower_limit': '-20',
       'state_class': <SensorStateClass.MEASUREMENT: 'measurement'>,
       'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
@@ -3663,7 +3663,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'temperature',
-      'friendly_name': 'Heating circuit 1 Heating limit during PV surplus (day)',
+      'friendly_name': 'Heating circuit 1 Heating limit (PV surplus, day)',
       'lower_limit': '-20',
       'state_class': <SensorStateClass.MEASUREMENT: 'measurement'>,
       'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
@@ -3681,7 +3681,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'temperature',
-      'friendly_name': 'Heating circuit 1 Heating limit during PV surplus (night)',
+      'friendly_name': 'Heating circuit 1 Heating limit (PV surplus, night)',
       'lower_limit': '-20',
       'state_class': <SensorStateClass.MEASUREMENT: 'measurement'>,
       'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
@@ -3741,7 +3741,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'temperature',
-      'friendly_name': 'Heating circuit 2 Target temperature during PV surplus (cooling)',
+      'friendly_name': 'Heating circuit 2 Target cooling temperature (PV surplus)',
       'icon': 'mdi:sun-thermometer',
       'lower_limit': '10',
       'state_class': <SensorStateClass.MEASUREMENT: 'measurement'>,
@@ -3760,7 +3760,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'temperature',
-      'friendly_name': 'Heating circuit 1 Target temperature during PV surplus',
+      'friendly_name': 'Heating circuit 1 Target temperature (PV surplus)',
       'icon': 'mdi:sun-thermometer',
       'lower_limit': '10',
       'state_class': <SensorStateClass.MEASUREMENT: 'measurement'>,
@@ -4094,7 +4094,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'temperature',
-      'friendly_name': 'Heating circuit 2 Target room temperature (cooling, day)',
+      'friendly_name': 'Heating circuit 2 Target room temperature for cooling (day)',
       'lower_limit': '10',
       'state_class': <SensorStateClass.MEASUREMENT: 'measurement'>,
       'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
@@ -4112,7 +4112,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'temperature',
-      'friendly_name': 'Heating circuit 2 Target room temperature (cooling, night)',
+      'friendly_name': 'Heating circuit 2 Target room temperature for cooling (night)',
       'lower_limit': '10',
       'state_class': <SensorStateClass.MEASUREMENT: 'measurement'>,
       'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
@@ -4386,7 +4386,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'energy',
-      'friendly_name': 'Heat pump Cooling energy consumption',
+      'friendly_name': 'Heat pump Cooling electricity consumption',
       'state_class': <SensorStateClass.TOTAL: 'total'>,
       'unit_of_measurement': <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
     }),
@@ -4402,7 +4402,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'energy',
-      'friendly_name': 'Heat pump Cooling energy consumption during PV surplus',
+      'friendly_name': 'Heat pump Cooling electricity consumption (PV surplus)',
       'state_class': <SensorStateClass.TOTAL: 'total'>,
       'unit_of_measurement': <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
     }),
@@ -4461,7 +4461,7 @@
 # name: test_sensors[en-sensor.keba_keenergy_12345678_heat_pump_excess_energy_activation_counter]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      'friendly_name': 'Heat pump Activation counter during PV surplus',
+      'friendly_name': 'Heat pump Activation counter (PV surplus)',
       'state_class': <SensorStateClass.TOTAL_INCREASING: 'total_increasing'>,
     }),
     'context': <ANY>,
@@ -4476,7 +4476,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'energy',
-      'friendly_name': 'Heat pump Energy consumption during PV surplus',
+      'friendly_name': 'Heat pump Electricity consumption (PV surplus)',
       'state_class': <SensorStateClass.TOTAL: 'total'>,
       'unit_of_measurement': <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
     }),
@@ -4492,7 +4492,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'duration',
-      'friendly_name': 'Heat pump Maximum runtime during PV surplus',
+      'friendly_name': 'Heat pump Maximum runtime (PV surplus)',
       'state_class': <SensorStateClass.MEASUREMENT: 'measurement'>,
       'unit_of_measurement': <UnitOfTime.HOURS: 'h'>,
     }),
@@ -4508,7 +4508,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'duration',
-      'friendly_name': 'Heat pump Operating hours during PV surplus',
+      'friendly_name': 'Heat pump Operating hours (PV surplus)',
       'state_class': <SensorStateClass.TOTAL_INCREASING: 'total_increasing'>,
       'unit_of_measurement': <UnitOfTime.HOURS: 'h'>,
     }),
@@ -4569,7 +4569,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'energy',
-      'friendly_name': 'Heat pump Heating energy consumption',
+      'friendly_name': 'Heat pump Heating electricity consumption',
       'state_class': <SensorStateClass.TOTAL: 'total'>,
       'unit_of_measurement': <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
     }),
@@ -4585,7 +4585,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'energy',
-      'friendly_name': 'Heat pump Heating energy consumption during PV surplus',
+      'friendly_name': 'Heat pump Heating electricity consumption (PV surplus)',
       'state_class': <SensorStateClass.TOTAL: 'total'>,
       'unit_of_measurement': <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
     }),
@@ -4663,7 +4663,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'energy',
-      'friendly_name': 'Heat pump Hot water energy consumption',
+      'friendly_name': 'Heat pump Hot water electricity consumption',
       'state_class': <SensorStateClass.TOTAL: 'total'>,
       'unit_of_measurement': <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
     }),
@@ -4679,7 +4679,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'energy',
-      'friendly_name': 'Heat pump Hot water energy consumption during PV surplus',
+      'friendly_name': 'Heat pump Hot water electricity consumption (PV surplus)',
       'state_class': <SensorStateClass.TOTAL: 'total'>,
       'unit_of_measurement': <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
     }),
@@ -4932,7 +4932,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'energy',
-      'friendly_name': 'Heat pump Total energy consumption',
+      'friendly_name': 'Heat pump Total electricity consumption',
       'state_class': <SensorStateClass.TOTAL: 'total'>,
       'unit_of_measurement': <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
     }),
@@ -5110,7 +5110,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'temperature',
-      'friendly_name': 'Hot water tank 1 Target temperature during PV surplus',
+      'friendly_name': 'Hot water tank 1 Target temperature (PV surplus)',
       'icon': 'mdi:sun-thermometer',
       'lower_limit': '0',
       'state_class': <SensorStateClass.MEASUREMENT: 'measurement'>,
@@ -5129,7 +5129,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'temperature',
-      'friendly_name': 'Hot water tank 2 Target temperature during PV surplus',
+      'friendly_name': 'Hot water tank 2 Target temperature (PV surplus)',
       'icon': 'mdi:sun-thermometer',
       'lower_limit': '0',
       'state_class': <SensorStateClass.MEASUREMENT: 'measurement'>,

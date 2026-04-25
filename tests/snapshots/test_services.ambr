@@ -21,5 +21,5 @@
   'Heizkurve "{heating_curve}" nicht gefunden.'
 # ---
 # name: test_set_heating_curve_points_with_invalid_heating_curve[en]
-  'Can not find heating curve "{heating_curve}".'
+  'Cannot find heating curve "{heating_curve}".'
 # ---

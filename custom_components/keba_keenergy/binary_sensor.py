@@ -165,7 +165,7 @@ BINARY_SENSOR_TYPES: dict[str, tuple[KebaKeEnergyBinarySensorEntityDescription, 
     SectionPrefix.PHOTOVOLTAICS: (
         KebaKeEnergyBinarySensorEntityDescription(
             key="excess_energy_active",
-            translation_key="pv_excess_energy",
+            translation_key="excess_energy",
         ),
     ),
 }

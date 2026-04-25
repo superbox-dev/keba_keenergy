@@ -104,9 +104,6 @@
             "hot_water_flow": {
                 "name": "Warmwasser läuft"
             },
-            "pv_excess_energy": {
-                "name": "Überschuss"
-            },
             "source_actuator_failure": {
                 "name": "Quellenaktor"
             },
@@ -117,7 +114,7 @@
                 "name": "Quellendruck"
             },
             "three_phase_failure": {
-                "name": "3-Phase"
+                "name": "Dreiphasen"
             },
             "vfd_failure": {
                 "name": "Frequenzumrichter"
@@ -158,28 +155,28 @@
                 "name": "Kühlgrenze (Nacht)"
             },
             "excess_energy_cooling_limit_day": {
-                "name": "Kühlgrenze bei PV-Überschuss (Tag)"
+                "name": "Kühlgrenze (PV-Überschuss, Tag)"
             },
             "excess_energy_cooling_limit_night": {
-                "name": "Kühlgrenze bei PV-Überschuss (Nacht)"
+                "name": "Kühlgrenze (PV-Überschuss, Nacht)"
             },
             "excess_energy_heating_limit_day": {
-                "name": "Heizgrenze bei PV-Überschuss (Tag)"
+                "name": "Heizgrenze (PV-Überschuss, Tag)"
             },
             "excess_energy_heating_limit_night": {
-                "name": "Heizgrenze bei PV-Überschuss (Nacht)"
+                "name": "Heizgrenze (PV-Überschuss, Nacht)"
             },
             "excess_energy_target_cooling_temperature": {
-                "name": "Soll-Temperatur bei PV-Überschuss (Kühlen)"
+                "name": "Soll-Temperatur Kühlen (PV-Überschuss)"
             },
             "excess_energy_target_cooling_temperature_hysteresis": {
-                "name": "Soll-Temperatur-Hysterese bei PV-Überschuss (Kühlen)"
+                "name": "Soll-Temperatur-Hysterese Kühlen (PV-Überschuss)"
             },
             "excess_energy_target_temperature": {
-                "name": "Soll-Temperatur bei PV-Überschuss"
+                "name": "Soll-Temperatur (PV-Überschuss)"
             },
             "excess_energy_target_temperature_hysteresis": {
-                "name": "Soll-Temperatur-Hysterese bei PV-Überschuss"
+                "name": "Soll-Temperatur-Hysterese (PV-Überschuss)"
             },
             "heating_curve_offset": {
                 "name": "Heizkurven-Offset"
@@ -194,19 +191,19 @@
                 "name": "Heizgrenze (Nacht)"
             },
             "min_runtime_excess_energy": {
-                "name": "Mindestlaufzeit bei PV-Überschuss"
+                "name": "Mindestlaufzeit (PV-Überschuss)"
             },
             "outdoor_temperature_excess_energy_limit": {
-                "name": "Außentemperatur-Grenze bei PV-Überschuss"
+                "name": "Außentemperatur-Grenze (PV-Überschuss)"
             },
             "standby_temperature": {
                 "name": "Stütztemperatur"
             },
             "target_room_cooling_temperature_day": {
-                "name": "Soll-Raumtemperatur (Kühlen, Tag)"
+                "name": "Soll-Raumtemperatur Kühlen (Tag)"
             },
             "target_room_cooling_temperature_night": {
-                "name": "Soll-Raumtemperatur (Kühlen, Nacht)"
+                "name": "Soll-Raumtemperatur Kühlen (Nacht)"
             },
             "target_room_temperature": {
                 "name": "Soll-Raumtemperatur"
@@ -325,7 +322,7 @@
                 "name": "Kondensationstemperatur"
             },
             "control_cpu_usage": {
-                "name": "Ctrl CPU-Auslastung"
+                "name": "CPU-Auslastung Steuerung"
             },
             "cool_request": {
                 "name": "Kühlanforderung",
@@ -346,10 +343,10 @@
                 "name": "Kühlmenge"
             },
             "cooling_energy_consumption": {
-                "name": "Energieverbrauch Kühlen"
+                "name": "Stromverbrauch Kühlen"
             },
             "cooling_excess_energy_consumption": {
-                "name": "Energieverbrauch Kühlen bei PV-Überschuss"
+                "name": "Stromverbrauch Kühlen (PV-Überschuss)"
             },
             "cooling_limit_day": {
                 "name": "Kühlgrenze (Tag)"
@@ -370,7 +367,7 @@
                 "name": "Ist-Temperatur (unten)"
             },
             "current_overheating": {
-                "name": "Istüberhitzung"
+                "name": "Ist-Überhitzung"
             },
             "current_temperature": {
                 "name": "Ist-Temperatur{counter}"
@@ -385,40 +382,40 @@
                 "name": "Taupunkt"
             },
             "excess_energy_activation_counter": {
-                "name": "Einschaltvorgänge bei PV-Überschuss"
+                "name": "Einschaltvorgänge (PV-Überschuss)"
             },
             "excess_energy_consumption": {
-                "name": "Energieverbrauch bei PV-Überschuss"
+                "name": "Stromverbrauch (PV-Überschuss)"
             },
             "excess_energy_cooling_limit_day": {
-                "name": "Kühlgrenze bei PV-Überschuss (Tag)"
+                "name": "Kühlgrenze (PV-Überschuss, Tag)"
             },
             "excess_energy_cooling_limit_night": {
-                "name": "Kühlgrenze bei PV-Überschuss (Nacht)"
+                "name": "Kühlgrenze (PV-Überschuss, Nacht)"
             },
             "excess_energy_heating_limit_day": {
-                "name": "Heizgrenze bei PV-Überschuss (Tag)"
+                "name": "Heizgrenze (PV-Überschuss, Tag)"
             },
             "excess_energy_heating_limit_night": {
-                "name": "Heizgrenze bei PV-Überschuss (Nacht)"
+                "name": "Heizgrenze (PV-Überschuss, Nacht)"
             },
             "excess_energy_max_runtime": {
-                "name": "Maximale Laufzeit bei PV-Überschuss"
+                "name": "Maximale Laufzeit (PV-Überschuss)"
             },
             "excess_energy_mode": {
                 "name": "PV-Überschuss"
             },
             "excess_energy_operating_time": {
-                "name": "Betriebsstunden bei PV-Überschuss"
+                "name": "Betriebsstunden (PV-Überschuss)"
             },
             "excess_power": {
                 "name": "Überschussleistung"
             },
             "excess_energy_target_cooling_temperature": {
-                "name": "Soll-Temperatur bei PV-Überschuss (Kühlen)"
+                "name": "Soll-Temperatur Kühlen (PV-Überschuss)"
             },
             "excess_energy_target_temperature": {
-                "name": "Soll-Temperatur bei PV-Überschuss"
+                "name": "Soll-Temperatur (PV-Überschuss)"
             },
             "expansion_valve_position": {
                 "name": "Expansionsventil"
@@ -474,10 +471,10 @@
                 "name": "Wärmemenge"
             },
             "heating_energy_consumption": {
-                "name": "Energieverbrauch Heizen"
+                "name": "Stromverbrauch Heizen"
             },
             "heating_excess_energy_consumption": {
-                "name": "Energieverbrauch Heizen bei PV-Überschuss"
+                "name": "Stromverbrauch Heizen (PV-Überschuss)"
             },
             "heating_limit_day": {
                 "name": "Heizgrenze (Tag)"
@@ -498,10 +495,10 @@
                 "name": "Warmwasserwärmemenge"
             },
             "hot_water_energy_consumption": {
-                "name": "Energieverbrauch Warmwasser"
+                "name": "Stromverbrauch Warmwasser"
             },
             "hot_water_excess_energy_consumption": {
-                "name": "Energieverbrauch Warmwasser bei PV-Überschuss"
+                "name": "Stromverbrauch Warmwasser (PV-Überschuss)"
             },
             "hot_water_power": {
                 "name": "Leistung Warmwasser"
@@ -666,10 +663,10 @@
                 "name": "Sollüberhitzung"
             },
             "target_room_cooling_temperature_day": {
-                "name": "Soll-Raumtemperatur (Kühlen, Tag)"
+                "name": "Soll-Raumtemperatur Kühlen (Tag)"
             },
             "target_room_cooling_temperature_night": {
-                "name": "Soll-Raumtemperatur (Kühlen, Nacht)"
+                "name": "Soll-Raumtemperatur Kühlen (Nacht)"
             },
             "target_room_temperature": {
                 "name": "Soll-Raumtemperatur"
@@ -708,10 +705,10 @@
                 "name": "Verdampfungstemperatur"
             },
             "webserver_cpu_usage": {
-                "name": "WebServer CPU-Auslastung"
+                "name": "CPU-Auslastung WebServer"
             },
             "webview_cpu_usage": {
-                "name": "WebView CPU-Auslastung"
+                "name": "CPU-Auslastung WebView"
             }
         },
         "switch": {
@@ -793,7 +790,7 @@
                     "scan_interval_tick_hot_water_tank": "Update-Multiplikator für den Warmwasserspeicher",
                     "scan_interval_tick_solar_circuit": "Update-Multiplikator für den Solarkreis",
                     "scan_interval_tick_switch_valve": "Update-Multiplikator für das Umschaltventil",
-                    "scan_interval_tick_system": "Update-Multiplikator die Bedieneinheit"
+                    "scan_interval_tick_system": "Update-Multiplikator für die Bedieneinheit"
                 },
                 "data_description": {
                     "scan_interval": "Zeit in Sekunden zwischen den Updates",

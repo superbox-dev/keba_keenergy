@@ -1,7 +1,7 @@
 {
     "config": {
         "abort": {
-            "already_configured": "Failed to connect",
+            "already_configured": "Device is already configured",
             "already_in_progress": "Configuration flow is already in progress",
             "reauth_successful": "Re-authentication was successful",
             "reconfigure_successful": "Re-configuration was successful",
@@ -104,9 +104,6 @@
             "hot_water_flow": {
                 "name": "Hot water flow"
             },
-            "pv_excess_energy": {
-                "name": "Surplus"
-            },
             "source_actuator_failure": {
                 "name": "Source actuator"
             },
@@ -120,7 +117,7 @@
                 "name": "Three-phase"
             },
             "vfd_failure": {
-                "name": "Variable drive frequency"
+                "name": "Variable frequency drive"
             }
         },
         "climate": {
@@ -158,28 +155,28 @@
                 "name": "Cooling limit (night)"
             },
             "excess_energy_cooling_limit_day": {
-                "name": "Cooling limit during PV surplus (day)"
+                "name": "Cooling limit (PV surplus, day)"
             },
             "excess_energy_cooling_limit_night": {
-                "name": "Cooling limit during PV surplus (night)"
+                "name": "Cooling limit (PV surplus, night)"
             },
             "excess_energy_heating_limit_day": {
-                "name": "Heating limit during PV surplus (day)"
+                "name": "Heating limit (PV surplus, day)"
             },
             "excess_energy_heating_limit_night": {
-                "name": "Heating limit during PV surplus (night)"
+                "name": "Heating limit (PV surplus, night)"
             },
             "excess_energy_target_cooling_temperature": {
-                "name": "Target temperature during PV surplus (cooling)"
+                "name": "Target cooling temperature (PV surplus)"
             },
             "excess_energy_target_cooling_temperature_hysteresis": {
-                "name": "Target temperature hysteresis during PV surplus (cooling)"
+                "name": "Target cooling temperature hysteresis (PV surplus)"
             },
             "excess_energy_target_temperature": {
-                "name": "Target temperature during PV surplus"
+                "name": "Target temperature (PV surplus)"
             },
             "excess_energy_target_temperature_hysteresis": {
-                "name": "Target temperature hysteresis during PV surplus"
+                "name": "Target temperature hysteresis (PV surplus)"
             },
             "heating_curve_offset": {
                 "name": "Heating curve offset"
@@ -194,19 +191,19 @@
                 "name": "Heating limit (night)"
             },
             "min_runtime_excess_energy": {
-                "name": "Minimum runtime during PV surplus"
+                "name": "Minimum runtime (PV surplus)"
             },
             "outdoor_temperature_excess_energy_limit": {
-                "name": "Outdoor temperature limit during PV surplus"
+                "name": "Outdoor temperature limit (PV surplus)"
             },
             "standby_temperature": {
                 "name": "Standby temperature"
             },
             "target_room_cooling_temperature_day": {
-                "name": "Target room temperature (cooling, day)"
+                "name": "Target room cooling temperature (day)"
             },
             "target_room_cooling_temperature_night": {
-                "name": "Target room temperature (cooling, night)"
+                "name": "Target room cooling temperature (night)"
             },
             "target_room_temperature": {
                 "name": "Target temperature"
@@ -325,7 +322,7 @@
                 "name": "Condensation temperature"
             },
             "control_cpu_usage": {
-                "name": "Ctrl CPU usage"
+                "name": "Control CPU usage"
             },
             "cool_request": {
                 "name": "Cool request",
@@ -346,10 +343,10 @@
                 "name": "Cooling energy"
             },
             "cooling_energy_consumption": {
-                "name": "Cooling energy consumption"
+                "name": "Cooling electricity consumption"
             },
             "cooling_excess_energy_consumption": {
-                "name": "Cooling energy consumption during PV surplus"
+                "name": "Cooling electricity consumption (PV surplus)"
             },
             "cooling_limit_day": {
                 "name": "Cooling limit (day)"
@@ -385,40 +382,40 @@
                 "name": "Dew point"
             },
             "excess_energy_activation_counter": {
-                "name": "Activation counter during PV surplus"
+                "name": "Activation counter (PV surplus)"
             },
             "excess_energy_consumption": {
-                "name": "Energy consumption during PV surplus"
+                "name": "Electricity consumption (PV surplus)"
             },
             "excess_energy_cooling_limit_day": {
-                "name": "Cooling limit during PV surplus (day)"
+                "name": "Cooling limit (PV surplus, day)"
             },
             "excess_energy_cooling_limit_night": {
-                "name": "Cooling limit during PV surplus (night)"
+                "name": "Cooling limit (PV surplus, night)"
             },
             "excess_energy_heating_limit_day": {
-                "name": "Heating limit during PV surplus (day)"
+                "name": "Heating limit (PV surplus, day)"
             },
             "excess_energy_heating_limit_night": {
-                "name": "Heating limit during PV surplus (night)"
+                "name": "Heating limit (PV surplus, night)"
             },
             "excess_energy_max_runtime": {
-                "name": "Maximum runtime during PV surplus"
+                "name": "Maximum runtime (PV surplus)"
             },
             "excess_energy_mode": {
                 "name": "PV surplus"
             },
             "excess_energy_operating_time": {
-                "name": "Operating hours during PV surplus"
+                "name": "Operating hours (PV surplus)"
             },
             "excess_power": {
                 "name": "Excess power"
             },
             "excess_energy_target_cooling_temperature": {
-                "name": "Target temperature during PV surplus (cooling)"
+                "name": "Target cooling temperature (PV surplus)"
             },
             "excess_energy_target_temperature": {
-                "name": "Target temperature during PV surplus"
+                "name": "Target temperature (PV surplus)"
             },
             "expansion_valve_position": {
                 "name": "Expansion valve position"
@@ -474,10 +471,10 @@
                 "name": "Heating energy"
             },
             "heating_energy_consumption": {
-                "name": "Heating energy consumption"
+                "name": "Heating electricity consumption"
             },
             "heating_excess_energy_consumption": {
-                "name": "Heating energy consumption during PV surplus"
+                "name": "Heating electricity consumption (PV surplus)"
             },
             "heating_limit_day": {
                 "name": "Heating limit (day)"
@@ -498,10 +495,10 @@
                 "name": "Hot water energy"
             },
             "hot_water_energy_consumption": {
-                "name": "Hot water energy consumption"
+                "name": "Hot water electricity consumption"
             },
             "hot_water_excess_energy_consumption": {
-                "name": "Hot water energy consumption during PV surplus"
+                "name": "Hot water electricity consumption (PV surplus)"
             },
             "hot_water_power": {
                 "name": "Hot water power"
@@ -667,10 +664,10 @@
                 "name": "Target overheating"
             },
             "target_room_cooling_temperature_day": {
-                "name": "Target room temperature (cooling, day)"
+                "name": "Target room temperature for cooling (day)"
             },
             "target_room_cooling_temperature_night": {
-                "name": "Target room temperature (cooling, night)"
+                "name": "Target room temperature for cooling (night)"
             },
             "target_room_temperature": {
                 "name": "Target room temperature"
@@ -697,7 +694,7 @@
                 "name": "Total energy"
             },
             "total_energy_consumption": {
-                "name": "Total energy consumption"
+                "name": "Total electricity consumption"
             },
             "total_spf": {
                 "name": "Total SPF"
@@ -755,10 +752,10 @@
             "message": "Authentication failed. Please check your credentials."
         },
         "cannot_find_heating_curve": {
-            "message": "Can not find heating curve \"{heating_curve}\"."
+            "message": "Cannot find heating curve \"{heating_curve}\"."
         },
         "communication_error": {
-            "message": "An error occurred while communicate with the API: {error}"
+            "message": "An error occurred while communicating with the API: {error}"
         },
         "duplicate_outdoor_temperature_values": {
             "message": "Duplicate outdoor temperature values found."

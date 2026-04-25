@@ -77,11 +77,11 @@ async def test_entity_update(
     [
         (
             APIError("mocked api error"),
-            "An error occurred while communicate with the API: mocked api error",
+            "An error occurred while communicating with the API: mocked api error",
         ),
         (
             APIError("mocked client error"),
-            "An error occurred while communicate with the API: mocked client error",
+            "An error occurred while communicating with the API: mocked client error",
         ),
     ],
 )

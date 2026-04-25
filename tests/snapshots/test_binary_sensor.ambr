@@ -179,7 +179,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'problem',
-      'friendly_name': 'Wärmepumpe 3-Phase',
+      'friendly_name': 'Wärmepumpe Dreiphasen',
     }),
     'context': <ANY>,
     'entity_id': 'binary_sensor.keba_keenergy_12345678_heat_pump_has_three_phase_failure',
@@ -286,7 +286,7 @@
 # name: test_binary_sensors[de-binary_sensor.keba_keenergy_12345678_photovoltaics_excess_energy_active]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      'friendly_name': 'Photovoltaik Überschuss',
+      'friendly_name': 'Photovoltaik PV-Überschuss',
     }),
     'context': <ANY>,
     'entity_id': 'binary_sensor.keba_keenergy_12345678_photovoltaics_excess_energy_active',
@@ -542,7 +542,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'problem',
-      'friendly_name': 'Heat pump Variable drive frequency',
+      'friendly_name': 'Heat pump Variable frequency drive',
     }),
     'context': <ANY>,
     'entity_id': 'binary_sensor.keba_keenergy_12345678_heat_pump_has_vfd_failure',
@@ -635,7 +635,7 @@
 # name: test_binary_sensors[en-binary_sensor.keba_keenergy_12345678_photovoltaics_excess_energy_active]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      'friendly_name': 'Photovoltaics Surplus',
+      'friendly_name': 'Photovoltaics PV surplus',
     }),
     'context': <ANY>,
     'entity_id': 'binary_sensor.keba_keenergy_12345678_photovoltaics_excess_energy_active',

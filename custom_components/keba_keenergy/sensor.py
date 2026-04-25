@@ -859,7 +859,10 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
             value=lambda data: data,
         ),
         KebaKeEnergySensorEntityDescription[float](
-            condition=lambda coordinator, index: coordinator.has_electrical_energy_meter(index=index),
+            condition=(
+                lambda coordinator, index: coordinator.has_electrical_energy_meter(index=index)
+                and (coordinator.has_active_cooling(index=index) or coordinator.has_passive_cooling(index=index))
+            ),
             device_class=SensorDeviceClass.ENERGY,
             entity_registry_enabled_default=False,
             key="cooling_energy_consumption",

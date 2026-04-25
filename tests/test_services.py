@@ -301,7 +301,7 @@ async def test_set_heating_curve_points_with_invalid_heating_curve(
 
     with pytest.raises(
         ServiceValidationError,
-        match='Can not find heating curve "HC1"',
+        match='Cannot find heating curve "HC1"',
     ):
         await hass.services.async_call(
             domain=DOMAIN,
