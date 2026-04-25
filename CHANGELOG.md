@@ -22,6 +22,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Do not show sensors that are not available in the heat pump setup [(Issue #47)][issue-47]
+- Updated translations
 
 ### Fixed
 
