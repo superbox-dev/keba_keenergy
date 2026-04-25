@@ -114,7 +114,7 @@
                 "name": "Quellendruck"
             },
             "three_phase_failure": {
-                "name": "Dreiphasen"
+                "name": "Drehstrom"
             },
             "vfd_failure": {
                 "name": "Frequenzumrichter"

@@ -117,7 +117,7 @@
                 "name": "Three-phase"
             },
             "vfd_failure": {
-                "name": "Variable frequency drive"
+                "name": "Frequency inverter"
             }
         },
         "climate": {
