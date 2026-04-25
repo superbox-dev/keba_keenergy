@@ -179,7 +179,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'problem',
-      'friendly_name': 'Wärmepumpe Dreiphasen',
+      'friendly_name': 'Wärmepumpe Drehstrom',
     }),
     'context': <ANY>,
     'entity_id': 'binary_sensor.keba_keenergy_12345678_heat_pump_has_three_phase_failure',
@@ -542,7 +542,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'problem',
-      'friendly_name': 'Heat pump Variable frequency drive',
+      'friendly_name': 'Heat pump Frequency inverter',
     }),
     'context': <ANY>,
     'entity_id': 'binary_sensor.keba_keenergy_12345678_heat_pump_has_vfd_failure',
