@@ -1109,7 +1109,6 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
         KebaKeEnergySensorEntityDescription[str](
             condition=lambda coordinator, index: coordinator.has_passive_cooling(index=index),
             device_class=SensorDeviceClass.ENUM,
-            entity_registry_enabled_default=False,
             key="mixer_position",
             options=[_.name.lower() for _ in MixerSwitchValvePosition],
             translation_key="mixer_position",
