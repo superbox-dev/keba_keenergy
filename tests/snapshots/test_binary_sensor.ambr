@@ -105,6 +105,20 @@
     'state': 'on',
   })
 # ---
+# name: test_binary_sensors[de-binary_sensor.keba_keenergy_12345678_heat_circuit_pump_state_1]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'device_class': 'running',
+      'friendly_name': 'Heizkreis 1 Pumpe Status',
+    }),
+    'context': <ANY>,
+    'entity_id': 'binary_sensor.keba_keenergy_12345678_heat_circuit_pump_state_1',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': 'on',
+  })
+# ---
 # name: test_binary_sensors[de-binary_sensor.keba_keenergy_12345678_heat_pump_consuming_excess_energy]
   StateSnapshot({
     'attributes': ReadOnlyDict({
@@ -448,6 +462,20 @@
     }),
     'context': <ANY>,
     'entity_id': 'binary_sensor.keba_keenergy_12345678_external_heat_source_heat_request_2',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': 'on',
+  })
+# ---
+# name: test_binary_sensors[en-binary_sensor.keba_keenergy_12345678_heat_circuit_pump_state_1]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'device_class': 'running',
+      'friendly_name': 'Heating circuit 1 Pump state',
+    }),
+    'context': <ANY>,
+    'entity_id': 'binary_sensor.keba_keenergy_12345678_heat_circuit_pump_state_1',
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,

@@ -839,7 +839,7 @@
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': '24.34',
+    'state': '22.21',
   })
 # ---
 # name: test_sensors[de-sensor.keba_keenergy_12345678_heat_circuit_flow_temperature_setpoint_1]
@@ -983,6 +983,27 @@
     'state': '18.0',
   })
 # ---
+# name: test_sensors[de-sensor.keba_keenergy_12345678_heat_circuit_mixer_position_1]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'device_class': 'enum',
+      'friendly_name': 'Heizkreis 1 Mischer',
+      'lower_limit': '-1',
+      'options': list([
+        'closed',
+        'off',
+        'open',
+      ]),
+      'upper_limit': '1',
+    }),
+    'context': <ANY>,
+    'entity_id': 'sensor.keba_keenergy_12345678_heat_circuit_mixer_position_1',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': 'closed',
+  })
+# ---
 # name: test_sensors[de-sensor.keba_keenergy_12345678_heat_circuit_operating_mode_1]
   StateSnapshot({
     'attributes': ReadOnlyDict({
@@ -1057,17 +1078,15 @@
     'attributes': ReadOnlyDict({
       'device_class': 'temperature',
       'friendly_name': 'Heizkreis 1 Rücklauftemperatur',
-      'lower_limit': '0',
       'state_class': <SensorStateClass.MEASUREMENT: 'measurement'>,
       'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
-      'upper_limit': '100',
     }),
     'context': <ANY>,
     'entity_id': 'sensor.keba_keenergy_12345678_heat_circuit_return_flow_temperature_1',
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': '20.21',
+    'state': '21.21',
   })
 # ---
 # name: test_sensors[de-sensor.keba_keenergy_12345678_heat_circuit_room_humidity_1]
@@ -2397,14 +2416,37 @@
       'device_class': 'temperature',
       'friendly_name': 'Passivkühlung Vorlauftemperatur (Mischer)',
       'icon': 'mdi:snowflake-thermometer',
+      'lower_limit': '0',
       'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
+      'upper_limit': '100',
     }),
     'context': <ANY>,
     'entity_id': 'sensor.keba_keenergy_12345678_passive_cooling_mixer_flow_temperature',
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': '19.22',
+    'state': '24.26',
+  })
+# ---
+# name: test_sensors[de-sensor.keba_keenergy_12345678_passive_cooling_mixer_position]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'device_class': 'enum',
+      'friendly_name': 'Passivkühlung Mischer',
+      'lower_limit': '-1',
+      'options': list([
+        'closed',
+        'off',
+        'open',
+      ]),
+      'upper_limit': '1',
+    }),
+    'context': <ANY>,
+    'entity_id': 'sensor.keba_keenergy_12345678_passive_cooling_mixer_position',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': 'closed',
   })
 # ---
 # name: test_sensors[de-sensor.keba_keenergy_12345678_passive_cooling_mixer_target_temperature]
@@ -2412,17 +2454,15 @@
     'attributes': ReadOnlyDict({
       'device_class': 'temperature',
       'friendly_name': 'Passivkühlung Soll-Temperatur (Mischer)',
-      'lower_limit': '0',
       'state_class': <SensorStateClass.MEASUREMENT: 'measurement'>,
       'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
-      'upper_limit': '100',
     }),
     'context': <ANY>,
     'entity_id': 'sensor.keba_keenergy_12345678_passive_cooling_mixer_target_temperature',
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': '24.26',
+    'state': '19.22',
   })
 # ---
 # name: test_sensors[de-sensor.keba_keenergy_12345678_passive_cooling_switch_valve_position]
@@ -3790,7 +3830,7 @@
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': '24.34',
+    'state': '22.21',
   })
 # ---
 # name: test_sensors[en-sensor.keba_keenergy_12345678_heat_circuit_flow_temperature_setpoint_1]
@@ -3934,6 +3974,27 @@
     'state': '18.0',
   })
 # ---
+# name: test_sensors[en-sensor.keba_keenergy_12345678_heat_circuit_mixer_position_1]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'device_class': 'enum',
+      'friendly_name': 'Heating circuit 1 Mixer',
+      'lower_limit': '-1',
+      'options': list([
+        'closed',
+        'off',
+        'open',
+      ]),
+      'upper_limit': '1',
+    }),
+    'context': <ANY>,
+    'entity_id': 'sensor.keba_keenergy_12345678_heat_circuit_mixer_position_1',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': 'closed',
+  })
+# ---
 # name: test_sensors[en-sensor.keba_keenergy_12345678_heat_circuit_operating_mode_1]
   StateSnapshot({
     'attributes': ReadOnlyDict({
@@ -4008,17 +4069,15 @@
     'attributes': ReadOnlyDict({
       'device_class': 'temperature',
       'friendly_name': 'Heating circuit 1 Return flow temperature',
-      'lower_limit': '0',
       'state_class': <SensorStateClass.MEASUREMENT: 'measurement'>,
       'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
-      'upper_limit': '100',
     }),
     'context': <ANY>,
     'entity_id': 'sensor.keba_keenergy_12345678_heat_circuit_return_flow_temperature_1',
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': '20.21',
+    'state': '21.21',
   })
 # ---
 # name: test_sensors[en-sensor.keba_keenergy_12345678_heat_circuit_room_humidity_1]
@@ -5348,14 +5407,37 @@
       'device_class': 'temperature',
       'friendly_name': 'Passive cooling Flow temperature (mixer)',
       'icon': 'mdi:snowflake-thermometer',
+      'lower_limit': '0',
       'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
+      'upper_limit': '100',
     }),
     'context': <ANY>,
     'entity_id': 'sensor.keba_keenergy_12345678_passive_cooling_mixer_flow_temperature',
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': '19.22',
+    'state': '24.26',
+  })
+# ---
+# name: test_sensors[en-sensor.keba_keenergy_12345678_passive_cooling_mixer_position]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'device_class': 'enum',
+      'friendly_name': 'Passive cooling Mixer',
+      'lower_limit': '-1',
+      'options': list([
+        'closed',
+        'off',
+        'open',
+      ]),
+      'upper_limit': '1',
+    }),
+    'context': <ANY>,
+    'entity_id': 'sensor.keba_keenergy_12345678_passive_cooling_mixer_position',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': 'closed',
   })
 # ---
 # name: test_sensors[en-sensor.keba_keenergy_12345678_passive_cooling_mixer_target_temperature]
@@ -5363,17 +5445,15 @@
     'attributes': ReadOnlyDict({
       'device_class': 'temperature',
       'friendly_name': 'Passive cooling Target temperature (mixer)',
-      'lower_limit': '0',
       'state_class': <SensorStateClass.MEASUREMENT: 'measurement'>,
       'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
-      'upper_limit': '100',
     }),
     'context': <ANY>,
     'entity_id': 'sensor.keba_keenergy_12345678_passive_cooling_mixer_target_temperature',
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': '24.26',
+    'state': '19.22',
   })
 # ---
 # name: test_sensors[en-sensor.keba_keenergy_12345678_passive_cooling_switch_valve_position]

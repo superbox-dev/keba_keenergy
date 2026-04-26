@@ -268,20 +268,6 @@ HEAT_CIRCUIT_FLOW_TEMPERATURE_SETPOINT: str = """
     }
 """
 
-HEAT_CIRCUIT_FLOW_TEMPERATURE: str = """
-    {
-        "name": "APPL.CtrlAppl.sParam.heatCircuit[%s].values.flowSetTemp",
-        "attributes": {
-            "formatId": "fmtTemp",
-            "longText": "Nominal temp.",
-            "unitId": "Temp",
-            "upperLimit": "100",
-            "lowerLimit": "0"
-        },
-        "value": "%s"
-    }
-"""
-
 HEAT_CIRCUIT_MIXER_FLOW_TEMPERATURE: str = """
     {
         "name": "APPL.CtrlAppl.sParam.heatCircuit[%s].heatCircuitMixer.flowTemp.values.actValue",
@@ -305,6 +291,42 @@ HEAT_CIRCUIT_MIXER_RETURN_FLOW_TEMPERATURE: str = """
             "unitId": "Temp",
             "upperLimit": "100",
             "lowerLimit": "0"
+        },
+        "value": "%s"
+    }
+"""
+
+HEAT_CIRCUIT_MIXER_POSITION: str = """
+    {
+        "name": "APPL.CtrlAppl.sParam.heatCircuit[%s].heatCircuitMixer.mixer.values.setValueScaled",
+        "attributes": {
+            "formatId": "fmt3p0",
+            "longText": "Mixer nom. value",
+            "unitId": "Pct100",
+            "upperLimit": "1",
+            "lowerLimit": "-1"
+        },
+        "value": "%s"
+    }
+"""
+
+HEAT_CIRCUIT_PUMP_STATE: str = """
+    {
+        "name": "APPL.CtrlAppl.sParam.heatCircuit[%s].pump.values.setValueB",
+        "attributes": {
+            "longText": "Pump nom.value"
+        },
+        "value": "%s"
+    }
+"""
+
+HEAT_CIRCUIT_RETURN_FLOW_TEMPERATURE: str = """
+    {
+        "name": "APPL.CtrlAppl.sParam.heatpump[%s].TempHeatReflux.values.actValue",
+        "attributes": {
+            "formatId": "fmtTemp",
+            "longText": "Reflux temp.",
+            "unitId": "Temp"
         },
         "value": "%s"
     }
@@ -1921,11 +1943,24 @@ PASSIVE_COOLING_CIRCULATION_PUMP_SPEED: dict[str, Any] = {
     "value": "0.23",
 }
 
-
 PASSIVE_COOLING_MIXER_TARGET_TEMPERATURE: dict[str, Any] = {
     "name": "APPL.CtrlAppl.sParam.passivecooling[0].Mixer.values.setValue",
-    "attributes": {"longText": "Set temp"},
+    "attributes": {
+        "longText": "Set temp",
+    },
     "value": "19.22",
+}
+
+PASSIVE_COOLING_MIXER_POSITION: dict[str, Any] = {
+    "name": "APPL.CtrlAppl.sParam.passivecooling[0].Mixer.mixer.values.setValueScaled",
+    "attributes": {
+        "formatId": "fmt3p0",
+        "longText": "Mixer nom. value",
+        "unitId": "Pct100",
+        "upperLimit": "1",
+        "lowerLimit": "-1",
+    },
+    "value": "-1",
 }
 
 PASSIVE_COOLING_MIXER_FLOW_TEMPERATURE: dict[str, Any] = {
@@ -2310,8 +2345,9 @@ def get_heat_pump_data(compressor_night_speed: str = "true") -> list[dict[str, A
         PASSIVE_COOLING_TEMPERATURE,
         PASSIVE_COOLING_SWITCH_VALVE_POSITION,
         PASSIVE_COOLING_CIRCULATION_PUMP_SPEED,
-        PASSIVE_COOLING_MIXER_TARGET_TEMPERATURE,
         PASSIVE_COOLING_MIXER_FLOW_TEMPERATURE,
+        PASSIVE_COOLING_MIXER_TARGET_TEMPERATURE,
+        PASSIVE_COOLING_MIXER_POSITION,
     ]
 
 
@@ -2378,9 +2414,11 @@ DEFAULT_POSITION_DATA_RESPONSE: list[dict[str, Any]] = [
     json.loads(HEAT_CIRCUIT_ROOM_HUMIDITY % ("0", "53")),
     json.loads(HEAT_CIRCUIT_DEW_POINT % ("0", "13.1")),
     json.loads(HEAT_CIRCUIT_FLOW_TEMPERATURE_SETPOINT % ("0", "26.5543")),
-    json.loads(HEAT_CIRCUIT_FLOW_TEMPERATURE % ("0", "24.33543")),
     json.loads(HEAT_CIRCUIT_MIXER_FLOW_TEMPERATURE % ("0", "22.2143")),
     json.loads(HEAT_CIRCUIT_MIXER_RETURN_FLOW_TEMPERATURE % ("0", "20.2143")),
+    json.loads(HEAT_CIRCUIT_MIXER_POSITION % ("0", "-1")),
+    json.loads(HEAT_CIRCUIT_PUMP_STATE % ("0", "true")),
+    json.loads(HEAT_CIRCUIT_RETURN_FLOW_TEMPERATURE % ("0", "21.2143")),
     json.loads(HEAT_CIRCUIT_TARGET_TEMPERATURE_DAY % ("0", "20.5")),
     json.loads(HEAT_CIRCUIT_TARGET_COOLING_TEMPERATURE_DAY % ("0", "20.5")),
     json.loads(HEAT_CIRCUIT_HEATING_LIMIT_DAY % ("0", "20")),
@@ -2503,12 +2541,16 @@ ENTITY_UPDATED_DATA_RESPONSE: list[dict[str, Any]] = [
     json.loads(HEAT_CIRCUIT_DEW_POINT % ("1", "13.1")),
     json.loads(HEAT_CIRCUIT_FLOW_TEMPERATURE_SETPOINT % ("0", "26.5543")),
     json.loads(HEAT_CIRCUIT_FLOW_TEMPERATURE_SETPOINT % ("1", "26.5543")),
-    json.loads(HEAT_CIRCUIT_FLOW_TEMPERATURE % ("0", "24.33543")),
-    json.loads(HEAT_CIRCUIT_FLOW_TEMPERATURE % ("1", "24.33543")),
     json.loads(HEAT_CIRCUIT_MIXER_FLOW_TEMPERATURE % ("0", "22.2143")),
     json.loads(HEAT_CIRCUIT_MIXER_FLOW_TEMPERATURE % ("1", "22.2143")),
     json.loads(HEAT_CIRCUIT_MIXER_RETURN_FLOW_TEMPERATURE % ("0", "20.2143")),
     json.loads(HEAT_CIRCUIT_MIXER_RETURN_FLOW_TEMPERATURE % ("1", "20.2143")),
+    json.loads(HEAT_CIRCUIT_MIXER_POSITION % ("0", "-1")),
+    json.loads(HEAT_CIRCUIT_MIXER_POSITION % ("1", "-1")),
+    json.loads(HEAT_CIRCUIT_PUMP_STATE % ("0", "true")),
+    json.loads(HEAT_CIRCUIT_PUMP_STATE % ("1", "true")),
+    json.loads(HEAT_CIRCUIT_RETURN_FLOW_TEMPERATURE % ("0", "21.2143")),
+    json.loads(HEAT_CIRCUIT_RETURN_FLOW_TEMPERATURE % ("1", "21.2143")),
     json.loads(HEAT_CIRCUIT_TARGET_TEMPERATURE_DAY % ("0", "20.5")),
     json.loads(HEAT_CIRCUIT_TARGET_TEMPERATURE_DAY % ("1", "20.5")),
     json.loads(HEAT_CIRCUIT_TARGET_COOLING_TEMPERATURE_DAY % ("0", "20.5")),
@@ -2696,9 +2738,11 @@ def get_single_position_data_response(
         json.loads(HEAT_CIRCUIT_ROOM_HUMIDITY % ("0", "53")),
         json.loads(HEAT_CIRCUIT_DEW_POINT % ("0", "13.1")),
         json.loads(HEAT_CIRCUIT_FLOW_TEMPERATURE_SETPOINT % ("0", "26.5543")),
-        json.loads(HEAT_CIRCUIT_FLOW_TEMPERATURE % ("0", "24.33543")),
         json.loads(HEAT_CIRCUIT_MIXER_FLOW_TEMPERATURE % ("0", "22.2143")),
         json.loads(HEAT_CIRCUIT_MIXER_RETURN_FLOW_TEMPERATURE % ("0", "20.2143")),
+        json.loads(HEAT_CIRCUIT_MIXER_POSITION % ("0", "-1")),
+        json.loads(HEAT_CIRCUIT_PUMP_STATE % ("0", "true")),
+        json.loads(HEAT_CIRCUIT_RETURN_FLOW_TEMPERATURE % ("0", "21.2143")),
         json.loads(HEAT_CIRCUIT_TARGET_TEMPERATURE_DAY % ("0", "20.5")),
         json.loads(HEAT_CIRCUIT_TARGET_COOLING_TEMPERATURE_DAY % ("0", "20.5")),
         json.loads(HEAT_CIRCUIT_HEATING_LIMIT_DAY % ("0", "20")),
@@ -2823,12 +2867,16 @@ MULTIPLE_POSITION_DATA_RESPONSE_1: list[dict[str, Any]] = [
     json.loads(HEAT_CIRCUIT_DEW_POINT % ("1", "13.1")),
     json.loads(HEAT_CIRCUIT_FLOW_TEMPERATURE_SETPOINT % ("0", "26.5543")),
     json.loads(HEAT_CIRCUIT_FLOW_TEMPERATURE_SETPOINT % ("1", "26.5543")),
-    json.loads(HEAT_CIRCUIT_FLOW_TEMPERATURE % ("0", "24.33543")),
-    json.loads(HEAT_CIRCUIT_FLOW_TEMPERATURE % ("1", "24.33543")),
     json.loads(HEAT_CIRCUIT_MIXER_FLOW_TEMPERATURE % ("0", "22.2143")),
     json.loads(HEAT_CIRCUIT_MIXER_FLOW_TEMPERATURE % ("1", "22.2143")),
     json.loads(HEAT_CIRCUIT_MIXER_RETURN_FLOW_TEMPERATURE % ("0", "20.2143")),
     json.loads(HEAT_CIRCUIT_MIXER_RETURN_FLOW_TEMPERATURE % ("1", "20.2143")),
+    json.loads(HEAT_CIRCUIT_MIXER_POSITION % ("0", "-1")),
+    json.loads(HEAT_CIRCUIT_MIXER_POSITION % ("1", "-1")),
+    json.loads(HEAT_CIRCUIT_PUMP_STATE % ("0", "true")),
+    json.loads(HEAT_CIRCUIT_PUMP_STATE % ("1", "true")),
+    json.loads(HEAT_CIRCUIT_RETURN_FLOW_TEMPERATURE % ("0", "21.2143")),
+    json.loads(HEAT_CIRCUIT_RETURN_FLOW_TEMPERATURE % ("1", "21.2143")),
     json.loads(HEAT_CIRCUIT_TARGET_TEMPERATURE_DAY % ("0", "20.5")),
     json.loads(HEAT_CIRCUIT_TARGET_TEMPERATURE_DAY % ("1", "20.5")),
     json.loads(HEAT_CIRCUIT_TARGET_COOLING_TEMPERATURE_DAY % ("0", "20.5")),
@@ -3027,12 +3075,16 @@ MULTIPLE_POSITION_DATA_RESPONSE_2: list[dict[str, Any]] = [
     json.loads(HEAT_CIRCUIT_DEW_POINT % ("1", "13.1")),
     json.loads(HEAT_CIRCUIT_FLOW_TEMPERATURE_SETPOINT % ("0", "26.5543")),
     json.loads(HEAT_CIRCUIT_FLOW_TEMPERATURE_SETPOINT % ("1", "26.5543")),
-    json.loads(HEAT_CIRCUIT_FLOW_TEMPERATURE % ("0", "24.33543")),
-    json.loads(HEAT_CIRCUIT_FLOW_TEMPERATURE % ("1", "24.33543")),
     json.loads(HEAT_CIRCUIT_MIXER_FLOW_TEMPERATURE % ("0", "22.2143")),
     json.loads(HEAT_CIRCUIT_MIXER_FLOW_TEMPERATURE % ("1", "22.2143")),
     json.loads(HEAT_CIRCUIT_MIXER_RETURN_FLOW_TEMPERATURE % ("0", "20.2143")),
     json.loads(HEAT_CIRCUIT_MIXER_RETURN_FLOW_TEMPERATURE % ("1", "20.2143")),
+    json.loads(HEAT_CIRCUIT_MIXER_POSITION % ("0", "-1")),
+    json.loads(HEAT_CIRCUIT_MIXER_POSITION % ("1", "-1")),
+    json.loads(HEAT_CIRCUIT_PUMP_STATE % ("0", "true")),
+    json.loads(HEAT_CIRCUIT_PUMP_STATE % ("1", "true")),
+    json.loads(HEAT_CIRCUIT_RETURN_FLOW_TEMPERATURE % ("0", "21.2143")),
+    json.loads(HEAT_CIRCUIT_RETURN_FLOW_TEMPERATURE % ("1", "21.2143")),
     json.loads(HEAT_CIRCUIT_TARGET_TEMPERATURE_DAY % ("0", "20.5")),
     json.loads(HEAT_CIRCUIT_TARGET_TEMPERATURE_DAY % ("1", "20.5")),
     json.loads(HEAT_CIRCUIT_TARGET_COOLING_TEMPERATURE_DAY % ("0", "20.5")),
@@ -3323,12 +3375,16 @@ MULTIPLE_POSITION_DATA_RESPONSE_3_2: list[dict[str, Any]] = [
     json.loads(HEAT_CIRCUIT_DEW_POINT % ("1", "13.1")),
     json.loads(HEAT_CIRCUIT_FLOW_TEMPERATURE_SETPOINT % ("0", "26.5543")),
     json.loads(HEAT_CIRCUIT_FLOW_TEMPERATURE_SETPOINT % ("1", "26.5543")),
-    json.loads(HEAT_CIRCUIT_FLOW_TEMPERATURE % ("0", "24.33543")),
-    json.loads(HEAT_CIRCUIT_FLOW_TEMPERATURE % ("1", "24.33543")),
     json.loads(HEAT_CIRCUIT_MIXER_FLOW_TEMPERATURE % ("0", "22.2143")),
     json.loads(HEAT_CIRCUIT_MIXER_FLOW_TEMPERATURE % ("1", "22.2143")),
     json.loads(HEAT_CIRCUIT_MIXER_RETURN_FLOW_TEMPERATURE % ("0", "20.2143")),
     json.loads(HEAT_CIRCUIT_MIXER_RETURN_FLOW_TEMPERATURE % ("1", "20.2143")),
+    json.loads(HEAT_CIRCUIT_MIXER_POSITION % ("0", "-1")),
+    json.loads(HEAT_CIRCUIT_MIXER_POSITION % ("1", "-1")),
+    json.loads(HEAT_CIRCUIT_PUMP_STATE % ("0", "true")),
+    json.loads(HEAT_CIRCUIT_PUMP_STATE % ("1", "true")),
+    json.loads(HEAT_CIRCUIT_RETURN_FLOW_TEMPERATURE % ("0", "21.2143")),
+    json.loads(HEAT_CIRCUIT_RETURN_FLOW_TEMPERATURE % ("1", "21.2143")),
     json.loads(HEAT_CIRCUIT_TARGET_TEMPERATURE_DAY % ("0", "20.5")),
     json.loads(HEAT_CIRCUIT_TARGET_TEMPERATURE_DAY % ("1", "20.5")),
     json.loads(HEAT_CIRCUIT_TARGET_COOLING_TEMPERATURE_DAY % ("0", "20.5")),

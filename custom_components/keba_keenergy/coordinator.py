@@ -83,6 +83,8 @@ REQUEST_DATA_GROUPS: dict[SectionPrefix, list[Section]] = {
         HeatCircuit.FLOW_TEMPERATURE_SETPOINT,
         HeatCircuit.MIXER_FLOW_TEMPERATURE,
         HeatCircuit.MIXER_RETURN_FLOW_TEMPERATURE,
+        HeatCircuit.MIXER_POSITION,
+        HeatCircuit.PUMP_STATE,
         HeatCircuit.RETURN_FLOW_TEMPERATURE,
         HeatCircuit.TARGET_TEMPERATURE_DAY,
         HeatCircuit.TARGET_COOLING_TEMPERATURE_DAY,
@@ -196,6 +198,7 @@ REQUEST_DATA_GROUPS: dict[SectionPrefix, list[Section]] = {
         PassiveCooling.CIRCULATION_PUMP_SPEED,
         PassiveCooling.MIXER_FLOW_TEMPERATURE,
         PassiveCooling.MIXER_TARGET_TEMPERATURE,
+        PassiveCooling.MIXER_POSITION,
     ],
     SectionPrefix.BUFFER_TANK: [
         BufferTank.CURRENT_TOP_TEMPERATURE,

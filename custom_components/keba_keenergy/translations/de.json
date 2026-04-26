@@ -104,6 +104,9 @@
             "hot_water_flow": {
                 "name": "Warmwasser läuft"
             },
+            "pump_state": {
+                "name": "Pumpe Status"
+            },
             "source_actuator_failure": {
                 "name": "Quellenaktor"
             },
@@ -523,6 +526,9 @@
             },
             "mixer_flow_temperature": {
                 "name": "Vorlauftemperatur (Mischer)"
+            },
+            "mixer_position": {
+                "name": "Mischer"
             },
             "mixer_return_flow_temperature": {
                 "name": "Rücklauftemperatur (Mischer)"

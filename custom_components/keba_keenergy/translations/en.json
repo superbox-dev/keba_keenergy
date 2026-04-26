@@ -104,6 +104,9 @@
             "hot_water_flow": {
                 "name": "Hot water flow"
             },
+            "pump_state": {
+                "name": "Pump state"
+            },
             "source_actuator_failure": {
                 "name": "Source actuator"
             },
@@ -523,6 +526,9 @@
             },
             "mixer_flow_temperature": {
                 "name": "Flow temperature (mixer)"
+            },
+            "mixer_position": {
+                "name": "Mixer"
             },
             "mixer_return_flow_temperature": {
                 "name": "Return flow temperature (mixer)"

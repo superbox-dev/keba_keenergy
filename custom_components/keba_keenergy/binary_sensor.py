@@ -57,6 +57,15 @@ BINARY_SENSOR_TYPES: dict[str, tuple[KebaKeEnergyBinarySensorEntityDescription, 
             },
         ),
     ),
+    SectionPrefix.HEAT_CIRCUIT: (
+        KebaKeEnergyBinarySensorEntityDescription(
+            condition=lambda coordinator, index: coordinator.has_pump(index=index),
+            device_class=BinarySensorDeviceClass.RUNNING,
+            entity_registry_enabled_default=False,
+            key="pump_state",
+            translation_key="pump_state",
+        ),
+    ),
     SectionPrefix.HEAT_PUMP: (
         KebaKeEnergyBinarySensorEntityDescription(
             condition=lambda coordinator, _: coordinator.has_photovoltaics(),

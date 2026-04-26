@@ -800,14 +800,30 @@
             'lower_limit': '0',
             'upper_limit': '100',
           }),
-          'value': 24.34,
+          'value': 22.21,
         }),
         dict({
           'attributes': dict({
             'lower_limit': '0',
             'upper_limit': '100',
           }),
-          'value': 24.34,
+          'value': 22.21,
+        }),
+      ]),
+      'mixer_position': list([
+        dict({
+          'attributes': dict({
+            'lower_limit': '-1',
+            'upper_limit': '1',
+          }),
+          'value': 'closed',
+        }),
+        dict({
+          'attributes': dict({
+            'lower_limit': '-1',
+            'upper_limit': '1',
+          }),
+          'value': 'closed',
         }),
       ]),
       'mixer_return_flow_temperature': list([
@@ -816,14 +832,14 @@
             'lower_limit': '0',
             'upper_limit': '100',
           }),
-          'value': 22.21,
+          'value': 20.21,
         }),
         dict({
           'attributes': dict({
             'lower_limit': '0',
             'upper_limit': '100',
           }),
-          'value': 22.21,
+          'value': 20.21,
         }),
       ]),
       'operating_mode': list([
@@ -858,20 +874,28 @@
           'value': 0.5,
         }),
       ]),
-      'return_flow_temperature': list([
+      'pump_state': list([
         dict({
           'attributes': dict({
-            'lower_limit': '0',
-            'upper_limit': '100',
           }),
-          'value': 20.21,
+          'value': 'on',
         }),
         dict({
           'attributes': dict({
-            'lower_limit': '0',
-            'upper_limit': '100',
           }),
-          'value': 20.21,
+          'value': 'on',
+        }),
+      ]),
+      'return_flow_temperature': list([
+        dict({
+          'attributes': dict({
+          }),
+          'value': 21.21,
+        }),
+        dict({
+          'attributes': dict({
+          }),
+          'value': 21.21,
         }),
       ]),
       'room_humidity': list([
@@ -1663,17 +1687,26 @@
       'mixer_flow_temperature': list([
         dict({
           'attributes': dict({
+            'lower_limit': '0',
+            'upper_limit': '100',
           }),
-          'value': 19.22,
+          'value': 24.26,
+        }),
+      ]),
+      'mixer_position': list([
+        dict({
+          'attributes': dict({
+            'lower_limit': '-1',
+            'upper_limit': '1',
+          }),
+          'value': 'closed',
         }),
       ]),
       'mixer_target_temperature': list([
         dict({
           'attributes': dict({
-            'lower_limit': '0',
-            'upper_limit': '100',
           }),
-          'value': 24.26,
+          'value': 19.22,
         }),
       ]),
       'switch_valve_position': list([
@@ -2586,14 +2619,30 @@
             'lower_limit': '0',
             'upper_limit': '100',
           }),
-          'value': 24.34,
+          'value': 22.21,
         }),
         dict({
           'attributes': dict({
             'lower_limit': '0',
             'upper_limit': '100',
           }),
-          'value': 24.34,
+          'value': 22.21,
+        }),
+      ]),
+      'mixer_position': list([
+        dict({
+          'attributes': dict({
+            'lower_limit': '-1',
+            'upper_limit': '1',
+          }),
+          'value': 'closed',
+        }),
+        dict({
+          'attributes': dict({
+            'lower_limit': '-1',
+            'upper_limit': '1',
+          }),
+          'value': 'closed',
         }),
       ]),
       'mixer_return_flow_temperature': list([
@@ -2602,14 +2651,14 @@
             'lower_limit': '0',
             'upper_limit': '100',
           }),
-          'value': 22.21,
+          'value': 20.21,
         }),
         dict({
           'attributes': dict({
             'lower_limit': '0',
             'upper_limit': '100',
           }),
-          'value': 22.21,
+          'value': 20.21,
         }),
       ]),
       'operating_mode': list([
@@ -2644,20 +2693,28 @@
           'value': 0.5,
         }),
       ]),
-      'return_flow_temperature': list([
+      'pump_state': list([
         dict({
           'attributes': dict({
-            'lower_limit': '0',
-            'upper_limit': '100',
           }),
-          'value': 20.21,
+          'value': 'on',
         }),
         dict({
           'attributes': dict({
-            'lower_limit': '0',
-            'upper_limit': '100',
           }),
-          'value': 20.21,
+          'value': 'on',
+        }),
+      ]),
+      'return_flow_temperature': list([
+        dict({
+          'attributes': dict({
+          }),
+          'value': 21.21,
+        }),
+        dict({
+          'attributes': dict({
+          }),
+          'value': 21.21,
         }),
       ]),
       'room_humidity': list([
@@ -3449,17 +3506,26 @@
       'mixer_flow_temperature': list([
         dict({
           'attributes': dict({
+            'lower_limit': '0',
+            'upper_limit': '100',
           }),
-          'value': 19.22,
+          'value': 24.26,
+        }),
+      ]),
+      'mixer_position': list([
+        dict({
+          'attributes': dict({
+            'lower_limit': '-1',
+            'upper_limit': '1',
+          }),
+          'value': 'closed',
         }),
       ]),
       'mixer_target_temperature': list([
         dict({
           'attributes': dict({
-            'lower_limit': '0',
-            'upper_limit': '100',
           }),
-          'value': 24.26,
+          'value': 19.22,
         }),
       ]),
       'switch_valve_position': list([

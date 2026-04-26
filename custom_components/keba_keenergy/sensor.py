@@ -34,6 +34,7 @@ from keba_keenergy_api.constants import HeatPumpState
 from keba_keenergy_api.constants import HeatPumpSubState
 from keba_keenergy_api.constants import HotWaterTankExcessEnergyMode
 from keba_keenergy_api.constants import HotWaterTankOperatingMode
+from keba_keenergy_api.constants import MixerSwitchValvePosition
 from keba_keenergy_api.constants import SectionPrefix
 from keba_keenergy_api.constants import SwitchValvePosition
 from keba_keenergy_api.constants import SystemOperatingMode
@@ -246,6 +247,15 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             state_class=SensorStateClass.MEASUREMENT,
             translation_key="mixer_return_flow_temperature",
+            value=lambda data: data,
+        ),
+        KebaKeEnergySensorEntityDescription[str](
+            condition=lambda coordinator, index: coordinator.has_mixer(index=index),
+            device_class=SensorDeviceClass.ENUM,
+            entity_registry_enabled_default=False,
+            key="mixer_position",
+            options=[_.name.lower() for _ in MixerSwitchValvePosition],
+            translation_key="mixer_position",
             value=lambda data: data,
         ),
         KebaKeEnergySensorEntityDescription[float](
@@ -743,7 +753,7 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
             translation_key="current_overheating",
             value=lambda data: data,
         ),
-        KebaKeEnergySensorEntityDescription[int](
+        KebaKeEnergySensorEntityDescription[str](
             key="expansion_valve_position",
             translation_key="expansion_valve_position",
             suggested_display_precision=0,
@@ -1062,7 +1072,7 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
             icon="mdi:snowflake-thermometer",
             value=lambda data: data,
         ),
-        KebaKeEnergySensorEntityDescription[float](
+        KebaKeEnergySensorEntityDescription[str](
             condition=lambda coordinator, index: coordinator.has_passive_cooling(index=index),
             device_class=SensorDeviceClass.ENUM,
             key="switch_valve_position",
@@ -1094,6 +1104,15 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             state_class=SensorStateClass.MEASUREMENT,
             translation_key="mixer_target_temperature",
+            value=lambda data: data,
+        ),
+        KebaKeEnergySensorEntityDescription[str](
+            condition=lambda coordinator, index: coordinator.has_passive_cooling(index=index),
+            device_class=SensorDeviceClass.ENUM,
+            entity_registry_enabled_default=False,
+            key="mixer_position",
+            options=[_.name.lower() for _ in MixerSwitchValvePosition],
+            translation_key="mixer_position",
             value=lambda data: data,
         ),
     ),

@@ -113,6 +113,7 @@ if TYPE_CHECKING:
         # passive cooling
         "sensor.keba_keenergy_12345678_passive_cooling_circulation_pump_speed",
         "sensor.keba_keenergy_12345678_passive_cooling_mixer_flow_temperature",
+        "sensor.keba_keenergy_12345678_passive_cooling_mixer_position",
         "sensor.keba_keenergy_12345678_passive_cooling_mixer_target_temperature",
         "sensor.keba_keenergy_12345678_passive_cooling_switch_valve_position",
         "sensor.keba_keenergy_12345678_passive_cooling_temperature",
@@ -137,6 +138,7 @@ if TYPE_CHECKING:
         "sensor.keba_keenergy_12345678_heat_circuit_heating_curve_1",
         "sensor.keba_keenergy_12345678_heat_circuit_heating_limit_day_1",
         "sensor.keba_keenergy_12345678_heat_circuit_heating_limit_night_1",
+        "sensor.keba_keenergy_12345678_heat_circuit_mixer_position_1",
         "sensor.keba_keenergy_12345678_heat_circuit_operating_mode_1",
         "sensor.keba_keenergy_12345678_heat_circuit_operating_mode_2",
         "sensor.keba_keenergy_12345678_heat_circuit_pump_speed_1",
