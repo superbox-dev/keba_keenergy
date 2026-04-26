@@ -25,20 +25,13 @@ from homeassistant.helpers.update_coordinator import DataUpdateCoordinator
 from homeassistant.helpers.update_coordinator import UpdateFailed
 from homeassistant.util.dt import now
 from keba_keenergy_api.api import KebaKeEnergyAPI
+from keba_keenergy_api.constants import BoolEnum
 from keba_keenergy_api.constants import BufferTank
 from keba_keenergy_api.constants import ExternalHeatSource
 from keba_keenergy_api.constants import HeatCircuit
-from keba_keenergy_api.constants import HeatCircuitHasMixer
-from keba_keenergy_api.constants import HeatCircuitHasPump
-from keba_keenergy_api.constants import HeatCircuitHasReturnFlowTemperature
-from keba_keenergy_api.constants import HeatCircuitHasRoomHumidity
-from keba_keenergy_api.constants import HeatCircuitHasRoomTemperature
 from keba_keenergy_api.constants import HeatCircuitMode
 from keba_keenergy_api.constants import HeatPump
-from keba_keenergy_api.constants import HeatPumpHasActiveCooling
-from keba_keenergy_api.constants import HeatPumpHasPassiveCooling
 from keba_keenergy_api.constants import HotWaterTank
-from keba_keenergy_api.constants import HotWaterTankHasFreshWaterModule
 from keba_keenergy_api.constants import PassiveCooling
 from keba_keenergy_api.constants import Photovoltaics
 from keba_keenergy_api.constants import Section
@@ -46,8 +39,6 @@ from keba_keenergy_api.constants import SectionPrefix
 from keba_keenergy_api.constants import SolarCircuit
 from keba_keenergy_api.constants import SwitchValve
 from keba_keenergy_api.constants import System
-from keba_keenergy_api.constants import SystemHasOutdoorTemperature
-from keba_keenergy_api.constants import SystemHasPhotovoltaics
 from keba_keenergy_api.endpoints import Position
 from keba_keenergy_api.endpoints import Value
 from keba_keenergy_api.endpoints import ValueResponse
@@ -658,33 +649,33 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
     def has_outdoor_temperature(self) -> bool:
         """Check if outdoor temperature sensor is available."""
         data: Value = cast("Value", self._fixed_data[SectionPrefix.SYSTEM]["has_outdoor_temperature"])
-        return bool(SystemHasOutdoorTemperature.ON.name.lower() == data["value"])
+        return bool(BoolEnum.ON.name.lower() == data["value"])
 
     def has_room_temperature(self, *, index: int | None = None) -> bool:
         """Check if room temperature sensor is available."""
         index = 0 if index is None else index
 
         data: list[Value] = cast("list[Value]", self._fixed_data[SectionPrefix.HEAT_CIRCUIT]["has_room_temperature"])
-        return bool(HeatCircuitHasRoomTemperature.ON.name.lower() == data[index]["value"])
+        return bool(BoolEnum.ON.name.lower() == data[index]["value"])
 
     def has_room_humidity(self, *, index: int | None = None) -> bool:
         """Check if room humidity sensor is available."""
         index = 0 if index is None else index
 
         data: list[Value] = cast("list[Value]", self._fixed_data[SectionPrefix.HEAT_CIRCUIT]["has_room_humidity"])
-        return bool(HeatCircuitHasRoomHumidity.ON.name.lower() == data[index]["value"])
+        return bool(BoolEnum.ON.name.lower() == data[index]["value"])
 
     def has_photovoltaics(self) -> bool:
         """Check if photovoltaics is available."""
         data: Value = cast("Value", self._fixed_data[SectionPrefix.SYSTEM]["has_photovoltaics"])
-        return bool(SystemHasPhotovoltaics.ON.name.lower() == data["value"])
+        return bool(BoolEnum.ON.name.lower() == data["value"])
 
     def has_mixer(self, *, index: int | None = None) -> bool:
         """Check if heating circuit mixer is available."""
         index = 0 if index is None else index
 
         data: list[Value] = cast("list[Value]", self._fixed_data[SectionPrefix.HEAT_CIRCUIT]["has_mixer"])
-        return bool(HeatCircuitHasMixer.ON.name.lower() == data[index]["value"])
+        return bool(BoolEnum.ON.name.lower() == data[index]["value"])
 
     def has_return_flow_temperature(self, *, index: int | None = None) -> bool:
         """Check if heating circuit return flow temperature sensor is available."""
@@ -694,14 +685,14 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
             "list[Value]",
             self._fixed_data[SectionPrefix.HEAT_CIRCUIT]["has_return_flow_temperature"],
         )
-        return bool(HeatCircuitHasReturnFlowTemperature.ON.name.lower() == data[index]["value"])
+        return bool(BoolEnum.ON.name.lower() == data[index]["value"])
 
     def has_pump(self, *, index: int | None = None) -> bool:
         """Check if heating circuit pump is available."""
         index = 0 if index is None else index
 
         data: list[Value] = cast("list[Value]", self._fixed_data[SectionPrefix.HEAT_CIRCUIT]["has_pump"])
-        return bool(HeatCircuitHasPump.ON.name.lower() == data[index]["value"])
+        return bool(BoolEnum.ON.name.lower() == data[index]["value"])
 
     def has_fresh_water_module(self, *, index: int | None = None) -> bool:
         """Check if fresh water module is available."""
@@ -711,7 +702,7 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
             "list[Value]",
             self._fixed_data[SectionPrefix.HOT_WATER_TANK]["has_fresh_water_module"],
         )
-        return bool(HotWaterTankHasFreshWaterModule.ON.name.lower() == data[index]["value"])
+        return bool(BoolEnum.ON.name.lower() == data[index]["value"])
 
     def has_electrical_energy_meter(self, *, index: int | None = None) -> bool:
         """Check if electrical energy meter is available."""
@@ -758,14 +749,14 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
         index = 0 if index is None else index
 
         data: list[Value] = cast("list[Value]", self._fixed_data[SectionPrefix.HEAT_PUMP]["has_active_cooling"])
-        return bool(HeatPumpHasActiveCooling.ON.name.lower() == data[index]["value"])
+        return bool(BoolEnum.ON.name.lower() == data[index]["value"])
 
     def has_passive_cooling(self, *, index: int | None = None) -> bool:
         """Check if passive cooling is available."""
         index = 0 if index is None else index
 
         data: list[Value] = cast("list[Value]", self._fixed_data[SectionPrefix.HEAT_PUMP]["has_passive_cooling"])
-        return bool(HeatPumpHasPassiveCooling.ON.name.lower() == data[index]["value"])
+        return bool(BoolEnum.ON.name.lower() == data[index]["value"])
 
     def is_cooling_circuit(self, *, index: int | None = None) -> bool:
         """Check if heating circuit mode is cooling."""

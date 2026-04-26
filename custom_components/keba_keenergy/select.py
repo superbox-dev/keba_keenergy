@@ -12,12 +12,11 @@ from homeassistant.components.select import DOMAIN as SELECT_DOMAIN
 from homeassistant.components.select import SelectEntity
 from homeassistant.components.select import SelectEntityDescription
 from homeassistant.const import EntityCategory
+from keba_keenergy_api.constants import BoolEnum
 from keba_keenergy_api.constants import BufferTankOperatingMode
-from keba_keenergy_api.constants import ExternalHeatSourceOperatingMode
 from keba_keenergy_api.constants import HeatCircuitOperatingMode
 from keba_keenergy_api.constants import HotWaterTankOperatingMode
 from keba_keenergy_api.constants import SectionPrefix
-from keba_keenergy_api.constants import SolarCircuitOperatingMode
 from keba_keenergy_api.constants import SystemOperatingMode
 
 from .const import DOMAIN
@@ -188,10 +187,10 @@ SELECT_TYPES: dict[str, tuple[KebaKeEnergySelectEntityDescription, ...]] = {
             entity_class=KebaKeEnergySelectEntity,
             entity_category=EntityCategory.CONFIG,
             key="operating_mode",
-            options=[_.name.lower() for _ in SolarCircuitOperatingMode],
+            options=[_.name.lower() for _ in BoolEnum],
             translation_key="solar_circuit_operating_mode",
             icon="mdi:cog",
-            value=lambda data: SolarCircuitOperatingMode[data.upper()].value,
+            value=lambda data: BoolEnum[data.upper()].value,
         ),
     ),
     SectionPrefix.BUFFER_TANK: (
@@ -222,10 +221,10 @@ SELECT_TYPES: dict[str, tuple[KebaKeEnergySelectEntityDescription, ...]] = {
             entity_category=EntityCategory.CONFIG,
             entity_registry_enabled_default=False,
             key="operating_mode",
-            options=[_.name.lower() for _ in ExternalHeatSourceOperatingMode],
+            options=[_.name.lower() for _ in BoolEnum],
             translation_key="external_heat_source_operating_mode",
             icon="mdi:cog",
-            value=lambda data: ExternalHeatSourceOperatingMode[data.upper()].value,
+            value=lambda data: BoolEnum[data.upper()].value,
         ),
     ),
 }

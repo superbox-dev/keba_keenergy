@@ -43,10 +43,10 @@ classifiers = [
 ]
 requires-python = ">= 3.13.2"
 dependencies = [
-    "keba_keenergy_api~=2.12.0b8",
+    "keba_keenergy_api~=2.12.0b9",
     "homeassistant>=2025.8.2"
 ]
-version = "1.10.0b9"
+version = "1.10.0b10"
 
 [project.urls]
 "Repository" = "https://github.com/superbox-dev/keba_keenergy"

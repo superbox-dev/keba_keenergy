@@ -23,9 +23,9 @@ from homeassistant.const import UnitOfPressure
 from homeassistant.const import UnitOfTemperature
 from homeassistant.const import UnitOfTime
 from homeassistant.helpers.typing import StateType
+from keba_keenergy_api.constants import BoolEnum
 from keba_keenergy_api.constants import BufferTankExcessEnergyMode
 from keba_keenergy_api.constants import BufferTankOperatingMode
-from keba_keenergy_api.constants import ExternalHeatSourceOperatingMode
 from keba_keenergy_api.constants import HeatCircuitCoolRequest
 from keba_keenergy_api.constants import HeatCircuitExcessEnergyMode
 from keba_keenergy_api.constants import HeatCircuitHeatRequest
@@ -1253,7 +1253,7 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
         KebaKeEnergySensorEntityDescription[str](
             device_class=SensorDeviceClass.ENUM,
             key="operating_mode",
-            options=[_.name.lower() for _ in ExternalHeatSourceOperatingMode],
+            options=[_.name.lower() for _ in BoolEnum],
             translation_key="external_heat_source_operating_mode",
             value=lambda data: data,
         ),
