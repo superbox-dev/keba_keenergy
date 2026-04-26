@@ -36,12 +36,11 @@ keywords = [
 classifiers = [
     "Development Status :: 5 - Production/Stable",
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.13",
     "Programming Language :: Python :: 3.14",
     "Programming Language :: Python :: 3 :: Only",
     "Operating System :: OS Independent",
 ]
-requires-python = ">= 3.13.2"
+requires-python = ">= 3.14.2"
 dependencies = [
     "keba_keenergy_api~=2.12.0b9",
     "homeassistant>=2025.8.2"
@@ -80,7 +79,7 @@ test = [
     "coverage>=7.10.0",
     "genbadge[coverage]>=1.1.2",
     "pytest>=9.0.0",
-    "pytest-homeassistant-custom-component>=0.13.272",
+    "pytest-homeassistant-custom-component>=0.13.325",
 ]
 
 [tool.setuptools]
