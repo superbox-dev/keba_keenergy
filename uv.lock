@@ -1320,7 +1320,7 @@ test = [
 
 [package.metadata]
 requires-dist = [
-    { name = "homeassistant", specifier = ">=2025.8.2" },
+    { name = "homeassistant", specifier = ">=2026.3.0" },
     { name = "keba-keenergy-api", specifier = "~=2.12.0b9" },
 ]
 
