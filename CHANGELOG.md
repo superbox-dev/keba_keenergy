@@ -28,6 +28,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - The "Operating Mode" entity state for the control unit was updated with a delay
+- Fix connection failures when using .local hostnames by forcing IPv4 in the HTTP client
 
 [issue-46]: https://github.com/superbox-dev/keba_keenergy/issues/46
 [issue-47]: https://github.com/superbox-dev/keba_keenergy/issues/47
