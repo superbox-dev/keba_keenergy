@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import logging
+import socket
 from typing import TYPE_CHECKING
 
 from homeassistant.const import CONF_HOST
@@ -54,7 +55,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: KebaKeEnergyConfigEntry)
     ssl: bool = entry.data[CONF_SSL]
 
     # Newer software versions of the Web HMI comes with self-signed SSL certificates
-    session: ClientSession = async_get_clientsession(hass, verify_ssl=False)
+    session: ClientSession = async_get_clientsession(hass, verify_ssl=False, family=socket.AF_INET)
 
     coordinator: KebaKeEnergyDataUpdateCoordinator = KebaKeEnergyDataUpdateCoordinator(
         hass,
