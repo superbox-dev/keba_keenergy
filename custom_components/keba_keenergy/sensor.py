@@ -8,6 +8,7 @@ from typing import Any
 from typing import Final
 from typing import TYPE_CHECKING
 from typing import TypeVar
+from typing import cast
 
 from homeassistant.components.sensor import DOMAIN as SENSOR_DOMAIN
 from homeassistant.components.sensor import SensorDeviceClass
@@ -22,7 +23,6 @@ from homeassistant.const import UnitOfPower
 from homeassistant.const import UnitOfPressure
 from homeassistant.const import UnitOfTemperature
 from homeassistant.const import UnitOfTime
-from homeassistant.helpers.typing import StateType
 from keba_keenergy_api.constants import BoolEnum
 from keba_keenergy_api.constants import BufferTankExcessEnergyMode
 from keba_keenergy_api.constants import BufferTankOperatingMode
@@ -45,13 +45,15 @@ from .entity import KebaKeEnergyEntityDescriptionMixin
 
 if TYPE_CHECKING:
     from collections.abc import Callable
+    from collections.abc import Mapping
     from homeassistant.core import HomeAssistant
     from homeassistant.helpers.entity_platform import AddEntitiesCallback
+    from homeassistant.helpers.typing import StateType
     from keba_keenergy_api.endpoints import Value
     from .coordinator import KebaKeEnergyConfigEntry
     from .coordinator import KebaKeEnergyDataUpdateCoordinator
 
-T = TypeVar("T", bound=StateType)
+T = TypeVar("T")
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -65,7 +67,8 @@ class KebaKeEnergySensorEntityDescription[T](
 ):
     """Class describing KEBA KeEnergy sensor entities."""
 
-    value: Callable[[T], StateType]
+    value: Callable[[T], StateType] = lambda data: cast("StateType", data)
+    attributes: Callable[[Mapping[str, Any]], Mapping[str, Any]] = lambda data: data
 
 
 class KebaKeEnergySensorEntity(KebaKeEnergyEntity, SensorEntity):
@@ -100,15 +103,15 @@ class KebaKeEnergySensorEntity(KebaKeEnergyEntity, SensorEntity):
         )
 
     @property
-    def extra_state_attributes(self) -> dict[str, Any] | None:
+    def extra_state_attributes(self) -> Mapping[str, Any] | None:
         """Return extra state attributes."""
         entity_data: Value | None = self.get_entity_data(self.entity_description.new_key or self.entity_description.key)
-        attributes: dict[str, Any] | None = None
+        attributes: Mapping[str, Any] = {}
 
         if isinstance(entity_data, dict):
-            attributes = entity_data["attributes"]
+            attributes = entity_data.get("attributes", {})
 
-        return attributes
+        return self.entity_description.attributes(attributes)
 
 
 SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = {
@@ -193,7 +196,6 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
             state_class=SensorStateClass.MEASUREMENT,
             translation_key="room_temperature",
             icon="mdi:home-thermometer",
-            value=lambda data: data,
         ),
         KebaKeEnergySensorEntityDescription[float](
             condition=lambda coordinator, index: coordinator.has_room_humidity(index=index),
@@ -203,7 +205,6 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
             native_unit_of_measurement=PERCENTAGE,
             state_class=SensorStateClass.MEASUREMENT,
             translation_key="room_humidity",
-            value=lambda data: data,
         ),
         KebaKeEnergySensorEntityDescription[float](
             condition=(
@@ -217,7 +218,6 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
             state_class=SensorStateClass.MEASUREMENT,
             translation_key="dew_point",
             icon="mdi:home-thermometer",
-            value=lambda data: data,
         ),
         KebaKeEnergySensorEntityDescription[float](
             device_class=SensorDeviceClass.TEMPERATURE,
@@ -226,7 +226,6 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             state_class=SensorStateClass.MEASUREMENT,
             translation_key="flow_temperature_setpoint",
-            value=lambda data: data,
         ),
         KebaKeEnergySensorEntityDescription[float](
             condition=lambda coordinator, index: coordinator.has_mixer(index=index),
@@ -237,7 +236,6 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
             new_key="mixer_flow_temperature",
             state_class=SensorStateClass.MEASUREMENT,
             translation_key="mixer_flow_temperature",
-            value=lambda data: data,
         ),
         KebaKeEnergySensorEntityDescription[float](
             condition=lambda coordinator, index: coordinator.has_mixer(index=index),
@@ -247,7 +245,6 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             state_class=SensorStateClass.MEASUREMENT,
             translation_key="mixer_return_flow_temperature",
-            value=lambda data: data,
         ),
         KebaKeEnergySensorEntityDescription[str](
             condition=lambda coordinator, index: coordinator.has_mixer(index=index),
@@ -256,7 +253,7 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
             key="mixer_position",
             options=[_.name.lower() for _ in MixerSwitchValvePosition],
             translation_key="mixer_position",
-            value=lambda data: data,
+            attributes=lambda attributes: {**attributes, "position_percent": attributes["raw_value"] * 100},
         ),
         KebaKeEnergySensorEntityDescription[float](
             condition=lambda coordinator, index: coordinator.has_return_flow_temperature(index=index),
@@ -266,7 +263,6 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             state_class=SensorStateClass.MEASUREMENT,
             translation_key="return_flow_temperature",
-            value=lambda data: data,
         ),
         KebaKeEnergySensorEntityDescription[float](
             device_class=SensorDeviceClass.TEMPERATURE,
@@ -274,7 +270,6 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             state_class=SensorStateClass.MEASUREMENT,
             translation_key="selected_target_room_temperature",
-            value=lambda data: data,
         ),
         KebaKeEnergySensorEntityDescription[float](
             device_class=SensorDeviceClass.TEMPERATURE,
@@ -282,7 +277,6 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             state_class=SensorStateClass.MEASUREMENT,
             translation_key="target_room_temperature",
-            value=lambda data: data,
         ),
         KebaKeEnergySensorEntityDescription[float](
             condition=lambda coordinator, index: coordinator.is_heating_circuit(index=index),
@@ -291,7 +285,6 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             state_class=SensorStateClass.MEASUREMENT,
             translation_key="target_room_temperature_day",
-            value=lambda data: data,
         ),
         KebaKeEnergySensorEntityDescription[float](
             condition=lambda coordinator, index: coordinator.is_cooling_circuit(index=index),
@@ -300,7 +293,6 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             state_class=SensorStateClass.MEASUREMENT,
             translation_key="target_room_cooling_temperature_day",
-            value=lambda data: data,
         ),
         KebaKeEnergySensorEntityDescription[float](
             condition=lambda coordinator, index: coordinator.is_heating_circuit(index=index),
@@ -310,7 +302,6 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             state_class=SensorStateClass.MEASUREMENT,
             translation_key="heating_limit_day",
-            value=lambda data: data,
         ),
         KebaKeEnergySensorEntityDescription[float](
             condition=lambda coordinator, index: coordinator.is_cooling_circuit(index=index),
@@ -320,7 +311,6 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             state_class=SensorStateClass.MEASUREMENT,
             translation_key="cooling_limit_day",
-            value=lambda data: data,
         ),
         KebaKeEnergySensorEntityDescription[float](
             condition=(
@@ -333,7 +323,6 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             state_class=SensorStateClass.MEASUREMENT,
             translation_key="excess_energy_heating_limit_day",
-            value=lambda data: data,
         ),
         KebaKeEnergySensorEntityDescription[float](
             condition=(
@@ -346,7 +335,6 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             state_class=SensorStateClass.MEASUREMENT,
             translation_key="excess_energy_cooling_limit_day",
-            value=lambda data: data,
         ),
         KebaKeEnergySensorEntityDescription[float](
             condition=(
@@ -359,7 +347,6 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             state_class=SensorStateClass.MEASUREMENT,
             translation_key="excess_energy_heating_limit_day",
-            value=lambda data: data,
         ),
         KebaKeEnergySensorEntityDescription[float](
             condition=(
@@ -372,7 +359,6 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             state_class=SensorStateClass.MEASUREMENT,
             translation_key="excess_energy_cooling_limit_day",
-            value=lambda data: data,
         ),
         KebaKeEnergySensorEntityDescription[float](
             condition=lambda coordinator, index: coordinator.is_heating_circuit(index=index),
@@ -381,7 +367,6 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             state_class=SensorStateClass.MEASUREMENT,
             translation_key="target_room_temperature_night",
-            value=lambda data: data,
         ),
         KebaKeEnergySensorEntityDescription[float](
             condition=lambda coordinator, index: coordinator.is_cooling_circuit(index=index),
@@ -390,7 +375,6 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             state_class=SensorStateClass.MEASUREMENT,
             translation_key="target_room_cooling_temperature_night",
-            value=lambda data: data,
         ),
         KebaKeEnergySensorEntityDescription[float](
             condition=lambda coordinator, index: coordinator.is_heating_circuit(index=index),
@@ -400,7 +384,6 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             state_class=SensorStateClass.MEASUREMENT,
             translation_key="heating_limit_night",
-            value=lambda data: data,
         ),
         KebaKeEnergySensorEntityDescription[float](
             condition=lambda coordinator, index: coordinator.is_cooling_circuit(index=index),
@@ -410,7 +393,6 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             state_class=SensorStateClass.MEASUREMENT,
             translation_key="cooling_limit_night",
-            value=lambda data: data,
         ),
         KebaKeEnergySensorEntityDescription[float](
             condition=(
@@ -423,7 +405,6 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             state_class=SensorStateClass.MEASUREMENT,
             translation_key="excess_energy_heating_limit_night",
-            value=lambda data: data,
         ),
         KebaKeEnergySensorEntityDescription[float](
             condition=(
@@ -436,7 +417,6 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             state_class=SensorStateClass.MEASUREMENT,
             translation_key="excess_energy_cooling_limit_night",
-            value=lambda data: data,
         ),
         KebaKeEnergySensorEntityDescription[float](
             condition=lambda coordinator, index: coordinator.is_heating_circuit(index=index),
@@ -445,7 +425,6 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             state_class=SensorStateClass.MEASUREMENT,
             translation_key="target_room_temperature_away",
-            value=lambda data: data,
         ),
         KebaKeEnergySensorEntityDescription[float](
             device_class=SensorDeviceClass.TEMPERATURE,
@@ -453,7 +432,6 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             state_class=SensorStateClass.MEASUREMENT,
             translation_key="target_room_temperature_offset",
-            value=lambda data: data,
         ),
         KebaKeEnergySensorEntityDescription[float](
             condition=(
@@ -466,7 +444,6 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
             state_class=SensorStateClass.MEASUREMENT,
             translation_key="excess_energy_target_temperature",
             icon="mdi:sun-thermometer",
-            value=lambda data: data,
         ),
         KebaKeEnergySensorEntityDescription[float](
             condition=(
@@ -479,7 +456,6 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
             state_class=SensorStateClass.MEASUREMENT,
             translation_key="excess_energy_target_cooling_temperature",
             icon="mdi:sun-thermometer",
-            value=lambda data: data,
         ),
         KebaKeEnergySensorEntityDescription[str](
             condition=lambda coordinator, _: coordinator.has_photovoltaics(),
@@ -487,14 +463,12 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
             key="excess_energy_mode",
             options=[_.name.lower() for _ in HeatCircuitExcessEnergyMode],
             translation_key="excess_energy_mode",
-            value=lambda data: data,
         ),
         KebaKeEnergySensorEntityDescription[str](
             device_class=SensorDeviceClass.ENUM,
             key="operating_mode",
             options=[_.name.lower() for _ in HeatCircuitOperatingMode],
             translation_key="heat_circuit_operating_mode",
-            value=lambda data: data,
         ),
         KebaKeEnergySensorEntityDescription[str](
             condition=lambda coordinator, index: coordinator.is_heating_circuit(index=index),
@@ -502,7 +476,6 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
             key="heat_request",
             options=[_.name.lower() for _ in HeatCircuitHeatRequest],
             translation_key="heat_request",
-            value=lambda data: data,
         ),
         KebaKeEnergySensorEntityDescription[str](
             condition=lambda coordinator, index: coordinator.is_cooling_circuit(index=index),
@@ -511,21 +484,18 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
             key="cool_request",
             options=[_.name.lower() for _ in HeatCircuitCoolRequest],
             translation_key="cool_request",
-            value=lambda data: data,
         ),
         KebaKeEnergySensorEntityDescription[str](
             condition=lambda coordinator, index: coordinator.is_heating_circuit(index=index),
             key="heating_curve",
             translation_key="heating_curve",
             icon="mdi:chart-bell-curve-cumulative",
-            value=lambda data: data,
         ),
         KebaKeEnergySensorEntityDescription[str](
             condition=lambda coordinator, index: coordinator.is_cooling_circuit(index=index),
             key="cooling_curve",
             translation_key="cooling_curve",
             icon="mdi:chart-bell-curve-cumulative",
-            value=lambda data: data,
         ),
         KebaKeEnergySensorEntityDescription[float](
             condition=lambda coordinator, index: coordinator.has_pump(index=index),
@@ -545,7 +515,6 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
             state_class=SensorStateClass.MEASUREMENT,
             translation_key="source_temperature",
             icon="mdi:sun-thermometer",
-            value=lambda data: data,
         ),
         KebaKeEnergySensorEntityDescription[float](
             key="pump_1",
@@ -572,7 +541,6 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
                 "counter": " 1",
             },
             icon="mdi:thermometer-water",
-            value=lambda data: data,
         ),
         KebaKeEnergySensorEntityDescription[float](
             device_class=SensorDeviceClass.TEMPERATURE,
@@ -585,7 +553,6 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
                 "counter": " 2",
             },
             icon="mdi:thermometer-water",
-            value=lambda data: data,
         ),
         KebaKeEnergySensorEntityDescription[float](
             device_class=SensorDeviceClass.TEMPERATURE,
@@ -598,7 +565,6 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
                 "counter": " 1",
             },
             icon="mdi:thermometer-water",
-            value=lambda data: data,
         ),
         KebaKeEnergySensorEntityDescription[float](
             device_class=SensorDeviceClass.TEMPERATURE,
@@ -611,7 +577,6 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
                 "counter": " 2",
             },
             icon="mdi:thermometer-water",
-            value=lambda data: data,
         ),
         KebaKeEnergySensorEntityDescription[float](
             device_class=SensorDeviceClass.ENERGY,
@@ -638,7 +603,6 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
             native_unit_of_measurement=UnitOfPower.WATT,
             state_class=SensorStateClass.MEASUREMENT,
             translation_key="actual_power",
-            value=lambda data: data,
         ),
     ),
     SectionPrefix.HEAT_PUMP: (
@@ -648,7 +612,6 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
             options=[_.name.lower() for _ in HeatPumpState],
             translation_key="state",
             icon="mdi:cog",
-            value=lambda data: data,
         ),
         KebaKeEnergySensorEntityDescription[str](
             device_class=SensorDeviceClass.ENUM,
@@ -656,7 +619,6 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
             options=[_.name.lower() for _ in HeatPumpSubState],
             translation_key="substate",
             icon="mdi:cog",
-            value=lambda data: data,
         ),
         KebaKeEnergySensorEntityDescription[float](
             key="circulation_pump",
@@ -679,7 +641,6 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             state_class=SensorStateClass.MEASUREMENT,
             translation_key="flow_temperature",
-            value=lambda data: data,
         ),
         KebaKeEnergySensorEntityDescription[float](
             device_class=SensorDeviceClass.TEMPERATURE,
@@ -687,7 +648,6 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             state_class=SensorStateClass.MEASUREMENT,
             translation_key="return_flow_temperature",
-            value=lambda data: data,
         ),
         KebaKeEnergySensorEntityDescription[float](
             device_class=SensorDeviceClass.TEMPERATURE,
@@ -695,7 +655,6 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             state_class=SensorStateClass.MEASUREMENT,
             translation_key="source_input_temperature",
-            value=lambda data: data,
         ),
         KebaKeEnergySensorEntityDescription[float](
             device_class=SensorDeviceClass.TEMPERATURE,
@@ -703,7 +662,6 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             state_class=SensorStateClass.MEASUREMENT,
             translation_key="source_output_temperature",
-            value=lambda data: data,
         ),
         KebaKeEnergySensorEntityDescription[float](
             device_class=SensorDeviceClass.TEMPERATURE,
@@ -711,7 +669,6 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             state_class=SensorStateClass.MEASUREMENT,
             translation_key="compressor_input_temperature",
-            value=lambda data: data,
         ),
         KebaKeEnergySensorEntityDescription[float](
             device_class=SensorDeviceClass.TEMPERATURE,
@@ -719,7 +676,6 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             state_class=SensorStateClass.MEASUREMENT,
             translation_key="compressor_output_temperature",
-            value=lambda data: data,
         ),
         KebaKeEnergySensorEntityDescription[float](
             device_class=SensorDeviceClass.TEMPERATURE,
@@ -727,7 +683,6 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             state_class=SensorStateClass.MEASUREMENT,
             translation_key="condenser_temperature",
-            value=lambda data: data,
         ),
         KebaKeEnergySensorEntityDescription[float](
             device_class=SensorDeviceClass.TEMPERATURE,
@@ -735,7 +690,6 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             state_class=SensorStateClass.MEASUREMENT,
             translation_key="vaporizer_temperature",
-            value=lambda data: data,
         ),
         KebaKeEnergySensorEntityDescription[float](
             device_class=SensorDeviceClass.TEMPERATURE,
@@ -743,7 +697,6 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             state_class=SensorStateClass.MEASUREMENT,
             translation_key="target_overheating",
-            value=lambda data: data,
         ),
         KebaKeEnergySensorEntityDescription[float](
             device_class=SensorDeviceClass.TEMPERATURE,
@@ -751,13 +704,11 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             state_class=SensorStateClass.MEASUREMENT,
             translation_key="current_overheating",
-            value=lambda data: data,
         ),
         KebaKeEnergySensorEntityDescription[str](
             key="expansion_valve_position",
             translation_key="expansion_valve_position",
             suggested_display_precision=0,
-            value=lambda data: data,
         ),
         KebaKeEnergySensorEntityDescription[float](
             key="compressor",
@@ -772,7 +723,6 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
             native_unit_of_measurement=UnitOfPressure.BAR,
             state_class=SensorStateClass.MEASUREMENT,
             translation_key="high_pressure",
-            value=lambda data: data,
         ),
         KebaKeEnergySensorEntityDescription[float](
             device_class=SensorDeviceClass.PRESSURE,
@@ -780,7 +730,6 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
             native_unit_of_measurement=UnitOfPressure.BAR,
             state_class=SensorStateClass.MEASUREMENT,
             translation_key="low_pressure",
-            value=lambda data: data,
         ),
         KebaKeEnergySensorEntityDescription[float](
             condition=lambda coordinator, index: coordinator.has_electrical_energy_meter(index=index),
@@ -790,7 +739,6 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
             native_unit_of_measurement=UnitOfPower.WATT,
             state_class=SensorStateClass.MEASUREMENT,
             translation_key="compressor_power",
-            value=lambda data: data,
         ),
         KebaKeEnergySensorEntityDescription[float](
             condition=lambda coordinator, index: coordinator.has_heat_meter(index=index),
@@ -800,7 +748,6 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
             native_unit_of_measurement=UnitOfPower.WATT,
             state_class=SensorStateClass.MEASUREMENT,
             translation_key="heating_power",
-            value=lambda data: data,
         ),
         KebaKeEnergySensorEntityDescription[float](
             condition=lambda coordinator, index: coordinator.has_heat_meter(index=index),
@@ -810,7 +757,6 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
             native_unit_of_measurement=UnitOfPower.WATT,
             state_class=SensorStateClass.MEASUREMENT,
             translation_key="hot_water_power",
-            value=lambda data: data,
         ),
         KebaKeEnergySensorEntityDescription[float](
             condition=(
@@ -823,7 +769,6 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
             state_class=SensorStateClass.MEASUREMENT,
             suggested_display_precision=2,
             translation_key="cop",
-            value=lambda data: data,
         ),
         KebaKeEnergySensorEntityDescription[float](
             condition=lambda coordinator, index: coordinator.has_heat_meter(index=index),
@@ -833,7 +778,6 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
             native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
             state_class=SensorStateClass.TOTAL,
             translation_key="heating_energy",
-            value=lambda data: data,
         ),
         KebaKeEnergySensorEntityDescription[float](
             condition=lambda coordinator, index: coordinator.has_electrical_energy_meter(index=index),
@@ -843,7 +787,6 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
             native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
             state_class=SensorStateClass.TOTAL,
             translation_key="heating_energy_consumption",
-            value=lambda data: data,
         ),
         KebaKeEnergySensorEntityDescription[float](
             condition=(
@@ -856,7 +799,6 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
             state_class=SensorStateClass.MEASUREMENT,
             suggested_display_precision=2,
             translation_key="heating_spf",
-            value=lambda data: data,
         ),
         KebaKeEnergySensorEntityDescription[float](
             condition=lambda coordinator, index: coordinator.has_heat_meter(index=index),
@@ -866,7 +808,6 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
             native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
             state_class=SensorStateClass.TOTAL,
             translation_key="cooling_energy",
-            value=lambda data: data,
         ),
         KebaKeEnergySensorEntityDescription[float](
             condition=(
@@ -879,7 +820,6 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
             native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
             state_class=SensorStateClass.TOTAL,
             translation_key="cooling_energy_consumption",
-            value=lambda data: data,
         ),
         KebaKeEnergySensorEntityDescription[float](
             condition=(
@@ -892,7 +832,6 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
             state_class=SensorStateClass.MEASUREMENT,
             suggested_display_precision=2,
             translation_key="cooling_spf",
-            value=lambda data: data,
         ),
         KebaKeEnergySensorEntityDescription[float](
             condition=(lambda coordinator, index: coordinator.has_heat_meter(index=index)),
@@ -902,7 +841,6 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
             native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
             state_class=SensorStateClass.TOTAL,
             translation_key="hot_water_energy",
-            value=lambda data: data,
         ),
         KebaKeEnergySensorEntityDescription[float](
             condition=lambda coordinator, index: coordinator.has_electrical_energy_meter(index=index),
@@ -912,7 +850,6 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
             native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
             state_class=SensorStateClass.TOTAL,
             translation_key="hot_water_energy_consumption",
-            value=lambda data: data,
         ),
         KebaKeEnergySensorEntityDescription[float](
             condition=(
@@ -925,7 +862,6 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
             state_class=SensorStateClass.MEASUREMENT,
             suggested_display_precision=2,
             translation_key="hot_water_spf",
-            value=lambda data: data,
         ),
         KebaKeEnergySensorEntityDescription[float](
             condition=lambda coordinator, index: coordinator.has_heat_meter(index=index),
@@ -935,7 +871,6 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
             native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
             state_class=SensorStateClass.TOTAL,
             translation_key="total_thermal_energy",
-            value=lambda data: data,
         ),
         KebaKeEnergySensorEntityDescription[float](
             condition=lambda coordinator, index: coordinator.has_electrical_energy_meter(index=index),
@@ -945,7 +880,6 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
             native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
             state_class=SensorStateClass.TOTAL,
             translation_key="total_energy_consumption",
-            value=lambda data: data,
         ),
         KebaKeEnergySensorEntityDescription[float](
             condition=(
@@ -958,7 +892,6 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
             state_class=SensorStateClass.MEASUREMENT,
             suggested_display_precision=2,
             translation_key="total_spf",
-            value=lambda data: data,
         ),
         KebaKeEnergySensorEntityDescription[float](
             condition=lambda coordinator, _: coordinator.has_photovoltaics(),
@@ -968,7 +901,6 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
             native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
             state_class=SensorStateClass.TOTAL,
             translation_key="excess_energy_consumption",
-            value=lambda data: data,
         ),
         KebaKeEnergySensorEntityDescription[float](
             condition=lambda coordinator, _: coordinator.has_photovoltaics(),
@@ -978,7 +910,6 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
             native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
             state_class=SensorStateClass.TOTAL,
             translation_key="heating_excess_energy_consumption",
-            value=lambda data: data,
         ),
         KebaKeEnergySensorEntityDescription[float](
             condition=(lambda coordinator, _: coordinator.has_photovoltaics()),
@@ -988,7 +919,6 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
             native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
             state_class=SensorStateClass.TOTAL,
             translation_key="cooling_excess_energy_consumption",
-            value=lambda data: data,
         ),
         KebaKeEnergySensorEntityDescription[float](
             condition=lambda coordinator, _: coordinator.has_photovoltaics(),
@@ -998,7 +928,6 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
             native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
             state_class=SensorStateClass.TOTAL,
             translation_key="hot_water_excess_energy_consumption",
-            value=lambda data: data,
         ),
         KebaKeEnergySensorEntityDescription[int](
             device_class=SensorDeviceClass.DURATION,
@@ -1026,7 +955,6 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
             state_class=SensorStateClass.TOTAL_INCREASING,
             suggested_display_precision=0,
             translation_key="activation_counter",
-            value=lambda data: data,
         ),
         KebaKeEnergySensorEntityDescription[int](
             condition=lambda coordinator, _: coordinator.has_photovoltaics(),
@@ -1058,7 +986,6 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
             state_class=SensorStateClass.TOTAL_INCREASING,
             suggested_display_precision=0,
             translation_key="excess_energy_activation_counter",
-            value=lambda data: data,
         ),
     ),
     SectionPrefix.PASSIVE_COOLING: (
@@ -1070,7 +997,6 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
             state_class=SensorStateClass.MEASUREMENT,
             translation_key="temperature",
             icon="mdi:snowflake-thermometer",
-            value=lambda data: data,
         ),
         KebaKeEnergySensorEntityDescription[str](
             condition=lambda coordinator, index: coordinator.has_passive_cooling(index=index),
@@ -1078,7 +1004,6 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
             key="switch_valve_position",
             options=[_.name.lower() for _ in SwitchValvePosition],
             translation_key="passive_cooling_valve_position",
-            value=lambda data: data,
         ),
         KebaKeEnergySensorEntityDescription[float](
             condition=lambda coordinator, index: coordinator.has_passive_cooling(index=index),
@@ -1095,7 +1020,6 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             translation_key="mixer_flow_temperature",
             icon="mdi:snowflake-thermometer",
-            value=lambda data: data,
         ),
         KebaKeEnergySensorEntityDescription[float](
             condition=lambda coordinator, index: coordinator.has_passive_cooling(index=index),
@@ -1104,7 +1028,6 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             state_class=SensorStateClass.MEASUREMENT,
             translation_key="mixer_target_temperature",
-            value=lambda data: data,
         ),
         KebaKeEnergySensorEntityDescription[str](
             condition=lambda coordinator, index: coordinator.has_passive_cooling(index=index),
@@ -1112,7 +1035,7 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
             key="mixer_position",
             options=[_.name.lower() for _ in MixerSwitchValvePosition],
             translation_key="mixer_position",
-            value=lambda data: data,
+            attributes=lambda attributes: {**attributes, "position_percent": attributes["raw_value"] * 100},
         ),
     ),
     SectionPrefix.BUFFER_TANK: (
@@ -1126,7 +1049,6 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
                 "counter": "",
             },
             icon="mdi:thermometer-water",
-            value=lambda data: data,
         ),
         KebaKeEnergySensorEntityDescription[float](
             device_class=SensorDeviceClass.TEMPERATURE,
@@ -1138,7 +1060,6 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
                 "counter": "",
             },
             icon="mdi:thermometer-water",
-            value=lambda data: data,
         ),
         KebaKeEnergySensorEntityDescription[float](
             condition=lambda coordinator, _: coordinator.has_photovoltaics(),
@@ -1148,7 +1069,6 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
             state_class=SensorStateClass.MEASUREMENT,
             translation_key="excess_energy_target_temperature",
             icon="mdi:sun-thermometer",
-            value=lambda data: data,
         ),
         KebaKeEnergySensorEntityDescription[str](
             condition=lambda coordinator, _: coordinator.has_photovoltaics(),
@@ -1156,14 +1076,12 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
             key="excess_energy_mode",
             options=[_.name.lower() for _ in BufferTankExcessEnergyMode],
             translation_key="excess_energy_mode",
-            value=lambda data: data,
         ),
         KebaKeEnergySensorEntityDescription[str](
             device_class=SensorDeviceClass.ENUM,
             key="operating_mode",
             options=[_.name.lower() for _ in BufferTankOperatingMode],
             translation_key="buffer_tank_operating_mode",
-            value=lambda data: data,
         ),
         KebaKeEnergySensorEntityDescription[float](
             device_class=SensorDeviceClass.TEMPERATURE,
@@ -1172,7 +1090,6 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
             state_class=SensorStateClass.MEASUREMENT,
             translation_key="standby_temperature",
             icon="mdi:thermometer-chevron-down",
-            value=lambda data: data,
         ),
         KebaKeEnergySensorEntityDescription[float](
             device_class=SensorDeviceClass.TEMPERATURE,
@@ -1184,7 +1101,6 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
                 "counter": "",
             },
             icon="mdi:thermometer-chevron-up",
-            value=lambda data: data,
         ),
     ),
     SectionPrefix.HOT_WATER_TANK: (
@@ -1198,14 +1114,12 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
                 "counter": "",
             },
             icon="mdi:thermometer-water",
-            value=lambda data: data,
         ),
         KebaKeEnergySensorEntityDescription[str](
             device_class=SensorDeviceClass.ENUM,
             key="operating_mode",
             options=[_.name.lower() for _ in HotWaterTankOperatingMode],
             translation_key="hot_water_tank_operating_mode",
-            value=lambda data: data,
         ),
         KebaKeEnergySensorEntityDescription[float](
             device_class=SensorDeviceClass.TEMPERATURE,
@@ -1214,7 +1128,6 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
             state_class=SensorStateClass.MEASUREMENT,
             translation_key="standby_temperature",
             icon="mdi:thermometer-chevron-down",
-            value=lambda data: data,
         ),
         KebaKeEnergySensorEntityDescription[float](
             condition=lambda coordinator, index: coordinator.has_fresh_water_module(index=index),
@@ -1225,7 +1138,6 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
             state_class=SensorStateClass.MEASUREMENT,
             translation_key="fresh_water_module_temperature",
             icon="mdi:thermometer-water",
-            value=lambda data: data,
         ),
         KebaKeEnergySensorEntityDescription[float](
             device_class=SensorDeviceClass.TEMPERATURE,
@@ -1237,7 +1149,6 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
                 "counter": "",
             },
             icon="mdi:thermometer-chevron-up",
-            value=lambda data: data,
         ),
         KebaKeEnergySensorEntityDescription[float](
             condition=lambda coordinator, _: coordinator.has_photovoltaics(),
@@ -1247,7 +1158,6 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
             state_class=SensorStateClass.MEASUREMENT,
             translation_key="excess_energy_target_temperature",
             icon="mdi:sun-thermometer",
-            value=lambda data: data,
         ),
         KebaKeEnergySensorEntityDescription[str](
             condition=lambda coordinator, _: coordinator.has_photovoltaics(),
@@ -1255,7 +1165,6 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
             key="excess_energy_mode",
             options=[_.name.lower() for _ in HotWaterTankExcessEnergyMode],
             translation_key="excess_energy_mode",
-            value=lambda data: data,
         ),
         KebaKeEnergySensorEntityDescription[float](
             device_class=SensorDeviceClass.TEMPERATURE,
@@ -1264,7 +1173,6 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             state_class=SensorStateClass.MEASUREMENT,
             translation_key="circulation_return_temperature",
-            value=lambda data: data,
         ),
     ),
     SectionPrefix.EXTERNAL_HEAT_SOURCE: (
@@ -1273,7 +1181,6 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
             key="operating_mode",
             options=[_.name.lower() for _ in BoolEnum],
             translation_key="external_heat_source_operating_mode",
-            value=lambda data: data,
         ),
         KebaKeEnergySensorEntityDescription[float](
             device_class=SensorDeviceClass.TEMPERATURE,
@@ -1284,7 +1191,6 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
             translation_placeholders={
                 "counter": "",
             },
-            value=lambda data: data,
         ),
         KebaKeEnergySensorEntityDescription[int](
             entity_category=EntityCategory.DIAGNOSTIC,
@@ -1312,7 +1218,6 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
             state_class=SensorStateClass.TOTAL_INCREASING,
             suggested_display_precision=0,
             translation_key="activation_counter",
-            value=lambda data: data,
         ),
         KebaKeEnergySensorEntityDescription[int](
             condition=lambda coordinator, _: coordinator.has_photovoltaics(),
@@ -1344,7 +1249,6 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
             state_class=SensorStateClass.TOTAL_INCREASING,
             suggested_display_precision=0,
             translation_key="excess_energy_activation_counter",
-            value=lambda data: data,
         ),
     ),
     SectionPrefix.SWITCH_VALVE: (
@@ -1353,7 +1257,6 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
             key="position",
             options=[_.name.lower() for _ in SwitchValvePosition],
             translation_key="switch_valve_position",
-            value=lambda data: data,
         ),
     ),
     SectionPrefix.PHOTOVOLTAICS: (
@@ -1363,7 +1266,6 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
             native_unit_of_measurement=UnitOfPower.WATT,
             state_class=SensorStateClass.MEASUREMENT,
             translation_key="excess_power",
-            value=lambda data: data,
         ),
         KebaKeEnergySensorEntityDescription[float](
             device_class=SensorDeviceClass.ENERGY,
