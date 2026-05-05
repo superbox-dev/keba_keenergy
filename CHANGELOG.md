@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!--start-->
 
-## [1.10.0] - 2025-04-23
+## [1.10.0] - 2025-05-05
 
 ### Added
 
@@ -22,6 +22,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Integration now required Python `3.14` and minimum Home Assistant version `2026.3.0`
 - Do not show sensors that are not available in the heat pump setup [(Issue #47)][issue-47]
 - Updated translations
 
