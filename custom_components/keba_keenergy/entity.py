@@ -34,6 +34,7 @@ if TYPE_CHECKING:
     from collections.abc import Mapping
     from datetime import datetime
     from homeassistant.core import CALLBACK_TYPE
+    from homeassistant.helpers.entity_platform import AddEntitiesCallback
     from homeassistant.helpers.typing import StateType
     from keba_keenergy_api.endpoints import Value
 
@@ -399,3 +400,59 @@ class KebaKeEnergyEntity(KebaKeEnergyBaseEntity):
             self.device_numbers = self.coordinator.external_heat_source_numbers
 
         return section
+
+
+async def _async_setup_entities(
+    entry: KebaKeEnergyConfigEntry,
+    async_add_entities: AddEntitiesCallback,
+    entity_types: dict[str, tuple[Any, ...]],
+    entity_cls: type[Any] | None,
+    entity_name: str,
+) -> None:
+    """Set up KEBA KeEnergy entities."""
+    coordinator: KebaKeEnergyDataUpdateCoordinator = entry.runtime_data
+    entities: list[Any] = []
+
+    for section_id, section_data in coordinator.data.items():
+        for description in entity_types.get(section_id, ()):
+            for key, values in section_data.items():
+                if key not in (description.key, description.new_key):
+                    continue
+
+                device_numbers = len(values) if isinstance(values, list) else 1
+
+                for index in range(device_numbers):
+                    if description.condition is not None and not description.condition(coordinator, index):
+                        _LOGGER.debug(
+                            'Skip %s "%s" (condition: %s)',
+                            entity_name,
+                            description.key,
+                            description.condition,
+                        )
+                        continue
+
+                    _LOGGER.debug(
+                        'Add %s "%s" (description: %s)',
+                        entity_name,
+                        description.key,
+                        description,
+                    )
+
+                    cls: type[Any] | None = (
+                        description.entity_class if hasattr(description, "entity_class") else entity_cls
+                    )
+
+                    if cls is None:
+                        continue
+
+                    entities.append(
+                        cls(
+                            coordinator=coordinator,
+                            description=description,
+                            entry=entry,
+                            section_id=section_id,
+                            index=index if device_numbers > 1 else None,
+                        ),
+                    )
+
+    async_add_entities(entities)

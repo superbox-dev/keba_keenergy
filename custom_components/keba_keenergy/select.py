@@ -22,6 +22,7 @@ from keba_keenergy_api.constants import SystemOperatingMode
 from .const import DOMAIN
 from .entity import KebaKeEnergyEntity
 from .entity import KebaKeEnergyEntityDescriptionMixin
+from .entity import _async_setup_entities
 
 if TYPE_CHECKING:
     from collections.abc import Callable
@@ -236,31 +237,10 @@ async def async_setup_entry(
     async_add_entities: AddEntitiesCallback,
 ) -> None:
     """Set up KEBA KeEnergy selects from a config entry."""
-    coordinator: KebaKeEnergyDataUpdateCoordinator = entry.runtime_data
-    selects: list[KebaKeEnergySelectEntity] = []
-
-    # Loop over all device data and add an index to the sensor
-    # if there is more than one device of the same type
-    # e.g. buffer tank, hot water tank, heat circuit, solar circuit or heat pump.
-
-    for section_id, section_data in coordinator.data.items():
-        for description in SELECT_TYPES.get(section_id, ()):
-            for key, values in section_data.items():
-                if key in [description.key, description.new_key]:
-                    device_numbers: int = len(values) if isinstance(values, list) else 1
-
-                    for index in range(device_numbers):
-                        if description.condition is not None and not description.condition(coordinator, index):
-                            continue
-
-                        selects += [
-                            description.entity_class(
-                                coordinator,
-                                description=description,
-                                entry=entry,
-                                section_id=section_id,
-                                index=index if device_numbers > 1 else None,
-                            ),
-                        ]
-
-    async_add_entities(selects)
+    await _async_setup_entities(
+        entry,
+        async_add_entities,
+        SELECT_TYPES,
+        None,
+        "select",
+    )
