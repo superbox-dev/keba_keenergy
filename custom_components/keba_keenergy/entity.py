@@ -423,12 +423,7 @@ async def _async_setup_entities(
 
                 for index in range(device_numbers):
                     if description.condition is not None and not description.condition(coordinator, index):
-                        _LOGGER.debug(
-                            'Skip %s "%s" (condition: %s)',
-                            entity_name,
-                            description.key,
-                            description.condition,
-                        )
+                        _LOGGER.debug('Skip %s "%s" (description: %s)', entity_name, description.key, description)
                         continue
 
                     _LOGGER.debug(
