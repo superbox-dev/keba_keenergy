@@ -45,7 +45,7 @@ dependencies = [
     "keba_keenergy_api~=2.12.0b13",
     "homeassistant>=2026.3.0"
 ]
-version = "1.10.0b16"
+version = "1.10.0b17"
 
 [project.urls]
 "Repository" = "https://github.com/superbox-dev/keba_keenergy"
