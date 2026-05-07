@@ -370,6 +370,8 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
         self.position = await self.api.system.get_positions()
         self.available_heating_curves = await self.api.heat_circuit.get_available_heating_curves()
 
+        _LOGGER.debug("Position: %s", self.position)
+
         self.request_data = await self.api.filter_request(
             request=self.request_data,
             position=self.position,
@@ -393,6 +395,8 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
             ],
             position=self.position,
         )
+
+        _LOGGER.debug("Fixed data: %s", self._fixed_data)
 
         if System.OUTDOOR_TEMPERATURE in self.request_data and not self.has_outdoor_temperature():  # pragma: nocover
             self.request_data.remove(System.OUTDOOR_TEMPERATURE)
