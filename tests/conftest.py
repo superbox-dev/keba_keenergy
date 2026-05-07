@@ -42,30 +42,46 @@ def auto_enable_custom_integrations(enable_custom_integrations: None) -> None:  
 
 
 @pytest.fixture(autouse=True)
-async def fail_on_log_errors(hass: HomeAssistant, request: pytest.FixtureRequest) -> AsyncGenerator[None]:
-    """Get all Home Assistant errors."""
+async def fail_on_log_errors(
+    hass: HomeAssistant,
+    request: pytest.FixtureRequest,
+) -> AsyncGenerator[None]:
+    """Fail test on Home Assistant or integration errors."""
+
     if request.node.get_closest_marker("no_fail_on_keba_errors"):
         yield
         return
 
     records: list[logging.LogRecord] = []
 
-    class Handler(logging.Handler):
+    class ErrorHandler(logging.Handler):
+        """Capture error log records."""
+
         def emit(self, record: logging.LogRecord) -> None:
             if record.levelno >= logging.ERROR:
                 records.append(record)
 
-    logger: logging.Logger = logging.getLogger("custom_components.keba_keenergy")
-    handler: Handler = Handler()
-    logger.addHandler(handler)
+    handler: ErrorHandler = ErrorHandler()
 
-    yield
+    loggers: list[logging.Logger] = [
+        logging.getLogger("custom_components.keba_keenergy"),
+        logging.getLogger("homeassistant.components.sensor"),
+        logging.getLogger("homeassistant.helpers.entity_platform"),
+    ]
 
-    await hass.async_block_till_done()
-    logger.removeHandler(handler)
+    for logger in loggers:
+        logger.addHandler(handler)
+
+    try:
+        yield
+        await hass.async_block_till_done()
+
+    finally:
+        for logger in loggers:
+            logger.removeHandler(handler)
 
     if records:
-        msgs: str = "\n".join(r.getMessage() for r in records)
+        msgs: str = "\n".join(record.getMessage() for record in records)
         pytest.fail(f"Keba integration logged errors:\n{msgs}")
 
 

@@ -199,20 +199,6 @@ NUMBER_TYPES: dict[str, tuple[KebaKeEnergyNumberEntityDescription, ...]] = {
         ),
         KebaKeEnergyNumberEntityDescription(
             condition=(
-                lambda coordinator, index: coordinator.is_heating_circuit(index=index)
-                and coordinator.has_photovoltaics()
-            ),
-            device_class=NumberDeviceClass.TEMPERATURE,
-            entity_category=EntityCategory.CONFIG,
-            entity_registry_enabled_default=False,
-            key="excess_energy_heating_limit_day",
-            native_unit_of_measurement=UnitOfTemperature.CELSIUS,
-            native_step=0.5,
-            translation_key="excess_energy_heating_limit_day",
-            scale=1,
-        ),
-        KebaKeEnergyNumberEntityDescription(
-            condition=(
                 lambda coordinator, index: coordinator.is_cooling_circuit(index=index)
                 and coordinator.has_photovoltaics()
             ),
