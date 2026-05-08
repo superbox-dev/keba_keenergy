@@ -190,6 +190,16 @@ HEAT_CIRCUIT_HAS_RETURN_FLOW_TEMPERATURE: str = """
 
 HEAT_CIRCUIT_HAS_PUMP: str = """
     {
+        "name": "APPL.CtrlAppl.sParam.options.heatCircuit[%s].hasPump",
+        "attributes": {
+          "longText": "HC pump"
+        },
+        "value": "%s"
+    }
+"""
+
+HEAT_CIRCUIT_HAS_VAR_SPEED_PUMP: str = """
+    {
         "name": "APPL.CtrlAppl.sParam.options.heatCircuit[%s].hasVarSpeedPump",
         "attributes": {
             "longText": "Var.speed pump"
@@ -2332,6 +2342,7 @@ DEFAULT_POSITION_FIXED_DATA_RESPONSE: list[dict[str, Any]] = [
     json.loads(HEAT_CIRCUIT_HAS_MIXER % ("0", "true")),
     json.loads(HEAT_CIRCUIT_HAS_RETURN_FLOW_TEMPERATURE % ("0", "true")),
     json.loads(HEAT_CIRCUIT_HAS_PUMP % ("0", "true")),
+    json.loads(HEAT_CIRCUIT_HAS_VAR_SPEED_PUMP % ("0", "true")),
     json.loads(HOT_WATER_TANK_HAS_FRESH_WATER_MODULE % ("0", "true")),
     json.loads(HEAT_PUMP_HAS_ACTIVE_COOLING % "false"),
     json.loads(HEAT_PUMP_HAS_PASSIVE_COOLING % "true"),
@@ -2356,6 +2367,8 @@ def get_multiple_position_fixed_data_response(has_passive_cooling: str = "false"
         json.loads(HEAT_CIRCUIT_HAS_RETURN_FLOW_TEMPERATURE % ("1", "false")),
         json.loads(HEAT_CIRCUIT_HAS_PUMP % ("0", "true")),
         json.loads(HEAT_CIRCUIT_HAS_PUMP % ("1", "false")),
+        json.loads(HEAT_CIRCUIT_HAS_VAR_SPEED_PUMP % ("0", "true")),
+        json.loads(HEAT_CIRCUIT_HAS_VAR_SPEED_PUMP % ("1", "false")),
         json.loads(HOT_WATER_TANK_HAS_FRESH_WATER_MODULE % ("0", "true")),
         json.loads(HOT_WATER_TANK_HAS_FRESH_WATER_MODULE % ("1", "false")),
         json.loads(HEAT_PUMP_HAS_ACTIVE_COOLING % "false"),

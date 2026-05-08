@@ -475,7 +475,7 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
             icon="mdi:chart-bell-curve-cumulative",
         ),
         KebaKeEnergySensorEntityDescription[float](
-            condition=lambda coordinator, index: coordinator.has_pump(index=index),
+            condition=lambda coordinator, index: coordinator.has_var_speed_pump(index=index),
             entity_registry_enabled_default=False,
             key="pump_speed",
             native_unit_of_measurement=PERCENTAGE,

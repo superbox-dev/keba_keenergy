@@ -387,6 +387,7 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
                 HeatCircuit.HAS_MIXER,
                 HeatCircuit.HAS_RETURN_FLOW_TEMPERATURE,
                 HeatCircuit.HAS_PUMP,
+                HeatCircuit.HAS_VAR_SPEED_PUMP,
                 HotWaterTank.HAS_FRESH_WATER_MODULE,
                 HeatPump.HAS_ACTIVE_COOLING,
                 HeatPump.HAS_PASSIVE_COOLING,
@@ -396,7 +397,7 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
             position=self.position,
         )
 
-        _LOGGER.debug("Fixed data: %s", self._fixed_data)
+        _LOGGER.debug("Options: %s", self._fixed_data)
 
         if System.OUTDOOR_TEMPERATURE in self.request_data and not self.has_outdoor_temperature():  # pragma: nocover
             self.request_data.remove(System.OUTDOOR_TEMPERATURE)
@@ -697,6 +698,13 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
         index = 0 if index is None else index
 
         data: list[Value] = cast("list[Value]", self._fixed_data[SectionPrefix.HEAT_CIRCUIT]["has_pump"])
+        return bool(BoolEnum.ON.name.lower() == data[index]["value"])
+
+    def has_var_speed_pump(self, *, index: int | None = None) -> bool:
+        """Check if heating circuit variable speed pump is available."""
+        index = 0 if index is None else index
+
+        data: list[Value] = cast("list[Value]", self._fixed_data[SectionPrefix.HEAT_CIRCUIT]["has_var_speed_pump"])
         return bool(BoolEnum.ON.name.lower() == data[index]["value"])
 
     def has_fresh_water_module(self, *, index: int | None = None) -> bool:
