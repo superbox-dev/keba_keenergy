@@ -796,7 +796,8 @@
                     "scan_interval_tick_hot_water_tank": "Update-Multiplikator für den Warmwasserspeicher",
                     "scan_interval_tick_solar_circuit": "Update-Multiplikator für den Solarkreis",
                     "scan_interval_tick_switch_valve": "Update-Multiplikator für das Umschaltventil",
-                    "scan_interval_tick_system": "Update-Multiplikator für die Bedieneinheit"
+                    "scan_interval_tick_system": "Update-Multiplikator für die Bedieneinheit",
+                    "scan_interval_tick_photovoltaics": "Update-Multiplikator für die Photovoltaik"
                 },
                 "data_description": {
                     "scan_interval": "Zeit in Sekunden zwischen den Updates",
@@ -807,7 +808,8 @@
                     "scan_interval_tick_hot_water_tank": "Aktualisierung alle X Scan-Intervalle",
                     "scan_interval_tick_solar_circuit": "Aktualisierung alle X Scan-Intervalle",
                     "scan_interval_tick_switch_valve": "Aktualisierung alle X Scan-Intervalle",
-                    "scan_interval_tick_system": "Aktualisierung alle X Scan-Intervalle"
+                    "scan_interval_tick_system": "Aktualisierung alle X Scan-Intervalle",
+                    "scan_interval_tick_photovoltaics": "Aktualisierung alle X Scan-Intervalle"
                 }
             }
         }

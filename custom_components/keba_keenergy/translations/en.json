@@ -797,7 +797,8 @@
                     "scan_interval_tick_hot_water_tank": "Hot water tank update multiplier",
                     "scan_interval_tick_solar_circuit": "Solar circuit update multiplier",
                     "scan_interval_tick_switch_valve": "Switch valve update multiplier",
-                    "scan_interval_tick_system": "Control unit update multiplier"
+                    "scan_interval_tick_system": "Control unit update multiplier",
+                    "scan_interval_tick_photovoltaics": "Photovoltaics update multiplier"
                 },
                 "data_description": {
                     "scan_interval": "Time in seconds between updates",
@@ -808,7 +809,8 @@
                     "scan_interval_tick_hot_water_tank": "Update every X scan intervals",
                     "scan_interval_tick_solar_circuit": "Update every X scan intervals",
                     "scan_interval_tick_switch_valve": "Update every X scan intervals",
-                    "scan_interval_tick_system": "Update every X scan intervals"
+                    "scan_interval_tick_system": "Update every X scan intervals",
+                    "scan_interval_tick_photovoltaics": "Update every X scan intervals"
                 }
             }
         }

@@ -9,6 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!--start-->
 
+## [1.10.1] - 2025-05-20
+
+### Fixed
+
+- Fix missing translation for photovoltaics
+
 ## [1.10.0] - 2025-05-19
 
 ### Added
