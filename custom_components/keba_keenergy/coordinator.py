@@ -372,7 +372,7 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
             position=self.position,
         )
 
-        self._fixed_data = await self.api.read_data(
+        fixed_request_data: list[Section] = await self.api.filter_request(
             request=[
                 System.HAS_OUTDOOR_TEMPERATURE,
                 System.HAS_PHOTOVOLTAICS,
@@ -389,6 +389,11 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
                 HeatPump.ELECTRIC_ENERGY_METER_TYPE,
                 HeatPump.HEAT_METER_TYPE,
             ],
+            position=self.position,
+        )
+
+        self._fixed_data = await self.api.read_data(
+            request=fixed_request_data,
             position=self.position,
         )
 
@@ -649,127 +654,156 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
 
     def has_outdoor_temperature(self) -> bool:
         """Check if outdoor temperature sensor is available."""
-        data: Value = cast("Value", self._fixed_data[SectionPrefix.SYSTEM]["has_outdoor_temperature"])
-        return bool(BoolEnum.ON.name.lower() == data["value"])
+        data: Value | None = cast("Value | None", self._fixed_data[SectionPrefix.SYSTEM].get("has_outdoor_temperature"))
+        return bool(BoolEnum.ON.name.lower() == data["value"]) if data else False
 
     def has_room_temperature(self, *, index: int | None = None) -> bool:
         """Check if room temperature sensor is available."""
         index = 0 if index is None else index
 
-        data: list[Value] = cast("list[Value]", self._fixed_data[SectionPrefix.HEAT_CIRCUIT]["has_room_temperature"])
-        return bool(BoolEnum.ON.name.lower() == data[index]["value"])
+        data: list[Value] | None = cast(
+            "list[Value] | None",
+            self._fixed_data[SectionPrefix.HEAT_CIRCUIT].get("has_room_temperature"),
+        )
+        return bool(BoolEnum.ON.name.lower() == data[index]["value"]) if data else False
 
     def has_room_humidity(self, *, index: int | None = None) -> bool:
         """Check if room humidity sensor is available."""
         index = 0 if index is None else index
 
-        data: list[Value] = cast("list[Value]", self._fixed_data[SectionPrefix.HEAT_CIRCUIT]["has_room_humidity"])
-        return bool(BoolEnum.ON.name.lower() == data[index]["value"])
+        data: list[Value] | None = cast(
+            "list[Value] | None",
+            self._fixed_data[SectionPrefix.HEAT_CIRCUIT].get("has_room_humidity"),
+        )
+        return bool(BoolEnum.ON.name.lower() == data[index]["value"]) if data else False
 
     def has_photovoltaics(self) -> bool:
         """Check if photovoltaics is available."""
-        data: Value = cast("Value", self._fixed_data[SectionPrefix.SYSTEM]["has_photovoltaics"])
-        return bool(BoolEnum.ON.name.lower() == data["value"])
+        data: Value | None = cast("Value | None", self._fixed_data[SectionPrefix.SYSTEM].get("has_photovoltaics"))
+        return bool(BoolEnum.ON.name.lower() == data["value"]) if data else False
 
     def has_mixer(self, *, index: int | None = None) -> bool:
         """Check if heating circuit mixer is available."""
         index = 0 if index is None else index
 
-        data: list[Value] = cast("list[Value]", self._fixed_data[SectionPrefix.HEAT_CIRCUIT]["has_mixer"])
-        return bool(BoolEnum.ON.name.lower() == data[index]["value"])
+        data: list[Value] | None = cast(
+            "list[Value] | None",
+            self._fixed_data[SectionPrefix.HEAT_CIRCUIT].get("has_mixer"),
+        )
+        return bool(BoolEnum.ON.name.lower() == data[index]["value"]) if data else False
 
     def has_return_flow_temperature(self, *, index: int | None = None) -> bool:
         """Check if heating circuit return flow temperature sensor is available."""
         index = 0 if index is None else index
 
-        data: list[Value] = cast(
-            "list[Value]",
-            self._fixed_data[SectionPrefix.HEAT_CIRCUIT]["has_return_flow_temperature"],
+        data: list[Value] | None = cast(
+            "list[Value] | None",
+            self._fixed_data[SectionPrefix.HEAT_CIRCUIT].get("has_return_flow_temperature"),
         )
-        return bool(BoolEnum.ON.name.lower() == data[index]["value"])
+        return bool(BoolEnum.ON.name.lower() == data[index]["value"]) if data else False
 
     def has_pump(self, *, index: int | None = None) -> bool:
         """Check if heating circuit pump is available."""
         index = 0 if index is None else index
 
-        data: list[Value] = cast("list[Value]", self._fixed_data[SectionPrefix.HEAT_CIRCUIT]["has_pump"])
-        return bool(BoolEnum.ON.name.lower() == data[index]["value"])
+        data: list[Value] | None = cast(
+            "list[Value] | None",
+            self._fixed_data[SectionPrefix.HEAT_CIRCUIT].get("has_pump"),
+        )
+        return bool(BoolEnum.ON.name.lower() == data[index]["value"]) if data else False
 
     def has_var_speed_pump(self, *, index: int | None = None) -> bool:
         """Check if heating circuit variable speed pump is available."""
         index = 0 if index is None else index
 
-        data: list[Value] = cast("list[Value]", self._fixed_data[SectionPrefix.HEAT_CIRCUIT]["has_var_speed_pump"])
-        return bool(BoolEnum.ON.name.lower() == data[index]["value"])
+        data: list[Value] | None = cast(
+            "list[Value] | None",
+            self._fixed_data[SectionPrefix.HEAT_CIRCUIT].get("has_var_speed_pump"),
+        )
+        return bool(BoolEnum.ON.name.lower() == data[index]["value"]) if data else False
 
     def has_fresh_water_module(self, *, index: int | None = None) -> bool:
         """Check if fresh water module is available."""
         index = 0 if index is None else index
 
-        data: list[Value] = cast(
-            "list[Value]",
-            self._fixed_data[SectionPrefix.HOT_WATER_TANK]["has_fresh_water_module"],
+        data: list[Value] | None = cast(
+            "list[Value] | None",
+            self._fixed_data[SectionPrefix.HOT_WATER_TANK].get("has_fresh_water_module"),
         )
-        return bool(BoolEnum.ON.name.lower() == data[index]["value"])
+        return bool(BoolEnum.ON.name.lower() == data[index]["value"]) if data else False
 
     def has_electrical_energy_meter(self, *, index: int | None = None) -> bool:
         """Check if electrical energy meter is available."""
         index = 0 if index is None else index
 
-        data: list[Value] = cast(
-            "list[Value]",
-            self._fixed_data[SectionPrefix.HEAT_PUMP]["electric_energy_meter_type"],
+        data: list[Value] | None = cast(
+            "list[Value] | None",
+            self._fixed_data[SectionPrefix.HEAT_PUMP].get("electric_energy_meter_type"),
         )
-        return bool(data[index]["value"] > 0)
+        return bool(data[index]["value"] > 0) if data else False
 
     def has_heat_meter(self, *, index: int | None = None) -> bool:
         """Check if heat meter is available."""
         index = 0 if index is None else index
 
-        data: list[Value] = cast(
-            "list[Value]",
-            self._fixed_data[SectionPrefix.HEAT_PUMP]["heat_meter_type"],
+        data: list[Value] | None = cast(
+            "list[Value] | None",
+            self._fixed_data[SectionPrefix.HEAT_PUMP].get("heat_meter_type"),
         )
-        return bool(data[index]["value"] > 0)
+        return bool(data[index]["value"] > 0) if data else False
 
     def has_active_cooling(self, *, index: int | None = None) -> bool:
         """Check if active cooling is available."""
         index = 0 if index is None else index
 
-        data: list[Value] = cast("list[Value]", self._fixed_data[SectionPrefix.HEAT_PUMP]["has_active_cooling"])
-        return bool(BoolEnum.ON.name.lower() == data[index]["value"])
+        data: list[Value] | None = cast(
+            "list[Value] | None",
+            self._fixed_data[SectionPrefix.HEAT_PUMP].get("has_active_cooling"),
+        )
+        return bool(BoolEnum.ON.name.lower() == data[index]["value"]) if data else False
 
     def has_passive_cooling(self, *, index: int | None = None) -> bool:
         """Check if passive cooling is available."""
         index = 0 if index is None else index
 
-        data: list[Value] = cast("list[Value]", self._fixed_data[SectionPrefix.HEAT_PUMP]["has_passive_cooling"])
-        return bool(BoolEnum.ON.name.lower() == data[index]["value"])
+        data: list[Value] | None = cast(
+            "list[Value] | None",
+            self._fixed_data[SectionPrefix.HEAT_PUMP].get("has_passive_cooling"),
+        )
+        return bool(BoolEnum.ON.name.lower() == data[index]["value"]) if data else False
 
     def is_cooling_circuit(self, *, index: int | None = None) -> bool:
         """Check if heating circuit mode is cooling."""
         index = 0 if index is None else index
 
-        data: list[Value] = cast("list[Value]", self._fixed_data[SectionPrefix.HEAT_CIRCUIT]["mode"])
-        return bool(
-            data[index]["value"]
-            in [
-                HeatCircuitMode.COOLING.name.lower(),
-                HeatCircuitMode.HEATING_AND_COOLING.name.lower(),
-                HeatCircuitMode.HEATING_AND_ACTIVE_COOLING.name.lower(),
-            ],
+        data: list[Value] | None = cast("list[Value] | None", self._fixed_data[SectionPrefix.HEAT_CIRCUIT].get("mode"))
+        return (
+            bool(
+                data[index]["value"]
+                in [
+                    HeatCircuitMode.COOLING.name.lower(),
+                    HeatCircuitMode.HEATING_AND_COOLING.name.lower(),
+                    HeatCircuitMode.HEATING_AND_ACTIVE_COOLING.name.lower(),
+                ],
+            )
+            if data
+            else False
         )
 
     def is_heating_circuit(self, *, index: int | None = None) -> bool:
         """Check if heating circuit mode is heating."""
         index = 0 if index is None else index
 
-        data: list[Value] = cast("list[Value]", self._fixed_data[SectionPrefix.HEAT_CIRCUIT]["mode"])
-        return bool(
-            data[index]["value"]
-            in [
-                HeatCircuitMode.HEATING.name.lower(),
-                HeatCircuitMode.HEATING_AND_COOLING.name.lower(),
-                HeatCircuitMode.HEATING_AND_ACTIVE_COOLING.name.lower(),
-            ],
+        data: list[Value] | None = cast("list[Value] | None", self._fixed_data[SectionPrefix.HEAT_CIRCUIT].get("mode"))
+        return (
+            bool(
+                data[index]["value"]
+                in [
+                    HeatCircuitMode.HEATING.name.lower(),
+                    HeatCircuitMode.HEATING_AND_COOLING.name.lower(),
+                    HeatCircuitMode.HEATING_AND_ACTIVE_COOLING.name.lower(),
+                ],
+            )
+            if data
+            else False
         )

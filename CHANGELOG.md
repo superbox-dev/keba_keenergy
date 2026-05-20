@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Fix missing translation for photovoltaics
 - Fix missing API error message and add better error logging [(Issue #59)][issue-59]
+- Filter API calls that are not available for this KEBA control unit / software version [(Issue #59)][issue-59]
 
 [issue-59]: https://github.com/superbox-dev/keba_keenergy/issues/59
 
