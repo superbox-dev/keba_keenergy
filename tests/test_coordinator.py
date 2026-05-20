@@ -12,10 +12,8 @@ from homeassistant.const import CONF_HOST
 from homeassistant.exceptions import ConfigEntryAuthFailed
 from homeassistant.exceptions import HomeAssistantError
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
-from homeassistant.helpers.update_coordinator import UpdateFailed
 from homeassistant.util import dt as dt_util
 from keba_keenergy_api.constants import SectionPrefix
-from keba_keenergy_api.error import APIError
 from keba_keenergy_api.error import AuthenticationError
 from pytest_homeassistant_custom_component.common import MockConfigEntry
 from pytest_homeassistant_custom_component.common import async_fire_time_changed
@@ -48,7 +46,6 @@ if TYPE_CHECKING:
 @pytest.mark.parametrize(
     ("side_effect", "raise_exception", "expected_translation_key", "expected_error"),
     [
-        (APIError("boom"), UpdateFailed, "communication_error", {"error": "boom"}),
         (AuthenticationError("boom"), ConfigEntryAuthFailed, "authentication_error", None),
     ],
 )

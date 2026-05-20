@@ -14,6 +14,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Fix missing translation for photovoltaics
+- Fix missing API error message and add better error logging [(Issue #59)][issue-59]
+
+[issue-59]: https://github.com/superbox-dev/keba_keenergy/issues/59
 
 ## [1.10.0] - 2025-05-19
 

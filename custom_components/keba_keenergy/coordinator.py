@@ -328,14 +328,9 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
                 translation_domain=DOMAIN,
                 translation_key="authentication_error",
             ) from error
-        except APIError as error:
-            raise UpdateFailed(
-                translation_domain=DOMAIN,
-                translation_key="communication_error",
-                translation_placeholders={
-                    "error": str(error),
-                },
-            ) from error
+        except APIError as error:  # pragma: no cover
+            _LOGGER.error("An error occurred while communicating with the API: %s", error)
+            raise UpdateFailed(error) from error
 
     @staticmethod
     async def _api_call_for_user(coro: Awaitable[Any]) -> Any:

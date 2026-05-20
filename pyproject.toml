@@ -45,7 +45,7 @@ dependencies = [
     "keba_keenergy_api~=2.12.0",
     "homeassistant>=2026.3.0"
 ]
-version = "1.10.0"
+version = "1.10.1b1"
 
 [project.urls]
 "Repository" = "https://github.com/superbox-dev/keba_keenergy"
@@ -110,6 +110,7 @@ ignore = [
     "PLR0913", # too-many-arguments
     "S101",    # assert
     "TRY003",  # raise-vanilla-args
+    "TRY400",   # error-instead-of-exception
 ]
 
 [tool.ruff.lint.per-file-ignores]

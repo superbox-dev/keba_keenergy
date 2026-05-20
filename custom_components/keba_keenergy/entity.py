@@ -442,17 +442,15 @@ async def _async_setup_entities(
                         description.entity_class if hasattr(description, "entity_class") else entity_cls
                     )
 
-                    if cls is None:
-                        continue
-
-                    entities.append(
-                        cls(
-                            coordinator=coordinator,
-                            description=description,
-                            entry=entry,
-                            section_id=section_id,
-                            index=index if device_numbers > 1 else None,
-                        ),
-                    )
+                    if cls:
+                        entities.append(
+                            cls(
+                                coordinator=coordinator,
+                                description=description,
+                                entry=entry,
+                                section_id=section_id,
+                                index=index if device_numbers > 1 else None,
+                            ),
+                        )
 
     async_add_entities(entities)
