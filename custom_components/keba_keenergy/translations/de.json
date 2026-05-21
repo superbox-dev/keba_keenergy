@@ -169,11 +169,17 @@
             "excess_energy_heating_limit_night": {
                 "name": "Heizgrenze (PV-Überschuss, Nacht)"
             },
-            "excess_energy_target_cooling_temperature": {
-                "name": "Soll-Temperatur Kühlen (PV-Überschuss)"
+            "excess_energy_target_room_cooling_temperature": {
+                "name": "Soll-Raumtemperatur Kühlen (PV-Überschuss)"
             },
-            "excess_energy_target_cooling_temperature_hysteresis": {
-                "name": "Soll-Temperatur-Hysterese Kühlen (PV-Überschuss)"
+            "excess_energy_target_room_cooling_temperature_hysteresis": {
+                "name": "Soll-Raumtemperatur-Hysterese Kühlen (PV-Überschuss)"
+            },
+            "excess_energy_target_room_temperature": {
+                "name": "Soll-Raumtemperatur (PV-Überschuss)"
+            },
+            "excess_energy_target_room_temperature_hysteresis": {
+                "name": "Soll-Raumtemperatur-Hysterese (PV-Überschuss)"
             },
             "excess_energy_target_temperature": {
                 "name": "Soll-Temperatur (PV-Überschuss)"
@@ -414,8 +420,11 @@
             "excess_power": {
                 "name": "Überschussleistung"
             },
-            "excess_energy_target_cooling_temperature": {
-                "name": "Soll-Temperatur Kühlen (PV-Überschuss)"
+            "excess_energy_target_room_cooling_temperature": {
+                "name": "Soll-Raumtemperatur Kühlen (PV-Überschuss)"
+            },
+            "excess_energy_target_room_temperature": {
+                "name": "Soll-Raumtemperatur (PV-Überschuss)"
             },
             "excess_energy_target_temperature": {
                 "name": "Soll-Temperatur (PV-Überschuss)"
