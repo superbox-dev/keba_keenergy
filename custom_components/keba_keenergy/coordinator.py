@@ -772,6 +772,22 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
         )
         return bool(BoolEnum.ON.name.lower() == data[index]["value"]) if data else False
 
+    def has_cooling_circuits(self) -> bool:
+        """Check if one heating circuit support cooling."""
+        has_cooling: bool = False
+
+        # Some KEBA KeEnergy software versions did not have an active or passive cooling options.
+        # Cooling support can only be detected with the heating circuit mode!
+        if self.position:
+            for index in range(self.position.heat_circuit):
+                is_cooling_circuit: bool = self.is_cooling_circuit(index=index)
+
+                if is_cooling_circuit:
+                    has_cooling = True
+                    break
+
+        return has_cooling
+
     def is_cooling_circuit(self, *, index: int | None = None) -> bool:
         """Check if heating circuit mode is cooling."""
         index = 0 if index is None else index
