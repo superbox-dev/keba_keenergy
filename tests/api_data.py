@@ -2351,12 +2351,16 @@ DEFAULT_POSITION_FIXED_DATA_RESPONSE: list[dict[str, Any]] = [
 ]
 
 
-def get_multiple_position_fixed_data_response(has_passive_cooling: str = "false") -> list[dict[str, Any]]:
+def get_multiple_position_fixed_data_response(
+    *,
+    has_passive_cooling: str = "false",
+    has_cooling_circuits: bool = True,
+) -> list[dict[str, Any]]:
     return [
         json.loads(SYSTEM_HAS_OUTDOOR_TEMPERATURE % "true"),
         json.loads(SYSTEM_HAS_PHOTOVOLTAICS % "true"),
         json.loads(HEAT_CIRCUIT_MODE % ("0", "0")),
-        json.loads(HEAT_CIRCUIT_MODE % ("1", "1")),
+        json.loads(HEAT_CIRCUIT_MODE % ("1", "1" if has_cooling_circuits else "0")),
         json.loads(HEAT_CIRCUIT_HAS_ROOM_TEMPERATURE % ("0", "true")),
         json.loads(HEAT_CIRCUIT_HAS_ROOM_TEMPERATURE % ("1", "false")),
         json.loads(HEAT_CIRCUIT_HAS_ROOM_HUMIDITY % ("0", "true")),

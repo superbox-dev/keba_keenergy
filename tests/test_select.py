@@ -148,7 +148,7 @@ async def test_selects_without_cooling(
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
         HEATING_CURVE_NAMES_RESPONSE,
-        get_multiple_position_fixed_data_response(has_passive_cooling="false"),
+        get_multiple_position_fixed_data_response(has_passive_cooling="false", has_cooling_circuits=False),
         MULTIPLE_POSITION_DATA_RESPONSE_1,
         *HEATING_CURVES_RESPONSE_1_1,
     ]
@@ -265,7 +265,7 @@ async def test_select_invalid_option(
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
         HEATING_CURVE_NAMES_RESPONSE,
-        get_multiple_position_fixed_data_response(has_passive_cooling="false"),
+        get_multiple_position_fixed_data_response(has_passive_cooling="false", has_cooling_circuits=False),
         MULTIPLE_POSITION_DATA_RESPONSE_1,
         *HEATING_CURVES_RESPONSE_1_1,
         # Read API after services call
