@@ -179,7 +179,7 @@ class FakeKebaKeEnergyAPI:
             "POST",
             URL("http://10.0.0.100/var/readWriteVars?action=set"),
             data,
-            None,
+            {},
         ) in self.aioclient_mock.mock_calls
 
 
