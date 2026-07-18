@@ -9,13 +9,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!--start-->
 
-## [1.10.2] - 2025-07-03
+## [1.10.2] - 2025-07-18
+
+### Changed
+
+- Bump `keba_keenergy_api` to v2.12.2 [(Issue #63)][issue-63]
 
 ### Fixed
 
 - Fix missing auto cool option in the control unit operation mode select [(Issue #60)][issue-60]
 
 [issue-60]: https://github.com/superbox-dev/keba_keenergy/issues/60
+[issue-63]: https://github.com/superbox-dev/keba_keenergy/issues/63
 
 ## [1.10.1] - 2025-05-21
 
