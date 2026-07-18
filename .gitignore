@@ -17,7 +17,7 @@
 
 # reports
 reports/
-.coverage
+.coverage*
 
 # build package
 *.egg-info
