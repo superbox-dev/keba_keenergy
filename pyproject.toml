@@ -102,6 +102,7 @@ line-length = 120
 select = ["ALL"]
 ignore = [
     "ANN401",  # any-type
+    "CPY001",  # missing-copyright-notice
     "D104",    # undocumented-public-package
     "D203",    # one-blank-line-before-class
     "D213",    # multi-line-summary-second-line
@@ -118,6 +119,7 @@ ignore = [
     "D",
     "PLR0913", # too-many-arguments
     "PLR0915", # too-many-statements
+    "PLR0917", # too-many-positional-arguments
     "PLR2004", # magic-value-comparison
     "SLF001",  # private-member-access
 ]
