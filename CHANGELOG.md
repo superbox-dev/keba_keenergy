@@ -9,6 +9,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!--start-->
 
+## [1.10.3] - 2025-07-28
+
+### Fixed
+
+- Increased the minimum supported Home Assistant version to **2026.7.0**, which includes `aiohttp` 3.14 and
+  `encode_basic_auth()` [(Issue #65)][issue-65]
+
+[issue-65]: https://github.com/superbox-dev/keba_keenergy/issues/65
+
 ## [1.10.2] - 2025-07-18
 
 ### Changed
