@@ -225,32 +225,42 @@ async def test_set_value(
         (
             "number.keba_keenergy_12345678_hot_water_tank_target_temperature_1",
             100,
-            r"Value 100\.0 for number\.keba_keenergy_12345678_hot_water_tank_target_temperature_1 "
-            r"is outside valid range 0\.0 - 52\.0",
+            (
+                r"Value 100\.0 for number\.keba_keenergy_12345678_hot_water_tank_target_temperature_1 "
+                r"is outside valid range 0\.0 - 52\.0"
+            ),
         ),
         (
             "number.keba_keenergy_12345678_heat_circuit_target_temperature_day_1",
             -10,
-            r"Value -10\.0 for number\.keba_keenergy_12345678_heat_circuit_target_temperature_day_1 "
-            r"is outside valid range 10\.0 - 30\.0",
+            (
+                r"Value -10\.0 for number\.keba_keenergy_12345678_heat_circuit_target_temperature_day_1 "
+                r"is outside valid range 10\.0 - 30\.0"
+            ),
         ),
         (
             "number.keba_keenergy_12345678_heat_circuit_target_temperature_offset_1",
             -3,
-            r"Value -3\.0 for number\.keba_keenergy_12345678_heat_circuit_target_temperature_offset_1 "
-            r"is outside valid range -2\.5 - 2\.5",
+            (
+                r"Value -3\.0 for number\.keba_keenergy_12345678_heat_circuit_target_temperature_offset_1 "
+                r"is outside valid range -2\.5 - 2\.5"
+            ),
         ),
         (
             "number.keba_keenergy_12345678_heat_circuit_heating_curve_offset_1",
             -11,
-            r"Value -11\.0 for number\.keba_keenergy_12345678_heat_circuit_heating_curve_offset_1 "
-            r"is outside valid range -10\.0 - 10\.0",
+            (
+                r"Value -11\.0 for number\.keba_keenergy_12345678_heat_circuit_heating_curve_offset_1 "
+                r"is outside valid range -10\.0 - 10\.0"
+            ),
         ),
         (
             "number.keba_keenergy_12345678_heat_circuit_heating_curve_slope_1",
             -0.1,
-            r"Value -0\.1 for number\.keba_keenergy_12345678_heat_circuit_heating_curve_slope_1 "
-            r"is outside valid range 0\.0 - 5\.0",
+            (
+                r"Value -0\.1 for number\.keba_keenergy_12345678_heat_circuit_heating_curve_slope_1 "
+                r"is outside valid range 0\.0 - 5\.0"
+            ),
         ),
     ],
 )

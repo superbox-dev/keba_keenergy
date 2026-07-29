@@ -96,15 +96,19 @@ async def test_binary_sensors(
             "switch.keba_keenergy_12345678_solar_circuit_priority_1_before_2_2",
             SERVICE_TURN_ON,
             MULTIPLE_POSITION_DATA_RESPONSE_2,
-            '[{"name": "APPL.CtrlAppl.sParam.hmiRetainData.consumer1PrioritySolar[1]", "value": "1"}, '
-            '{"name": "APPL.CtrlAppl.sParam.genericHeat[2].param.priority", "value": "14"}]',
+            (
+                '[{"name": "APPL.CtrlAppl.sParam.hmiRetainData.consumer1PrioritySolar[1]", "value": "1"}, '
+                '{"name": "APPL.CtrlAppl.sParam.genericHeat[2].param.priority", "value": "14"}]'
+            ),
         ),
         (
             "switch.keba_keenergy_12345678_solar_circuit_priority_1_before_2_2",
             SERVICE_TURN_OFF,
             MULTIPLE_POSITION_DATA_RESPONSE_1,
-            '[{"name": "APPL.CtrlAppl.sParam.hmiRetainData.consumer1PrioritySolar[1]", "value": "0"}, '
-            '{"name": "APPL.CtrlAppl.sParam.genericHeat[2].param.priority", "value": "15"}]',
+            (
+                '[{"name": "APPL.CtrlAppl.sParam.hmiRetainData.consumer1PrioritySolar[1]", "value": "0"}, '
+                '{"name": "APPL.CtrlAppl.sParam.genericHeat[2].param.priority", "value": "15"}]'
+            ),
         ),
         (
             "switch.keba_keenergy_12345678_heat_circuit_use_heating_curve_1",
