@@ -5,8 +5,8 @@ from __future__ import annotations
 import logging
 from dataclasses import dataclass
 from functools import cached_property
-from typing import Final
 from typing import TYPE_CHECKING
+from typing import Final
 
 from homeassistant.components.select import DOMAIN as SELECT_DOMAIN
 from homeassistant.components.select import SelectEntity
@@ -26,8 +26,10 @@ from .entity import _async_setup_entities
 
 if TYPE_CHECKING:
     from collections.abc import Callable
+
     from homeassistant.core import HomeAssistant
     from homeassistant.helpers.entity_platform import AddEntitiesCallback
+
     from .coordinator import KebaKeEnergyConfigEntry
     from .coordinator import KebaKeEnergyDataUpdateCoordinator
 
@@ -51,6 +53,8 @@ class KebaKeEnergySelectEntityDescription(
 class KebaKeEnergySelectEntity(KebaKeEnergyEntity, SelectEntity):
     """KEBA KeEnergy select entity."""
 
+    entity_description: KebaKeEnergySelectEntityDescription
+
     def __init__(
         self,
         coordinator: KebaKeEnergyDataUpdateCoordinator,
@@ -60,7 +64,8 @@ class KebaKeEnergySelectEntity(KebaKeEnergyEntity, SelectEntity):
         index: int | None,
     ) -> None:
         """Initialize the entity."""
-        self.entity_description: KebaKeEnergySelectEntityDescription = description
+        self.entity_description = description
+
         super().__init__(coordinator, entry=entry, section_id=section_id, index=index)
         self.entity_id: str = f"{SELECT_DOMAIN}.{DOMAIN}_{self._attr_unique_id}"
 

@@ -8,22 +8,22 @@ from datetime import datetime
 from datetime import time
 from datetime import timedelta
 from functools import cached_property
+from typing import TYPE_CHECKING
 from typing import Any
 from typing import Final
-from typing import TYPE_CHECKING
 
 import voluptuous as vol
 from homeassistant.components.climate import ClimateEntity
 from homeassistant.components.climate import ClimateEntityDescription
-from homeassistant.components.climate.const import ClimateEntityFeature
 from homeassistant.components.climate.const import DOMAIN as CLIMATE_DOMAIN
-from homeassistant.components.climate.const import HVACAction
-from homeassistant.components.climate.const import HVACMode
 from homeassistant.components.climate.const import PRESET_AWAY
 from homeassistant.components.climate.const import PRESET_BOOST
 from homeassistant.components.climate.const import PRESET_COMFORT
 from homeassistant.components.climate.const import PRESET_HOME
 from homeassistant.components.climate.const import PRESET_SLEEP
+from homeassistant.components.climate.const import ClimateEntityFeature
+from homeassistant.components.climate.const import HVACAction
+from homeassistant.components.climate.const import HVACMode
 from homeassistant.const import ATTR_TEMPERATURE
 from homeassistant.const import UnitOfTemperature
 from homeassistant.core import HassJob
@@ -41,9 +41,11 @@ from .const import FLASH_WRITE_DELAY
 from .entity import KebaKeEnergyBaseEntity
 
 if TYPE_CHECKING:
+    from zoneinfo import ZoneInfo
+
     from homeassistant.core import HomeAssistant
     from homeassistant.helpers.entity_platform import AddEntitiesCallback
-    from zoneinfo import ZoneInfo
+
     from .coordinator import KebaKeEnergyConfigEntry
     from .coordinator import KebaKeEnergyDataUpdateCoordinator
 

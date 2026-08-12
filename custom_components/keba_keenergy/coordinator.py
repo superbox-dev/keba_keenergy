@@ -8,8 +8,8 @@ from copy import deepcopy
 from datetime import date
 from datetime import timedelta
 from functools import cached_property
-from typing import Any
 from typing import TYPE_CHECKING
+from typing import Any
 from typing import TypeGuard
 from typing import cast
 from zoneinfo import ZoneInfo
@@ -51,8 +51,9 @@ from .const import FLASH_WRITE_LIMIT_PER_WEEK
 from .const import REQUEST_REFRESH_COOLDOWN
 
 if TYPE_CHECKING:
-    from collections.abc import Callable
     from collections.abc import Awaitable
+    from collections.abc import Callable
+
     from aiohttp import ClientSession
     from homeassistant.core import HomeAssistant
 

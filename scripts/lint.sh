@@ -4,8 +4,8 @@ set -e
 
 cd "$(dirname "$0")/.."
 
-uv run black .
-uv run mypy .
-uv run ruff check . --fix
+uv run ruff format --check
+uv run ruff check --fix
+uv run ty check
 uv run yamllint .
-uv run rumdl check . --fix
+uv run rumdl check --fix

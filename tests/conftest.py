@@ -2,8 +2,8 @@ from __future__ import annotations
 
 import json
 import logging
-from typing import Any
 from typing import TYPE_CHECKING
+from typing import Any
 from unittest.mock import patch
 
 import pytest
@@ -11,8 +11,8 @@ from homeassistant.const import CONF_HOST
 from homeassistant.const import CONF_SSL
 from pytest_homeassistant_custom_component.common import MockConfigEntry
 from pytest_homeassistant_custom_component.syrupy import HomeAssistantSnapshotExtension
-from pytest_homeassistant_custom_component.test_util.aiohttp import AiohttpClientMockResponse
 from pytest_homeassistant_custom_component.test_util.aiohttp import AiohttpClientMocker
+from pytest_homeassistant_custom_component.test_util.aiohttp import AiohttpClientMockResponse
 from yarl import URL
 
 from custom_components.keba_keenergy.const import DOMAIN
@@ -25,6 +25,7 @@ from tests.api_data import TIMEZONE_RESPONSE
 if TYPE_CHECKING:
     from collections.abc import AsyncGenerator
     from collections.abc import Generator
+
     from _pytest.fixtures import SubRequest
     from homeassistant.core import HomeAssistant
     from syrupy.assertion import SnapshotAssertion

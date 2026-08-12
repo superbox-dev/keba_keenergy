@@ -1,8 +1,8 @@
 from __future__ import annotations
 
 from datetime import timedelta
-from typing import Any
 from typing import TYPE_CHECKING
+from typing import Any
 
 import pytest
 import voluptuous as vol
@@ -20,16 +20,17 @@ from pytest_homeassistant_custom_component.common import async_fire_time_changed
 from tests import setup_integration
 from tests.api_data import DEFAULT_POSITION_FIXED_DATA_RESPONSE
 from tests.api_data import DEFAULT_POSITION_RESPONSE
-from tests.api_data import HEATING_CURVES_RESPONSE_1_1
 from tests.api_data import HEATING_CURVE_NAMES_RESPONSE
-from tests.api_data import MULTIPLE_POSITIONS_RESPONSE
+from tests.api_data import HEATING_CURVES_RESPONSE_1_1
 from tests.api_data import MULTIPLE_POSITION_DATA_RESPONSE_1
+from tests.api_data import MULTIPLE_POSITIONS_RESPONSE
 from tests.api_data import get_multiple_position_fixed_data_response
 from tests.api_data import get_single_position_data_response
 
 if TYPE_CHECKING:
     from pytest_homeassistant_custom_component.common import MockConfigEntry
     from syrupy.assertion import SnapshotAssertion
+
     from tests.conftest import FakeKebaKeEnergyAPI
 
 

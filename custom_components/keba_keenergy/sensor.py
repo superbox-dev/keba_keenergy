@@ -4,9 +4,9 @@ from __future__ import annotations
 
 import logging
 from dataclasses import dataclass
+from typing import TYPE_CHECKING
 from typing import Any
 from typing import Final
-from typing import TYPE_CHECKING
 from typing import TypeVar
 from typing import cast
 
@@ -15,8 +15,8 @@ from homeassistant.components.sensor import SensorDeviceClass
 from homeassistant.components.sensor import SensorEntity
 from homeassistant.components.sensor import SensorEntityDescription
 from homeassistant.components.sensor import SensorStateClass
-from homeassistant.const import EntityCategory
 from homeassistant.const import PERCENTAGE
+from homeassistant.const import EntityCategory
 from homeassistant.const import UnitOfEnergy
 from homeassistant.const import UnitOfInformation
 from homeassistant.const import UnitOfPower
@@ -47,10 +47,12 @@ from .entity import _async_setup_entities
 if TYPE_CHECKING:
     from collections.abc import Callable
     from collections.abc import Mapping
+
     from homeassistant.core import HomeAssistant
     from homeassistant.helpers.entity_platform import AddEntitiesCallback
     from homeassistant.helpers.typing import StateType
     from keba_keenergy_api.endpoints import Value
+
     from .coordinator import KebaKeEnergyConfigEntry
     from .coordinator import KebaKeEnergyDataUpdateCoordinator
 
@@ -75,6 +77,8 @@ class KebaKeEnergySensorEntityDescription[T](
 class KebaKeEnergySensorEntity(KebaKeEnergyEntity, SensorEntity):
     """KEBA KeEnergy sensor entity."""
 
+    entity_description: KebaKeEnergySensorEntityDescription[StateType]
+
     def __init__(
         self,
         coordinator: KebaKeEnergyDataUpdateCoordinator,
@@ -84,7 +88,7 @@ class KebaKeEnergySensorEntity(KebaKeEnergyEntity, SensorEntity):
         index: int | None,
     ) -> None:
         """Initialize the entity."""
-        self.entity_description: KebaKeEnergySensorEntityDescription[StateType] = description
+        self.entity_description = description
 
         super().__init__(
             coordinator,
@@ -209,8 +213,9 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
         ),
         KebaKeEnergySensorEntityDescription[float](
             condition=(
-                lambda coordinator, index: coordinator.has_room_temperature(index=index)
-                and coordinator.has_room_humidity(index=index)
+                lambda coordinator, index: (
+                    coordinator.has_room_temperature(index=index) and coordinator.has_room_humidity(index=index)
+                )
             ),
             device_class=SensorDeviceClass.TEMPERATURE,
             entity_registry_enabled_default=False,
@@ -315,8 +320,9 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
         ),
         KebaKeEnergySensorEntityDescription[float](
             condition=(
-                lambda coordinator, index: coordinator.is_heating_circuit(index=index)
-                and coordinator.has_photovoltaics()
+                lambda coordinator, index: (
+                    coordinator.is_heating_circuit(index=index) and coordinator.has_photovoltaics()
+                )
             ),
             device_class=SensorDeviceClass.TEMPERATURE,
             entity_registry_enabled_default=False,
@@ -327,8 +333,9 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
         ),
         KebaKeEnergySensorEntityDescription[float](
             condition=(
-                lambda coordinator, index: coordinator.is_cooling_circuit(index=index)
-                and coordinator.has_photovoltaics()
+                lambda coordinator, index: (
+                    coordinator.is_cooling_circuit(index=index) and coordinator.has_photovoltaics()
+                )
             ),
             device_class=SensorDeviceClass.TEMPERATURE,
             entity_registry_enabled_default=False,
@@ -373,8 +380,9 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
         ),
         KebaKeEnergySensorEntityDescription[float](
             condition=(
-                lambda coordinator, index: coordinator.is_heating_circuit(index=index)
-                and coordinator.has_photovoltaics()
+                lambda coordinator, index: (
+                    coordinator.is_heating_circuit(index=index) and coordinator.has_photovoltaics()
+                )
             ),
             device_class=SensorDeviceClass.TEMPERATURE,
             entity_registry_enabled_default=False,
@@ -385,8 +393,9 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
         ),
         KebaKeEnergySensorEntityDescription[float](
             condition=(
-                lambda coordinator, index: coordinator.is_cooling_circuit(index=index)
-                and coordinator.has_photovoltaics()
+                lambda coordinator, index: (
+                    coordinator.is_cooling_circuit(index=index) and coordinator.has_photovoltaics()
+                )
             ),
             device_class=SensorDeviceClass.TEMPERATURE,
             entity_registry_enabled_default=False,
@@ -412,8 +421,9 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
         ),
         KebaKeEnergySensorEntityDescription[float](
             condition=(
-                lambda coordinator, index: coordinator.is_heating_circuit(index=index)
-                and coordinator.has_photovoltaics()
+                lambda coordinator, index: (
+                    coordinator.is_heating_circuit(index=index) and coordinator.has_photovoltaics()
+                )
             ),
             device_class=SensorDeviceClass.TEMPERATURE,
             key="excess_energy_target_temperature",
@@ -424,8 +434,9 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
         ),
         KebaKeEnergySensorEntityDescription[float](
             condition=(
-                lambda coordinator, index: coordinator.is_cooling_circuit(index=index)
-                and coordinator.has_photovoltaics()
+                lambda coordinator, index: (
+                    coordinator.is_cooling_circuit(index=index) and coordinator.has_photovoltaics()
+                )
             ),
             device_class=SensorDeviceClass.TEMPERATURE,
             key="excess_energy_target_cooling_temperature",
@@ -737,8 +748,9 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
         ),
         KebaKeEnergySensorEntityDescription[float](
             condition=(
-                lambda coordinator, index: coordinator.has_electrical_energy_meter(index=index)
-                and coordinator.has_heat_meter(index=index)
+                lambda coordinator, index: (
+                    coordinator.has_electrical_energy_meter(index=index) and coordinator.has_heat_meter(index=index)
+                )
             ),
             entity_category=EntityCategory.DIAGNOSTIC,
             entity_registry_enabled_default=False,
@@ -767,8 +779,9 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
         ),
         KebaKeEnergySensorEntityDescription[float](
             condition=(
-                lambda coordinator, index: coordinator.has_electrical_energy_meter(index=index)
-                and coordinator.has_heat_meter(index=index)
+                lambda coordinator, index: (
+                    coordinator.has_electrical_energy_meter(index=index) and coordinator.has_heat_meter(index=index)
+                )
             ),
             entity_category=EntityCategory.DIAGNOSTIC,
             entity_registry_enabled_default=False,
@@ -788,8 +801,10 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
         ),
         KebaKeEnergySensorEntityDescription[float](
             condition=(
-                lambda coordinator, index: coordinator.has_electrical_energy_meter(index=index)
-                and (coordinator.has_active_cooling(index=index) or coordinator.has_passive_cooling(index=index))
+                lambda coordinator, index: (
+                    coordinator.has_electrical_energy_meter(index=index)
+                    and (coordinator.has_active_cooling(index=index) or coordinator.has_passive_cooling(index=index))
+                )
             ),
             device_class=SensorDeviceClass.ENERGY,
             entity_registry_enabled_default=False,
@@ -800,8 +815,9 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
         ),
         KebaKeEnergySensorEntityDescription[float](
             condition=(
-                lambda coordinator, index: coordinator.has_electrical_energy_meter(index=index)
-                and coordinator.has_heat_meter(index=index)
+                lambda coordinator, index: (
+                    coordinator.has_electrical_energy_meter(index=index) and coordinator.has_heat_meter(index=index)
+                )
             ),
             entity_category=EntityCategory.DIAGNOSTIC,
             entity_registry_enabled_default=False,
@@ -830,8 +846,9 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
         ),
         KebaKeEnergySensorEntityDescription[float](
             condition=(
-                lambda coordinator, index: coordinator.has_electrical_energy_meter(index=index)
-                and coordinator.has_heat_meter(index=index)
+                lambda coordinator, index: (
+                    coordinator.has_electrical_energy_meter(index=index) and coordinator.has_heat_meter(index=index)
+                )
             ),
             entity_category=EntityCategory.DIAGNOSTIC,
             entity_registry_enabled_default=False,
@@ -860,8 +877,10 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
         ),
         KebaKeEnergySensorEntityDescription[float](
             condition=(
-                lambda coordinator, index: coordinator.has_electrical_energy_meter(index=index)
-                and (coordinator.has_heat_meter(index=index) or coordinator.has_heat_meter(index=index))
+                lambda coordinator, index: (
+                    coordinator.has_electrical_energy_meter(index=index)
+                    and (coordinator.has_heat_meter(index=index) or coordinator.has_heat_meter(index=index))
+                )
             ),
             entity_category=EntityCategory.DIAGNOSTIC,
             entity_registry_enabled_default=False,

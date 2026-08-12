@@ -19,16 +19,17 @@ from keba_keenergy_api.error import APIError
 
 from custom_components.keba_keenergy.const import DOMAIN
 from tests import setup_integration
-from tests.api_data import HEATING_CURVES_RESPONSE_1_1
 from tests.api_data import HEATING_CURVE_NAMES_RESPONSE
-from tests.api_data import MULTIPLE_POSITIONS_RESPONSE
+from tests.api_data import HEATING_CURVES_RESPONSE_1_1
 from tests.api_data import MULTIPLE_POSITION_DATA_RESPONSE_1
+from tests.api_data import MULTIPLE_POSITIONS_RESPONSE
 from tests.api_data import get_multiple_position_fixed_data_response
 
 if TYPE_CHECKING:
     from homeassistant.config_entries import ConfigFlowResult
     from homeassistant.core import HomeAssistant
     from pytest_homeassistant_custom_component.common import MockConfigEntry
+
     from tests.conftest import FakeKebaKeEnergyAPI
 
 ZERO_CONF_SERVICE_INFO: ZeroconfServiceInfo = ZeroconfServiceInfo(

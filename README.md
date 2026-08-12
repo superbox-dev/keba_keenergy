@@ -110,10 +110,8 @@ You can get started by reading the [CONTRIBUTING.md](CONTRIBUTING.md).
 
 [![CI](https://github.com/superbox-dev/keba_keenergy/actions/workflows/ci.yml/badge.svg?branch=main)][workflow-ci]
 ![Typing: strict][typing-strict]
-![Code style: black][code-black]
 ![Code style: Ruff][code-ruff]
 
 [workflow-ci]: https://github.com/superbox-dev/keba_keenergy/actions/workflows/ci.yml
 [typing-strict]: https://img.shields.io/badge/typing-strict-green.svg
-[code-black]: https://img.shields.io/badge/code%20style-black-black
 [code-ruff]: https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/charliermarsh/ruff/main/assets/badge/v1.json

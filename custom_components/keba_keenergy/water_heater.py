@@ -3,9 +3,9 @@
 from __future__ import annotations
 
 from functools import cached_property
+from typing import TYPE_CHECKING
 from typing import Any
 from typing import Final
-from typing import TYPE_CHECKING
 
 from homeassistant.components.water_heater import STATE_ECO
 from homeassistant.components.water_heater import STATE_HEAT_PUMP
@@ -13,9 +13,7 @@ from homeassistant.components.water_heater import STATE_PERFORMANCE
 from homeassistant.components.water_heater import WaterHeaterEntity
 from homeassistant.components.water_heater import WaterHeaterEntityDescription
 from homeassistant.components.water_heater import WaterHeaterEntityFeature
-from homeassistant.components.water_heater.const import (
-    DOMAIN as WATER_HEATER_DOMAIN,
-)
+from homeassistant.components.water_heater.const import DOMAIN as WATER_HEATER_DOMAIN
 from homeassistant.const import ATTR_TEMPERATURE
 from homeassistant.const import STATE_OFF
 from homeassistant.const import UnitOfTemperature
@@ -34,6 +32,7 @@ from .entity import KebaKeEnergyBaseEntity
 
 if TYPE_CHECKING:
     from homeassistant.helpers.entity_platform import AddEntitiesCallback
+
     from .coordinator import KebaKeEnergyConfigEntry
     from .coordinator import KebaKeEnergyDataUpdateCoordinator
 

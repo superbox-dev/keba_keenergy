@@ -5,8 +5,8 @@ from __future__ import annotations
 import logging
 import math
 from http import HTTPStatus
-from typing import Any
 from typing import TYPE_CHECKING
+from typing import Any
 
 import voluptuous as vol
 from aiohttp import ClientError
@@ -29,7 +29,6 @@ from keba_keenergy_api.api import KebaKeEnergyAPI
 from keba_keenergy_api.constants import SectionPrefix
 from keba_keenergy_api.error import APIError
 
-from .const import CONFIG_ENTRY_VERSION
 from .const import CONF_BUFFER_TANK_TICK
 from .const import CONF_EXTERNAL_HEAT_SOURCE_TICK
 from .const import CONF_HEAT_CIRCUIT_TICK
@@ -39,6 +38,7 @@ from .const import CONF_PHOTOVOLTAICS_TICK
 from .const import CONF_SOLAR_CIRCUIT_TICK
 from .const import CONF_SWITCH_VALVE_TICK
 from .const import CONF_SYSTEM_TICK
+from .const import CONFIG_ENTRY_VERSION
 from .const import DEFAULT_SCAN_INTERVAL
 from .const import DOMAIN
 from .const import MANUFACTURER
@@ -47,8 +47,10 @@ from .const import NAME
 
 if TYPE_CHECKING:
     from collections.abc import Mapping
-    from homeassistant.helpers.service_info.zeroconf import ZeroconfServiceInfo
+
     from aiohttp import ClientSession
+    from homeassistant.helpers.service_info.zeroconf import ZeroconfServiceInfo
+
     from .coordinator import KebaKeEnergyConfigEntry
     from .coordinator import KebaKeEnergyDataUpdateCoordinator
 

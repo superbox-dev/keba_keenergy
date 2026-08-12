@@ -5,8 +5,8 @@ from __future__ import annotations
 import logging
 from dataclasses import dataclass
 from functools import cached_property
-from typing import Any
 from typing import TYPE_CHECKING
+from typing import Any
 from typing import TypeVar
 from typing import overload
 
@@ -33,6 +33,7 @@ if TYPE_CHECKING:
     from collections.abc import Callable
     from collections.abc import Mapping
     from datetime import datetime
+
     from homeassistant.core import CALLBACK_TYPE
     from homeassistant.helpers.entity_platform import AddEntitiesCallback
     from homeassistant.helpers.typing import StateType
@@ -231,9 +232,13 @@ class KebaKeEnergyBaseEntity(
             "sw_version": (self.coordinator.device_hmi_sw_version if self.is_system_device else None),
             "translation_key": self._translation_key,
             "translation_placeholders": self._translation_placeholders,
-            # Added via_device if the device is not the KEBA KeEnergy control device.
-            "via_device": (None if self.is_system_device else (DOMAIN, f"{self.entry.unique_id}_{DOMAIN}")),
         }
+
+        if not self.is_system_device:
+            data["via_device"] = (
+                DOMAIN,
+                f"{self.entry.unique_id}_{DOMAIN}",
+            )
 
         _device_info: DeviceInfo = DeviceInfo(
             configuration_url=self.coordinator.configuration_url,
@@ -243,7 +248,7 @@ class KebaKeEnergyBaseEntity(
             sw_version=data["sw_version"],
             translation_key=data["translation_key"],
             translation_placeholders=data["translation_placeholders"],
-            via_device=data["via_device"],
+            **({"via_device": data["via_device"]} if "via_device" in data else {}),
         )
 
         return _device_info

@@ -6,8 +6,8 @@ import logging
 from datetime import date
 from datetime import datetime
 from datetime import time
-from typing import Final
 from typing import TYPE_CHECKING
+from typing import Final
 
 import voluptuous as vol
 from ciso8601 import parse_datetime_as_naive
@@ -26,9 +26,11 @@ from .const import SERVICE_SET_AWAY_DATE_RANGE
 from .const import SERVICE_SET_HEATING_CURVE_POINTS
 
 if TYPE_CHECKING:
+    from zoneinfo import ZoneInfo
+
     from homeassistant.core import HomeAssistant
     from homeassistant.core import ServiceCall
-    from zoneinfo import ZoneInfo
+
     from .coordinator import KebaKeEnergyConfigEntry
     from .coordinator import KebaKeEnergyDataUpdateCoordinator
 

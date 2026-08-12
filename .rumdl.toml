@@ -1,0 +1,6 @@
+[global]
+line-length = 120
+disable = [
+    "MD052",   # Fix broken reference links and images
+]
+respect-gitignore = true

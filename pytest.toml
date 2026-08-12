@@ -1,0 +1,24 @@
+[pytest]
+testpaths = [
+    "tests",
+]
+log_cli = true
+log_cli_level = "INFO"
+log_cli_format = "%(levelname)-8s | %(asctime)s | [%(name)s] %(message)s"
+# https://docs.pytest.org/en/latest/reference/reference.html#ini-options-ref
+addopts = [
+    "--cov",
+    "--cov-report=term-missing",
+    "--cov-report=xml:coverage.xml",
+    "--color=yes",
+    "--exitfirst",
+    "--failed-first",
+    "--strict-config",
+    "--strict-markers",
+    "-n=auto",
+]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
+markers = [
+  "no_fail_on_keba_errors: Disable the fail_on_keba_errors autouse fixture",
+]

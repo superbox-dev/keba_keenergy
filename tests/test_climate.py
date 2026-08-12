@@ -3,15 +3,14 @@ from __future__ import annotations
 from datetime import UTC
 from datetime import datetime
 from datetime import timedelta
-from typing import Any
 from typing import TYPE_CHECKING
+from typing import Any
 from unittest.mock import patch
 
 import pytest
 from homeassistant.components.climate.const import ATTR_HVAC_MODE
 from homeassistant.components.climate.const import ATTR_PRESET_MODE
 from homeassistant.components.climate.const import DOMAIN as CLIMATE_DOMAIN
-from homeassistant.components.climate.const import HVACMode
 from homeassistant.components.climate.const import PRESET_AWAY
 from homeassistant.components.climate.const import PRESET_BOOST
 from homeassistant.components.climate.const import PRESET_COMFORT
@@ -20,6 +19,7 @@ from homeassistant.components.climate.const import PRESET_SLEEP
 from homeassistant.components.climate.const import SERVICE_SET_HVAC_MODE
 from homeassistant.components.climate.const import SERVICE_SET_PRESET_MODE
 from homeassistant.components.climate.const import SERVICE_SET_TEMPERATURE
+from homeassistant.components.climate.const import HVACMode
 from homeassistant.const import ATTR_ENTITY_ID
 from homeassistant.const import ATTR_TEMPERATURE
 from homeassistant.const import SERVICE_TURN_OFF
@@ -35,16 +35,17 @@ from tests import setup_integration
 from tests.api_data import DEFAULT_POSITION_DATA_RESPONSE
 from tests.api_data import DEFAULT_POSITION_FIXED_DATA_RESPONSE
 from tests.api_data import DEFAULT_POSITION_RESPONSE
-from tests.api_data import HEATING_CURVES_RESPONSE_1_1
 from tests.api_data import HEATING_CURVE_NAMES_RESPONSE
-from tests.api_data import MULTIPLE_POSITIONS_RESPONSE
+from tests.api_data import HEATING_CURVES_RESPONSE_1_1
 from tests.api_data import MULTIPLE_POSITION_DATA_RESPONSE_1
 from tests.api_data import MULTIPLE_POSITION_DATA_RESPONSE_2
+from tests.api_data import MULTIPLE_POSITIONS_RESPONSE
 from tests.api_data import get_multiple_position_fixed_data_response
 from tests.api_data import get_single_position_data_response
 
 if TYPE_CHECKING:
     from syrupy.assertion import SnapshotAssertion
+
     from tests.conftest import FakeKebaKeEnergyAPI
 
 ENTITY_ID: str = "climate.keba_keenergy_12345678"

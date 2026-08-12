@@ -1,0 +1,32 @@
+line-length = 120
+
+[lint]
+select = ["ALL"]
+ignore = [
+    "ANN401",  # any-type
+    "COM812",  # missing-trailing-comma
+    "CPY001",  # missing-copyright-notice
+    "D203",    # one-blank-line-before-class
+    "D213",    # multi-line-summary-second-line
+    "ERA001",  # commented-out-code
+    "PLR0913", # too-many-arguments
+    "S101",    # assert
+    "TRY003",  # raise-vanilla-args
+    "TRY400",  # error-instead-of-exception
+]
+
+[lint.per-file-ignores]
+"custom_components/__init__.py" = [
+    "D104"     # undocumented-public-package
+]
+"tests/*" = [
+    "D",
+    "PLR0913", # too-many-arguments
+    "PLR0915", # too-many-statements
+    "PLR0917", # too-many-positional-arguments
+    "PLR2004", # magic-value-comparison
+    "SLF001",  # private-member-access
+]
+
+[lint.isort]
+force-single-line = true

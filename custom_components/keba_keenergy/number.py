@@ -5,15 +5,15 @@ from __future__ import annotations
 import logging
 from dataclasses import dataclass
 from functools import cached_property
-from typing import Final
 from typing import TYPE_CHECKING
+from typing import Final
 
 from homeassistant.components.number import DOMAIN as NUMBER_DOMAIN
 from homeassistant.components.number import NumberDeviceClass
 from homeassistant.components.number import NumberEntity
 from homeassistant.components.number import NumberEntityDescription
-from homeassistant.const import EntityCategory
 from homeassistant.const import PERCENTAGE
+from homeassistant.const import EntityCategory
 from homeassistant.const import UnitOfTemperature
 from homeassistant.const import UnitOfTime
 from homeassistant.core import HassJob
@@ -29,6 +29,7 @@ from .entity import _async_setup_entities
 if TYPE_CHECKING:
     from homeassistant.core import HomeAssistant
     from homeassistant.helpers.entity_platform import AddEntitiesCallback
+
     from .coordinator import KebaKeEnergyConfigEntry
     from .coordinator import KebaKeEnergyDataUpdateCoordinator
 
@@ -51,6 +52,8 @@ class KebaKeEnergyNumberEntityDescription(
 class KebaKeEnergyNumberEntity(KebaKeEnergyEntity, NumberEntity):
     """KEBA KeEnergy number entity."""
 
+    entity_description: KebaKeEnergyNumberEntityDescription
+
     def __init__(
         self,
         coordinator: KebaKeEnergyDataUpdateCoordinator,
@@ -60,7 +63,7 @@ class KebaKeEnergyNumberEntity(KebaKeEnergyEntity, NumberEntity):
         index: int | None,
     ) -> None:
         """Initialize the entity."""
-        self.entity_description: KebaKeEnergyNumberEntityDescription = description
+        self.entity_description = description
 
         super().__init__(
             coordinator,
@@ -171,8 +174,9 @@ NUMBER_TYPES: dict[str, tuple[KebaKeEnergyNumberEntityDescription, ...]] = {
         ),
         KebaKeEnergyNumberEntityDescription(
             condition=(
-                lambda coordinator, index: coordinator.is_heating_circuit(index=index)
-                and coordinator.has_photovoltaics()
+                lambda coordinator, index: (
+                    coordinator.is_heating_circuit(index=index) and coordinator.has_photovoltaics()
+                )
             ),
             device_class=NumberDeviceClass.TEMPERATURE,
             entity_category=EntityCategory.CONFIG,
@@ -185,8 +189,9 @@ NUMBER_TYPES: dict[str, tuple[KebaKeEnergyNumberEntityDescription, ...]] = {
         ),
         KebaKeEnergyNumberEntityDescription(
             condition=(
-                lambda coordinator, index: coordinator.is_cooling_circuit(index=index)
-                and coordinator.has_photovoltaics()
+                lambda coordinator, index: (
+                    coordinator.is_cooling_circuit(index=index) and coordinator.has_photovoltaics()
+                )
             ),
             device_class=NumberDeviceClass.TEMPERATURE,
             entity_category=EntityCategory.CONFIG,
@@ -199,8 +204,9 @@ NUMBER_TYPES: dict[str, tuple[KebaKeEnergyNumberEntityDescription, ...]] = {
         ),
         KebaKeEnergyNumberEntityDescription(
             condition=(
-                lambda coordinator, index: coordinator.is_cooling_circuit(index=index)
-                and coordinator.has_photovoltaics()
+                lambda coordinator, index: (
+                    coordinator.is_cooling_circuit(index=index) and coordinator.has_photovoltaics()
+                )
             ),
             device_class=NumberDeviceClass.TEMPERATURE,
             entity_category=EntityCategory.CONFIG,
@@ -257,8 +263,9 @@ NUMBER_TYPES: dict[str, tuple[KebaKeEnergyNumberEntityDescription, ...]] = {
         ),
         KebaKeEnergyNumberEntityDescription(
             condition=(
-                lambda coordinator, index: coordinator.is_heating_circuit(index=index)
-                and coordinator.has_photovoltaics()
+                lambda coordinator, index: (
+                    coordinator.is_heating_circuit(index=index) and coordinator.has_photovoltaics()
+                )
             ),
             device_class=NumberDeviceClass.TEMPERATURE,
             entity_category=EntityCategory.CONFIG,
@@ -271,8 +278,9 @@ NUMBER_TYPES: dict[str, tuple[KebaKeEnergyNumberEntityDescription, ...]] = {
         ),
         KebaKeEnergyNumberEntityDescription(
             condition=(
-                lambda coordinator, index: coordinator.is_cooling_circuit(index=index)
-                and coordinator.has_photovoltaics()
+                lambda coordinator, index: (
+                    coordinator.is_cooling_circuit(index=index) and coordinator.has_photovoltaics()
+                )
             ),
             device_class=NumberDeviceClass.TEMPERATURE,
             entity_category=EntityCategory.CONFIG,
@@ -305,8 +313,9 @@ NUMBER_TYPES: dict[str, tuple[KebaKeEnergyNumberEntityDescription, ...]] = {
         ),
         KebaKeEnergyNumberEntityDescription(
             condition=(
-                lambda coordinator, index: coordinator.is_heating_circuit(index=index)
-                and coordinator.has_photovoltaics()
+                lambda coordinator, index: (
+                    coordinator.is_heating_circuit(index=index) and coordinator.has_photovoltaics()
+                )
             ),
             entity_category=EntityCategory.CONFIG,
             entity_registry_enabled_default=False,
@@ -320,8 +329,9 @@ NUMBER_TYPES: dict[str, tuple[KebaKeEnergyNumberEntityDescription, ...]] = {
         ),
         KebaKeEnergyNumberEntityDescription(
             condition=(
-                lambda coordinator, index: coordinator.is_heating_circuit(index=index)
-                and coordinator.has_photovoltaics()
+                lambda coordinator, index: (
+                    coordinator.is_heating_circuit(index=index) and coordinator.has_photovoltaics()
+                )
             ),
             entity_category=EntityCategory.CONFIG,
             entity_registry_enabled_default=False,
@@ -335,8 +345,9 @@ NUMBER_TYPES: dict[str, tuple[KebaKeEnergyNumberEntityDescription, ...]] = {
         ),
         KebaKeEnergyNumberEntityDescription(
             condition=(
-                lambda coordinator, index: coordinator.is_cooling_circuit(index=index)
-                and coordinator.has_photovoltaics()
+                lambda coordinator, index: (
+                    coordinator.is_cooling_circuit(index=index) and coordinator.has_photovoltaics()
+                )
             ),
             entity_category=EntityCategory.CONFIG,
             entity_registry_enabled_default=False,
@@ -350,8 +361,9 @@ NUMBER_TYPES: dict[str, tuple[KebaKeEnergyNumberEntityDescription, ...]] = {
         ),
         KebaKeEnergyNumberEntityDescription(
             condition=(
-                lambda coordinator, index: coordinator.is_cooling_circuit(index=index)
-                and coordinator.has_photovoltaics()
+                lambda coordinator, index: (
+                    coordinator.is_cooling_circuit(index=index) and coordinator.has_photovoltaics()
+                )
             ),
             entity_category=EntityCategory.CONFIG,
             entity_registry_enabled_default=False,

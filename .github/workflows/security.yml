@@ -22,4 +22,4 @@ jobs:
       - name: Create requirements.txt
         run: uv export --quiet --locked --all-extras --dev --no-hashes --no-editable --output-file=requirements.txt
       - name: Audit python packages
-        run: uv run pip-audit --requirement=requirements.txt
+        run: uv audit

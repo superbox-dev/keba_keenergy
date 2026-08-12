@@ -1,0 +1,10 @@
+[tool.coverage.run]
+branch = false
+source = ["keba_keenergy_api"]
+
+[tool.coverage.report]
+show_missing = true
+skip_covered = true
+exclude_also = [
+    "if TYPE_CHECKING:",
+]

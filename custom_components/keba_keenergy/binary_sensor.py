@@ -4,13 +4,13 @@ from __future__ import annotations
 
 import logging
 from dataclasses import dataclass
-from typing import Final
 from typing import TYPE_CHECKING
+from typing import Final
 
+from homeassistant.components.binary_sensor import DOMAIN as BINARY_SENSOR_DOMAIN
 from homeassistant.components.binary_sensor import BinarySensorDeviceClass
 from homeassistant.components.binary_sensor import BinarySensorEntity
 from homeassistant.components.binary_sensor import BinarySensorEntityDescription
-from homeassistant.components.binary_sensor import DOMAIN as BINARY_SENSOR_DOMAIN
 from homeassistant.const import EntityCategory
 from keba_keenergy_api.constants import SectionPrefix
 
@@ -22,6 +22,7 @@ from .entity import _async_setup_entities
 if TYPE_CHECKING:
     from homeassistant.core import HomeAssistant
     from homeassistant.helpers.entity_platform import AddEntitiesCallback
+
     from .coordinator import KebaKeEnergyConfigEntry
     from .coordinator import KebaKeEnergyDataUpdateCoordinator
 
@@ -184,6 +185,8 @@ BINARY_SENSOR_TYPES: dict[str, tuple[KebaKeEnergyBinarySensorEntityDescription, 
 class KebaKeEnergyBinarySensorEntity(KebaKeEnergyEntity, BinarySensorEntity):
     """KEBA KeEnergy sensor entity."""
 
+    entity_description: KebaKeEnergyBinarySensorEntityDescription
+
     def __init__(
         self,
         coordinator: KebaKeEnergyDataUpdateCoordinator,
@@ -193,7 +196,7 @@ class KebaKeEnergyBinarySensorEntity(KebaKeEnergyEntity, BinarySensorEntity):
         index: int | None,
     ) -> None:
         """Initialize the entity."""
-        self.entity_description: KebaKeEnergyBinarySensorEntityDescription = description
+        self.entity_description = description
 
         super().__init__(
             coordinator,

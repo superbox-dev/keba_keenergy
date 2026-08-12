@@ -53,10 +53,10 @@ People *love* thorough bug reports. I'm not even kidding.
 
 ## Use a Consistent Coding Style
 
-Use [black](https://github.com/ambv/black) to make sure the code follows the style.
+Use [ruff](https://docs.astral.sh/ruff/formatter/) to make sure the code follows the style.
 
 ```bash
-uv run black .
+uv run ruff format --check
 ```
 
 ## Test your code modification
@@ -64,7 +64,7 @@ uv run black .
 To test the code we use [pytest](https://docs.pytest.org):
 
 ```bash
-uv run pytest -n auto
+uv run pytest
 ```
 
 ## License

@@ -1,0 +1,57 @@
+exclude = '^\.venv/'
+
+[[repos]]
+repo = "https://github.com/pre-commit/pre-commit-hooks"
+rev = "v6.0.0"
+hooks = [
+  { id = "check-shebang-scripts-are-executable" },
+  { id = "check-symlinks" },
+  { id = "check-toml" },
+  { id = "check-yaml" },
+  { id = "check-merge-conflict" },
+  { id = "check-added-large-files" },
+  { id = "check-case-conflict" },
+  { id = "mixed-line-ending" },
+  { id = "detect-private-key" },
+  { id = "trailing-whitespace" }
+]
+
+[[repos]]
+repo = "local"
+
+[[repos.hooks]]
+id = "ruff-format"
+name = "ruff format"
+entry = "uv run ruff format --check"
+language = "system"
+types = ["python"]
+
+[[repos.hooks]]
+id = "ruff"
+name = "ruff"
+entry = "uv run ruff check"
+language = "system"
+types = ["python"]
+
+[[repos.hooks]]
+id = "ty"
+name = "ty"
+entry = "uv run ty check"
+language = "system"
+types = ["python"]
+pass_filenames = false
+require_serial = true
+
+[[repos.hooks]]
+id = "rumdl"
+name = "rumdl"
+entry = "uv run rumdl check"
+language = "system"
+files = '\.md$'
+
+[[repos.hooks]]
+id = "yamllint"
+name = "yamllint"
+entry = "uv run yamllint"
+language = "system"
+files = '\.ya?ml$'

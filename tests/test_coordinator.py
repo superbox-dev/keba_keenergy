@@ -2,8 +2,8 @@ from __future__ import annotations
 
 import json
 from datetime import timedelta
-from typing import Any
 from typing import TYPE_CHECKING
+from typing import Any
 from unittest.mock import AsyncMock
 from unittest.mock import patch
 
@@ -21,8 +21,8 @@ from pytest_homeassistant_custom_component.common import async_fire_time_changed
 from custom_components.keba_keenergy.const import DOMAIN
 from custom_components.keba_keenergy.coordinator import KebaKeEnergyDataUpdateCoordinator
 from tests import setup_integration
-from tests.api_data import HEATING_CURVES_RESPONSE_1_1
 from tests.api_data import HEATING_CURVE_NAMES_RESPONSE
+from tests.api_data import HEATING_CURVES_RESPONSE_1_1
 from tests.api_data import MULTIPLE_POSITION_DATA_RESPONSE_3_1
 from tests.api_data import MULTIPLE_POSITION_DATA_RESPONSE_3_2
 from tests.api_data import SYSTEM_BUFFER_TANK_NUMBERS
@@ -36,10 +36,11 @@ from tests.api_data import get_multiple_position_fixed_data_response
 from tests.conftest import FakeKebaKeEnergyAPI
 
 if TYPE_CHECKING:
-    from homeassistant.core import HomeAssistant
     from aiohttp import ClientSession
+    from homeassistant.core import HomeAssistant
     from pytest_homeassistant_custom_component.common import MockConfigEntry
     from syrupy.assertion import SnapshotAssertion
+
     from tests.conftest import FakeKebaKeEnergyAPI
 
 
