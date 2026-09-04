@@ -1,6 +1,6 @@
 [tool.coverage.run]
 branch = false
-source = ["keba_keenergy"]
+source = ["custom_components"]
 
 [tool.coverage.report]
 show_missing = true
