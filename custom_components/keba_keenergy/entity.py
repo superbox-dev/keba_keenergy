@@ -234,12 +234,6 @@ class KebaKeEnergyBaseEntity(
             "translation_placeholders": self._translation_placeholders,
         }
 
-        if not self.is_system_device:
-            data["via_device"] = (
-                DOMAIN,
-                f"{self.entry.unique_id}_{DOMAIN}",
-            )
-
         _device_info: DeviceInfo = DeviceInfo(
             configuration_url=self.coordinator.configuration_url,
             identifiers={(DOMAIN, self.device_identifier)},
@@ -248,8 +242,10 @@ class KebaKeEnergyBaseEntity(
             sw_version=data["sw_version"],
             translation_key=data["translation_key"],
             translation_placeholders=data["translation_placeholders"],
-            **({"via_device": data["via_device"]} if "via_device" in data else {}),
         )
+
+        if not self.is_system_device:
+            _device_info["via_device_id"] = self.coordinator.control_unit_device_id
 
         return _device_info
 

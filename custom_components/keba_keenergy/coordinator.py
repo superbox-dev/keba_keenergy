@@ -276,6 +276,7 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
     ) -> None:
         """Initialize."""
         self.config_entry: KebaKeEnergyConfigEntry = entry
+        self.control_unit_device_id: str = ""
 
         self._store: Store[dict[str, Any]] = Store(hass, version=1, key=DOMAIN)
         self._write_lock: Lock = Lock()

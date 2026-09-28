@@ -24,6 +24,7 @@ from .services import async_setup_services
 if TYPE_CHECKING:
     from aiohttp import ClientSession
     from homeassistant.core import HomeAssistant
+    from homeassistant.helpers.device_registry import DeviceEntry
     from homeassistant.helpers.typing import ConfigType
 
 CONFIG_SCHEMA = cv.config_entry_only_config_schema(DOMAIN)
@@ -74,7 +75,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: KebaKeEnergyConfigEntry)
     # register keba_keenergy before via_device is used
     device_registry = dr.async_get(hass)
 
-    device_registry.async_get_or_create(
+    control_unit: DeviceEntry = device_registry.async_get_or_create(
         config_entry_id=entry.entry_id,
         identifiers={(DOMAIN, f"{entry.unique_id}_{DOMAIN}")},
         manufacturer=MANUFACTURER,
@@ -83,6 +84,8 @@ async def async_setup_entry(hass: HomeAssistant, entry: KebaKeEnergyConfigEntry)
         sw_version=coordinator.device_hmi_sw_version,
         serial_number=coordinator.device_serial_number,
     )
+
+    coordinator.control_unit_device_id = control_unit.id
 
     await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
 

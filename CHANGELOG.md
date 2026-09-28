@@ -9,6 +9,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!--start-->
 
+## [1.10.4] - 2025-09-28
+
+### Changed
+
+- Increased the minimum supported Home Assistant version to **2026.9.4**
+
+### Fixed
+
+- Fix deprecation warnings from the Home Assistant device registry by using `via_device_id` instead of `via_device`
+  to link devices to the control unit
+
 ## [1.10.3] - 2025-07-28
 
 ### Fixed

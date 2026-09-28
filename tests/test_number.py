@@ -306,12 +306,12 @@ async def test_set_value_bad_range(
         (
             "number.keba_keenergy_12345678_hot_water_tank_max_temperature_1",
             None,
-            r"expected float for dictionary value @ data\['value']",
+            r"expected float",
         ),
         (
             "number.keba_keenergy_12345678_heat_circuit_day_temperature_1",
             "bad",
-            r"expected float for dictionary value @ data\['value']",
+            r"expected float",
         ),
     ],
 )
