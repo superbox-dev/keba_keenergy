@@ -377,22 +377,19 @@ class KebaKeEnergyOptionsFlow(OptionsFlowWithReload):
             ),
         )
 
-        tick_mapping: dict[str, str] = {
-            CONF_HEAT_PUMP_TICK: "heat_pump",
-            CONF_HEAT_CIRCUIT_TICK: "heat_circuit",
-            CONF_SOLAR_CIRCUIT_TICK: "solar_circuit",
-            CONF_HOT_WATER_TANK_TICK: "hot_water_tank",
-            CONF_BUFFER_TANK_TICK: "buffer_tank",
-            CONF_SWITCH_VALVE_TICK: "switch_valve",
-            CONF_EXTERNAL_HEAT_SOURCE_TICK: "external_heat_source",
-            CONF_PHOTOVOLTAICS_TICK: "photovoltaics",
+        tick_mapping: dict[str, SectionPrefix] = {
+            CONF_HEAT_PUMP_TICK: SectionPrefix.HEAT_PUMP,
+            CONF_HEAT_CIRCUIT_TICK: SectionPrefix.HEAT_CIRCUIT,
+            CONF_SOLAR_CIRCUIT_TICK: SectionPrefix.SOLAR_CIRCUIT,
+            CONF_HOT_WATER_TANK_TICK: SectionPrefix.HOT_WATER_TANK,
+            CONF_BUFFER_TANK_TICK: SectionPrefix.BUFFER_TANK,
+            CONF_SWITCH_VALVE_TICK: SectionPrefix.SWITCH_VALVE,
+            CONF_EXTERNAL_HEAT_SOURCE_TICK: SectionPrefix.EXTERNAL_HEAT_SOURCE,
+            CONF_PHOTOVOLTAICS_TICK: SectionPrefix.PHOTOVOLTAICS,
         }
 
         for conf_key, prefix in tick_mapping.items():
-            if (prefix == SectionPrefix.PHOTOVOLTAICS and coordinator.has_photovoltaics()) or getattr(
-                coordinator.position,
-                prefix,
-            ):
+            if coordinator.has_device(prefix):
                 schema_fields[
                     vol.Required(
                         conf_key,

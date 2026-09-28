@@ -612,6 +612,46 @@ async def test_option_flow(
     }
 
 
+async def test_option_flow_without_photovoltaics(
+    hass: HomeAssistant,
+    config_entry: MockConfigEntry,
+    fake_api: FakeKebaKeEnergyAPI,
+) -> None:
+    fake_api.responses = [
+        MULTIPLE_POSITIONS_RESPONSE,
+        HEATING_CURVE_NAMES_RESPONSE,
+        get_multiple_position_fixed_data_response(),
+        MULTIPLE_POSITION_DATA_RESPONSE_1,
+        *HEATING_CURVES_RESPONSE_1_1,
+    ]
+    fake_api.register_requests(config_entry.data[CONF_HOST])
+
+    await setup_integration(hass, config_entry)
+
+    # Simulate a system without photovoltaics (Issue #66)
+    with patch.object(config_entry.runtime_data, "has_photovoltaics", return_value=False):
+        result_init: ConfigFlowResult = await hass.config_entries.options.async_init(
+            config_entry.entry_id,
+            data=None,
+        )
+
+    assert result_init["type"] is FlowResultType.FORM
+    assert result_init["step_id"] == "init"
+    assert result_init["data_schema"]
+
+    assert list(result_init["data_schema"].schema.keys()) == [
+        "scan_interval",
+        "scan_interval_tick_system",
+        "scan_interval_tick_heat_pump",
+        "scan_interval_tick_heat_circuit",
+        "scan_interval_tick_solar_circuit",
+        "scan_interval_tick_hot_water_tank",
+        "scan_interval_tick_buffer_tank",
+        "scan_interval_tick_switch_valve",
+        "scan_interval_tick_external_heat_source",
+    ]
+
+
 async def test_option_flow_when_integration_not_fully_loaded(
     hass: HomeAssistant,
     config_entry: MockConfigEntry,

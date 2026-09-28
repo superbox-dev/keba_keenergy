@@ -408,12 +408,7 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
         self.request_data_groups = {
             prefix: [section for section in sections if section in self.request_data]
             for prefix, sections in REQUEST_DATA_GROUPS.items()
-            # Add the system device (control unit), this is always required and has no position
-            if prefix == SectionPrefix.SYSTEM
-            # Add photovoltaics device if available
-            or (prefix == SectionPrefix.PHOTOVOLTAICS and self.has_photovoltaics())
-            # Add data for a device if available
-            or (self.position and getattr(self.position, prefix.value, 0) > 0)
+            if self.has_device(prefix)
         }
 
     async def _async_update_data(self) -> dict[str, ValueResponse]:
@@ -653,6 +648,16 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
     def external_heat_source_numbers(self) -> int:
         """Return number of external heat sources."""
         return self.position.external_heat_source if self.position else 0
+
+    def has_device(self, prefix: SectionPrefix) -> bool:
+        """Return True if the device group is available in this setup."""
+        if prefix == SectionPrefix.SYSTEM:
+            return True
+
+        if prefix == SectionPrefix.PHOTOVOLTAICS:
+            return self.has_photovoltaics()
+
+        return bool(self.position and getattr(self.position, prefix, 0) > 0)
 
     def has_outdoor_temperature(self) -> bool:
         """Check if outdoor temperature sensor is available."""

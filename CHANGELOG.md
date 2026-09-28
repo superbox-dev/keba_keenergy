@@ -19,6 +19,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Fix deprecation warnings from the Home Assistant device registry by using `via_device_id` instead of `via_device`
   to link devices to the control unit
+- Fix an error when opening the integration settings if photovoltaics are not available [(Issue #66)][issue-66].
+
+[issue-66]: https://github.com/superbox-dev/keba_keenergy/issues/66
 
 ## [1.10.3] - 2025-07-28
 
