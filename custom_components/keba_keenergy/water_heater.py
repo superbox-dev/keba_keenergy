@@ -134,12 +134,14 @@ class KebaKeEnergyHotWaterTankEntity(KebaKeEnergyWaterHeaterTankEntity, WaterHea
     @cached_property
     def min_temp(self) -> float:
         """Return the minimum temperature."""
-        return float(self.get_attribute("target_temperature", attr="lower_limit"))
+        lower_limit: float | None = self.get_limit("target_temperature", attr="lower_limit")
+        return super().min_temp if lower_limit is None else lower_limit
 
     @cached_property
     def max_temp(self) -> float:
         """Return the maximum temperature."""
-        return float(self.get_attribute("target_temperature", attr="upper_limit"))
+        upper_limit: float | None = self.get_limit("target_temperature", attr="upper_limit")
+        return super().max_temp if upper_limit is None else upper_limit
 
     @property
     def current_operation(self) -> str | None:

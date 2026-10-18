@@ -175,28 +175,24 @@ class KebaKeEnergyClimateEntity(KebaKeEnergyBaseEntity, ClimateEntity):
     def min_temp(self) -> float:
         """Return the minimum temperature."""
         selected_target_temperature: float | None = self.get_value("selected_target_temperature", expected_type=float)
-        target_temperature_offset: float = float(
-            self.get_attribute("target_temperature_offset", attr="lower_limit"),
-        )
+        lower_limit: float | None = self.get_limit("target_temperature_offset", attr="lower_limit")
 
         return (
             super().min_temp
-            if selected_target_temperature is None
-            else selected_target_temperature + target_temperature_offset
+            if selected_target_temperature is None or lower_limit is None
+            else selected_target_temperature + lower_limit
         )
 
     @property
     def max_temp(self) -> float:
         """Return the maximum temperature."""
         selected_target_temperature: float | None = self.get_value("selected_target_temperature", expected_type=float)
-        target_temperature_offset: float = float(
-            self.get_attribute("target_temperature_offset", attr="upper_limit"),
-        )
+        upper_limit: float | None = self.get_limit("target_temperature_offset", attr="upper_limit")
 
         return (
             super().max_temp
-            if selected_target_temperature is None
-            else selected_target_temperature + target_temperature_offset
+            if selected_target_temperature is None or upper_limit is None
+            else selected_target_temperature + upper_limit
         )
 
     @property

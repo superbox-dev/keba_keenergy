@@ -80,17 +80,15 @@ class KebaKeEnergyNumberEntity(KebaKeEnergyEntity, NumberEntity):
 
     @cached_property
     def native_min_value(self) -> float:
-        """Return the maximum value."""
-        return (
-            float(self.get_attribute(self.entity_description.key, attr="lower_limit")) * self.entity_description.scale
-        )
+        """Return the minimum value."""
+        lower_limit: float | None = self.get_limit(self.entity_description.key, attr="lower_limit")
+        return super().native_min_value if lower_limit is None else lower_limit * self.entity_description.scale
 
     @cached_property
     def native_max_value(self) -> float:
         """Return the maximum value."""
-        return (
-            float(self.get_attribute(self.entity_description.key, attr="upper_limit")) * self.entity_description.scale
-        )
+        upper_limit: float | None = self.get_limit(self.entity_description.key, attr="upper_limit")
+        return super().native_max_value if upper_limit is None else upper_limit * self.entity_description.scale
 
     @property
     def native_value(self) -> float | None:

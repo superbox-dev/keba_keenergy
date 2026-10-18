@@ -300,6 +300,13 @@ class KebaKeEnergyBaseEntity(
         attributes: dict[str, Any] = entity_data.get("attributes", {}) if entity_data else {}
         return str(attributes.get(attr, ""))
 
+    def get_limit(self, key: str, /, *, attr: str) -> float | None:
+        """Get a limit (e.g. `lower_limit`) from the API by key, or None if the value has no valid limit."""
+        try:
+            return float(self.get_attribute(key, attr=attr))
+        except ValueError:
+            return None
+
     @overload
     def get_value(self, key: str, /, *, expected_type: type[T]) -> T | None: ...
 

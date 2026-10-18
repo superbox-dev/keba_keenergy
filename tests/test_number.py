@@ -9,7 +9,11 @@ from typing import TYPE_CHECKING
 
 import probatio
 import pytest
+from homeassistant.components.number import ATTR_MAX
+from homeassistant.components.number import ATTR_MIN
 from homeassistant.components.number import ATTR_VALUE
+from homeassistant.components.number import DEFAULT_MAX_VALUE
+from homeassistant.components.number import DEFAULT_MIN_VALUE
 from homeassistant.components.number import DOMAIN as NUMBER_DOMAIN
 from homeassistant.components.number.const import SERVICE_SET_VALUE
 from homeassistant.const import ATTR_ENTITY_ID
@@ -29,6 +33,7 @@ from tests.api_data import MULTIPLE_POSITION_DATA_RESPONSE_1
 from tests.api_data import MULTIPLE_POSITIONS_RESPONSE
 from tests.api_data import get_multiple_position_fixed_data_response
 from tests.api_data import get_single_position_data_response
+from tests.api_data import update_response
 
 if TYPE_CHECKING:
     from pytest_homeassistant_custom_component.common import MockConfigEntry
@@ -417,6 +422,31 @@ async def test_set_unchanged_value(
     await hass.async_block_till_done()
 
     assert fake_api.write_requests() == []
+
+
+async def test_value_without_limits(
+    hass: HomeAssistant,
+    fake_api: FakeKebaKeEnergyAPI,
+) -> None:
+    """Test that a number entity without limits from the API uses the default limits."""
+    entity_id: str = "number.keba_keenergy_12345678_heat_circuit_target_temperature_offset"
+    fake_api.responses = [
+        DEFAULT_POSITION_RESPONSE,
+        HEATING_CURVE_NAMES_RESPONSE,
+        DEFAULT_POSITION_FIXED_DATA_RESPONSE,
+        update_response(
+            get_single_position_data_response(),
+            "APPL.CtrlAppl.sParam.heatCircuit[0].param.offsetRoomTemp",
+            attributes={},
+        ),
+        *HEATING_CURVES_RESPONSE_1_1,
+    ]
+    await fake_api.setup_integration()
+
+    state: State | None = hass.states.get(entity_id)
+    assert isinstance(state, State)
+    assert state.attributes[ATTR_MIN] == DEFAULT_MIN_VALUE
+    assert state.attributes[ATTR_MAX] == DEFAULT_MAX_VALUE
 
 
 async def test_debounced_value_not_written_after_unload(
