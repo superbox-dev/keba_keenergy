@@ -62,6 +62,14 @@
                 }
             }
         },
+        "climate": {
+            "heat_circuit": {
+                "default": "mdi:hvac",
+                "state": {
+                    "off": "mdi:hvac-off"
+                }
+            }
+        },
         "sensor": {
             "buffer_tank_operating_mode": {
                 "state": {

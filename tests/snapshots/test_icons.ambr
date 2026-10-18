@@ -138,8 +138,18 @@
         'on': 'mdi:fire',
       }),
     }),
-    'climate.keba_keenergy_12345678_1': 'mdi:hvac',
-    'climate.keba_keenergy_12345678_2': 'mdi:hvac-off',
+    'climate.keba_keenergy_12345678_1': dict({
+      'default': 'mdi:hvac',
+      'state': dict({
+        'off': 'mdi:hvac-off',
+      }),
+    }),
+    'climate.keba_keenergy_12345678_2': dict({
+      'default': 'mdi:hvac',
+      'state': dict({
+        'off': 'mdi:hvac-off',
+      }),
+    }),
     'number.keba_keenergy_12345678_buffer_tank_excess_energy_target_temperature_1': dict({
       'default': 'mdi:sun-thermometer',
     }),

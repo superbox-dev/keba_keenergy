@@ -120,11 +120,6 @@ class KebaKeEnergyClimateEntity(KebaKeEnergyBaseEntity, ClimateEntity):
             index=self.index,
         )
 
-    @property
-    def icon(self) -> str | None:
-        """Return the icon to use in the frontend, if any."""
-        return "mdi:hvac" if self.hvac_mode == HVACMode.HEAT else "mdi:hvac-off"
-
     @cached_property
     def _hvac_mode_on(self) -> HVACMode:
         # A heating circuit that supports heating and cooling uses HEAT_COOL, this is untested with a real device
