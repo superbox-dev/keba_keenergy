@@ -15,6 +15,7 @@ from typing import overload
 
 from homeassistant.core import HassJob
 from homeassistant.core import callback
+from homeassistant.exceptions import HomeAssistantError
 from homeassistant.helpers.device_registry import DeviceInfo
 from homeassistant.helpers.event import async_call_later
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
@@ -47,6 +48,7 @@ if TYPE_CHECKING:
     from homeassistant.helpers.entity_platform import AddEntitiesCallback
     from homeassistant.helpers.typing import StateType
     from keba_keenergy_api.endpoints import Value
+    from keba_keenergy_api.endpoints import ValueResponse
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -243,6 +245,8 @@ class KebaKeEnergyBaseEntity(
             ),
         }
 
+        previous_data: dict[str, ValueResponse] = self.coordinator.data
+
         self.coordinator.async_update_value(
             value,
             section_id=self.section_id,
@@ -251,7 +255,14 @@ class KebaKeEnergyBaseEntity(
             key_index=self.key_index,
         )
 
-        await self.coordinator.async_write_data(request=request, ignore_weekly_write_count=ignore_weekly_write_count)
+        try:
+            await self.coordinator.async_write_data(
+                request=request, ignore_weekly_write_count=ignore_weekly_write_count
+            )
+        except HomeAssistantError:
+            # The control unit still has the previous value, so the entities show it again
+            self.coordinator.async_set_updated_data(previous_data)
+            raise
 
     def _schedule_debounced_write(self, value: float | None, /) -> None:
         """Write the value after `FLASH_WRITE_DELAY`, a new value restarts the delay."""

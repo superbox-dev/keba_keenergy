@@ -129,3 +129,37 @@ async def test_heat_pump_manufacturer(
         if (DOMAIN, "12345678_heat_pump") in device.identifiers
     ]
     assert manufacturers == [expected_manufacturer]
+
+
+async def test_entity_keeps_state_if_update_failed(
+    hass: HomeAssistant,
+    fake_api: FakeKebaKeEnergyAPI,
+) -> None:
+    """Test that an entity keeps its state if writing the new value fails."""
+    entity_id: str = "select.keba_keenergy_12345678_buffer_tank_operating_mode_1"
+    fake_api.responses = [
+        MULTIPLE_POSITIONS_RESPONSE,
+        get_multiple_position_fixed_data_response(),
+        MULTIPLE_POSITION_DATA_RESPONSE_1,
+    ]
+    fake_api.write_status = HTTPStatus.BAD_REQUEST
+    await fake_api.setup_integration()
+
+    state: State | None = hass.states.get(entity_id)
+    assert isinstance(state, State)
+    previous_state: str = state.state
+
+    with pytest.raises(HomeAssistantError):
+        await hass.services.async_call(
+            domain=SELECT_DOMAIN,
+            service=SERVICE_SELECT_OPTION,
+            service_data={
+                ATTR_ENTITY_ID: entity_id,
+                ATTR_OPTION: "heat_up" if previous_state != "heat_up" else "off",
+            },
+            blocking=True,
+        )
+
+    state = hass.states.get(entity_id)
+    assert isinstance(state, State)
+    assert state.state == previous_state
