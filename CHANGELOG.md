@@ -2,280 +2,413 @@
 
 All notable changes to this project will be documented in this file.
 
-The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
 <!--start-->
 
-## [1.10.4] - 2025-09-30
+### Changed
+
+- Linked the GitHub release notes to the matching section of the changelog.
+- Extended the issue templates with the environment and debug logs.
+
+## [1.10.4] - 2026-09-30
 
 ### Changed
 
-- Increased the minimum supported Home Assistant version to **2026.9.4**
+- Required Home Assistant 2026.9.4 or newer.
 
 ### Fixed
 
-- Fix deprecation warnings from the Home Assistant device registry by using `via_device_id` instead of `via_device`
-  to link devices to the control unit
-- Fix an error when opening the integration settings if photovoltaics are not available [(Issue #66)][issue-66].
+- Fixed Home Assistant device registry deprecation warnings by linking the devices to the control unit with
+  `via_device_id` instead of `via_device`.
+- Fixed an error when opening the options if the control unit has no photovoltaics. ([Issue #66][issue-66])
 
 [issue-66]: https://github.com/superbox-dev/keba_keenergy/issues/66
 
-## [1.10.3] - 2025-07-28
+## [1.10.3] - 2026-07-28
 
 ### Fixed
 
-- Increased the minimum supported Home Assistant version to **2026.7.0**, which includes `aiohttp` 3.14 and
-  `encode_basic_auth()` [(Issue #65)][issue-65]
+- Required Home Assistant 2026.7.0 or newer, which includes `aiohttp` 3.14 with `encode_basic_auth()`.
+  ([Issue #65][issue-65])
 
 [issue-65]: https://github.com/superbox-dev/keba_keenergy/issues/65
 
-## [1.10.2] - 2025-07-18
+## [1.10.2] - 2026-07-18
 
 ### Changed
 
-- Bump `keba_keenergy_api` to v2.12.2 [(Issue #63)][issue-63]
+- Updated `keba_keenergy_api` to 2.12.2. ([Issue #63][issue-63])
 
 ### Fixed
 
-- Fix missing auto cool option in the control unit operation mode select [(Issue #60)][issue-60]
+- Fixed the missing "Auto cool" option of the control unit operating mode select. ([Issue #60][issue-60])
 
 [issue-60]: https://github.com/superbox-dev/keba_keenergy/issues/60
 [issue-63]: https://github.com/superbox-dev/keba_keenergy/issues/63
 
-## [1.10.1] - 2025-05-21
+## [1.10.1] - 2026-05-21
 
 ### Fixed
 
-- Fix missing translation for photovoltaics
-- Fix missing API error message and add better error logging [(Issue #59)][issue-59]
-- Filter API calls that are not available for this KEBA control unit / software version [(Issue #59)][issue-59]
+- Fixed the missing translation of the photovoltaics device.
+- Fixed the missing API error message and improved the error logging. ([Issue #59][issue-59])
+- Fixed API requests for values that the control unit or its software version does not provide. These values are
+  now filtered before the first update. ([Issue #59][issue-59])
 
 [issue-59]: https://github.com/superbox-dev/keba_keenergy/issues/59
 
-## [1.10.0] - 2025-05-19
+## [1.10.0] - 2026-05-19
 
 ### Added
 
-- Add control for heating limits (day/night) [(Issue #46)][issue-46]
-- Add support for heating circuits with active or passive cooling feature [(Issue #47)][issue-47]
-- Add sensor for "Return flow temperature (mixer)" to the heating circuit
-- Add device for photovoltaics [(Issue #55)][issue-55]
-- Add entities to control or monitor excess energy from photovoltaics [(Issue #55)][issue-55]
-- Add "Mixer" and "Pump status" to the heating circuit [(Issue #57)][issue-57]
+- Added numbers and sensors for the heating limits (day and night) of the heating circuits. ([Issue #46][issue-46])
+- Added support for heating circuits with active or passive cooling: the climate entity supports the cool mode, and
+  the heating circuits got the cooling curve select, the cooling curve offset and slope, the cooling limits, the
+  target room cooling temperatures and the cool request sensor. ([Issue #47][issue-47])
+- Added the passive cooling device with temperature, switch valve position, circulation pump speed and mixer
+  sensors. ([Issue #47][issue-47])
+- Added the sensor "Return flow temperature (mixer)" to the heating circuit.
+- Added the photovoltaics device with the sensors "Excess power", "Daily energy" and "Total energy".
+  ([Issue #55][issue-55])
+- Added the entities to use the excess energy (PV surplus) of photovoltaics: "PV surplus" binary sensors, "Use PV
+  surplus" switches, target temperatures, hystereses and heating and cooling limits for PV surplus, the electricity
+  consumption from PV surplus and the operating hours, maximum runtime and activation counter during PV surplus.
+  ([Issue #55][issue-55])
+- Added the sensor "Mixer" and the binary sensor "Pump state" to the heating circuit. ([Issue #57][issue-57])
+- Added attributes to the mixer position sensor. ([Issue #58][issue-58])
 
 ### Changed
 
-- Integration now required Python `3.14` and minimum Home Assistant version `2026.3.0`
-- Do not show sensors that are not available in the heat pump setup [(Issue #47)][issue-47]
-- Updated translations
+- Required Python 3.14 and Home Assistant 2026.3.0 or newer.
+- Updated `keba_keenergy_api` to 2.12.0.
+- Hid the sensors that are not available in the heat pump setup, e.g. room temperature, room humidity, mixer, pump,
+  return flow temperature, fresh water module and outdoor temperature. ([Issue #47][issue-47])
+- Moved the coefficient of performance, the seasonal performance factors and other technical sensors to the
+  diagnostic entity category.
+- Renamed the heat pump sensor "Circulation pump" to "Circulation pump speed". Existing entity IDs are not changed.
+- Updated the English and German translations.
 
 ### Fixed
 
-- The "Operating Mode" entity state for the control unit was updated with a delay
-- Fix connection failures when using .local hostnames by forcing IPv4 in the HTTP client
+- Fixed the state of the control unit "Operating mode" select being updated with a delay.
+- Fixed connection failures with `.local` hostnames by using IPv4 for the HTTP client.
+- Fixed duplicate entities.
+- Fixed the wrong detection of the heating circuit pump. ([Issue #57][issue-57])
 
 [issue-46]: https://github.com/superbox-dev/keba_keenergy/issues/46
 [issue-47]: https://github.com/superbox-dev/keba_keenergy/issues/47
 [issue-55]: https://github.com/superbox-dev/keba_keenergy/issues/55
 [issue-57]: https://github.com/superbox-dev/keba_keenergy/issues/57
+[issue-58]: https://github.com/superbox-dev/keba_keenergy/issues/58
 
-## [1.9.1] - 2025-04-03
+## [1.9.1] - 2026-04-03
 
 ### Security
 
-- Update `keba-keenergy-api`, as aiohttp is being updated from `3.13.3` to `3.13.4` [CVE-2026-34513][CVE-2026-34513]
+- Updated `keba_keenergy_api` to 2.10.2, which updates `aiohttp` from 3.13.3 to 3.13.4.
+  ([CVE-2026-34513][CVE-2026-34513])
 
 [CVE-2026-34513]: https://github.com/advisories/GHSA-hcc4-c3v8-rx92
 
-## [1.9.0] - 2025-03-15
+## [1.9.0] - 2026-03-15
 
 ### Added
 
-- Add options to set a custom polling rate per device [(Issue #30)][issue-30]
-- Add heating circuit pump speed sensor [(Issue #34)][issue-34]
+- Added the "Scan interval" option and an update multiplier option for each device type, to update the values of a
+  device only every n-th scan interval. The options only show the device types of the heat pump setup.
+  ([Issue #30][issue-30])
+- Added the sensor "Pump speed" to the heating circuit. ([Issue #34][issue-34])
+- Added reauthentication. If the Web HMI rejects the credentials, Home Assistant asks for the new credentials.
+  ([Issue #35][issue-35])
+- Added the reconfiguration flow to change the host and the credentials. ([Issue #35][issue-35])
 
 ### Changed
 
-- Update code with the [quality scale checklist][qs-checklist].
+- Implemented rules of the Home Assistant [integration quality scale][qs-checklist]: `runtime-data`,
+  `config-entry-unloading`, `action-setup`, `parallel-updates`, `entity-category`, `icon-translations`,
+  `strict-typing` and descriptions for all config flow fields. ([Issue #35][issue-35])
+- Added support for Python 3.14.
+- Updated `keba_keenergy_api` to 2.10.1.
 
 [qs-checklist]: https://developers.home-assistant.io/docs/core/integration-quality-scale/rules/
 [issue-30]: https://github.com/superbox-dev/keba_keenergy/issues/30
 [issue-34]: https://github.com/superbox-dev/keba_keenergy/issues/34
+[issue-35]: https://github.com/superbox-dev/keba_keenergy/issues/35
 
-## [1.8.1] - 2025-02-20
+## [1.8.1] - 2026-02-20
 
 ### Fixed
 
-## Fixed missing heating curve names [(Issue #36)][issue-36]
+- Fixed the missing names of the heating curves. ([Issue #36][issue-36])
 
 [issue-36]: https://github.com/superbox-dev/keba_keenergy/issues/36
 
-## [1.8.0] - 2025-02-17
+## [1.8.0] - 2026-02-17
 
 ### Added
 
-- Added sensors for "Target overheating", "Current overheating", and "Expansion valve position" [(Issue #29)][issue-29]
-- Added sensor "Circulation return temperature" to the hot water tank [(Issue #24)][issue-24]
-- Added binary sensor "Circulation pump state" to the hot water tank [(Issue #24)][issue-24]
-- Added select entity "Heating curve" to the heating circuit [(Issue #24)][issue-24]
-- Added number entity "Heating curve offset" to the heating circuit [(Issue #24)][issue-24]
-- Added number entity "Heating curve slope" to the heating circuit [(Issue #24)][issue-24]
-- Added switch entity "Use heating curve" to the heating circuit [(Issue #24)][issue-24]
-- Added service "set_heating_curve_points" [(Issue #24)][issue-24]
-- Added sensor `Heating curve` with points as extra state attributes [(Issue #24)][issue-24]
+- Added the sensors "Target overheating", "Current overheating" and "Expansion valve position" to the heat pump.
+  ([Issue #29][issue-29])
+- Added the sensor "Circulation return temperature" (disabled by default) and the binary sensor "Circulation pump
+  state" to the hot water tank. ([Issue #24][issue-24])
+- Added the select "Heating curve", the numbers "Heating curve offset" and "Heating curve slope" and the switch "Use
+  heating curve" to the heating circuit. ([Issue #24][issue-24])
+- Added the `set_heating_curve_points` action to set up to 16 points of a heating curve. ([Issue #24][issue-24])
+- Added the sensor "Heating curve" with the points of the heating curve as attributes. ([Issue #28][issue-28])
 
 ### Changed
 
-- The entity icons have been slightly improved
-- Update translations
+- Updated `keba_keenergy_api` to 2.9.0.
+- Rejected an end date before the start date in the `set_away_date_range` action.
+- Translated the error messages of the actions and of failed write requests.
+- Added a default display precision to the sensors without a unit.
+- Improved the entity icons and disabled some rarely used entities by default.
+- Updated the English and German translations.
 
 ### Fixed
 
-- Changed wrong unit J to kWh on sensors "Solar circuit Heating energy" and "Solar circuit Daily energy" [(Issue #32)][issue-32]
+- Fixed the unit of the solar circuit sensors "Heating energy" and "Daily energy", which showed J as kWh.
+  ([Issue #32][issue-32])
+- Fixed the translation of the switch valve position. ([Issue #31][issue-31])
 
-[issue-32]: https://github.com/superbox-dev/keba_keenergy/issues/32
-[issue-29]: https://github.com/superbox-dev/keba_keenergy/issues/29
 [issue-24]: https://github.com/superbox-dev/keba_keenergy/issues/24
+[issue-28]: https://github.com/superbox-dev/keba_keenergy/issues/28
+[issue-29]: https://github.com/superbox-dev/keba_keenergy/issues/29
+[issue-31]: https://github.com/superbox-dev/keba_keenergy/issues/31
+[issue-32]: https://github.com/superbox-dev/keba_keenergy/issues/32
 
-## [1.7.0] - 2025-01-31
+## [1.7.0] - 2026-01-31
 
 ### Added
 
-- Added service to set away date range [(Issue #20)][issue-20]
-- Added [blueprint][blueprint] to set away date range from a calendar entry [(Issue #20)][issue-20]
-- Added issue warning when more than 30 write operations are performed per week [(Issue #23)][issue-23]
+- Added the `set_away_date_range` action to set the away period of the heating circuits. ([Issue #20][issue-20])
+- Added a [blueprint][blueprint] to set the away date range from a calendar event. ([Issue #20][issue-20])
+- Added a repair issue if more than 30 write operations are performed in a week, because frequent writes reduce
+  the lifetime of the flash memory of the control unit. The counter is kept across restarts. ([Issue #23][issue-23])
 
-## Changed
+### Changed
 
-- Bump `keba_keenergy_api` to v2.8.1
-- Changed documentation link to <www.superbox.one>
+- Wrote values only if they changed, and wrote changes of numbers, target temperatures and the climate entity after
+  a short delay, so several quick changes result in one write operation. ([Issue #23][issue-23])
+- Disabled the numbers that are rarely changed by default. ([Issue #23][issue-23])
+- Updated `keba_keenergy_api` to 2.8.1.
+- Changed the documentation link to <https://superbox.one>.
 
-[blueprint]: https://superbox.one/keba-keenergy/home-assistant/wiki/examples/#set-away-date-range
+### Fixed
+
+- Fixed the missing English translations.
+
+[blueprint]: https://superbox.one/#set-the-away-date-range-from-a-calendar
 [issue-20]: https://github.com/superbox-dev/keba_keenergy/issues/20
 [issue-23]: https://github.com/superbox-dev/keba_keenergy/issues/23
 
-## [1.6.1] - 2025-01-24
+## [1.6.1] - 2026-01-24
 
 ### Added
 
-- Added new sensor "Target temperature (selected)" to the heat circuit.
-  This sensor show always the right target temperature (day, night, ...) without the offset.
+- Added the sensor "Target room temperature (selected)" to the heating circuit. It always shows the current target
+  temperature (day, night, ...) without the offset.
+
+### Changed
+
+- Updated `keba_keenergy_api` to 2.8.0.
 
 ### Fixed
 
-- Fixed slow API update and refresh on entities that can changed e.g. "Operation mode" or the "Preset mode"
-  in the climate entity
-- Fixed climate entity show wrong target temperature [(Issue #19)][issue-19]
-- Fixed preset mode "away" in the climate entity [(Issue #21)][issue-21]
+- Fixed the slow update of entities after a change, e.g. of the operating mode or the preset mode of the climate
+  entity.
+- Fixed the wrong target temperature of the climate entity. ([Issue #19][issue-19])
+- Fixed the preset mode "away" of the climate entity. ([Issue #21][issue-21])
 
 [issue-19]: https://github.com/superbox-dev/keba_keenergy/issues/19
 [issue-21]: https://github.com/superbox-dev/keba_keenergy/issues/21
 
-## [1.6.0] - 2025-01-18
+## [1.6.0] - 2026-01-18
 
 ### Added
 
-- Added support for switch valves
-- Added diagnostic sensors "Compressor", "Source actuator", "Source", "Source pressure",
-  "Three-phase" and "Variable drive frequency" to the heat pump device
+- Added support for switch valves.
+- Added the diagnostic binary sensors "Compressor", "Source actuator", "Source", "Source pressure", "Three-phase" and
+  "Variable drive frequency" to the heat pump to show failures.
+
+### Changed
+
+- Read values that never change, e.g. the number of heating circuits, only once on setup.
+- Skipped API requests that the KEBA software version does not support.
+- Updated `keba_keenergy_api` to 2.7.0.
+
+## [1.5.0] - 2026-01-11
+
+### Added
+
+- Added support for buffer tanks.
+- Added the sensors "Source pump speed", "Vaporization temperature", "Condensation temperature" and "Substate" to the
+  heat pump.
+- Added the number "Compressor speed (night)" and the switch "Compressor speed limit (night)" to the heat pump.
+- Added the switch "Priority 1 before 2" to the solar circuit.
+
+### Changed
+
+- Enabled more sensors by default.
+- Updated `keba_keenergy_api` to 2.6.0.
 
 ### Fixed
 
-- Fixed unnecessary API calls for values that did never change e.g. number of heating circuits
-- Don't execute API calls for KEBA software versions that did not support this API call
+- Fixed the authentication with umlauts in the credentials.
 
-## [1.5.0] - 2025-01-11
-
-### Added
-
-- Support for buffer tanks
-- Added sensors "Source pump speed", "Vaporizer temperature", "Condenser temperature" and "Substate" to the heat pump
-- Added number control for the "compressor night speed" to the heat pump
-- Added switch control for the "compressor use night speed" to the heat pump
-- Added switch control for the "priority 1 before 2" to the solar circuit
-
-### Fixed
-
-- Authentication does not work with umlauts
-
-## [1.4.0] - 2025-01-03
+## [1.4.0] - 2026-01-03
 
 ### Added
 
-- Support for solar circuits
+- Added support for solar circuits.
+
+### Changed
+
+- Updated `keba_keenergy_api` to 2.4.0.
 
 ## [1.3.1] - 2025-12-09
 
 ### Fixed
 
-- missing heating circuit heat request modes in the climate entity HAVC action
+- Fixed the missing heat request states of the heating circuit in the HVAC action of the climate entity.
 
 ## [1.3.0] - 2025-10-29
 
 ### Added
 
-- Diagnostic sensors for CPU usage, RAM usage and free RAM
-
-## [1.2.2] - 2025-10-19
-
-### Fixed
-
-- API errors when fetch data from a device that is not installed e.g. zero external heat sources
+- Added the diagnostic sensors "CPU usage", "WebView CPU usage", "WebServer CPU usage", "Control CPU usage",
+  "RAM usage" and "Free RAM" to the control unit.
 
 ### Changed
 
-- Update translations
+- Attached `keba_keenergy.zip` to the GitHub releases, HACS installs the integration from it.
 
-## [1.2.1] - 2025-10-15
+## [1.2.2] - 2025-10-19
+
+### Changed
+
+- Requested only the values that the hardware and software version of the Web HMI support.
+- Removed the discovery of AP 420 control units.
+- Updated `keba_keenergy_api` to 2.3.1.
+- Updated the English and German translations.
 
 ### Fixed
 
-- invalid API endpoints for devices (e.g. AP420/H-A) that did not support this
+- Fixed API errors for devices that are not installed, e.g. if there is no external heat source.
+
+## [1.2.1] - 2025-10-15
+
+### Added
+
+- Added the discovery of AP 420 control units and of all AP 440 control units.
+
+### Changed
+
+- Logged the authentication check of the config flow as debug message instead of error.
+
+### Fixed
+
+- Fixed requests to API endpoints that some control units, e.g. AP 420/H-A, do not support.
 
 ## [1.2.0] - 2025-10-15
 
 ### Added
 
-- Number entities to control the target temperature offset
-- Support username and password for basic auth (newer software versions now required basic auth)
-- External heat source device and entities
-- Entity "Operating hours", "Maximum runtime" and "Activation counter" to the head pump
-- Entity "Heat request", "Operating hours", "Maximum runtime" and "Activation counter" to the external heat source
+- Added the username and password for Web HMIs with login, required by newer software versions.
+- Added the number "Target room temperature (offset)" to the heating circuit.
+- Added support for external heat sources with operating mode, target temperature, heat request, operating hours,
+  maximum runtime and activation counter.
+- Added the sensors "Operating hours", "Maximum runtime" and "Activation counter" to the heat pump.
+- Added the flow and return flow temperature sensors of the heating circuits.
+- Added the manufacturer "ino" to the device info.
 
 ### Changed
 
-- Updated german and english translations
-- Removed entities to control the night speed of the compressor (for backward compatibility with older software
-  versions)
+- Disabled the sensors that not all heat pumps support by default.
+- Disabled the SSL certificate verification, because newer software versions of the Web HMI use self-signed
+  certificates.
+- Changed the device class of the operating hours to duration.
+- Updated `keba_keenergy_api` to 2.2.0.
+- Updated the English and German translations.
+
+### Removed
+
+- Removed the entities to limit the compressor speed at night, for compatibility with older software versions.
+
+### Fixed
+
+- Fixed the state class of sensors.
 
 ## [1.1.0] - 2025-09-30
 
 ### Added
 
-- Energy management sensors for the head pump device
-- Select entities for all operation modes
-- Switch entity to control the compressor speed at night
+- Added the energy management sensors to the heat pump, e.g. power, energy, electricity consumption and coefficient
+  of performance.
+- Added selects for the operating modes of the control unit, heating circuits and hot water tanks.
+- Added the number and switch to limit the compressor speed at night.
+- Added the sensors "Hot water flow", "Fresh water module temperature" and "Flow temperature setpoint".
+- Added the heat request state "Off (room temperature reached)" of the heating circuit.
 
 ### Changed
 
-- German and english translations
-- The manufacturer and model name from the head pump device translation
+- Translated the manufacturer and model name of the heat pump device.
+- Logged API errors as errors instead of debug messages.
+- Updated `keba_keenergy_api` to 2.0.0.
+- Updated the English and German translations.
+
+### Fixed
+
+- Fixed the slow update after changing a number.
+- Fixed the upper target temperature of the water heater.
 
 ## [1.0.1] - 2025-09-12
 
 ### Added
 
-- German translations
+- Added German translations, also for the heating circuit and hot water tank devices.
 
 ### Fixed
 
-- Wrong unit for room humidity sensor
+- Fixed the wrong unit of the room humidity sensor.
 
-## [1.0.0] - 2025-09-1
+## [1.0.0] - 2025-09-01
 
-Initial release
+### Added
+
+- Added the config flow with host and SSL, and the discovery of AP 440 control units.
+- Added the control unit, heat pump, heating circuit and hot water tank devices.
+- Added the climate entities of the heating circuits and the water heater entities of the hot water tanks.
+- Added the numbers for the target temperatures of the heating circuits (day, night, holiday) and the hot water tanks.
+- Added the sensors for the outdoor temperature, the operating modes, the heat pump state, temperatures, pressures
+  and compressor, and the binary sensor for the heat request.
+
+[Unreleased]: https://github.com/superbox-dev/keba_keenergy/compare/v1.10.4...HEAD
+[1.10.4]: https://github.com/superbox-dev/keba_keenergy/compare/v1.10.3...v1.10.4
+[1.10.3]: https://github.com/superbox-dev/keba_keenergy/compare/v1.10.2...v1.10.3
+[1.10.2]: https://github.com/superbox-dev/keba_keenergy/compare/v1.10.1...v1.10.2
+[1.10.1]: https://github.com/superbox-dev/keba_keenergy/compare/v1.10.0...v1.10.1
+[1.10.0]: https://github.com/superbox-dev/keba_keenergy/compare/v1.9.1...v1.10.0
+[1.9.1]: https://github.com/superbox-dev/keba_keenergy/compare/v1.9.0...v1.9.1
+[1.9.0]: https://github.com/superbox-dev/keba_keenergy/compare/v1.8.1...v1.9.0
+[1.8.1]: https://github.com/superbox-dev/keba_keenergy/compare/v1.8.0...v1.8.1
+[1.8.0]: https://github.com/superbox-dev/keba_keenergy/compare/v1.7.0...v1.8.0
+[1.7.0]: https://github.com/superbox-dev/keba_keenergy/compare/v1.6.1...v1.7.0
+[1.6.1]: https://github.com/superbox-dev/keba_keenergy/compare/v1.6.0...v1.6.1
+[1.6.0]: https://github.com/superbox-dev/keba_keenergy/compare/v1.5.0...v1.6.0
+[1.5.0]: https://github.com/superbox-dev/keba_keenergy/compare/v1.4.0...v1.5.0
+[1.4.0]: https://github.com/superbox-dev/keba_keenergy/compare/v1.3.1...v1.4.0
+[1.3.1]: https://github.com/superbox-dev/keba_keenergy/compare/v1.3.0...v1.3.1
+[1.3.0]: https://github.com/superbox-dev/keba_keenergy/compare/v1.2.2...v1.3.0
+[1.2.2]: https://github.com/superbox-dev/keba_keenergy/compare/v1.2.1...v1.2.2
+[1.2.1]: https://github.com/superbox-dev/keba_keenergy/compare/v1.2.0...v1.2.1
+[1.2.0]: https://github.com/superbox-dev/keba_keenergy/compare/v1.1.0...v1.2.0
+[1.1.0]: https://github.com/superbox-dev/keba_keenergy/compare/v1.0.1...v1.1.0
+[1.0.1]: https://github.com/superbox-dev/keba_keenergy/compare/v1.0.0...v1.0.1
+[1.0.0]: https://github.com/superbox-dev/keba_keenergy/releases/tag/v1.0.0
 
 <!--end-->
