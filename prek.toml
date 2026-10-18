@@ -9,7 +9,7 @@ hooks = [
   { id = "check-toml" },
   { id = "check-yaml" },
   { id = "check-merge-conflict" },
-  { id = "check-added-large-files" },
+  { id = "check-added-large-files", args = ["--maxkb=1024"] },  # website/package-lock.json has ~750 KB
   { id = "check-case-conflict" },
   { id = "mixed-line-ending" },
   { id = "detect-private-key" },

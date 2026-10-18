@@ -1,0 +1,13 @@
+// Used by the IDE and the "typecheck" script, not by "docusaurus start/build"
+{
+  "extends": "@docusaurus/tsconfig",
+  "compilerOptions": {
+    // baseUrl is deprecated in TypeScript 6, paths resolve relative to this file without it
+    "baseUrl": null,
+    "paths": {
+      "@site/*": ["./*"]
+    },
+    "strict": true
+  },
+  "exclude": [".docusaurus", "build"]
+}

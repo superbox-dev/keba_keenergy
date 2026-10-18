@@ -1,4 +1,0 @@
-title: superbox
-remote_theme: superbox-dev/keba_keenergy_site
-plugins:
-  - jekyll-remote-theme

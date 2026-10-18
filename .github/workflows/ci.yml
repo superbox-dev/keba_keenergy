@@ -34,6 +34,23 @@ jobs:
       - name: Lint Markdown files
         run: uv run rumdl check $(git ls-files '*.md')
 
+  documentation:
+    name: Documentation
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v7
+      - name: Set up project
+        uses: ./.github/actions/setup-project
+      - name: Set up Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: lts/*
+          cache: npm
+          cache-dependency-path: website/package-lock.json
+      - name: Build website
+        run: ./scripts/docs.sh
+
   validation:
     name: Validation
     runs-on: ubuntu-latest
@@ -114,6 +131,7 @@ jobs:
     if: github.ref_type == 'tag'
     needs:
       - code-analysis
+      - documentation
       - validation
       - security
       - tests

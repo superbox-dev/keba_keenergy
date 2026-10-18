@@ -7,6 +7,10 @@
       <excludeFolder url="file://$MODULE_DIR$/.venv" />
       <excludeFolder url="file://$MODULE_DIR$/.rumdl_cache" />
       <excludeFolder url="file://$MODULE_DIR$/keba_keenergy.egg-info" />
+      <excludeFolder url="file://$MODULE_DIR$/website/.docusaurus" />
+      <excludeFolder url="file://$MODULE_DIR$/website/build" />
+      <excludeFolder url="file://$MODULE_DIR$/website/docs" />
+      <excludeFolder url="file://$MODULE_DIR$/website/node_modules" />
     </content>
     <orderEntry type="jdk" jdkName="uv (keba_keenergy)" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />

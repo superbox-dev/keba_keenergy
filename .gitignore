@@ -16,11 +16,17 @@
 
 # coverage
 coverage.xml
-.coverage
+.coverage*
 
 # build package
 *.egg-info
 dist/
+
+# website
+website/node_modules/
+website/build/
+website/.docusaurus/
+website/docs/
 
 # Home Assistant configuration
 config/*

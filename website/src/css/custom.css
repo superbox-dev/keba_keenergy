@@ -1,0 +1,236 @@
+/* Styled after the Home Assistant documentation (home-assistant.io) */
+
+@import '@fontsource-variable/figtree';
+
+:root {
+  /* Green of the superbox logo, darker in light mode for a readable link contrast (4.6:1 on white) */
+  --ha-primary: #148567;
+  --ha-accent: #1cb88f;
+  --ha-radius: 16px;
+  --ha-card-background: #f2f4f9;
+  --ha-divider: #e8edf0;
+  --ha-header-background: rgba(255, 255, 255, 0.91);
+
+  --ifm-color-primary: #148567;
+  --ifm-color-primary-dark: #12785d;
+  --ifm-color-primary-darker: #117158;
+  --ifm-color-primary-darkest: #0e5d48;
+  --ifm-color-primary-light: #169271;
+  --ifm-color-primary-lighter: #179976;
+  --ifm-color-primary-lightest: #1aad86;
+
+  --ifm-font-family-base: 'Figtree Variable', 'Helvetica Neue', Arial, sans-serif;
+  --ifm-heading-font-family: var(--ifm-font-family-base);
+  --ifm-font-color-base: #212121;
+  --ifm-heading-color: #0c0c0c;
+  --ifm-link-hover-decoration: none;
+  --ifm-code-font-size: 90%;
+  --ifm-code-border-radius: 6px;
+  --ifm-pre-border-radius: 12px;
+  --ifm-navbar-shadow: none;
+  --ifm-toc-border-color: transparent;
+  --ifm-menu-color-background-active: #e6f6f1;
+  --ifm-footer-background-color: #f2f4f9;
+  --ifm-footer-link-color: #555;
+  --ifm-footer-title-color: #0c0c0c;
+  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1);
+}
+
+[data-theme='dark'] {
+  --ha-primary: #1cb88f;
+  --ha-card-background: #1c1f24;
+  --ha-divider: #2c3138;
+  --ha-header-background: rgba(17, 19, 22, 0.88);
+
+  --ifm-color-primary: #1cb88f;
+  --ifm-color-primary-dark: #19a681;
+  --ifm-color-primary-darker: #189c7a;
+  --ifm-color-primary-darkest: #148164;
+  --ifm-color-primary-light: #1fca9d;
+  --ifm-color-primary-lighter: #20d4a4;
+  --ifm-color-primary-lightest: #34e0b3;
+
+  --ifm-background-color: #111316;
+  --ifm-background-surface-color: #111316;
+  --ifm-font-color-base: #e3e5e8;
+  --ifm-heading-color: #fafafa;
+  --ifm-menu-color-background-active: rgba(28, 184, 143, 0.14);
+  --ifm-footer-background-color: #1c1f24;
+  --ifm-footer-link-color: #b8bec6;
+  --ifm-footer-title-color: #fafafa;
+  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
+}
+
+/* Header: translucent white with blur */
+
+.navbar {
+  background-color: var(--ha-header-background);
+  backdrop-filter: blur(24px);
+  border-bottom: 1px solid var(--ha-divider);
+}
+
+/* backdrop-filter makes the navbar the containing block of the fixed mobile sidebar, which then gets cut off */
+.navbar.navbar-sidebar--show {
+  backdrop-filter: none;
+}
+
+/* Logo on a white tile like the superbox-dev avatar on GitHub */
+.navbar__logo img {
+  padding: 4px;
+  border-radius: 6px;
+  background: #fff;
+  box-shadow: 0 0 0 1px var(--ha-divider);
+}
+
+.navbar__title {
+  font-weight: 700;
+}
+
+.navbar__link {
+  font-weight: 500;
+}
+
+/* Typography */
+
+.markdown h1:first-child {
+  font-weight: 800;
+  --ifm-h1-font-size: 2.5rem;
+}
+
+.markdown h2 {
+  font-weight: 700;
+  margin-top: 2.5rem;
+}
+
+.markdown h2 code,
+.markdown h3 code {
+  font-size: 90%;
+}
+
+.markdown li > code,
+.markdown p > code {
+  white-space: nowrap;
+}
+
+/* Breadcrumbs: "Home ▸ Endpoints" */
+
+.breadcrumbs__link {
+  padding: 0;
+  background: none;
+  color: var(--ifm-color-primary);
+  font-size: 0.875rem;
+}
+
+.breadcrumbs__item--active .breadcrumbs__link {
+  background: none;
+  color: var(--ifm-font-color-base);
+}
+
+.breadcrumbs__item:not(:last-child)::after {
+  content: '▸';
+  background: none;
+  width: auto;
+  height: auto;
+  margin: 0 0.4rem;
+  opacity: 1;
+  filter: none;
+  color: var(--ifm-font-color-base);
+}
+
+/* Alerts: rounded, filled, no side border */
+
+.alert {
+  --ifm-alert-border-left-width: 0;
+  --ifm-alert-border-radius: var(--ha-radius);
+  --ifm-alert-shadow: none;
+  --ifm-alert-foreground-color: var(--ifm-font-color-base);
+}
+
+.alert--secondary {
+  --ifm-alert-background-color: #f0f0f3;
+  --ifm-alert-border-color: #6c757d;
+}
+
+.alert--info {
+  --ifm-alert-background-color: #e7f2fa;
+  --ifm-alert-border-color: #6ab0de;
+}
+
+.alert--success {
+  --ifm-alert-background-color: #e6f4ea;
+  --ifm-alert-border-color: #4caf50;
+}
+
+.alert--warning {
+  --ifm-alert-background-color: #f7f9e1;
+  --ifm-alert-border-color: #bbb90d;
+}
+
+.alert--danger {
+  --ifm-alert-background-color: #fdecea;
+  --ifm-alert-border-color: #d32f2f;
+}
+
+[data-theme='dark'] .alert {
+  --ifm-alert-background-color: var(--ha-card-background);
+}
+
+.alert [class*='admonitionHeading'] {
+  color: var(--ifm-alert-border-color);
+  text-transform: none;
+  font-size: 1rem;
+}
+
+/* Right column: project card and "On this page" */
+
+.ha-aside__toc {
+  padding: 0.25rem 1.25rem 1rem;
+  border-radius: var(--ha-radius);
+  background: var(--ha-card-background);
+}
+
+.ha-aside__title {
+  margin: 1rem 0 0.5rem;
+  padding-bottom: 5px;
+  border-bottom: 1px solid var(--ha-accent);
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.ha-aside__title svg {
+  width: 1.1em;
+  height: 1.1em;
+  vertical-align: -0.2em;
+  fill: currentColor;
+}
+
+/* The right column scrolls with the page, so the table of contents is neither sticky nor scrollable */
+.ha-aside__toc > div {
+  position: static;
+  max-height: none;
+  overflow: visible;
+}
+
+.ha-aside__toc .table-of-contents {
+  padding: 0;
+  font-size: 0.875rem;
+}
+
+.ha-aside__toc .table-of-contents__link--active {
+  font-weight: 600;
+}
+
+/* Long method names in the table of contents are cut instead of broken mid-word */
+
+.ha-aside__toc .table-of-contents__link {
+  display: block;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+/* Footer */
+
+.footer {
+  border-top: 1px solid var(--ha-divider);
+}
