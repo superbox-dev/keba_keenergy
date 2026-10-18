@@ -36,6 +36,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Fixed the error `Platform keba_keenergy does not generate unique IDs` in the log of heating circuits with
+  cooling and photovoltaics, the number `excess_energy_cooling_limit_day` was defined twice.
 - Fixed the missing translations of the states of the `excess_energy_mode` and `mixer_position` sensors.
 - Fixed the missing state icons of the operating mode sensors since 1.10.0.
 - Fixed the away date range being written to the control unit even if it did not change. ([Issue #23][issue-23])

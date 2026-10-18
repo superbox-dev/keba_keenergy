@@ -20,6 +20,7 @@ from pytest_homeassistant_custom_component.test_util.aiohttp import AiohttpClien
 from pytest_homeassistant_custom_component.test_util.aiohttp import AiohttpClientMockResponse
 from yarl import URL
 
+from custom_components.keba_keenergy import PLATFORMS
 from custom_components.keba_keenergy.const import DOMAIN
 from tests import setup_integration
 from tests.api_data import DEVICE_INFO_RESPONSE
@@ -70,10 +71,11 @@ async def fail_on_log_errors(
 
     handler: ErrorHandler = ErrorHandler()
 
+    # The entity platforms log their errors (e.g. duplicate unique IDs) with the logger of the platform
     loggers: list[logging.Logger] = [
         logging.getLogger("custom_components.keba_keenergy"),
-        logging.getLogger("homeassistant.components.sensor"),
         logging.getLogger("homeassistant.helpers.entity_platform"),
+        *(logging.getLogger(f"homeassistant.components.{platform}") for platform in PLATFORMS),
     ]
 
     for logger in loggers:
