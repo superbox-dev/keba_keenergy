@@ -10,8 +10,6 @@ import pytest
 from homeassistant.core import HomeAssistant
 from homeassistant.core import State
 
-from tests.api_data import HEATING_CURVE_NAMES_RESPONSE
-from tests.api_data import HEATING_CURVES_RESPONSE_1_1
 from tests.api_data import MULTIPLE_POSITION_DATA_RESPONSE_1
 from tests.api_data import MULTIPLE_POSITIONS_RESPONSE
 from tests.api_data import get_multiple_position_fixed_data_response
@@ -72,10 +70,8 @@ async def test_binary_sensors(
     """Test the states of the binary sensors."""
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
-        HEATING_CURVE_NAMES_RESPONSE,
         get_multiple_position_fixed_data_response(has_passive_cooling="true"),
         MULTIPLE_POSITION_DATA_RESPONSE_1,
-        *HEATING_CURVES_RESPONSE_1_1,
     ]
 
     await fake_api.setup_integration()

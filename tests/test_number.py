@@ -27,8 +27,6 @@ from pytest_homeassistant_custom_component.common import async_fire_time_changed
 from custom_components.keba_keenergy.const import FLASH_WRITE_DELAY
 from tests.api_data import DEFAULT_POSITION_FIXED_DATA_RESPONSE
 from tests.api_data import DEFAULT_POSITION_RESPONSE
-from tests.api_data import HEATING_CURVE_NAMES_RESPONSE
-from tests.api_data import HEATING_CURVES_RESPONSE_1_1
 from tests.api_data import MULTIPLE_POSITION_DATA_RESPONSE_1
 from tests.api_data import MULTIPLE_POSITIONS_RESPONSE
 from tests.api_data import get_multiple_position_fixed_data_response
@@ -110,10 +108,8 @@ async def test_numbers(
     """Test the states of the number entities."""
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
-        HEATING_CURVE_NAMES_RESPONSE,
         get_multiple_position_fixed_data_response(has_passive_cooling="true"),
         MULTIPLE_POSITION_DATA_RESPONSE_1,
-        *HEATING_CURVES_RESPONSE_1_1,
     ]
 
     await fake_api.setup_integration()
@@ -194,13 +190,10 @@ async def test_set_value(
     """Test setting the value of a number entity."""
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
-        HEATING_CURVE_NAMES_RESPONSE,
         get_multiple_position_fixed_data_response(),
         MULTIPLE_POSITION_DATA_RESPONSE_1,
-        *HEATING_CURVES_RESPONSE_1_1,
         # Read API after services call
         MULTIPLE_POSITION_DATA_RESPONSE_1,
-        *HEATING_CURVES_RESPONSE_1_1,
     ]
     await fake_api.setup_integration()
 
@@ -279,13 +272,10 @@ async def test_set_value_bad_range(
     """Test setting a value out of range of a number entity."""
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
-        HEATING_CURVE_NAMES_RESPONSE,
         get_multiple_position_fixed_data_response(),
         MULTIPLE_POSITION_DATA_RESPONSE_1,
-        *HEATING_CURVES_RESPONSE_1_1,
         # Read API after services call
         MULTIPLE_POSITION_DATA_RESPONSE_1,
-        *HEATING_CURVES_RESPONSE_1_1,
     ]
     await fake_api.setup_integration()
 
@@ -326,13 +316,10 @@ async def test_set_value_bad_attr(
     """Test setting an invalid value of a number entity."""
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
-        HEATING_CURVE_NAMES_RESPONSE,
         get_multiple_position_fixed_data_response(),
         MULTIPLE_POSITION_DATA_RESPONSE_1,
-        *HEATING_CURVES_RESPONSE_1_1,
         # Read API after services call
         MULTIPLE_POSITION_DATA_RESPONSE_1,
-        *HEATING_CURVES_RESPONSE_1_1,
     ]
     await fake_api.setup_integration()
 
@@ -356,13 +343,10 @@ async def test_set_value_debounced(
     entity_id: str = "number.keba_keenergy_12345678_heat_circuit_target_temperature_offset"
     fake_api.responses = [
         DEFAULT_POSITION_RESPONSE,
-        HEATING_CURVE_NAMES_RESPONSE,
         DEFAULT_POSITION_FIXED_DATA_RESPONSE,
         get_single_position_data_response(heat_circuit_target_temperature_offset="1.5"),
-        *HEATING_CURVES_RESPONSE_1_1,
         # Read API after updating the entity
         get_single_position_data_response(heat_circuit_target_temperature_offset="1.5"),
-        *HEATING_CURVES_RESPONSE_1_1,
     ]
     await fake_api.setup_integration()
 
@@ -401,10 +385,8 @@ async def test_set_unchanged_value(
     """Test that the current value of a number entity is not written again."""
     fake_api.responses = [
         DEFAULT_POSITION_RESPONSE,
-        HEATING_CURVE_NAMES_RESPONSE,
         DEFAULT_POSITION_FIXED_DATA_RESPONSE,
         get_single_position_data_response(heat_circuit_target_temperature_offset="1.5"),
-        *HEATING_CURVES_RESPONSE_1_1,
     ]
     await fake_api.setup_integration()
 
@@ -432,14 +414,12 @@ async def test_value_without_limits(
     entity_id: str = "number.keba_keenergy_12345678_heat_circuit_target_temperature_offset"
     fake_api.responses = [
         DEFAULT_POSITION_RESPONSE,
-        HEATING_CURVE_NAMES_RESPONSE,
         DEFAULT_POSITION_FIXED_DATA_RESPONSE,
         update_response(
             get_single_position_data_response(),
             "APPL.CtrlAppl.sParam.heatCircuit[0].param.offsetRoomTemp",
             attributes={},
         ),
-        *HEATING_CURVES_RESPONSE_1_1,
     ]
     await fake_api.setup_integration()
 
@@ -457,10 +437,8 @@ async def test_debounced_value_not_written_after_unload(
     """Test that a pending debounced value is not written after the integration was unloaded."""
     fake_api.responses = [
         DEFAULT_POSITION_RESPONSE,
-        HEATING_CURVE_NAMES_RESPONSE,
         DEFAULT_POSITION_FIXED_DATA_RESPONSE,
         get_single_position_data_response(heat_circuit_target_temperature_offset="1.5"),
-        *HEATING_CURVES_RESPONSE_1_1,
     ]
     await fake_api.setup_integration()
 

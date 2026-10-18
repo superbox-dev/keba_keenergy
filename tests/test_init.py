@@ -18,8 +18,6 @@ from custom_components.keba_keenergy.const import DOMAIN
 from tests.api_data import DEFAULT_POSITION_DATA_RESPONSE
 from tests.api_data import DEFAULT_POSITION_FIXED_DATA_RESPONSE
 from tests.api_data import DEFAULT_POSITION_RESPONSE
-from tests.api_data import HEATING_CURVE_NAMES_RESPONSE
-from tests.api_data import HEATING_CURVES_RESPONSE_1_1
 from tests.api_data import MULTIPLE_POSITION_DATA_RESPONSE_1
 from tests.api_data import MULTIPLE_POSITIONS_RESPONSE
 from tests.api_data import get_multiple_position_fixed_data_response
@@ -42,10 +40,8 @@ async def test_load_entry(
     """Test setting up the integration."""
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
-        HEATING_CURVE_NAMES_RESPONSE,
         get_multiple_position_fixed_data_response(has_passive_cooling="true"),
         MULTIPLE_POSITION_DATA_RESPONSE_1,
-        *HEATING_CURVES_RESPONSE_1_1,
     ]
     await fake_api.setup_integration()
 
@@ -78,10 +74,8 @@ async def test_unload_entry(
     """Test unloading the integration."""
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
-        HEATING_CURVE_NAMES_RESPONSE,
         get_multiple_position_fixed_data_response(),
         MULTIPLE_POSITION_DATA_RESPONSE_1,
-        *HEATING_CURVES_RESPONSE_1_1,
     ]
     await fake_api.setup_integration()
 
@@ -95,17 +89,13 @@ async def test_unload_entry(
     [
         [
             MULTIPLE_POSITIONS_RESPONSE,
-            HEATING_CURVE_NAMES_RESPONSE,
             get_multiple_position_fixed_data_response(has_passive_cooling="true"),
             MULTIPLE_POSITION_DATA_RESPONSE_1,
-            *HEATING_CURVES_RESPONSE_1_1,
         ],
         [
             DEFAULT_POSITION_RESPONSE,
-            HEATING_CURVE_NAMES_RESPONSE,
             DEFAULT_POSITION_FIXED_DATA_RESPONSE,
             DEFAULT_POSITION_DATA_RESPONSE,
-            *HEATING_CURVES_RESPONSE_1_1,
         ],
     ],
     ids=["multiple_positions", "default_position"],
@@ -154,10 +144,8 @@ async def test_remove_stale_devices(
     )
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
-        HEATING_CURVE_NAMES_RESPONSE,
         get_multiple_position_fixed_data_response(),
         MULTIPLE_POSITION_DATA_RESPONSE_1,
-        *HEATING_CURVES_RESPONSE_1_1,
     ]
     fake_api.register_requests(config_entry.data[CONF_HOST], ssl=config_entry.data[CONF_SSL])
     assert await hass.config_entries.async_setup(config_entry.entry_id)

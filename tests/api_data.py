@@ -8,8 +8,6 @@ import json
 from copy import deepcopy
 from typing import Any
 
-FILTER_REQUESTS: dict[str, Any] = {"ret": "OK", "children": []}
-
 
 def update_response(response: list[dict[str, Any]], name: str, /, **changes: object) -> list[dict[str, Any]]:
     """Return a copy of the response, in which the value with the name has the changes (e.g. `value`)."""
@@ -10447,17 +10445,6 @@ HEATING_CURVES_RESPONSE_1_2: list[list[dict[str, Any]]] = [
                 "lowerLimit": "-90000",
             },
             "value": "20",
-        },
-    ],
-]
-
-HEATING_CURVES_RESPONSE_2: list[list[dict[str, Any]]] = [
-    HEATING_CURVE_NAMES_RESPONSE,
-    [
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[0].name",
-            "attributes": {"longText": "Table name"},
-            "value": "HC1",
         },
     ],
 ]

@@ -17,8 +17,6 @@ from homeassistant.core import State
 from homeassistant.helpers import entity_registry as er
 from keba_keenergy_api.constants import HeatCircuitMode
 
-from tests.api_data import HEATING_CURVE_NAMES_RESPONSE
-from tests.api_data import HEATING_CURVES_RESPONSE_1_1
 from tests.api_data import MULTIPLE_POSITION_DATA_RESPONSE_1
 from tests.api_data import MULTIPLE_POSITION_DATA_RESPONSE_2
 from tests.api_data import MULTIPLE_POSITIONS_RESPONSE
@@ -66,10 +64,8 @@ async def test_switches(
     """Test the states of the switch entities."""
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
-        HEATING_CURVE_NAMES_RESPONSE,
         get_multiple_position_fixed_data_response(has_passive_cooling="true"),
         MULTIPLE_POSITION_DATA_RESPONSE_1,
-        *HEATING_CURVES_RESPONSE_1_1,
     ]
 
     await fake_api.setup_integration()
@@ -113,13 +109,10 @@ async def test_turn_on(
     """Test turning on a switch."""
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
-        HEATING_CURVE_NAMES_RESPONSE,
         get_multiple_position_fixed_data_response(),
         response,
-        *HEATING_CURVES_RESPONSE_1_1,
         # Read API after services call
         response,
-        *HEATING_CURVES_RESPONSE_1_1,
     ]
     await fake_api.setup_integration()
 
@@ -167,13 +160,10 @@ async def test_turn_off(
     """Test turning off a switch."""
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
-        HEATING_CURVE_NAMES_RESPONSE,
         get_multiple_position_fixed_data_response(),
         response,
-        *HEATING_CURVES_RESPONSE_1_1,
         # Read API after services call
         response,
-        *HEATING_CURVES_RESPONSE_1_1,
     ]
     await fake_api.setup_integration()
 
@@ -208,10 +198,8 @@ async def test_unchanged_state(
     """Test that a switch is not written if it already has the state."""
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
-        HEATING_CURVE_NAMES_RESPONSE,
         get_multiple_position_fixed_data_response(),
         response,
-        *HEATING_CURVES_RESPONSE_1_1,
     ]
     await fake_api.setup_integration()
 
@@ -235,14 +223,12 @@ async def test_heating_and_cooling_circuit_has_one_curve_switch(
     """Test that a heating and cooling circuit only has the heating curve switch, because both use one setting."""
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
-        HEATING_CURVE_NAMES_RESPONSE,
         update_response(
             get_multiple_position_fixed_data_response(),
             "APPL.CtrlAppl.sParam.options.heatCircuit[1].type",
             value=str(HeatCircuitMode.HEATING_AND_COOLING.value),
         ),
         MULTIPLE_POSITION_DATA_RESPONSE_1,
-        *HEATING_CURVES_RESPONSE_1_1,
     ]
     await fake_api.setup_integration()
 

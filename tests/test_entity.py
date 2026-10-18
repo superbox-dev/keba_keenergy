@@ -23,8 +23,6 @@ from homeassistant.setup import async_setup_component
 from custom_components.keba_keenergy.const import DOMAIN
 from tests import init_translations
 from tests.api_data import ENTITY_UPDATED_DATA_RESPONSE
-from tests.api_data import HEATING_CURVE_NAMES_RESPONSE
-from tests.api_data import HEATING_CURVES_RESPONSE_1_1
 from tests.api_data import MULTIPLE_POSITION_DATA_RESPONSE_1
 from tests.api_data import MULTIPLE_POSITIONS_RESPONSE
 from tests.api_data import get_multiple_position_fixed_data_response
@@ -40,13 +38,10 @@ async def test_entity_update(
     """Test writing a value of an entity."""
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
-        HEATING_CURVE_NAMES_RESPONSE,
         get_multiple_position_fixed_data_response(),
         MULTIPLE_POSITION_DATA_RESPONSE_1,
-        *HEATING_CURVES_RESPONSE_1_1,
         # Read API after services call
         ENTITY_UPDATED_DATA_RESPONSE,
-        *HEATING_CURVES_RESPONSE_1_1,
     ]
     await async_setup_component(hass, HA_DOMAIN, {})
     await fake_api.setup_integration()
@@ -79,10 +74,8 @@ async def test_entity_update_failed(
     """Test the translated error if writing a value of an entity fails."""
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
-        HEATING_CURVE_NAMES_RESPONSE,
         get_multiple_position_fixed_data_response(),
         MULTIPLE_POSITION_DATA_RESPONSE_1,
-        *HEATING_CURVES_RESPONSE_1_1,
     ]
     fake_api.write_status = HTTPStatus.BAD_REQUEST
     hass.config.language = "de"
@@ -124,10 +117,8 @@ async def test_heat_pump_manufacturer(
     """Test the manufacturer of the heat pump device, detected from the system name."""
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
-        HEATING_CURVE_NAMES_RESPONSE,
         get_multiple_position_fixed_data_response(),
         MULTIPLE_POSITION_DATA_RESPONSE_1,
-        *HEATING_CURVES_RESPONSE_1_1,
     ]
     fake_api.system_name = system_name
     await fake_api.setup_integration()

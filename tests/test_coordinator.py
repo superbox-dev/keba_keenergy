@@ -19,8 +19,6 @@ from homeassistant.util import dt as dt_util
 from keba_keenergy_api.constants import SectionPrefix
 from pytest_homeassistant_custom_component.common import async_fire_time_changed
 
-from tests.api_data import HEATING_CURVE_NAMES_RESPONSE
-from tests.api_data import HEATING_CURVES_RESPONSE_1_1
 from tests.api_data import MULTIPLE_POSITION_DATA_RESPONSE_1
 from tests.api_data import MULTIPLE_POSITION_DATA_RESPONSE_3_1
 from tests.api_data import MULTIPLE_POSITION_DATA_RESPONSE_3_2
@@ -52,10 +50,8 @@ async def test_update_authentication_error(
     """Test that rejected credentials during an update start the reauthentication flow."""
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
-        HEATING_CURVE_NAMES_RESPONSE,
         get_multiple_position_fixed_data_response(),
         MULTIPLE_POSITION_DATA_RESPONSE_1,
-        *HEATING_CURVES_RESPONSE_1_1,
     ]
     await fake_api.setup_integration()
 
@@ -81,10 +77,8 @@ async def test_update_api_error(
     """Test that the entities are unavailable if an update fails."""
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
-        HEATING_CURVE_NAMES_RESPONSE,
         get_multiple_position_fixed_data_response(),
         MULTIPLE_POSITION_DATA_RESPONSE_1,
-        *HEATING_CURVES_RESPONSE_1_1,
     ]
     await fake_api.setup_integration()
 
@@ -138,14 +132,10 @@ async def test_update_interval_ticks(
             json.loads(SYSTEM_EXTERNAL_HEAT_SOURCE_NUMBERS % "2"),
             json.loads(SYSTEM_SWITCH_VALVE_NUMBERS % "2"),
         ],
-        HEATING_CURVE_NAMES_RESPONSE,
         get_multiple_position_fixed_data_response(),
         MULTIPLE_POSITION_DATA_RESPONSE_3_2,
-        *HEATING_CURVES_RESPONSE_1_1,
         MULTIPLE_POSITION_DATA_RESPONSE_3_2,
-        *HEATING_CURVES_RESPONSE_1_1,
         MULTIPLE_POSITION_DATA_RESPONSE_3_1,
-        *HEATING_CURVES_RESPONSE_1_1,
     ]
 
     await fake_api.setup_integration()

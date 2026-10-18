@@ -24,10 +24,7 @@ from custom_components.keba_keenergy.services import ATTR_START_DATE
 from custom_components.keba_keenergy.services import AWAY_DATE_RANGE_SCHEMA
 from custom_components.keba_keenergy.services import HEATING_CURVE_POINTS_SCHEMA
 from tests import init_translations
-from tests.api_data import HEATING_CURVE_NAMES_RESPONSE
-from tests.api_data import HEATING_CURVES_RESPONSE_1_1
 from tests.api_data import HEATING_CURVES_RESPONSE_1_2
-from tests.api_data import HEATING_CURVES_RESPONSE_2
 from tests.api_data import MULTIPLE_POSITION_DATA_RESPONSE_1
 from tests.api_data import MULTIPLE_POSITIONS_RESPONSE
 from tests.api_data import get_multiple_position_fixed_data_response
@@ -48,13 +45,10 @@ async def test_set_away_range(
     """Test the action to set the away date range."""
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
-        HEATING_CURVE_NAMES_RESPONSE,
         get_multiple_position_fixed_data_response(),
         MULTIPLE_POSITION_DATA_RESPONSE_1,
-        *HEATING_CURVES_RESPONSE_1_1,
         # Read API after services call
         MULTIPLE_POSITION_DATA_RESPONSE_1,
-        *HEATING_CURVES_RESPONSE_1_1,
     ]
     await fake_api.setup_integration()
 
@@ -85,10 +79,8 @@ async def test_set_unchanged_away_range(
     """Test that the away date range is not written if the heating circuits already have it."""
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
-        HEATING_CURVE_NAMES_RESPONSE,
         get_multiple_position_fixed_data_response(),
         MULTIPLE_POSITION_DATA_RESPONSE_1,
-        *HEATING_CURVES_RESPONSE_1_1,
     ]
     await fake_api.setup_integration()
 
@@ -114,13 +106,10 @@ async def test_set_away_range_with_invalid_start_and_end_date(
     """Test the action to set the away date range with an end date before the start date."""
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
-        HEATING_CURVE_NAMES_RESPONSE,
         get_multiple_position_fixed_data_response(),
         MULTIPLE_POSITION_DATA_RESPONSE_1,
-        *HEATING_CURVES_RESPONSE_1_1,
         # Read API after services call
         MULTIPLE_POSITION_DATA_RESPONSE_1,
-        *HEATING_CURVES_RESPONSE_1_1,
     ]
     hass.config.language = "de"
     await fake_api.setup_integration()
@@ -157,13 +146,10 @@ async def test_set_away_range_with_invalid_config_entry(
     """Test the action to set the away date range with an unknown config entry."""
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
-        HEATING_CURVE_NAMES_RESPONSE,
         get_multiple_position_fixed_data_response(),
         MULTIPLE_POSITION_DATA_RESPONSE_1,
-        *HEATING_CURVES_RESPONSE_1_1,
         # Read API after services call
         MULTIPLE_POSITION_DATA_RESPONSE_1,
-        *HEATING_CURVES_RESPONSE_1_1,
     ]
     await fake_api.setup_integration()
     translations: dict[str, str] = await init_translations(hass, category="exceptions")
@@ -194,13 +180,10 @@ async def test_set_away_range_with_unloaded_config_entry(
     """Test the action to set the away date range with an unloaded config entry."""
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
-        HEATING_CURVE_NAMES_RESPONSE,
         get_multiple_position_fixed_data_response(),
         MULTIPLE_POSITION_DATA_RESPONSE_1,
-        *HEATING_CURVES_RESPONSE_1_1,
         # Read API after services call
         MULTIPLE_POSITION_DATA_RESPONSE_1,
-        *HEATING_CURVES_RESPONSE_1_1,
     ]
     await fake_api.setup_integration()
     translations: dict[str, str] = await init_translations(hass, category="exceptions")
@@ -232,13 +215,8 @@ async def test_set_heating_curve_points(
     """Test the action to set the points of a heating curve."""
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
-        HEATING_CURVE_NAMES_RESPONSE,
         get_multiple_position_fixed_data_response(),
         MULTIPLE_POSITION_DATA_RESPONSE_1,
-        *HEATING_CURVES_RESPONSE_1_1,
-        # Read API after services call
-        *HEATING_CURVES_RESPONSE_1_1,
-        *HEATING_CURVES_RESPONSE_2,
     ]
     await fake_api.setup_integration()
 
@@ -312,15 +290,12 @@ async def test_set_heating_curve_points_with_invalid_heating_curve(
     """Test the action to set the points of an unknown heating curve."""
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
-        HEATING_CURVE_NAMES_RESPONSE,
         get_multiple_position_fixed_data_response(),
         MULTIPLE_POSITION_DATA_RESPONSE_1,
-        *HEATING_CURVES_RESPONSE_1_1,
-        # Read API after services call
-        *HEATING_CURVES_RESPONSE_1_2,
-        *HEATING_CURVES_RESPONSE_2,
     ]
     await fake_api.setup_integration()
+    # The points of the heating curve HC1 have another name on the control unit
+    fake_api.heating_curves = HEATING_CURVES_RESPONSE_1_2
     translations: dict[str, str] = await init_translations(hass, category="exceptions")
 
     with pytest.raises(
@@ -362,13 +337,8 @@ async def test_set_heating_curve_points_with_duplicate_outdoor_temperatures(
     """Test the action to set heating curve points with duplicate outdoor temperatures."""
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
-        HEATING_CURVE_NAMES_RESPONSE,
         get_multiple_position_fixed_data_response(),
         MULTIPLE_POSITION_DATA_RESPONSE_1,
-        *HEATING_CURVES_RESPONSE_1_1,
-        # Read API after services call
-        *HEATING_CURVES_RESPONSE_1_1,
-        *HEATING_CURVES_RESPONSE_2,
     ]
     await fake_api.setup_integration()
     translations: dict[str, str] = await init_translations(hass, category="exceptions")
@@ -469,13 +439,10 @@ async def test_set_away_range_with_date_and_time(
     """Test that the action to set the away date range only uses the date of a date with time."""
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
-        HEATING_CURVE_NAMES_RESPONSE,
         get_multiple_position_fixed_data_response(),
         MULTIPLE_POSITION_DATA_RESPONSE_1,
-        *HEATING_CURVES_RESPONSE_1_1,
         # Read API after services call
         MULTIPLE_POSITION_DATA_RESPONSE_1,
-        *HEATING_CURVES_RESPONSE_1_1,
     ]
     await fake_api.setup_integration()
 
@@ -518,14 +485,11 @@ async def test_set_heating_curve_points_with_communication_error(
     """Test that a communication error while reading the heating curves raises a translated error."""
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
-        HEATING_CURVE_NAMES_RESPONSE,
         get_multiple_position_fixed_data_response(),
         MULTIPLE_POSITION_DATA_RESPONSE_1,
-        *HEATING_CURVES_RESPONSE_1_1,
-        # Read the heating curves in the services call
-        HTTPStatus.BAD_REQUEST,
     ]
     await fake_api.setup_integration()
+    fake_api.heating_curves = HTTPStatus.BAD_REQUEST
 
     with pytest.raises(HomeAssistantError) as error:
         await hass.services.async_call(

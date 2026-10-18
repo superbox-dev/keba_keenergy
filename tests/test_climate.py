@@ -39,8 +39,6 @@ from custom_components.keba_keenergy.const import FLASH_WRITE_DELAY
 from tests.api_data import DEFAULT_POSITION_DATA_RESPONSE
 from tests.api_data import DEFAULT_POSITION_FIXED_DATA_RESPONSE
 from tests.api_data import DEFAULT_POSITION_RESPONSE
-from tests.api_data import HEATING_CURVE_NAMES_RESPONSE
-from tests.api_data import HEATING_CURVES_RESPONSE_1_1
 from tests.api_data import MULTIPLE_POSITION_DATA_RESPONSE_1
 from tests.api_data import MULTIPLE_POSITION_DATA_RESPONSE_2
 from tests.api_data import MULTIPLE_POSITIONS_RESPONSE
@@ -64,20 +62,16 @@ ENTITY_ID_2: str = "climate.keba_keenergy_12345678_2"
         (
             [
                 DEFAULT_POSITION_RESPONSE,
-                HEATING_CURVE_NAMES_RESPONSE,
                 DEFAULT_POSITION_FIXED_DATA_RESPONSE,
                 DEFAULT_POSITION_DATA_RESPONSE,
-                *HEATING_CURVES_RESPONSE_1_1,
             ],
             [ENTITY_ID],
         ),
         (
             [
                 MULTIPLE_POSITIONS_RESPONSE,
-                HEATING_CURVE_NAMES_RESPONSE,
                 get_multiple_position_fixed_data_response(),
                 MULTIPLE_POSITION_DATA_RESPONSE_1,
-                *HEATING_CURVES_RESPONSE_1_1,
             ],
             [ENTITY_ID_1, ENTITY_ID_2],
         ),
@@ -115,10 +109,8 @@ async def test_climate(
     """Test the states of the climate entities."""
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
-        HEATING_CURVE_NAMES_RESPONSE,
         get_multiple_position_fixed_data_response(),
         MULTIPLE_POSITION_DATA_RESPONSE_1,
-        *HEATING_CURVES_RESPONSE_1_1,
     ]
 
     await fake_api.setup_integration()
@@ -146,10 +138,8 @@ async def test_target_temperature(
     """Test the target temperature of the climate entity."""
     fake_api.responses = [
         DEFAULT_POSITION_RESPONSE,
-        HEATING_CURVE_NAMES_RESPONSE,
         DEFAULT_POSITION_FIXED_DATA_RESPONSE,
         responses,
-        *HEATING_CURVES_RESPONSE_1_1,
     ]
     await fake_api.setup_integration()
 
@@ -166,13 +156,10 @@ async def test_set_temperature_debounced(
     """Test that quick target temperature changes are shown at once and written once, with the last value."""
     fake_api.responses = [
         DEFAULT_POSITION_RESPONSE,
-        HEATING_CURVE_NAMES_RESPONSE,
         DEFAULT_POSITION_FIXED_DATA_RESPONSE,
         get_single_position_data_response(heat_circuit_target_temperature_offset="1.5"),
-        *HEATING_CURVES_RESPONSE_1_1,
         # Read API after updating the entity
         get_single_position_data_response(heat_circuit_target_temperature_offset="1.5"),
-        *HEATING_CURVES_RESPONSE_1_1,
     ]
     await fake_api.setup_integration()
 
@@ -211,13 +198,10 @@ async def test_turn_off(
     """Test turning off a heating circuit."""
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
-        HEATING_CURVE_NAMES_RESPONSE,
         get_multiple_position_fixed_data_response(),
         MULTIPLE_POSITION_DATA_RESPONSE_1,
-        *HEATING_CURVES_RESPONSE_1_1,
         # Read API after services call
         MULTIPLE_POSITION_DATA_RESPONSE_1,
-        *HEATING_CURVES_RESPONSE_1_1,
     ]
     await fake_api.setup_integration()
 
@@ -243,13 +227,10 @@ async def test_turn_on(
     """Test turning on a heating circuit."""
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
-        HEATING_CURVE_NAMES_RESPONSE,
         get_multiple_position_fixed_data_response(),
         MULTIPLE_POSITION_DATA_RESPONSE_1,
-        *HEATING_CURVES_RESPONSE_1_1,
         # Read API after services call
         MULTIPLE_POSITION_DATA_RESPONSE_1,
-        *HEATING_CURVES_RESPONSE_1_1,
     ]
     await fake_api.setup_integration()
 
@@ -285,13 +266,10 @@ async def test_set_hvac_mode(
     """Test setting the HVAC mode of a heating circuit in holiday mode."""
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
-        HEATING_CURVE_NAMES_RESPONSE,
         get_multiple_position_fixed_data_response(),
         MULTIPLE_POSITION_DATA_RESPONSE_2,
-        *HEATING_CURVES_RESPONSE_1_1,
         # Read API after services call
         MULTIPLE_POSITION_DATA_RESPONSE_2,
-        *HEATING_CURVES_RESPONSE_1_1,
     ]
     await fake_api.setup_integration()
 
@@ -317,10 +295,8 @@ async def test_set_unchanged_hvac_mode(
     """Test that the HVAC mode is not written if the heating circuit already has it."""
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
-        HEATING_CURVE_NAMES_RESPONSE,
         get_multiple_position_fixed_data_response(),
         MULTIPLE_POSITION_DATA_RESPONSE_1,
-        *HEATING_CURVES_RESPONSE_1_1,
     ]
     await fake_api.setup_integration()
 
@@ -356,13 +332,10 @@ async def test_set_preset_mode(
     """Test setting the preset mode of a heating circuit."""
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
-        HEATING_CURVE_NAMES_RESPONSE,
         get_multiple_position_fixed_data_response(),
         response,
-        *HEATING_CURVES_RESPONSE_1_1,
         # Read API after services call
         response,
-        *HEATING_CURVES_RESPONSE_1_1,
     ]
     await fake_api.setup_integration()
 
@@ -388,10 +361,8 @@ async def test_set_preset_mode_away(
     """Test that the preset mode away sets the away date range."""
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
-        HEATING_CURVE_NAMES_RESPONSE,
         get_multiple_position_fixed_data_response(),
         MULTIPLE_POSITION_DATA_RESPONSE_1,
-        *HEATING_CURVES_RESPONSE_1_1,
     ]
     await fake_api.setup_integration()
 
@@ -421,13 +392,10 @@ async def test_unset_preset_mode_away(
     """Test that leaving the preset mode away resets the away date range."""
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
-        HEATING_CURVE_NAMES_RESPONSE,
         get_multiple_position_fixed_data_response(),
         MULTIPLE_POSITION_DATA_RESPONSE_2,
-        *HEATING_CURVES_RESPONSE_1_1,
         # Read API after services call
         MULTIPLE_POSITION_DATA_RESPONSE_1,
-        *HEATING_CURVES_RESPONSE_1_1,
     ]
     await fake_api.setup_integration()
 
@@ -461,13 +429,10 @@ async def test_set_temperature(
     """Test setting the target temperature of a heating circuit."""
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
-        HEATING_CURVE_NAMES_RESPONSE,
         get_multiple_position_fixed_data_response(),
         MULTIPLE_POSITION_DATA_RESPONSE_1,
-        *HEATING_CURVES_RESPONSE_1_1,
         # Read API after services call
         MULTIPLE_POSITION_DATA_RESPONSE_1,
-        *HEATING_CURVES_RESPONSE_1_1,
     ]
     await fake_api.setup_integration()
 
@@ -501,14 +466,12 @@ async def test_operating_mode_without_preset(
     """Test that a heating circuit in an operating mode without a preset has the home preset."""
     fake_api.responses = [
         DEFAULT_POSITION_RESPONSE,
-        HEATING_CURVE_NAMES_RESPONSE,
         DEFAULT_POSITION_FIXED_DATA_RESPONSE,
         update_response(
             get_single_position_data_response(),
             "APPL.CtrlAppl.sParam.heatCircuit[0].param.operatingMode",
             value=str(operating_mode.value),
         ),
-        *HEATING_CURVES_RESPONSE_1_1,
     ]
     await fake_api.setup_integration()
 
@@ -525,13 +488,10 @@ async def test_set_preset_mode_without_time_zone_request(
     """Test that a preset mode change outside of away does not request the time zone."""
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
-        HEATING_CURVE_NAMES_RESPONSE,
         get_multiple_position_fixed_data_response(),
         MULTIPLE_POSITION_DATA_RESPONSE_1,
-        *HEATING_CURVES_RESPONSE_1_1,
         # Read API after services call
         MULTIPLE_POSITION_DATA_RESPONSE_1,
-        *HEATING_CURVES_RESPONSE_1_1,
     ]
     await fake_api.setup_integration()
 

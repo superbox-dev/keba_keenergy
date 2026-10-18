@@ -31,8 +31,6 @@ from custom_components.keba_keenergy.const import FLASH_WRITE_DELAY
 from tests.api_data import DEFAULT_POSITION_DATA_RESPONSE
 from tests.api_data import DEFAULT_POSITION_FIXED_DATA_RESPONSE
 from tests.api_data import DEFAULT_POSITION_RESPONSE
-from tests.api_data import HEATING_CURVE_NAMES_RESPONSE
-from tests.api_data import HEATING_CURVES_RESPONSE_1_1
 from tests.api_data import MULTIPLE_POSITION_DATA_RESPONSE_1
 from tests.api_data import MULTIPLE_POSITION_DATA_RESPONSE_2
 from tests.api_data import MULTIPLE_POSITIONS_RESPONSE
@@ -58,20 +56,16 @@ ENTITY_ID_4: str = "water_heater.keba_keenergy_12345678_buffer_tank_1"
         (
             [
                 DEFAULT_POSITION_RESPONSE,
-                HEATING_CURVE_NAMES_RESPONSE,
                 DEFAULT_POSITION_FIXED_DATA_RESPONSE,
                 DEFAULT_POSITION_DATA_RESPONSE,
-                *HEATING_CURVES_RESPONSE_1_1,
             ],
             [ENTITY_ID, ENTITY_ID_3],
         ),
         (
             [
                 MULTIPLE_POSITIONS_RESPONSE,
-                HEATING_CURVE_NAMES_RESPONSE,
                 get_multiple_position_fixed_data_response(),
                 MULTIPLE_POSITION_DATA_RESPONSE_1,
-                *HEATING_CURVES_RESPONSE_1_1,
             ],
             [ENTITY_ID_1, ENTITY_ID_2, ENTITY_ID_4],
         ),
@@ -113,10 +107,8 @@ async def test_water_heater(
     """Test the states of the water heater entities."""
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
-        HEATING_CURVE_NAMES_RESPONSE,
         get_multiple_position_fixed_data_response(),
         MULTIPLE_POSITION_DATA_RESPONSE_1,
-        *HEATING_CURVES_RESPONSE_1_1,
     ]
 
     await fake_api.setup_integration()
@@ -151,13 +143,10 @@ async def test_turn_off(
     """Test turning off a tank."""
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
-        HEATING_CURVE_NAMES_RESPONSE,
         get_multiple_position_fixed_data_response(),
         response,
-        *HEATING_CURVES_RESPONSE_1_1,
         # Read API after services call
         response,
-        *HEATING_CURVES_RESPONSE_1_1,
     ]
     await fake_api.setup_integration()
 
@@ -195,13 +184,10 @@ async def test_turn_on(
     """Test turning on a tank."""
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
-        HEATING_CURVE_NAMES_RESPONSE,
         get_multiple_position_fixed_data_response(),
         MULTIPLE_POSITION_DATA_RESPONSE_1,
-        *HEATING_CURVES_RESPONSE_1_1,
         # Read API after services call
         MULTIPLE_POSITION_DATA_RESPONSE_1,
-        *HEATING_CURVES_RESPONSE_1_1,
     ]
     await fake_api.setup_integration()
 
@@ -252,13 +238,10 @@ async def test_set_operation_mode_hot_water_tank(
     """Test setting the operation mode of a hot water tank."""
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
-        HEATING_CURVE_NAMES_RESPONSE,
         get_multiple_position_fixed_data_response(),
         response,
-        *HEATING_CURVES_RESPONSE_1_1,
         # Read API after services call
         response,
-        *HEATING_CURVES_RESPONSE_1_1,
     ]
     await fake_api.setup_integration()
 
@@ -305,13 +288,10 @@ async def test_set_operation_mode_buffer_tank(
     """Test setting the operation mode of a buffer tank."""
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
-        HEATING_CURVE_NAMES_RESPONSE,
         get_multiple_position_fixed_data_response(),
         response,
-        *HEATING_CURVES_RESPONSE_1_1,
         # Read API after services call
         response,
-        *HEATING_CURVES_RESPONSE_1_1,
     ]
     await fake_api.setup_integration()
 
@@ -348,13 +328,10 @@ async def test_set_temperature(
     """Test setting the target temperature of a hot water tank."""
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
-        HEATING_CURVE_NAMES_RESPONSE,
         get_multiple_position_fixed_data_response(),
         MULTIPLE_POSITION_DATA_RESPONSE_1,
-        *HEATING_CURVES_RESPONSE_1_1,
         # Read API after services call
         MULTIPLE_POSITION_DATA_RESPONSE_1,
-        *HEATING_CURVES_RESPONSE_1_1,
     ]
     await fake_api.setup_integration()
 
@@ -381,13 +358,10 @@ async def test_set_temperature_debounced(
     """Test that quick target temperature changes are shown at once and written once, with the last value."""
     fake_api.responses = [
         DEFAULT_POSITION_RESPONSE,
-        HEATING_CURVE_NAMES_RESPONSE,
         DEFAULT_POSITION_FIXED_DATA_RESPONSE,
         get_single_position_data_response(hot_water_tank_target_temperature="51"),
-        *HEATING_CURVES_RESPONSE_1_1,
         # Read API after updating the entity
         get_single_position_data_response(hot_water_tank_target_temperature="51"),
-        *HEATING_CURVES_RESPONSE_1_1,
     ]
     await fake_api.setup_integration()
 
@@ -438,10 +412,8 @@ async def test_unchanged_state(
     """Test that a tank is not written if it is already turned on or off."""
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
-        HEATING_CURVE_NAMES_RESPONSE,
         get_multiple_position_fixed_data_response(),
         response,
-        *HEATING_CURVES_RESPONSE_1_1,
     ]
     await fake_api.setup_integration()
 
@@ -464,10 +436,8 @@ async def test_set_unchanged_target_temperature(
     """Test that the current target temperature of a hot water tank is not written again."""
     fake_api.responses = [
         DEFAULT_POSITION_RESPONSE,
-        HEATING_CURVE_NAMES_RESPONSE,
         DEFAULT_POSITION_FIXED_DATA_RESPONSE,
         get_single_position_data_response(hot_water_tank_target_temperature="51"),
-        *HEATING_CURVES_RESPONSE_1_1,
     ]
     await fake_api.setup_integration()
 

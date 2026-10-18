@@ -21,8 +21,6 @@ from homeassistant.helpers.service_info.zeroconf import ZeroconfServiceInfo
 from keba_keenergy_api.error import APIError
 
 from custom_components.keba_keenergy.const import DOMAIN
-from tests.api_data import HEATING_CURVE_NAMES_RESPONSE
-from tests.api_data import HEATING_CURVES_RESPONSE_1_1
 from tests.api_data import MULTIPLE_POSITION_DATA_RESPONSE_1
 from tests.api_data import MULTIPLE_POSITIONS_RESPONSE
 from tests.api_data import get_multiple_position_fixed_data_response
@@ -55,10 +53,8 @@ async def test_user_flow(
     """Test the user flow without authentication."""
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
-        HEATING_CURVE_NAMES_RESPONSE,
         get_multiple_position_fixed_data_response(),
         MULTIPLE_POSITION_DATA_RESPONSE_1,
-        *HEATING_CURVES_RESPONSE_1_1,
     ]
     fake_api.register_auth_request("10.0.0.100")
     fake_api.register_requests("10.0.0.100")
@@ -98,10 +94,8 @@ async def test_user_flow_authentication(
     """Test the user flow with authentication."""
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
-        HEATING_CURVE_NAMES_RESPONSE,
         get_multiple_position_fixed_data_response(),
         MULTIPLE_POSITION_DATA_RESPONSE_1,
-        *HEATING_CURVES_RESPONSE_1_1,
     ]
     fake_api.register_auth_request("10.0.0.100", status=401)
     fake_api.register_requests("10.0.0.100", ssl=True)
@@ -153,10 +147,8 @@ async def test_reconfigure_flow_authentication(
     """Test the reconfiguration flow with authentication."""
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
-        HEATING_CURVE_NAMES_RESPONSE,
         get_multiple_position_fixed_data_response(),
         MULTIPLE_POSITION_DATA_RESPONSE_1,
-        *HEATING_CURVES_RESPONSE_1_1,
     ]
 
     fake_api.register_auth_request("10.0.0.200", status=401)
@@ -237,10 +229,8 @@ async def test_user_flow_authentication_cannot_connect(
     """Test the errors of the authentication step of the user flow."""
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
-        HEATING_CURVE_NAMES_RESPONSE,
         get_multiple_position_fixed_data_response(),
         MULTIPLE_POSITION_DATA_RESPONSE_1,
-        *HEATING_CURVES_RESPONSE_1_1,
     ]
     fake_api.register_auth_request("10.0.0.100", exc=ClientError())
     fake_api.register_requests("10.0.0.100", ssl=True)
@@ -288,10 +278,8 @@ async def test_reauth_flow_success(
     """Test the reauthentication flow with valid credentials."""
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
-        HEATING_CURVE_NAMES_RESPONSE,
         get_multiple_position_fixed_data_response(),
         MULTIPLE_POSITION_DATA_RESPONSE_1,
-        *HEATING_CURVES_RESPONSE_1_1,
     ]
     fake_api.register_requests("10.0.0.100", ssl=True)
 
@@ -445,10 +433,8 @@ async def test_zeroconf_flow(
     """Test the zeroconf discovery flow without authentication."""
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
-        HEATING_CURVE_NAMES_RESPONSE,
         get_multiple_position_fixed_data_response(),
         MULTIPLE_POSITION_DATA_RESPONSE_1,
-        *HEATING_CURVES_RESPONSE_1_1,
     ]
     fake_api.register_auth_request("ap4400.local")
     fake_api.register_requests("ap4400.local")
@@ -484,10 +470,8 @@ async def test_zeroconf_flow_authentication(
     """Test the zeroconf discovery flow with authentication."""
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
-        HEATING_CURVE_NAMES_RESPONSE,
         get_multiple_position_fixed_data_response(),
         MULTIPLE_POSITION_DATA_RESPONSE_1,
-        *HEATING_CURVES_RESPONSE_1_1,
     ]
     fake_api.register_auth_request("ap4400.local", status=401)
     fake_api.register_requests("ap4400.local", ssl=True)
@@ -714,16 +698,12 @@ async def test_option_flow(
     fake_api.responses = [
         # 1. coordinator
         MULTIPLE_POSITIONS_RESPONSE,
-        HEATING_CURVE_NAMES_RESPONSE,
         get_multiple_position_fixed_data_response(),
         MULTIPLE_POSITION_DATA_RESPONSE_1,
-        *HEATING_CURVES_RESPONSE_1_1,
         # 2. coordinator
         MULTIPLE_POSITIONS_RESPONSE,
-        HEATING_CURVE_NAMES_RESPONSE,
         get_multiple_position_fixed_data_response(),
         MULTIPLE_POSITION_DATA_RESPONSE_1,
-        *HEATING_CURVES_RESPONSE_1_1,
     ]
     await fake_api.setup_integration()
 
@@ -766,10 +746,8 @@ async def test_option_flow_without_photovoltaics(
     """Test that the options flow hides the photovoltaics option without photovoltaics."""
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
-        HEATING_CURVE_NAMES_RESPONSE,
         get_multiple_position_fixed_data_response(has_photovoltaics="false"),
         [value for value in MULTIPLE_POSITION_DATA_RESPONSE_1 if ".photovoltaics." not in value["name"]],
-        *HEATING_CURVES_RESPONSE_1_1,
     ]
     await fake_api.setup_integration()
 
@@ -804,10 +782,8 @@ async def test_option_flow_when_integration_unloaded(
     fake_api.responses = [
         # 1. coordinator
         MULTIPLE_POSITIONS_RESPONSE,
-        HEATING_CURVE_NAMES_RESPONSE,
         get_multiple_position_fixed_data_response(),
         MULTIPLE_POSITION_DATA_RESPONSE_1,
-        *HEATING_CURVES_RESPONSE_1_1,
     ]
     await fake_api.setup_integration()
     await hass.config_entries.async_unload(config_entry.entry_id)
@@ -832,10 +808,8 @@ async def test_option_flow_when_integration_reload_failed(
     fake_api.responses = [
         # 1. coordinator
         MULTIPLE_POSITIONS_RESPONSE,
-        HEATING_CURVE_NAMES_RESPONSE,
         get_multiple_position_fixed_data_response(),
         MULTIPLE_POSITION_DATA_RESPONSE_1,
-        *HEATING_CURVES_RESPONSE_1_1,
         # 2. reload
         HTTPStatus.BAD_REQUEST,
     ]

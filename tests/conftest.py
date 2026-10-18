@@ -23,7 +23,7 @@ from yarl import URL
 from custom_components.keba_keenergy.const import DOMAIN
 from tests import setup_integration
 from tests.api_data import DEVICE_INFO_RESPONSE
-from tests.api_data import FILTER_REQUESTS
+from tests.api_data import HEATING_CURVES_RESPONSE_1_1
 from tests.api_data import HMI_RESPONSE
 from tests.api_data import SYSTEM_RESPONSE
 from tests.api_data import TIMEZONE_RESPONSE
@@ -117,6 +117,7 @@ class FakeKebaKeEnergyAPI:
         self.aioclient_mock: AiohttpClientMocker = aioclient_mock
         self.config_entry: MockConfigEntry = config_entry
         self.responses: list[list[dict[str, Any]] | HTTPStatus] = []
+        self.heating_curves: list[list[dict[str, Any]]] | HTTPStatus = HEATING_CURVES_RESPONSE_1_1
         self.system_name: str = SYSTEM_RESPONSE["name"]
         self.write_status: HTTPStatus = HTTPStatus.OK
 
@@ -148,7 +149,9 @@ class FakeKebaKeEnergyAPI:
         """Register all requests of the setup and the updates.
 
         The read requests return the `responses` in order, an `HTTPStatus` returns an empty response with this status.
-        The system name and the status of the write requests can be changed with `system_name` and `write_status`.
+        The requests of `filter_request()` succeed, the values of the heating curves come from `heating_curves`
+        (an `HTTPStatus` fails them). The system name and the status of the write requests can be changed with
+        `system_name` and `write_status`.
         """
         schema: str = "https" if ssl else "http"
 
@@ -173,12 +176,6 @@ class FakeKebaKeEnergyAPI:
         )
 
         self.aioclient_mock.post(
-            f"{schema}://{host}/var/readVarChildren",
-            text=json.dumps(FILTER_REQUESTS),
-            headers={"Content-Type": "application/json;charset=utf-8"},
-        )
-
-        self.aioclient_mock.post(
             f"{schema}://{host}/var/readWriteVars",
             text="[{}]",
             params={"action": "set"},
@@ -196,11 +193,42 @@ class FakeKebaKeEnergyAPI:
         self.register_requests(self.config_entry.data[CONF_HOST], ssl=self.config_entry.data[CONF_SSL])
         await setup_integration(self.hass, self.config_entry)
 
-    async def _read_side_effect(self, method: str, url: URL, *_: object) -> AiohttpClientMockResponse:
-        if not self.responses:
-            return AiohttpClientMockResponse(method, url=url)
+    @staticmethod
+    def is_filter_request(data: object, /) -> bool:
+        """Return True for a request of `filter_request()`, which reads all values without attributes.
 
-        response: list[dict[str, Any]] | HTTPStatus = self.responses.pop(0)
+        The values of the heating curves are also read without attributes, but never by `filter_request()`.
+        """
+        payload: list[dict[str, str]] = json.loads(str(data))
+        return all(item["attr"] == "0" and ".linTabPool[" not in item["name"] for item in payload)
+
+    def _heating_curve_response(self, payload: list[dict[str, str]], /) -> list[dict[str, Any]] | HTTPStatus:
+        """Return the requested values of the heating curves.
+
+        The names are read alone (`get_available_heating_curves()`), the points with the name of their heating curve,
+        so `heating_curves` holds the names and the points separately, like the Web HMI may return different names.
+        """
+        if isinstance(self.heating_curves, HTTPStatus):
+            return self.heating_curves
+
+        names, points = self.heating_curves
+        is_names_request: bool = all(item["name"].endswith(".name") for item in payload)
+        values: dict[str, dict[str, Any]] = {value["name"]: value for value in (names if is_names_request else points)}
+        return [values[item["name"]] for item in payload]
+
+    async def _read_side_effect(self, method: str, url: URL, data: object, *_: object) -> AiohttpClientMockResponse:
+        payload: list[dict[str, str]] = json.loads(str(data))
+        response: list[dict[str, Any]] | HTTPStatus
+
+        if self.is_filter_request(data):
+            # All values are supported, `filter_request()` only checks that the request succeeds
+            response = []
+        elif all(".linTabPool[" in item["name"] for item in payload):
+            response = self._heating_curve_response(payload)
+        elif not self.responses:
+            return AiohttpClientMockResponse(method, url=url)
+        else:
+            response = self.responses.pop(0)
 
         if isinstance(response, HTTPStatus):
             return AiohttpClientMockResponse(method, url=url, status=response)
@@ -217,7 +245,10 @@ class FakeKebaKeEnergyAPI:
         return [
             str(data)
             for method, url, data, _ in self.aioclient_mock.mock_calls
-            if method == "POST" and url.path == "/var/readWriteVars" and "action" not in url.query
+            if method == "POST"
+            and url.path == "/var/readWriteVars"
+            and "action" not in url.query
+            and not self.is_filter_request(data)
         ]
 
     def assert_called_write_with(self, data: str, /) -> None:

@@ -173,6 +173,8 @@ Code lives in `custom_components/keba_keenergy/`.
 - Mock HTTP with `FakeKebaKeEnergyAPI` (`fake_api` fixture) in `tests/conftest.py` and the responses in
   `tests/api_data.py`:
   - `fake_api.responses` are the responses of the read requests, in order, an `HTTPStatus` fails a request
+  - the requests of `filter_request()` always succeed, they do not use `responses`
+  - the heating curves (names and points) are answered from `fake_api.heating_curves`, an `HTTPStatus` fails them
   - `await fake_api.setup_integration()` registers the requests and sets up the `config_entry`
   - `system_name` and `write_status` change the system name and the status of the write requests
   - `write_requests()`, `read_requests()` and `assert_called_write_with()` check the requests
