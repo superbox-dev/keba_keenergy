@@ -11,7 +11,7 @@ from datetime import time
 from typing import TYPE_CHECKING
 from typing import Final
 
-import voluptuous as vol
+import probatio
 from ciso8601 import parse_datetime_as_naive
 from homeassistant.config_entries import ConfigEntryState
 from homeassistant.exceptions import ServiceValidationError
@@ -41,15 +41,15 @@ _LOGGER = logging.getLogger(__name__)
 ATTR_START_DATE: Final[str] = "start_date"
 ATTR_END_DATE: Final[str] = "end_date"
 
-AWAY_DATE_RANGE_SCHEMA: vol.Schema = vol.Schema(
+AWAY_DATE_RANGE_SCHEMA: probatio.Schema = probatio.Schema(
     {
-        vol.Required(ATTR_CONFIG_ENTRY): selector.ConfigEntrySelector(
+        probatio.Required(ATTR_CONFIG_ENTRY): selector.ConfigEntrySelector(
             {
                 "integration": DOMAIN,
             },
         ),
-        vol.Required(ATTR_START_DATE): cv.string,
-        vol.Required(ATTR_END_DATE): cv.string,
+        probatio.Required(ATTR_START_DATE): cv.string,
+        probatio.Required(ATTR_END_DATE): cv.string,
     },
 )
 
@@ -58,34 +58,34 @@ ATTR_OUTDOOR: Final[str] = "outdoor"
 ATTR_FLOW: Final[str] = "flow"
 ATTR_HEATING_CURVE: Final[str] = "heating_curve"
 
-HEATING_CURVE_POINT_SCHEMA = vol.Schema(
+HEATING_CURVE_POINT_SCHEMA = probatio.Schema(
     {
-        vol.Required(ATTR_OUTDOOR): vol.All(
-            vol.Coerce(float),
-            vol.Range(min=-40, max=40),
+        probatio.Required(ATTR_OUTDOOR): probatio.All(
+            probatio.Coerce(float),
+            probatio.Range(min=-40, max=40),
         ),
-        vol.Required(ATTR_FLOW): vol.All(
-            vol.Coerce(float),
-            vol.Range(min=10, max=90),
+        probatio.Required(ATTR_FLOW): probatio.All(
+            probatio.Coerce(float),
+            probatio.Range(min=10, max=90),
         ),
     },
 )
 
-HEATING_CURVE_POINTS_SCHEMA: vol.Schema = vol.Schema(
+HEATING_CURVE_POINTS_SCHEMA: probatio.Schema = probatio.Schema(
     {
-        vol.Required(ATTR_CONFIG_ENTRY): selector.ConfigEntrySelector(
+        probatio.Required(ATTR_CONFIG_ENTRY): selector.ConfigEntrySelector(
             {
                 "integration": DOMAIN,
             },
         ),
-        vol.Required(ATTR_HEATING_CURVE): vol.All(
+        probatio.Required(ATTR_HEATING_CURVE): probatio.All(
             str,
-            vol.Length(min=2),
-            vol.Match(r"^HC"),
+            probatio.Length(min=2),
+            probatio.Match(r"^HC"),
         ),
-        vol.Required(ATTR_POINTS): vol.All(
+        probatio.Required(ATTR_POINTS): probatio.All(
             cv.ensure_list,
-            vol.Length(max=MAX_HEATING_CURVE_POINTS),
+            probatio.Length(max=MAX_HEATING_CURVE_POINTS),
             [HEATING_CURVE_POINT_SCHEMA],
         ),
     },

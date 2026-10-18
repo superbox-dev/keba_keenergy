@@ -13,7 +13,7 @@ from functools import cached_property
 from typing import TYPE_CHECKING
 from typing import Final
 
-import voluptuous as vol
+import probatio
 from homeassistant.components.climate import ClimateEntity
 from homeassistant.components.climate import ClimateEntityDescription
 from homeassistant.components.climate.const import DOMAIN as CLIMATE_DOMAIN
@@ -70,11 +70,11 @@ COOLING_CIRCUIT_PRESET_TO_HA: Final[dict[int, str]] = {
 }
 
 TEMPERATURE_OFFSET_SCHEMA = {
-    vol.Required(ATTR_OFFSET, default=0): vol.Coerce(float),
+    probatio.Required(ATTR_OFFSET, default=0): probatio.Coerce(float),
 }
 
 TEMPERATURE_SCHEMA = {
-    vol.Required(ATTR_TEMPERATURE): vol.Coerce(float),
+    probatio.Required(ATTR_TEMPERATURE): probatio.Coerce(float),
 }
 
 

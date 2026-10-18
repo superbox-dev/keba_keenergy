@@ -10,7 +10,7 @@ from http import HTTPStatus
 from typing import TYPE_CHECKING
 from typing import Any
 
-import voluptuous as vol
+import probatio
 from aiohttp import ClientError
 from homeassistant.config_entries import ConfigFlow
 from homeassistant.config_entries import ConfigFlowResult
@@ -56,10 +56,10 @@ if TYPE_CHECKING:
     from .coordinator import KebaKeEnergyConfigEntry
     from .coordinator import KebaKeEnergyDataUpdateCoordinator
 
-STEP_AUTH_DATA_SCHEMA: vol.Schema = vol.Schema(
+STEP_AUTH_DATA_SCHEMA: probatio.Schema = probatio.Schema(
     {
-        vol.Required(CONF_USERNAME): str,
-        vol.Required(CONF_PASSWORD): str,
+        probatio.Required(CONF_USERNAME): str,
+        probatio.Required(CONF_PASSWORD): str,
     },
 )
 
@@ -140,10 +140,10 @@ class KebaKeEnergyConfigFlow(ConfigFlow, domain=DOMAIN):
 
         return self.async_show_form(
             step_id="user",
-            data_schema=vol.Schema(
+            data_schema=probatio.Schema(
                 {
-                    vol.Required(CONF_HOST, default=self.host): str,
-                    vol.Required(CONF_SSL, default=self.ssl): bool,
+                    probatio.Required(CONF_HOST, default=self.host): str,
+                    probatio.Required(CONF_SSL, default=self.ssl): bool,
                 },
             ),
             errors=errors,
@@ -344,7 +344,7 @@ class KebaKeEnergyOptionsFlow(OptionsFlowWithReload):
         schema_fields: dict[Any, Any] = {}
 
         schema_fields[
-            vol.Required(
+            probatio.Required(
                 CONF_SCAN_INTERVAL,
                 default=self.config_entry.options.get(CONF_SCAN_INTERVAL, DEFAULT_SCAN_INTERVAL),
             )
@@ -357,7 +357,7 @@ class KebaKeEnergyOptionsFlow(OptionsFlowWithReload):
         )
 
         schema_fields[
-            vol.Required(
+            probatio.Required(
                 CONF_SYSTEM_TICK,
                 default=self.config_entry.options.get(CONF_SYSTEM_TICK, 1),
             )
@@ -384,7 +384,7 @@ class KebaKeEnergyOptionsFlow(OptionsFlowWithReload):
         for conf_key, prefix in tick_mapping.items():
             if coordinator.has_device(prefix):
                 schema_fields[
-                    vol.Required(
+                    probatio.Required(
                         conf_key,
                         default=self.config_entry.options.get(conf_key, 1),
                     )
@@ -399,7 +399,7 @@ class KebaKeEnergyOptionsFlow(OptionsFlowWithReload):
 
         return self.async_show_form(
             step_id="init",
-            data_schema=vol.Schema(schema_fields),
+            data_schema=probatio.Schema(schema_fields),
         )
 
 

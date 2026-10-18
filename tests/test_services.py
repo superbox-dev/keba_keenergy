@@ -7,8 +7,8 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 from typing import Any
 
+import probatio
 import pytest
-import voluptuous as vol
 from homeassistant.exceptions import ServiceValidationError
 
 from custom_components.keba_keenergy.const import ATTR_CONFIG_ENTRY
@@ -417,7 +417,7 @@ def test_away_date_range_schema_missing_start() -> None:
         ATTR_END_DATE: "2026-01-10",
     }
 
-    with pytest.raises(vol.Invalid):
+    with pytest.raises(probatio.Invalid):
         AWAY_DATE_RANGE_SCHEMA(data)
 
 
@@ -443,7 +443,7 @@ def test_heating_curve_points_schema_too_many_points() -> None:
         ATTR_POINTS: [{"outdoor": i, "flow": i} for i in range(100)],
     }
 
-    with pytest.raises(vol.Invalid):
+    with pytest.raises(probatio.Invalid):
         HEATING_CURVE_POINTS_SCHEMA(data)
 
 
@@ -455,5 +455,5 @@ def test_heating_curve_points_schema_invalid_curve() -> None:
         ATTR_POINTS: [{"outdoor": 0, "flow": 30}],
     }
 
-    with pytest.raises(vol.Invalid):
+    with pytest.raises(probatio.Invalid):
         HEATING_CURVE_POINTS_SCHEMA(data)

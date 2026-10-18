@@ -7,8 +7,8 @@ from __future__ import annotations
 from datetime import timedelta
 from typing import TYPE_CHECKING
 
+import probatio
 import pytest
-import voluptuous as vol
 from homeassistant.components.number import ATTR_VALUE
 from homeassistant.components.number import DOMAIN as NUMBER_DOMAIN
 from homeassistant.components.number.const import SERVICE_SET_VALUE
@@ -330,7 +330,7 @@ async def test_set_value_bad_attr(
     ]
     await fake_api.setup_integration()
 
-    with pytest.raises(vol.Invalid, match=expected):
+    with pytest.raises(probatio.Invalid, match=expected):
         await hass.services.async_call(
             domain=NUMBER_DOMAIN,
             service=SERVICE_SET_VALUE,
