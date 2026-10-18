@@ -23,6 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Fixed the missing state icons of the operating mode sensors since 1.10.0.
 - Fixed the away date range being written to the control unit even if it did not change. ([Issue #23][issue-23])
 
 ## [1.10.4] - 2026-09-30

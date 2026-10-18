@@ -63,6 +63,13 @@
             }
         },
         "sensor": {
+            "buffer_tank_operating_mode": {
+                "state": {
+                    "heat_up": "mdi:fire",
+                    "off": "mdi:power-off",
+                    "on": "mdi:power"
+                }
+            },
             "circulation_pump_speed": {
                 "default": "mdi:speedometer",
                 "range": {
@@ -118,8 +125,24 @@
             "excess_energy_target_temperature": {
                 "default": "mdi:sun-thermometer"
             },
+            "external_heat_source_operating_mode": {
+                "state": {
+                    "off": "mdi:power-off",
+                    "on": "mdi:power"
+                }
+            },
             "fresh_water_module_temperature": {
                 "default": "mdi:thermometer-water"
+            },
+            "heat_circuit_operating_mode": {
+                "state": {
+                    "auto": "mdi:clock-outline",
+                    "day": "mdi:weather-sunny",
+                    "holiday": "mdi:bag-checked",
+                    "night": "mdi:weather-night",
+                    "off": "mdi:power-standby",
+                    "party": "mdi:glass-cocktail"
+                }
             },
             "heat_request": {
                 "default": "mdi:fire",
@@ -131,45 +154,12 @@
             "heating_curve": {
                 "default": "mdi:chart-bell-curve-cumulative"
             },
-            "operating_mode_buffer_tank": {
-                "state": {
-                    "heat_up": "mdi:fire",
-                    "off": "mdi:power-off",
-                    "on": "mdi:power"
-                }
-            },
-            "operating_mode_external_heat_source": {
-                "state": {
-                    "off": "mdi:power-off",
-                    "on": "mdi:power"
-                }
-            },
-            "operating_mode_heat_circuit": {
-                "state": {
-                    "auto": "mdi:clock-outline",
-                    "day": "mdi:weather-sunny",
-                    "holiday": "mdi:bag-checked",
-                    "night": "mdi:weather-night",
-                    "off": "mdi:power-standby",
-                    "party": "mdi:glass-cocktail"
-                }
-            },
-            "operating_mode_hot_water_tank": {
+            "hot_water_tank_operating_mode": {
                 "state": {
                     "auto": "mdi:thermometer-auto",
                     "heat_up": "mdi:fire",
                     "off": "mdi:power-off",
                     "on": "mdi:power"
-                }
-            },
-            "operating_mode_system": {
-                "default": "mdi:cog",
-                "state": {
-                    "auto": "mdi:thermometer-auto",
-                    "auto_cool": "mdi:snowflake",
-                    "auto_heat": "mdi:fire",
-                    "standby": "mdi:power-standby",
-                    "summer": "mdi:water-thermometer"
                 }
             },
             "outdoor_temperature": {
@@ -225,6 +215,16 @@
             },
             "substate": {
                 "default": "mdi:cog"
+            },
+            "system_operating_mode": {
+                "default": "mdi:cog",
+                "state": {
+                    "auto": "mdi:thermometer-auto",
+                    "auto_cool": "mdi:snowflake",
+                    "auto_heat": "mdi:fire",
+                    "standby": "mdi:power-standby",
+                    "summer": "mdi:water-thermometer"
+                }
             },
             "temperature": {
                 "default": "mdi:snowflake-thermometer"
