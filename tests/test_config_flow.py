@@ -13,6 +13,7 @@ from aiohttp import ClientError
 from homeassistant import setup
 from homeassistant.config_entries import SOURCE_USER
 from homeassistant.config_entries import SOURCE_ZEROCONF
+from homeassistant.config_entries import ConfigEntryState
 from homeassistant.const import CONF_HOST
 from homeassistant.const import CONF_SSL
 from homeassistant.data_entry_flow import FlowResultType
@@ -738,12 +739,12 @@ async def test_option_flow_without_photovoltaics(
     ]
 
 
-async def test_option_flow_when_integration_not_fully_loaded(
+async def test_option_flow_when_integration_unloaded(
     hass: HomeAssistant,
     config_entry: MockConfigEntry,
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
-    """Test that the options flow aborts if the integration is not loaded."""
+    """Test that the options flow aborts if the integration was unloaded."""
     fake_api.responses = [
         # 1. coordinator
         MULTIPLE_POSITIONS_RESPONSE,
@@ -753,7 +754,39 @@ async def test_option_flow_when_integration_not_fully_loaded(
         *HEATING_CURVES_RESPONSE_1_1,
     ]
     await fake_api.setup_integration()
-    config_entry.runtime_data = None
+    await hass.config_entries.async_unload(config_entry.entry_id)
+
+    assert config_entry.state is ConfigEntryState.NOT_LOADED
+
+    result_init: ConfigFlowResult = await hass.config_entries.options.async_init(
+        config_entry.entry_id,
+        data=None,
+    )
+
+    assert result_init["type"] == FlowResultType.ABORT
+    assert result_init["reason"] == "options_not_ready"
+
+
+async def test_option_flow_when_integration_reload_failed(
+    hass: HomeAssistant,
+    config_entry: MockConfigEntry,
+    fake_api: FakeKebaKeEnergyAPI,
+) -> None:
+    """Test that the options flow aborts if a reload of the integration failed."""
+    fake_api.responses = [
+        # 1. coordinator
+        MULTIPLE_POSITIONS_RESPONSE,
+        HEATING_CURVE_NAMES_RESPONSE,
+        get_multiple_position_fixed_data_response(),
+        MULTIPLE_POSITION_DATA_RESPONSE_1,
+        *HEATING_CURVES_RESPONSE_1_1,
+        # 2. reload
+        HTTPStatus.BAD_REQUEST,
+    ]
+    await fake_api.setup_integration()
+    await hass.config_entries.async_reload(config_entry.entry_id)
+
+    assert config_entry.state is ConfigEntryState.SETUP_RETRY
 
     result_init: ConfigFlowResult = await hass.config_entries.options.async_init(
         config_entry.entry_id,

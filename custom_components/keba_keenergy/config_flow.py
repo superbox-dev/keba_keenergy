@@ -12,6 +12,7 @@ from typing import Any
 
 import probatio
 from aiohttp import ClientError
+from homeassistant.config_entries import ConfigEntryState
 from homeassistant.config_entries import ConfigFlow
 from homeassistant.config_entries import ConfigFlowResult
 from homeassistant.config_entries import OptionsFlowWithReload
@@ -332,14 +333,10 @@ class KebaKeEnergyOptionsFlow(OptionsFlowWithReload):
         if user_input is not None:
             return self.async_create_entry(data=self._normalize_user_input(user_input))
 
-        coordinator: KebaKeEnergyDataUpdateCoordinator | None = getattr(
-            self.config_entry,
-            "runtime_data",
-            None,
-        )
-
-        if coordinator is None:
+        if self.config_entry.state is not ConfigEntryState.LOADED:
             return self.async_abort(reason="options_not_ready")
+
+        coordinator: KebaKeEnergyDataUpdateCoordinator = self.config_entry.runtime_data
 
         schema_fields: dict[Any, Any] = {}
 
