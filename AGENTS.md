@@ -103,7 +103,7 @@ Code lives in `custom_components/keba_keenergy/`.
 - Not applicable:
   - `entity-event-setup`: entities only use the coordinator
 - Open:
-  - `dynamic-devices` / `stale-devices`: devices are only detected on setup, a changed setup needs a reload
+  - `dynamic-devices`: devices are only detected on setup, a changed setup needs a reload
 - Keep these rules satisfied:
   - `brands`: the brand images are in the `home-assistant/brands` repository (`custom_integrations/keba_keenergy/`)
   - `exception-translations`: exceptions use `translation_domain` and `translation_key`
@@ -118,6 +118,8 @@ Code lives in `custom_components/keba_keenergy/`.
   - `repair-issues`: `frequent_flash_writes`
   - `diagnostics`: `diagnostics.py` redacts the host, the credentials, the serial number and the title
   - `discovery-update-info`: the zeroconf flow updates a changed IPv4 address, a configured hostname is kept
+  - `stale-devices`: on setup, devices whose identifier is not in `coordinator.device_identifiers()` are removed
+    - device identifiers always come from `get_device_identifier()`, otherwise devices with entities are removed
   - `test-coverage`: 100%, see [Tests](#tests)
 - Also keep:
   - the coordinator gets `config_entry` explicitly

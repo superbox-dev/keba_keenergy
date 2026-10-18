@@ -76,6 +76,14 @@ async def async_setup_entry(hass: HomeAssistant, entry: KebaKeEnergyConfigEntry)
 
     coordinator.control_unit_device_id = control_unit.id
 
+    # Remove the devices that the control unit no longer provides, e.g. a removed buffer tank
+    device_identifiers: set[str] = coordinator.device_identifiers()
+
+    for device in dr.async_entries_for_config_entry(device_registry, entry.entry_id):
+        if not any(domain == DOMAIN and identifier in device_identifiers for domain, identifier in device.identifiers):
+            _LOGGER.debug("Remove stale device %s", device.identifiers)
+            device_registry.async_remove_device(device.id)
+
     await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
 
     return True

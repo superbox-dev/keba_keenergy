@@ -285,7 +285,8 @@ The integration polls the Web HMI every 20 seconds by default, see [Options](#op
 slowly changing values, e.g. of the control unit, can be updated less often to reduce the load on the Web HMI.
 
 The devices and entities are detected when the integration is set up. After you change the setup of your heat pump,
-reload the integration.
+reload the integration. Devices that the control unit no longer provides, e.g. a removed buffer tank, are removed
+with their entities.
 
 ## Known limitations
 

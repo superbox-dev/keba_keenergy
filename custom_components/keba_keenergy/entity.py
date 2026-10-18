@@ -35,6 +35,7 @@ from .const import MANUFACTURER_INO
 from .const import MANUFACTURER_MTEC
 from .coordinator import KebaKeEnergyConfigEntry
 from .coordinator import KebaKeEnergyDataUpdateCoordinator
+from .coordinator import get_device_identifier
 from .coordinator import get_value_by_index
 
 if TYPE_CHECKING:
@@ -155,15 +156,7 @@ class KebaKeEnergyBaseEntity(
     @cached_property
     def device_identifier(self) -> str:
         """Return the device identifier."""
-        _identifier: str = f"{self.entry.unique_id}_{DOMAIN if self.is_system_device else self.section_id}"
-
-        # Add position number to identifier if there is more than one device
-        # e.g. hot water tank, heat circuit, solar circuit or heat pump.
-
-        if self.position is not None:
-            _identifier = f"{_identifier}_{self.position}"
-
-        return _identifier
+        return get_device_identifier(self.entry.unique_id, self.section_id, self.position)
 
     @cached_property
     def device_manufacturer(self) -> str | None:

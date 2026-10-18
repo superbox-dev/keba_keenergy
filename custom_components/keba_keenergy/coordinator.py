@@ -257,6 +257,15 @@ REQUEST_DATA_GROUPS: dict[SectionPrefix, list[Section]] = {
 }
 
 
+def get_device_identifier(entry_unique_id: str | None, section_id: str, position: int | None) -> str:
+    """Return the device identifier `<entry unique_id>_<section or domain for the control unit>[_<position>]`.
+
+    The position is only added if the section has more than one device.
+    """
+    identifier: str = f"{entry_unique_id}_{DOMAIN if section_id == SectionPrefix.SYSTEM else section_id}"
+    return identifier if position is None else f"{identifier}_{position}"
+
+
 def get_value_by_index(
     values: list[list[Value]] | list[Value] | Value,
     /,
@@ -657,6 +666,26 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
     def hot_water_tank_numbers(self) -> int:
         """Return number of hot water tanks."""
         return self.position.hot_water_tank if self.position else 0
+
+    def device_identifiers(self) -> set[str]:
+        """Return the identifiers of all devices that the current data provides."""
+        identifiers: set[str] = set()
+
+        for section_id, section_data in self.data.items():
+            device_numbers: int = max(
+                (len(values) if isinstance(values, list) else 1 for values in section_data.values()),
+                default=0,
+            )
+            identifiers.update(
+                get_device_identifier(
+                    self.config_entry.unique_id,
+                    section_id,
+                    index + 1 if device_numbers > 1 else None,
+                )
+                for index in range(device_numbers)
+            )
+
+        return identifiers
 
     def device_count(self, prefix: str, /) -> int:
         """Return the number of devices of the section."""
