@@ -86,6 +86,22 @@ jobs:
           if-no-files-found: error
           overwrite: True
 
+  tests-minimum:
+    name: Tests (minimum Home Assistant version)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v7
+      - name: Set up project
+        uses: ./.github/actions/setup-project
+      - name: Install the minimum Home Assistant version
+        # The version from pyproject.toml, uv picks the matching pytest-homeassistant-custom-component
+        run: |
+          HOMEASSISTANT_VERSION="$(grep -oE '"homeassistant>=[0-9.]+"' pyproject.toml | grep -oE '[0-9][0-9.]+')"
+          uv pip install "homeassistant==${HOMEASSISTANT_VERSION}" pytest-homeassistant-custom-component
+      - name: Run tests
+        run: uv run --no-sync pytest -n auto
+
   coverage:
     name: Generate coverage badge
     runs-on: ubuntu-latest
@@ -135,6 +151,7 @@ jobs:
       - validation
       - security
       - tests
+      - tests-minimum
     permissions:
       contents: write
     steps:

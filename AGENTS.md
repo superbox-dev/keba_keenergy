@@ -31,8 +31,10 @@ Before finishing a change, run all of them except the snapshot update, `develop.
 - **Minimum versions**:
   - Python and Home Assistant as in `pyproject.toml` (and `homeassistant` in `hacs.json`)
   - no deprecated Home Assistant APIs
-  - the tests run against the minimum Home Assistant version in `uv.lock`, do not upgrade
-    `pytest-homeassistant-custom-component` beyond it
+  - `uv.lock` uses the latest Home Assistant version for ty and the tests
+  - CI also runs the tests against the minimum version (`tests-minimum` job), it reads the version from
+    `pyproject.toml`
+  - use `probatio` for schemas, not `voluptuous`
 - Code style:
   - line length 120
   - single-line imports
