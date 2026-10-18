@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Added diagnostics. The host, the credentials and the serial number are redacted.
 - Updated the IP address of a configured control unit when Home Assistant discovers it with a new IP address.
   A configured hostname is kept.
 

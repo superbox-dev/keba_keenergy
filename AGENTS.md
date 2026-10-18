@@ -104,7 +104,6 @@ Code lives in `custom_components/keba_keenergy/`.
   - `entity-event-setup`: entities only use the coordinator
 - Open:
   - `brands`: no brand images in `custom_components/keba_keenergy/brand/`
-  - `diagnostics`: no `diagnostics.py`, it would have to redact the credentials and the serial number
   - `dynamic-devices` / `stale-devices`: devices are only detected on setup, a changed setup needs a reload
 - Keep these rules satisfied:
   - `exception-translations`: exceptions use `translation_domain` and `translation_key`
@@ -117,6 +116,7 @@ Code lives in `custom_components/keba_keenergy/`.
   - `parallel-updates`: every platform sets `PARALLEL_UPDATES`
   - `reauthentication-flow` / `reconfiguration-flow`: keep both working
   - `repair-issues`: `frequent_flash_writes`
+  - `diagnostics`: `diagnostics.py` redacts the host, the credentials, the serial number and the title
   - `discovery-update-info`: the zeroconf flow updates a changed IPv4 address, a configured hostname is kept
   - `test-coverage`: 100%, see [Tests](#tests)
 - Also keep:

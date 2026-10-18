@@ -307,7 +307,9 @@ reload the integration.
   after a change of your heat pump setup.
 
 If the problem persists, [enable debug logging][debug-logs], reproduce the problem and open an
-[issue](https://github.com/superbox-dev/keba_keenergy/issues/new/choose) with the log, the Web HMI software version
+[issue](https://github.com/superbox-dev/keba_keenergy/issues/new/choose) with the log, the
+[diagnostics][debug-logs] (**Download diagnostics** in the menu of the integration entry, the host, the credentials
+and the serial number are removed), the Web HMI software version
 (**Service** → **Systeminformationen** → **Software**) and the device hardware name
 (**Service** → **Systeminformationen** → **Gerät**).
 

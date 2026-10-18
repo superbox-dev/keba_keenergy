@@ -602,6 +602,16 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
             for index in range(self.heat_circuit_numbers)
         ]
 
+    @property
+    def fixed_data(self) -> dict[str, ValueResponse]:
+        """Return the values that are read once on setup."""
+        return self._fixed_data
+
+    @property
+    def weekly_write_count(self) -> int:
+        """Return the number of writes in the current week."""
+        return self._weekly_write_count
+
     @cached_property
     def configuration_url(self) -> str:
         """Return web gui url."""

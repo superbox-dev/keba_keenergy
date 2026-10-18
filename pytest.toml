@@ -20,6 +20,8 @@ addopts = [
 asyncio_mode = "auto"
 filterwarnings = [
     "error",
+    # Raised by the http component of Home Assistant itself (used by diagnostics), not by this integration.
+    "ignore::aiohttp.web_exceptions.NotAppKeyWarning",
 ]
 asyncio_default_fixture_loop_scope = "function"
 markers = [
