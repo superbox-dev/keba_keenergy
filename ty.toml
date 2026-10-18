@@ -1,2 +1,7 @@
+[rules]
+# Home Assistant entities override `cached_property` attributes with `@property` and narrow `entity_description`.
+invalid-mutable-override = "ignore"
+invalid-property-type-override = "ignore"
+
 [terminal]
 error-on-warning = true
