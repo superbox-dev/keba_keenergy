@@ -16,6 +16,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Shortened the `README.md` to the installation and moved the details to the documentation.
 - Linked the GitHub release notes to the matching section of the changelog.
 - Extended the issue templates with the environment and debug logs.
+- Moved the static entity icons to `icons.json`. The icons are unchanged, but the entities no longer have an `icon`
+  state attribute.
 - Wrote the HVAC mode of a heating circuit only if it differs from the current operating mode.
 - Translated the error message of failed data updates.
 

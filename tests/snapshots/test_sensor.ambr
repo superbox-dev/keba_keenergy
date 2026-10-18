@@ -4,7 +4,6 @@
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Pufferspeicher 1 Ist-Temperatur (unten)',
-      <EntityStateAttribute.ICON: 'icon'>: 'mdi:thermometer-water',
       'lower_limit': '5',
       <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.MEASUREMENT: 'measurement'>,
       <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfTemperature.CELSIUS: '°C'>,
@@ -23,7 +22,6 @@
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Pufferspeicher 2 Ist-Temperatur (unten)',
-      <EntityStateAttribute.ICON: 'icon'>: 'mdi:thermometer-water',
       'lower_limit': '5',
       <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.MEASUREMENT: 'measurement'>,
       <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfTemperature.CELSIUS: '°C'>,
@@ -42,7 +40,6 @@
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Pufferspeicher 1 Ist-Temperatur (oben)',
-      <EntityStateAttribute.ICON: 'icon'>: 'mdi:thermometer-water',
       'lower_limit': '5',
       <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.MEASUREMENT: 'measurement'>,
       <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfTemperature.CELSIUS: '°C'>,
@@ -61,7 +58,6 @@
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Pufferspeicher 2 Ist-Temperatur (oben)',
-      <EntityStateAttribute.ICON: 'icon'>: 'mdi:thermometer-water',
       'lower_limit': '5',
       <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.MEASUREMENT: 'measurement'>,
       <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfTemperature.CELSIUS: '°C'>,
@@ -124,7 +120,6 @@
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Pufferspeicher 1 Soll-Temperatur (PV-Überschuss)',
-      <EntityStateAttribute.ICON: 'icon'>: 'mdi:sun-thermometer',
       'lower_limit': '0',
       <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.MEASUREMENT: 'measurement'>,
       <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfTemperature.CELSIUS: '°C'>,
@@ -143,7 +138,6 @@
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Pufferspeicher 2 Soll-Temperatur (PV-Überschuss)',
-      <EntityStateAttribute.ICON: 'icon'>: 'mdi:sun-thermometer',
       'lower_limit': '0',
       <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.MEASUREMENT: 'measurement'>,
       <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfTemperature.CELSIUS: '°C'>,
@@ -206,7 +200,6 @@
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Pufferspeicher 1 Stütztemperatur',
-      <EntityStateAttribute.ICON: 'icon'>: 'mdi:thermometer-chevron-down',
       'lower_limit': '0',
       <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.MEASUREMENT: 'measurement'>,
       <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfTemperature.CELSIUS: '°C'>,
@@ -225,7 +218,6 @@
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Pufferspeicher 2 Stütztemperatur',
-      <EntityStateAttribute.ICON: 'icon'>: 'mdi:thermometer-chevron-down',
       'lower_limit': '0',
       <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.MEASUREMENT: 'measurement'>,
       <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfTemperature.CELSIUS: '°C'>,
@@ -614,7 +606,6 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Heizkreis 2 Kühlkurve',
-      <EntityStateAttribute.ICON: 'icon'>: 'mdi:chart-bell-curve-cumulative',
     }),
     'context': <ANY>,
     'entity_id': 'sensor.keba_keenergy_12345678_heat_circuit_cooling_curve_2',
@@ -665,7 +656,6 @@
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Heizkreis 1 Taupunkt',
-      <EntityStateAttribute.ICON: 'icon'>: 'mdi:home-thermometer',
       'lower_limit': '-20.0',
       <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.MEASUREMENT: 'measurement'>,
       <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfTemperature.CELSIUS: '°C'>,
@@ -800,7 +790,6 @@
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Heizkreis 2 Soll-Raumtemperatur Kühlen (PV-Überschuss)',
-      <EntityStateAttribute.ICON: 'icon'>: 'mdi:sun-thermometer',
       'lower_limit': '10',
       <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.MEASUREMENT: 'measurement'>,
       <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfTemperature.CELSIUS: '°C'>,
@@ -819,7 +808,6 @@
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Heizkreis 1 Soll-Raumtemperatur (PV-Überschuss)',
-      <EntityStateAttribute.ICON: 'icon'>: 'mdi:sun-thermometer',
       'lower_limit': '10',
       <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.MEASUREMENT: 'measurement'>,
       <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfTemperature.CELSIUS: '°C'>,
@@ -917,7 +905,6 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Heizkreis 1 Heizkurve',
-      <EntityStateAttribute.ICON: 'icon'>: 'mdi:chart-bell-curve-cumulative',
       'points': list([
         dict({
           'flow': 20.0,
@@ -1126,7 +1113,6 @@
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Heizkreis 1 Raumtemperatur',
-      <EntityStateAttribute.ICON: 'icon'>: 'mdi:home-thermometer',
       'lower_limit': '0',
       <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.MEASUREMENT: 'measurement'>,
       <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfTemperature.CELSIUS: '°C'>,
@@ -1921,7 +1907,6 @@
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'enum',
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Wärmepumpe Status',
-      <EntityStateAttribute.ICON: 'icon'>: 'mdi:cog',
       'lower_limit': '0',
       <SensorEntityCapabilityAttribute.OPTIONS: 'options'>: list([
         'standby',
@@ -1950,7 +1935,6 @@
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'enum',
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Wärmepumpe Unterstatus',
-      <EntityStateAttribute.ICON: 'icon'>: 'mdi:cog',
       'lower_limit': '0',
       <SensorEntityCapabilityAttribute.OPTIONS: 'options'>: list([
         'none',
@@ -2115,7 +2099,6 @@
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Warmwasserspeicher 1 Ist-Temperatur',
-      <EntityStateAttribute.ICON: 'icon'>: 'mdi:thermometer-water',
       'lower_limit': '20',
       <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.MEASUREMENT: 'measurement'>,
       <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfTemperature.CELSIUS: '°C'>,
@@ -2134,7 +2117,6 @@
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Warmwasserspeicher 2 Ist-Temperatur',
-      <EntityStateAttribute.ICON: 'icon'>: 'mdi:thermometer-water',
       'lower_limit': '20',
       <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.MEASUREMENT: 'measurement'>,
       <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfTemperature.CELSIUS: '°C'>,
@@ -2197,7 +2179,6 @@
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Warmwasserspeicher 1 Soll-Temperatur (PV-Überschuss)',
-      <EntityStateAttribute.ICON: 'icon'>: 'mdi:sun-thermometer',
       'lower_limit': '0',
       <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.MEASUREMENT: 'measurement'>,
       <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfTemperature.CELSIUS: '°C'>,
@@ -2216,7 +2197,6 @@
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Warmwasserspeicher 2 Soll-Temperatur (PV-Überschuss)',
-      <EntityStateAttribute.ICON: 'icon'>: 'mdi:sun-thermometer',
       'lower_limit': '0',
       <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.MEASUREMENT: 'measurement'>,
       <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfTemperature.CELSIUS: '°C'>,
@@ -2235,7 +2215,6 @@
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Warmwasserspeicher 1 Frischwassermodul-Temperatur',
-      <EntityStateAttribute.ICON: 'icon'>: 'mdi:thermometer-water',
       'lower_limit': '0',
       <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.MEASUREMENT: 'measurement'>,
       <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfTemperature.CELSIUS: '°C'>,
@@ -2300,7 +2279,6 @@
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Warmwasserspeicher 1 Stütztemperatur',
-      <EntityStateAttribute.ICON: 'icon'>: 'mdi:thermometer-chevron-down',
       'lower_limit': '0',
       <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.MEASUREMENT: 'measurement'>,
       <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfTemperature.CELSIUS: '°C'>,
@@ -2319,7 +2297,6 @@
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Warmwasserspeicher 2 Stütztemperatur',
-      <EntityStateAttribute.ICON: 'icon'>: 'mdi:thermometer-chevron-down',
       'lower_limit': '0',
       <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.MEASUREMENT: 'measurement'>,
       <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfTemperature.CELSIUS: '°C'>,
@@ -2515,7 +2492,6 @@
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Passivkühlung Temperatur',
-      <EntityStateAttribute.ICON: 'icon'>: 'mdi:snowflake-thermometer',
       'lower_limit': '-100',
       <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.MEASUREMENT: 'measurement'>,
       <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfTemperature.CELSIUS: '°C'>,
@@ -2629,7 +2605,6 @@
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Solarkreis 1 Ist-Temperatur 1',
-      <EntityStateAttribute.ICON: 'icon'>: 'mdi:thermometer-water',
       <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.MEASUREMENT: 'measurement'>,
       <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfTemperature.CELSIUS: '°C'>,
     }),
@@ -2646,7 +2621,6 @@
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Solarkreis 2 Ist-Temperatur 1',
-      <EntityStateAttribute.ICON: 'icon'>: 'mdi:thermometer-water',
       <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.MEASUREMENT: 'measurement'>,
       <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfTemperature.CELSIUS: '°C'>,
     }),
@@ -2663,7 +2637,6 @@
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Solarkreis 1 Ist-Temperatur 2',
-      <EntityStateAttribute.ICON: 'icon'>: 'mdi:thermometer-water',
       <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.MEASUREMENT: 'measurement'>,
       <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfTemperature.CELSIUS: '°C'>,
     }),
@@ -2680,7 +2653,6 @@
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Solarkreis 2 Ist-Temperatur 2',
-      <EntityStateAttribute.ICON: 'icon'>: 'mdi:thermometer-water',
       <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.MEASUREMENT: 'measurement'>,
       <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfTemperature.CELSIUS: '°C'>,
     }),
@@ -2833,7 +2805,6 @@
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Solarkreis 1 Kollektortemperatur',
-      <EntityStateAttribute.ICON: 'icon'>: 'mdi:sun-thermometer',
       'lower_limit': '20',
       <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.MEASUREMENT: 'measurement'>,
       <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfTemperature.CELSIUS: '°C'>,
@@ -2852,7 +2823,6 @@
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Solarkreis 2 Kollektortemperatur',
-      <EntityStateAttribute.ICON: 'icon'>: 'mdi:sun-thermometer',
       'lower_limit': '20',
       <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.MEASUREMENT: 'measurement'>,
       <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfTemperature.CELSIUS: '°C'>,
@@ -3021,7 +2991,6 @@
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Buffer tank 1 Current temperature (bottom)',
-      <EntityStateAttribute.ICON: 'icon'>: 'mdi:thermometer-water',
       'lower_limit': '5',
       <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.MEASUREMENT: 'measurement'>,
       <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfTemperature.CELSIUS: '°C'>,
@@ -3040,7 +3009,6 @@
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Buffer tank 2 Current temperature (bottom)',
-      <EntityStateAttribute.ICON: 'icon'>: 'mdi:thermometer-water',
       'lower_limit': '5',
       <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.MEASUREMENT: 'measurement'>,
       <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfTemperature.CELSIUS: '°C'>,
@@ -3059,7 +3027,6 @@
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Buffer tank 1 Current temperature (top)',
-      <EntityStateAttribute.ICON: 'icon'>: 'mdi:thermometer-water',
       'lower_limit': '5',
       <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.MEASUREMENT: 'measurement'>,
       <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfTemperature.CELSIUS: '°C'>,
@@ -3078,7 +3045,6 @@
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Buffer tank 2 Current temperature (top)',
-      <EntityStateAttribute.ICON: 'icon'>: 'mdi:thermometer-water',
       'lower_limit': '5',
       <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.MEASUREMENT: 'measurement'>,
       <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfTemperature.CELSIUS: '°C'>,
@@ -3141,7 +3107,6 @@
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Buffer tank 1 Target temperature (PV surplus)',
-      <EntityStateAttribute.ICON: 'icon'>: 'mdi:sun-thermometer',
       'lower_limit': '0',
       <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.MEASUREMENT: 'measurement'>,
       <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfTemperature.CELSIUS: '°C'>,
@@ -3160,7 +3125,6 @@
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Buffer tank 2 Target temperature (PV surplus)',
-      <EntityStateAttribute.ICON: 'icon'>: 'mdi:sun-thermometer',
       'lower_limit': '0',
       <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.MEASUREMENT: 'measurement'>,
       <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfTemperature.CELSIUS: '°C'>,
@@ -3223,7 +3187,6 @@
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Buffer tank 1 Standby temperature',
-      <EntityStateAttribute.ICON: 'icon'>: 'mdi:thermometer-chevron-down',
       'lower_limit': '0',
       <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.MEASUREMENT: 'measurement'>,
       <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfTemperature.CELSIUS: '°C'>,
@@ -3242,7 +3205,6 @@
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Buffer tank 2 Standby temperature',
-      <EntityStateAttribute.ICON: 'icon'>: 'mdi:thermometer-chevron-down',
       'lower_limit': '0',
       <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.MEASUREMENT: 'measurement'>,
       <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfTemperature.CELSIUS: '°C'>,
@@ -3631,7 +3593,6 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Heating circuit 2 Cooling curve',
-      <EntityStateAttribute.ICON: 'icon'>: 'mdi:chart-bell-curve-cumulative',
     }),
     'context': <ANY>,
     'entity_id': 'sensor.keba_keenergy_12345678_heat_circuit_cooling_curve_2',
@@ -3682,7 +3643,6 @@
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Heating circuit 1 Dew point',
-      <EntityStateAttribute.ICON: 'icon'>: 'mdi:home-thermometer',
       'lower_limit': '-20.0',
       <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.MEASUREMENT: 'measurement'>,
       <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfTemperature.CELSIUS: '°C'>,
@@ -3817,7 +3777,6 @@
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Heating circuit 2 Target room cooling temperature (PV surplus)',
-      <EntityStateAttribute.ICON: 'icon'>: 'mdi:sun-thermometer',
       'lower_limit': '10',
       <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.MEASUREMENT: 'measurement'>,
       <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfTemperature.CELSIUS: '°C'>,
@@ -3836,7 +3795,6 @@
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Heating circuit 1 Target room temperature (PV surplus)',
-      <EntityStateAttribute.ICON: 'icon'>: 'mdi:sun-thermometer',
       'lower_limit': '10',
       <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.MEASUREMENT: 'measurement'>,
       <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfTemperature.CELSIUS: '°C'>,
@@ -3934,7 +3892,6 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Heating circuit 1 Heating curve',
-      <EntityStateAttribute.ICON: 'icon'>: 'mdi:chart-bell-curve-cumulative',
       'points': list([
         dict({
           'flow': 20.0,
@@ -4143,7 +4100,6 @@
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Heating circuit 1 Room temperature',
-      <EntityStateAttribute.ICON: 'icon'>: 'mdi:home-thermometer',
       'lower_limit': '0',
       <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.MEASUREMENT: 'measurement'>,
       <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfTemperature.CELSIUS: '°C'>,
@@ -4938,7 +4894,6 @@
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'enum',
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Heat pump State',
-      <EntityStateAttribute.ICON: 'icon'>: 'mdi:cog',
       'lower_limit': '0',
       <SensorEntityCapabilityAttribute.OPTIONS: 'options'>: list([
         'standby',
@@ -4967,7 +4922,6 @@
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'enum',
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Heat pump Substate',
-      <EntityStateAttribute.ICON: 'icon'>: 'mdi:cog',
       'lower_limit': '0',
       <SensorEntityCapabilityAttribute.OPTIONS: 'options'>: list([
         'none',
@@ -5132,7 +5086,6 @@
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Hot water tank 1 Current temperature',
-      <EntityStateAttribute.ICON: 'icon'>: 'mdi:thermometer-water',
       'lower_limit': '20',
       <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.MEASUREMENT: 'measurement'>,
       <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfTemperature.CELSIUS: '°C'>,
@@ -5151,7 +5104,6 @@
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Hot water tank 2 Current temperature',
-      <EntityStateAttribute.ICON: 'icon'>: 'mdi:thermometer-water',
       'lower_limit': '20',
       <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.MEASUREMENT: 'measurement'>,
       <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfTemperature.CELSIUS: '°C'>,
@@ -5214,7 +5166,6 @@
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Hot water tank 1 Target temperature (PV surplus)',
-      <EntityStateAttribute.ICON: 'icon'>: 'mdi:sun-thermometer',
       'lower_limit': '0',
       <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.MEASUREMENT: 'measurement'>,
       <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfTemperature.CELSIUS: '°C'>,
@@ -5233,7 +5184,6 @@
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Hot water tank 2 Target temperature (PV surplus)',
-      <EntityStateAttribute.ICON: 'icon'>: 'mdi:sun-thermometer',
       'lower_limit': '0',
       <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.MEASUREMENT: 'measurement'>,
       <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfTemperature.CELSIUS: '°C'>,
@@ -5252,7 +5202,6 @@
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Hot water tank 1 Fresh water module temperature',
-      <EntityStateAttribute.ICON: 'icon'>: 'mdi:thermometer-water',
       'lower_limit': '0',
       <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.MEASUREMENT: 'measurement'>,
       <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfTemperature.CELSIUS: '°C'>,
@@ -5317,7 +5266,6 @@
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Hot water tank 1 Standby temperature',
-      <EntityStateAttribute.ICON: 'icon'>: 'mdi:thermometer-chevron-down',
       'lower_limit': '0',
       <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.MEASUREMENT: 'measurement'>,
       <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfTemperature.CELSIUS: '°C'>,
@@ -5336,7 +5284,6 @@
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Hot water tank 2 Standby temperature',
-      <EntityStateAttribute.ICON: 'icon'>: 'mdi:thermometer-chevron-down',
       'lower_limit': '0',
       <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.MEASUREMENT: 'measurement'>,
       <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfTemperature.CELSIUS: '°C'>,
@@ -5532,7 +5479,6 @@
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Passive cooling Temperature',
-      <EntityStateAttribute.ICON: 'icon'>: 'mdi:snowflake-thermometer',
       'lower_limit': '-100',
       <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.MEASUREMENT: 'measurement'>,
       <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfTemperature.CELSIUS: '°C'>,
@@ -5646,7 +5592,6 @@
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Solar circuit 1 Current temperature 1',
-      <EntityStateAttribute.ICON: 'icon'>: 'mdi:thermometer-water',
       <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.MEASUREMENT: 'measurement'>,
       <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfTemperature.CELSIUS: '°C'>,
     }),
@@ -5663,7 +5608,6 @@
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Solar circuit 2 Current temperature 1',
-      <EntityStateAttribute.ICON: 'icon'>: 'mdi:thermometer-water',
       <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.MEASUREMENT: 'measurement'>,
       <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfTemperature.CELSIUS: '°C'>,
     }),
@@ -5680,7 +5624,6 @@
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Solar circuit 1 Current temperature 2',
-      <EntityStateAttribute.ICON: 'icon'>: 'mdi:thermometer-water',
       <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.MEASUREMENT: 'measurement'>,
       <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfTemperature.CELSIUS: '°C'>,
     }),
@@ -5697,7 +5640,6 @@
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Solar circuit 2 Current temperature 2',
-      <EntityStateAttribute.ICON: 'icon'>: 'mdi:thermometer-water',
       <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.MEASUREMENT: 'measurement'>,
       <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfTemperature.CELSIUS: '°C'>,
     }),
@@ -5850,7 +5792,6 @@
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Solar circuit 1 Collector temperature',
-      <EntityStateAttribute.ICON: 'icon'>: 'mdi:sun-thermometer',
       'lower_limit': '20',
       <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.MEASUREMENT: 'measurement'>,
       <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfTemperature.CELSIUS: '°C'>,
@@ -5869,7 +5810,6 @@
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Solar circuit 2 Collector temperature',
-      <EntityStateAttribute.ICON: 'icon'>: 'mdi:sun-thermometer',
       'lower_limit': '20',
       <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.MEASUREMENT: 'measurement'>,
       <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfTemperature.CELSIUS: '°C'>,

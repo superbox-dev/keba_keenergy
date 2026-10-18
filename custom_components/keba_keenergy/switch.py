@@ -102,7 +102,6 @@ SWITCH_TYPES: dict[str, tuple[KebaKeEnergySwitchEntityDescription, ...]] = {
             entity_registry_enabled_default=False,
             key="use_heating_curve",
             translation_key="use_heating_curve",
-            icon="mdi:chart-bell-curve-cumulative",
         ),
         KebaKeEnergySwitchEntityDescription(
             condition=lambda coordinator, index: coordinator.is_cooling_circuit(index=index),
@@ -112,7 +111,6 @@ SWITCH_TYPES: dict[str, tuple[KebaKeEnergySwitchEntityDescription, ...]] = {
             key="use_heating_curve",
             ref_key="use_cooling_curve",
             translation_key="use_cooling_curve",
-            icon="mdi:chart-bell-curve-cumulative",
         ),
     ),
     SectionPrefix.SOLAR_CIRCUIT: (

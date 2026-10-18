@@ -326,7 +326,6 @@ NUMBER_TYPES: dict[str, tuple[KebaKeEnergyNumberEntityDescription, ...]] = {
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             native_step=0.5,
             translation_key="excess_energy_target_room_temperature",
-            icon="mdi:sun-thermometer",
             scale=1,
         ),
         KebaKeEnergyNumberEntityDescription(
@@ -342,7 +341,6 @@ NUMBER_TYPES: dict[str, tuple[KebaKeEnergyNumberEntityDescription, ...]] = {
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             native_step=0.1,
             translation_key="excess_energy_target_room_temperature_hysteresis",
-            icon="mdi:thermometer-lines",
             scale=1,
         ),
         KebaKeEnergyNumberEntityDescription(
@@ -358,7 +356,6 @@ NUMBER_TYPES: dict[str, tuple[KebaKeEnergyNumberEntityDescription, ...]] = {
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             native_step=0.5,
             translation_key="excess_energy_target_room_cooling_temperature",
-            icon="mdi:sun-thermometer",
             scale=1,
         ),
         KebaKeEnergyNumberEntityDescription(
@@ -374,7 +371,6 @@ NUMBER_TYPES: dict[str, tuple[KebaKeEnergyNumberEntityDescription, ...]] = {
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             native_step=0.1,
             translation_key="excess_energy_target_room_cooling_temperature_hysteresis",
-            icon="mdi:thermometer-lines",
             scale=1,
         ),
         KebaKeEnergyNumberEntityDescription(
@@ -406,7 +402,6 @@ NUMBER_TYPES: dict[str, tuple[KebaKeEnergyNumberEntityDescription, ...]] = {
             key="heating_curve_slope",
             native_step=0.01,
             translation_key="heating_curve_slope",
-            icon="mdi:slope-uphill",
             scale=1,
         ),
         KebaKeEnergyNumberEntityDescription(
@@ -416,7 +411,6 @@ NUMBER_TYPES: dict[str, tuple[KebaKeEnergyNumberEntityDescription, ...]] = {
             key="cooling_curve_slope",
             native_step=0.01,
             translation_key="cooling_curve_slope",
-            icon="mdi:slope-uphill",
             scale=1,
         ),
     ),
@@ -472,7 +466,6 @@ NUMBER_TYPES: dict[str, tuple[KebaKeEnergyNumberEntityDescription, ...]] = {
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             native_step=0.5,
             translation_key="excess_energy_target_temperature",
-            icon="mdi:sun-thermometer",
             scale=1,
         ),
         KebaKeEnergyNumberEntityDescription(
@@ -484,7 +477,6 @@ NUMBER_TYPES: dict[str, tuple[KebaKeEnergyNumberEntityDescription, ...]] = {
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             native_step=0.1,
             translation_key="excess_energy_target_temperature_hysteresis",
-            icon="mdi:thermometer-lines",
             scale=1,
         ),
         KebaKeEnergyNumberEntityDescription(
@@ -494,7 +486,6 @@ NUMBER_TYPES: dict[str, tuple[KebaKeEnergyNumberEntityDescription, ...]] = {
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             native_step=0.5,
             translation_key="standby_temperature",
-            icon="mdi:thermometer-chevron-down",
             scale=1,
         ),
         KebaKeEnergyNumberEntityDescription(
@@ -506,7 +497,6 @@ NUMBER_TYPES: dict[str, tuple[KebaKeEnergyNumberEntityDescription, ...]] = {
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             native_step=0.5,
             translation_key="outdoor_temperature_excess_energy_limit",
-            icon="mdi:thermometer",
             scale=1,
         ),
     ),
@@ -518,7 +508,6 @@ NUMBER_TYPES: dict[str, tuple[KebaKeEnergyNumberEntityDescription, ...]] = {
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             native_step=0.5,
             translation_key="standby_temperature",
-            icon="mdi:thermometer-chevron-down",
             scale=1,
         ),
         KebaKeEnergyNumberEntityDescription(
@@ -543,7 +532,6 @@ NUMBER_TYPES: dict[str, tuple[KebaKeEnergyNumberEntityDescription, ...]] = {
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             native_step=0.5,
             translation_key="excess_energy_target_temperature",
-            icon="mdi:sun-thermometer",
             scale=1,
         ),
         KebaKeEnergyNumberEntityDescription(
@@ -555,7 +543,6 @@ NUMBER_TYPES: dict[str, tuple[KebaKeEnergyNumberEntityDescription, ...]] = {
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             native_step=0.1,
             translation_key="excess_energy_target_temperature_hysteresis",
-            icon="mdi:thermometer-lines",
             scale=1,
         ),
     ),

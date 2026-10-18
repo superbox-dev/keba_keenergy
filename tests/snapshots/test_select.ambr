@@ -3,7 +3,6 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Pufferspeicher 1 Betriebsart',
-      <EntityStateAttribute.ICON: 'icon'>: 'mdi:cog',
       <SelectEntityCapabilityAttribute.OPTIONS: 'options'>: list([
         'off',
         'on',
@@ -29,7 +28,6 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Pufferspeicher 2 Betriebsart',
-      <EntityStateAttribute.ICON: 'icon'>: 'mdi:cog',
       <SelectEntityCapabilityAttribute.OPTIONS: 'options'>: list([
         'off',
         'on',
@@ -55,7 +53,6 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Externe Wärmequelle 1 Betriebsart',
-      <EntityStateAttribute.ICON: 'icon'>: 'mdi:cog',
       <SelectEntityCapabilityAttribute.OPTIONS: 'options'>: list([
         'off',
         'on',
@@ -79,7 +76,6 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Externe Wärmequelle 2 Betriebsart',
-      <EntityStateAttribute.ICON: 'icon'>: 'mdi:cog',
       <SelectEntityCapabilityAttribute.OPTIONS: 'options'>: list([
         'off',
         'on',
@@ -103,7 +99,6 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Heizkreis 2 Kühlkurve',
-      <EntityStateAttribute.ICON: 'icon'>: 'mdi:chart-bell-curve-cumulative',
       <SelectEntityCapabilityAttribute.OPTIONS: 'options'>: list([
         'HC1',
         'HC2',
@@ -129,7 +124,6 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Heizkreis 1 Heizkurve',
-      <EntityStateAttribute.ICON: 'icon'>: 'mdi:chart-bell-curve-cumulative',
       <SelectEntityCapabilityAttribute.OPTIONS: 'options'>: list([
         'HC1',
         'HC2',
@@ -155,7 +149,6 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Warmwasserspeicher 1 Betriebsart',
-      <EntityStateAttribute.ICON: 'icon'>: 'mdi:cog',
       <SelectEntityCapabilityAttribute.OPTIONS: 'options'>: list([
         'off',
         'auto',
@@ -183,7 +176,6 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Warmwasserspeicher 2 Betriebsart',
-      <EntityStateAttribute.ICON: 'icon'>: 'mdi:cog',
       <SelectEntityCapabilityAttribute.OPTIONS: 'options'>: list([
         'off',
         'auto',
@@ -211,7 +203,6 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Solarkreis 1 Betriebsart',
-      <EntityStateAttribute.ICON: 'icon'>: 'mdi:cog',
       <SelectEntityCapabilityAttribute.OPTIONS: 'options'>: list([
         'off',
         'on',
@@ -235,7 +226,6 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Solarkreis 2 Betriebsart',
-      <EntityStateAttribute.ICON: 'icon'>: 'mdi:cog',
       <SelectEntityCapabilityAttribute.OPTIONS: 'options'>: list([
         'off',
         'on',
@@ -259,7 +249,6 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Buffer tank 1 Operating mode',
-      <EntityStateAttribute.ICON: 'icon'>: 'mdi:cog',
       <SelectEntityCapabilityAttribute.OPTIONS: 'options'>: list([
         'off',
         'on',
@@ -285,7 +274,6 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Buffer tank 2 Operating mode',
-      <EntityStateAttribute.ICON: 'icon'>: 'mdi:cog',
       <SelectEntityCapabilityAttribute.OPTIONS: 'options'>: list([
         'off',
         'on',
@@ -311,7 +299,6 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'External heat source 1 Operating mode',
-      <EntityStateAttribute.ICON: 'icon'>: 'mdi:cog',
       <SelectEntityCapabilityAttribute.OPTIONS: 'options'>: list([
         'off',
         'on',
@@ -335,7 +322,6 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'External heat source 2 Operating mode',
-      <EntityStateAttribute.ICON: 'icon'>: 'mdi:cog',
       <SelectEntityCapabilityAttribute.OPTIONS: 'options'>: list([
         'off',
         'on',
@@ -359,7 +345,6 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Heating circuit 2 Cooling curve',
-      <EntityStateAttribute.ICON: 'icon'>: 'mdi:chart-bell-curve-cumulative',
       <SelectEntityCapabilityAttribute.OPTIONS: 'options'>: list([
         'HC1',
         'HC2',
@@ -385,7 +370,6 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Heating circuit 1 Heating curve',
-      <EntityStateAttribute.ICON: 'icon'>: 'mdi:chart-bell-curve-cumulative',
       <SelectEntityCapabilityAttribute.OPTIONS: 'options'>: list([
         'HC1',
         'HC2',
@@ -411,7 +395,6 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Hot water tank 1 Operating mode',
-      <EntityStateAttribute.ICON: 'icon'>: 'mdi:cog',
       <SelectEntityCapabilityAttribute.OPTIONS: 'options'>: list([
         'off',
         'auto',
@@ -439,7 +422,6 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Hot water tank 2 Operating mode',
-      <EntityStateAttribute.ICON: 'icon'>: 'mdi:cog',
       <SelectEntityCapabilityAttribute.OPTIONS: 'options'>: list([
         'off',
         'auto',
@@ -467,7 +449,6 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Solar circuit 1 Operating mode',
-      <EntityStateAttribute.ICON: 'icon'>: 'mdi:cog',
       <SelectEntityCapabilityAttribute.OPTIONS: 'options'>: list([
         'off',
         'on',
@@ -491,7 +472,6 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Solar circuit 2 Operating mode',
-      <EntityStateAttribute.ICON: 'icon'>: 'mdi:cog',
       <SelectEntityCapabilityAttribute.OPTIONS: 'options'>: list([
         'off',
         'on',
@@ -515,7 +495,6 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Heizkreis 1 Betriebsart',
-      <EntityStateAttribute.ICON: 'icon'>: 'mdi:cog',
       <SelectEntityCapabilityAttribute.OPTIONS: 'options'>: list([
         'off',
         'auto',
@@ -547,7 +526,6 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Heizkreis 2 Betriebsart',
-      <EntityStateAttribute.ICON: 'icon'>: 'mdi:cog',
       <SelectEntityCapabilityAttribute.OPTIONS: 'options'>: list([
         'off',
         'auto',
@@ -577,7 +555,6 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Bedieneinheit Betriebsart',
-      <EntityStateAttribute.ICON: 'icon'>: 'mdi:cog',
       <SelectEntityCapabilityAttribute.OPTIONS: 'options'>: list([
         'standby',
         'summer',
@@ -607,7 +584,6 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Heating circuit 1 Operating mode',
-      <EntityStateAttribute.ICON: 'icon'>: 'mdi:cog',
       <SelectEntityCapabilityAttribute.OPTIONS: 'options'>: list([
         'off',
         'auto',
@@ -639,7 +615,6 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Heating circuit 2 Operating mode',
-      <EntityStateAttribute.ICON: 'icon'>: 'mdi:cog',
       <SelectEntityCapabilityAttribute.OPTIONS: 'options'>: list([
         'off',
         'auto',
@@ -669,7 +644,6 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Control unit Operating mode',
-      <EntityStateAttribute.ICON: 'icon'>: 'mdi:cog',
       <SelectEntityCapabilityAttribute.OPTIONS: 'options'>: list([
         'standby',
         'summer',
@@ -699,7 +673,6 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Heizkreis 1 Betriebsart',
-      <EntityStateAttribute.ICON: 'icon'>: 'mdi:cog',
       <SelectEntityCapabilityAttribute.OPTIONS: 'options'>: list([
         'off',
         'auto',
@@ -731,7 +704,6 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Heizkreis 2 Betriebsart',
-      <EntityStateAttribute.ICON: 'icon'>: 'mdi:cog',
       <SelectEntityCapabilityAttribute.OPTIONS: 'options'>: list([
         'off',
         'auto',
@@ -763,7 +735,6 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Bedieneinheit Betriebsart',
-      <EntityStateAttribute.ICON: 'icon'>: 'mdi:cog',
       <SelectEntityCapabilityAttribute.OPTIONS: 'options'>: list([
         'standby',
         'summer',
@@ -789,7 +760,6 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Heating circuit 1 Operating mode',
-      <EntityStateAttribute.ICON: 'icon'>: 'mdi:cog',
       <SelectEntityCapabilityAttribute.OPTIONS: 'options'>: list([
         'off',
         'auto',
@@ -821,7 +791,6 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Heating circuit 2 Operating mode',
-      <EntityStateAttribute.ICON: 'icon'>: 'mdi:cog',
       <SelectEntityCapabilityAttribute.OPTIONS: 'options'>: list([
         'off',
         'auto',
@@ -853,7 +822,6 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Control unit Operating mode',
-      <EntityStateAttribute.ICON: 'icon'>: 'mdi:cog',
       <SelectEntityCapabilityAttribute.OPTIONS: 'options'>: list([
         'standby',
         'summer',
