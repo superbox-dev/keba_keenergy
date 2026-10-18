@@ -130,7 +130,8 @@ provide are not created. Changes are written to the control unit, see [Known lim
 - **Numbers**: target room temperatures (day, night, away, offset, PV surplus), heating and cooling limits,
   heating and cooling curve offset and slope
 - **Selects**: operating mode, heating curve, cooling curve
-- **Switches**: use PV surplus, use heating curve, use cooling curve
+- **Switches**: use PV surplus, use heating curve, use cooling curve (only for cooling circuits, a heating and cooling
+  circuit uses one setting for both and only has **Use heating curve**)
 - **Sensors**: room temperature and humidity, dew point, flow and return flow temperatures, mixer, pump speed,
   heat and cool request, the current setpoints
 - **Binary sensor**: pump state

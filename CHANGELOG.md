@@ -40,6 +40,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixed an untranslated error of the `keba_keenergy.set_heating_curve_points` action if the Web HMI is not reachable.
 - Fixed an untranslated error of the `keba_keenergy.set_away_date_range` action for an invalid date.
 - Fixed an error of number, climate and water heater entities if the Web HMI provides no limits.
+- Fixed a second switch `Use cooling curve` for heating circuits that heat and cool. Both switches changed the same
+  setting, so these heating circuits now only have the switch `Use heating curve`. The switch `Use cooling curve` of
+  such a heating circuit is no longer provided and can be deleted.
 - Fixed the icon of the climate entity, which showed off for a heating circuit in the HVAC mode `auto`, `cool` or
   `heat_cool`. The icon is now in `icons.json`, so the climate entities no longer have an `icon` state attribute.
 

@@ -14,6 +14,8 @@ from homeassistant.const import SERVICE_TURN_OFF
 from homeassistant.const import SERVICE_TURN_ON
 from homeassistant.core import HomeAssistant
 from homeassistant.core import State
+from homeassistant.helpers import entity_registry as er
+from keba_keenergy_api.constants import HeatCircuitMode
 
 from tests.api_data import HEATING_CURVE_NAMES_RESPONSE
 from tests.api_data import HEATING_CURVES_RESPONSE_1_1
@@ -21,6 +23,7 @@ from tests.api_data import MULTIPLE_POSITION_DATA_RESPONSE_1
 from tests.api_data import MULTIPLE_POSITION_DATA_RESPONSE_2
 from tests.api_data import MULTIPLE_POSITIONS_RESPONSE
 from tests.api_data import get_multiple_position_fixed_data_response
+from tests.api_data import update_response
 
 if TYPE_CHECKING:
     from syrupy.assertion import SnapshotAssertion
@@ -222,3 +225,32 @@ async def test_unchanged_state(
     )
 
     assert fake_api.write_requests() == []
+
+
+@pytest.mark.usefixtures("entity_registry_enabled_by_default")
+async def test_heating_and_cooling_circuit_has_one_curve_switch(
+    hass: HomeAssistant,
+    fake_api: FakeKebaKeEnergyAPI,
+) -> None:
+    """Test that a heating and cooling circuit only has the heating curve switch, because both use one setting."""
+    fake_api.responses = [
+        MULTIPLE_POSITIONS_RESPONSE,
+        HEATING_CURVE_NAMES_RESPONSE,
+        update_response(
+            get_multiple_position_fixed_data_response(),
+            "APPL.CtrlAppl.sParam.options.heatCircuit[1].type",
+            value=str(HeatCircuitMode.HEATING_AND_COOLING.value),
+        ),
+        MULTIPLE_POSITION_DATA_RESPONSE_1,
+        *HEATING_CURVES_RESPONSE_1_1,
+    ]
+    await fake_api.setup_integration()
+
+    assert sorted(
+        entry.unique_id
+        for entry in er.async_entries_for_config_entry(er.async_get(hass), fake_api.config_entry.entry_id)
+        if entry.domain == SWITCH_DOMAIN and "_curve_" in entry.unique_id
+    ) == [
+        "12345678_heat_circuit_use_heating_curve_1",
+        "12345678_heat_circuit_use_heating_curve_2",
+    ]
