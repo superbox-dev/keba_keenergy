@@ -110,7 +110,7 @@ class KebaKeEnergyHotWaterTankEntity(KebaKeEnergyWaterHeaterTankEntity, WaterHea
 
         self.entity_id: str = f"{WATER_HEATER_DOMAIN}.{DOMAIN}_{self._attr_unique_id}"
 
-        self._pending_key = "target_temperature_offset"
+        self._pending_key = "target_temperature"
         self._pending_section = HotWaterTank.TARGET_TEMPERATURE
         self._pending_device_numbers = self.coordinator.hot_water_tank_numbers
 

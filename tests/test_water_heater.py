@@ -455,3 +455,33 @@ async def test_unchanged_state(
     )
 
     assert fake_api.write_requests() == []
+
+
+async def test_set_unchanged_target_temperature(
+    hass: HomeAssistant,
+    fake_api: FakeKebaKeEnergyAPI,
+) -> None:
+    """Test that the current target temperature of a hot water tank is not written again."""
+    fake_api.responses = [
+        DEFAULT_POSITION_RESPONSE,
+        HEATING_CURVE_NAMES_RESPONSE,
+        DEFAULT_POSITION_FIXED_DATA_RESPONSE,
+        get_single_position_data_response(hot_water_tank_target_temperature="51"),
+        *HEATING_CURVES_RESPONSE_1_1,
+    ]
+    await fake_api.setup_integration()
+
+    await hass.services.async_call(
+        domain=WATER_HEATER_DOMAIN,
+        service=SERVICE_SET_TEMPERATURE,
+        service_data={
+            ATTR_ENTITY_ID: ENTITY_ID,
+            ATTR_TEMPERATURE: 51,
+        },
+        blocking=True,
+    )
+
+    async_fire_time_changed(hass, dt_util.utcnow() + timedelta(seconds=FLASH_WRITE_DELAY))
+    await hass.async_block_till_done()
+
+    assert fake_api.write_requests() == []
