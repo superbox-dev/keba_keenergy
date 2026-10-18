@@ -31,6 +31,7 @@ from tests.api_data import get_multiple_position_fixed_data_response
 from tests.api_data import get_single_position_data_response
 
 if TYPE_CHECKING:
+    from pytest_homeassistant_custom_component.common import MockConfigEntry
     from syrupy.assertion import SnapshotAssertion
 
     from tests.conftest import FakeKebaKeEnergyAPI
@@ -411,6 +412,39 @@ async def test_set_unchanged_value(
         },
         blocking=True,
     )
+
+    async_fire_time_changed(hass, dt_util.utcnow() + timedelta(seconds=FLASH_WRITE_DELAY))
+    await hass.async_block_till_done()
+
+    assert fake_api.write_requests() == []
+
+
+async def test_debounced_value_not_written_after_unload(
+    hass: HomeAssistant,
+    config_entry: MockConfigEntry,
+    fake_api: FakeKebaKeEnergyAPI,
+) -> None:
+    """Test that a pending debounced value is not written after the integration was unloaded."""
+    fake_api.responses = [
+        DEFAULT_POSITION_RESPONSE,
+        HEATING_CURVE_NAMES_RESPONSE,
+        DEFAULT_POSITION_FIXED_DATA_RESPONSE,
+        get_single_position_data_response(heat_circuit_target_temperature_offset="1.5"),
+        *HEATING_CURVES_RESPONSE_1_1,
+    ]
+    await fake_api.setup_integration()
+
+    await hass.services.async_call(
+        domain=NUMBER_DOMAIN,
+        service=SERVICE_SET_VALUE,
+        service_data={
+            ATTR_ENTITY_ID: "number.keba_keenergy_12345678_heat_circuit_target_temperature_offset",
+            ATTR_VALUE: 0.5,
+        },
+        blocking=True,
+    )
+
+    await hass.config_entries.async_unload(config_entry.entry_id)
 
     async_fire_time_changed(hass, dt_util.utcnow() + timedelta(seconds=FLASH_WRITE_DELAY))
     await hass.async_block_till_done()

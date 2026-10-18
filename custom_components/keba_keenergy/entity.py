@@ -128,6 +128,14 @@ class KebaKeEnergyBaseEntity(
 
         return unique_id
 
+    async def async_will_remove_from_hass(self) -> None:
+        """Cancel a pending debounced write when the entity is removed."""
+        if self._async_call_later:
+            self._async_call_later()
+            self._async_call_later = None
+
+        await super().async_will_remove_from_hass()
+
     @property
     def position(self) -> int | None:
         """Return device position number."""
