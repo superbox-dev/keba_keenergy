@@ -17,6 +17,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Linked the GitHub release notes to the matching section of the changelog.
 - Extended the issue templates with the environment and debug logs.
 
+### Fixed
+
+- Fixed the away date range being written to the control unit even if it did not change. ([Issue #23][issue-23])
+
 ## [1.10.4] - 2026-09-30
 
 ### Changed

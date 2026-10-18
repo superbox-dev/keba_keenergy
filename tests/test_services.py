@@ -75,6 +75,35 @@ async def test_set_away_range(
     )
 
 
+async def test_set_unchanged_away_range(
+    hass: HomeAssistant,
+    config_entry: MockConfigEntry,
+    fake_api: FakeKebaKeEnergyAPI,
+) -> None:
+    """Test that the away date range is not written if the heating circuits already have it."""
+    fake_api.responses = [
+        MULTIPLE_POSITIONS_RESPONSE,
+        HEATING_CURVE_NAMES_RESPONSE,
+        get_multiple_position_fixed_data_response(),
+        MULTIPLE_POSITION_DATA_RESPONSE_1,
+        *HEATING_CURVES_RESPONSE_1_1,
+    ]
+    await fake_api.setup_integration()
+
+    await hass.services.async_call(
+        domain=DOMAIN,
+        service=SERVICE_SET_AWAY_DATE_RANGE,
+        service_data={
+            ATTR_CONFIG_ENTRY: config_entry.entry_id,
+            ATTR_START_DATE: "2026-01-22",
+            ATTR_END_DATE: "2026-01-22",
+        },
+        blocking=True,
+    )
+
+    assert fake_api.write_requests() == []
+
+
 async def test_set_away_range_with_invalid_start_and_end_date(
     hass: HomeAssistant,
     config_entry: MockConfigEntry,

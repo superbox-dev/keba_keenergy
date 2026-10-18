@@ -254,7 +254,7 @@ REQUEST_DATA_GROUPS: dict[SectionPrefix, list[Section]] = {
 }
 
 
-def is_int_value_list(value: object) -> TypeGuard[list[int]]:
+def is_int_value_list(value: object) -> TypeGuard[list[Value]]:
     """Check if the value list only contains integer values."""
     return isinstance(value, list) and all(isinstance(v, dict) and isinstance(v.get("value"), int) for v in value)
 
@@ -583,7 +583,9 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
                 away_start_date: list[int] = [int(start_timestamp) for _ in range(self.position.heat_circuit)]
                 away_end_date: list[int] = [int(end_timestamp) for _ in range(self.position.heat_circuit)]
 
-                if current_away_start_date != away_start_date or current_away_end_date != away_end_date:
+                if [value["value"] for value in current_away_start_date] != away_start_date or [
+                    value["value"] for value in current_away_end_date
+                ] != away_end_date:
                     await self.async_write_data(
                         request={
                             HeatCircuit.AWAY_START_DATE: away_start_date,
