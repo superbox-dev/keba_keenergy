@@ -36,6 +36,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Fixed the missing translations of the states of the `excess_energy_mode` and `mixer_position` sensors.
 - Fixed the missing state icons of the operating mode sensors since 1.10.0.
 - Fixed the away date range being written to the control unit even if it did not change. ([Issue #23][issue-23])
 - Fixed the target temperature of a hot water tank being written to the control unit even if it did not change.

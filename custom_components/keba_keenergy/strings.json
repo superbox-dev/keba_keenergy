@@ -412,7 +412,12 @@
                 "name": "Maximum runtime (PV surplus)"
             },
             "excess_energy_mode": {
-                "name": "PV surplus"
+                "name": "PV surplus",
+                "state": {
+                    "off": "Off",
+                    "heating": "Heating",
+                    "cooling": "Cooling"
+                }
             },
             "excess_energy_operating_time": {
                 "name": "Operating hours (PV surplus)"
@@ -537,7 +542,12 @@
                 "name": "Flow temperature (mixer)"
             },
             "mixer_position": {
-                "name": "Mixer"
+                "name": "Mixer",
+                "state": {
+                    "closed": "Closed",
+                    "off": "Off",
+                    "open": "Open"
+                }
             },
             "mixer_return_flow_temperature": {
                 "name": "Return flow temperature (mixer)"

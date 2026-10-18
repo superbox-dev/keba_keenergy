@@ -412,7 +412,12 @@
                 "name": "Maximale Laufzeit (PV-Überschuss)"
             },
             "excess_energy_mode": {
-                "name": "PV-Überschuss"
+                "name": "PV-Überschuss",
+                "state": {
+                    "off": "Aus",
+                    "heating": "Heizen",
+                    "cooling": "Kühlen"
+                }
             },
             "excess_energy_operating_time": {
                 "name": "Betriebsstunden (PV-Überschuss)"
@@ -537,7 +542,12 @@
                 "name": "Vorlauftemperatur (Mischer)"
             },
             "mixer_position": {
-                "name": "Mischer"
+                "name": "Mischer",
+                "state": {
+                    "closed": "Geschlossen",
+                    "off": "Aus",
+                    "open": "Offen"
+                }
             },
             "mixer_return_flow_temperature": {
                 "name": "Rücklauftemperatur (Mischer)"
