@@ -13,7 +13,10 @@ from typing import Final
 from typing import TypeVar
 from typing import overload
 
+from homeassistant.core import HassJob
+from homeassistant.core import callback
 from homeassistant.helpers.device_registry import DeviceInfo
+from homeassistant.helpers.event import async_call_later
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 from keba_keenergy_api.constants import BufferTank
 from keba_keenergy_api.constants import ExternalHeatSource
@@ -26,6 +29,7 @@ from keba_keenergy_api.constants import SolarCircuit
 from keba_keenergy_api.constants import System
 
 from .const import DOMAIN
+from .const import FLASH_WRITE_DELAY
 from .const import MANUFACTURER
 from .const import MANUFACTURER_INO
 from .const import MANUFACTURER_MTEC
@@ -79,6 +83,7 @@ class KebaKeEnergyEntityDescriptionMixin:
     new_key: str | None = None  # new key name (required for future migration of the entity id)
     ref_key: str | None = None  # reference to another key (used for entity id)
     condition: Callable[[KebaKeEnergyDataUpdateCoordinator, int], bool] | None = None
+    entity_class: type[Any] | None = None  # entity class instead of the default class of the platform
 
 
 class KebaKeEnergyBaseEntity(
@@ -103,19 +108,25 @@ class KebaKeEnergyBaseEntity(
         self.index: int | None = index
         self.key_index: int | None = key_index
 
-        self._attr_unique_id: str | None = entry.unique_id
-
-        if self.key_index is not None:
-            self._attr_unique_id = f"{self._attr_unique_id}_{self.key_index + 1}"
-
-        if self.position is not None:
-            self._attr_unique_id = f"{self._attr_unique_id}_{self.position}"
+        self._attr_unique_id: str | None = self._build_unique_id()
 
         self._async_call_later: CALLBACK_TYPE | None = None
         self._pending_value: float | None = None
         self._pending_key: str = ""
         self._pending_section: Section | None = None
         self._pending_device_numbers: int | None = None
+
+    def _build_unique_id(self, *parts: str) -> str:
+        """Return `<entry unique_id>[_<part>...][_<key_index + 1>][_<index + 1>]`."""
+        unique_id: str = "_".join((str(self.entry.unique_id), *parts))
+
+        if self.key_index is not None:
+            unique_id = f"{unique_id}_{self.key_index + 1}"
+
+        if self.position is not None:
+            unique_id = f"{unique_id}_{self.position}"
+
+        return unique_id
 
     @property
     def position(self) -> int | None:
@@ -190,22 +201,14 @@ class KebaKeEnergyBaseEntity(
     @property
     def device_info(self) -> DeviceInfo:
         """Return updated device specific attributes."""
-        data: dict[str, Any] = {
-            "manufacturer": self.device_manufacturer,
-            "model": self.device_model,
-            "sw_version": (self.coordinator.device_hmi_sw_version if self.is_system_device else None),
-            "translation_key": self._translation_key,
-            "translation_placeholders": self._translation_placeholders,
-        }
-
         _device_info: DeviceInfo = DeviceInfo(
             configuration_url=self.coordinator.configuration_url,
             identifiers={(DOMAIN, self.device_identifier)},
-            model=data["model"],
-            manufacturer=data["manufacturer"],
-            sw_version=data["sw_version"],
-            translation_key=data["translation_key"],
-            translation_placeholders=data["translation_placeholders"],
+            model=self.device_model,
+            manufacturer=self.device_manufacturer,
+            sw_version=self.coordinator.device_hmi_sw_version if self.is_system_device else None,
+            translation_key=self._translation_key,
+            translation_placeholders=self._translation_placeholders,
         )
 
         if not self.is_system_device:
@@ -220,7 +223,7 @@ class KebaKeEnergyBaseEntity(
         *,
         section: Section,
         device_numbers: int | None = None,
-        ignore_daily_write_count: bool = False,
+        ignore_weekly_write_count: bool = False,
     ) -> None:
         """Write data to the KEBA KeEnergy API."""
         current_index: int = self.index or 0
@@ -247,13 +250,29 @@ class KebaKeEnergyBaseEntity(
             key_index=self.key_index,
         )
 
-        await self.coordinator.async_write_data(request=request, ignore_weekly_write_count=ignore_daily_write_count)
+        await self.coordinator.async_write_data(request=request, ignore_weekly_write_count=ignore_weekly_write_count)
+
+    def _schedule_debounced_write(self, value: float | None, /) -> None:
+        """Write the value after `FLASH_WRITE_DELAY`, a new value restarts the delay."""
+        self._pending_value = value
+
+        if self._async_call_later:
+            self._async_call_later()
+
+        self._async_call_later = async_call_later(
+            hass=self.hass,
+            delay=FLASH_WRITE_DELAY,
+            action=HassJob(
+                self._async_debounced_write_data,
+                cancel_on_shutdown=True,
+            ),
+        )
 
     async def _async_debounced_write_data(self, _: datetime) -> None:
         """Write data (debounced) to the KEBA KeEnergy API."""
         self._async_call_later = None
 
-        current_value = self.get_value(self._pending_key, expected_type=float)
+        current_value: float | None = self.get_value(self._pending_key, expected_type=float)
 
         if self._pending_section and self._pending_value is not None and self._pending_value != current_value:
             await self._async_write_data(
@@ -282,10 +301,7 @@ class KebaKeEnergyBaseEntity(
     def get_value(self, key: str, /, *, expected_type: type[T] | None = None) -> StateType:
         """Get value from the API by key."""
         entity_data: Value | None = self.get_entity_data(key)
-        value: StateType = None
-
-        if isinstance(entity_data, dict):
-            value = entity_data["value"]
+        value: StateType = entity_data.get("value") if entity_data else None
 
         if expected_type and value is not None:
             return expected_type(value)
@@ -311,18 +327,7 @@ class KebaKeEnergyEntity(KebaKeEnergyBaseEntity):
 
     def get_unique_id(self, key: str, /) -> str | None:
         """Generate unique id."""
-        unique_id: str | None = f"{self.entry.unique_id}_{self.section_id}_{key}"
-
-        if self.is_system_device:
-            unique_id = f"{self.entry.unique_id}_{key}"
-
-        if self.key_index is not None:
-            unique_id = f"{unique_id}_{self.key_index + 1}"
-
-        if self.position is not None:
-            unique_id = f"{unique_id}_{self.position}"
-
-        return unique_id
+        return self._build_unique_id(key) if self.is_system_device else self._build_unique_id(self.section_id, key)
 
     @property
     def section(self) -> Section:
@@ -332,10 +337,11 @@ class KebaKeEnergyEntity(KebaKeEnergyBaseEntity):
     @property
     def device_numbers(self) -> int | None:
         """Return the number of devices of the section, or None for the control unit."""
-        return None if self.is_system_device else getattr(self.coordinator.position, self.section_id, 0)
+        return None if self.is_system_device else self.coordinator.device_count(self.section_id)
 
 
-async def _async_setup_entities(
+@callback
+def _async_setup_entities(
     entry: KebaKeEnergyConfigEntry,
     async_add_entities: AddEntitiesCallback,
     entity_types: dict[str, tuple[Any, ...]],
@@ -348,11 +354,13 @@ async def _async_setup_entities(
 
     for section_id, section_data in coordinator.data.items():
         for description in entity_types.get(section_id, ()):
-            for key, values in section_data.items():
-                if key not in (description.key, description.new_key):
+            for key in (description.key, description.new_key):
+                values: list[list[Value]] | list[Value] | Value | None = section_data.get(key) if key else None
+
+                if values is None:
                     continue
 
-                device_numbers = len(values) if isinstance(values, list) else 1
+                device_numbers: int = len(values) if isinstance(values, list) else 1
 
                 for index in range(device_numbers):
                     if description.condition is not None and not description.condition(coordinator, index):
@@ -371,7 +379,7 @@ async def _async_setup_entities(
                         index,
                     )
 
-                    cls: type[Any] = getattr(description, "entity_class", entity_cls)
+                    cls: type[Any] = description.entity_class or entity_cls
 
                     entities.append(
                         cls(

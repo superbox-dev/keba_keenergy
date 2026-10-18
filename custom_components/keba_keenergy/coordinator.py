@@ -271,8 +271,6 @@ def get_value_by_index(
 class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueResponse]]):
     """Class to manage fetching KEBA KeEnergy data API."""
 
-    _attr_has_entity_name: bool = True
-
     def __init__(
         self,
         hass: HomeAssistant,
@@ -458,7 +456,7 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
                 "Requesting section '%s' (multiplier=%d, position=%d)",
                 section.value,
                 multiplier,
-                getattr(self.position, section.value, 0),
+                self.device_count(section),
             )
 
         response: dict[str, ValueResponse] = await self._api_call_for_update(
@@ -648,6 +646,11 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
         """Return number of hot water tanks."""
         return self.position.hot_water_tank if self.position else 0
 
+    def device_count(self, prefix: str, /) -> int:
+        """Return the number of devices of the section."""
+        count: object = getattr(self.position, prefix, 0)
+        return count if isinstance(count, int) else 0
+
     def has_device(self, prefix: SectionPrefix) -> bool:
         """Return True if the device group is available in this setup."""
         if prefix == SectionPrefix.SYSTEM:
@@ -656,7 +659,7 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
         if prefix == SectionPrefix.PHOTOVOLTAICS:
             return self.has_photovoltaics()
 
-        return bool(self.position and getattr(self.position, prefix, 0) > 0)
+        return self.device_count(prefix) > 0
 
     def has_outdoor_temperature(self) -> bool:
         """Check if outdoor temperature sensor is available."""

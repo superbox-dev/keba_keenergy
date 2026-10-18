@@ -101,9 +101,8 @@ class KebaKeEnergySensorEntity(KebaKeEnergyEntity, SensorEntity):
     @property
     def native_value(self) -> StateType:
         """Return the state of the sensor."""
-        return self.entity_description.value(
-            self.get_value(self.entity_description.new_key or self.entity_description.key),
-        )
+        value: StateType = self.get_value(self.entity_description.new_key or self.entity_description.key)
+        return None if value is None else self.entity_description.value(value)
 
     @property
     def extra_state_attributes(self) -> Mapping[str, Any] | None:
@@ -1263,7 +1262,7 @@ async def async_setup_entry(
     async_add_entities: AddEntitiesCallback,
 ) -> None:
     """Set up KEBA KeEnergy sensors from a config entry."""
-    await _async_setup_entities(
+    _async_setup_entities(
         entry,
         async_add_entities,
         SENSOR_TYPES,

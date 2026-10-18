@@ -14,6 +14,7 @@ from typing import Final
 import probatio
 from ciso8601 import parse_datetime_as_naive
 from homeassistant.config_entries import ConfigEntryState
+from homeassistant.core import callback
 from homeassistant.exceptions import ServiceValidationError
 from homeassistant.helpers import config_validation as cv
 from homeassistant.helpers import selector
@@ -92,7 +93,7 @@ HEATING_CURVE_POINTS_SCHEMA: probatio.Schema = probatio.Schema(
 )
 
 
-def __get_coordinator(call: ServiceCall) -> KebaKeEnergyDataUpdateCoordinator:
+def _get_coordinator(call: ServiceCall) -> KebaKeEnergyDataUpdateCoordinator:
     """Get the coordinator from the entry."""
     entry_id: str = call.data[ATTR_CONFIG_ENTRY]
     entry: KebaKeEnergyConfigEntry | None = call.hass.config_entries.async_get_entry(entry_id)
@@ -121,7 +122,7 @@ def __get_coordinator(call: ServiceCall) -> KebaKeEnergyDataUpdateCoordinator:
 
 
 async def _async_set_away_range(call: ServiceCall) -> None:
-    coordinator: KebaKeEnergyDataUpdateCoordinator = __get_coordinator(call)
+    coordinator: KebaKeEnergyDataUpdateCoordinator = _get_coordinator(call)
 
     start_date: str = call.data[ATTR_START_DATE]
     end_date: str = call.data[ATTR_END_DATE]
@@ -147,7 +148,7 @@ async def _async_set_away_range(call: ServiceCall) -> None:
 
 
 async def _async_set_heating_curve_points(call: ServiceCall) -> None:
-    coordinator: KebaKeEnergyDataUpdateCoordinator = __get_coordinator(call)
+    coordinator: KebaKeEnergyDataUpdateCoordinator = _get_coordinator(call)
 
     heating_curve: str = call.data[ATTR_HEATING_CURVE]
     heating_curves: HeatingCurves = await coordinator.api.heat_circuit.get_heating_curve_points()
@@ -184,7 +185,8 @@ async def _async_set_heating_curve_points(call: ServiceCall) -> None:
     )
 
 
-async def async_setup_services(hass: HomeAssistant) -> None:
+@callback
+def async_setup_services(hass: HomeAssistant) -> None:
     """KEBA KeEnergy services setup."""
     hass.services.async_register(
         DOMAIN,

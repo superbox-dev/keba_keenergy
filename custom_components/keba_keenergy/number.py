@@ -18,12 +18,9 @@ from homeassistant.const import PERCENTAGE
 from homeassistant.const import EntityCategory
 from homeassistant.const import UnitOfTemperature
 from homeassistant.const import UnitOfTime
-from homeassistant.core import HassJob
-from homeassistant.helpers.event import async_call_later
 from keba_keenergy_api.constants import SectionPrefix
 
 from .const import DOMAIN
-from .const import FLASH_WRITE_DELAY
 from .entity import KebaKeEnergyEntity
 from .entity import KebaKeEnergyEntityDescriptionMixin
 from .entity import _async_setup_entities
@@ -98,34 +95,17 @@ class KebaKeEnergyNumberEntity(KebaKeEnergyEntity, NumberEntity):
     @property
     def native_value(self) -> float | None:
         """Return the state of the number."""
-        native_value: float | None
+        native_value: float | None = (
+            self._pending_value
+            if self._pending_value is not None and self._async_call_later
+            else self.get_value(self.entity_description.key, expected_type=float)
+        )
 
-        if self._pending_value is not None and self._async_call_later:
-            native_value = self._pending_value * self.entity_description.scale
-        else:
-            native_value = self.get_value(self.entity_description.key, expected_type=float)
-
-            if native_value:
-                native_value = native_value * self.entity_description.scale
-
-        return native_value
+        return None if native_value is None else native_value * self.entity_description.scale
 
     async def async_set_native_value(self, value: float) -> None:
         """Set new value."""
-        self._pending_value = value / self.entity_description.scale
-
-        if self._async_call_later:
-            self._async_call_later()
-            self._async_call_later = None
-
-        self._async_call_later = async_call_later(
-            hass=self.hass,
-            delay=FLASH_WRITE_DELAY,
-            action=HassJob(
-                self._async_debounced_write_data,
-                cancel_on_shutdown=True,
-            ),
-        )
+        self._schedule_debounced_write(value / self.entity_description.scale)
 
 
 NUMBER_TYPES: dict[str, tuple[KebaKeEnergyNumberEntityDescription, ...]] = {
@@ -566,7 +546,7 @@ async def async_setup_entry(
     async_add_entities: AddEntitiesCallback,
 ) -> None:
     """Set up KEBA KeEnergy numbers from a config entry."""
-    await _async_setup_entities(
+    _async_setup_entities(
         entry,
         async_add_entities,
         NUMBER_TYPES,

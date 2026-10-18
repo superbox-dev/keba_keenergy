@@ -27,8 +27,6 @@ from homeassistant.components.climate.const import HVACAction
 from homeassistant.components.climate.const import HVACMode
 from homeassistant.const import ATTR_TEMPERATURE
 from homeassistant.const import UnitOfTemperature
-from homeassistant.core import HassJob
-from homeassistant.helpers.event import async_call_later
 from homeassistant.util import dt as dt_util
 from keba_keenergy_api.constants import HeatCircuit
 from keba_keenergy_api.constants import HeatCircuitCoolRequest
@@ -38,7 +36,6 @@ from keba_keenergy_api.constants import SectionPrefix
 
 from .const import ATTR_OFFSET
 from .const import DOMAIN
-from .const import FLASH_WRITE_DELAY
 from .entity import KebaKeEnergyBaseEntity
 
 if TYPE_CHECKING:
@@ -91,8 +88,6 @@ class KebaKeEnergyClimateEntity(KebaKeEnergyBaseEntity, ClimateEntity):
     _attr_target_temperature_step: float = 0.5
     _attr_temperature_unit: str = UnitOfTemperature.CELSIUS
     _attr_name = None
-
-    _enable_turn_on_off_backwards_compatibility = False
 
     def __init__(
         self,
@@ -286,7 +281,6 @@ class KebaKeEnergyClimateEntity(KebaKeEnergyBaseEntity, ClimateEntity):
 
         if hvac_mode == HVACMode.AUTO:
             await self._async_set_away_date_range(PRESET_HOME)
-            self._attr_preset_mode = PRESET_HOME
 
         operating_mode: str | None = self.get_value("operating_mode", expected_type=str)
 
@@ -314,22 +308,10 @@ class KebaKeEnergyClimateEntity(KebaKeEnergyBaseEntity, ClimateEntity):
         temperature: object = kwargs.get(ATTR_TEMPERATURE)
         selected_target_temperature: float | None = self.get_value("selected_target_temperature", expected_type=float)
 
-        self._pending_value = (
+        self._schedule_debounced_write(
             temperature - selected_target_temperature
             if isinstance(temperature, int | float) and selected_target_temperature is not None
-            else None
-        )
-
-        if self._async_call_later:
-            self._async_call_later()
-
-        self._async_call_later = async_call_later(
-            hass=self.hass,
-            delay=FLASH_WRITE_DELAY,
-            action=HassJob(
-                self._async_debounced_write_data,
-                cancel_on_shutdown=True,
-            ),
+            else None,
         )
 
     async def _async_set_away_date_range(self, preset_mode: str, /) -> None:

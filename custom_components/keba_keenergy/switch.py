@@ -14,6 +14,7 @@ from homeassistant.components.switch import SwitchEntity
 from homeassistant.components.switch import SwitchEntityDescription
 from homeassistant.components.switch.const import DOMAIN as SWITCH_DOMAIN
 from homeassistant.const import EntityCategory
+from keba_keenergy_api.constants import BoolEnum
 from keba_keenergy_api.constants import SectionPrefix
 
 from .const import DOMAIN
@@ -62,9 +63,10 @@ class KebaKeEnergySwitchEntity(KebaKeEnergyEntity, SwitchEntity):
         )
 
     @property
-    def is_on(self) -> bool:
+    def is_on(self) -> bool | None:
         """Return true if the switch is on."""
-        return self.get_value(self.entity_description.key, expected_type=str) == "on"
+        value: str | None = self.get_value(self.entity_description.key, expected_type=str)
+        return None if value is None else value == BoolEnum.ON.name.lower()
 
     async def async_turn_off(self, **kwargs: object) -> None:  # noqa: ARG002
         """Turn the switch off."""
@@ -169,7 +171,7 @@ async def async_setup_entry(
     async_add_entities: AddEntitiesCallback,
 ) -> None:
     """Set up KEBA KeEnergy switches from a config entry."""
-    await _async_setup_entities(
+    _async_setup_entities(
         entry,
         async_add_entities,
         SWITCH_TYPES,

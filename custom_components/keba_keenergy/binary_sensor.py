@@ -14,6 +14,7 @@ from homeassistant.components.binary_sensor import BinarySensorDeviceClass
 from homeassistant.components.binary_sensor import BinarySensorEntity
 from homeassistant.components.binary_sensor import BinarySensorEntityDescription
 from homeassistant.const import EntityCategory
+from keba_keenergy_api.constants import BoolEnum
 from keba_keenergy_api.constants import SectionPrefix
 
 from .const import DOMAIN
@@ -211,9 +212,12 @@ class KebaKeEnergyBinarySensorEntity(KebaKeEnergyEntity, BinarySensorEntity):
         self.entity_id: str = f"{BINARY_SENSOR_DOMAIN}.{DOMAIN}_{self.unique_id}"
 
     @property
-    def is_on(self) -> bool:
+    def is_on(self) -> bool | None:
         """Return true if the binary sensor is on."""
-        return self.get_value(self.entity_description.new_key or self.entity_description.key, expected_type=str) == "on"
+        value: str | None = self.get_value(
+            self.entity_description.new_key or self.entity_description.key, expected_type=str
+        )
+        return None if value is None else value == BoolEnum.ON.name.lower()
 
 
 async def async_setup_entry(
@@ -222,7 +226,7 @@ async def async_setup_entry(
     async_add_entities: AddEntitiesCallback,
 ) -> None:
     """Set up KEBA KeEnergy binary sensors from a config entry."""
-    await _async_setup_entities(
+    _async_setup_entities(
         entry,
         async_add_entities,
         BINARY_SENSOR_TYPES,

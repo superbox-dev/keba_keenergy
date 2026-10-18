@@ -18,9 +18,6 @@ from homeassistant.components.water_heater.const import DOMAIN as WATER_HEATER_D
 from homeassistant.const import ATTR_TEMPERATURE
 from homeassistant.const import STATE_OFF
 from homeassistant.const import UnitOfTemperature
-from homeassistant.core import HassJob
-from homeassistant.core import HomeAssistant
-from homeassistant.helpers.event import async_call_later
 from keba_keenergy_api.constants import BufferTank
 from keba_keenergy_api.constants import BufferTankOperatingMode
 from keba_keenergy_api.constants import HotWaterTank
@@ -28,10 +25,10 @@ from keba_keenergy_api.constants import HotWaterTankOperatingMode
 from keba_keenergy_api.constants import SectionPrefix
 
 from .const import DOMAIN
-from .const import FLASH_WRITE_DELAY
 from .entity import KebaKeEnergyBaseEntity
 
 if TYPE_CHECKING:
+    from homeassistant.core import HomeAssistant
     from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
     from .coordinator import KebaKeEnergyConfigEntry
@@ -148,7 +145,7 @@ class KebaKeEnergyHotWaterTankEntity(KebaKeEnergyWaterHeaterTankEntity, WaterHea
     def current_operation(self) -> str | None:
         """Return current operation mode."""
         operating_mode: str | None = self.get_value("operating_mode", expected_type=str)
-        return HOT_WATER_TANK_OPERATING_MODE_TO_HA.get(operating_mode or "", STATE_OFF)
+        return HOT_WATER_TANK_OPERATING_MODE_TO_HA.get(operating_mode, STATE_OFF) if operating_mode else None
 
     async def async_turn_off(self, **kwargs: object) -> None:  # noqa: ARG002
         """Turn the hot water tank off."""
@@ -176,25 +173,13 @@ class KebaKeEnergyHotWaterTankEntity(KebaKeEnergyWaterHeaterTankEntity, WaterHea
                     key,
                     section=HotWaterTank.OPERATING_MODE,
                     device_numbers=self.coordinator.hot_water_tank_numbers,
-                    ignore_daily_write_count=operation_mode == STATE_PERFORMANCE,
+                    ignore_weekly_write_count=operation_mode == STATE_PERFORMANCE,
                 )
 
     async def async_set_temperature(self, **kwargs: object) -> None:
         """Set temperature for hot water tank."""
         temperature: object = kwargs.get(ATTR_TEMPERATURE)
-        self._pending_value = float(temperature) if isinstance(temperature, int | float) else None
-
-        if self._async_call_later:
-            self._async_call_later()
-
-        self._async_call_later = async_call_later(
-            hass=self.hass,
-            delay=FLASH_WRITE_DELAY,
-            action=HassJob(
-                self._async_debounced_write_data,
-                cancel_on_shutdown=True,
-            ),
-        )
+        self._schedule_debounced_write(float(temperature) if isinstance(temperature, int | float) else None)
 
 
 class KebaKeEnergyBufferTankEntity(KebaKeEnergyWaterHeaterTankEntity, WaterHeaterEntity):
@@ -216,10 +201,7 @@ class KebaKeEnergyBufferTankEntity(KebaKeEnergyWaterHeaterTankEntity, WaterHeate
         super().__init__(coordinator, description=description, entry=entry, section_id=section_id, index=index)
         self._attr_operation_list = list(BUFFER_TANK_STATE_TO_HA.values())
 
-        self._attr_unique_id: str | None = f"{self.entry.unique_id}_{self.section_id}"
-
-        if self.position is not None:
-            self._attr_unique_id = f"{self._attr_unique_id}_{self.position}"
+        self._attr_unique_id: str | None = self._build_unique_id(self.section_id)
 
         self.entity_id: str = f"{WATER_HEATER_DOMAIN}.{DOMAIN}_{self._attr_unique_id}"
 
