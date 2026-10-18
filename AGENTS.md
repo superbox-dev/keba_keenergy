@@ -23,18 +23,13 @@ Before finishing a change, run all of them except the snapshot update, `develop.
 ## Rules
 
 - **No breaking changes** for existing installations:
-  - entity description `key`s (part of the `unique_id` and the `entity_id`)
+  - entity description `key`s (part of the `unique_id`)
   - device identifiers
-  - option keys (`CONF_*`, e.g. `scan_interval_tick_<section>`) and their default behaviour
+  - option keys (`CONF_*`) and their default behaviour
   - `translation_key`s
-  - action names and fields (`services.yaml`), the blueprints in `blueprints/` use them
 - **Minimum versions**:
-  - Python and Home Assistant as in `pyproject.toml` (and `homeassistant` in `hacs.json`)
+  - Python as in `pyproject.toml`, Home Assistant as in `hacs.json`
   - no deprecated Home Assistant APIs
-  - `uv.lock` uses the latest Home Assistant version for ty and the tests
-  - CI also runs the tests against the minimum version (`tests-minimum` job), it reads the version from
-    `pyproject.toml`
-  - use `probatio` for schemas, not `voluptuous`
 - Code style:
   - line length 120
   - single-line imports
