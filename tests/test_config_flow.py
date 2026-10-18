@@ -557,6 +557,62 @@ async def test_zeroconf_flow_already_setup(
 
 
 @pytest.mark.parametrize(
+    ("config_entry", "expected_host"),
+    [
+        ({"data": {CONF_HOST: "10.0.0.50", CONF_SSL: False}}, "10.0.0.100"),
+        ({"data": {CONF_HOST: "keba.local", CONF_SSL: False}}, "keba.local"),
+    ],
+    indirect=["config_entry"],
+)
+async def test_zeroconf_flow_updates_ip_address(
+    hass: HomeAssistant,
+    config_entry: MockConfigEntry,
+    expected_host: str,
+) -> None:
+    """Test that the zeroconf discovery updates a changed IP address, but keeps a configured host name."""
+    config_entry.add_to_hass(hass)
+
+    result: ConfigFlowResult = await hass.config_entries.flow.async_init(
+        DOMAIN,
+        context={"source": SOURCE_ZEROCONF},
+        data=ZERO_CONF_SERVICE_INFO,
+    )
+
+    assert result["type"] == FlowResultType.ABORT
+    assert result["reason"] == "already_configured"
+    assert config_entry.data[CONF_HOST] == expected_host
+
+
+async def test_zeroconf_flow_keeps_ip_address_for_ipv6(
+    hass: HomeAssistant,
+    config_entry: MockConfigEntry,
+) -> None:
+    """Test that the zeroconf discovery does not replace the IP address with an IPv6 address."""
+    config_entry.add_to_hass(hass)
+
+    result: ConfigFlowResult = await hass.config_entries.flow.async_init(
+        DOMAIN,
+        context={"source": SOURCE_ZEROCONF},
+        data=ZeroconfServiceInfo(
+            ip_address=ip_address("fd00::100"),
+            ip_addresses=[ip_address("fd00::100")],
+            port=0,
+            hostname="ap4400.local.",
+            type="_keba-device._tcp.local.",
+            name="ap4400._keba-device._tcp.local.'",
+            properties={
+                "devicename": "AP 440/H-A",
+                "serialnumber": "12345678",
+            },
+        ),
+    )
+
+    assert result["type"] == FlowResultType.ABORT
+    assert result["reason"] == "already_configured"
+    assert config_entry.data[CONF_HOST] == "10.0.0.100"
+
+
+@pytest.mark.parametrize(
     ("side_effect", "expected_error"),
     [
         (APIError("mocked api error"), "cannot_connect"),

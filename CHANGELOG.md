@@ -9,6 +9,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!--start-->
 
+### Added
+
+- Updated the IP address of a configured control unit when Home Assistant discovers it with a new IP address.
+  A configured hostname is kept.
+
 ### Changed
 
 - Moved the documentation on <https://superbox.one> to Docusaurus, styled after the integration pages of

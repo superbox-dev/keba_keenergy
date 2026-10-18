@@ -82,7 +82,8 @@ Or go to **Settings** → **Devices & services**, select **+ Add integration** a
 | Password                | The password of the Web HMI. Only asked if the Web HMI requires a login.                                     |
 
 To change the host or the credentials later, select **Reconfigure** in the menu of the integration entry. If the
-Web HMI rejects the credentials, Home Assistant asks you to enter them again.
+Web HMI rejects the credentials, Home Assistant asks you to enter them again. If a configured control unit is
+discovered with a new IP address, Home Assistant updates the host automatically. A configured hostname is kept.
 
 [redirect-config-flow]: https://my.home-assistant.io/redirect/config_flow_start/?domain=keba_keenergy
 

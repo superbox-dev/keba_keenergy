@@ -7,6 +7,7 @@ from __future__ import annotations
 import logging
 import math
 from http import HTTPStatus
+from ipaddress import IPv4Address
 from typing import TYPE_CHECKING
 from typing import Any
 
@@ -28,6 +29,7 @@ from homeassistant.helpers.aiohttp_client import async_get_clientsession
 from homeassistant.helpers.selector import NumberSelector
 from homeassistant.helpers.selector import NumberSelectorConfig
 from homeassistant.helpers.selector import NumberSelectorMode
+from homeassistant.util.network import is_ip_address
 from keba_keenergy_api.api import KebaKeEnergyAPI
 from keba_keenergy_api.constants import SectionPrefix
 from keba_keenergy_api.error import APIError
@@ -207,15 +209,31 @@ class KebaKeEnergyConfigFlow(ConfigFlow, domain=DOMAIN):
 
     async def async_step_zeroconf(self, discovery_info: ZeroconfServiceInfo) -> ConfigFlowResult:
         """Handle zeroconf discovery."""
-        _LOGGER.info("Discovery info: %s", discovery_info)
+        _LOGGER.debug("Discovery info: %s", discovery_info)
 
         self.host = discovery_info.hostname[0:-1]
         self.serial_number = discovery_info.properties["serialnumber"]
 
         await self.async_set_unique_id(self.serial_number)
-        self._abort_if_unique_id_configured()
+        self._abort_if_unique_id_configured(updates=self._discovery_updates(discovery_info))
 
         return await self.async_step_discovery_confirm()
+
+    def _discovery_updates(self, discovery_info: ZeroconfServiceInfo, /) -> dict[str, str] | None:
+        """Return the new IP address of a configured device, a configured host name is kept."""
+        entry: KebaKeEnergyConfigEntry | None = self.hass.config_entries.async_entry_for_domain_unique_id(
+            DOMAIN,
+            self.serial_number or "",
+        )
+
+        if (
+            entry is None
+            or not isinstance(discovery_info.ip_address, IPv4Address)
+            or not is_ip_address(entry.data[CONF_HOST])
+        ):
+            return None
+
+        return {CONF_HOST: str(discovery_info.ip_address)}
 
     async def async_step_discovery_confirm(self, user_input: dict[str, Any] | None = None) -> ConfigFlowResult:
         """Handle user-confirmation of discovered node."""
