@@ -4,8 +4,8 @@
 
 from __future__ import annotations
 
+from http import HTTPStatus
 from typing import TYPE_CHECKING
-from unittest.mock import patch
 
 import pytest
 from homeassistant.components.homeassistant import SERVICE_UPDATE_ENTITY
@@ -17,12 +17,11 @@ from homeassistant.const import ATTR_ENTITY_ID
 from homeassistant.core import HomeAssistant
 from homeassistant.core import State
 from homeassistant.exceptions import HomeAssistantError
+from homeassistant.helpers import device_registry as dr
 from homeassistant.setup import async_setup_component
-from keba_keenergy_api.api import KebaKeEnergyAPI
-from keba_keenergy_api.error import APIError
 
+from custom_components.keba_keenergy.const import DOMAIN
 from tests import init_translations
-from tests import setup_integration
 from tests.api_data import ENTITY_UPDATED_DATA_RESPONSE
 from tests.api_data import HEATING_CURVE_NAMES_RESPONSE
 from tests.api_data import HEATING_CURVES_RESPONSE_1_1
@@ -31,16 +30,14 @@ from tests.api_data import MULTIPLE_POSITIONS_RESPONSE
 from tests.api_data import get_multiple_position_fixed_data_response
 
 if TYPE_CHECKING:
-    from pytest_homeassistant_custom_component.common import MockConfigEntry
-
     from tests.conftest import FakeKebaKeEnergyAPI
 
 
 async def test_entity_update(
     hass: HomeAssistant,
-    config_entry: MockConfigEntry,
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
+    """Test writing a value of an entity."""
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
         HEATING_CURVE_NAMES_RESPONSE,
@@ -51,10 +48,8 @@ async def test_entity_update(
         ENTITY_UPDATED_DATA_RESPONSE,
         *HEATING_CURVES_RESPONSE_1_1,
     ]
-    fake_api.register_requests("10.0.0.100")
-
     await async_setup_component(hass, HA_DOMAIN, {})
-    await setup_integration(hass, config_entry)
+    await fake_api.setup_integration()
 
     entity_id: str = "sensor.keba_keenergy_12345678_heat_circuit_operating_mode_2"
     heat_circuit_operating_mode_1: State | None = hass.states.get(entity_id)
@@ -77,26 +72,11 @@ async def test_entity_update(
     assert heat_circuit_operating_mode_1.state == "night"
 
 
-@pytest.mark.parametrize(
-    ("side_effect", "expected_error"),
-    [
-        (
-            APIError("mocked api error"),
-            "An error occurred while communicating with the API: mocked api error",
-        ),
-        (
-            APIError("mocked client error"),
-            "An error occurred while communicating with the API: mocked client error",
-        ),
-    ],
-)
 async def test_entity_update_failed(
     hass: HomeAssistant,
-    config_entry: MockConfigEntry,
     fake_api: FakeKebaKeEnergyAPI,
-    side_effect: Exception,
-    expected_error: str,
 ) -> None:
+    """Test the translated error if writing a value of an entity fails."""
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
         HEATING_CURVE_NAMES_RESPONSE,
@@ -104,31 +84,57 @@ async def test_entity_update_failed(
         MULTIPLE_POSITION_DATA_RESPONSE_1,
         *HEATING_CURVES_RESPONSE_1_1,
     ]
-    fake_api.register_requests("10.0.0.100")
-
+    fake_api.write_status = HTTPStatus.BAD_REQUEST
     hass.config.language = "de"
-    await setup_integration(hass, config_entry)
-    translations: dict[str, str] = await init_translations(hass, config_entry, category="exceptions")
+    await fake_api.setup_integration()
+    translations: dict[str, str] = await init_translations(hass, category="exceptions")
 
-    entity_id: str = "select.keba_keenergy_12345678_buffer_tank_operating_mode_1"
-    state: State | None = hass.states.get(entity_id)
-    assert isinstance(state, State)
-
-    with (
-        patch.object(KebaKeEnergyAPI, "write_data", side_effect=side_effect),
-        pytest.raises(HomeAssistantError, match=expected_error),
-    ):
+    with pytest.raises(HomeAssistantError, match="An error occurred while communicating with the API: ") as error:
         await hass.services.async_call(
             domain=SELECT_DOMAIN,
             service=SERVICE_SELECT_OPTION,
             service_data={
-                ATTR_ENTITY_ID: entity_id,
+                ATTR_ENTITY_ID: "select.keba_keenergy_12345678_buffer_tank_operating_mode_1",
                 ATTR_OPTION: "on",
             },
             blocking=True,
         )
 
+    assert error.value.translation_key == "communication_error"
     assert (
         translations["component.keba_keenergy.exceptions.communication_error.message"]
         == "Bei der Kommunikation mit der API ist ein Fehler aufgetreten: {error}"
     )
+
+
+@pytest.mark.parametrize(
+    ("system_name", "expected_manufacturer"),
+    [
+        ("KeEnergy.MTec", "M-TEC"),
+        ("Bartl 4.0", "ino"),
+        ("KeEnergy", None),
+    ],
+)
+async def test_heat_pump_manufacturer(
+    hass: HomeAssistant,
+    fake_api: FakeKebaKeEnergyAPI,
+    system_name: str,
+    expected_manufacturer: str | None,
+) -> None:
+    """Test the manufacturer of the heat pump device, detected from the system name."""
+    fake_api.responses = [
+        MULTIPLE_POSITIONS_RESPONSE,
+        HEATING_CURVE_NAMES_RESPONSE,
+        get_multiple_position_fixed_data_response(),
+        MULTIPLE_POSITION_DATA_RESPONSE_1,
+        *HEATING_CURVES_RESPONSE_1_1,
+    ]
+    fake_api.system_name = system_name
+    await fake_api.setup_integration()
+
+    manufacturers: list[str | None] = [
+        device.manufacturer
+        for device in dr.async_entries_for_config_entry(dr.async_get(hass), fake_api.config_entry.entry_id)
+        if (DOMAIN, "12345678_heat_pump") in device.identifiers
+    ]
+    assert manufacturers == [expected_manufacturer]

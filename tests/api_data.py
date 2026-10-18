@@ -2272,6 +2272,7 @@ MULTIPLE_POSITIONS_RESPONSE: list[dict[str, Any]] = [
 
 
 def get_heat_pump_data(compressor_night_speed: str = "true") -> list[dict[str, Any]]:
+    """Return the values of a heat pump."""
     return [
         HEAT_PUMP_CONSUMING_EXCESS_ENERGY,
         HEAT_PUMP_EXCESS_ENERGY_OPERATING_TIME,
@@ -2359,10 +2360,12 @@ def get_multiple_position_fixed_data_response(
     *,
     has_passive_cooling: str = "false",
     has_cooling_circuits: bool = True,
+    has_photovoltaics: str = "true",
 ) -> list[dict[str, Any]]:
+    """Return the values that are read once on setup, for a setup with several devices of each type."""
     return [
         json.loads(SYSTEM_HAS_OUTDOOR_TEMPERATURE % "true"),
-        json.loads(SYSTEM_HAS_PHOTOVOLTAICS % "true"),
+        json.loads(SYSTEM_HAS_PHOTOVOLTAICS % has_photovoltaics),
         json.loads(HEAT_CIRCUIT_MODE % ("0", "0")),
         json.loads(HEAT_CIRCUIT_MODE % ("1", "1" if has_cooling_circuits else "0")),
         json.loads(HEAT_CIRCUIT_HAS_ROOM_TEMPERATURE % ("0", "true")),
@@ -2710,6 +2713,7 @@ def get_single_position_data_response(
     heat_circuit_target_temperature_offset: str = "0",
     hot_water_tank_target_temperature: str = "51",
 ) -> list[dict[str, Any]]:
+    """Return the values of a setup with one device of each type."""
     return [
         json.loads(EXTERNAL_HEAT_SOURCE_OPERATING_MODE % ("0", "1")),
         json.loads(EXTERNAL_HEAT_SOURCE_TARGET_TEMPERATURE % ("0", "23")),

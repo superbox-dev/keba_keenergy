@@ -30,12 +30,12 @@ from homeassistant.const import SERVICE_TURN_OFF
 from homeassistant.const import SERVICE_TURN_ON
 from homeassistant.core import HomeAssistant
 from homeassistant.core import State
+from homeassistant.helpers.entity_component import async_update_entity
 from homeassistant.util import dt as dt_util
 from keba_keenergy_api.constants import HeatCircuitOperatingMode
-from pytest_homeassistant_custom_component.common import MockConfigEntry
 from pytest_homeassistant_custom_component.common import async_fire_time_changed
 
-from tests import setup_integration
+from custom_components.keba_keenergy.const import FLASH_WRITE_DELAY
 from tests.api_data import DEFAULT_POSITION_DATA_RESPONSE
 from tests.api_data import DEFAULT_POSITION_FIXED_DATA_RESPONSE
 from tests.api_data import DEFAULT_POSITION_RESPONSE
@@ -84,15 +84,13 @@ ENTITY_ID_2: str = "climate.keba_keenergy_12345678_2"
 )
 async def test_climate_entities(
     hass: HomeAssistant,
-    config_entry: MockConfigEntry,
     fake_api: FakeKebaKeEnergyAPI,
     response: list[list[dict[str, Any]]],
     entities: list[str],
 ) -> None:
-    fake_api.responses = response
-    fake_api.register_requests("10.0.0.100")
-
-    await setup_integration(hass, config_entry)
+    """Test that the climate entities are created for the heating circuits."""
+    fake_api.responses = [*response]
+    await fake_api.setup_integration()
 
     for entity in entities:
         assert isinstance(hass.states.get(entity), State)
@@ -105,15 +103,15 @@ async def test_climate_entities(
         "climate.keba_keenergy_12345678_2",
     ],
 )
-@pytest.mark.parametrize("language", ["en", "de"])
+@pytest.mark.parametrize("language", ["en", "de"], indirect=True)
+@pytest.mark.usefixtures("language")
 async def test_climate(
     hass: HomeAssistant,
-    config_entry: MockConfigEntry,
     fake_api: FakeKebaKeEnergyAPI,
     snapshot: SnapshotAssertion,
-    language: str,
     entity: str,
 ) -> None:
+    """Test the states of the climate entities."""
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
         HEATING_CURVE_NAMES_RESPONSE,
@@ -121,10 +119,8 @@ async def test_climate(
         MULTIPLE_POSITION_DATA_RESPONSE_1,
         *HEATING_CURVES_RESPONSE_1_1,
     ]
-    fake_api.register_requests("10.0.0.100")
-    hass.config.language = language
 
-    await setup_integration(hass, config_entry)
+    await fake_api.setup_integration()
 
     _entity: State | None = hass.states.get(entity)
     assert isinstance(_entity, State)
@@ -142,11 +138,11 @@ async def test_climate(
 )
 async def test_target_temperature(
     hass: HomeAssistant,
-    config_entry: MockConfigEntry,
     fake_api: FakeKebaKeEnergyAPI,
     responses: list[dict[str, Any]],
     expected_target_temperature: float,
 ) -> None:
+    """Test the target temperature of the climate entity."""
     fake_api.responses = [
         DEFAULT_POSITION_RESPONSE,
         HEATING_CURVE_NAMES_RESPONSE,
@@ -154,9 +150,7 @@ async def test_target_temperature(
         responses,
         *HEATING_CURVES_RESPONSE_1_1,
     ]
-    fake_api.register_requests("10.0.0.100")
-
-    await setup_integration(hass, config_entry)
+    await fake_api.setup_integration()
 
     state: State | None = hass.states.get(ENTITY_ID)
     assert isinstance(state, State)
@@ -164,48 +158,56 @@ async def test_target_temperature(
     assert state.attributes[ATTR_TEMPERATURE] == expected_target_temperature
 
 
-async def test_target_temperature_uses_pending_value(
+async def test_set_temperature_debounced(
     hass: HomeAssistant,
-    config_entry: MockConfigEntry,
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
+    """Test that quick target temperature changes are shown at once and written once, with the last value."""
     fake_api.responses = [
         DEFAULT_POSITION_RESPONSE,
         HEATING_CURVE_NAMES_RESPONSE,
         DEFAULT_POSITION_FIXED_DATA_RESPONSE,
         get_single_position_data_response(heat_circuit_target_temperature_offset="1.5"),
         *HEATING_CURVES_RESPONSE_1_1,
+        # Read API after updating the entity
+        get_single_position_data_response(heat_circuit_target_temperature_offset="1.5"),
+        *HEATING_CURVES_RESPONSE_1_1,
     ]
-    fake_api.register_requests("10.0.0.100")
+    await fake_api.setup_integration()
 
-    await setup_integration(hass, config_entry)
+    temperatures: tuple[float, ...] = (21.0, 20.5)
 
-    entity = hass.data["climate"].get_entity(ENTITY_ID)
-    assert entity is not None
+    for temperature in temperatures:
+        await hass.services.async_call(
+            domain=CLIMATE_DOMAIN,
+            service=SERVICE_SET_TEMPERATURE,
+            service_data={
+                ATTR_ENTITY_ID: ENTITY_ID,
+                ATTR_TEMPERATURE: temperature,
+            },
+            blocking=True,
+        )
 
-    assert entity.target_temperature == 21.5
+    await async_update_entity(hass, ENTITY_ID)
 
-    # First call → creates _async_call_later
-    await entity.async_set_temperature(**{ATTR_TEMPERATURE: 21.0})
-    first_handle = entity._async_call_later
+    state: State | None = hass.states.get(ENTITY_ID)
+    assert isinstance(state, State)
+    assert state.attributes[ATTR_TEMPERATURE] == temperatures[-1]
+    assert fake_api.write_requests() == []
 
-    assert first_handle is not None
-    assert entity._pending_value == 1.0
-    assert entity._async_call_later is not None
+    async_fire_time_changed(hass, dt_util.utcnow() + timedelta(seconds=FLASH_WRITE_DELAY))
+    await hass.async_block_till_done()
 
-    # Second call BEFORE debounce fires
-    await entity.async_set_temperature(**{ATTR_TEMPERATURE: 20.5})
-
-    assert entity._async_call_later is not None
-    assert entity._async_call_later is not first_handle
-    assert entity.target_temperature == 20.5
+    assert fake_api.write_requests() == [
+        '[{"name": "APPL.CtrlAppl.sParam.heatCircuit[0].param.offsetRoomTemp", "value": "0.5"}]',
+    ]
 
 
 async def test_turn_off(
     hass: HomeAssistant,
-    config_entry: MockConfigEntry,
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
+    """Test turning off a heating circuit."""
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
         HEATING_CURVE_NAMES_RESPONSE,
@@ -216,10 +218,7 @@ async def test_turn_off(
         MULTIPLE_POSITION_DATA_RESPONSE_1,
         *HEATING_CURVES_RESPONSE_1_1,
     ]
-    fake_api.register_requests("10.0.0.100")
-
-    config_entry.add_to_hass(hass)
-    assert await hass.config_entries.async_setup(config_entry.entry_id)
+    await fake_api.setup_integration()
 
     await hass.services.async_call(
         domain=CLIMATE_DOMAIN,
@@ -238,9 +237,9 @@ async def test_turn_off(
 
 async def test_turn_on(
     hass: HomeAssistant,
-    config_entry: MockConfigEntry,
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
+    """Test turning on a heating circuit."""
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
         HEATING_CURVE_NAMES_RESPONSE,
@@ -251,10 +250,7 @@ async def test_turn_on(
         MULTIPLE_POSITION_DATA_RESPONSE_1,
         *HEATING_CURVES_RESPONSE_1_1,
     ]
-    fake_api.register_requests("10.0.0.100")
-
-    config_entry.add_to_hass(hass)
-    assert await hass.config_entries.async_setup(config_entry.entry_id)
+    await fake_api.setup_integration()
 
     await hass.services.async_call(
         domain=CLIMATE_DOMAIN,
@@ -281,24 +277,22 @@ async def test_turn_on(
 )
 async def test_set_hvac_mode(
     hass: HomeAssistant,
-    config_entry: MockConfigEntry,
     fake_api: FakeKebaKeEnergyAPI,
     hvac_mode: str,
     expected_hvac_mode: str,
 ) -> None:
+    """Test setting the HVAC mode of a heating circuit in holiday mode."""
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
         HEATING_CURVE_NAMES_RESPONSE,
         get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITION_DATA_RESPONSE_1,
+        MULTIPLE_POSITION_DATA_RESPONSE_2,
         *HEATING_CURVES_RESPONSE_1_1,
         # Read API after services call
-        MULTIPLE_POSITION_DATA_RESPONSE_1,
+        MULTIPLE_POSITION_DATA_RESPONSE_2,
         *HEATING_CURVES_RESPONSE_1_1,
     ]
-    fake_api.register_requests("10.0.0.100")
-
-    await setup_integration(hass, config_entry)
+    await fake_api.setup_integration()
 
     await hass.services.async_call(
         domain=CLIMATE_DOMAIN,
@@ -326,12 +320,12 @@ async def test_set_hvac_mode(
 )
 async def test_set_preset_mode(
     hass: HomeAssistant,
-    config_entry: MockConfigEntry,
     fake_api: FakeKebaKeEnergyAPI,
     preset_mode: str,
     response: list[dict[str, Any]],
     expected_preset_mode: str,
 ) -> None:
+    """Test setting the preset mode of a heating circuit."""
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
         HEATING_CURVE_NAMES_RESPONSE,
@@ -342,9 +336,7 @@ async def test_set_preset_mode(
         response,
         *HEATING_CURVES_RESPONSE_1_1,
     ]
-    fake_api.register_requests("10.0.0.100")
-
-    await setup_integration(hass, config_entry)
+    await fake_api.setup_integration()
 
     await hass.services.async_call(
         domain=CLIMATE_DOMAIN,
@@ -363,9 +355,9 @@ async def test_set_preset_mode(
 
 async def test_set_preset_mode_away(
     hass: HomeAssistant,
-    config_entry: MockConfigEntry,
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
+    """Test that the preset mode away sets the away date range."""
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
         HEATING_CURVE_NAMES_RESPONSE,
@@ -373,9 +365,7 @@ async def test_set_preset_mode_away(
         MULTIPLE_POSITION_DATA_RESPONSE_1,
         *HEATING_CURVES_RESPONSE_1_1,
     ]
-    fake_api.register_requests("10.0.0.100")
-
-    await setup_integration(hass, config_entry)
+    await fake_api.setup_integration()
 
     with patch.object(dt_util, "now", return_value=datetime(2026, 1, 24, 12, 0, tzinfo=UTC)):
         await hass.services.async_call(
@@ -398,9 +388,9 @@ async def test_set_preset_mode_away(
 
 async def test_unset_preset_mode_away(
     hass: HomeAssistant,
-    config_entry: MockConfigEntry,
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
+    """Test that leaving the preset mode away resets the away date range."""
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
         HEATING_CURVE_NAMES_RESPONSE,
@@ -411,9 +401,7 @@ async def test_unset_preset_mode_away(
         MULTIPLE_POSITION_DATA_RESPONSE_1,
         *HEATING_CURVES_RESPONSE_1_1,
     ]
-    fake_api.register_requests("10.0.0.100")
-
-    await setup_integration(hass, config_entry)
+    await fake_api.setup_integration()
 
     with patch.object(dt_util, "now", return_value=datetime(2026, 1, 24, 12, 0, tzinfo=UTC)):
         await hass.services.async_call(
@@ -440,9 +428,9 @@ async def test_unset_preset_mode_away(
 
 async def test_set_temperature(
     hass: HomeAssistant,
-    config_entry: MockConfigEntry,
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
+    """Test setting the target temperature of a heating circuit."""
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
         HEATING_CURVE_NAMES_RESPONSE,
@@ -453,9 +441,7 @@ async def test_set_temperature(
         MULTIPLE_POSITION_DATA_RESPONSE_1,
         *HEATING_CURVES_RESPONSE_1_1,
     ]
-    fake_api.register_requests("10.0.0.100")
-
-    await setup_integration(hass, config_entry)
+    await fake_api.setup_integration()
 
     await hass.services.async_call(
         domain=CLIMATE_DOMAIN,

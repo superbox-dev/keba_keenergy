@@ -10,13 +10,11 @@ from typing import Any
 import pytest
 from homeassistant.components.switch.const import DOMAIN as SWITCH_DOMAIN
 from homeassistant.const import ATTR_ENTITY_ID
-from homeassistant.const import CONF_HOST
 from homeassistant.const import SERVICE_TURN_OFF
 from homeassistant.const import SERVICE_TURN_ON
 from homeassistant.core import HomeAssistant
 from homeassistant.core import State
 
-from tests import setup_integration
 from tests.api_data import HEATING_CURVE_NAMES_RESPONSE
 from tests.api_data import HEATING_CURVES_RESPONSE_1_1
 from tests.api_data import MULTIPLE_POSITION_DATA_RESPONSE_1
@@ -25,7 +23,6 @@ from tests.api_data import MULTIPLE_POSITIONS_RESPONSE
 from tests.api_data import get_multiple_position_fixed_data_response
 
 if TYPE_CHECKING:
-    from pytest_homeassistant_custom_component.common import MockConfigEntry
     from syrupy.assertion import SnapshotAssertion
 
     from tests.conftest import FakeKebaKeEnergyAPI
@@ -55,16 +52,15 @@ if TYPE_CHECKING:
         "switch.keba_keenergy_12345678_external_heat_source_use_excess_energy_2",
     ],
 )
-@pytest.mark.parametrize("language", ["en", "de"])
-@pytest.mark.usefixtures("entity_registry_enabled_by_default")
-async def test_binary_sensors(
+@pytest.mark.parametrize("language", ["en", "de"], indirect=True)
+@pytest.mark.usefixtures("entity_registry_enabled_by_default", "language")
+async def test_switches(
     hass: HomeAssistant,
-    config_entry: MockConfigEntry,
     fake_api: FakeKebaKeEnergyAPI,
     snapshot: SnapshotAssertion,
-    language: str,
     entity: str,
 ) -> None:
+    """Test the states of the switch entities."""
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
         HEATING_CURVE_NAMES_RESPONSE,
@@ -72,10 +68,8 @@ async def test_binary_sensors(
         MULTIPLE_POSITION_DATA_RESPONSE_1,
         *HEATING_CURVES_RESPONSE_1_1,
     ]
-    fake_api.register_requests(config_entry.data[CONF_HOST])
-    hass.config.language = language
 
-    await setup_integration(hass, config_entry)
+    await fake_api.setup_integration()
 
     _entity: State | None = hass.states.get(entity)
     assert isinstance(_entity, State)
@@ -83,23 +77,15 @@ async def test_binary_sensors(
 
 
 @pytest.mark.parametrize(
-    ("entity_id", "service", "response", "expected"),
+    ("entity_id", "response", "expected"),
     [
         (
             "switch.keba_keenergy_12345678_heat_pump_compressor_use_night_speed",
-            SERVICE_TURN_ON,
             MULTIPLE_POSITION_DATA_RESPONSE_2,
             '[{"name": "APPL.CtrlAppl.sParam.heatpump[0].HeatPumpPowerCtrl.param.useDayNightSpeed", "value": "1"}]',
         ),
         (
-            "switch.keba_keenergy_12345678_heat_pump_compressor_use_night_speed",
-            SERVICE_TURN_OFF,
-            MULTIPLE_POSITION_DATA_RESPONSE_1,
-            '[{"name": "APPL.CtrlAppl.sParam.heatpump[0].HeatPumpPowerCtrl.param.useDayNightSpeed", "value": "0"}]',
-        ),
-        (
             "switch.keba_keenergy_12345678_solar_circuit_priority_1_before_2_2",
-            SERVICE_TURN_ON,
             MULTIPLE_POSITION_DATA_RESPONSE_2,
             (
                 '[{"name": "APPL.CtrlAppl.sParam.hmiRetainData.consumer1PrioritySolar[1]", "value": "1"}, '
@@ -107,32 +93,21 @@ async def test_binary_sensors(
             ),
         ),
         (
-            "switch.keba_keenergy_12345678_solar_circuit_priority_1_before_2_2",
-            SERVICE_TURN_OFF,
-            MULTIPLE_POSITION_DATA_RESPONSE_1,
-            (
-                '[{"name": "APPL.CtrlAppl.sParam.hmiRetainData.consumer1PrioritySolar[1]", "value": "0"}, '
-                '{"name": "APPL.CtrlAppl.sParam.genericHeat[2].param.priority", "value": "15"}]'
-            ),
-        ),
-        (
             "switch.keba_keenergy_12345678_heat_circuit_use_heating_curve_1",
-            SERVICE_TURN_ON,
             MULTIPLE_POSITION_DATA_RESPONSE_1,
             '[{"name": "APPL.CtrlAppl.sParam.heatCircuit[0].param.enableHeatCurveLinTab", "value": "1"}]',
         ),
     ],
 )
 @pytest.mark.usefixtures("entity_registry_enabled_by_default")
-async def test_set_value(
+async def test_turn_on(
     hass: HomeAssistant,
-    config_entry: MockConfigEntry,
     fake_api: FakeKebaKeEnergyAPI,
     entity_id: str,
-    service: str,
     response: list[dict[str, Any]],
     expected: str,
 ) -> None:
+    """Test turning on a switch."""
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
         HEATING_CURVE_NAMES_RESPONSE,
@@ -143,16 +118,14 @@ async def test_set_value(
         response,
         *HEATING_CURVES_RESPONSE_1_1,
     ]
-    fake_api.register_requests("10.0.0.100")
-
-    await setup_integration(hass, config_entry)
+    await fake_api.setup_integration()
 
     state: State | None = hass.states.get(entity_id)
     assert isinstance(state, State)
 
     await hass.services.async_call(
         domain=SWITCH_DOMAIN,
-        service=service,
+        service=SERVICE_TURN_ON,
         service_data={
             ATTR_ENTITY_ID: entity_id,
         },
@@ -160,3 +133,92 @@ async def test_set_value(
     )
 
     fake_api.assert_called_write_with(expected)
+
+
+@pytest.mark.parametrize(
+    ("entity_id", "response", "expected"),
+    [
+        (
+            "switch.keba_keenergy_12345678_heat_pump_compressor_use_night_speed",
+            MULTIPLE_POSITION_DATA_RESPONSE_1,
+            '[{"name": "APPL.CtrlAppl.sParam.heatpump[0].HeatPumpPowerCtrl.param.useDayNightSpeed", "value": "0"}]',
+        ),
+        (
+            "switch.keba_keenergy_12345678_solar_circuit_priority_1_before_2_2",
+            MULTIPLE_POSITION_DATA_RESPONSE_1,
+            (
+                '[{"name": "APPL.CtrlAppl.sParam.hmiRetainData.consumer1PrioritySolar[1]", "value": "0"}, '
+                '{"name": "APPL.CtrlAppl.sParam.genericHeat[2].param.priority", "value": "15"}]'
+            ),
+        ),
+    ],
+)
+@pytest.mark.usefixtures("entity_registry_enabled_by_default")
+async def test_turn_off(
+    hass: HomeAssistant,
+    fake_api: FakeKebaKeEnergyAPI,
+    entity_id: str,
+    response: list[dict[str, Any]],
+    expected: str,
+) -> None:
+    """Test turning off a switch."""
+    fake_api.responses = [
+        MULTIPLE_POSITIONS_RESPONSE,
+        HEATING_CURVE_NAMES_RESPONSE,
+        get_multiple_position_fixed_data_response(),
+        response,
+        *HEATING_CURVES_RESPONSE_1_1,
+        # Read API after services call
+        response,
+        *HEATING_CURVES_RESPONSE_1_1,
+    ]
+    await fake_api.setup_integration()
+
+    state: State | None = hass.states.get(entity_id)
+    assert isinstance(state, State)
+
+    await hass.services.async_call(
+        domain=SWITCH_DOMAIN,
+        service=SERVICE_TURN_OFF,
+        service_data={
+            ATTR_ENTITY_ID: entity_id,
+        },
+        blocking=True,
+    )
+
+    fake_api.assert_called_write_with(expected)
+
+
+@pytest.mark.parametrize(
+    ("service", "response"),
+    [
+        (SERVICE_TURN_ON, MULTIPLE_POSITION_DATA_RESPONSE_1),
+        (SERVICE_TURN_OFF, MULTIPLE_POSITION_DATA_RESPONSE_2),
+    ],
+)
+async def test_unchanged_state(
+    hass: HomeAssistant,
+    fake_api: FakeKebaKeEnergyAPI,
+    service: str,
+    response: list[dict[str, Any]],
+) -> None:
+    """Test that a switch is not written if it already has the state."""
+    fake_api.responses = [
+        MULTIPLE_POSITIONS_RESPONSE,
+        HEATING_CURVE_NAMES_RESPONSE,
+        get_multiple_position_fixed_data_response(),
+        response,
+        *HEATING_CURVES_RESPONSE_1_1,
+    ]
+    await fake_api.setup_integration()
+
+    await hass.services.async_call(
+        domain=SWITCH_DOMAIN,
+        service=service,
+        service_data={
+            ATTR_ENTITY_ID: "switch.keba_keenergy_12345678_solar_circuit_priority_1_before_2_2",
+        },
+        blocking=True,
+    )
+
+    assert fake_api.write_requests() == []

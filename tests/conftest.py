@@ -6,6 +6,7 @@ from __future__ import annotations
 
 import json
 import logging
+from http import HTTPStatus
 from typing import TYPE_CHECKING
 from typing import Any
 from unittest.mock import patch
@@ -20,6 +21,7 @@ from pytest_homeassistant_custom_component.test_util.aiohttp import AiohttpClien
 from yarl import URL
 
 from custom_components.keba_keenergy.const import DOMAIN
+from tests import setup_integration
 from tests.api_data import DEVICE_INFO_RESPONSE
 from tests.api_data import FILTER_REQUESTS
 from tests.api_data import HMI_RESPONSE
@@ -42,8 +44,8 @@ def snapshot(snapshot: SnapshotAssertion) -> SnapshotAssertion:
 
 
 @pytest.fixture(autouse=True)
-def auto_enable_custom_integrations(enable_custom_integrations: None) -> None:  # noqa: ARG001
-    return
+def auto_enable_custom_integrations(enable_custom_integrations: None) -> None:
+    """Enable the custom integrations in Home Assistant."""
 
 
 @pytest.fixture(autouse=True)
@@ -52,7 +54,6 @@ async def fail_on_log_errors(
     request: pytest.FixtureRequest,
 ) -> AsyncGenerator[None]:
     """Fail test on Home Assistant or integration errors."""
-
     if request.node.get_closest_marker("no_fail_on_keba_errors"):
         yield
         return
@@ -63,6 +64,7 @@ async def fail_on_log_errors(
         """Capture error log records."""
 
         def emit(self, record: logging.LogRecord) -> None:
+            """Capture the record if it is an error."""
             if record.levelno >= logging.ERROR:
                 records.append(record)
 
@@ -91,19 +93,35 @@ async def fail_on_log_errors(
 
 
 class FakeKebaKeEnergyAPI:
-    def __init__(self, aioclient_mock: AiohttpClientMocker) -> None:
+    """Fake Web HMI of a KEBA KeEnergy control unit, based on the mocked HTTP requests."""
+
+    def __init__(
+        self,
+        hass: HomeAssistant,
+        aioclient_mock: AiohttpClientMocker,
+        config_entry: MockConfigEntry,
+    ) -> None:
+        """Initialize the fake Web HMI.
+
+        Parameters
+        ----------
+        hass
+            The Home Assistant instance of the test.
+        aioclient_mock
+            The mocker of the HTTP requests.
+        config_entry
+            The config entry that is set up by `setup_integration()`.
+
+        """
+        self.hass: HomeAssistant = hass
         self.aioclient_mock: AiohttpClientMocker = aioclient_mock
-        self._responses: list[list[dict[str, Any]]] = []
-
-    @property
-    def responses(self) -> list[list[dict[str, Any]]]:
-        return self._responses
-
-    @responses.setter
-    def responses(self, value: list[list[dict[str, Any]]]) -> None:
-        self._responses = value
+        self.config_entry: MockConfigEntry = config_entry
+        self.responses: list[list[dict[str, Any]] | HTTPStatus] = []
+        self.system_name: str = SYSTEM_RESPONSE["name"]
+        self.write_status: HTTPStatus = HTTPStatus.OK
 
     def register_auth_request(self, host: str, /, *, status: int = 200, exc: Exception | None = None) -> None:
+        """Register the request that checks if the Web HMI requires authentication."""
         self.aioclient_mock.get(f"https://{host}", status=status, exc=exc)
 
     def register_get_device_info(
@@ -115,6 +133,7 @@ class FakeKebaKeEnergyAPI:
         status: int = 200,
         exc: Exception | None = None,
     ) -> None:
+        """Register the request of the device info."""
         schema: str = "https" if ssl else "http"
 
         self.aioclient_mock.post(
@@ -126,13 +145,18 @@ class FakeKebaKeEnergyAPI:
         )
 
     def register_requests(self, host: str, /, *, ssl: bool = False) -> None:
+        """Register all requests of the setup and the updates.
+
+        The read requests return the `responses` in order, an `HTTPStatus` returns an empty response with this status.
+        The system name and the status of the write requests can be changed with `system_name` and `write_status`.
+        """
         schema: str = "https" if ssl else "http"
 
         self.register_get_device_info(host, ssl=ssl)
 
         self.aioclient_mock.post(
             f"{schema}://{host}/swupdate?action=getSystemInstalled",
-            text=json.dumps(SYSTEM_RESPONSE),
+            text=json.dumps({**SYSTEM_RESPONSE, "name": self.system_name}),
             headers={"Content-Type": "application/json;charset=utf-8"},
         )
 
@@ -158,45 +182,77 @@ class FakeKebaKeEnergyAPI:
             f"{schema}://{host}/var/readWriteVars",
             text="[{}]",
             params={"action": "set"},
+            status=self.write_status,
             headers={"Content-Type": "application/json;charset=utf-8"},
         )
 
         self.aioclient_mock.post(
             f"{schema}://{host}/var/readWriteVars",
-            side_effect=self._add_sideeffect,
+            side_effect=self._read_side_effect,
         )
 
-    async def _add_sideeffect(self, method: str, url: URL, *args: Any) -> AiohttpClientMockResponse:  # noqa: ARG002
-        if len(self._responses) > 0:
-            response = self._responses.pop(0)
+    async def setup_integration(self) -> None:
+        """Register all requests for the host of the config entry and set up the integration."""
+        self.register_requests(self.config_entry.data[CONF_HOST], ssl=self.config_entry.data[CONF_SSL])
+        await setup_integration(self.hass, self.config_entry)
 
-            return AiohttpClientMockResponse(
-                method,
-                url=url,
-                text=json.dumps(response),
-                headers={"Content-Type": "application/json;charset=utf-8"},
-            )
+    async def _read_side_effect(self, method: str, url: URL, *_: object) -> AiohttpClientMockResponse:
+        if not self.responses:
+            return AiohttpClientMockResponse(method, url=url)
 
-        return AiohttpClientMockResponse(method, url=url)
+        response: list[dict[str, Any]] | HTTPStatus = self.responses.pop(0)
+
+        if isinstance(response, HTTPStatus):
+            return AiohttpClientMockResponse(method, url=url, status=response)
+
+        return AiohttpClientMockResponse(
+            method,
+            url=url,
+            text=json.dumps(response),
+            headers={"Content-Type": "application/json;charset=utf-8"},
+        )
+
+    def read_requests(self) -> list[str]:
+        """Return the bodies of all read requests, in order."""
+        return [
+            str(data)
+            for method, url, data, _ in self.aioclient_mock.mock_calls
+            if method == "POST" and url.path == "/var/readWriteVars" and "action" not in url.query
+        ]
 
     def assert_called_write_with(self, data: str, /) -> None:
-        assert (
-            "POST",
-            URL("http://10.0.0.100/var/readWriteVars?action=set"),
-            data,
-            {},
-        ) in self.aioclient_mock.mock_calls
+        """Assert that the data was written to the Web HMI."""
+        assert data in self.write_requests()
+
+    def write_requests(self) -> list[str]:
+        """Return the bodies of all write requests, in order."""
+        return [
+            str(data)
+            for method, url, data, _ in self.aioclient_mock.mock_calls
+            if method == "POST" and url == URL("http://10.0.0.100/var/readWriteVars?action=set")
+        ]
 
 
 @pytest.fixture
 async def fake_api(
+    hass: HomeAssistant,
     aioclient_mock: AiohttpClientMocker,
+    config_entry: MockConfigEntry,
 ) -> FakeKebaKeEnergyAPI:
-    return FakeKebaKeEnergyAPI(aioclient_mock)
+    """Return the fake Web HMI."""
+    return FakeKebaKeEnergyAPI(hass, aioclient_mock, config_entry)
+
+
+@pytest.fixture
+def language(hass: HomeAssistant, request: SubRequest) -> str:
+    """Set the language of Home Assistant, parametrized indirectly."""
+    hass.config.language = request.param
+    return request.param
 
 
 @pytest.fixture
 def config_entry(request: SubRequest) -> MockConfigEntry:
+    """Return the config entry, parametrized indirectly with `data` and `options` to update."""
     mock_config_entry_data: dict[str, Any] = {
         "title": "KEBA KeEnergy (ap4400.local)",
         "data": {

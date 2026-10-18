@@ -7,7 +7,6 @@ from __future__ import annotations
 from http import HTTPStatus
 from ipaddress import ip_address
 from typing import TYPE_CHECKING
-from unittest.mock import patch
 
 import pytest
 from aiohttp import ClientError
@@ -18,11 +17,9 @@ from homeassistant.const import CONF_HOST
 from homeassistant.const import CONF_SSL
 from homeassistant.data_entry_flow import FlowResultType
 from homeassistant.helpers.service_info.zeroconf import ZeroconfServiceInfo
-from keba_keenergy_api.endpoints import SystemEndpoints
 from keba_keenergy_api.error import APIError
 
 from custom_components.keba_keenergy.const import DOMAIN
-from tests import setup_integration
 from tests.api_data import HEATING_CURVE_NAMES_RESPONSE
 from tests.api_data import HEATING_CURVES_RESPONSE_1_1
 from tests.api_data import MULTIPLE_POSITION_DATA_RESPONSE_1
@@ -54,6 +51,7 @@ async def test_user_flow(
     hass: HomeAssistant,
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
+    """Test the user flow without authentication."""
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
         HEATING_CURVE_NAMES_RESPONSE,
@@ -96,6 +94,7 @@ async def test_user_flow_authentication(
     hass: HomeAssistant,
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
+    """Test the user flow with authentication."""
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
         HEATING_CURVE_NAMES_RESPONSE,
@@ -150,6 +149,7 @@ async def test_reconfigure_flow_authentication(
     config_entry: MockConfigEntry,
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
+    """Test the reconfiguration flow with authentication."""
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
         HEATING_CURVE_NAMES_RESPONSE,
@@ -191,10 +191,49 @@ async def test_reconfigure_flow_authentication(
     assert result_auth_step["reason"] == "reconfigure_successful"
 
 
+async def test_user_flow_authentication_invalid_auth(
+    hass: HomeAssistant,
+    fake_api: FakeKebaKeEnergyAPI,
+) -> None:
+    """Test that the authentication step of the user flow shows an error for invalid credentials."""
+    fake_api.register_auth_request("10.0.0.100", status=401)
+    fake_api.register_get_device_info("10.0.0.100", ssl=True, status=401)
+
+    assert await setup.async_setup_component(hass, DOMAIN, {})
+
+    result_user_step: ConfigFlowResult = await hass.config_entries.flow.async_init(
+        DOMAIN,
+        context={"source": SOURCE_USER},
+    )
+
+    result_auth_step: ConfigFlowResult = await hass.config_entries.flow.async_configure(
+        result_user_step["flow_id"],
+        user_input={
+            CONF_HOST: "10.0.0.100",
+            CONF_SSL: True,
+        },
+    )
+
+    assert result_auth_step["step_id"] == "auth"
+
+    result_error: ConfigFlowResult = await hass.config_entries.flow.async_configure(
+        result_user_step["flow_id"],
+        user_input={
+            "username": "test",
+            "password": "wrong",
+        },
+    )
+
+    assert result_error["type"] is FlowResultType.FORM
+    assert result_error["step_id"] == "auth"
+    assert result_error["errors"] == {"base": "invalid_auth"}
+
+
 async def test_user_flow_authentication_cannot_connect(
     hass: HomeAssistant,
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
+    """Test the errors of the authentication step of the user flow."""
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
         HEATING_CURVE_NAMES_RESPONSE,
@@ -245,6 +284,7 @@ async def test_reauth_flow_success(
     config_entry: MockConfigEntry,
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
+    """Test the reauthentication flow with valid credentials."""
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
         HEATING_CURVE_NAMES_RESPONSE,
@@ -285,6 +325,7 @@ async def test_reauth_flow_failure(
     config_entry: MockConfigEntry,
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
+    """Test the reauthentication flow with invalid credentials."""
     fake_api.register_get_device_info("10.0.0.100", ssl=True, status=401)
 
     config_entry.add_to_hass(hass)
@@ -330,6 +371,7 @@ async def test_reauth_flow_wrong_account(
     config_entry: MockConfigEntry,
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
+    """Test that the reauthentication flow aborts for another device."""
     fake_api.register_get_device_info("10.0.0.100", ssl=True)
 
     config_entry.add_to_hass(hass)
@@ -359,35 +401,37 @@ async def test_reauth_flow_wrong_account(
 
 
 @pytest.mark.parametrize(
-    ("side_effect", "expected_error"),
+    ("status", "exc", "expected_error"),
     [
-        (APIError("mocked api error"), "cannot_connect"),
-        (APIError("mocked api error", status=HTTPStatus.UNAUTHORIZED), "invalid_auth"),
-        (Exception("mocked client error"), "unknown"),
+        (HTTPStatus.BAD_REQUEST, None, "cannot_connect"),
+        (HTTPStatus.UNAUTHORIZED, None, "invalid_auth"),
+        (HTTPStatus.OK, ValueError("mocked client error"), "unknown"),
     ],
 )
 @pytest.mark.no_fail_on_keba_errors
 async def test_user_flow_cannot_connect(
     hass: HomeAssistant,
     fake_api: FakeKebaKeEnergyAPI,
-    side_effect: Exception,
+    status: HTTPStatus,
+    exc: Exception | None,
     expected_error: str,
 ) -> None:
+    """Test the errors of the user flow."""
     fake_api.register_auth_request("10.0.0.100")
+    fake_api.register_get_device_info("10.0.0.100", status=status, exc=exc)
 
     result_user_step_1: ConfigFlowResult = await hass.config_entries.flow.async_init(
         DOMAIN,
         context={"source": SOURCE_USER},
     )
 
-    with patch.object(SystemEndpoints, "get_device_info", side_effect=side_effect):
-        result_user_step_2: ConfigFlowResult = await hass.config_entries.flow.async_configure(
-            result_user_step_1["flow_id"],
-            user_input={
-                "host": "10.0.0.100",
-                "ssl": False,
-            },
-        )
+    result_user_step_2: ConfigFlowResult = await hass.config_entries.flow.async_configure(
+        result_user_step_1["flow_id"],
+        user_input={
+            "host": "10.0.0.100",
+            "ssl": False,
+        },
+    )
 
     assert result_user_step_2["type"] == FlowResultType.FORM
     assert result_user_step_2["errors"] == {"base": expected_error}
@@ -397,6 +441,7 @@ async def test_zeroconf_flow(
     hass: HomeAssistant,
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
+    """Test the zeroconf discovery flow without authentication."""
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
         HEATING_CURVE_NAMES_RESPONSE,
@@ -435,6 +480,7 @@ async def test_zeroconf_flow_authentication(
     hass: HomeAssistant,
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
+    """Test the zeroconf discovery flow with authentication."""
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
         HEATING_CURVE_NAMES_RESPONSE,
@@ -475,6 +521,7 @@ async def test_zeroconf_flow_authentication_cannot_connect(
     hass: HomeAssistant,
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
+    """Test the errors of the authentication step of the zeroconf discovery flow."""
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
         MULTIPLE_POSITION_DATA_RESPONSE_1,
@@ -496,6 +543,7 @@ async def test_zeroconf_flow_already_setup(
     hass: HomeAssistant,
     config_entry: MockConfigEntry,
 ) -> None:
+    """Test that the zeroconf discovery flow aborts for a configured device."""
     config_entry.add_to_hass(hass)
 
     result: ConfigFlowResult = await hass.config_entries.flow.async_init(
@@ -522,6 +570,7 @@ async def test_zeroconf_cannot_connect(
     side_effect: Exception,
     expected_error: str,
 ) -> None:
+    """Test the errors of the zeroconf discovery flow."""
     fake_api.register_auth_request("ap4400.local")
     fake_api.register_get_device_info("ap4400.local", ssl=False, exc=side_effect)
 
@@ -540,11 +589,71 @@ async def test_zeroconf_cannot_connect(
     assert result_discovery_confirm_2["errors"] == {"base": expected_error}
 
 
+@pytest.mark.parametrize(
+    ("user_input", "expected"),
+    [
+        (
+            {
+                "scan_interval": 60,
+                "scan_interval_tick_system": 4,
+                "scan_interval_tick_heat_pump": 4,
+                "scan_interval_tick_heat_circuit": 8,
+                "scan_interval_tick_solar_circuit": 2,
+                "scan_interval_tick_hot_water_tank": 2,
+                "scan_interval_tick_buffer_tank": 16,
+                "scan_interval_tick_switch_valve": 2,
+                "scan_interval_tick_external_heat_source": 4,
+                "scan_interval_tick_photovoltaics": 2,
+            },
+            {
+                "scan_interval": 120,
+                "scan_interval_tick_system": 2,
+                "scan_interval_tick_heat_pump": 2,
+                "scan_interval_tick_heat_circuit": 4,
+                "scan_interval_tick_solar_circuit": 1,
+                "scan_interval_tick_hot_water_tank": 1,
+                "scan_interval_tick_buffer_tank": 8,
+                "scan_interval_tick_switch_valve": 1,
+                "scan_interval_tick_external_heat_source": 2,
+                "scan_interval_tick_photovoltaics": 1,
+            },
+        ),
+        (
+            {
+                "scan_interval": 60,
+                "scan_interval_tick_system": 1,
+                "scan_interval_tick_heat_pump": 2,
+                "scan_interval_tick_heat_circuit": 3,
+                "scan_interval_tick_solar_circuit": 1,
+                "scan_interval_tick_hot_water_tank": 1,
+                "scan_interval_tick_buffer_tank": 1,
+                "scan_interval_tick_switch_valve": 1,
+                "scan_interval_tick_external_heat_source": 1,
+                "scan_interval_tick_photovoltaics": 1,
+            },
+            {
+                "scan_interval": 60,
+                "scan_interval_tick_system": 1,
+                "scan_interval_tick_heat_pump": 2,
+                "scan_interval_tick_heat_circuit": 3,
+                "scan_interval_tick_solar_circuit": 1,
+                "scan_interval_tick_hot_water_tank": 1,
+                "scan_interval_tick_buffer_tank": 1,
+                "scan_interval_tick_switch_valve": 1,
+                "scan_interval_tick_external_heat_source": 1,
+                "scan_interval_tick_photovoltaics": 1,
+            },
+        ),
+    ],
+)
 async def test_option_flow(
     hass: HomeAssistant,
     config_entry: MockConfigEntry,
     fake_api: FakeKebaKeEnergyAPI,
+    user_input: dict[str, int],
+    expected: dict[str, int],
 ) -> None:
+    """Test the options flow and the normalization of the update multipliers."""
     fake_api.responses = [
         # 1. coordinator
         MULTIPLE_POSITIONS_RESPONSE,
@@ -559,9 +668,7 @@ async def test_option_flow(
         MULTIPLE_POSITION_DATA_RESPONSE_1,
         *HEATING_CURVES_RESPONSE_1_1,
     ]
-    fake_api.register_requests(config_entry.data[CONF_HOST])
-
-    await setup_integration(hass, config_entry)
+    await fake_api.setup_integration()
 
     result_init: ConfigFlowResult = await hass.config_entries.options.async_init(
         config_entry.entry_id,
@@ -587,33 +694,11 @@ async def test_option_flow(
 
     result_create_entry: ConfigFlowResult = await hass.config_entries.options.async_configure(
         result_init["flow_id"],
-        user_input={
-            "scan_interval": 60,
-            "scan_interval_tick_system": 4,
-            "scan_interval_tick_heat_pump": 4,
-            "scan_interval_tick_heat_circuit": 8,
-            "scan_interval_tick_solar_circuit": 2,
-            "scan_interval_tick_hot_water_tank": 2,
-            "scan_interval_tick_buffer_tank": 16,
-            "scan_interval_tick_switch_valve": 2,
-            "scan_interval_tick_external_heat_source": 4,
-            "scan_interval_tick_photovoltaics": 2,
-        },
+        user_input=user_input,
     )
 
     assert result_create_entry["type"] is FlowResultType.CREATE_ENTRY
-    assert result_create_entry["data"] == {
-        "scan_interval": 120,
-        "scan_interval_tick_system": 2,
-        "scan_interval_tick_heat_pump": 2,
-        "scan_interval_tick_heat_circuit": 4,
-        "scan_interval_tick_solar_circuit": 1,
-        "scan_interval_tick_hot_water_tank": 1,
-        "scan_interval_tick_buffer_tank": 8,
-        "scan_interval_tick_switch_valve": 1,
-        "scan_interval_tick_external_heat_source": 2,
-        "scan_interval_tick_photovoltaics": 1,
-    }
+    assert result_create_entry["data"] == expected
 
 
 async def test_option_flow_without_photovoltaics(
@@ -621,23 +706,20 @@ async def test_option_flow_without_photovoltaics(
     config_entry: MockConfigEntry,
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
+    """Test that the options flow hides the photovoltaics option without photovoltaics."""
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
         HEATING_CURVE_NAMES_RESPONSE,
-        get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITION_DATA_RESPONSE_1,
+        get_multiple_position_fixed_data_response(has_photovoltaics="false"),
+        [value for value in MULTIPLE_POSITION_DATA_RESPONSE_1 if ".photovoltaics." not in value["name"]],
         *HEATING_CURVES_RESPONSE_1_1,
     ]
-    fake_api.register_requests(config_entry.data[CONF_HOST])
+    await fake_api.setup_integration()
 
-    await setup_integration(hass, config_entry)
-
-    # Simulate a system without photovoltaics (Issue #66)
-    with patch.object(config_entry.runtime_data, "has_photovoltaics", return_value=False):
-        result_init: ConfigFlowResult = await hass.config_entries.options.async_init(
-            config_entry.entry_id,
-            data=None,
-        )
+    result_init: ConfigFlowResult = await hass.config_entries.options.async_init(
+        config_entry.entry_id,
+        data=None,
+    )
 
     assert result_init["type"] is FlowResultType.FORM
     assert result_init["step_id"] == "init"
@@ -661,6 +743,7 @@ async def test_option_flow_when_integration_not_fully_loaded(
     config_entry: MockConfigEntry,
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
+    """Test that the options flow aborts if the integration is not loaded."""
     fake_api.responses = [
         # 1. coordinator
         MULTIPLE_POSITIONS_RESPONSE,
@@ -669,9 +752,7 @@ async def test_option_flow_when_integration_not_fully_loaded(
         MULTIPLE_POSITION_DATA_RESPONSE_1,
         *HEATING_CURVES_RESPONSE_1_1,
     ]
-    fake_api.register_requests(config_entry.data[CONF_HOST])
-
-    await setup_integration(hass, config_entry)
+    await fake_api.setup_integration()
     config_entry.runtime_data = None
 
     result_init: ConfigFlowResult = await hass.config_entries.options.async_init(

@@ -8,12 +8,10 @@ from typing import TYPE_CHECKING
 
 import pytest
 from homeassistant.components.sensor.const import ATTR_OPTIONS
-from homeassistant.const import CONF_HOST
 from homeassistant.core import HomeAssistant
 from homeassistant.core import State
 
 from tests import init_translations
-from tests import setup_integration
 from tests.api_data import HEATING_CURVE_NAMES_RESPONSE
 from tests.api_data import HEATING_CURVES_RESPONSE_1_1
 from tests.api_data import MULTIPLE_POSITION_DATA_RESPONSE_1
@@ -21,7 +19,6 @@ from tests.api_data import MULTIPLE_POSITIONS_RESPONSE
 from tests.api_data import get_multiple_position_fixed_data_response
 
 if TYPE_CHECKING:
-    from pytest_homeassistant_custom_component.common import MockConfigEntry
     from syrupy.assertion import SnapshotAssertion
 
     from tests.conftest import FakeKebaKeEnergyAPI
@@ -208,16 +205,15 @@ if TYPE_CHECKING:
         "sensor.keba_keenergy_12345678_photovoltaics_total_energy",
     ],
 )
-@pytest.mark.parametrize("language", ["en", "de"])
-@pytest.mark.usefixtures("entity_registry_enabled_by_default")
+@pytest.mark.parametrize("language", ["en", "de"], indirect=True)
+@pytest.mark.usefixtures("entity_registry_enabled_by_default", "language")
 async def test_sensors(
     hass: HomeAssistant,
-    config_entry: MockConfigEntry,
     fake_api: FakeKebaKeEnergyAPI,
     snapshot: SnapshotAssertion,
-    language: str,
     entity: str,
 ) -> None:
+    """Test the states of the sensors."""
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
         HEATING_CURVE_NAMES_RESPONSE,
@@ -225,10 +221,8 @@ async def test_sensors(
         MULTIPLE_POSITION_DATA_RESPONSE_1,
         *HEATING_CURVES_RESPONSE_1_1,
     ]
-    fake_api.register_requests(config_entry.data[CONF_HOST])
-    hass.config.language = language
 
-    await setup_integration(hass, config_entry)
+    await fake_api.setup_integration()
 
     _entity: State | None = hass.states.get(entity)
     assert isinstance(_entity, State)
@@ -260,17 +254,16 @@ async def test_sensors(
         ("sensor.keba_keenergy_12345678_switch_valve_position_2", "switch_valve_position"),
     ],
 )
-@pytest.mark.parametrize("language", ["en", "de"])
-@pytest.mark.usefixtures("entity_registry_enabled_by_default")
+@pytest.mark.parametrize("language", ["en", "de"], indirect=True)
+@pytest.mark.usefixtures("entity_registry_enabled_by_default", "language")
 async def test_sensors_options_translations(
     hass: HomeAssistant,
-    config_entry: MockConfigEntry,
     fake_api: FakeKebaKeEnergyAPI,
     snapshot: SnapshotAssertion,
-    language: str,
     entity: str,
     translation: str,
 ) -> None:
+    """Test the translated options of the enum sensors."""
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
         HEATING_CURVE_NAMES_RESPONSE,
@@ -278,11 +271,9 @@ async def test_sensors_options_translations(
         MULTIPLE_POSITION_DATA_RESPONSE_1,
         *HEATING_CURVES_RESPONSE_1_1,
     ]
-    fake_api.register_requests(config_entry.data[CONF_HOST])
-    hass.config.language = language
 
-    await setup_integration(hass, config_entry)
-    translations: dict[str, str] = await init_translations(hass, config_entry, category="entity")
+    await fake_api.setup_integration()
+    translations: dict[str, str] = await init_translations(hass, category="entity")
 
     _entity: State | None = hass.states.get(entity)
     assert isinstance(_entity, State)

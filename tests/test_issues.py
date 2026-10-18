@@ -5,17 +5,18 @@
 from __future__ import annotations
 
 from typing import TYPE_CHECKING
-from unittest.mock import patch
+from typing import Any
 
 from homeassistant.components.select import ATTR_OPTION
 from homeassistant.components.select import DOMAIN as SELECT_DOMAIN
 from homeassistant.components.select import SERVICE_SELECT_OPTION
 from homeassistant.const import ATTR_ENTITY_ID
 from homeassistant.helpers import issue_registry as ir
+from homeassistant.util import dt as dt_util
 
 from custom_components.keba_keenergy.const import DOMAIN
+from custom_components.keba_keenergy.const import FLASH_WRITE_LIMIT_PER_WEEK
 from tests import init_translations
-from tests import setup_integration
 from tests.api_data import HEATING_CURVE_NAMES_RESPONSE
 from tests.api_data import HEATING_CURVES_RESPONSE_1_1
 from tests.api_data import MULTIPLE_POSITION_DATA_RESPONSE_1
@@ -23,17 +24,19 @@ from tests.api_data import MULTIPLE_POSITIONS_RESPONSE
 from tests.api_data import get_multiple_position_fixed_data_response
 
 if TYPE_CHECKING:
+    from datetime import date
+
     from homeassistant.core import HomeAssistant
-    from pytest_homeassistant_custom_component.common import MockConfigEntry
 
     from tests.conftest import FakeKebaKeEnergyAPI
 
 
 async def test_issues(
     hass: HomeAssistant,
-    config_entry: MockConfigEntry,
     fake_api: FakeKebaKeEnergyAPI,
+    hass_storage: dict[str, Any],
 ) -> None:
+    """Test the repair issue for frequent write operations."""
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
         HEATING_CURVE_NAMES_RESPONSE,
@@ -47,40 +50,40 @@ async def test_issues(
         MULTIPLE_POSITION_DATA_RESPONSE_1,
         *HEATING_CURVES_RESPONSE_1_1,
     ]
-    fake_api.register_requests("10.0.0.100")
-
-    with patch(
-        "homeassistant.helpers.storage.Store.async_load",
-        return_value={
+    today: date = dt_util.now().date()
+    hass_storage[DOMAIN] = {
+        "version": 1,
+        "minor_version": 1,
+        "key": DOMAIN,
+        "data": {
             "flash_write_counter": {
-                "week": [2026, 5],
-                "count": 1,
+                "week": [today.isocalendar().year, today.isocalendar().week],
+                "count": FLASH_WRITE_LIMIT_PER_WEEK,
             },
         },
-    ):
-        await setup_integration(hass, config_entry)
-        translations: dict[str, str] = await init_translations(hass, config_entry, category="issues")
+    }
+    await fake_api.setup_integration()
+    translations: dict[str, str] = await init_translations(hass, category="issues")
 
-    with patch("custom_components.keba_keenergy.coordinator.FLASH_WRITE_LIMIT_PER_WEEK", 1):
-        await hass.services.async_call(
-            domain=SELECT_DOMAIN,
-            service=SERVICE_SELECT_OPTION,
-            service_data={
-                ATTR_ENTITY_ID: "select.keba_keenergy_12345678_buffer_tank_operating_mode_1",
-                ATTR_OPTION: "on",
-            },
-            blocking=True,
-        )
+    await hass.services.async_call(
+        domain=SELECT_DOMAIN,
+        service=SERVICE_SELECT_OPTION,
+        service_data={
+            ATTR_ENTITY_ID: "select.keba_keenergy_12345678_buffer_tank_operating_mode_1",
+            ATTR_OPTION: "on",
+        },
+        blocking=True,
+    )
 
-        await hass.services.async_call(
-            domain=SELECT_DOMAIN,
-            service=SERVICE_SELECT_OPTION,
-            service_data={
-                ATTR_ENTITY_ID: "select.keba_keenergy_12345678_buffer_tank_operating_mode_1",
-                ATTR_OPTION: "off",
-            },
-            blocking=True,
-        )
+    await hass.services.async_call(
+        domain=SELECT_DOMAIN,
+        service=SERVICE_SELECT_OPTION,
+        service_data={
+            ATTR_ENTITY_ID: "select.keba_keenergy_12345678_buffer_tank_operating_mode_1",
+            ATTR_OPTION: "off",
+        },
+        blocking=True,
+    )
 
     issue_registry = ir.async_get(hass)
 
@@ -99,17 +102,18 @@ async def test_issues(
 
     assert title == "Frequent write operations detected"
     assert description == (
-        """More than 1 write operations were performed on the device this week.
-
-Very frequent write operations (for example caused by automations) may reduce the lifetime of the device's flash memory."""  # noqa: E501
+        "More than 30 write operations were performed on the device this week.\n\n"
+        "Very frequent write operations (for example caused by automations) may reduce the lifetime of the device's "
+        "flash memory."
     )
 
 
 async def test_issues_translated(
     hass: HomeAssistant,
-    config_entry: MockConfigEntry,
     fake_api: FakeKebaKeEnergyAPI,
+    hass_storage: dict[str, Any],
 ) -> None:
+    """Test the German translation of the repair issue for frequent write operations."""
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
         HEATING_CURVE_NAMES_RESPONSE,
@@ -123,41 +127,41 @@ async def test_issues_translated(
         MULTIPLE_POSITION_DATA_RESPONSE_1,
         *HEATING_CURVES_RESPONSE_1_1,
     ]
-    fake_api.register_requests("10.0.0.100")
-
-    with patch(
-        "homeassistant.helpers.storage.Store.async_load",
-        return_value={
+    today: date = dt_util.now().date()
+    hass_storage[DOMAIN] = {
+        "version": 1,
+        "minor_version": 1,
+        "key": DOMAIN,
+        "data": {
             "flash_write_counter": {
-                "week": [2026, 5],
-                "count": 1,
+                "week": [today.isocalendar().year, today.isocalendar().week],
+                "count": FLASH_WRITE_LIMIT_PER_WEEK,
             },
         },
-    ):
-        hass.config.language = "de"
-        await setup_integration(hass, config_entry)
-        translations: dict[str, str] = await init_translations(hass, config_entry, category="issues")
+    }
+    hass.config.language = "de"
+    await fake_api.setup_integration()
+    translations: dict[str, str] = await init_translations(hass, category="issues")
 
-    with patch("custom_components.keba_keenergy.coordinator.FLASH_WRITE_LIMIT_PER_WEEK", 1):
-        await hass.services.async_call(
-            domain=SELECT_DOMAIN,
-            service=SERVICE_SELECT_OPTION,
-            service_data={
-                ATTR_ENTITY_ID: "select.keba_keenergy_12345678_buffer_tank_operating_mode_1",
-                ATTR_OPTION: "on",
-            },
-            blocking=True,
-        )
+    await hass.services.async_call(
+        domain=SELECT_DOMAIN,
+        service=SERVICE_SELECT_OPTION,
+        service_data={
+            ATTR_ENTITY_ID: "select.keba_keenergy_12345678_buffer_tank_operating_mode_1",
+            ATTR_OPTION: "on",
+        },
+        blocking=True,
+    )
 
-        await hass.services.async_call(
-            domain=SELECT_DOMAIN,
-            service=SERVICE_SELECT_OPTION,
-            service_data={
-                ATTR_ENTITY_ID: "select.keba_keenergy_12345678_buffer_tank_operating_mode_1",
-                ATTR_OPTION: "off",
-            },
-            blocking=True,
-        )
+    await hass.services.async_call(
+        domain=SELECT_DOMAIN,
+        service=SERVICE_SELECT_OPTION,
+        service_data={
+            ATTR_ENTITY_ID: "select.keba_keenergy_12345678_buffer_tank_operating_mode_1",
+            ATTR_OPTION: "off",
+        },
+        blocking=True,
+    )
 
     issue_registry = ir.async_get(hass)
 
@@ -176,7 +180,7 @@ async def test_issues_translated(
 
     assert title == "Viele Schreibzugriffe erkannt"
     assert description == (
-        """In dieser Woche wurden mehr als 1 Schreibzugriffe auf das Gerät durchgeführt.
-
-Sehr häufige Schreibzugriffe (zum Beispiel durch Automationen) können die Lebensdauer des Flash-Speichers des Geräts reduzieren."""  # noqa: E501
+        "In dieser Woche wurden mehr als 30 Schreibzugriffe auf das Gerät durchgeführt.\n\n"
+        "Sehr häufige Schreibzugriffe (zum Beispiel durch Automationen) können die Lebensdauer des "
+        "Flash-Speichers des Geräts reduzieren."
     )

@@ -6,7 +6,6 @@ from __future__ import annotations
 
 from datetime import timedelta
 from typing import TYPE_CHECKING
-from typing import Any
 
 import pytest
 import voluptuous as vol
@@ -14,14 +13,14 @@ from homeassistant.components.number import ATTR_VALUE
 from homeassistant.components.number import DOMAIN as NUMBER_DOMAIN
 from homeassistant.components.number.const import SERVICE_SET_VALUE
 from homeassistant.const import ATTR_ENTITY_ID
-from homeassistant.const import CONF_HOST
 from homeassistant.core import HomeAssistant
 from homeassistant.core import State
 from homeassistant.exceptions import ServiceValidationError
+from homeassistant.helpers.entity_component import async_update_entity
 from homeassistant.util import dt as dt_util
 from pytest_homeassistant_custom_component.common import async_fire_time_changed
 
-from tests import setup_integration
+from custom_components.keba_keenergy.const import FLASH_WRITE_DELAY
 from tests.api_data import DEFAULT_POSITION_FIXED_DATA_RESPONSE
 from tests.api_data import DEFAULT_POSITION_RESPONSE
 from tests.api_data import HEATING_CURVE_NAMES_RESPONSE
@@ -32,7 +31,6 @@ from tests.api_data import get_multiple_position_fixed_data_response
 from tests.api_data import get_single_position_data_response
 
 if TYPE_CHECKING:
-    from pytest_homeassistant_custom_component.common import MockConfigEntry
     from syrupy.assertion import SnapshotAssertion
 
     from tests.conftest import FakeKebaKeEnergyAPI
@@ -95,16 +93,15 @@ if TYPE_CHECKING:
         "number.keba_keenergy_12345678_external_heat_source_min_runtime_excess_energy_2",
     ],
 )
-@pytest.mark.parametrize("language", ["en", "de"])
-@pytest.mark.usefixtures("entity_registry_enabled_by_default")
+@pytest.mark.parametrize("language", ["en", "de"], indirect=True)
+@pytest.mark.usefixtures("entity_registry_enabled_by_default", "language")
 async def test_numbers(
     hass: HomeAssistant,
-    config_entry: MockConfigEntry,
     fake_api: FakeKebaKeEnergyAPI,
     snapshot: SnapshotAssertion,
-    language: str,
     entity: str,
 ) -> None:
+    """Test the states of the number entities."""
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
         HEATING_CURVE_NAMES_RESPONSE,
@@ -112,10 +109,8 @@ async def test_numbers(
         MULTIPLE_POSITION_DATA_RESPONSE_1,
         *HEATING_CURVES_RESPONSE_1_1,
     ]
-    fake_api.register_requests(config_entry.data[CONF_HOST])
-    hass.config.language = language
 
-    await setup_integration(hass, config_entry)
+    await fake_api.setup_integration()
 
     _entity: State | None = hass.states.get(entity)
     assert isinstance(_entity, State)
@@ -185,12 +180,12 @@ async def test_numbers(
 @pytest.mark.usefixtures("entity_registry_enabled_by_default")
 async def test_set_value(
     hass: HomeAssistant,
-    config_entry: MockConfigEntry,
     fake_api: FakeKebaKeEnergyAPI,
     entity_id: str,
     value: int,
     expected: str,
 ) -> None:
+    """Test setting the value of a number entity."""
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
         HEATING_CURVE_NAMES_RESPONSE,
@@ -201,9 +196,7 @@ async def test_set_value(
         MULTIPLE_POSITION_DATA_RESPONSE_1,
         *HEATING_CURVES_RESPONSE_1_1,
     ]
-    fake_api.register_requests("10.0.0.100")
-
-    await setup_integration(hass, config_entry)
+    await fake_api.setup_integration()
 
     state: State | None = hass.states.get(entity_id)
     assert isinstance(state, State)
@@ -272,12 +265,12 @@ async def test_set_value(
 @pytest.mark.usefixtures("entity_registry_enabled_by_default")
 async def test_set_value_bad_range(
     hass: HomeAssistant,
-    config_entry: MockConfigEntry,
     fake_api: FakeKebaKeEnergyAPI,
     entity_id: str,
     value: int,
     expected: str,
 ) -> None:
+    """Test setting a value out of range of a number entity."""
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
         HEATING_CURVE_NAMES_RESPONSE,
@@ -288,9 +281,7 @@ async def test_set_value_bad_range(
         MULTIPLE_POSITION_DATA_RESPONSE_1,
         *HEATING_CURVES_RESPONSE_1_1,
     ]
-    fake_api.register_requests("10.0.0.100")
-
-    await setup_integration(hass, config_entry)
+    await fake_api.setup_integration()
 
     with pytest.raises(ServiceValidationError, match=expected):
         await hass.services.async_call(
@@ -321,12 +312,12 @@ async def test_set_value_bad_range(
 )
 async def test_set_value_bad_attr(
     hass: HomeAssistant,
-    config_entry: MockConfigEntry,
     fake_api: FakeKebaKeEnergyAPI,
     entity_id: str,
-    value: Any,
+    value: str | None,
     expected: str,
 ) -> None:
+    """Test setting an invalid value of a number entity."""
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
         HEATING_CURVE_NAMES_RESPONSE,
@@ -337,9 +328,7 @@ async def test_set_value_bad_attr(
         MULTIPLE_POSITION_DATA_RESPONSE_1,
         *HEATING_CURVES_RESPONSE_1_1,
     ]
-    fake_api.register_requests("10.0.0.100")
-
-    await setup_integration(hass, config_entry)
+    await fake_api.setup_integration()
 
     with pytest.raises(vol.Invalid, match=expected):
         await hass.services.async_call(
@@ -353,41 +342,77 @@ async def test_set_value_bad_attr(
         )
 
 
-async def test_number_native_value_uses_pending_value(
+async def test_set_value_debounced(
     hass: HomeAssistant,
-    config_entry: MockConfigEntry,
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
+    """Test that quick value changes are shown at once and written once, with the last value."""
+    entity_id: str = "number.keba_keenergy_12345678_heat_circuit_target_temperature_offset"
     fake_api.responses = [
         DEFAULT_POSITION_RESPONSE,
         HEATING_CURVE_NAMES_RESPONSE,
         DEFAULT_POSITION_FIXED_DATA_RESPONSE,
         get_single_position_data_response(heat_circuit_target_temperature_offset="1.5"),
         *HEATING_CURVES_RESPONSE_1_1,
-        get_single_position_data_response(heat_circuit_target_temperature_offset="1.0"),
-        *HEATING_CURVES_RESPONSE_1_1,
-        get_single_position_data_response(heat_circuit_target_temperature_offset="0.5"),
+        # Read API after updating the entity
+        get_single_position_data_response(heat_circuit_target_temperature_offset="1.5"),
         *HEATING_CURVES_RESPONSE_1_1,
     ]
-    fake_api.register_requests(config_entry.data["host"])
+    await fake_api.setup_integration()
 
-    await setup_integration(hass, config_entry)
+    values: tuple[float, ...] = (1.0, 0.5)
 
-    entity = hass.data["number"].get_entity("number.keba_keenergy_12345678_heat_circuit_target_temperature_offset")
-    assert entity is not None
+    for value in values:
+        await hass.services.async_call(
+            domain=NUMBER_DOMAIN,
+            service=SERVICE_SET_VALUE,
+            service_data={
+                ATTR_ENTITY_ID: entity_id,
+                ATTR_VALUE: value,
+            },
+            blocking=True,
+        )
 
-    assert entity.native_value == 1.5
+    await async_update_entity(hass, entity_id)
 
-    # First call → creates debounce handle
-    await entity.async_set_native_value(1.0)
-    first_handle = entity._async_call_later
+    state: State | None = hass.states.get(entity_id)
+    assert isinstance(state, State)
+    assert state.state == str(values[-1])
+    assert fake_api.write_requests() == []
 
-    assert first_handle is not None
-    assert entity.native_value == 1.0
+    async_fire_time_changed(hass, dt_util.utcnow() + timedelta(seconds=FLASH_WRITE_DELAY))
+    await hass.async_block_till_done()
 
-    # Second call BEFORE debounce fires
-    await entity.async_set_native_value(0.5)
+    assert fake_api.write_requests() == [
+        '[{"name": "APPL.CtrlAppl.sParam.heatCircuit[0].param.offsetRoomTemp", "value": "0.5"}]',
+    ]
 
-    assert entity._async_call_later is not None
-    assert entity._async_call_later is not first_handle
-    assert entity.native_value == 0.5
+
+async def test_set_unchanged_value(
+    hass: HomeAssistant,
+    fake_api: FakeKebaKeEnergyAPI,
+) -> None:
+    """Test that the current value of a number entity is not written again."""
+    fake_api.responses = [
+        DEFAULT_POSITION_RESPONSE,
+        HEATING_CURVE_NAMES_RESPONSE,
+        DEFAULT_POSITION_FIXED_DATA_RESPONSE,
+        get_single_position_data_response(heat_circuit_target_temperature_offset="1.5"),
+        *HEATING_CURVES_RESPONSE_1_1,
+    ]
+    await fake_api.setup_integration()
+
+    await hass.services.async_call(
+        domain=NUMBER_DOMAIN,
+        service=SERVICE_SET_VALUE,
+        service_data={
+            ATTR_ENTITY_ID: "number.keba_keenergy_12345678_heat_circuit_target_temperature_offset",
+            ATTR_VALUE: 1.5,
+        },
+        blocking=True,
+    )
+
+    async_fire_time_changed(hass, dt_util.utcnow() + timedelta(seconds=FLASH_WRITE_DELAY))
+    await hass.async_block_till_done()
+
+    assert fake_api.write_requests() == []
