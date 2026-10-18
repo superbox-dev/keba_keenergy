@@ -4,11 +4,13 @@
 
 from __future__ import annotations
 
+from http import HTTPStatus
 from typing import TYPE_CHECKING
 from typing import Any
 
 import probatio
 import pytest
+from homeassistant.exceptions import HomeAssistantError
 from homeassistant.exceptions import ServiceValidationError
 
 from custom_components.keba_keenergy.const import ATTR_CONFIG_ENTRY
@@ -457,3 +459,85 @@ def test_heating_curve_points_schema_invalid_curve() -> None:
 
     with pytest.raises(probatio.Invalid):
         HEATING_CURVE_POINTS_SCHEMA(data)
+
+
+async def test_set_away_range_with_date_and_time(
+    hass: HomeAssistant,
+    config_entry: MockConfigEntry,
+    fake_api: FakeKebaKeEnergyAPI,
+) -> None:
+    """Test that the action to set the away date range only uses the date of a date with time."""
+    fake_api.responses = [
+        MULTIPLE_POSITIONS_RESPONSE,
+        HEATING_CURVE_NAMES_RESPONSE,
+        get_multiple_position_fixed_data_response(),
+        MULTIPLE_POSITION_DATA_RESPONSE_1,
+        *HEATING_CURVES_RESPONSE_1_1,
+        # Read API after services call
+        MULTIPLE_POSITION_DATA_RESPONSE_1,
+        *HEATING_CURVES_RESPONSE_1_1,
+    ]
+    await fake_api.setup_integration()
+
+    await hass.services.async_call(
+        domain=DOMAIN,
+        service=SERVICE_SET_AWAY_DATE_RANGE,
+        service_data={
+            ATTR_CONFIG_ENTRY: config_entry.entry_id,
+            ATTR_START_DATE: "2025-01-01T08:00:00",
+            ATTR_END_DATE: "2025-01-14T20:00:00+00:00",
+        },
+        blocking=True,
+    )
+
+    fake_api.assert_called_write_with(
+        '[{"name": "APPL.CtrlAppl.sParam.heatCircuit[0].param.holiday.start", "value": "1735686000"}, '
+        '{"name": "APPL.CtrlAppl.sParam.heatCircuit[1].param.holiday.start", "value": "1735686000"}, '
+        '{"name": "APPL.CtrlAppl.sParam.heatCircuit[0].param.holiday.stop", "value": "1736895599"}, '
+        '{"name": "APPL.CtrlAppl.sParam.heatCircuit[1].param.holiday.stop", "value": "1736895599"}]',
+    )
+
+
+def test_away_date_range_schema_invalid_date() -> None:
+    """Test the schema of the away date range action with an invalid date."""
+    data = {
+        ATTR_CONFIG_ENTRY: "1234",
+        ATTR_START_DATE: "2026-02-30",
+        ATTR_END_DATE: "2026-03-10",
+    }
+
+    with pytest.raises(probatio.Invalid):
+        AWAY_DATE_RANGE_SCHEMA(data)
+
+
+async def test_set_heating_curve_points_with_communication_error(
+    hass: HomeAssistant,
+    config_entry: MockConfigEntry,
+    fake_api: FakeKebaKeEnergyAPI,
+) -> None:
+    """Test that a communication error while reading the heating curves raises a translated error."""
+    fake_api.responses = [
+        MULTIPLE_POSITIONS_RESPONSE,
+        HEATING_CURVE_NAMES_RESPONSE,
+        get_multiple_position_fixed_data_response(),
+        MULTIPLE_POSITION_DATA_RESPONSE_1,
+        *HEATING_CURVES_RESPONSE_1_1,
+        # Read the heating curves in the services call
+        HTTPStatus.BAD_REQUEST,
+    ]
+    await fake_api.setup_integration()
+
+    with pytest.raises(HomeAssistantError) as error:
+        await hass.services.async_call(
+            domain=DOMAIN,
+            service=SERVICE_SET_HEATING_CURVE_POINTS,
+            service_data={
+                ATTR_CONFIG_ENTRY: config_entry.entry_id,
+                ATTR_HEATING_CURVE: "HC1",
+                ATTR_POINTS: [{"outdoor": 0, "flow": 30}],
+            },
+            blocking=True,
+        )
+
+    assert error.value.translation_key == "communication_error"
+    assert fake_api.write_requests() == []

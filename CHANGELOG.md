@@ -31,6 +31,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixed an error of the climate entity if a heating circuit is in the operating mode `external` or `room_control`.
 - Fixed a pending change of a number, climate or water heater entity being written after the integration was
   unloaded.
+- Fixed an untranslated error of the `keba_keenergy.set_heating_curve_points` action if the Web HMI is not reachable.
+- Fixed an untranslated error of the `keba_keenergy.set_away_date_range` action for an invalid date.
 - Fixed an error of number, climate and water heater entities if the Web HMI provides no limits.
 
 ## [1.10.4] - 2026-09-30

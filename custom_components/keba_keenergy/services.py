@@ -12,7 +12,6 @@ from typing import TYPE_CHECKING
 from typing import Final
 
 import probatio
-from ciso8601 import parse_datetime_as_naive
 from homeassistant.config_entries import ConfigEntryState
 from homeassistant.core import callback
 from homeassistant.exceptions import ServiceValidationError
@@ -42,6 +41,15 @@ _LOGGER = logging.getLogger(__name__)
 ATTR_START_DATE: Final[str] = "start_date"
 ATTR_END_DATE: Final[str] = "end_date"
 
+
+def _date(value: object) -> date:
+    """Validate a date, a date with time (as before) only uses the date."""
+    try:
+        return cv.date(value)
+    except probatio.Invalid:
+        return cv.datetime(value).date()
+
+
 AWAY_DATE_RANGE_SCHEMA: probatio.Schema = probatio.Schema(
     {
         probatio.Required(ATTR_CONFIG_ENTRY): selector.ConfigEntrySelector(
@@ -49,8 +57,8 @@ AWAY_DATE_RANGE_SCHEMA: probatio.Schema = probatio.Schema(
                 "integration": DOMAIN,
             },
         ),
-        probatio.Required(ATTR_START_DATE): cv.string,
-        probatio.Required(ATTR_END_DATE): cv.string,
+        probatio.Required(ATTR_START_DATE): _date,
+        probatio.Required(ATTR_END_DATE): _date,
     },
 )
 
@@ -124,22 +132,19 @@ def _get_coordinator(call: ServiceCall) -> KebaKeEnergyDataUpdateCoordinator:
 async def _async_set_away_range(call: ServiceCall) -> None:
     coordinator: KebaKeEnergyDataUpdateCoordinator = _get_coordinator(call)
 
-    start_date: str = call.data[ATTR_START_DATE]
-    end_date: str = call.data[ATTR_END_DATE]
+    start_date: date = call.data[ATTR_START_DATE]
+    end_date: date = call.data[ATTR_END_DATE]
 
-    tz: ZoneInfo = await coordinator.get_timezone()
-
-    start_date_naive: date = parse_datetime_as_naive(start_date).date()
-    end_date_naive: date = parse_datetime_as_naive(end_date).date()
-
-    start_date_tz = datetime.combine(start_date_naive, time.min, tzinfo=tz)
-    end_date_tz = datetime.combine(end_date_naive, time.max, tzinfo=tz)
-
-    if end_date_tz < start_date_tz:
+    if end_date < start_date:
         raise ServiceValidationError(
             translation_domain=DOMAIN,
             translation_key="end_date_smaller_than_start_date",
         )
+
+    tz: ZoneInfo = await coordinator.get_timezone()
+
+    start_date_tz: datetime = datetime.combine(start_date, time.min, tzinfo=tz)
+    end_date_tz: datetime = datetime.combine(end_date, time.max, tzinfo=tz)
 
     await coordinator.set_away_date_range(
         start_timestamp=start_date_tz.timestamp(),
@@ -151,7 +156,7 @@ async def _async_set_heating_curve_points(call: ServiceCall) -> None:
     coordinator: KebaKeEnergyDataUpdateCoordinator = _get_coordinator(call)
 
     heating_curve: str = call.data[ATTR_HEATING_CURVE]
-    heating_curves: HeatingCurves = await coordinator.api.heat_circuit.get_heating_curve_points()
+    heating_curves: HeatingCurves = await coordinator.get_heating_curve_points()
 
     if heating_curve not in heating_curves:
         raise ServiceValidationError(

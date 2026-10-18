@@ -43,6 +43,7 @@ from keba_keenergy_api.constants import SectionPrefix
 from keba_keenergy_api.constants import SolarCircuit
 from keba_keenergy_api.constants import SwitchValve
 from keba_keenergy_api.constants import System
+from keba_keenergy_api.endpoints import HeatingCurves
 from keba_keenergy_api.endpoints import Position
 from keba_keenergy_api.endpoints import Value
 from keba_keenergy_api.endpoints import ValueResponse
@@ -574,6 +575,10 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
         """Get the timezone from the Web HMI."""
         timezone: str = await self._api_call_for_user(self.api.system.get_timezone())
         return ZoneInfo(timezone)
+
+    async def get_heating_curve_points(self) -> HeatingCurves:
+        """Get the points of all heating curves from the Web HMI."""
+        return await self._api_call_for_user(self.api.heat_circuit.get_heating_curve_points())
 
     async def set_away_date_range(self, *, start_timestamp: float, end_timestamp: float) -> None:
         """Set the away date range of all heating circuits, if it changed."""

@@ -164,6 +164,8 @@ temperature (away).
 | `start_date`   | First day of the away period, e.g. `2026-01-01`.    |
 | `end_date`     | Last day of the away period, e.g. `2026-01-14`.     |
 
+A date with time, e.g. `2026-01-01T08:00:00`, is accepted too, only the date is used.
+
 ### `keba_keenergy.set_heating_curve_points`
 
 Sets the points of a heating curve.
