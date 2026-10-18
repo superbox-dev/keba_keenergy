@@ -110,8 +110,6 @@ class KebaKeEnergyClimateEntity(KebaKeEnergyBaseEntity, ClimateEntity):
 
         self.entity_id = f"{CLIMATE_DOMAIN}.{DOMAIN}_{self._attr_unique_id}"
 
-        self._operating_mode_status: int | None = None
-
         self._pending_key = "target_temperature_offset"
         self._pending_section = HeatCircuit.TARGET_TEMPERATURE_OFFSET
         self._pending_device_numbers = self.coordinator.heat_circuit_numbers
@@ -311,9 +309,11 @@ class KebaKeEnergyClimateEntity(KebaKeEnergyBaseEntity, ClimateEntity):
         elif hvac_mode == HVACMode.OFF:
             operating_mode_status = HeatCircuitOperatingMode.OFF.value
 
-        if operating_mode_status is not None and self._operating_mode_status != operating_mode_status:
-            self._operating_mode_status = operating_mode_status
+        operating_mode: str | None = self.get_value("operating_mode", expected_type=str)
 
+        if operating_mode_status is not None and (
+            operating_mode is None or HeatCircuitOperatingMode[operating_mode.upper()].value != operating_mode_status
+        ):
             await self._async_write_data(
                 operating_mode_status,
                 section=HeatCircuit.OPERATING_MODE,

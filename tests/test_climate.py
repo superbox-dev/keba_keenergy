@@ -309,6 +309,33 @@ async def test_set_hvac_mode(
     )
 
 
+async def test_set_unchanged_hvac_mode(
+    hass: HomeAssistant,
+    fake_api: FakeKebaKeEnergyAPI,
+) -> None:
+    """Test that the HVAC mode is not written if the heating circuit already has it."""
+    fake_api.responses = [
+        MULTIPLE_POSITIONS_RESPONSE,
+        HEATING_CURVE_NAMES_RESPONSE,
+        get_multiple_position_fixed_data_response(),
+        MULTIPLE_POSITION_DATA_RESPONSE_1,
+        *HEATING_CURVES_RESPONSE_1_1,
+    ]
+    await fake_api.setup_integration()
+
+    await hass.services.async_call(
+        domain=CLIMATE_DOMAIN,
+        service=SERVICE_SET_HVAC_MODE,
+        service_data={
+            ATTR_ENTITY_ID: ENTITY_ID_1,
+            ATTR_HVAC_MODE: HVACMode.HEAT,
+        },
+        blocking=True,
+    )
+
+    assert fake_api.write_requests() == []
+
+
 @pytest.mark.parametrize(
     ("preset_mode", "response", "expected_preset_mode"),
     [
