@@ -3,7 +3,7 @@
   "name": "KEBA KeEnergy",
   "codeowners": ["@mh-superbox"],
   "config_flow": true,
-  "documentation": "https://superbox.one",
+  "documentation": "https://superbox-dev.github.io/keba_keenergy/",
   "integration_type": "hub",
   "iot_class": "local_polling",
   "issue_tracker": "https://github.com/superbox-dev/keba_keenergy/issues",

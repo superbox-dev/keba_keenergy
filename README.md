@@ -27,20 +27,21 @@ circuits, external heat sources and photovoltaics. It is used with heat pumps fr
 3. Go to **Settings** → **Devices & services**, select **+ Add integration** and search for **KEBA KeEnergy**.
 
 Requires Home Assistant 2026.9.4 or newer and network access to the Web HMI of the control unit. See the
-[installation](https://superbox.one/#installation) and [configuration](https://superbox.one/#configuration) sections
-for a manual installation and all parameters.
+[installation](https://superbox-dev.github.io/keba_keenergy/#installation) and
+[configuration](https://superbox-dev.github.io/keba_keenergy/#configuration) sections for a manual
+installation and all parameters.
 
 [redirect-hacs]: https://my.home-assistant.io/redirect/hacs_repository/?owner=superbox-dev&repository=keba_keenergy&category=integration
 
 ## Documentation
 
-Read the full documentation on [superbox.one](https://superbox.one):
-[supported devices](https://superbox.one/#supported-devices),
-[options](https://superbox.one/#options),
-[entities](https://superbox.one/#supported-functionality),
-[actions](https://superbox.one/#actions),
-[examples](https://superbox.one/#examples),
-[troubleshooting](https://superbox.one/#troubleshooting) and more.
+Read the full documentation on [GitHub Pages](https://superbox-dev.github.io/keba_keenergy/):
+[supported devices](https://superbox-dev.github.io/keba_keenergy/#supported-devices),
+[options](https://superbox-dev.github.io/keba_keenergy/#options),
+[entities](https://superbox-dev.github.io/keba_keenergy/#supported-functionality),
+[actions](https://superbox-dev.github.io/keba_keenergy/#actions),
+[examples](https://superbox-dev.github.io/keba_keenergy/#examples),
+[troubleshooting](https://superbox-dev.github.io/keba_keenergy/#troubleshooting) and more.
 
 ## Changelog
 

@@ -149,7 +149,7 @@ Code lives in `custom_components/keba_keenergy/`.
 
 ## Documentation
 
-- Docusaurus website in `website/`, deployed to <https://superbox.one> from `main` (`.github/workflows/page.yml`)
+- Docusaurus website in `website/`, deployed to <https://superbox-dev.github.io/keba_keenergy/> from `main` (`.github/workflows/page.yml`)
 - `scripts/generate-docs.py` writes all pages into `website/docs/` (not tracked, run by `scripts/docs.sh`):
   - hand-written pages from `website/content/`
   - donation, contributing and changelog from the `<!--start-…-->` / `<!--end-…-->` markers
@@ -158,7 +158,6 @@ Code lives in `custom_components/keba_keenergy/`.
   - sections in the order of the home-assistant.io integration pages
   - examples use the serial number `12345678` of the test data
 - Images are in `assets/` (also used by `README.md`)
-- `website/static/keba-keenergy/` redirects the URLs of the old MkDocs pages, keep them
 - Keep `README.md` short (install, links to the sections), details go to `website/content/index.md`
 - Design after home-assistant.io:
   - `website/src/css/custom.css` and the wrapped `website/src/theme/TOC/`

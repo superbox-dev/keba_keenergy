@@ -13,8 +13,8 @@ const config: Config = {
     v4: true,
   },
 
-  url: 'https://superbox.one',
-  baseUrl: '/',
+  url: 'https://superbox-dev.github.io',
+  baseUrl: '/keba_keenergy/',
   trailingSlash: false,
 
   organizationName: 'superbox-dev',
@@ -112,7 +112,7 @@ const config: Config = {
           items: [
             {label: 'GitHub', href: repository},
             {label: 'HACS', href: 'https://hacs.xyz'},
-            {label: 'API library', href: 'https://api.superbox.one'},
+            {label: 'API library', href: 'https://superbox-dev.github.io/keba_keenergy_api/'},
           ],
         },
       ],

@@ -19,8 +19,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Moved the documentation on <https://superbox.one> to Docusaurus, styled after the integration pages of
-  Home Assistant, with all information on one page. The old wiki URLs redirect to the new sections.
+- Moved the documentation to Docusaurus on <https://superbox-dev.github.io/keba_keenergy/>, styled after the
+  integration pages of Home Assistant, with all information on one page. The domain `superbox.one` is no longer used.
 - Shortened the `README.md` to the installation and moved the details to the documentation.
 - Linked the GitHub release notes to the matching section of the changelog.
 - Extended the issue templates with the environment and debug logs.
@@ -238,7 +238,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Fixed the missing English translations.
 
-[blueprint]: https://superbox.one/#set-the-away-date-range-from-a-calendar
+[blueprint]: https://superbox-dev.github.io/keba_keenergy/#set-the-away-date-range-from-a-calendar
 [issue-20]: https://github.com/superbox-dev/keba_keenergy/issues/20
 [issue-23]: https://github.com/superbox-dev/keba_keenergy/issues/23
 
