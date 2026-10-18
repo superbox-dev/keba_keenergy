@@ -315,17 +315,23 @@ class KebaKeEnergyClimateEntity(KebaKeEnergyBaseEntity, ClimateEntity):
         )
 
     async def _async_set_away_date_range(self, preset_mode: str, /) -> None:
+        is_away: bool = preset_mode == PRESET_AWAY
+
+        # The time zone is only requested if the away date range changes
+        if not is_away and self.preset_mode != PRESET_AWAY:
+            return
+
         tz: ZoneInfo = await self.coordinator.get_timezone()
         now: date = dt_util.now(tz).date()
         start_date_tz: datetime = datetime.combine(now, time.min, tzinfo=tz)
         end_date_tz: datetime = datetime.combine(now, time.max, tzinfo=tz)
 
-        if preset_mode == PRESET_AWAY:
+        if is_away:
             await self.coordinator.set_away_date_range(
                 start_timestamp=start_date_tz.timestamp(),
                 end_timestamp=(end_date_tz + timedelta(days=365)).timestamp(),
             )
-        elif self.preset_mode == PRESET_AWAY and preset_mode != PRESET_AWAY:
+        else:
             await self.coordinator.set_away_date_range(
                 start_timestamp=(start_date_tz - timedelta(days=1)).timestamp(),
                 end_timestamp=(end_date_tz - timedelta(days=1)).timestamp(),

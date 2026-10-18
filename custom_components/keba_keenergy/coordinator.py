@@ -467,9 +467,7 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
         )
 
         if self.data:
-            previous_data: dict[str, ValueResponse] = deepcopy(self.data)
-
-            for section_id, previous_section_data in previous_data.items():
+            for section_id, previous_section_data in self.data.items():
                 if not response[section_id]:
                     response[section_id] = previous_section_data
 
@@ -486,7 +484,8 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
         key_index: int | None,
     ) -> None:
         """Optimistically update a single value into coordinator data."""
-        data: dict[str, ValueResponse] = deepcopy(self.data)
+        # Only copy the changed section, the other sections are shared with the previous data
+        data: dict[str, ValueResponse] = {**self.data, section_id: deepcopy(self.data[section_id])}
         key: str = section.name.lower()
 
         if section.value.human_readable:
@@ -504,11 +503,13 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
     ) -> None:
         """Set the weekly counter and write to the NAND."""
         async with self._write_lock:
-            await self._async_reset_weekly_counter_if_needed()
+            counter_changed: bool = self._reset_weekly_counter_if_needed()
 
             if not ignore_weekly_write_count:
                 self._weekly_write_count += 1
+                counter_changed = True
 
+            if counter_changed:
                 await self._store.async_save(
                     {
                         "flash_write_counter": {
@@ -549,29 +550,25 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
             severity=ir.IssueSeverity.WARNING,
         )
 
-    async def _async_reset_weekly_counter_if_needed(self) -> None:
+    def _reset_weekly_counter_if_needed(self) -> bool:
+        """Reset the write counter in a new week, return True if it was reset."""
         today: date = now().date()
         current_week: tuple[int, int] = today.isocalendar().year, today.isocalendar().week
 
-        if self._write_count_week != current_week:
-            self._write_count_week = current_week
-            self._weekly_write_count = 0
-            self._flash_issue_active = False
+        if self._write_count_week == current_week:
+            return False
 
-            ir.async_delete_issue(
-                self.hass,
-                domain=DOMAIN,
-                issue_id="frequent_flash_writes",
-            )
+        self._write_count_week = current_week
+        self._weekly_write_count = 0
+        self._flash_issue_active = False
 
-            await self._store.async_save(
-                {
-                    "flash_write_counter": {
-                        "week": list(self._write_count_week),
-                        "count": self._weekly_write_count,
-                    },
-                },
-            )
+        ir.async_delete_issue(
+            self.hass,
+            domain=DOMAIN,
+            issue_id="frequent_flash_writes",
+        )
+
+        return True
 
     async def get_timezone(self) -> ZoneInfo:
         """Get the timezone from the Web HMI."""

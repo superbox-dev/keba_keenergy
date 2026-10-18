@@ -10,6 +10,10 @@ from typing import Any
 from homeassistant.components.select import ATTR_OPTION
 from homeassistant.components.select import DOMAIN as SELECT_DOMAIN
 from homeassistant.components.select import SERVICE_SELECT_OPTION
+from homeassistant.components.water_heater import ATTR_OPERATION_MODE
+from homeassistant.components.water_heater import SERVICE_SET_OPERATION_MODE
+from homeassistant.components.water_heater.const import DOMAIN as WATER_HEATER_DOMAIN
+from homeassistant.components.water_heater.const import STATE_PERFORMANCE
 from homeassistant.const import ATTR_ENTITY_ID
 from homeassistant.helpers import issue_registry as ir
 from homeassistant.util import dt as dt_util
@@ -20,6 +24,7 @@ from tests import init_translations
 from tests.api_data import HEATING_CURVE_NAMES_RESPONSE
 from tests.api_data import HEATING_CURVES_RESPONSE_1_1
 from tests.api_data import MULTIPLE_POSITION_DATA_RESPONSE_1
+from tests.api_data import MULTIPLE_POSITION_DATA_RESPONSE_2
 from tests.api_data import MULTIPLE_POSITIONS_RESPONSE
 from tests.api_data import get_multiple_position_fixed_data_response
 
@@ -184,3 +189,48 @@ async def test_issues_translated(
         "Sehr häufige Schreibzugriffe (zum Beispiel durch Automationen) können die Lebensdauer des "
         "Flash-Speichers des Geräts reduzieren."
     )
+
+
+async def test_ignored_write_is_not_counted(
+    hass: HomeAssistant,
+    fake_api: FakeKebaKeEnergyAPI,
+    hass_storage: dict[str, Any],
+) -> None:
+    """Test that a write that is not counted (heat up the hot water tank) keeps the weekly write counter."""
+    fake_api.responses = [
+        MULTIPLE_POSITIONS_RESPONSE,
+        HEATING_CURVE_NAMES_RESPONSE,
+        get_multiple_position_fixed_data_response(),
+        MULTIPLE_POSITION_DATA_RESPONSE_2,
+        *HEATING_CURVES_RESPONSE_1_1,
+        # Read API after services call
+        MULTIPLE_POSITION_DATA_RESPONSE_2,
+        *HEATING_CURVES_RESPONSE_1_1,
+    ]
+    today: date = dt_util.now().date()
+    week: list[int] = [today.isocalendar().year, today.isocalendar().week]
+    hass_storage[DOMAIN] = {
+        "version": 1,
+        "minor_version": 1,
+        "key": DOMAIN,
+        "data": {
+            "flash_write_counter": {
+                "week": week,
+                "count": 5,
+            },
+        },
+    }
+    await fake_api.setup_integration()
+
+    await hass.services.async_call(
+        domain=WATER_HEATER_DOMAIN,
+        service=SERVICE_SET_OPERATION_MODE,
+        service_data={
+            ATTR_ENTITY_ID: "water_heater.keba_keenergy_12345678_1",
+            ATTR_OPERATION_MODE: STATE_PERFORMANCE,
+        },
+        blocking=True,
+    )
+
+    assert len(fake_api.write_requests()) == 1
+    assert hass_storage[DOMAIN]["data"]["flash_write_counter"] == {"week": week, "count": 5}

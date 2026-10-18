@@ -486,3 +486,36 @@ async def test_set_temperature(
     fake_api.assert_called_write_with(
         '[{"name": "APPL.CtrlAppl.sParam.heatCircuit[0].param.offsetRoomTemp", "value": "-0.5"}]',
     )
+
+
+async def test_set_preset_mode_without_time_zone_request(
+    hass: HomeAssistant,
+    fake_api: FakeKebaKeEnergyAPI,
+) -> None:
+    """Test that a preset mode change outside of away does not request the time zone."""
+    fake_api.responses = [
+        MULTIPLE_POSITIONS_RESPONSE,
+        HEATING_CURVE_NAMES_RESPONSE,
+        get_multiple_position_fixed_data_response(),
+        MULTIPLE_POSITION_DATA_RESPONSE_1,
+        *HEATING_CURVES_RESPONSE_1_1,
+        # Read API after services call
+        MULTIPLE_POSITION_DATA_RESPONSE_1,
+        *HEATING_CURVES_RESPONSE_1_1,
+    ]
+    await fake_api.setup_integration()
+
+    await hass.services.async_call(
+        domain=CLIMATE_DOMAIN,
+        service=SERVICE_SET_PRESET_MODE,
+        service_data={
+            ATTR_ENTITY_ID: ENTITY_ID_1,
+            ATTR_PRESET_MODE: PRESET_BOOST,
+        },
+        blocking=True,
+    )
+
+    assert fake_api.write_requests() == [
+        '[{"name": "APPL.CtrlAppl.sParam.heatCircuit[0].param.operatingMode", "value": "5"}]',
+    ]
+    assert not [url for _, url, *_ in fake_api.aioclient_mock.mock_calls if url.path == "/dateTime"]

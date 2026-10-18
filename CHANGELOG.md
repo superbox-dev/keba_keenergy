@@ -20,6 +20,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   state attribute.
 - Wrote the HVAC mode of a heating circuit only if it differs from the current operating mode.
 - Translated the error message of failed data updates.
+- Requested the time zone of the Web HMI for a preset mode change of a heating circuit only if the away date range
+  changes.
 
 ### Fixed
 
