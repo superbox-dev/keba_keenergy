@@ -12,11 +12,13 @@ from homeassistant.components.switch.const import DOMAIN as SWITCH_DOMAIN
 from homeassistant.const import ATTR_ENTITY_ID
 from homeassistant.const import SERVICE_TURN_OFF
 from homeassistant.const import SERVICE_TURN_ON
+from homeassistant.const import Platform
 from homeassistant.core import HomeAssistant
 from homeassistant.core import State
 from homeassistant.helpers import entity_registry as er
 from keba_keenergy_api.constants import HeatCircuitMode
 
+from tests import get_platform_states
 from tests.api_data import MULTIPLE_POSITION_DATA_RESPONSE_1
 from tests.api_data import MULTIPLE_POSITION_DATA_RESPONSE_2
 from tests.api_data import MULTIPLE_POSITIONS_RESPONSE
@@ -29,50 +31,23 @@ if TYPE_CHECKING:
     from tests.conftest import FakeKebaKeEnergyAPI
 
 
-@pytest.mark.parametrize(
-    "entity",
-    [
-        # buffer tank
-        "switch.keba_keenergy_12345678_buffer_tank_use_excess_energy_1",
-        "switch.keba_keenergy_12345678_buffer_tank_use_excess_energy_2",
-        # hot water tank
-        "switch.keba_keenergy_12345678_hot_water_tank_use_excess_energy_1",
-        "switch.keba_keenergy_12345678_hot_water_tank_use_excess_energy_2",
-        # heat pump
-        "switch.keba_keenergy_12345678_heat_pump_compressor_use_night_speed",
-        # heating circuit
-        "switch.keba_keenergy_12345678_heat_circuit_use_excess_energy_1",
-        "switch.keba_keenergy_12345678_heat_circuit_use_excess_energy_2",
-        "switch.keba_keenergy_12345678_heat_circuit_use_heating_curve_1",
-        "switch.keba_keenergy_12345678_heat_circuit_use_heating_curve_2",
-        # solar circuit
-        "switch.keba_keenergy_12345678_solar_circuit_priority_1_before_2_1",
-        "switch.keba_keenergy_12345678_solar_circuit_priority_1_before_2_2",
-        # external heat source
-        "switch.keba_keenergy_12345678_external_heat_source_use_excess_energy_1",
-        "switch.keba_keenergy_12345678_external_heat_source_use_excess_energy_2",
-    ],
-)
 @pytest.mark.parametrize("language", ["en", "de"], indirect=True)
 @pytest.mark.usefixtures("entity_registry_enabled_by_default", "language")
 async def test_switches(
     hass: HomeAssistant,
     fake_api: FakeKebaKeEnergyAPI,
     snapshot: SnapshotAssertion,
-    entity: str,
 ) -> None:
-    """Test the states of the switch entities."""
+    """Test the states of all switch entities."""
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(has_passive_cooling="true"),
         MULTIPLE_POSITION_DATA_RESPONSE_1,
     ]
-
     await fake_api.setup_integration()
 
-    _entity: State | None = hass.states.get(entity)
-    assert isinstance(_entity, State)
-    assert _entity == snapshot
+    for state in get_platform_states(hass, fake_api.config_entry, Platform.SWITCH):
+        assert state == snapshot(name=state.entity_id)
 
 
 @pytest.mark.parametrize(

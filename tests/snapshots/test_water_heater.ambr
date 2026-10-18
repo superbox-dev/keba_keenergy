@@ -1,5 +1,5 @@
 # serializer version: 1
-# name: test_water_heater[de-water_heater.keba_keenergy_12345678_1]
+# name: test_water_heater[de][water_heater.keba_keenergy_12345678_1]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <WaterHeaterStateAttribute.CURRENT_TEMPERATURE: 'current_temperature'>: 47.7,
@@ -26,7 +26,7 @@
     'state': 'performance',
   })
 # ---
-# name: test_water_heater[de-water_heater.keba_keenergy_12345678_2]
+# name: test_water_heater[de][water_heater.keba_keenergy_12345678_2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <WaterHeaterStateAttribute.CURRENT_TEMPERATURE: 'current_temperature'>: 47.7,
@@ -53,7 +53,7 @@
     'state': 'off',
   })
 # ---
-# name: test_water_heater[de-water_heater.keba_keenergy_12345678_buffer_tank_1]
+# name: test_water_heater[de][water_heater.keba_keenergy_12345678_buffer_tank_1]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <WaterHeaterStateAttribute.CURRENT_TEMPERATURE: 'current_temperature'>: 45.7,
@@ -79,7 +79,7 @@
     'state': 'off',
   })
 # ---
-# name: test_water_heater[de-water_heater.keba_keenergy_12345678_buffer_tank_2]
+# name: test_water_heater[de][water_heater.keba_keenergy_12345678_buffer_tank_2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <WaterHeaterStateAttribute.CURRENT_TEMPERATURE: 'current_temperature'>: 35.7,
@@ -105,7 +105,7 @@
     'state': 'heat_pump',
   })
 # ---
-# name: test_water_heater[en-water_heater.keba_keenergy_12345678_1]
+# name: test_water_heater[en][water_heater.keba_keenergy_12345678_1]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <WaterHeaterStateAttribute.CURRENT_TEMPERATURE: 'current_temperature'>: 47.7,
@@ -132,7 +132,7 @@
     'state': 'performance',
   })
 # ---
-# name: test_water_heater[en-water_heater.keba_keenergy_12345678_2]
+# name: test_water_heater[en][water_heater.keba_keenergy_12345678_2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <WaterHeaterStateAttribute.CURRENT_TEMPERATURE: 'current_temperature'>: 47.7,
@@ -159,7 +159,7 @@
     'state': 'off',
   })
 # ---
-# name: test_water_heater[en-water_heater.keba_keenergy_12345678_buffer_tank_1]
+# name: test_water_heater[en][water_heater.keba_keenergy_12345678_buffer_tank_1]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <WaterHeaterStateAttribute.CURRENT_TEMPERATURE: 'current_temperature'>: 45.7,
@@ -185,7 +185,7 @@
     'state': 'off',
   })
 # ---
-# name: test_water_heater[en-water_heater.keba_keenergy_12345678_buffer_tank_2]
+# name: test_water_heater[en][water_heater.keba_keenergy_12345678_buffer_tank_2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <WaterHeaterStateAttribute.CURRENT_TEMPERATURE: 'current_temperature'>: 35.7,

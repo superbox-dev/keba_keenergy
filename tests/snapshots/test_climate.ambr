@@ -1,5 +1,5 @@
 # serializer version: 1
-# name: test_climate[de-climate.keba_keenergy_12345678_1]
+# name: test_climate[de][climate.keba_keenergy_12345678_1]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <ClimateEntityStateAttribute.CURRENT_HUMIDITY: 'current_humidity'>: 53.0,
@@ -33,7 +33,7 @@
     'state': 'heat',
   })
 # ---
-# name: test_climate[de-climate.keba_keenergy_12345678_2]
+# name: test_climate[de][climate.keba_keenergy_12345678_2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <ClimateEntityStateAttribute.CURRENT_TEMPERATURE: 'current_temperature'>: None,
@@ -65,7 +65,7 @@
     'state': 'auto',
   })
 # ---
-# name: test_climate[en-climate.keba_keenergy_12345678_1]
+# name: test_climate[en][climate.keba_keenergy_12345678_1]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <ClimateEntityStateAttribute.CURRENT_HUMIDITY: 'current_humidity'>: 53.0,
@@ -99,7 +99,7 @@
     'state': 'heat',
   })
 # ---
-# name: test_climate[en-climate.keba_keenergy_12345678_2]
+# name: test_climate[en][climate.keba_keenergy_12345678_2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <ClimateEntityStateAttribute.CURRENT_TEMPERATURE: 'current_temperature'>: None,

@@ -28,6 +28,7 @@ from homeassistant.const import ATTR_ENTITY_ID
 from homeassistant.const import ATTR_TEMPERATURE
 from homeassistant.const import SERVICE_TURN_OFF
 from homeassistant.const import SERVICE_TURN_ON
+from homeassistant.const import Platform
 from homeassistant.core import HomeAssistant
 from homeassistant.core import State
 from homeassistant.helpers.entity_component import async_update_entity
@@ -36,6 +37,7 @@ from keba_keenergy_api.constants import HeatCircuitOperatingMode
 from pytest_homeassistant_custom_component.common import async_fire_time_changed
 
 from custom_components.keba_keenergy.const import FLASH_WRITE_DELAY
+from tests import get_platform_states
 from tests.api_data import DEFAULT_POSITION_DATA_RESPONSE
 from tests.api_data import DEFAULT_POSITION_FIXED_DATA_RESPONSE
 from tests.api_data import DEFAULT_POSITION_RESPONSE
@@ -91,33 +93,23 @@ async def test_climate_entities(
         assert isinstance(hass.states.get(entity), State)
 
 
-@pytest.mark.parametrize(
-    "entity",
-    [
-        "climate.keba_keenergy_12345678_1",
-        "climate.keba_keenergy_12345678_2",
-    ],
-)
 @pytest.mark.parametrize("language", ["en", "de"], indirect=True)
-@pytest.mark.usefixtures("language")
+@pytest.mark.usefixtures("entity_registry_enabled_by_default", "language")
 async def test_climate(
     hass: HomeAssistant,
     fake_api: FakeKebaKeEnergyAPI,
     snapshot: SnapshotAssertion,
-    entity: str,
 ) -> None:
-    """Test the states of the climate entities."""
+    """Test the states of all climate entities."""
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
         MULTIPLE_POSITION_DATA_RESPONSE_1,
     ]
-
     await fake_api.setup_integration()
 
-    _entity: State | None = hass.states.get(entity)
-    assert isinstance(_entity, State)
-    assert _entity == snapshot
+    for state in get_platform_states(hass, fake_api.config_entry, Platform.CLIMATE):
+        assert state == snapshot(name=state.entity_id)
 
 
 @pytest.mark.parametrize(

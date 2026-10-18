@@ -17,6 +17,7 @@ from homeassistant.components.number import DEFAULT_MIN_VALUE
 from homeassistant.components.number import DOMAIN as NUMBER_DOMAIN
 from homeassistant.components.number.const import SERVICE_SET_VALUE
 from homeassistant.const import ATTR_ENTITY_ID
+from homeassistant.const import Platform
 from homeassistant.core import HomeAssistant
 from homeassistant.core import State
 from homeassistant.exceptions import ServiceValidationError
@@ -25,6 +26,7 @@ from homeassistant.util import dt as dt_util
 from pytest_homeassistant_custom_component.common import async_fire_time_changed
 
 from custom_components.keba_keenergy.const import FLASH_WRITE_DELAY
+from tests import get_platform_states
 from tests.api_data import DEFAULT_POSITION_FIXED_DATA_RESPONSE
 from tests.api_data import DEFAULT_POSITION_RESPONSE
 from tests.api_data import MULTIPLE_POSITION_DATA_RESPONSE_1
@@ -40,83 +42,23 @@ if TYPE_CHECKING:
     from tests.conftest import FakeKebaKeEnergyAPI
 
 
-@pytest.mark.parametrize(
-    "entity",
-    [
-        # buffer tank
-        "number.keba_keenergy_12345678_buffer_tank_excess_energy_target_temperature_1",
-        "number.keba_keenergy_12345678_buffer_tank_excess_energy_target_temperature_2",
-        "number.keba_keenergy_12345678_buffer_tank_excess_energy_target_temperature_hysteresis_1",
-        "number.keba_keenergy_12345678_buffer_tank_excess_energy_target_temperature_hysteresis_2",
-        "number.keba_keenergy_12345678_buffer_tank_outdoor_temperature_excess_energy_limit_1",
-        "number.keba_keenergy_12345678_buffer_tank_outdoor_temperature_excess_energy_limit_2",
-        "number.keba_keenergy_12345678_buffer_tank_standby_temperature_1",
-        "number.keba_keenergy_12345678_buffer_tank_standby_temperature_2",
-        # hot water tank
-        "number.keba_keenergy_12345678_hot_water_tank_excess_energy_target_temperature_1",
-        "number.keba_keenergy_12345678_hot_water_tank_excess_energy_target_temperature_2",
-        "number.keba_keenergy_12345678_hot_water_tank_excess_energy_target_temperature_hysteresis_1",
-        "number.keba_keenergy_12345678_hot_water_tank_excess_energy_target_temperature_hysteresis_2",
-        "number.keba_keenergy_12345678_hot_water_tank_standby_temperature_1",
-        "number.keba_keenergy_12345678_hot_water_tank_standby_temperature_2",
-        "number.keba_keenergy_12345678_hot_water_tank_target_temperature_1",
-        "number.keba_keenergy_12345678_hot_water_tank_target_temperature_2",
-        # heat pump
-        "number.keba_keenergy_12345678_heat_pump_compressor_night_speed",
-        # heating circuit
-        "number.keba_keenergy_12345678_heat_circuit_cooling_curve_offset_2",
-        "number.keba_keenergy_12345678_heat_circuit_cooling_curve_slope_2",
-        "number.keba_keenergy_12345678_heat_circuit_cooling_limit_day_2",
-        "number.keba_keenergy_12345678_heat_circuit_cooling_limit_night_2",
-        "number.keba_keenergy_12345678_heat_circuit_excess_energy_cooling_limit_day_2",
-        "number.keba_keenergy_12345678_heat_circuit_excess_energy_cooling_limit_night_2",
-        "number.keba_keenergy_12345678_heat_circuit_excess_energy_heating_limit_day_1",
-        "number.keba_keenergy_12345678_heat_circuit_excess_energy_heating_limit_night_1",
-        "number.keba_keenergy_12345678_heat_circuit_excess_energy_target_cooling_temperature_2",
-        "number.keba_keenergy_12345678_heat_circuit_excess_energy_target_cooling_temperature_hysteresis_2",
-        "number.keba_keenergy_12345678_heat_circuit_excess_energy_target_temperature_1",
-        "number.keba_keenergy_12345678_heat_circuit_excess_energy_target_temperature_hysteresis_1",
-        "number.keba_keenergy_12345678_heat_circuit_heating_curve_offset_1",
-        "number.keba_keenergy_12345678_heat_circuit_heating_curve_slope_1",
-        "number.keba_keenergy_12345678_heat_circuit_heating_limit_day_1",
-        "number.keba_keenergy_12345678_heat_circuit_heating_limit_night_1",
-        "number.keba_keenergy_12345678_heat_circuit_target_cooling_temperature_day_2",
-        "number.keba_keenergy_12345678_heat_circuit_target_cooling_temperature_night_2",
-        "number.keba_keenergy_12345678_heat_circuit_target_temperature_away_1",
-        "number.keba_keenergy_12345678_heat_circuit_target_temperature_day_1",
-        "number.keba_keenergy_12345678_heat_circuit_target_temperature_night_1",
-        "number.keba_keenergy_12345678_heat_circuit_target_temperature_offset_1",
-        "number.keba_keenergy_12345678_heat_circuit_target_temperature_offset_2",
-        # solar circuit
-        "number.keba_keenergy_12345678_solar_circuit_target_temperature_1_1",
-        "number.keba_keenergy_12345678_solar_circuit_target_temperature_1_2",
-        "number.keba_keenergy_12345678_solar_circuit_target_temperature_2_1",
-        "number.keba_keenergy_12345678_solar_circuit_target_temperature_2_2",
-        # external heat source
-        "number.keba_keenergy_12345678_external_heat_source_min_runtime_excess_energy_1",
-        "number.keba_keenergy_12345678_external_heat_source_min_runtime_excess_energy_2",
-    ],
-)
 @pytest.mark.parametrize("language", ["en", "de"], indirect=True)
 @pytest.mark.usefixtures("entity_registry_enabled_by_default", "language")
 async def test_numbers(
     hass: HomeAssistant,
     fake_api: FakeKebaKeEnergyAPI,
     snapshot: SnapshotAssertion,
-    entity: str,
 ) -> None:
-    """Test the states of the number entities."""
+    """Test the states of all number entities."""
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(has_passive_cooling="true"),
         MULTIPLE_POSITION_DATA_RESPONSE_1,
     ]
-
     await fake_api.setup_integration()
 
-    _entity: State | None = hass.states.get(entity)
-    assert isinstance(_entity, State)
-    assert _entity == snapshot
+    for state in get_platform_states(hass, fake_api.config_entry, Platform.NUMBER):
+        assert state == snapshot(name=state.entity_id)
 
 
 @pytest.mark.parametrize(

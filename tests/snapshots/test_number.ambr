@@ -1,5 +1,5 @@
 # serializer version: 1
-# name: test_numbers[de-number.keba_keenergy_12345678_buffer_tank_excess_energy_target_temperature_1]
+# name: test_numbers[de][number.keba_keenergy_12345678_buffer_tank_excess_energy_target_temperature_1]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
@@ -18,7 +18,7 @@
     'state': '75.0',
   })
 # ---
-# name: test_numbers[de-number.keba_keenergy_12345678_buffer_tank_excess_energy_target_temperature_2]
+# name: test_numbers[de][number.keba_keenergy_12345678_buffer_tank_excess_energy_target_temperature_2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
@@ -37,7 +37,7 @@
     'state': '75.0',
   })
 # ---
-# name: test_numbers[de-number.keba_keenergy_12345678_buffer_tank_excess_energy_target_temperature_hysteresis_1]
+# name: test_numbers[de][number.keba_keenergy_12345678_buffer_tank_excess_energy_target_temperature_hysteresis_1]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
@@ -56,7 +56,7 @@
     'state': '2.0',
   })
 # ---
-# name: test_numbers[de-number.keba_keenergy_12345678_buffer_tank_excess_energy_target_temperature_hysteresis_2]
+# name: test_numbers[de][number.keba_keenergy_12345678_buffer_tank_excess_energy_target_temperature_hysteresis_2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
@@ -75,7 +75,7 @@
     'state': '2.0',
   })
 # ---
-# name: test_numbers[de-number.keba_keenergy_12345678_buffer_tank_outdoor_temperature_excess_energy_limit_1]
+# name: test_numbers[de][number.keba_keenergy_12345678_buffer_tank_outdoor_temperature_excess_energy_limit_1]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
@@ -94,7 +94,7 @@
     'state': '25.0',
   })
 # ---
-# name: test_numbers[de-number.keba_keenergy_12345678_buffer_tank_outdoor_temperature_excess_energy_limit_2]
+# name: test_numbers[de][number.keba_keenergy_12345678_buffer_tank_outdoor_temperature_excess_energy_limit_2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
@@ -113,7 +113,7 @@
     'state': '25.0',
   })
 # ---
-# name: test_numbers[de-number.keba_keenergy_12345678_buffer_tank_standby_temperature_1]
+# name: test_numbers[de][number.keba_keenergy_12345678_buffer_tank_standby_temperature_1]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
@@ -132,7 +132,7 @@
     'state': '10.0',
   })
 # ---
-# name: test_numbers[de-number.keba_keenergy_12345678_buffer_tank_standby_temperature_2]
+# name: test_numbers[de][number.keba_keenergy_12345678_buffer_tank_standby_temperature_2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
@@ -151,7 +151,7 @@
     'state': '11.0',
   })
 # ---
-# name: test_numbers[de-number.keba_keenergy_12345678_external_heat_source_min_runtime_excess_energy_1]
+# name: test_numbers[de][number.keba_keenergy_12345678_external_heat_source_min_runtime_excess_energy_1]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'duration',
@@ -170,7 +170,7 @@
     'state': '5.0',
   })
 # ---
-# name: test_numbers[de-number.keba_keenergy_12345678_external_heat_source_min_runtime_excess_energy_2]
+# name: test_numbers[de][number.keba_keenergy_12345678_external_heat_source_min_runtime_excess_energy_2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'duration',
@@ -189,7 +189,7 @@
     'state': '5.0',
   })
 # ---
-# name: test_numbers[de-number.keba_keenergy_12345678_heat_circuit_cooling_curve_offset_2]
+# name: test_numbers[de][number.keba_keenergy_12345678_heat_circuit_cooling_curve_offset_2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
@@ -208,7 +208,7 @@
     'state': '-1.5',
   })
 # ---
-# name: test_numbers[de-number.keba_keenergy_12345678_heat_circuit_cooling_curve_slope_2]
+# name: test_numbers[de][number.keba_keenergy_12345678_heat_circuit_cooling_curve_slope_2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Heizkreis 2 Kühlkurven-Steigung',
@@ -225,7 +225,7 @@
     'state': '0.6',
   })
 # ---
-# name: test_numbers[de-number.keba_keenergy_12345678_heat_circuit_cooling_limit_day_2]
+# name: test_numbers[de][number.keba_keenergy_12345678_heat_circuit_cooling_limit_day_2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
@@ -244,7 +244,7 @@
     'state': '20.0',
   })
 # ---
-# name: test_numbers[de-number.keba_keenergy_12345678_heat_circuit_cooling_limit_night_2]
+# name: test_numbers[de][number.keba_keenergy_12345678_heat_circuit_cooling_limit_night_2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
@@ -263,7 +263,7 @@
     'state': '18.0',
   })
 # ---
-# name: test_numbers[de-number.keba_keenergy_12345678_heat_circuit_excess_energy_cooling_limit_day_2]
+# name: test_numbers[de][number.keba_keenergy_12345678_heat_circuit_excess_energy_cooling_limit_day_2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
@@ -282,7 +282,7 @@
     'state': '10.0',
   })
 # ---
-# name: test_numbers[de-number.keba_keenergy_12345678_heat_circuit_excess_energy_cooling_limit_night_2]
+# name: test_numbers[de][number.keba_keenergy_12345678_heat_circuit_excess_energy_cooling_limit_night_2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
@@ -301,7 +301,7 @@
     'state': '28.0',
   })
 # ---
-# name: test_numbers[de-number.keba_keenergy_12345678_heat_circuit_excess_energy_heating_limit_day_1]
+# name: test_numbers[de][number.keba_keenergy_12345678_heat_circuit_excess_energy_heating_limit_day_1]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
@@ -320,7 +320,7 @@
     'state': '30.0',
   })
 # ---
-# name: test_numbers[de-number.keba_keenergy_12345678_heat_circuit_excess_energy_heating_limit_night_1]
+# name: test_numbers[de][number.keba_keenergy_12345678_heat_circuit_excess_energy_heating_limit_night_1]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
@@ -339,7 +339,7 @@
     'state': '28.0',
   })
 # ---
-# name: test_numbers[de-number.keba_keenergy_12345678_heat_circuit_excess_energy_target_cooling_temperature_2]
+# name: test_numbers[de][number.keba_keenergy_12345678_heat_circuit_excess_energy_target_cooling_temperature_2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
@@ -358,7 +358,7 @@
     'state': '10.0',
   })
 # ---
-# name: test_numbers[de-number.keba_keenergy_12345678_heat_circuit_excess_energy_target_cooling_temperature_hysteresis_2]
+# name: test_numbers[de][number.keba_keenergy_12345678_heat_circuit_excess_energy_target_cooling_temperature_hysteresis_2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
@@ -377,7 +377,7 @@
     'state': '0.7',
   })
 # ---
-# name: test_numbers[de-number.keba_keenergy_12345678_heat_circuit_excess_energy_target_temperature_1]
+# name: test_numbers[de][number.keba_keenergy_12345678_heat_circuit_excess_energy_target_temperature_1]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
@@ -396,7 +396,7 @@
     'state': '30.0',
   })
 # ---
-# name: test_numbers[de-number.keba_keenergy_12345678_heat_circuit_excess_energy_target_temperature_hysteresis_1]
+# name: test_numbers[de][number.keba_keenergy_12345678_heat_circuit_excess_energy_target_temperature_hysteresis_1]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
@@ -415,7 +415,7 @@
     'state': '0.7',
   })
 # ---
-# name: test_numbers[de-number.keba_keenergy_12345678_heat_circuit_heating_curve_offset_1]
+# name: test_numbers[de][number.keba_keenergy_12345678_heat_circuit_heating_curve_offset_1]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
@@ -434,7 +434,7 @@
     'state': '1.5',
   })
 # ---
-# name: test_numbers[de-number.keba_keenergy_12345678_heat_circuit_heating_curve_slope_1]
+# name: test_numbers[de][number.keba_keenergy_12345678_heat_circuit_heating_curve_slope_1]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Heizkreis 1 Heizkurven-Steigung',
@@ -451,7 +451,7 @@
     'state': '0.5',
   })
 # ---
-# name: test_numbers[de-number.keba_keenergy_12345678_heat_circuit_heating_limit_day_1]
+# name: test_numbers[de][number.keba_keenergy_12345678_heat_circuit_heating_limit_day_1]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
@@ -470,7 +470,7 @@
     'state': '20.0',
   })
 # ---
-# name: test_numbers[de-number.keba_keenergy_12345678_heat_circuit_heating_limit_night_1]
+# name: test_numbers[de][number.keba_keenergy_12345678_heat_circuit_heating_limit_night_1]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
@@ -489,7 +489,7 @@
     'state': '18.0',
   })
 # ---
-# name: test_numbers[de-number.keba_keenergy_12345678_heat_circuit_target_cooling_temperature_day_2]
+# name: test_numbers[de][number.keba_keenergy_12345678_heat_circuit_target_cooling_temperature_day_2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
@@ -508,7 +508,7 @@
     'state': '20.5',
   })
 # ---
-# name: test_numbers[de-number.keba_keenergy_12345678_heat_circuit_target_cooling_temperature_night_2]
+# name: test_numbers[de][number.keba_keenergy_12345678_heat_circuit_target_cooling_temperature_night_2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
@@ -527,7 +527,7 @@
     'state': '20.0',
   })
 # ---
-# name: test_numbers[de-number.keba_keenergy_12345678_heat_circuit_target_temperature_away_1]
+# name: test_numbers[de][number.keba_keenergy_12345678_heat_circuit_target_temperature_away_1]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
@@ -546,7 +546,7 @@
     'state': '18.0',
   })
 # ---
-# name: test_numbers[de-number.keba_keenergy_12345678_heat_circuit_target_temperature_day_1]
+# name: test_numbers[de][number.keba_keenergy_12345678_heat_circuit_target_temperature_day_1]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
@@ -565,7 +565,7 @@
     'state': '20.5',
   })
 # ---
-# name: test_numbers[de-number.keba_keenergy_12345678_heat_circuit_target_temperature_night_1]
+# name: test_numbers[de][number.keba_keenergy_12345678_heat_circuit_target_temperature_night_1]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
@@ -584,7 +584,7 @@
     'state': '20.0',
   })
 # ---
-# name: test_numbers[de-number.keba_keenergy_12345678_heat_circuit_target_temperature_offset_1]
+# name: test_numbers[de][number.keba_keenergy_12345678_heat_circuit_target_temperature_offset_1]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
@@ -603,7 +603,7 @@
     'state': '1.5',
   })
 # ---
-# name: test_numbers[de-number.keba_keenergy_12345678_heat_circuit_target_temperature_offset_2]
+# name: test_numbers[de][number.keba_keenergy_12345678_heat_circuit_target_temperature_offset_2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
@@ -622,7 +622,7 @@
     'state': '0.0',
   })
 # ---
-# name: test_numbers[de-number.keba_keenergy_12345678_heat_pump_compressor_night_speed]
+# name: test_numbers[de][number.keba_keenergy_12345678_heat_pump_compressor_night_speed]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'speed',
@@ -641,7 +641,7 @@
     'state': '50.0',
   })
 # ---
-# name: test_numbers[de-number.keba_keenergy_12345678_hot_water_tank_excess_energy_target_temperature_1]
+# name: test_numbers[de][number.keba_keenergy_12345678_hot_water_tank_excess_energy_target_temperature_1]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
@@ -660,7 +660,7 @@
     'state': '75.0',
   })
 # ---
-# name: test_numbers[de-number.keba_keenergy_12345678_hot_water_tank_excess_energy_target_temperature_2]
+# name: test_numbers[de][number.keba_keenergy_12345678_hot_water_tank_excess_energy_target_temperature_2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
@@ -679,7 +679,7 @@
     'state': '75.0',
   })
 # ---
-# name: test_numbers[de-number.keba_keenergy_12345678_hot_water_tank_excess_energy_target_temperature_hysteresis_1]
+# name: test_numbers[de][number.keba_keenergy_12345678_hot_water_tank_excess_energy_target_temperature_hysteresis_1]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
@@ -698,7 +698,7 @@
     'state': '4.0',
   })
 # ---
-# name: test_numbers[de-number.keba_keenergy_12345678_hot_water_tank_excess_energy_target_temperature_hysteresis_2]
+# name: test_numbers[de][number.keba_keenergy_12345678_hot_water_tank_excess_energy_target_temperature_hysteresis_2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
@@ -717,7 +717,7 @@
     'state': '4.0',
   })
 # ---
-# name: test_numbers[de-number.keba_keenergy_12345678_hot_water_tank_standby_temperature_1]
+# name: test_numbers[de][number.keba_keenergy_12345678_hot_water_tank_standby_temperature_1]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
@@ -736,7 +736,7 @@
     'state': '32.5',
   })
 # ---
-# name: test_numbers[de-number.keba_keenergy_12345678_hot_water_tank_standby_temperature_2]
+# name: test_numbers[de][number.keba_keenergy_12345678_hot_water_tank_standby_temperature_2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
@@ -755,7 +755,7 @@
     'state': '32.5',
   })
 # ---
-# name: test_numbers[de-number.keba_keenergy_12345678_hot_water_tank_target_temperature_1]
+# name: test_numbers[de][number.keba_keenergy_12345678_hot_water_tank_target_temperature_1]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
@@ -775,7 +775,7 @@
     'state': '51.0',
   })
 # ---
-# name: test_numbers[de-number.keba_keenergy_12345678_hot_water_tank_target_temperature_2]
+# name: test_numbers[de][number.keba_keenergy_12345678_hot_water_tank_target_temperature_2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
@@ -795,7 +795,7 @@
     'state': '51.0',
   })
 # ---
-# name: test_numbers[de-number.keba_keenergy_12345678_solar_circuit_target_temperature_1_1]
+# name: test_numbers[de][number.keba_keenergy_12345678_solar_circuit_target_temperature_1_1]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
@@ -815,7 +815,7 @@
     'state': '55.0',
   })
 # ---
-# name: test_numbers[de-number.keba_keenergy_12345678_solar_circuit_target_temperature_1_2]
+# name: test_numbers[de][number.keba_keenergy_12345678_solar_circuit_target_temperature_1_2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
@@ -835,7 +835,7 @@
     'state': '53.0',
   })
 # ---
-# name: test_numbers[de-number.keba_keenergy_12345678_solar_circuit_target_temperature_2_1]
+# name: test_numbers[de][number.keba_keenergy_12345678_solar_circuit_target_temperature_2_1]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
@@ -855,7 +855,7 @@
     'state': '54.0',
   })
 # ---
-# name: test_numbers[de-number.keba_keenergy_12345678_solar_circuit_target_temperature_2_2]
+# name: test_numbers[de][number.keba_keenergy_12345678_solar_circuit_target_temperature_2_2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
@@ -875,7 +875,7 @@
     'state': '52.0',
   })
 # ---
-# name: test_numbers[en-number.keba_keenergy_12345678_buffer_tank_excess_energy_target_temperature_1]
+# name: test_numbers[en][number.keba_keenergy_12345678_buffer_tank_excess_energy_target_temperature_1]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
@@ -894,7 +894,7 @@
     'state': '75.0',
   })
 # ---
-# name: test_numbers[en-number.keba_keenergy_12345678_buffer_tank_excess_energy_target_temperature_2]
+# name: test_numbers[en][number.keba_keenergy_12345678_buffer_tank_excess_energy_target_temperature_2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
@@ -913,7 +913,7 @@
     'state': '75.0',
   })
 # ---
-# name: test_numbers[en-number.keba_keenergy_12345678_buffer_tank_excess_energy_target_temperature_hysteresis_1]
+# name: test_numbers[en][number.keba_keenergy_12345678_buffer_tank_excess_energy_target_temperature_hysteresis_1]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
@@ -932,7 +932,7 @@
     'state': '2.0',
   })
 # ---
-# name: test_numbers[en-number.keba_keenergy_12345678_buffer_tank_excess_energy_target_temperature_hysteresis_2]
+# name: test_numbers[en][number.keba_keenergy_12345678_buffer_tank_excess_energy_target_temperature_hysteresis_2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
@@ -951,7 +951,7 @@
     'state': '2.0',
   })
 # ---
-# name: test_numbers[en-number.keba_keenergy_12345678_buffer_tank_outdoor_temperature_excess_energy_limit_1]
+# name: test_numbers[en][number.keba_keenergy_12345678_buffer_tank_outdoor_temperature_excess_energy_limit_1]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
@@ -970,7 +970,7 @@
     'state': '25.0',
   })
 # ---
-# name: test_numbers[en-number.keba_keenergy_12345678_buffer_tank_outdoor_temperature_excess_energy_limit_2]
+# name: test_numbers[en][number.keba_keenergy_12345678_buffer_tank_outdoor_temperature_excess_energy_limit_2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
@@ -989,7 +989,7 @@
     'state': '25.0',
   })
 # ---
-# name: test_numbers[en-number.keba_keenergy_12345678_buffer_tank_standby_temperature_1]
+# name: test_numbers[en][number.keba_keenergy_12345678_buffer_tank_standby_temperature_1]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
@@ -1008,7 +1008,7 @@
     'state': '10.0',
   })
 # ---
-# name: test_numbers[en-number.keba_keenergy_12345678_buffer_tank_standby_temperature_2]
+# name: test_numbers[en][number.keba_keenergy_12345678_buffer_tank_standby_temperature_2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
@@ -1027,7 +1027,7 @@
     'state': '11.0',
   })
 # ---
-# name: test_numbers[en-number.keba_keenergy_12345678_external_heat_source_min_runtime_excess_energy_1]
+# name: test_numbers[en][number.keba_keenergy_12345678_external_heat_source_min_runtime_excess_energy_1]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'duration',
@@ -1046,7 +1046,7 @@
     'state': '5.0',
   })
 # ---
-# name: test_numbers[en-number.keba_keenergy_12345678_external_heat_source_min_runtime_excess_energy_2]
+# name: test_numbers[en][number.keba_keenergy_12345678_external_heat_source_min_runtime_excess_energy_2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'duration',
@@ -1065,7 +1065,7 @@
     'state': '5.0',
   })
 # ---
-# name: test_numbers[en-number.keba_keenergy_12345678_heat_circuit_cooling_curve_offset_2]
+# name: test_numbers[en][number.keba_keenergy_12345678_heat_circuit_cooling_curve_offset_2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
@@ -1084,7 +1084,7 @@
     'state': '-1.5',
   })
 # ---
-# name: test_numbers[en-number.keba_keenergy_12345678_heat_circuit_cooling_curve_slope_2]
+# name: test_numbers[en][number.keba_keenergy_12345678_heat_circuit_cooling_curve_slope_2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Heating circuit 2 Cooling curve slope',
@@ -1101,7 +1101,7 @@
     'state': '0.6',
   })
 # ---
-# name: test_numbers[en-number.keba_keenergy_12345678_heat_circuit_cooling_limit_day_2]
+# name: test_numbers[en][number.keba_keenergy_12345678_heat_circuit_cooling_limit_day_2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
@@ -1120,7 +1120,7 @@
     'state': '20.0',
   })
 # ---
-# name: test_numbers[en-number.keba_keenergy_12345678_heat_circuit_cooling_limit_night_2]
+# name: test_numbers[en][number.keba_keenergy_12345678_heat_circuit_cooling_limit_night_2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
@@ -1139,7 +1139,7 @@
     'state': '18.0',
   })
 # ---
-# name: test_numbers[en-number.keba_keenergy_12345678_heat_circuit_excess_energy_cooling_limit_day_2]
+# name: test_numbers[en][number.keba_keenergy_12345678_heat_circuit_excess_energy_cooling_limit_day_2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
@@ -1158,7 +1158,7 @@
     'state': '10.0',
   })
 # ---
-# name: test_numbers[en-number.keba_keenergy_12345678_heat_circuit_excess_energy_cooling_limit_night_2]
+# name: test_numbers[en][number.keba_keenergy_12345678_heat_circuit_excess_energy_cooling_limit_night_2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
@@ -1177,7 +1177,7 @@
     'state': '28.0',
   })
 # ---
-# name: test_numbers[en-number.keba_keenergy_12345678_heat_circuit_excess_energy_heating_limit_day_1]
+# name: test_numbers[en][number.keba_keenergy_12345678_heat_circuit_excess_energy_heating_limit_day_1]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
@@ -1196,7 +1196,7 @@
     'state': '30.0',
   })
 # ---
-# name: test_numbers[en-number.keba_keenergy_12345678_heat_circuit_excess_energy_heating_limit_night_1]
+# name: test_numbers[en][number.keba_keenergy_12345678_heat_circuit_excess_energy_heating_limit_night_1]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
@@ -1215,7 +1215,7 @@
     'state': '28.0',
   })
 # ---
-# name: test_numbers[en-number.keba_keenergy_12345678_heat_circuit_excess_energy_target_cooling_temperature_2]
+# name: test_numbers[en][number.keba_keenergy_12345678_heat_circuit_excess_energy_target_cooling_temperature_2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
@@ -1234,7 +1234,7 @@
     'state': '10.0',
   })
 # ---
-# name: test_numbers[en-number.keba_keenergy_12345678_heat_circuit_excess_energy_target_cooling_temperature_hysteresis_2]
+# name: test_numbers[en][number.keba_keenergy_12345678_heat_circuit_excess_energy_target_cooling_temperature_hysteresis_2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
@@ -1253,7 +1253,7 @@
     'state': '0.7',
   })
 # ---
-# name: test_numbers[en-number.keba_keenergy_12345678_heat_circuit_excess_energy_target_temperature_1]
+# name: test_numbers[en][number.keba_keenergy_12345678_heat_circuit_excess_energy_target_temperature_1]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
@@ -1272,7 +1272,7 @@
     'state': '30.0',
   })
 # ---
-# name: test_numbers[en-number.keba_keenergy_12345678_heat_circuit_excess_energy_target_temperature_hysteresis_1]
+# name: test_numbers[en][number.keba_keenergy_12345678_heat_circuit_excess_energy_target_temperature_hysteresis_1]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
@@ -1291,7 +1291,7 @@
     'state': '0.7',
   })
 # ---
-# name: test_numbers[en-number.keba_keenergy_12345678_heat_circuit_heating_curve_offset_1]
+# name: test_numbers[en][number.keba_keenergy_12345678_heat_circuit_heating_curve_offset_1]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
@@ -1310,7 +1310,7 @@
     'state': '1.5',
   })
 # ---
-# name: test_numbers[en-number.keba_keenergy_12345678_heat_circuit_heating_curve_slope_1]
+# name: test_numbers[en][number.keba_keenergy_12345678_heat_circuit_heating_curve_slope_1]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Heating circuit 1 Heating curve slope',
@@ -1327,7 +1327,7 @@
     'state': '0.5',
   })
 # ---
-# name: test_numbers[en-number.keba_keenergy_12345678_heat_circuit_heating_limit_day_1]
+# name: test_numbers[en][number.keba_keenergy_12345678_heat_circuit_heating_limit_day_1]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
@@ -1346,7 +1346,7 @@
     'state': '20.0',
   })
 # ---
-# name: test_numbers[en-number.keba_keenergy_12345678_heat_circuit_heating_limit_night_1]
+# name: test_numbers[en][number.keba_keenergy_12345678_heat_circuit_heating_limit_night_1]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
@@ -1365,7 +1365,7 @@
     'state': '18.0',
   })
 # ---
-# name: test_numbers[en-number.keba_keenergy_12345678_heat_circuit_target_cooling_temperature_day_2]
+# name: test_numbers[en][number.keba_keenergy_12345678_heat_circuit_target_cooling_temperature_day_2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
@@ -1384,7 +1384,7 @@
     'state': '20.5',
   })
 # ---
-# name: test_numbers[en-number.keba_keenergy_12345678_heat_circuit_target_cooling_temperature_night_2]
+# name: test_numbers[en][number.keba_keenergy_12345678_heat_circuit_target_cooling_temperature_night_2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
@@ -1403,7 +1403,7 @@
     'state': '20.0',
   })
 # ---
-# name: test_numbers[en-number.keba_keenergy_12345678_heat_circuit_target_temperature_away_1]
+# name: test_numbers[en][number.keba_keenergy_12345678_heat_circuit_target_temperature_away_1]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
@@ -1422,7 +1422,7 @@
     'state': '18.0',
   })
 # ---
-# name: test_numbers[en-number.keba_keenergy_12345678_heat_circuit_target_temperature_day_1]
+# name: test_numbers[en][number.keba_keenergy_12345678_heat_circuit_target_temperature_day_1]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
@@ -1441,7 +1441,7 @@
     'state': '20.5',
   })
 # ---
-# name: test_numbers[en-number.keba_keenergy_12345678_heat_circuit_target_temperature_night_1]
+# name: test_numbers[en][number.keba_keenergy_12345678_heat_circuit_target_temperature_night_1]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
@@ -1460,7 +1460,7 @@
     'state': '20.0',
   })
 # ---
-# name: test_numbers[en-number.keba_keenergy_12345678_heat_circuit_target_temperature_offset_1]
+# name: test_numbers[en][number.keba_keenergy_12345678_heat_circuit_target_temperature_offset_1]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
@@ -1479,7 +1479,7 @@
     'state': '1.5',
   })
 # ---
-# name: test_numbers[en-number.keba_keenergy_12345678_heat_circuit_target_temperature_offset_2]
+# name: test_numbers[en][number.keba_keenergy_12345678_heat_circuit_target_temperature_offset_2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
@@ -1498,7 +1498,7 @@
     'state': '0.0',
   })
 # ---
-# name: test_numbers[en-number.keba_keenergy_12345678_heat_pump_compressor_night_speed]
+# name: test_numbers[en][number.keba_keenergy_12345678_heat_pump_compressor_night_speed]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'speed',
@@ -1517,7 +1517,7 @@
     'state': '50.0',
   })
 # ---
-# name: test_numbers[en-number.keba_keenergy_12345678_hot_water_tank_excess_energy_target_temperature_1]
+# name: test_numbers[en][number.keba_keenergy_12345678_hot_water_tank_excess_energy_target_temperature_1]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
@@ -1536,7 +1536,7 @@
     'state': '75.0',
   })
 # ---
-# name: test_numbers[en-number.keba_keenergy_12345678_hot_water_tank_excess_energy_target_temperature_2]
+# name: test_numbers[en][number.keba_keenergy_12345678_hot_water_tank_excess_energy_target_temperature_2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
@@ -1555,7 +1555,7 @@
     'state': '75.0',
   })
 # ---
-# name: test_numbers[en-number.keba_keenergy_12345678_hot_water_tank_excess_energy_target_temperature_hysteresis_1]
+# name: test_numbers[en][number.keba_keenergy_12345678_hot_water_tank_excess_energy_target_temperature_hysteresis_1]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
@@ -1574,7 +1574,7 @@
     'state': '4.0',
   })
 # ---
-# name: test_numbers[en-number.keba_keenergy_12345678_hot_water_tank_excess_energy_target_temperature_hysteresis_2]
+# name: test_numbers[en][number.keba_keenergy_12345678_hot_water_tank_excess_energy_target_temperature_hysteresis_2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
@@ -1593,7 +1593,7 @@
     'state': '4.0',
   })
 # ---
-# name: test_numbers[en-number.keba_keenergy_12345678_hot_water_tank_standby_temperature_1]
+# name: test_numbers[en][number.keba_keenergy_12345678_hot_water_tank_standby_temperature_1]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
@@ -1612,7 +1612,7 @@
     'state': '32.5',
   })
 # ---
-# name: test_numbers[en-number.keba_keenergy_12345678_hot_water_tank_standby_temperature_2]
+# name: test_numbers[en][number.keba_keenergy_12345678_hot_water_tank_standby_temperature_2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
@@ -1631,7 +1631,7 @@
     'state': '32.5',
   })
 # ---
-# name: test_numbers[en-number.keba_keenergy_12345678_hot_water_tank_target_temperature_1]
+# name: test_numbers[en][number.keba_keenergy_12345678_hot_water_tank_target_temperature_1]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
@@ -1651,7 +1651,7 @@
     'state': '51.0',
   })
 # ---
-# name: test_numbers[en-number.keba_keenergy_12345678_hot_water_tank_target_temperature_2]
+# name: test_numbers[en][number.keba_keenergy_12345678_hot_water_tank_target_temperature_2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
@@ -1671,7 +1671,7 @@
     'state': '51.0',
   })
 # ---
-# name: test_numbers[en-number.keba_keenergy_12345678_solar_circuit_target_temperature_1_1]
+# name: test_numbers[en][number.keba_keenergy_12345678_solar_circuit_target_temperature_1_1]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
@@ -1691,7 +1691,7 @@
     'state': '55.0',
   })
 # ---
-# name: test_numbers[en-number.keba_keenergy_12345678_solar_circuit_target_temperature_1_2]
+# name: test_numbers[en][number.keba_keenergy_12345678_solar_circuit_target_temperature_1_2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
@@ -1711,7 +1711,7 @@
     'state': '53.0',
   })
 # ---
-# name: test_numbers[en-number.keba_keenergy_12345678_solar_circuit_target_temperature_2_1]
+# name: test_numbers[en][number.keba_keenergy_12345678_solar_circuit_target_temperature_2_1]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
@@ -1731,7 +1731,7 @@
     'state': '54.0',
   })
 # ---
-# name: test_numbers[en-number.keba_keenergy_12345678_solar_circuit_target_temperature_2_2]
+# name: test_numbers[en][number.keba_keenergy_12345678_solar_circuit_target_temperature_2_2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',

@@ -21,6 +21,7 @@ from homeassistant.const import ATTR_TEMPERATURE
 from homeassistant.const import SERVICE_TURN_OFF
 from homeassistant.const import SERVICE_TURN_ON
 from homeassistant.const import STATE_OFF
+from homeassistant.const import Platform
 from homeassistant.core import HomeAssistant
 from homeassistant.core import State
 from homeassistant.helpers.entity_component import async_update_entity
@@ -28,6 +29,7 @@ from homeassistant.util import dt as dt_util
 from pytest_homeassistant_custom_component.common import async_fire_time_changed
 
 from custom_components.keba_keenergy.const import FLASH_WRITE_DELAY
+from tests import get_platform_states
 from tests.api_data import DEFAULT_POSITION_DATA_RESPONSE
 from tests.api_data import DEFAULT_POSITION_FIXED_DATA_RESPONSE
 from tests.api_data import DEFAULT_POSITION_RESPONSE
@@ -85,37 +87,23 @@ async def test_water_heater_entities(
         assert isinstance(hass.states.get(entity), State)
 
 
-@pytest.mark.parametrize(
-    "entity",
-    [
-        # buffer tank
-        "water_heater.keba_keenergy_12345678_buffer_tank_1",
-        "water_heater.keba_keenergy_12345678_buffer_tank_2",
-        # hot water tank
-        "water_heater.keba_keenergy_12345678_1",
-        "water_heater.keba_keenergy_12345678_2",
-    ],
-)
 @pytest.mark.parametrize("language", ["en", "de"], indirect=True)
-@pytest.mark.usefixtures("language")
+@pytest.mark.usefixtures("entity_registry_enabled_by_default", "language")
 async def test_water_heater(
     hass: HomeAssistant,
     fake_api: FakeKebaKeEnergyAPI,
     snapshot: SnapshotAssertion,
-    entity: str,
 ) -> None:
-    """Test the states of the water heater entities."""
+    """Test the states of all water heater entities."""
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
         MULTIPLE_POSITION_DATA_RESPONSE_1,
     ]
-
     await fake_api.setup_integration()
 
-    _entity: State | None = hass.states.get(entity)
-    assert isinstance(_entity, State)
-    assert _entity == snapshot
+    for state in get_platform_states(hass, fake_api.config_entry, Platform.WATER_HEATER):
+        assert state == snapshot(name=state.entity_id)
 
 
 @pytest.mark.parametrize(
