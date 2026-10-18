@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Linked the GitHub release notes to the matching section of the changelog.
 - Extended the issue templates with the environment and debug logs.
 - Wrote the HVAC mode of a heating circuit only if it differs from the current operating mode.
+- Translated the error message of failed data updates.
 
 ### Fixed
 

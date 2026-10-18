@@ -11,7 +11,10 @@ from typing import TYPE_CHECKING
 
 import pytest
 from homeassistant.config_entries import SOURCE_REAUTH
+from homeassistant.const import STATE_UNAVAILABLE
+from homeassistant.core import State
 from homeassistant.exceptions import ConfigEntryAuthFailed
+from homeassistant.helpers.update_coordinator import UpdateFailed
 from homeassistant.util import dt as dt_util
 from keba_keenergy_api.constants import SectionPrefix
 from pytest_homeassistant_custom_component.common import async_fire_time_changed
@@ -67,6 +70,36 @@ async def test_update_authentication_error(
     assert [flow["context"]["source"] for flow in config_entry.async_get_active_flows(hass, {SOURCE_REAUTH})] == [
         SOURCE_REAUTH,
     ]
+
+
+@pytest.mark.no_fail_on_keba_errors
+async def test_update_api_error(
+    hass: HomeAssistant,
+    config_entry: MockConfigEntry,
+    fake_api: FakeKebaKeEnergyAPI,
+) -> None:
+    """Test that the entities are unavailable if an update fails."""
+    fake_api.responses = [
+        MULTIPLE_POSITIONS_RESPONSE,
+        HEATING_CURVE_NAMES_RESPONSE,
+        get_multiple_position_fixed_data_response(),
+        MULTIPLE_POSITION_DATA_RESPONSE_1,
+        *HEATING_CURVES_RESPONSE_1_1,
+    ]
+    await fake_api.setup_integration()
+
+    coordinator: KebaKeEnergyDataUpdateCoordinator = config_entry.runtime_data
+    fake_api.responses = [HTTPStatus.BAD_REQUEST]
+
+    await coordinator.async_refresh()
+    await hass.async_block_till_done()
+
+    assert isinstance(coordinator.last_exception, UpdateFailed)
+    assert coordinator.last_exception.translation_key == "communication_error"
+
+    state: State | None = hass.states.get("sensor.keba_keenergy_12345678_outdoor_temperature")
+    assert isinstance(state, State)
+    assert state.state == STATE_UNAVAILABLE
 
 
 @pytest.mark.parametrize(
