@@ -1,3 +1,7 @@
+# Copyright 2026 Michael Hacker
+# SPDX-License-Identifier: Apache-2.0
+"""Tests for the climate entities."""
+
 from __future__ import annotations
 
 from datetime import UTC

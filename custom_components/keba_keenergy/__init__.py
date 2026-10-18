@@ -1,3 +1,5 @@
+# Copyright 2026 Michael Hacker
+# SPDX-License-Identifier: Apache-2.0
 """The KEBA KeEnergy integration."""
 
 from __future__ import annotations

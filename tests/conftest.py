@@ -1,3 +1,7 @@
+# Copyright 2026 Michael Hacker
+# SPDX-License-Identifier: Apache-2.0
+"""Fixtures for the KEBA KeEnergy tests."""
+
 from __future__ import annotations
 
 import json

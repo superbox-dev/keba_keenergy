@@ -1,3 +1,7 @@
+# Copyright 2026 Michael Hacker
+# SPDX-License-Identifier: Apache-2.0
+"""Tests for the config flow."""
+
 from __future__ import annotations
 
 from http import HTTPStatus

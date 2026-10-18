@@ -1,3 +1,5 @@
+# Copyright 2026 Michael Hacker
+# SPDX-License-Identifier: Apache-2.0
 """Support for the KEBA KeEnergy switches."""
 
 from __future__ import annotations

@@ -1,3 +1,7 @@
+# Copyright 2026 Michael Hacker
+# SPDX-License-Identifier: Apache-2.0
+"""Fake responses of the KEBA KeEnergy Web HMI for the tests."""
+
 from __future__ import annotations
 
 import json
