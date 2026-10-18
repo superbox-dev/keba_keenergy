@@ -7,7 +7,6 @@ from __future__ import annotations
 import logging
 from dataclasses import dataclass
 from typing import TYPE_CHECKING
-from typing import Any
 from typing import Final
 
 from homeassistant.components.switch import SwitchDeviceClass
@@ -67,7 +66,7 @@ class KebaKeEnergySwitchEntity(KebaKeEnergyEntity, SwitchEntity):
         """Return true if the switch is on."""
         return self.get_value(self.entity_description.key, expected_type=str) == "on"
 
-    async def async_turn_off(self, **kwargs: Any) -> None:  # noqa: ARG002
+    async def async_turn_off(self, **kwargs: object) -> None:  # noqa: ARG002
         """Turn the switch off."""
         if self.is_on:
             await self._async_write_data(
@@ -76,7 +75,7 @@ class KebaKeEnergySwitchEntity(KebaKeEnergyEntity, SwitchEntity):
                 device_numbers=self.device_numbers,
             )
 
-    async def async_turn_on(self, **kwargs: Any) -> None:  # noqa: ARG002
+    async def async_turn_on(self, **kwargs: object) -> None:  # noqa: ARG002
         """Turn the switch on."""
         if not self.is_on:
             await self._async_write_data(

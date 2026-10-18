@@ -9,8 +9,6 @@ from dataclasses import dataclass
 from typing import TYPE_CHECKING
 from typing import Any
 from typing import Final
-from typing import TypeVar
-from typing import cast
 
 from homeassistant.components.sensor import DOMAIN as SENSOR_DOMAIN
 from homeassistant.components.sensor import SensorDeviceClass
@@ -58,21 +56,19 @@ if TYPE_CHECKING:
     from .coordinator import KebaKeEnergyConfigEntry
     from .coordinator import KebaKeEnergyDataUpdateCoordinator
 
-T = TypeVar("T")
-
 
 PARALLEL_UPDATES: Final[int] = 0
 _LOGGER = logging.getLogger(__name__)
 
 
 @dataclass(frozen=True, kw_only=True)
-class KebaKeEnergySensorEntityDescription[T](
+class KebaKeEnergySensorEntityDescription[T: StateType](
     SensorEntityDescription,
     KebaKeEnergyEntityDescriptionMixin,
 ):
     """Class describing KEBA KeEnergy sensor entities."""
 
-    value: Callable[[T], StateType] = lambda data: cast("StateType", data)
+    value: Callable[[T], StateType] = lambda data: data
     attributes: Callable[[Mapping[str, Any]], Mapping[str, Any]] = lambda data: data
 
 
@@ -113,11 +109,7 @@ class KebaKeEnergySensorEntity(KebaKeEnergyEntity, SensorEntity):
     def extra_state_attributes(self) -> Mapping[str, Any] | None:
         """Return extra state attributes."""
         entity_data: Value | None = self.get_entity_data(self.entity_description.new_key or self.entity_description.key)
-        attributes: Mapping[str, Any] = {}
-
-        if isinstance(entity_data, dict):
-            attributes = entity_data.get("attributes", {})
-
+        attributes: Mapping[str, Any] = entity_data.get("attributes", {}) if entity_data else {}
         return self.entity_description.attributes(attributes)
 
 
@@ -527,10 +519,10 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             state_class=SensorStateClass.MEASUREMENT,
             translation_key="current_temperature",
+            icon="mdi:thermometer-water",
             translation_placeholders={
                 "counter": " 1",
             },
-            icon="mdi:thermometer-water",
         ),
         KebaKeEnergySensorEntityDescription[float](
             device_class=SensorDeviceClass.TEMPERATURE,
@@ -539,10 +531,10 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             state_class=SensorStateClass.MEASUREMENT,
             translation_key="current_temperature",
+            icon="mdi:thermometer-water",
             translation_placeholders={
                 "counter": " 2",
             },
-            icon="mdi:thermometer-water",
         ),
         KebaKeEnergySensorEntityDescription[float](
             device_class=SensorDeviceClass.TEMPERATURE,
@@ -1043,10 +1035,10 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             state_class=SensorStateClass.MEASUREMENT,
             translation_key="current_top_temperature",
+            icon="mdi:thermometer-water",
             translation_placeholders={
                 "counter": "",
             },
-            icon="mdi:thermometer-water",
         ),
         KebaKeEnergySensorEntityDescription[float](
             device_class=SensorDeviceClass.TEMPERATURE,
@@ -1054,10 +1046,10 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             state_class=SensorStateClass.MEASUREMENT,
             translation_key="current_bottom_temperature",
+            icon="mdi:thermometer-water",
             translation_placeholders={
                 "counter": "",
             },
-            icon="mdi:thermometer-water",
         ),
         KebaKeEnergySensorEntityDescription[float](
             condition=lambda coordinator, _: coordinator.has_photovoltaics(),
@@ -1108,10 +1100,10 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             state_class=SensorStateClass.MEASUREMENT,
             translation_key="current_temperature",
+            icon="mdi:thermometer-water",
             translation_placeholders={
                 "counter": "",
             },
-            icon="mdi:thermometer-water",
         ),
         KebaKeEnergySensorEntityDescription[str](
             device_class=SensorDeviceClass.ENUM,

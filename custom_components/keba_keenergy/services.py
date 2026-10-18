@@ -123,28 +123,27 @@ def __get_coordinator(call: ServiceCall) -> KebaKeEnergyDataUpdateCoordinator:
 async def _async_set_away_range(call: ServiceCall) -> None:
     coordinator: KebaKeEnergyDataUpdateCoordinator = __get_coordinator(call)
 
-    start_date: str | None = call.data.get(ATTR_START_DATE)
-    end_date: str | None = call.data.get(ATTR_END_DATE)
+    start_date: str = call.data[ATTR_START_DATE]
+    end_date: str = call.data[ATTR_END_DATE]
 
-    if start_date and end_date:
-        tz: ZoneInfo = await coordinator.get_timezone()
+    tz: ZoneInfo = await coordinator.get_timezone()
 
-        start_date_naive: date = parse_datetime_as_naive(start_date).date()
-        end_date_naive: date = parse_datetime_as_naive(end_date).date()
+    start_date_naive: date = parse_datetime_as_naive(start_date).date()
+    end_date_naive: date = parse_datetime_as_naive(end_date).date()
 
-        start_date_tz = datetime.combine(start_date_naive, time.min, tzinfo=tz)
-        end_date_tz = datetime.combine(end_date_naive, time.max, tzinfo=tz)
+    start_date_tz = datetime.combine(start_date_naive, time.min, tzinfo=tz)
+    end_date_tz = datetime.combine(end_date_naive, time.max, tzinfo=tz)
 
-        if end_date_tz < start_date_tz:
-            raise ServiceValidationError(
-                translation_domain=DOMAIN,
-                translation_key="end_date_smaller_than_start_date",
-            )
-
-        await coordinator.set_away_date_range(
-            start_timestamp=start_date_tz.timestamp(),
-            end_timestamp=end_date_tz.timestamp(),
+    if end_date_tz < start_date_tz:
+        raise ServiceValidationError(
+            translation_domain=DOMAIN,
+            translation_key="end_date_smaller_than_start_date",
         )
+
+    await coordinator.set_away_date_range(
+        start_timestamp=start_date_tz.timestamp(),
+        end_timestamp=end_date_tz.timestamp(),
+    )
 
 
 async def _async_set_heating_curve_points(call: ServiceCall) -> None:

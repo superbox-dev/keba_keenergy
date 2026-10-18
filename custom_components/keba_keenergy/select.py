@@ -250,6 +250,6 @@ async def async_setup_entry(
         entry,
         async_add_entities,
         SELECT_TYPES,
-        None,
+        KebaKeEnergySelectEntity,
         "select",
     )

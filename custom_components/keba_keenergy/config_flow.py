@@ -316,23 +316,14 @@ class KebaKeEnergyOptionsFlow(OptionsFlowWithReload):
             CONF_PHOTOVOLTAICS_TICK,
         ]
 
-        ticks: list[int] = [int(user_input.get(k, 1)) for k in tick_keys if k in user_input]
+        ticks: dict[str, int] = {key: int(user_input[key]) for key in tick_keys if key in user_input}
+        gcd: int = math.gcd(*ticks.values())
 
-        if ticks:
-            gcd: int = math.gcd(*ticks)
+        if gcd > 1:
+            user_input[CONF_SCAN_INTERVAL] = int(scan_interval * gcd)
+            user_input.update({key: tick // gcd for key, tick in ticks.items()})
 
-            if gcd > 1:
-                user_input[CONF_SCAN_INTERVAL] = int(scan_interval * gcd)
-
-                for key in tick_keys:
-                    if key in user_input:
-                        user_input[key] = int(user_input[key] // gcd)
-
-        _LOGGER.debug(
-            "Tick normalization: %s -> gcd=%s",
-            user_input,
-            math.gcd(*ticks) if ticks else None,
-        )
+        _LOGGER.debug("Tick normalization: %s -> gcd=%s", user_input, gcd)
 
         return user_input
 

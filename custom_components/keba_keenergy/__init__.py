@@ -8,10 +8,6 @@ import logging
 import socket
 from typing import TYPE_CHECKING
 
-from homeassistant.const import CONF_HOST
-from homeassistant.const import CONF_PASSWORD
-from homeassistant.const import CONF_SSL
-from homeassistant.const import CONF_USERNAME
 from homeassistant.const import Platform
 from homeassistant.helpers import config_validation as cv
 from homeassistant.helpers import device_registry as dr
@@ -52,21 +48,12 @@ async def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:  # noqa:
 
 async def async_setup_entry(hass: HomeAssistant, entry: KebaKeEnergyConfigEntry) -> bool:
     """Set up the KEBA KeEnergy platform."""
-    host: str = entry.data[CONF_HOST]
-    username: str | None = entry.data.get(CONF_USERNAME)
-    password: str | None = entry.data.get(CONF_PASSWORD)
-    ssl: bool = entry.data[CONF_SSL]
-
     # Newer software versions of the Web HMI comes with self-signed SSL certificates
     session: ClientSession = async_get_clientsession(hass, verify_ssl=False, family=socket.AF_INET)
 
     coordinator: KebaKeEnergyDataUpdateCoordinator = KebaKeEnergyDataUpdateCoordinator(
         hass,
         entry,
-        host=host,
-        username=username,
-        password=password,
-        ssl=ssl,
         session=session,
     )
 

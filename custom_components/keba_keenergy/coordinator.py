@@ -12,12 +12,14 @@ from datetime import timedelta
 from functools import cached_property
 from typing import TYPE_CHECKING
 from typing import Any
-from typing import TypeGuard
-from typing import cast
 from zoneinfo import ZoneInfo
 
 from homeassistant.config_entries import ConfigEntry
+from homeassistant.const import CONF_HOST
+from homeassistant.const import CONF_PASSWORD
 from homeassistant.const import CONF_SCAN_INTERVAL
+from homeassistant.const import CONF_SSL
+from homeassistant.const import CONF_USERNAME
 from homeassistant.exceptions import ConfigEntryAuthFailed
 from homeassistant.exceptions import HomeAssistantError
 from homeassistant.helpers import issue_registry as ir
@@ -254,9 +256,16 @@ REQUEST_DATA_GROUPS: dict[SectionPrefix, list[Section]] = {
 }
 
 
-def is_int_value_list(value: object) -> TypeGuard[list[Value]]:
-    """Check if the value list only contains integer values."""
-    return isinstance(value, list) and all(isinstance(v, dict) and isinstance(v.get("value"), int) for v in value)
+def get_value_by_index(
+    values: list[list[Value]] | list[Value] | Value,
+    /,
+    *,
+    index: int | None,
+    key_index: int | None,
+) -> Value:
+    """Return the value of the device with the index, and of the key with the key index if the device has several."""
+    value: list[Value] | Value = values[index or 0] if isinstance(values, list) else values
+    return value[key_index or 0] if isinstance(value, list) else value
 
 
 class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueResponse]]):
@@ -270,13 +279,20 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
         entry: KebaKeEnergyConfigEntry,
         /,
         *,
-        host: str,
-        username: str | None,
-        password: str | None,
-        ssl: bool,
         session: ClientSession,
     ) -> None:
-        """Initialize."""
+        """Initialize the coordinator.
+
+        Parameters
+        ----------
+        hass
+            The Home Assistant instance.
+        entry
+            The config entry with the host, the SSL setting and the optional credentials.
+        session
+            The HTTP session for the requests to the Web HMI.
+
+        """
         self.config_entry: KebaKeEnergyConfigEntry = entry
         self.control_unit_device_id: str = ""
 
@@ -284,10 +300,10 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
         self._write_lock: Lock = Lock()
 
         self.api: KebaKeEnergyAPI = KebaKeEnergyAPI(
-            host,
-            username=username,
-            password=password,
-            ssl=ssl,
+            entry.data[CONF_HOST],
+            username=entry.data.get(CONF_USERNAME),
+            password=entry.data.get(CONF_PASSWORD),
+            ssl=entry.data[CONF_SSL],
             skip_ssl_verification=True,
             session=session,
         )
@@ -324,7 +340,7 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
         )
 
     @staticmethod
-    async def _api_call_for_update(coro: Awaitable[Any]) -> Any:
+    async def _api_call_for_update[R](coro: Awaitable[R]) -> R:
         try:
             return await coro
         except AuthenticationError as error:
@@ -342,7 +358,7 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
             ) from error
 
     @staticmethod
-    async def _api_call_for_user(coro: Awaitable[Any]) -> Any:
+    async def _api_call_for_user[R](coro: Awaitable[R]) -> R:
         try:
             return await coro
         except APIError as error:
@@ -356,14 +372,12 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
 
     async def _async_setup(self) -> None:
         """Set up the coordinator."""
-        store_data: dict[str, Any] | None = await self._store.async_load()
+        store_data: dict[str, Any] = await self._store.async_load() or {}
+        counter: dict[str, Any] | None = store_data.get("flash_write_counter")
 
-        if store_data:
-            counter: dict[str, Any] | None = store_data.get("flash_write_counter")
-
-            if isinstance(counter, dict):
-                self._write_count_week = tuple(counter["week"])
-                self._weekly_write_count = counter["count"]
+        if isinstance(counter, dict):
+            self._write_count_week = tuple(counter["week"])
+            self._weekly_write_count = counter["count"]
 
         await self._api_call_for_update(self._async_fixed_data())
 
@@ -408,8 +422,10 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
 
         _LOGGER.debug("Options: %s", self._fixed_data)
 
-        if System.OUTDOOR_TEMPERATURE in self.request_data and not self.has_outdoor_temperature():  # pragma: nocover
-            self.request_data.remove(System.OUTDOOR_TEMPERATURE)
+        has_outdoor_temperature: bool = self.has_outdoor_temperature()
+        self.request_data = [
+            section for section in self.request_data if section != System.OUTDOOR_TEMPERATURE or has_outdoor_temperature
+        ]
 
         # Group request data by device but only add data that are available for the heat pump setup
         self.request_data_groups = {
@@ -463,7 +479,7 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
 
     def async_update_value(
         self,
-        value: Any,
+        value: object,
         /,
         *,
         section_id: str,
@@ -478,17 +494,7 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
         if section.value.human_readable:
             value = section.value.human_readable(value).name.lower()
 
-        values: list[list[Value]] | list[Value] | Value = data[section_id][key]
-
-        if isinstance(values, list):
-            value_by_index: list[Value] | Value = values[index]
-
-            if isinstance(value_by_index, list) and key_index is not None:
-                value_by_index[key_index]["value"] = value
-            elif isinstance(value_by_index, dict):
-                value_by_index["value"] = value
-        elif isinstance(values, dict):
-            values["value"] = value
+        get_value_by_index(data[section_id][key], index=index, key_index=key_index)["value"] = value
 
         self.async_set_updated_data(data)
 
@@ -575,28 +581,26 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
         return ZoneInfo(timezone)
 
     async def set_away_date_range(self, *, start_timestamp: float, end_timestamp: float) -> None:
-        """Set the away date range."""
-        if self.position:
-            current_away_start_date: list[list[Value]] | list[Value] | Value = self.data[SectionPrefix.HEAT_CIRCUIT][
-                "away_start_date"
-            ]
-            current_away_end_date: list[list[Value]] | list[Value] | Value = self.data[SectionPrefix.HEAT_CIRCUIT][
-                "away_end_date"
-            ]
+        """Set the away date range of all heating circuits, if it changed."""
+        away_start_date: list[int] = [int(start_timestamp)] * self.heat_circuit_numbers
+        away_end_date: list[int] = [int(end_timestamp)] * self.heat_circuit_numbers
 
-            if is_int_value_list(current_away_start_date) and is_int_value_list(current_away_end_date):
-                away_start_date: list[int] = [int(start_timestamp) for _ in range(self.position.heat_circuit)]
-                away_end_date: list[int] = [int(end_timestamp) for _ in range(self.position.heat_circuit)]
+        if self._heat_circuit_values("away_start_date") != away_start_date or (
+            self._heat_circuit_values("away_end_date") != away_end_date
+        ):
+            await self.async_write_data(
+                request={
+                    HeatCircuit.AWAY_START_DATE: away_start_date,
+                    HeatCircuit.AWAY_END_DATE: away_end_date,
+                },
+            )
 
-                if [value["value"] for value in current_away_start_date] != away_start_date or [
-                    value["value"] for value in current_away_end_date
-                ] != away_end_date:
-                    await self.async_write_data(
-                        request={
-                            HeatCircuit.AWAY_START_DATE: away_start_date,
-                            HeatCircuit.AWAY_END_DATE: away_end_date,
-                        },
-                    )
+    def _heat_circuit_values(self, key: str, /) -> list[object]:
+        """Return the values of all heating circuits."""
+        return [
+            get_value_by_index(self.data[SectionPrefix.HEAT_CIRCUIT][key], index=index, key_index=None).get("value")
+            for index in range(self.heat_circuit_numbers)
+        ]
 
     @cached_property
     def configuration_url(self) -> str:
@@ -626,22 +630,13 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
     @property
     def heat_pump_names(self) -> list[Value]:
         """Return heat pump names."""
-        return cast("list[Value]", self.data[SectionPrefix.HEAT_PUMP]["name"])
+        names: list[list[Value]] | list[Value] | Value = self.data[SectionPrefix.HEAT_PUMP]["name"]
+        return [name for name in names if isinstance(name, dict)] if isinstance(names, list) else []
 
     @cached_property
     def heat_circuit_numbers(self) -> int:
         """Return number of heat circuits."""
         return self.position.heat_circuit if self.position else 0
-
-    @cached_property
-    def solar_circuit_numbers(self) -> int:
-        """Return number of solar circuits."""
-        return self.position.solar_circuit if self.position else 0
-
-    @cached_property
-    def heat_pump_numbers(self) -> int:
-        """Return number of heat pumps."""
-        return self.position.heat_pump if self.position else 0
 
     @cached_property
     def buffer_tank_numbers(self) -> int:
@@ -652,11 +647,6 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
     def hot_water_tank_numbers(self) -> int:
         """Return number of hot water tanks."""
         return self.position.hot_water_tank if self.position else 0
-
-    @cached_property
-    def external_heat_source_numbers(self) -> int:
-        """Return number of external heat sources."""
-        return self.position.external_heat_source if self.position else 0
 
     def has_device(self, prefix: SectionPrefix) -> bool:
         """Return True if the device group is available in this setup."""
@@ -670,172 +660,89 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
 
     def has_outdoor_temperature(self) -> bool:
         """Check if outdoor temperature sensor is available."""
-        data: Value | None = cast("Value | None", self._fixed_data[SectionPrefix.SYSTEM].get("has_outdoor_temperature"))
-        return bool(BoolEnum.ON.name.lower() == data["value"]) if data else False
+        return self._is_fixed_value_on(SectionPrefix.SYSTEM, "has_outdoor_temperature")
 
     def has_room_temperature(self, *, index: int | None = None) -> bool:
         """Check if room temperature sensor is available."""
-        index = 0 if index is None else index
-
-        data: list[Value] | None = cast(
-            "list[Value] | None",
-            self._fixed_data[SectionPrefix.HEAT_CIRCUIT].get("has_room_temperature"),
-        )
-        return bool(BoolEnum.ON.name.lower() == data[index]["value"]) if data else False
+        return self._is_fixed_value_on(SectionPrefix.HEAT_CIRCUIT, "has_room_temperature", index=index)
 
     def has_room_humidity(self, *, index: int | None = None) -> bool:
         """Check if room humidity sensor is available."""
-        index = 0 if index is None else index
-
-        data: list[Value] | None = cast(
-            "list[Value] | None",
-            self._fixed_data[SectionPrefix.HEAT_CIRCUIT].get("has_room_humidity"),
-        )
-        return bool(BoolEnum.ON.name.lower() == data[index]["value"]) if data else False
+        return self._is_fixed_value_on(SectionPrefix.HEAT_CIRCUIT, "has_room_humidity", index=index)
 
     def has_photovoltaics(self) -> bool:
         """Check if photovoltaics is available."""
-        data: Value | None = cast("Value | None", self._fixed_data[SectionPrefix.SYSTEM].get("has_photovoltaics"))
-        return bool(BoolEnum.ON.name.lower() == data["value"]) if data else False
+        return self._is_fixed_value_on(SectionPrefix.SYSTEM, "has_photovoltaics")
 
     def has_mixer(self, *, index: int | None = None) -> bool:
         """Check if heating circuit mixer is available."""
-        index = 0 if index is None else index
-
-        data: list[Value] | None = cast(
-            "list[Value] | None",
-            self._fixed_data[SectionPrefix.HEAT_CIRCUIT].get("has_mixer"),
-        )
-        return bool(BoolEnum.ON.name.lower() == data[index]["value"]) if data else False
+        return self._is_fixed_value_on(SectionPrefix.HEAT_CIRCUIT, "has_mixer", index=index)
 
     def has_return_flow_temperature(self, *, index: int | None = None) -> bool:
         """Check if heating circuit return flow temperature sensor is available."""
-        index = 0 if index is None else index
-
-        data: list[Value] | None = cast(
-            "list[Value] | None",
-            self._fixed_data[SectionPrefix.HEAT_CIRCUIT].get("has_return_flow_temperature"),
-        )
-        return bool(BoolEnum.ON.name.lower() == data[index]["value"]) if data else False
+        return self._is_fixed_value_on(SectionPrefix.HEAT_CIRCUIT, "has_return_flow_temperature", index=index)
 
     def has_pump(self, *, index: int | None = None) -> bool:
         """Check if heating circuit pump is available."""
-        index = 0 if index is None else index
-
-        data: list[Value] | None = cast(
-            "list[Value] | None",
-            self._fixed_data[SectionPrefix.HEAT_CIRCUIT].get("has_pump"),
-        )
-        return bool(BoolEnum.ON.name.lower() == data[index]["value"]) if data else False
+        return self._is_fixed_value_on(SectionPrefix.HEAT_CIRCUIT, "has_pump", index=index)
 
     def has_var_speed_pump(self, *, index: int | None = None) -> bool:
         """Check if heating circuit variable speed pump is available."""
-        index = 0 if index is None else index
-
-        data: list[Value] | None = cast(
-            "list[Value] | None",
-            self._fixed_data[SectionPrefix.HEAT_CIRCUIT].get("has_var_speed_pump"),
-        )
-        return bool(BoolEnum.ON.name.lower() == data[index]["value"]) if data else False
+        return self._is_fixed_value_on(SectionPrefix.HEAT_CIRCUIT, "has_var_speed_pump", index=index)
 
     def has_fresh_water_module(self, *, index: int | None = None) -> bool:
         """Check if fresh water module is available."""
-        index = 0 if index is None else index
-
-        data: list[Value] | None = cast(
-            "list[Value] | None",
-            self._fixed_data[SectionPrefix.HOT_WATER_TANK].get("has_fresh_water_module"),
-        )
-        return bool(BoolEnum.ON.name.lower() == data[index]["value"]) if data else False
+        return self._is_fixed_value_on(SectionPrefix.HOT_WATER_TANK, "has_fresh_water_module", index=index)
 
     def has_electrical_energy_meter(self, *, index: int | None = None) -> bool:
         """Check if electrical energy meter is available."""
-        index = 0 if index is None else index
-
-        data: list[Value] | None = cast(
-            "list[Value] | None",
-            self._fixed_data[SectionPrefix.HEAT_PUMP].get("electric_energy_meter_type"),
-        )
-        return bool(data[index]["value"] > 0) if data else False
+        value: object = self._get_fixed_value(SectionPrefix.HEAT_PUMP, "electric_energy_meter_type", index=index)
+        return isinstance(value, int) and value > 0
 
     def has_heat_meter(self, *, index: int | None = None) -> bool:
         """Check if heat meter is available."""
-        index = 0 if index is None else index
-
-        data: list[Value] | None = cast(
-            "list[Value] | None",
-            self._fixed_data[SectionPrefix.HEAT_PUMP].get("heat_meter_type"),
-        )
-        return bool(data[index]["value"] > 0) if data else False
+        value: object = self._get_fixed_value(SectionPrefix.HEAT_PUMP, "heat_meter_type", index=index)
+        return isinstance(value, int) and value > 0
 
     def has_active_cooling(self, *, index: int | None = None) -> bool:
         """Check if active cooling is available."""
-        index = 0 if index is None else index
-
-        data: list[Value] | None = cast(
-            "list[Value] | None",
-            self._fixed_data[SectionPrefix.HEAT_PUMP].get("has_active_cooling"),
-        )
-        return bool(BoolEnum.ON.name.lower() == data[index]["value"]) if data else False
+        return self._is_fixed_value_on(SectionPrefix.HEAT_PUMP, "has_active_cooling", index=index)
 
     def has_passive_cooling(self, *, index: int | None = None) -> bool:
         """Check if passive cooling is available."""
-        index = 0 if index is None else index
-
-        data: list[Value] | None = cast(
-            "list[Value] | None",
-            self._fixed_data[SectionPrefix.HEAT_PUMP].get("has_passive_cooling"),
-        )
-        return bool(BoolEnum.ON.name.lower() == data[index]["value"]) if data else False
+        return self._is_fixed_value_on(SectionPrefix.HEAT_PUMP, "has_passive_cooling", index=index)
 
     def has_cooling_circuits(self) -> bool:
         """Check if one heating circuit support cooling."""
-        has_cooling: bool = False
-
         # Some KEBA KeEnergy software versions did not have an active or passive cooling options.
         # Cooling support can only be detected with the heating circuit mode!
-        if self.position:
-            for index in range(self.position.heat_circuit):
-                is_cooling_circuit: bool = self.is_cooling_circuit(index=index)
-
-                if is_cooling_circuit:
-                    has_cooling = True
-                    break
-
-        return has_cooling
+        return any(self.is_cooling_circuit(index=index) for index in range(self.heat_circuit_numbers))
 
     def is_cooling_circuit(self, *, index: int | None = None) -> bool:
         """Check if heating circuit mode is cooling."""
-        index = 0 if index is None else index
-
-        data: list[Value] | None = cast("list[Value] | None", self._fixed_data[SectionPrefix.HEAT_CIRCUIT].get("mode"))
-        return (
-            bool(
-                data[index]["value"]
-                in [
-                    HeatCircuitMode.COOLING.name.lower(),
-                    HeatCircuitMode.HEATING_AND_COOLING.name.lower(),
-                    HeatCircuitMode.HEATING_AND_ACTIVE_COOLING.name.lower(),
-                ],
-            )
-            if data
-            else False
+        return self._get_fixed_value(SectionPrefix.HEAT_CIRCUIT, "mode", index=index) in (
+            HeatCircuitMode.COOLING.name.lower(),
+            HeatCircuitMode.HEATING_AND_COOLING.name.lower(),
+            HeatCircuitMode.HEATING_AND_ACTIVE_COOLING.name.lower(),
         )
 
     def is_heating_circuit(self, *, index: int | None = None) -> bool:
         """Check if heating circuit mode is heating."""
-        index = 0 if index is None else index
-
-        data: list[Value] | None = cast("list[Value] | None", self._fixed_data[SectionPrefix.HEAT_CIRCUIT].get("mode"))
-        return (
-            bool(
-                data[index]["value"]
-                in [
-                    HeatCircuitMode.HEATING.name.lower(),
-                    HeatCircuitMode.HEATING_AND_COOLING.name.lower(),
-                    HeatCircuitMode.HEATING_AND_ACTIVE_COOLING.name.lower(),
-                ],
-            )
-            if data
-            else False
+        return self._get_fixed_value(SectionPrefix.HEAT_CIRCUIT, "mode", index=index) in (
+            HeatCircuitMode.HEATING.name.lower(),
+            HeatCircuitMode.HEATING_AND_COOLING.name.lower(),
+            HeatCircuitMode.HEATING_AND_ACTIVE_COOLING.name.lower(),
         )
+
+    def _get_fixed_value(self, prefix: SectionPrefix, key: str, /, *, index: int | None = None) -> object:
+        """Return a value that is read once on setup, of the device with the index if the value is a list."""
+        data: list[list[Value]] | list[Value] | Value | None = self._fixed_data.get(prefix, {}).get(key)
+
+        if isinstance(data, list):
+            data = data[index or 0]
+
+        return data.get("value") if isinstance(data, dict) else None
+
+    def _is_fixed_value_on(self, prefix: SectionPrefix, key: str, /, *, index: int | None = None) -> bool:
+        """Return True if a value that is read once on setup is switched on."""
+        return self._get_fixed_value(prefix, key, index=index) == BoolEnum.ON.name.lower()

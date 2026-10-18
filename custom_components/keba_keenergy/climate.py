@@ -11,7 +11,6 @@ from datetime import time
 from datetime import timedelta
 from functools import cached_property
 from typing import TYPE_CHECKING
-from typing import Any
 from typing import Final
 
 import voluptuous as vol
@@ -132,31 +131,14 @@ class KebaKeEnergyClimateEntity(KebaKeEnergyBaseEntity, ClimateEntity):
         return "mdi:hvac" if self.hvac_mode == HVACMode.HEAT else "mdi:hvac-off"
 
     @cached_property
+    def _hvac_mode_on(self) -> HVACMode:
+        # A heating circuit that supports heating and cooling uses HEAT_COOL, this is untested with a real device
+        return HVACMode.HEAT if self._is_heating else HVACMode.COOL if self._is_cooling else HVACMode.HEAT_COOL
+
+    @cached_property
     def hvac_modes(self) -> list[HVACMode]:
         """Return the list of available hvac operation modes."""
-        hvac_modes: list[HVACMode]
-
-        if self._is_heating:
-            hvac_modes = [
-                HVACMode.AUTO,
-                HVACMode.HEAT,
-                HVACMode.OFF,
-            ]
-        elif self._is_cooling:
-            hvac_modes = [
-                HVACMode.AUTO,
-                HVACMode.COOL,
-                HVACMode.OFF,
-            ]
-        else:  # pragma: nocover
-            # untested: I don't know what a heating circuit with heating and cooling support do.
-            hvac_modes = [
-                HVACMode.AUTO,
-                HVACMode.HEAT_COOL,
-                HVACMode.OFF,
-            ]
-
-        return hvac_modes
+        return [HVACMode.AUTO, self._hvac_mode_on, HVACMode.OFF]
 
     @cached_property
     def preset_modes(self) -> list[str] | None:
@@ -180,7 +162,6 @@ class KebaKeEnergyClimateEntity(KebaKeEnergyBaseEntity, ClimateEntity):
     @property
     def target_temperature(self) -> float | None:
         """Return the temperature we try to reach."""
-        target_temperature: float | None = None
         selected_target_temperature: float | None = self.get_value("selected_target_temperature", expected_type=float)
         target_temperature_offset: float | None
 
@@ -189,10 +170,11 @@ class KebaKeEnergyClimateEntity(KebaKeEnergyBaseEntity, ClimateEntity):
         else:
             target_temperature_offset = self.get_value("target_temperature_offset", expected_type=float)
 
-        if selected_target_temperature is not None and target_temperature_offset is not None:
-            target_temperature = selected_target_temperature + target_temperature_offset
-
-        return target_temperature
+        return (
+            None
+            if selected_target_temperature is None or target_temperature_offset is None
+            else selected_target_temperature + target_temperature_offset
+        )
 
     @property
     def min_temp(self) -> float:
@@ -202,8 +184,11 @@ class KebaKeEnergyClimateEntity(KebaKeEnergyBaseEntity, ClimateEntity):
             self.get_attribute("target_temperature_offset", attr="lower_limit"),
         )
 
-        assert selected_target_temperature is not None
-        return selected_target_temperature + target_temperature_offset
+        return (
+            super().min_temp
+            if selected_target_temperature is None
+            else selected_target_temperature + target_temperature_offset
+        )
 
     @property
     def max_temp(self) -> float:
@@ -213,8 +198,11 @@ class KebaKeEnergyClimateEntity(KebaKeEnergyBaseEntity, ClimateEntity):
             self.get_attribute("target_temperature_offset", attr="upper_limit"),
         )
 
-        assert selected_target_temperature is not None
-        return selected_target_temperature + target_temperature_offset
+        return (
+            super().max_temp
+            if selected_target_temperature is None
+            else selected_target_temperature + target_temperature_offset
+        )
 
     @property
     def current_humidity(self) -> float | None:
@@ -228,51 +216,41 @@ class KebaKeEnergyClimateEntity(KebaKeEnergyBaseEntity, ClimateEntity):
     @property
     def hvac_mode(self) -> HVACMode | None:
         """Return hvac operation."""
-        hvac_mode: HVACMode | None = None
         operating_mode: str | None = self.get_value("operating_mode", expected_type=str)
+        return None if operating_mode is None else self._operating_mode_to_hvac_mode(operating_mode)
 
-        if operating_mode:
-            if HeatCircuitOperatingMode[operating_mode.upper()].value == HeatCircuitOperatingMode.AUTO.value:
-                hvac_mode = HVACMode.AUTO
-            elif HeatCircuitOperatingMode[operating_mode.upper()].value in [
-                HeatCircuitOperatingMode.HOLIDAY.value,
-                HeatCircuitOperatingMode.DAY.value,
-                HeatCircuitOperatingMode.NIGHT.value,
-                HeatCircuitOperatingMode.PARTY.value,
-            ]:
-                if self._is_heating:
-                    hvac_mode = HVACMode.HEAT
-                elif self._is_cooling:
-                    hvac_mode = HVACMode.COOL
-                else:  # pragma: nocover
-                    # untested: I don't know what a heating circuit with heating and cooling support do.
-                    hvac_mode = HVACMode.HEAT_COOL
-            else:
-                hvac_mode = HVACMode.OFF
+    def _operating_mode_to_hvac_mode(self, operating_mode: str, /) -> HVACMode:
+        mode: int = HeatCircuitOperatingMode[operating_mode.upper()].value
 
-        return hvac_mode
+        if mode == HeatCircuitOperatingMode.AUTO.value:
+            return HVACMode.AUTO
+
+        if mode in HEATING_CIRCUIT_PRESET_TO_HA:
+            return self._hvac_mode_on
+
+        return HVACMode.OFF
 
     @property
     def hvac_action(self) -> HVACAction | None:
         """Return the current running hvac operation if supported."""
-        hvac_action: HVACAction = HVACAction.IDLE
+        has_heat_request: bool = HeatCircuitHeatRequest.ON.name.lower() == self.get_value(
+            "heat_request",
+            expected_type=str,
+        )
+        has_cool_request: bool = HeatCircuitCoolRequest.ON.name.lower() == self.get_value(
+            "cool_request",
+            expected_type=str,
+        )
 
-        if self.hvac_mode == HVACMode.OFF:
-            hvac_action = HVACAction.OFF
-        else:
-            has_heat_request: bool = bool(
-                HeatCircuitHeatRequest.ON.name.lower() == self.get_value("heat_request", expected_type=str),
-            )
-            has_cool_request: bool = bool(
-                HeatCircuitCoolRequest.ON.name.lower() == self.get_value("cool_request", expected_type=str),
-            )
-
-            if has_heat_request:
-                hvac_action = HVACAction.HEATING
-            elif has_cool_request:
-                hvac_action = HVACAction.COOLING
-
-        return hvac_action
+        return (
+            HVACAction.OFF
+            if self.hvac_mode == HVACMode.OFF
+            else HVACAction.HEATING
+            if has_heat_request
+            else HVACAction.COOLING
+            if has_cool_request
+            else HVACAction.IDLE
+        )
 
     @property
     def preset_mode(self) -> str:
@@ -298,22 +276,21 @@ class KebaKeEnergyClimateEntity(KebaKeEnergyBaseEntity, ClimateEntity):
 
     async def async_set_hvac_mode(self, hvac_mode: HVACMode) -> None:
         """Set hvac mode for heat circuit."""
-        operating_mode_status: int | None = None
+        operating_mode_status: int = (
+            HeatCircuitOperatingMode.AUTO.value
+            if hvac_mode == HVACMode.AUTO
+            else HeatCircuitOperatingMode.OFF.value
+            if hvac_mode == HVACMode.OFF
+            else HeatCircuitOperatingMode.DAY.value
+        )
 
         if hvac_mode == HVACMode.AUTO:
-            operating_mode_status = HeatCircuitOperatingMode.AUTO.value
             await self._async_set_away_date_range(PRESET_HOME)
             self._attr_preset_mode = PRESET_HOME
-        elif hvac_mode in [HVACMode.HEAT, HVACMode.COOL, HVACMode.HEAT_COOL]:
-            operating_mode_status = HeatCircuitOperatingMode.DAY.value
-        elif hvac_mode == HVACMode.OFF:
-            operating_mode_status = HeatCircuitOperatingMode.OFF.value
 
         operating_mode: str | None = self.get_value("operating_mode", expected_type=str)
 
-        if operating_mode_status is not None and (
-            operating_mode is None or HeatCircuitOperatingMode[operating_mode.upper()].value != operating_mode_status
-        ):
+        if operating_mode is None or HeatCircuitOperatingMode[operating_mode.upper()].value != operating_mode_status:
             await self._async_write_data(
                 operating_mode_status,
                 section=HeatCircuit.OPERATING_MODE,
@@ -332,23 +309,28 @@ class KebaKeEnergyClimateEntity(KebaKeEnergyBaseEntity, ClimateEntity):
                     device_numbers=self.coordinator.heat_circuit_numbers,
                 )
 
-    async def async_set_temperature(self, **kwargs: Any) -> None:
+    async def async_set_temperature(self, **kwargs: object) -> None:
         """Set new target temperature."""
-        if temperature := kwargs.get(ATTR_TEMPERATURE):
-            self._pending_value = temperature - self.get_value("selected_target_temperature", expected_type=float)
+        temperature: object = kwargs.get(ATTR_TEMPERATURE)
+        selected_target_temperature: float | None = self.get_value("selected_target_temperature", expected_type=float)
 
-            if self._async_call_later:
-                self._async_call_later()
-                self._async_call_later = None
+        self._pending_value = (
+            temperature - selected_target_temperature
+            if isinstance(temperature, int | float) and selected_target_temperature is not None
+            else None
+        )
 
-            self._async_call_later = async_call_later(
-                hass=self.hass,
-                delay=FLASH_WRITE_DELAY,
-                action=HassJob(
-                    self._async_debounced_write_data,
-                    cancel_on_shutdown=True,
-                ),
-            )
+        if self._async_call_later:
+            self._async_call_later()
+
+        self._async_call_later = async_call_later(
+            hass=self.hass,
+            delay=FLASH_WRITE_DELAY,
+            action=HassJob(
+                self._async_debounced_write_data,
+                cancel_on_shutdown=True,
+            ),
+        )
 
     async def _async_set_away_date_range(self, preset_mode: str, /) -> None:
         tz: ZoneInfo = await self.coordinator.get_timezone()
