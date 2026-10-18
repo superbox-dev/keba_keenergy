@@ -103,9 +103,9 @@ Code lives in `custom_components/keba_keenergy/`.
 - Not applicable:
   - `entity-event-setup`: entities only use the coordinator
 - Open:
-  - `brands`: no brand images in `custom_components/keba_keenergy/brand/`
   - `dynamic-devices` / `stale-devices`: devices are only detected on setup, a changed setup needs a reload
 - Keep these rules satisfied:
+  - `brands`: the brand images are in the `home-assistant/brands` repository (`custom_integrations/keba_keenergy/`)
   - `exception-translations`: exceptions use `translation_domain` and `translation_key`
   - `icon-translations`: icons in `icons.json`
   - `entity-device-class`: use a device class wherever one applies
