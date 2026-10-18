@@ -46,6 +46,7 @@ from tests.api_data import MULTIPLE_POSITION_DATA_RESPONSE_2
 from tests.api_data import MULTIPLE_POSITIONS_RESPONSE
 from tests.api_data import get_multiple_position_fixed_data_response
 from tests.api_data import get_single_position_data_response
+from tests.api_data import update_response
 
 if TYPE_CHECKING:
     from syrupy.assertion import SnapshotAssertion
@@ -486,6 +487,35 @@ async def test_set_temperature(
     fake_api.assert_called_write_with(
         '[{"name": "APPL.CtrlAppl.sParam.heatCircuit[0].param.offsetRoomTemp", "value": "-0.5"}]',
     )
+
+
+@pytest.mark.parametrize(
+    "operating_mode",
+    [HeatCircuitOperatingMode.EXTERNAL, HeatCircuitOperatingMode.ROOM_CONTROL],
+)
+async def test_operating_mode_without_preset(
+    hass: HomeAssistant,
+    fake_api: FakeKebaKeEnergyAPI,
+    operating_mode: HeatCircuitOperatingMode,
+) -> None:
+    """Test that a heating circuit in an operating mode without a preset has the home preset."""
+    fake_api.responses = [
+        DEFAULT_POSITION_RESPONSE,
+        HEATING_CURVE_NAMES_RESPONSE,
+        DEFAULT_POSITION_FIXED_DATA_RESPONSE,
+        update_response(
+            get_single_position_data_response(),
+            "APPL.CtrlAppl.sParam.heatCircuit[0].param.operatingMode",
+            value=str(operating_mode.value),
+        ),
+        *HEATING_CURVES_RESPONSE_1_1,
+    ]
+    await fake_api.setup_integration()
+
+    state: State | None = hass.states.get(ENTITY_ID)
+    assert isinstance(state, State)
+    assert state.state == HVACMode.OFF
+    assert state.attributes[ATTR_PRESET_MODE] == PRESET_HOME
 
 
 async def test_set_preset_mode_without_time_zone_request(

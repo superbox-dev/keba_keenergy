@@ -250,16 +250,14 @@ class KebaKeEnergyClimateEntity(KebaKeEnergyBaseEntity, ClimateEntity):
     @property
     def preset_mode(self) -> str:
         """Return the current preset mode."""
-        preset_mode: str = PRESET_HOME
         operating_mode: str | None = self.get_value("operating_mode", expected_type=str)
 
-        if (
-            operating_mode
-            and HeatCircuitOperatingMode[operating_mode.upper()].value != HeatCircuitOperatingMode.OFF.value
-        ):
-            preset_mode = HEATING_CIRCUIT_PRESET_TO_HA[HeatCircuitOperatingMode[operating_mode.upper()].value]
-
-        return preset_mode
+        # Off and the modes without a preset (e.g. external or room control) return the home preset
+        return (
+            HEATING_CIRCUIT_PRESET_TO_HA.get(HeatCircuitOperatingMode[operating_mode.upper()].value, PRESET_HOME)
+            if operating_mode
+            else PRESET_HOME
+        )
 
     async def async_turn_off(self) -> None:
         """Turn off the heat circuit."""

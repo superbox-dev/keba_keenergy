@@ -28,6 +28,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixed the missing state icons of the operating mode sensors since 1.10.0.
 - Fixed the away date range being written to the control unit even if it did not change. ([Issue #23][issue-23])
 - Fixed the target temperature of a hot water tank being written to the control unit even if it did not change.
+- Fixed an error of the climate entity if a heating circuit is in the operating mode `external` or `room_control`.
 - Fixed a pending change of a number, climate or water heater entity being written after the integration was
   unloaded.
 

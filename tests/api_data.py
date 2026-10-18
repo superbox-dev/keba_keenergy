@@ -5,9 +5,19 @@
 from __future__ import annotations
 
 import json
+from copy import deepcopy
 from typing import Any
 
 FILTER_REQUESTS: dict[str, Any] = {"ret": "OK", "children": []}
+
+
+def update_response(response: list[dict[str, Any]], name: str, /, **changes: object) -> list[dict[str, Any]]:
+    """Return a copy of the response, in which the value with the name has the changes (e.g. `value`)."""
+    updated: list[dict[str, Any]] = deepcopy(response)
+    values: list[dict[str, Any]] = [value for value in updated if value["name"] == name]
+    assert len(values) == 1, f"{name} is not in the response"
+    values[0].update(changes)
+    return updated
 
 
 EXTERNAL_HEAT_SOURCE_OPERATING_MODE: str = """
