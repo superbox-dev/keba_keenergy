@@ -10,6 +10,7 @@ import pytest
 from homeassistant.components.sensor.const import ATTR_OPTIONS
 from homeassistant.core import HomeAssistant
 from homeassistant.core import State
+from homeassistant.helpers import entity_registry as er
 
 from tests import init_translations
 from tests.api_data import HEATING_CURVE_NAMES_RESPONSE
@@ -281,3 +282,31 @@ async def test_sensors_options_translations(
         opt: translations[f"component.keba_keenergy.entity.sensor.{translation}.state.{opt}"]
         for opt in _entity.attributes[ATTR_OPTIONS]
     } == snapshot
+
+
+@pytest.mark.parametrize(
+    "entity_id",
+    [
+        "sensor.keba_keenergy_12345678_heat_pump_operating_time",
+        "sensor.keba_keenergy_12345678_photovoltaics_daily_energy",
+    ],
+)
+@pytest.mark.usefixtures("entity_registry_enabled_by_default")
+async def test_converted_sensor_display_precision(
+    hass: HomeAssistant,
+    fake_api: FakeKebaKeEnergyAPI,
+    entity_id: str,
+) -> None:
+    """Test that converted sensors keep the exact value and are displayed with two decimals."""
+    fake_api.responses = [
+        MULTIPLE_POSITIONS_RESPONSE,
+        HEATING_CURVE_NAMES_RESPONSE,
+        get_multiple_position_fixed_data_response(),
+        MULTIPLE_POSITION_DATA_RESPONSE_1,
+        *HEATING_CURVES_RESPONSE_1_1,
+    ]
+    await fake_api.setup_integration()
+
+    entry: er.RegistryEntry | None = er.async_get(hass).async_get(entity_id)
+    assert entry is not None
+    assert entry.options["sensor"] == {"suggested_display_precision": 2}

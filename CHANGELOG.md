@@ -28,6 +28,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Translated the error message of failed data updates.
 - Requested the time zone of the Web HMI for a preset mode change of a heating circuit only if the away date range
   changes.
+- Provided the exact values of the energy, operating time and runtime sensors that are converted to kWh and hours,
+  instead of rounding them to two decimals. They are still displayed with two decimals.
 
 ### Fixed
 

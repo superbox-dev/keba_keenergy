@@ -556,8 +556,9 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
             key="heating_energy",
             native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
             state_class=SensorStateClass.TOTAL,
+            suggested_display_precision=2,
             translation_key="heating_energy",
-            value=lambda data: round(data / 3_600_000, 2),  # Convert Joule to kWh
+            value=lambda data: data / 3_600_000,  # Convert Joule to kWh
         ),
         KebaKeEnergySensorEntityDescription[float](
             device_class=SensorDeviceClass.ENERGY,
@@ -565,8 +566,9 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
             key="daily_energy",
             native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
             state_class=SensorStateClass.TOTAL,
+            suggested_display_precision=2,
             translation_key="daily_energy",
-            value=lambda data: round(data / 3_600_000, 2),  # Convert Joule to kWh
+            value=lambda data: data / 3_600_000,  # Convert Joule to kWh
         ),
         KebaKeEnergySensorEntityDescription[float](
             device_class=SensorDeviceClass.POWER,
@@ -913,8 +915,9 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
             key="operating_time",
             native_unit_of_measurement=UnitOfTime.HOURS,
             state_class=SensorStateClass.TOTAL_INCREASING,
+            suggested_display_precision=2,
             translation_key="operating_time",
-            value=lambda data: round(data / 3600, 2),
+            value=lambda data: data / 3600,
         ),
         KebaKeEnergySensorEntityDescription[int](
             device_class=SensorDeviceClass.DURATION,
@@ -923,8 +926,9 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
             key="max_runtime",
             native_unit_of_measurement=UnitOfTime.HOURS,
             state_class=SensorStateClass.MEASUREMENT,
+            suggested_display_precision=2,
             translation_key="max_runtime",
-            value=lambda data: round(data / 3600, 2),
+            value=lambda data: data / 3600,
         ),
         KebaKeEnergySensorEntityDescription[int](
             entity_category=EntityCategory.DIAGNOSTIC,
@@ -942,8 +946,9 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
             key="excess_energy_operating_time",
             native_unit_of_measurement=UnitOfTime.HOURS,
             state_class=SensorStateClass.TOTAL_INCREASING,
+            suggested_display_precision=2,
             translation_key="excess_energy_operating_time",
-            value=lambda data: round(data / 3600, 2),
+            value=lambda data: data / 3600,
         ),
         KebaKeEnergySensorEntityDescription[int](
             condition=lambda coordinator, _: coordinator.has_photovoltaics(),
@@ -953,8 +958,9 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
             key="excess_energy_max_runtime",
             native_unit_of_measurement=UnitOfTime.HOURS,
             state_class=SensorStateClass.MEASUREMENT,
+            suggested_display_precision=2,
             translation_key="excess_energy_max_runtime",
-            value=lambda data: round(data / 3600, 2),
+            value=lambda data: data / 3600,
         ),
         KebaKeEnergySensorEntityDescription[int](
             condition=lambda coordinator, _: coordinator.has_photovoltaics(),
@@ -1167,8 +1173,9 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
             native_unit_of_measurement=UnitOfTime.HOURS,
             device_class=SensorDeviceClass.DURATION,
             state_class=SensorStateClass.TOTAL_INCREASING,
+            suggested_display_precision=2,
             translation_key="operating_time",
-            value=lambda data: round(data / 3600, 2),
+            value=lambda data: data / 3600,
         ),
         KebaKeEnergySensorEntityDescription[int](
             entity_category=EntityCategory.DIAGNOSTIC,
@@ -1177,8 +1184,9 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
             native_unit_of_measurement=UnitOfTime.HOURS,
             device_class=SensorDeviceClass.DURATION,
             state_class=SensorStateClass.MEASUREMENT,
+            suggested_display_precision=2,
             translation_key="max_runtime",
-            value=lambda data: round(data / 3600, 2),
+            value=lambda data: data / 3600,
         ),
         KebaKeEnergySensorEntityDescription[int](
             entity_category=EntityCategory.DIAGNOSTIC,
@@ -1196,8 +1204,9 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
             key="excess_energy_operating_time",
             native_unit_of_measurement=UnitOfTime.HOURS,
             state_class=SensorStateClass.TOTAL_INCREASING,
+            suggested_display_precision=2,
             translation_key="excess_energy_operating_time",
-            value=lambda data: round(data / 3600, 2),
+            value=lambda data: data / 3600,
         ),
         KebaKeEnergySensorEntityDescription[int](
             condition=lambda coordinator, _: coordinator.has_photovoltaics(),
@@ -1207,8 +1216,9 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
             key="excess_energy_max_runtime",
             native_unit_of_measurement=UnitOfTime.HOURS,
             state_class=SensorStateClass.MEASUREMENT,
+            suggested_display_precision=2,
             translation_key="excess_energy_max_runtime",
-            value=lambda data: round(data / 3600, 2),
+            value=lambda data: data / 3600,
         ),
         KebaKeEnergySensorEntityDescription[int](
             condition=lambda coordinator, _: coordinator.has_photovoltaics(),
@@ -1241,16 +1251,18 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
             key="daily_energy",
             native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
             state_class=SensorStateClass.TOTAL,
+            suggested_display_precision=2,
             translation_key="daily_energy",
-            value=lambda data: round(data / 3_600_000, 2),  # Convert Joule to kWh
+            value=lambda data: data / 3_600_000,  # Convert Joule to kWh
         ),
         KebaKeEnergySensorEntityDescription[float](
             device_class=SensorDeviceClass.ENERGY,
             key="total_energy",
             native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
             state_class=SensorStateClass.TOTAL_INCREASING,
+            suggested_display_precision=2,
             translation_key="total_energy",
-            value=lambda data: round(data / 3_600_000, 2),  # Convert Joule to kWh
+            value=lambda data: data / 3_600_000,  # Convert Joule to kWh
         ),
     ),
 }
