@@ -118,7 +118,7 @@ class FakeKebaKeEnergyAPI:
         self.hass: HomeAssistant = hass
         self.aioclient_mock: AiohttpClientMocker = aioclient_mock
         self.config_entry: MockConfigEntry = config_entry
-        self.responses: list[list[dict[str, Any]] | HTTPStatus] = []
+        self.responses: list[list[dict[str, Any]] | HTTPStatus | Exception] = []
         self.heating_curves: list[list[dict[str, Any]]] | HTTPStatus = HEATING_CURVES_RESPONSE_1_1
         self.system_name: str = SYSTEM_RESPONSE["name"]
         self.write_status: HTTPStatus = HTTPStatus.OK
@@ -150,7 +150,8 @@ class FakeKebaKeEnergyAPI:
     def register_requests(self, host: str, /, *, ssl: bool = False) -> None:
         """Register all requests of the setup and the updates.
 
-        The read requests return the `responses` in order, an `HTTPStatus` returns an empty response with this status.
+        The read requests return the `responses` in order, an `HTTPStatus` returns an empty response with this status
+        and an exception (e.g. `TimeoutError`) is raised by the request.
         The requests of `filter_request()` succeed, the values of the heating curves come from `heating_curves`
         (an `HTTPStatus` fails them). The system name and the status of the write requests can be changed with
         `system_name` and `write_status`.
@@ -220,7 +221,7 @@ class FakeKebaKeEnergyAPI:
 
     async def _read_side_effect(self, method: str, url: URL, data: object, *_: object) -> AiohttpClientMockResponse:
         payload: list[dict[str, str]] = json.loads(str(data))
-        response: list[dict[str, Any]] | HTTPStatus
+        response: list[dict[str, Any]] | HTTPStatus | Exception
 
         if self.is_filter_request(data):
             # All values are supported, `filter_request()` only checks that the request succeeds
@@ -231,6 +232,9 @@ class FakeKebaKeEnergyAPI:
             return AiohttpClientMockResponse(method, url=url)
         else:
             response = self.responses.pop(0)
+
+        if isinstance(response, Exception):
+            raise response
 
         if isinstance(response, HTTPStatus):
             return AiohttpClientMockResponse(method, url=url, status=response)

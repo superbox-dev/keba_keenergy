@@ -16,7 +16,6 @@ from homeassistant.core import State
 from homeassistant.exceptions import ConfigEntryAuthFailed
 from homeassistant.helpers.update_coordinator import UpdateFailed
 from homeassistant.util import dt as dt_util
-from keba_keenergy_api.constants import SectionPrefix
 from pytest_homeassistant_custom_component.common import async_fire_time_changed
 
 from tests.api_data import MULTIPLE_POSITION_DATA_RESPONSE_1
@@ -35,7 +34,6 @@ from tests.api_data import get_multiple_position_fixed_data_response
 if TYPE_CHECKING:
     from homeassistant.core import HomeAssistant
     from pytest_homeassistant_custom_component.common import MockConfigEntry
-    from syrupy.assertion import SnapshotAssertion
 
     from custom_components.keba_keenergy.coordinator import KebaKeEnergyDataUpdateCoordinator
     from tests.conftest import FakeKebaKeEnergyAPI
@@ -68,13 +66,15 @@ async def test_update_authentication_error(
     ]
 
 
+@pytest.mark.parametrize("error", [HTTPStatus.BAD_REQUEST, TimeoutError()], ids=["http_error", "timeout"])
 @pytest.mark.no_fail_on_keba_errors
 async def test_update_api_error(
     hass: HomeAssistant,
     config_entry: MockConfigEntry,
     fake_api: FakeKebaKeEnergyAPI,
+    error: HTTPStatus | Exception,
 ) -> None:
-    """Test that the entities are unavailable if an update fails."""
+    """Test that the entities are unavailable if an update fails or times out."""
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
@@ -83,7 +83,7 @@ async def test_update_api_error(
     await fake_api.setup_integration()
 
     coordinator: KebaKeEnergyDataUpdateCoordinator = config_entry.runtime_data
-    fake_api.responses = [HTTPStatus.BAD_REQUEST]
+    fake_api.responses = [error]
 
     await coordinator.async_refresh()
     await hass.async_block_till_done()
@@ -119,9 +119,11 @@ async def test_update_interval_ticks(
     hass: HomeAssistant,
     config_entry: MockConfigEntry,
     fake_api: FakeKebaKeEnergyAPI,
-    snapshot: SnapshotAssertion,
 ) -> None:
-    """Test that a device with an update multiplier of 2 is only requested every second update."""
+    """Test that a device with an update multiplier of 2 is only requested every second update.
+
+    A skipped section keeps its values, the other sections are updated.
+    """
     fake_api.responses = [
         [
             json.loads(SYSTEM_HEAT_PUMP_NUMBERS % "1"),
@@ -135,35 +137,36 @@ async def test_update_interval_ticks(
         get_multiple_position_fixed_data_response(),
         MULTIPLE_POSITION_DATA_RESPONSE_3_2,
         MULTIPLE_POSITION_DATA_RESPONSE_3_2,
+        # Without the values of the heating circuits
         MULTIPLE_POSITION_DATA_RESPONSE_3_1,
     ]
-
     await fake_api.setup_integration()
 
     coordinator: KebaKeEnergyDataUpdateCoordinator = config_entry.runtime_data
-
-    assert not coordinator.request_data_groups.get(SectionPrefix.SOLAR_CIRCUIT)
     heat_circuit_reads: list[int] = [_heat_circuit_reads(fake_api)]
+    heat_circuit_state: str = _state(hass, "sensor.keba_keenergy_12345678_heat_circuit_target_temperature_1")
 
-    assert coordinator.data == snapshot
-
-    async_fire_time_changed(hass, dt_util.utcnow() + timedelta(seconds=1))
-    await coordinator.async_request_refresh()
-    await hass.async_block_till_done()
-
-    heat_circuit_reads.append(_heat_circuit_reads(fake_api))
-
-    async_fire_time_changed(hass, dt_util.utcnow() + timedelta(seconds=1))
-    await coordinator.async_request_refresh()
-    await hass.async_block_till_done()
-
-    heat_circuit_reads.append(_heat_circuit_reads(fake_api))
+    for _ in range(2):
+        async_fire_time_changed(hass, dt_util.utcnow() + timedelta(seconds=1))
+        await coordinator.async_request_refresh()
+        await hass.async_block_till_done()
+        heat_circuit_reads.append(_heat_circuit_reads(fake_api))
 
     assert heat_circuit_reads == [1, 2, 2]
-
-    assert coordinator.data == snapshot
+    assert _state(hass, "sensor.keba_keenergy_12345678_heat_circuit_target_temperature_1") == heat_circuit_state
+    assert _state(hass, "sensor.keba_keenergy_12345678_buffer_tank_target_temperature_1") == "42.0"
+    # The control unit has no solar circuit, so its values are never requested
+    assert not any("solarCircuit" in body for body in fake_api.read_requests())
 
 
 def _heat_circuit_reads(fake_api: FakeKebaKeEnergyAPI) -> int:
     """Return the number of read requests with the values of the heating circuits."""
     return sum('"APPL.CtrlAppl.sParam.heatCircuit[0].param.operatingMode"' in body for body in fake_api.read_requests())
+
+
+def _state(hass: HomeAssistant, entity_id: str, /) -> str:
+    """Return the state of an entity, which must not be unavailable."""
+    state: State | None = hass.states.get(entity_id)
+    assert isinstance(state, State)
+    assert state.state != STATE_UNAVAILABLE
+    return state.state

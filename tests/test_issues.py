@@ -4,6 +4,7 @@
 
 from __future__ import annotations
 
+from datetime import timedelta
 from typing import TYPE_CHECKING
 from typing import Any
 
@@ -221,3 +222,56 @@ async def test_ignored_write_is_not_counted(
 
     assert len(fake_api.write_requests()) == 1
     assert hass_storage[DOMAIN]["data"]["flash_write_counter"] == {"week": week, "count": 5}
+
+
+async def test_new_week_resets_write_counter(
+    hass: HomeAssistant,
+    fake_api: FakeKebaKeEnergyAPI,
+    hass_storage: dict[str, Any],
+) -> None:
+    """Test that the first write of a new week resets the write counter and removes the repair issue."""
+    fake_api.responses = [
+        MULTIPLE_POSITIONS_RESPONSE,
+        get_multiple_position_fixed_data_response(),
+        MULTIPLE_POSITION_DATA_RESPONSE_1,
+        # Read API after services call
+        MULTIPLE_POSITION_DATA_RESPONSE_1,
+    ]
+    today: date = dt_util.now().date()
+    last_week: date = today - timedelta(weeks=1)
+    hass_storage[DOMAIN] = {
+        "version": 1,
+        "minor_version": 1,
+        "key": DOMAIN,
+        "data": {
+            "flash_write_counter": {
+                "week": [last_week.isocalendar().year, last_week.isocalendar().week],
+                "count": FLASH_WRITE_LIMIT_PER_WEEK + 1,
+            },
+        },
+    }
+    ir.async_create_issue(
+        hass,
+        domain=DOMAIN,
+        issue_id="frequent_flash_writes",
+        is_fixable=False,
+        severity=ir.IssueSeverity.WARNING,
+        translation_key="frequent_flash_writes",
+    )
+    await fake_api.setup_integration()
+
+    await hass.services.async_call(
+        domain=SELECT_DOMAIN,
+        service=SERVICE_SELECT_OPTION,
+        service_data={
+            ATTR_ENTITY_ID: "select.keba_keenergy_12345678_buffer_tank_operating_mode_1",
+            ATTR_OPTION: "on",
+        },
+        blocking=True,
+    )
+
+    assert ir.async_get(hass).async_get_issue(DOMAIN, "frequent_flash_writes") is None
+    assert hass_storage[DOMAIN]["data"]["flash_write_counter"] == {
+        "week": [today.isocalendar().year, today.isocalendar().week],
+        "count": 1,
+    }
