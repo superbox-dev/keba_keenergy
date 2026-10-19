@@ -4,10 +4,12 @@
 
 from __future__ import annotations
 
+from http import HTTPStatus
 from typing import TYPE_CHECKING
 from typing import Any
 
 import pytest
+from homeassistant.config_entries import SOURCE_REAUTH
 from homeassistant.config_entries import ConfigEntryState
 from homeassistant.const import CONF_HOST
 from homeassistant.const import CONF_SSL
@@ -159,3 +161,33 @@ async def test_remove_stale_devices(
         for device in dr.async_entries_for_config_entry(device_registry, config_entry.entry_id)
         for _, identifier in device.identifiers
     }
+
+
+@pytest.mark.parametrize(
+    ("error", "expected_state", "expected_flows"),
+    [
+        (HTTPStatus.BAD_REQUEST, ConfigEntryState.SETUP_RETRY, []),
+        (TimeoutError(), ConfigEntryState.SETUP_RETRY, []),
+        (HTTPStatus.UNAUTHORIZED, ConfigEntryState.SETUP_ERROR, [SOURCE_REAUTH]),
+    ],
+    ids=["http_error", "timeout", "authentication_error"],
+)
+@pytest.mark.no_fail_on_keba_errors
+async def test_setup_failed(
+    hass: HomeAssistant,
+    fake_api: FakeKebaKeEnergyAPI,
+    error: HTTPStatus | Exception,
+    expected_state: ConfigEntryState,
+    expected_flows: list[str],
+) -> None:
+    """Test that a failed setup is retried, or starts the reauthentication for rejected credentials."""
+    config_entry: MockConfigEntry = fake_api.config_entry
+    fake_api.responses = [error]
+    fake_api.register_requests(config_entry.data[CONF_HOST], ssl=config_entry.data[CONF_SSL])
+    config_entry.add_to_hass(hass)
+
+    assert not await hass.config_entries.async_setup(config_entry.entry_id)
+    await hass.async_block_till_done()
+
+    assert config_entry.state is expected_state
+    assert [flow["context"]["source"] for flow in hass.config_entries.flow.async_progress()] == expected_flows

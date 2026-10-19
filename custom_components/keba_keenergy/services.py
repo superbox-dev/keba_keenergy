@@ -94,7 +94,7 @@ HEATING_CURVE_POINTS_SCHEMA: probatio.Schema = probatio.Schema(
         ),
         probatio.Required(ATTR_POINTS): probatio.All(
             cv.ensure_list,
-            probatio.Length(max=MAX_HEATING_CURVE_POINTS),
+            probatio.Length(min=1, max=MAX_HEATING_CURVE_POINTS),
             [HEATING_CURVE_POINT_SCHEMA],
         ),
     },
@@ -181,6 +181,14 @@ async def _async_set_heating_curve_points(call: ServiceCall) -> None:
             translation_domain=DOMAIN,
             translation_key="duplicate_outdoor_temperature_values",
         )
+
+    # Only write changed points, the control unit stores them in its flash memory
+    current_points: HeatingCurvePoints = tuple(
+        HeatingCurvePoint(outdoor=round(p.outdoor, 2), flow=round(p.flow, 2)) for p in heating_curves[heating_curve]
+    )
+
+    if current_points == points:
+        return
 
     await coordinator.async_execute_write(
         write_fn=lambda: coordinator.api.heat_circuit.set_heating_curve_points(

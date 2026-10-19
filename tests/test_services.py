@@ -24,9 +24,11 @@ from custom_components.keba_keenergy.services import ATTR_START_DATE
 from custom_components.keba_keenergy.services import AWAY_DATE_RANGE_SCHEMA
 from custom_components.keba_keenergy.services import HEATING_CURVE_POINTS_SCHEMA
 from tests import init_translations
+from tests.api_data import HEATING_CURVE_NAMES_RESPONSE
 from tests.api_data import HEATING_CURVES_RENAMED_POINTS_RESPONSE
 from tests.api_data import MULTIPLE_POSITION_DATA_RESPONSE
 from tests.api_data import MULTIPLE_POSITIONS_RESPONSE
+from tests.api_data import get_heating_curve_points_response
 from tests.api_data import get_multiple_position_fixed_data_response
 
 if TYPE_CHECKING:
@@ -408,14 +410,26 @@ def test_heating_curve_points_schema_valid() -> None:
 
 
 def test_heating_curve_points_schema_too_many_points() -> None:
-    """Test the schema of the heating curve points action with too many points."""
+    """Test the schema of the heating curve points action with more than 16 otherwise valid points."""
     data: dict[str, Any] = {
         ATTR_CONFIG_ENTRY: "1234",
-        ATTR_HEATING_CURVE: "hc1",
-        ATTR_POINTS: [{"outdoor": i, "flow": i} for i in range(100)],
+        ATTR_HEATING_CURVE: "HC1",
+        ATTR_POINTS: [{"outdoor": outdoor, "flow": 30} for outdoor in range(-20, -3)],
     }
 
-    with pytest.raises(probatio.Invalid):
+    with pytest.raises(probatio.Invalid, match="length of value must be at most 16"):
+        HEATING_CURVE_POINTS_SCHEMA(data)
+
+
+def test_heating_curve_points_schema_without_points() -> None:
+    """Test the schema of the heating curve points action with an empty list of points."""
+    data: dict[str, Any] = {
+        ATTR_CONFIG_ENTRY: "1234",
+        ATTR_HEATING_CURVE: "HC1",
+        ATTR_POINTS: [],
+    }
+
+    with pytest.raises(probatio.Invalid, match="length of value must be at least 1"):
         HEATING_CURVE_POINTS_SCHEMA(data)
 
 
@@ -504,4 +518,39 @@ async def test_set_heating_curve_points_with_communication_error(
         )
 
     assert error.value.translation_key == "communication_error"
+    assert fake_api.write_requests() == []
+
+
+async def test_set_unchanged_heating_curve_points(
+    hass: HomeAssistant,
+    config_entry: MockConfigEntry,
+    fake_api: FakeKebaKeEnergyAPI,
+) -> None:
+    """Test that the action does not write the points if the heating curve already has them (flash writes)."""
+    fake_api.responses = [
+        MULTIPLE_POSITIONS_RESPONSE,
+        get_multiple_position_fixed_data_response(),
+        MULTIPLE_POSITION_DATA_RESPONSE,
+    ]
+    await fake_api.setup_integration()
+    fake_api.heating_curves = [
+        HEATING_CURVE_NAMES_RESPONSE,
+        get_heating_curve_points_response(points=(("-20", "35.3"), ("0", "29.5"), ("20", "23.899999"))),
+    ]
+
+    await hass.services.async_call(
+        domain=DOMAIN,
+        service=SERVICE_SET_HEATING_CURVE_POINTS,
+        service_data={
+            ATTR_CONFIG_ENTRY: config_entry.entry_id,
+            ATTR_HEATING_CURVE: "HC1",
+            ATTR_POINTS: [
+                {"outdoor": 20, "flow": 23.9},
+                {"outdoor": -20, "flow": 35.3},
+                {"outdoor": 0, "flow": 29.5},
+            ],
+        },
+        blocking=True,
+    )
+
     assert fake_api.write_requests() == []

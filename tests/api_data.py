@@ -2899,12 +2899,18 @@ HEATING_CURVE_NAMES_RESPONSE: list[dict[str, Any]] = [
 ]
 
 
-def get_heating_curve_points_response(*, renamed: dict[str, str] | None = None) -> list[dict[str, Any]]:
+def get_heating_curve_points_response(
+    *,
+    renamed: dict[str, str] | None = None,
+    points: tuple[tuple[str, str], ...] | None = None,
+) -> list[dict[str, Any]]:
     """Return the name, the number of points and the 16 points of each heating curve (`HC...`) of the pool.
 
     Every heating curve has 7 points from -15 °C outdoor to 20 °C flow temperature. `renamed` changes the name of a
     heating curve in the points, e.g. to a name that does not match the names of `HEATING_CURVE_NAMES_RESPONSE`.
+    `points` replaces the (outdoor, flow) points and their number of every heating curve.
     """
+    curve_points: tuple[tuple[str, str], ...] = points or (("-15", "20"),) * 7
     point_attributes: dict[str, str] = {"formatId": "fmtCurrent", "upperLimit": "90000", "lowerLimit": "-90000"}
     response: list[dict[str, Any]] = []
 
@@ -2922,21 +2928,22 @@ def get_heating_curve_points_response(*, renamed: dict[str, str] | None = None) 
             {
                 "name": f"{prefix}.noOfPoints",
                 "attributes": {"formatId": "fmt2p0", "longText": "QTY points", "upperLimit": "16", "lowerLimit": "0"},
-                "value": "7",
+                "value": str(len(curve_points)),
             },
         ]
 
         for point in range(16):
+            outdoor, flow = curve_points[point] if point < len(curve_points) else ("-15", "20")
             response += [
                 {
                     "name": f"{prefix}.points[{point}].x",
                     "attributes": {**point_attributes, "longText": "Point X"},
-                    "value": "-15",
+                    "value": outdoor,
                 },
                 {
                     "name": f"{prefix}.points[{point}].y",
                     "attributes": {**point_attributes, "longText": "Point Y"},
-                    "value": "20",
+                    "value": flow,
                 },
             ]
 

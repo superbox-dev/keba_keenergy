@@ -4,7 +4,9 @@
 
 from __future__ import annotations
 
+import logging
 from datetime import timedelta
+from http import HTTPStatus
 from typing import TYPE_CHECKING
 
 import probatio
@@ -425,3 +427,41 @@ async def test_debounced_value_not_written_after_unload(
     await hass.async_block_till_done()
 
     assert fake_api.write_requests() == []
+
+
+async def test_debounced_write_failed(
+    hass: HomeAssistant,
+    fake_api: FakeKebaKeEnergyAPI,
+    caplog: pytest.LogCaptureFixture,
+) -> None:
+    """Test that a failed debounced write shows the previous value again and logs a warning, not an error."""
+    entity_id: str = "number.keba_keenergy_12345678_heat_circuit_target_temperature_offset"
+    fake_api.responses = [
+        DEFAULT_POSITION_RESPONSE,
+        DEFAULT_POSITION_FIXED_DATA_RESPONSE,
+        get_single_position_data_response(heat_circuit_target_temperature_offset="1.5"),
+    ]
+    await fake_api.setup_integration()
+    fake_api.write_status = HTTPStatus.BAD_REQUEST
+
+    await hass.services.async_call(
+        domain=NUMBER_DOMAIN,
+        service=SERVICE_SET_VALUE,
+        service_data={
+            ATTR_ENTITY_ID: entity_id,
+            ATTR_VALUE: 0.5,
+        },
+        blocking=True,
+    )
+
+    async_fire_time_changed(hass, dt_util.utcnow() + timedelta(seconds=FLASH_WRITE_DELAY))
+    await hass.async_block_till_done()
+
+    state: State | None = hass.states.get(entity_id)
+    assert isinstance(state, State)
+    assert state.state == "1.5"
+    assert len(fake_api.write_requests()) == 1
+    assert f"Failed to write the value of {entity_id}: An error occurred while communicating with the API" in (
+        caplog.text
+    )
+    assert [record for record in caplog.records if record.levelno >= logging.ERROR] == []

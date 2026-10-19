@@ -33,6 +33,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   changes.
 - Provided the exact values of the energy, operating time and runtime sensors that are converted to kWh and hours,
   instead of rounding them to two decimals. They are still displayed with two decimals.
+- Wrote the points of the `keba_keenergy.set_heating_curve_points` action only if they differ from the points of the
+  heating curve.
 
 ### Fixed
 
@@ -56,6 +58,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   `use_cooling_curve`. Only newly added switches get the new entity ID, existing ones keep theirs.
 - Fixed the icon of the climate entity, which showed off for a heating circuit in the HVAC mode `auto`, `cool` or
   `heat_cool`. The icon is now in `icons.json`, so the climate entities no longer have an `icon` state attribute.
+- Fixed the `keba_keenergy.set_heating_curve_points` action accepting an empty list of points, which wrote a heating
+  curve with 7 points of 0 °C.
+- Fixed an error with a traceback in the log if a delayed write of a number, climate or water heater entity failed,
+  e.g. of a temperature set with a slider. It is logged as a warning now.
 
 ## [1.10.4] - 2026-09-30
 

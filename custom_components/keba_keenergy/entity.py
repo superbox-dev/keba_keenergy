@@ -301,11 +301,15 @@ class KebaKeEnergyBaseEntity(
         current_value: float | None = self.get_value(self._pending_key, expected_type=float)
 
         if self._pending_section and self._pending_value is not None and self._pending_value != current_value:
-            await self._async_write_data(
-                self._pending_value,
-                section=self._pending_section,
-                device_numbers=self.device_numbers,
-            )
+            try:
+                await self._async_write_data(
+                    self._pending_value,
+                    section=self._pending_section,
+                    device_numbers=self.device_numbers,
+                )
+            except HomeAssistantError as error:
+                # No caller gets the error of a debounced write, the entity already shows the previous value again
+                _LOGGER.warning("Failed to write the value of %s: %s", self.entity_id, error)
 
     def _get_debounced_value(self) -> float | None:
         """Return the value that waits for the debounced write, otherwise the current value."""

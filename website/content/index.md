@@ -170,13 +170,13 @@ A date with time, e.g. `2026-01-01T08:00:00`, is accepted too, only the date is 
 
 ### `keba_keenergy.set_heating_curve_points`
 
-Sets the points of a heating curve.
+Sets the points of a heating curve. If the heating curve already has these points, nothing is written.
 
 | Field           | Description                                                                                        |
 |-----------------|----------------------------------------------------------------------------------------------------|
 | `config_entry`  | The KEBA KeEnergy integration entry.                                                               |
 | `heating_curve` | The name of the heating curve as shown in the heating curve select, e.g. `HC1` or `HC FBH`.        |
-| `points`        | Up to 16 points, each with an `outdoor` (-40 to 40 °C) and a `flow` (10 to 90 °C) temperature.     |
+| `points`        | 1 to 16 points, each with an `outdoor` (-40 to 40 °C) and a `flow` (10 to 90 °C) temperature.      |
 
 ```yaml
 action: keba_keenergy.set_heating_curve_points
