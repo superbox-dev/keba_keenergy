@@ -32,8 +32,9 @@ Before finishing a change, run `ruff format`, `lint.sh` and `pytest`, in this or
   - second entity on the same API value: `key` is the API value, `ref_key` its own name for the unique ID
 - No deprecated Home Assistant APIs
 - Type annotations also for local variables (not for loop, `with`, `except`, comprehension or unpacking targets)
-  - union order: general before specific types, each alphabetical, single value before its list, `None` last
-    (`float | int | str`, `Exception | HTTPStatus`, `Value | list[Value] | None`)
+  - union order, also in `isinstance()`: general before specific types, each alphabetical, containers after
+    single types and less nested first, `None` last (`float | int | str`, `Exception | HTTPStatus`,
+    `Value | list[Value] | list[list[Value]] | None`)
   - type alias for complex annotations (nested or repeated unions)
 - Every `.py` file starts with (after the shebang of an executable script, update the end year when editing a
   file, a single year while it equals the start year):
