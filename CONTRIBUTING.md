@@ -34,7 +34,12 @@ Use the fake data in `tests/api_data.py`.
 ## Coding style
 
 `./scripts/lint.sh` runs [ruff](https://docs.astral.sh/ruff/) (format and lint), [ty](https://docs.astral.sh/ty/),
-yamllint and [rumdl](https://github.com/rvben/rumdl). See [AGENTS.md](AGENTS.md) for the project rules.
+yamllint and [rumdl](https://github.com/rvben/rumdl). See [CLAUDE.md](CLAUDE.md) for the project rules.
+
+## AI assistant
+
+The project only uses [Claude Code](https://claude.com/claude-code) as AI assistant. Its rules are in
+[CLAUDE.md](CLAUDE.md), `tests/CLAUDE.md`, `website/CLAUDE.md` and the skills in `.claude/skills/`.
 
 ## Documentation
 

@@ -13,6 +13,9 @@ ignore = [
     "S101",    # assert, pytest checks results with assert
 ]
 
+[lint.flake8-tidy-imports.banned-api]
+"typing.cast".msg = "Narrow types with runtime checks (e.g. `isinstance`) or generics"
+
 [lint.isort]
 force-single-line = true
 

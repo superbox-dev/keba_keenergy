@@ -27,7 +27,7 @@ class DocsGenerator:
     _LINKS: ClassVar[dict[str, str]] = {
         "(CHANGELOG.md)": "(changelog.md)",
         "(CONTRIBUTING.md)": "(contributing.md)",
-        "(AGENTS.md)": f"({REPOSITORY}/blob/main/AGENTS.md)",
+        "(CLAUDE.md)": f"({REPOSITORY}/blob/main/CLAUDE.md)",
     }
 
     def __init__(self, output: Path) -> None:
