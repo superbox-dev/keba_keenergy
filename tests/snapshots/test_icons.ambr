@@ -692,12 +692,12 @@
     'switch.keba_keenergy_12345678_buffer_tank_use_excess_energy_2': None,
     'switch.keba_keenergy_12345678_external_heat_source_use_excess_energy_1': None,
     'switch.keba_keenergy_12345678_external_heat_source_use_excess_energy_2': None,
+    'switch.keba_keenergy_12345678_heat_circuit_use_cooling_curve_2': dict({
+      'default': 'mdi:chart-bell-curve-cumulative',
+    }),
     'switch.keba_keenergy_12345678_heat_circuit_use_excess_energy_1': None,
     'switch.keba_keenergy_12345678_heat_circuit_use_excess_energy_2': None,
     'switch.keba_keenergy_12345678_heat_circuit_use_heating_curve_1': dict({
-      'default': 'mdi:chart-bell-curve-cumulative',
-    }),
-    'switch.keba_keenergy_12345678_heat_circuit_use_heating_curve_2': dict({
       'default': 'mdi:chart-bell-curve-cumulative',
     }),
     'switch.keba_keenergy_12345678_heat_pump_compressor_use_night_speed': None,

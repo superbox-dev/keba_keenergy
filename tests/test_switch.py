@@ -19,6 +19,7 @@ from homeassistant.helpers import entity_registry as er
 from keba_keenergy_api.constants import HeatCircuitMode
 
 from tests import get_platform_states
+from tests.api_data import ENTITY_UPDATED_DATA_RESPONSE
 from tests.api_data import MULTIPLE_POSITION_DATA_RESPONSE
 from tests.api_data import MULTIPLE_POSITION_OTHER_MODES_DATA_RESPONSE
 from tests.api_data import MULTIPLE_POSITIONS_RESPONSE
@@ -70,6 +71,11 @@ async def test_switches(
             "switch.keba_keenergy_12345678_heat_circuit_use_heating_curve_1",
             MULTIPLE_POSITION_DATA_RESPONSE,
             '[{"name": "APPL.CtrlAppl.sParam.heatCircuit[0].param.enableHeatCurveLinTab", "value": "1"}]',
+        ),
+        (
+            "switch.keba_keenergy_12345678_heat_circuit_use_cooling_curve_2",
+            ENTITY_UPDATED_DATA_RESPONSE,
+            '[{"name": "APPL.CtrlAppl.sParam.heatCircuit[1].param.enableHeatCurveLinTab", "value": "1"}]',
         ),
     ],
 )

@@ -57,10 +57,10 @@ class KebaKeEnergySwitchEntity(KebaKeEnergyEntity, SwitchEntity):
         self.entity_description: KebaKeEnergySwitchEntityDescription = description
         super().__init__(coordinator, entry=entry, section_id=section_id, index=index)
 
-        self.entity_id: str = f"{SWITCH_DOMAIN}.{DOMAIN}_{self._attr_unique_id}"
         self._attr_unique_id: str | None = self.get_unique_id(
             self.entity_description.ref_key or self.entity_description.key,
         )
+        self.entity_id: str = f"{SWITCH_DOMAIN}.{DOMAIN}_{self._attr_unique_id}"
 
     @property
     def is_on(self) -> bool | None:

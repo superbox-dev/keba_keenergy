@@ -52,6 +52,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixed a second switch `Use cooling curve` for heating circuits that heat and cool. Both switches changed the same
   setting, so these heating circuits now only have the switch `Use heating curve`. The switch `Use cooling curve` of
   such a heating circuit is no longer provided and can be deleted.
+- Fixed the entity ID of the switch `Use cooling curve`, which ended in `use_heating_curve` instead of
+  `use_cooling_curve`. Only newly added switches get the new entity ID, existing ones keep theirs.
 - Fixed the icon of the climate entity, which showed off for a heating circuit in the HVAC mode `auto`, `cool` or
   `heat_cool`. The icon is now in `icons.json`, so the climate entities no longer have an `icon` state attribute.
 
