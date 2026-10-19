@@ -1,5 +1,5 @@
 #!/usr/bin/env -S uv run python
-# Copyright 2026 Michael Hacker
+# Copyright 2025-2026 Michael Hacker
 # SPDX-License-Identifier: Apache-2.0
 
 """Generate the Markdown pages of the Docusaurus website.

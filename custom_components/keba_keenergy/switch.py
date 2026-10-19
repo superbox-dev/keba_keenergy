@@ -1,4 +1,4 @@
-# Copyright 2026 Michael Hacker
+# Copyright 2025-2026 Michael Hacker
 # SPDX-License-Identifier: Apache-2.0
 """Support for the KEBA KeEnergy switches."""
 
