@@ -414,16 +414,13 @@
             "excess_energy_mode": {
                 "name": "PV-Überschuss",
                 "state": {
-                    "off": "Aus",
+                    "cooling": "Kühlen",
                     "heating": "Heizen",
-                    "cooling": "Kühlen"
+                    "off": "Aus"
                 }
             },
             "excess_energy_operating_time": {
                 "name": "Betriebsstunden (PV-Überschuss)"
-            },
-            "excess_power": {
-                "name": "Überschussleistung"
             },
             "excess_energy_target_room_cooling_temperature": {
                 "name": "Soll-Raumtemperatur Kühlen (PV-Überschuss)"
@@ -433,6 +430,9 @@
             },
             "excess_energy_target_temperature": {
                 "name": "Soll-Temperatur (PV-Überschuss)"
+            },
+            "excess_power": {
+                "name": "Überschussleistung"
             },
             "expansion_valve_position": {
                 "name": "Expansionsventil"
@@ -813,10 +813,10 @@
                     "scan_interval_tick_heat_circuit": "Update-Multiplikator für den Heizkreis",
                     "scan_interval_tick_heat_pump": "Update-Multiplikator für die Wärmepumpe",
                     "scan_interval_tick_hot_water_tank": "Update-Multiplikator für den Warmwasserspeicher",
+                    "scan_interval_tick_photovoltaics": "Update-Multiplikator für die Photovoltaik",
                     "scan_interval_tick_solar_circuit": "Update-Multiplikator für den Solarkreis",
                     "scan_interval_tick_switch_valve": "Update-Multiplikator für das Umschaltventil",
-                    "scan_interval_tick_system": "Update-Multiplikator für die Bedieneinheit",
-                    "scan_interval_tick_photovoltaics": "Update-Multiplikator für die Photovoltaik"
+                    "scan_interval_tick_system": "Update-Multiplikator für die Bedieneinheit"
                 },
                 "data_description": {
                     "scan_interval": "Zeit in Sekunden zwischen den Updates",
@@ -825,10 +825,10 @@
                     "scan_interval_tick_heat_circuit": "Aktualisierung alle X Scan-Intervalle",
                     "scan_interval_tick_heat_pump": "Aktualisierung alle X Scan-Intervalle",
                     "scan_interval_tick_hot_water_tank": "Aktualisierung alle X Scan-Intervalle",
+                    "scan_interval_tick_photovoltaics": "Aktualisierung alle X Scan-Intervalle",
                     "scan_interval_tick_solar_circuit": "Aktualisierung alle X Scan-Intervalle",
                     "scan_interval_tick_switch_valve": "Aktualisierung alle X Scan-Intervalle",
-                    "scan_interval_tick_system": "Aktualisierung alle X Scan-Intervalle",
-                    "scan_interval_tick_photovoltaics": "Aktualisierung alle X Scan-Intervalle"
+                    "scan_interval_tick_system": "Aktualisierung alle X Scan-Intervalle"
                 }
             }
         }

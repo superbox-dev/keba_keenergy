@@ -414,16 +414,13 @@
             "excess_energy_mode": {
                 "name": "PV surplus",
                 "state": {
-                    "off": "Off",
+                    "cooling": "Cooling",
                     "heating": "Heating",
-                    "cooling": "Cooling"
+                    "off": "Off"
                 }
             },
             "excess_energy_operating_time": {
                 "name": "Operating hours (PV surplus)"
-            },
-            "excess_power": {
-                "name": "Excess power"
             },
             "excess_energy_target_room_cooling_temperature": {
                 "name": "Target room cooling temperature (PV surplus)"
@@ -433,6 +430,9 @@
             },
             "excess_energy_target_temperature": {
                 "name": "Target temperature (PV surplus)"
+            },
+            "excess_power": {
+                "name": "Excess power"
             },
             "expansion_valve_position": {
                 "name": "Expansion valve position"
@@ -684,7 +684,6 @@
                     "summer": "Summer mode (hot water only)"
                 }
             },
-
             "target_overheating": {
                 "name": "Target overheating"
             },
@@ -814,10 +813,10 @@
                     "scan_interval_tick_heat_circuit": "Heating circuit update multiplier",
                     "scan_interval_tick_heat_pump": "Heat pump update multiplier",
                     "scan_interval_tick_hot_water_tank": "Hot water tank update multiplier",
+                    "scan_interval_tick_photovoltaics": "Photovoltaics update multiplier",
                     "scan_interval_tick_solar_circuit": "Solar circuit update multiplier",
                     "scan_interval_tick_switch_valve": "Switch valve update multiplier",
-                    "scan_interval_tick_system": "Control unit update multiplier",
-                    "scan_interval_tick_photovoltaics": "Photovoltaics update multiplier"
+                    "scan_interval_tick_system": "Control unit update multiplier"
                 },
                 "data_description": {
                     "scan_interval": "Time in seconds between updates",
@@ -826,10 +825,10 @@
                     "scan_interval_tick_heat_circuit": "Update every X scan intervals",
                     "scan_interval_tick_heat_pump": "Update every X scan intervals",
                     "scan_interval_tick_hot_water_tank": "Update every X scan intervals",
+                    "scan_interval_tick_photovoltaics": "Update every X scan intervals",
                     "scan_interval_tick_solar_circuit": "Update every X scan intervals",
                     "scan_interval_tick_switch_valve": "Update every X scan intervals",
-                    "scan_interval_tick_system": "Update every X scan intervals",
-                    "scan_interval_tick_photovoltaics": "Update every X scan intervals"
+                    "scan_interval_tick_system": "Update every X scan intervals"
                 }
             }
         }

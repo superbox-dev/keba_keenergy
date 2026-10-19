@@ -70,6 +70,64 @@
                 }
             }
         },
+        "number": {
+            "cooling_curve_slope": {
+                "default": "mdi:slope-uphill"
+            },
+            "excess_energy_target_room_cooling_temperature": {
+                "default": "mdi:sun-thermometer"
+            },
+            "excess_energy_target_room_cooling_temperature_hysteresis": {
+                "default": "mdi:thermometer-lines"
+            },
+            "excess_energy_target_room_temperature": {
+                "default": "mdi:sun-thermometer"
+            },
+            "excess_energy_target_room_temperature_hysteresis": {
+                "default": "mdi:thermometer-lines"
+            },
+            "excess_energy_target_temperature": {
+                "default": "mdi:sun-thermometer"
+            },
+            "excess_energy_target_temperature_hysteresis": {
+                "default": "mdi:thermometer-lines"
+            },
+            "heating_curve_slope": {
+                "default": "mdi:slope-uphill"
+            },
+            "outdoor_temperature_excess_energy_limit": {
+                "default": "mdi:thermometer"
+            },
+            "standby_temperature": {
+                "default": "mdi:thermometer-chevron-down"
+            }
+        },
+        "select": {
+            "buffer_tank_operating_mode": {
+                "default": "mdi:cog"
+            },
+            "cooling_curve": {
+                "default": "mdi:chart-bell-curve-cumulative"
+            },
+            "external_heat_source_operating_mode": {
+                "default": "mdi:cog"
+            },
+            "heat_circuit_operating_mode": {
+                "default": "mdi:cog"
+            },
+            "heating_curve": {
+                "default": "mdi:chart-bell-curve-cumulative"
+            },
+            "hot_water_tank_operating_mode": {
+                "default": "mdi:cog"
+            },
+            "solar_circuit_operating_mode": {
+                "default": "mdi:cog"
+            },
+            "system_operating_mode": {
+                "default": "mdi:cog"
+            }
+        },
         "sensor": {
             "buffer_tank_operating_mode": {
                 "state": {
@@ -97,8 +155,8 @@
             "cool_request": {
                 "default": "mdi:snowflake",
                 "state": {
-                    "on": "mdi:snowflake",
-                    "off": "mdi:snowflake-off"
+                    "off": "mdi:snowflake-off",
+                    "on": "mdi:snowflake"
                 }
             },
             "cooling_curve": {
@@ -119,9 +177,9 @@
             "excess_energy_mode": {
                 "default": "mdi:lightning-bolt",
                 "state": {
-                    "off": "mdi:lightning-bolt",
+                    "cooling": "mdi:snowflake",
                     "heating": "mdi:fire",
-                    "cooling": "mdi:snowflake"
+                    "off": "mdi:lightning-bolt"
                 }
             },
             "excess_energy_target_room_cooling_temperature": {
@@ -155,8 +213,8 @@
             "heat_request": {
                 "default": "mdi:fire",
                 "state": {
-                    "on": "mdi:fire",
-                    "off": "mdi:fire-off"
+                    "off": "mdi:fire-off",
+                    "on": "mdi:fire"
                 }
             },
             "heating_curve": {
@@ -238,70 +296,12 @@
                 "default": "mdi:snowflake-thermometer"
             }
         },
-        "number": {
-            "cooling_curve_slope": {
-                "default": "mdi:slope-uphill"
-            },
-            "excess_energy_target_room_cooling_temperature": {
-                "default": "mdi:sun-thermometer"
-            },
-            "excess_energy_target_room_cooling_temperature_hysteresis": {
-                "default": "mdi:thermometer-lines"
-            },
-            "excess_energy_target_room_temperature": {
-                "default": "mdi:sun-thermometer"
-            },
-            "excess_energy_target_room_temperature_hysteresis": {
-                "default": "mdi:thermometer-lines"
-            },
-            "excess_energy_target_temperature": {
-                "default": "mdi:sun-thermometer"
-            },
-            "excess_energy_target_temperature_hysteresis": {
-                "default": "mdi:thermometer-lines"
-            },
-            "heating_curve_slope": {
-                "default": "mdi:slope-uphill"
-            },
-            "outdoor_temperature_excess_energy_limit": {
-                "default": "mdi:thermometer"
-            },
-            "standby_temperature": {
-                "default": "mdi:thermometer-chevron-down"
-            }
-        },
         "switch": {
             "use_cooling_curve": {
                 "default": "mdi:chart-bell-curve-cumulative"
             },
             "use_heating_curve": {
                 "default": "mdi:chart-bell-curve-cumulative"
-            }
-        },
-        "select": {
-            "buffer_tank_operating_mode": {
-                "default": "mdi:cog"
-            },
-            "cooling_curve": {
-                "default": "mdi:chart-bell-curve-cumulative"
-            },
-            "external_heat_source_operating_mode": {
-                "default": "mdi:cog"
-            },
-            "heat_circuit_operating_mode": {
-                "default": "mdi:cog"
-            },
-            "heating_curve": {
-                "default": "mdi:chart-bell-curve-cumulative"
-            },
-            "hot_water_tank_operating_mode": {
-                "default": "mdi:cog"
-            },
-            "solar_circuit_operating_mode": {
-                "default": "mdi:cog"
-            },
-            "system_operating_mode": {
-                "default": "mdi:cog"
             }
         }
     }
