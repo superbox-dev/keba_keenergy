@@ -21,11 +21,11 @@
   margin: 1rem 0;
 }
 
-/* Name of the integration, the integration has no brand images */
-.name {
-  font-size: 1.5rem;
-  font-weight: 800;
-  color: var(--ifm-heading-color);
+/* Brand logo of the integration, with a light and a dark variant */
+.brand {
+  width: 100%;
+  max-width: 220px;
+  height: auto;
 }
 
 .section {
