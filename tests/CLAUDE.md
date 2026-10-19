@@ -8,7 +8,8 @@
   - regenerate the snapshots and review the new entities
 - Use `hass_storage` for stored data, patch `dt_util.now` for date-dependent values
 - Test only through Home Assistant:
-  - never call, patch or inspect `_`-prefixed methods or attributes, or the API library
+  - exception: static checks of files (e.g. `test_translations.py`), with `_`-prefixed helpers in the test module
+  - never call, patch or inspect `_`-prefixed methods or attributes of the integration, or the API library
   - set up the integration and drive it through the mocked HTTP responses
   - call actions (`hass.services.async_call`) instead of entity methods
   - trigger updates with `coordinator.async_refresh()` and debounced writes with `async_fire_time_changed()`

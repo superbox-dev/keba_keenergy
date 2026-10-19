@@ -19,11 +19,14 @@ uv run pytest --snapshot-update -n 0 # regenerate snapshots (serial only), then 
 ```
 
 Before finishing a change, run all of them except the snapshot update, `develop.sh` and the live reload.
+`docs.sh` only when `website/`, `README.md`, `CONTRIBUTING.md` or `CHANGELOG.md` changed.
 
 ## Rules
 
 - **No breaking changes** for installations: never change what Home Assistant stores or users reference
-  (IDs, keys, option defaults)
+  (unique IDs, entity `key`s, device identifiers, config entry data, option keys and defaults, action names and
+  fields, entities)
+  - only when asked, then as a major release
   - rename entity `key`s only via `new_key` / `ref_key`
 - No deprecated Home Assistant APIs
 - Type annotations also for local variables
@@ -37,9 +40,9 @@ Before finishing a change, run all of them except the snapshot update, `develop.
 - No new lint/type suppressions or `# pragma: no cover`, fix or test the code
   - only exception: `# noqa: ARG00x` in required signatures
 - No real credentials, serial numbers or IP addresses, use the fake data in `tests/api_data.py`
-- Missing device endpoints or values belong in `keba_keenergy_api`
+- Missing device endpoints or values belong in `keba_keenergy_api`, stop and ask how to proceed
 - Limited flash writes: write only changed values, only via the coordinator write methods, debounce fast-changing values
-- `strings.json` and `translations/en.json` identical, `translations/de.json` with the same keys
+- `git add` new files, the pre-commit hooks only check tracked files
 - Never edit generated files (`coverage-badge.svg`) or `config/` (except `config/configuration.yaml`)
 - **Never edit `CLAUDE.md` files or `.claude/skills/` on your own**, only when asked
   - if a change conflicts with them, stop and ask
@@ -47,6 +50,9 @@ Before finishing a change, run all of them except the snapshot update, `develop.
 ## Architecture
 
 - Follow the Home Assistant integration conventions, code in `custom_components/keba_keenergy/`
+- Helpers are `_`-prefixed methods of the class that uses them (`@staticmethod` if they need no `self`)
+  - module-level functions only when shared across classes or modules, or for Home Assistant callbacks (action
+    handlers, validators)
 
 ## Quality scale
 
@@ -72,7 +78,7 @@ Before finishing a change, run all of them except the snapshot update, `develop.
 
 ## Changelog, versions and git
 
-- Every user-visible change gets an entry under `## [Unreleased]` in `CHANGELOG.md`, use the `changelog` skill
+- Every notable change gets an entry under `## [Unreleased]` in `CHANGELOG.md`, use the `changelog` skill
 - Version: only change it when asked, use the `release` skill
 - `keba_keenergy_api` requirement is in `pyproject.toml` and `manifest.json`, run `uv lock` after changing it
 - Work on `develop`
