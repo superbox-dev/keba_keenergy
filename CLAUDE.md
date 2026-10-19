@@ -9,7 +9,7 @@ with all device access going through the separate PyPI library `keba_keenergy_ap
 - Setup: `./scripts/setup.sh`
 
 ```bash
-uv run ruff format                   # format (lint.sh only checks)
+uv run ruff format                   # format (lint.sh does not format, but applies ruff/rumdl autofixes)
 ./scripts/lint.sh                    # all linters and type checks
 uv run pytest                        # tests + coverage
 uv run pytest --snapshot-update -n 0 # regenerate snapshots (serial only), then review the diff
@@ -18,30 +18,35 @@ uv run pytest --snapshot-update -n 0 # regenerate snapshots (serial only), then 
 ./scripts/docs.sh start              # docs with live reload
 ```
 
-Before finishing a change, run all of them except the snapshot update, `develop.sh` and the live reload.
+Before finishing a change, run `ruff format`, `lint.sh` and `pytest`, in this order.
 `docs.sh` only when `website/`, `README.md`, `CONTRIBUTING.md` or `CHANGELOG.md` changed.
 
 ## Rules
 
-- **No breaking changes** for installations: never change what Home Assistant stores or users reference
+- **No breaking changes** for installations: nothing a user notices later and has to fix by hand
   (unique IDs, entity `key`s, device identifiers, config entry data, option keys and defaults, action names and
-  fields, entities)
+  fields, removed entities, device classes, units, state classes, enum states)
   - only when asked, then as a major release
-  - rename entity `key`s only via `new_key` / `ref_key`
+  - `key` is the API value name and part of the unique ID, never change it
+  - API value renamed in `keba_keenergy_api`: keep `key`, set the new name as `new_key`
+  - second entity on the same API value: `key` is the API value, `ref_key` its own name for the unique ID
 - No deprecated Home Assistant APIs
-- Type annotations also for local variables
-- Every `.py` file starts with (after the shebang of an executable script):
+- Type annotations also for local variables (not for loop, `with`, `except`, comprehension or unpacking targets)
+- Every `.py` file starts with (after the shebang of an executable script, new files get the current year, update
+  it when editing a file):
 
   ```python
-  # Copyright 2026 Michael Hacker
+  # Copyright <current year> Michael Hacker
   # SPDX-License-Identifier: Apache-2.0
   ```
 
-- No new lint/type suppressions or `# pragma: no cover`, fix or test the code
+- No lint/type suppressions or `# pragma: no cover`, fix or test the code
   - only exception: `# noqa: ARG00x` in required signatures
 - No real credentials, serial numbers or IP addresses, use the fake data in `tests/api_data.py`
 - Missing device endpoints or values belong in `keba_keenergy_api`, stop and ask how to proceed
-- Limited flash writes: write only changed values, only via the coordinator write methods, debounce fast-changing values
+  - values calculated from existing ones are fine in the integration
+- Limited flash writes: write only changed values, only via the coordinator write methods, debounce fast-changing
+  values (e.g. temperatures set with a slider)
 - `git add` new files, the pre-commit hooks only check tracked files
 - Never edit generated files (`coverage-badge.svg`) or `config/` (except `config/configuration.yaml`)
 - **Never edit `CLAUDE.md` files or `.claude/skills/` on your own**, only when asked
@@ -61,7 +66,8 @@ Before finishing a change, run all of them except the snapshot update, `develop.
 - `entity-device-class`: use a device class wherever one applies
   - `ENUM` needs `options` and state translations under `entity.<platform>.<key>.state`
 - `entity-category`: `EntityCategory.DIAGNOSTIC` for diagnostic entities
-- `entity-disabled-by-default`: rarely needed entities get `entity_registry_enabled_default=False`
+- `entity-disabled-by-default`: `entity_registry_enabled_default=False` for redundant or derived entities, entities
+  only for diagnosis or service, or entities only useful for rare setups
 - `log-when-unavailable`: failed updates raise `UpdateFailed`, the coordinator logs the outage once
 - `parallel-updates`: every platform sets `PARALLEL_UPDATES`
 - `stale-devices`: device identifiers always come from `get_device_identifier()`, otherwise devices with entities
@@ -78,7 +84,8 @@ Before finishing a change, run all of them except the snapshot update, `develop.
 
 ## Changelog, versions and git
 
-- Every notable change gets an entry under `## [Unreleased]` in `CHANGELOG.md`, use the `changelog` skill
+- Every change users notice gets an entry under `## [Unreleased]` in `CHANGELOG.md` (not refactorings, tests, CI,
+  `CLAUDE.md` or skills), use the `changelog` skill
 - Version: only change it when asked, use the `release` skill
 - `keba_keenergy_api` requirement is in `pyproject.toml` and `manifest.json`, run `uv lock` after changing it
 - Work on `develop`
