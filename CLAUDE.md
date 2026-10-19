@@ -9,7 +9,7 @@ with all device access going through the separate PyPI library `keba_keenergy_ap
 - Setup: `./scripts/setup.sh`
 
 ```bash
-uv run ruff format                   # format (lint.sh does not format, but applies ruff/rumdl autofixes)
+uv run ruff format                   # format (lint.sh only checks)
 ./scripts/lint.sh                    # all linters and type checks
 uv run pytest                        # tests + coverage
 uv run pytest --snapshot-update -n 0 # regenerate snapshots (serial only), then review the diff
@@ -32,15 +32,15 @@ Before finishing a change, run `ruff format`, `lint.sh` and `pytest`, in this or
   - second entity on the same API value: `key` is the API value, `ref_key` its own name for the unique ID
 - No deprecated Home Assistant APIs
 - Type annotations also for local variables (not for loop, `with`, `except`, comprehension or unpacking targets)
-- Every `.py` file starts with (after the shebang of an executable script, new files get the current year, update
-  it when editing a file):
+- Every `.py` file starts with (after the shebang of an executable script, update the end year when editing a
+  file, a single year while it equals the start year):
 
   ```python
-  # Copyright <current year> Michael Hacker
+  # Copyright 2025-<current year> Michael Hacker
   # SPDX-License-Identifier: Apache-2.0
   ```
 
-- No lint/type suppressions or `# pragma: no cover`, fix or test the code
+- No inline lint/type suppressions, no new ones in the config, no `# pragma: no cover`, fix or test the code
   - only exception: `# noqa: ARG00x` in required signatures
 - No real credentials, serial numbers or IP addresses, use the fake data in `tests/api_data.py`
 - Missing device endpoints or values belong in `keba_keenergy_api`, stop and ask how to proceed
@@ -73,7 +73,7 @@ Before finishing a change, run `ruff format`, `lint.sh` and `pytest`, in this or
 - `stale-devices`: device identifiers always come from `get_device_identifier()`, otherwise devices with entities
   are removed
 - The coordinator gets `config_entry` explicitly
-- The options flow aborts while the integration is not loaded (`options_not_ready`)
+- The options flow aborts while the integration is not loaded (`options_not_ready`), it needs the detected devices
 
 ## Documentation
 

@@ -5,7 +5,7 @@ set -e
 cd "$(dirname "$0")/.."
 
 uv run ruff format --check
-uv run ruff check --fix
+uv run ruff check
 uv run ty check
 uv run yamllint .
-uv run rumdl check --fix
+uv run rumdl check
