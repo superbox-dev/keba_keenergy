@@ -6,7 +6,6 @@ from __future__ import annotations
 
 import logging
 from dataclasses import dataclass
-from functools import cached_property
 from typing import TYPE_CHECKING
 from typing import Final
 
@@ -76,15 +75,14 @@ class KebaKeEnergyNumberEntity(KebaKeEnergyEntity, NumberEntity):
 
         self._pending_key = self.entity_description.key
         self._pending_section = self.section
-        self._pending_device_numbers = self.device_numbers
 
-    @cached_property
+    @property
     def native_min_value(self) -> float:
         """Return the minimum value."""
         lower_limit: float | None = self.get_limit(self.entity_description.key, attr="lower_limit")
         return super().native_min_value if lower_limit is None else lower_limit * self.entity_description.scale
 
-    @cached_property
+    @property
     def native_max_value(self) -> float:
         """Return the maximum value."""
         upper_limit: float | None = self.get_limit(self.entity_description.key, attr="upper_limit")
@@ -93,11 +91,7 @@ class KebaKeEnergyNumberEntity(KebaKeEnergyEntity, NumberEntity):
     @property
     def native_value(self) -> float | None:
         """Return the state of the number."""
-        native_value: float | None = (
-            self._pending_value
-            if self._pending_value is not None and self._async_call_later
-            else self.get_value(self.entity_description.key, expected_type=float)
-        )
+        native_value: float | None = self._get_debounced_value()
 
         return None if native_value is None else native_value * self.entity_description.scale
 

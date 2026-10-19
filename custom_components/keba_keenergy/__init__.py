@@ -12,11 +12,13 @@ from homeassistant.const import Platform
 from homeassistant.helpers import config_validation as cv
 from homeassistant.helpers import device_registry as dr
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
+from keba_keenergy_api.constants import SectionPrefix
 
 from .const import DOMAIN
 from .const import MANUFACTURER
 from .coordinator import KebaKeEnergyConfigEntry
 from .coordinator import KebaKeEnergyDataUpdateCoordinator
+from .coordinator import get_device_identifier
 from .services import async_setup_services
 
 if TYPE_CHECKING:
@@ -66,7 +68,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: KebaKeEnergyConfigEntry)
 
     control_unit: DeviceEntry = device_registry.async_get_or_create(
         config_entry_id=entry.entry_id,
-        identifiers={(DOMAIN, f"{entry.unique_id}_{DOMAIN}")},
+        identifiers={(DOMAIN, get_device_identifier(entry.unique_id, SectionPrefix.SYSTEM, None))},
         manufacturer=MANUFACTURER,
         name=coordinator.name,
         model=coordinator.device_model,

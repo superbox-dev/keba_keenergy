@@ -493,18 +493,39 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
         section: Section,
         index: int,
         key_index: int | None,
-    ) -> None:
-        """Optimistically update a single value into coordinator data."""
-        # Only copy the changed section, the other sections are shared with the previous data
-        data: dict[str, ValueResponse] = {**self.data, section_id: deepcopy(self.data[section_id])}
-        key: str = section.name.lower()
-
+    ) -> object:
+        """Optimistically update a single value into coordinator data, return the replaced value."""
         if section.value.human_readable:
             value = section.value.human_readable(value).name.lower()
 
-        get_value_by_index(data[section_id][key], index=index, key_index=key_index)["value"] = value
+        return self.async_set_value(
+            value,
+            section_id=section_id,
+            key=section.name.lower(),
+            index=index,
+            key_index=key_index,
+        )
+
+    def async_set_value(
+        self,
+        value: object,
+        /,
+        *,
+        section_id: str,
+        key: str,
+        index: int,
+        key_index: int | None,
+    ) -> object:
+        """Set a single value, as stored in the coordinator data, and return the replaced value."""
+        # Only copy the changed section, the other sections are shared with the previous data
+        data: dict[str, ValueResponse] = {**self.data, section_id: deepcopy(self.data[section_id])}
+        entity_data: Value = get_value_by_index(data[section_id][key], index=index, key_index=key_index)
+        previous_value: object = entity_data.get("value")
+        entity_data["value"] = value
 
         self.async_set_updated_data(data)
+
+        return previous_value
 
     async def async_execute_write(
         self,
@@ -592,8 +613,8 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
 
     async def set_away_date_range(self, *, start_timestamp: float, end_timestamp: float) -> None:
         """Set the away date range of all heating circuits, if it changed."""
-        away_start_date: list[int] = [int(start_timestamp)] * self.heat_circuit_numbers
-        away_end_date: list[int] = [int(end_timestamp)] * self.heat_circuit_numbers
+        away_start_date: list[int] = [int(start_timestamp)] * self.device_count(SectionPrefix.HEAT_CIRCUIT)
+        away_end_date: list[int] = [int(end_timestamp)] * self.device_count(SectionPrefix.HEAT_CIRCUIT)
 
         if self._heat_circuit_values("away_start_date") != away_start_date or (
             self._heat_circuit_values("away_end_date") != away_end_date
@@ -609,7 +630,7 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
         """Return the values of all heating circuits."""
         return [
             get_value_by_index(self.data[SectionPrefix.HEAT_CIRCUIT][key], index=index, key_index=None).get("value")
-            for index in range(self.heat_circuit_numbers)
+            for index in range(self.device_count(SectionPrefix.HEAT_CIRCUIT))
         ]
 
     @property
@@ -653,34 +674,24 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
         names: list[list[Value]] | list[Value] | Value = self.data[SectionPrefix.HEAT_PUMP]["name"]
         return [name for name in names if isinstance(name, dict)] if isinstance(names, list) else []
 
-    @cached_property
-    def heat_circuit_numbers(self) -> int:
-        """Return number of heat circuits."""
-        return self.position.heat_circuit if self.position else 0
-
-    @cached_property
-    def buffer_tank_numbers(self) -> int:
-        """Return number of buffer tanks."""
-        return self.position.buffer_tank if self.position else 0
-
-    @cached_property
-    def hot_water_tank_numbers(self) -> int:
-        """Return number of hot water tanks."""
-        return self.position.hot_water_tank if self.position else 0
-
     def device_identifiers(self) -> set[str]:
-        """Return the identifiers of all devices that the current data provides."""
+        """Return the identifiers of all devices that the control unit is configured with.
+
+        The devices come from the positions and options that are read on setup, not from the polled data,
+        so a section that is missing in a response never removes a device.
+        """
         identifiers: set[str] = set()
 
-        for section_id, section_data in self.data.items():
-            device_numbers: int = max(
-                (len(values) if isinstance(values, list) else 1 for values in section_data.values()),
-                default=0,
+        for prefix in SectionPrefix:
+            device_numbers: int = (
+                int(self.has_device(prefix))
+                if prefix in (SectionPrefix.SYSTEM, SectionPrefix.PHOTOVOLTAICS)
+                else self.device_count(prefix)
             )
             identifiers.update(
                 get_device_identifier(
                     self.config_entry.unique_id,
-                    section_id,
+                    prefix,
                     index + 1 if device_numbers > 1 else None,
                 )
                 for index in range(device_numbers)
@@ -761,7 +772,9 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
         """Check if one heating circuit support cooling."""
         # Some KEBA KeEnergy software versions did not have an active or passive cooling options.
         # Cooling support can only be detected with the heating circuit mode!
-        return any(self.is_cooling_circuit(index=index) for index in range(self.heat_circuit_numbers))
+        return any(
+            self.is_cooling_circuit(index=index) for index in range(self.device_count(SectionPrefix.HEAT_CIRCUIT))
+        )
 
     def is_cooling_circuit(self, *, index: int | None = None) -> bool:
         """Check if heating circuit mode is cooling."""

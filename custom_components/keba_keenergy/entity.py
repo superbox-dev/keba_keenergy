@@ -48,7 +48,6 @@ if TYPE_CHECKING:
     from homeassistant.helpers.entity_platform import AddEntitiesCallback
     from homeassistant.helpers.typing import StateType
     from keba_keenergy_api.endpoints import Value
-    from keba_keenergy_api.endpoints import ValueResponse
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -117,7 +116,6 @@ class KebaKeEnergyBaseEntity(
         self._pending_value: float | None = None
         self._pending_key: str = ""
         self._pending_section: Section | None = None
-        self._pending_device_numbers: int | None = None
 
     def _build_unique_id(self, *parts: str) -> str:
         """Return `<entry unique_id>[_<part>...][_<key_index + 1>][_<index + 1>]`."""
@@ -154,6 +152,11 @@ class KebaKeEnergyBaseEntity(
     def is_heat_pump(self) -> bool:
         """Return True if the entity is part of a heat pump else False."""
         return self.section_id == SectionPrefix.HEAT_PUMP
+
+    @property
+    def device_numbers(self) -> int | None:
+        """Return the number of devices of the section, or None for the control unit."""
+        return None if self.is_system_device else self.coordinator.device_count(self.section_id)
 
     @cached_property
     def device_identifier(self) -> str:
@@ -245,9 +248,7 @@ class KebaKeEnergyBaseEntity(
             ),
         }
 
-        previous_data: dict[str, ValueResponse] = self.coordinator.data
-
-        self.coordinator.async_update_value(
+        previous_value: object = self.coordinator.async_update_value(
             value,
             section_id=self.section_id,
             section=section,
@@ -260,12 +261,25 @@ class KebaKeEnergyBaseEntity(
                 request=request, ignore_weekly_write_count=ignore_weekly_write_count
             )
         except HomeAssistantError:
-            # The control unit still has the previous value, so the entities show it again
-            self.coordinator.async_set_updated_data(previous_data)
+            # The control unit still has the previous value, so the entity shows it again. Only this value is reset,
+            # other values may have changed while the write waited for the lock.
+            self.coordinator.async_set_value(
+                previous_value,
+                section_id=self.section_id,
+                key=section.name.lower(),
+                index=self.index or 0,
+                key_index=self.key_index,
+            )
             raise
 
     def _schedule_debounced_write(self, value: float | None, /) -> None:
-        """Write the value after `FLASH_WRITE_DELAY`, a new value restarts the delay."""
+        """Write the value after `FLASH_WRITE_DELAY`, a new value restarts the delay.
+
+        Without a value (None) a pending write is kept.
+        """
+        if value is None:
+            return
+
         self._pending_value = value
 
         if self._async_call_later:
@@ -290,8 +304,15 @@ class KebaKeEnergyBaseEntity(
             await self._async_write_data(
                 self._pending_value,
                 section=self._pending_section,
-                device_numbers=self._pending_device_numbers,
+                device_numbers=self.device_numbers,
             )
+
+    def _get_debounced_value(self) -> float | None:
+        """Return the value that waits for the debounced write, otherwise the current value."""
+        if self._pending_value is not None and self._async_call_later:
+            return self._pending_value
+
+        return self.get_value(self._pending_key, expected_type=float)
 
     def get_entity_data(self, key: str, /) -> Value | None:
         """Get the real entity data from the coordinator data."""
@@ -352,11 +373,6 @@ class KebaKeEnergyEntity(KebaKeEnergyBaseEntity):
     def section(self) -> Section:
         """Get the section of the entity description key."""
         return SECTIONS[self.section_id][self.entity_description.key.upper()]
-
-    @property
-    def device_numbers(self) -> int | None:
-        """Return the number of devices of the section, or None for the control unit."""
-        return None if self.is_system_device else self.coordinator.device_count(self.section_id)
 
 
 @callback

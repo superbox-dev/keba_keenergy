@@ -4,7 +4,6 @@
 
 from __future__ import annotations
 
-from functools import cached_property
 from typing import TYPE_CHECKING
 from typing import Final
 
@@ -112,7 +111,6 @@ class KebaKeEnergyHotWaterTankEntity(KebaKeEnergyWaterHeaterTankEntity, WaterHea
 
         self._pending_key = "target_temperature"
         self._pending_section = HotWaterTank.TARGET_TEMPERATURE
-        self._pending_device_numbers = self.coordinator.hot_water_tank_numbers
 
     @property
     def current_temperature(self) -> float | None:
@@ -122,22 +120,15 @@ class KebaKeEnergyHotWaterTankEntity(KebaKeEnergyWaterHeaterTankEntity, WaterHea
     @property
     def target_temperature(self) -> float | None:
         """Return the temperature we try to reach."""
-        target_temperature: float | None
+        return self._get_debounced_value()
 
-        if self._pending_value is not None and self._async_call_later:
-            target_temperature = self._pending_value
-        else:
-            target_temperature = self.get_value("target_temperature", expected_type=float)
-
-        return target_temperature
-
-    @cached_property
+    @property
     def min_temp(self) -> float:
         """Return the minimum temperature."""
         lower_limit: float | None = self.get_limit("target_temperature", attr="lower_limit")
         return super().min_temp if lower_limit is None else lower_limit
 
-    @cached_property
+    @property
     def max_temp(self) -> float:
         """Return the maximum temperature."""
         upper_limit: float | None = self.get_limit("target_temperature", attr="upper_limit")
@@ -155,7 +146,7 @@ class KebaKeEnergyHotWaterTankEntity(KebaKeEnergyWaterHeaterTankEntity, WaterHea
             await self._async_write_data(
                 HotWaterTankOperatingMode.OFF.value,
                 section=HotWaterTank.OPERATING_MODE,
-                device_numbers=self.coordinator.hot_water_tank_numbers,
+                device_numbers=self.device_numbers,
             )
 
     async def async_turn_on(self, **kwargs: object) -> None:  # noqa: ARG002
@@ -164,7 +155,7 @@ class KebaKeEnergyHotWaterTankEntity(KebaKeEnergyWaterHeaterTankEntity, WaterHea
             await self._async_write_data(
                 HotWaterTankOperatingMode.ON.value,
                 section=HotWaterTank.OPERATING_MODE,
-                device_numbers=self.coordinator.hot_water_tank_numbers,
+                device_numbers=self.device_numbers,
             )
 
     async def async_set_operation_mode(self, operation_mode: str) -> None:
@@ -174,7 +165,7 @@ class KebaKeEnergyHotWaterTankEntity(KebaKeEnergyWaterHeaterTankEntity, WaterHea
                 await self._async_write_data(
                     key,
                     section=HotWaterTank.OPERATING_MODE,
-                    device_numbers=self.coordinator.hot_water_tank_numbers,
+                    device_numbers=self.device_numbers,
                     ignore_weekly_write_count=operation_mode == STATE_PERFORMANCE,
                 )
 
@@ -238,7 +229,7 @@ class KebaKeEnergyBufferTankEntity(KebaKeEnergyWaterHeaterTankEntity, WaterHeate
             await self._async_write_data(
                 BufferTankOperatingMode.OFF.value,
                 section=BufferTank.OPERATING_MODE,
-                device_numbers=self.coordinator.buffer_tank_numbers,
+                device_numbers=self.device_numbers,
             )
 
     async def async_turn_on(self, **kwargs: object) -> None:  # noqa: ARG002
@@ -247,7 +238,7 @@ class KebaKeEnergyBufferTankEntity(KebaKeEnergyWaterHeaterTankEntity, WaterHeate
             await self._async_write_data(
                 BufferTankOperatingMode.ON.value,
                 section=BufferTank.OPERATING_MODE,
-                device_numbers=self.coordinator.buffer_tank_numbers,
+                device_numbers=self.device_numbers,
             )
 
     async def async_set_operation_mode(self, operation_mode: str) -> None:
@@ -257,7 +248,7 @@ class KebaKeEnergyBufferTankEntity(KebaKeEnergyWaterHeaterTankEntity, WaterHeate
                 await self._async_write_data(
                     key,
                     section=BufferTank.OPERATING_MODE,
-                    device_numbers=self.coordinator.buffer_tank_numbers,
+                    device_numbers=self.device_numbers,
                 )
 
 
@@ -269,6 +260,8 @@ async def async_setup_entry(
     """Set up KEBA KeEnergy water heaters from a config entry."""
     coordinator: KebaKeEnergyDataUpdateCoordinator = entry.runtime_data
     water_heaters: list[KebaKeEnergyWaterHeaterTankEntity] = []
+    hot_water_tank_numbers: int = coordinator.device_count(SectionPrefix.HOT_WATER_TANK)
+    buffer_tank_numbers: int = coordinator.device_count(SectionPrefix.BUFFER_TANK)
 
     water_heaters += [
         KebaKeEnergyHotWaterTankEntity(
@@ -279,9 +272,9 @@ async def async_setup_entry(
             ),
             entry=entry,
             section_id=SectionPrefix.HOT_WATER_TANK.value,
-            index=index if coordinator.hot_water_tank_numbers > 1 else None,
+            index=index if hot_water_tank_numbers > 1 else None,
         )
-        for index in range(coordinator.hot_water_tank_numbers)
+        for index in range(hot_water_tank_numbers)
     ]
 
     water_heaters += [
@@ -293,9 +286,9 @@ async def async_setup_entry(
             ),
             entry=entry,
             section_id=SectionPrefix.BUFFER_TANK.value,
-            index=index if coordinator.buffer_tank_numbers > 1 else None,
+            index=index if buffer_tank_numbers > 1 else None,
         )
-        for index in range(coordinator.buffer_tank_numbers)
+        for index in range(buffer_tank_numbers)
     ]
 
     async_add_entities(water_heaters)

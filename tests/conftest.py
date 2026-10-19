@@ -4,6 +4,7 @@
 
 from __future__ import annotations
 
+import asyncio
 import json
 import logging
 from http import HTTPStatus
@@ -122,6 +123,7 @@ class FakeKebaKeEnergyAPI:
         self.heating_curves: list[list[dict[str, Any]]] | HTTPStatus = HEATING_CURVES_RESPONSE_1_1
         self.system_name: str = SYSTEM_RESPONSE["name"]
         self.write_status: HTTPStatus = HTTPStatus.OK
+        self.unsupported_variables: set[str] = set()
 
     def register_auth_request(self, host: str, /, *, status: int = 200, exc: Exception | None = None) -> None:
         """Register the request that checks if the Web HMI requires authentication."""
@@ -152,7 +154,8 @@ class FakeKebaKeEnergyAPI:
 
         The read requests return the `responses` in order, an `HTTPStatus` returns an empty response with this status
         and an exception (e.g. `TimeoutError`) is raised by the request.
-        The requests of `filter_request()` succeed, the values of the heating curves come from `heating_curves`
+        The requests of `filter_request()` succeed, except for the `unsupported_variables`, which the Web HMI does not
+        know and which are also left out of the responses. The values of the heating curves come from `heating_curves`
         (an `HTTPStatus` fails them). The system name and the status of the write requests can be changed with
         `system_name` and `write_status`.
         """
@@ -180,10 +183,8 @@ class FakeKebaKeEnergyAPI:
 
         self.aioclient_mock.post(
             f"{schema}://{host}/var/readWriteVars",
-            text="[{}]",
             params={"action": "set"},
-            status=self.write_status,
-            headers={"Content-Type": "application/json;charset=utf-8"},
+            side_effect=self._write_side_effect,
         )
 
         self.aioclient_mock.post(
@@ -219,12 +220,34 @@ class FakeKebaKeEnergyAPI:
         values: dict[str, dict[str, Any]] = {value["name"]: value for value in (names if is_names_request else points)}
         return [values[item["name"]] for item in payload]
 
+    async def _write_side_effect(self, method: str, url: URL, *_: object) -> AiohttpClientMockResponse:
+        # A real request suspends, so other writes can queue for the write lock in the meantime
+        await asyncio.sleep(0)
+
+        return AiohttpClientMockResponse(
+            method,
+            url=url,
+            text="[{}]",
+            status=self.write_status,
+            headers={"Content-Type": "application/json;charset=utf-8"},
+        )
+
     async def _read_side_effect(self, method: str, url: URL, data: object, *_: object) -> AiohttpClientMockResponse:
         payload: list[dict[str, str]] = json.loads(str(data))
         response: list[dict[str, Any]] | HTTPStatus | Exception
 
         if self.is_filter_request(data):
-            # All values are supported, `filter_request()` only checks that the request succeeds
+            unknown: list[str] = [item["name"] for item in payload if item["name"] in self.unsupported_variables]
+
+            if unknown:
+                # The Web HMI rejects the whole request and names the first unknown variable
+                return AiohttpClientMockResponse(
+                    method,
+                    url=url,
+                    status=HTTPStatus.INTERNAL_SERVER_ERROR,
+                    text=f"Reading variable: {unknown[0]} failed",
+                )
+
             response = []
         elif all(".linTabPool[" in item["name"] for item in payload):
             response = self._heating_curve_response(payload)
@@ -232,6 +255,9 @@ class FakeKebaKeEnergyAPI:
             return AiohttpClientMockResponse(method, url=url)
         else:
             response = self.responses.pop(0)
+
+            if isinstance(response, list):
+                response = [value for value in response if value["name"] not in self.unsupported_variables]
 
         if isinstance(response, Exception):
             raise response

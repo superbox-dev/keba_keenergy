@@ -9,6 +9,8 @@ from typing import TYPE_CHECKING
 from typing import Any
 
 import pytest
+from homeassistant.components.water_heater import ATTR_MAX_TEMP
+from homeassistant.components.water_heater import ATTR_MIN_TEMP
 from homeassistant.components.water_heater import ATTR_OPERATION_MODE
 from homeassistant.components.water_heater import SERVICE_SET_OPERATION_MODE
 from homeassistant.components.water_heater import SERVICE_SET_TEMPERATURE
@@ -38,8 +40,10 @@ from tests.api_data import MULTIPLE_POSITION_DATA_RESPONSE_2
 from tests.api_data import MULTIPLE_POSITIONS_RESPONSE
 from tests.api_data import get_multiple_position_fixed_data_response
 from tests.api_data import get_single_position_data_response
+from tests.api_data import update_response
 
 if TYPE_CHECKING:
+    from pytest_homeassistant_custom_component.common import MockConfigEntry
     from syrupy.assertion import SnapshotAssertion
 
     from tests.conftest import FakeKebaKeEnergyAPI
@@ -443,3 +447,32 @@ async def test_set_unchanged_target_temperature(
     await hass.async_block_till_done()
 
     assert fake_api.write_requests() == []
+
+
+async def test_limits_after_update(
+    hass: HomeAssistant,
+    config_entry: MockConfigEntry,
+    fake_api: FakeKebaKeEnergyAPI,
+) -> None:
+    """Test that a hot water tank uses the limits from the API once an update provides them."""
+    fake_api.responses = [
+        DEFAULT_POSITION_RESPONSE,
+        DEFAULT_POSITION_FIXED_DATA_RESPONSE,
+        update_response(
+            get_single_position_data_response(),
+            "APPL.CtrlAppl.sParam.hotWaterTank[0].param.normalSetTempMax.value",
+            attributes={},
+        ),
+        get_single_position_data_response(),
+    ]
+    await fake_api.setup_integration()
+
+    state: State | None = hass.states.get(ENTITY_ID)
+    assert isinstance(state, State)
+    assert (state.attributes[ATTR_MIN_TEMP], state.attributes[ATTR_MAX_TEMP]) != (0, 52)
+
+    await config_entry.runtime_data.async_refresh()
+
+    state = hass.states.get(ENTITY_ID)
+    assert isinstance(state, State)
+    assert (state.attributes[ATTR_MIN_TEMP], state.attributes[ATTR_MAX_TEMP]) == (0, 52)

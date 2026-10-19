@@ -163,3 +163,38 @@ async def test_entity_keeps_state_if_update_failed(
     state = hass.states.get(entity_id)
     assert isinstance(state, State)
     assert state.state == previous_state
+
+
+async def test_entities_keep_their_state_if_queued_updates_failed(
+    hass: HomeAssistant,
+    fake_api: FakeKebaKeEnergyAPI,
+) -> None:
+    """Test that entities keep their states if writes fail, which waited for each other."""
+    entity_ids: list[str] = [
+        "select.keba_keenergy_12345678_buffer_tank_operating_mode_1",
+        "select.keba_keenergy_12345678_buffer_tank_operating_mode_2",
+    ]
+    fake_api.responses = [
+        MULTIPLE_POSITIONS_RESPONSE,
+        get_multiple_position_fixed_data_response(),
+        MULTIPLE_POSITION_DATA_RESPONSE_1,
+    ]
+    fake_api.write_status = HTTPStatus.BAD_REQUEST
+    await fake_api.setup_integration()
+
+    with pytest.raises(HomeAssistantError):
+        # The entities write at the same time, so the second write waits for the first one
+        await hass.services.async_call(
+            domain=SELECT_DOMAIN,
+            service=SERVICE_SELECT_OPTION,
+            service_data={
+                ATTR_ENTITY_ID: entity_ids,
+                ATTR_OPTION: "heat_up",
+            },
+            blocking=True,
+        )
+
+    await hass.async_block_till_done()
+
+    assert len(fake_api.write_requests()) == len(entity_ids)
+    assert [state.state for state in map(hass.states.get, entity_ids) if state] == ["off", "on"]

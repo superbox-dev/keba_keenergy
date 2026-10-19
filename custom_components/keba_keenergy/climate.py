@@ -106,7 +106,6 @@ class KebaKeEnergyClimateEntity(KebaKeEnergyBaseEntity, ClimateEntity):
 
         self._pending_key = "target_temperature_offset"
         self._pending_section = HeatCircuit.TARGET_TEMPERATURE_OFFSET
-        self._pending_device_numbers = self.coordinator.heat_circuit_numbers
 
     @cached_property
     def _is_heating(self) -> bool:
@@ -153,12 +152,7 @@ class KebaKeEnergyClimateEntity(KebaKeEnergyBaseEntity, ClimateEntity):
     def target_temperature(self) -> float | None:
         """Return the temperature we try to reach."""
         selected_target_temperature: float | None = self.get_value("selected_target_temperature", expected_type=float)
-        target_temperature_offset: float | None
-
-        if self._pending_value is not None and self._async_call_later:
-            target_temperature_offset = self._pending_value
-        else:
-            target_temperature_offset = self.get_value("target_temperature_offset", expected_type=float)
+        target_temperature_offset: float | None = self._get_debounced_value()
 
         return (
             None
@@ -277,7 +271,7 @@ class KebaKeEnergyClimateEntity(KebaKeEnergyBaseEntity, ClimateEntity):
             await self._async_write_data(
                 operating_mode_status,
                 section=HeatCircuit.OPERATING_MODE,
-                device_numbers=self.coordinator.heat_circuit_numbers,
+                device_numbers=self.device_numbers,
             )
 
     async def async_set_preset_mode(self, preset_mode: str) -> None:
@@ -289,7 +283,7 @@ class KebaKeEnergyClimateEntity(KebaKeEnergyBaseEntity, ClimateEntity):
                 await self._async_write_data(
                     key,
                     section=HeatCircuit.OPERATING_MODE,
-                    device_numbers=self.coordinator.heat_circuit_numbers,
+                    device_numbers=self.device_numbers,
                 )
 
     async def async_set_temperature(self, **kwargs: object) -> None:
@@ -334,6 +328,7 @@ async def async_setup_entry(
 ) -> None:
     """Set up KEBA KeEnergy climates from a config entry."""
     coordinator: KebaKeEnergyDataUpdateCoordinator = entry.runtime_data
+    heat_circuit_numbers: int = coordinator.device_count(SectionPrefix.HEAT_CIRCUIT)
     climates: list[KebaKeEnergyClimateEntity] = [
         KebaKeEnergyClimateEntity(
             coordinator,
@@ -343,9 +338,9 @@ async def async_setup_entry(
             ),
             entry=entry,
             section_id=SectionPrefix.HEAT_CIRCUIT.value,
-            index=index if coordinator.heat_circuit_numbers > 1 else None,
+            index=index if heat_circuit_numbers > 1 else None,
         )
-        for index in range(coordinator.heat_circuit_numbers)
+        for index in range(heat_circuit_numbers)
     ]
 
     async_add_entities(climates)

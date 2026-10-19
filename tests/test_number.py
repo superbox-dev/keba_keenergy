@@ -371,6 +371,31 @@ async def test_value_without_limits(
     assert state.attributes[ATTR_MAX] == DEFAULT_MAX_VALUE
 
 
+async def test_limits_after_update(
+    hass: HomeAssistant,
+    config_entry: MockConfigEntry,
+    fake_api: FakeKebaKeEnergyAPI,
+) -> None:
+    """Test that a number entity uses the limits from the API once an update provides them."""
+    entity_id: str = "number.keba_keenergy_12345678_heat_circuit_target_temperature_offset"
+    fake_api.responses = [
+        DEFAULT_POSITION_RESPONSE,
+        DEFAULT_POSITION_FIXED_DATA_RESPONSE,
+        update_response(
+            get_single_position_data_response(),
+            "APPL.CtrlAppl.sParam.heatCircuit[0].param.offsetRoomTemp",
+            attributes={},
+        ),
+        get_single_position_data_response(),
+    ]
+    await fake_api.setup_integration()
+    await config_entry.runtime_data.async_refresh()
+
+    state: State | None = hass.states.get(entity_id)
+    assert isinstance(state, State)
+    assert (state.attributes[ATTR_MIN], state.attributes[ATTR_MAX]) == (-2.5, 2.5)
+
+
 async def test_debounced_value_not_written_after_unload(
     hass: HomeAssistant,
     config_entry: MockConfigEntry,

@@ -183,6 +183,38 @@ async def test_set_temperature_debounced(
     ]
 
 
+async def test_set_temperature_without_selected_target_temperature(
+    hass: HomeAssistant,
+    fake_api: FakeKebaKeEnergyAPI,
+) -> None:
+    """Test that no offset is written if the Web HMI does not provide the selected target temperature."""
+    fake_api.unsupported_variables = {"APPL.CtrlAppl.sParam.heatCircuit[0].values.selectedSetTemp"}
+    fake_api.responses = [
+        DEFAULT_POSITION_RESPONSE,
+        DEFAULT_POSITION_FIXED_DATA_RESPONSE,
+        get_single_position_data_response(),
+    ]
+    await fake_api.setup_integration()
+
+    await hass.services.async_call(
+        domain=CLIMATE_DOMAIN,
+        service=SERVICE_SET_TEMPERATURE,
+        service_data={
+            ATTR_ENTITY_ID: ENTITY_ID,
+            ATTR_TEMPERATURE: 21.0,
+        },
+        blocking=True,
+    )
+
+    async_fire_time_changed(hass, dt_util.utcnow() + timedelta(seconds=FLASH_WRITE_DELAY))
+    await hass.async_block_till_done()
+
+    state: State | None = hass.states.get(ENTITY_ID)
+    assert isinstance(state, State)
+    assert state.attributes[ATTR_TEMPERATURE] is None
+    assert fake_api.write_requests() == []
+
+
 async def test_turn_off(
     hass: HomeAssistant,
     fake_api: FakeKebaKeEnergyAPI,
