@@ -105,7 +105,7 @@ Code lives in `custom_components/keba_keenergy/`.
 - Open:
   - `dynamic-devices`: devices are only detected on setup, a changed setup needs a reload
 - Keep these rules satisfied:
-  - `brands`: the brand images are in `custom_components/keba_keenergy/brand/` (light and `dark_` variants)
+  - `brands`: the brand images are in the `home-assistant/brands` repository (`custom_integrations/keba_keenergy/`)
   - `exception-translations`: exceptions use `translation_domain` and `translation_key`
   - `icon-translations`: icons in `icons.json`
   - `entity-device-class`: use a device class wherever one applies
@@ -162,7 +162,6 @@ Code lives in `custom_components/keba_keenergy/`.
 - Design after home-assistant.io:
   - `website/src/css/custom.css` and the wrapped `website/src/theme/TOC/`
   - the integration card in `website/src/components/ProjectInfo/` reads `manifest.json` and `hacs.json`
-  - the brand images in `custom_components/keba_keenergy/brand/` are served from the website root
 
 ## Tests
 

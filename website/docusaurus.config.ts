@@ -23,9 +23,6 @@ const config: Config = {
   onBrokenLinks: 'throw',
   onBrokenAnchors: 'throw',
 
-  // The brand images of the integration are served from the root, e.g. /icon.png
-  staticDirectories: ['static', '../custom_components/keba_keenergy/brand'],
-
   markdown: {
     // The pages are copied from website/content and the repository Markdown files, so parse them as CommonMark
     format: 'detect',

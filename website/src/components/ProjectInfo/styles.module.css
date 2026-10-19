@@ -21,7 +21,7 @@
   margin: 1rem 0;
 }
 
-/* Brand logo of the integration, with a light and a dark variant */
+/* Brand logo of the integration, the same image in the light and the dark mode */
 .brand {
   width: 100%;
   max-width: 220px;

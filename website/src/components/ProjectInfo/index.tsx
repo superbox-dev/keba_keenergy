@@ -1,6 +1,5 @@
 import type {ReactNode} from 'react';
 import Link from '@docusaurus/Link';
-import ThemedImage from '@theme/ThemedImage';
 import useBaseUrl from '@docusaurus/useBaseUrl';
 import {
   mdiAccountGroup,
@@ -48,13 +47,7 @@ export default function ProjectInfo(): ReactNode {
     <div className={styles.projectInfo}>
       <section className={styles.module}>
         <div className={styles.logo}>
-          <ThemedImage
-            className={styles.brand}
-            alt={manifest.name}
-            sources={{light: useBaseUrl('/logo.png'), dark: useBaseUrl('/dark_logo.png')}}
-            width={995}
-            height={256}
-          />
+          <img className={styles.brand} src={useBaseUrl('/logo.png')} alt={manifest.name} width={995} height={256} />
           <Link href={`${repository}/releases`}>
             <img
               src="https://img.shields.io/github/v/release/superbox-dev/keba_keenergy?label=Release"
