@@ -24,8 +24,8 @@ from custom_components.keba_keenergy.services import ATTR_START_DATE
 from custom_components.keba_keenergy.services import AWAY_DATE_RANGE_SCHEMA
 from custom_components.keba_keenergy.services import HEATING_CURVE_POINTS_SCHEMA
 from tests import init_translations
-from tests.api_data import HEATING_CURVES_RESPONSE_1_2
-from tests.api_data import MULTIPLE_POSITION_DATA_RESPONSE_1
+from tests.api_data import HEATING_CURVES_RENAMED_POINTS_RESPONSE
+from tests.api_data import MULTIPLE_POSITION_DATA_RESPONSE
 from tests.api_data import MULTIPLE_POSITIONS_RESPONSE
 from tests.api_data import get_multiple_position_fixed_data_response
 
@@ -46,9 +46,9 @@ async def test_set_away_range(
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITION_DATA_RESPONSE_1,
+        MULTIPLE_POSITION_DATA_RESPONSE,
         # Read API after services call
-        MULTIPLE_POSITION_DATA_RESPONSE_1,
+        MULTIPLE_POSITION_DATA_RESPONSE,
     ]
     await fake_api.setup_integration()
 
@@ -80,7 +80,7 @@ async def test_set_unchanged_away_range(
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITION_DATA_RESPONSE_1,
+        MULTIPLE_POSITION_DATA_RESPONSE,
     ]
     await fake_api.setup_integration()
 
@@ -107,9 +107,9 @@ async def test_set_away_range_with_invalid_start_and_end_date(
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITION_DATA_RESPONSE_1,
+        MULTIPLE_POSITION_DATA_RESPONSE,
         # Read API after services call
-        MULTIPLE_POSITION_DATA_RESPONSE_1,
+        MULTIPLE_POSITION_DATA_RESPONSE,
     ]
     hass.config.language = "de"
     await fake_api.setup_integration()
@@ -147,9 +147,9 @@ async def test_set_away_range_with_invalid_config_entry(
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITION_DATA_RESPONSE_1,
+        MULTIPLE_POSITION_DATA_RESPONSE,
         # Read API after services call
-        MULTIPLE_POSITION_DATA_RESPONSE_1,
+        MULTIPLE_POSITION_DATA_RESPONSE,
     ]
     await fake_api.setup_integration()
     translations: dict[str, str] = await init_translations(hass, category="exceptions")
@@ -181,9 +181,9 @@ async def test_set_away_range_with_unloaded_config_entry(
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITION_DATA_RESPONSE_1,
+        MULTIPLE_POSITION_DATA_RESPONSE,
         # Read API after services call
-        MULTIPLE_POSITION_DATA_RESPONSE_1,
+        MULTIPLE_POSITION_DATA_RESPONSE,
     ]
     await fake_api.setup_integration()
     translations: dict[str, str] = await init_translations(hass, category="exceptions")
@@ -216,7 +216,7 @@ async def test_set_heating_curve_points(
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITION_DATA_RESPONSE_1,
+        MULTIPLE_POSITION_DATA_RESPONSE,
     ]
     await fake_api.setup_integration()
 
@@ -291,11 +291,11 @@ async def test_set_heating_curve_points_with_invalid_heating_curve(
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITION_DATA_RESPONSE_1,
+        MULTIPLE_POSITION_DATA_RESPONSE,
     ]
     await fake_api.setup_integration()
     # The points of the heating curve HC1 have another name on the control unit
-    fake_api.heating_curves = HEATING_CURVES_RESPONSE_1_2
+    fake_api.heating_curves = HEATING_CURVES_RENAMED_POINTS_RESPONSE
     translations: dict[str, str] = await init_translations(hass, category="exceptions")
 
     with pytest.raises(
@@ -338,7 +338,7 @@ async def test_set_heating_curve_points_with_duplicate_outdoor_temperatures(
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITION_DATA_RESPONSE_1,
+        MULTIPLE_POSITION_DATA_RESPONSE,
     ]
     await fake_api.setup_integration()
     translations: dict[str, str] = await init_translations(hass, category="exceptions")
@@ -440,9 +440,9 @@ async def test_set_away_range_with_date_and_time(
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITION_DATA_RESPONSE_1,
+        MULTIPLE_POSITION_DATA_RESPONSE,
         # Read API after services call
-        MULTIPLE_POSITION_DATA_RESPONSE_1,
+        MULTIPLE_POSITION_DATA_RESPONSE,
     ]
     await fake_api.setup_integration()
 
@@ -486,7 +486,7 @@ async def test_set_heating_curve_points_with_communication_error(
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITION_DATA_RESPONSE_1,
+        MULTIPLE_POSITION_DATA_RESPONSE,
     ]
     await fake_api.setup_integration()
     fake_api.heating_curves = HTTPStatus.BAD_REQUEST

@@ -13,7 +13,7 @@ from homeassistant.helpers import entity_registry as er
 
 from tests import get_option_translations
 from tests import get_platform_states
-from tests.api_data import MULTIPLE_POSITION_DATA_RESPONSE_1
+from tests.api_data import MULTIPLE_POSITION_DATA_RESPONSE
 from tests.api_data import MULTIPLE_POSITIONS_RESPONSE
 from tests.api_data import get_multiple_position_fixed_data_response
 
@@ -35,7 +35,7 @@ async def test_sensors(
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(has_passive_cooling="true"),
-        MULTIPLE_POSITION_DATA_RESPONSE_1,
+        MULTIPLE_POSITION_DATA_RESPONSE,
     ]
     await fake_api.setup_integration()
 
@@ -63,7 +63,7 @@ async def test_converted_sensor_display_precision(
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITION_DATA_RESPONSE_1,
+        MULTIPLE_POSITION_DATA_RESPONSE,
     ]
     await fake_api.setup_integration()
 

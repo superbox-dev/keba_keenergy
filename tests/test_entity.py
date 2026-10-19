@@ -23,7 +23,7 @@ from homeassistant.setup import async_setup_component
 from custom_components.keba_keenergy.const import DOMAIN
 from tests import init_translations
 from tests.api_data import ENTITY_UPDATED_DATA_RESPONSE
-from tests.api_data import MULTIPLE_POSITION_DATA_RESPONSE_1
+from tests.api_data import MULTIPLE_POSITION_DATA_RESPONSE
 from tests.api_data import MULTIPLE_POSITIONS_RESPONSE
 from tests.api_data import get_multiple_position_fixed_data_response
 
@@ -39,7 +39,7 @@ async def test_entity_update(
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITION_DATA_RESPONSE_1,
+        MULTIPLE_POSITION_DATA_RESPONSE,
         # Read API after services call
         ENTITY_UPDATED_DATA_RESPONSE,
     ]
@@ -75,7 +75,7 @@ async def test_entity_update_failed(
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITION_DATA_RESPONSE_1,
+        MULTIPLE_POSITION_DATA_RESPONSE,
     ]
     fake_api.write_status = HTTPStatus.BAD_REQUEST
     hass.config.language = "de"
@@ -118,7 +118,7 @@ async def test_heat_pump_manufacturer(
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITION_DATA_RESPONSE_1,
+        MULTIPLE_POSITION_DATA_RESPONSE,
     ]
     fake_api.system_name = system_name
     await fake_api.setup_integration()
@@ -140,7 +140,7 @@ async def test_entity_keeps_state_if_update_failed(
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITION_DATA_RESPONSE_1,
+        MULTIPLE_POSITION_DATA_RESPONSE,
     ]
     fake_api.write_status = HTTPStatus.BAD_REQUEST
     await fake_api.setup_integration()
@@ -177,7 +177,7 @@ async def test_entities_keep_their_state_if_queued_updates_failed(
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITION_DATA_RESPONSE_1,
+        MULTIPLE_POSITION_DATA_RESPONSE,
     ]
     fake_api.write_status = HTTPStatus.BAD_REQUEST
     await fake_api.setup_integration()

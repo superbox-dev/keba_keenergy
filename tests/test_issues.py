@@ -22,8 +22,8 @@ from homeassistant.util import dt as dt_util
 from custom_components.keba_keenergy.const import DOMAIN
 from custom_components.keba_keenergy.const import FLASH_WRITE_LIMIT_PER_WEEK
 from tests import init_translations
-from tests.api_data import MULTIPLE_POSITION_DATA_RESPONSE_1
-from tests.api_data import MULTIPLE_POSITION_DATA_RESPONSE_2
+from tests.api_data import MULTIPLE_POSITION_DATA_RESPONSE
+from tests.api_data import MULTIPLE_POSITION_OTHER_MODES_DATA_RESPONSE
 from tests.api_data import MULTIPLE_POSITIONS_RESPONSE
 from tests.api_data import get_multiple_position_fixed_data_response
 
@@ -44,11 +44,11 @@ async def test_issues(
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITION_DATA_RESPONSE_1,
+        MULTIPLE_POSITION_DATA_RESPONSE,
         # Read API after services call #1
-        MULTIPLE_POSITION_DATA_RESPONSE_1,
+        MULTIPLE_POSITION_DATA_RESPONSE,
         # Read API after services call #1
-        MULTIPLE_POSITION_DATA_RESPONSE_1,
+        MULTIPLE_POSITION_DATA_RESPONSE,
     ]
     today: date = dt_util.now().date()
     hass_storage[DOMAIN] = {
@@ -117,11 +117,11 @@ async def test_issues_translated(
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITION_DATA_RESPONSE_1,
+        MULTIPLE_POSITION_DATA_RESPONSE,
         # Read API after services call #1
-        MULTIPLE_POSITION_DATA_RESPONSE_1,
+        MULTIPLE_POSITION_DATA_RESPONSE,
         # Read API after services call #2
-        MULTIPLE_POSITION_DATA_RESPONSE_1,
+        MULTIPLE_POSITION_DATA_RESPONSE,
     ]
     today: date = dt_util.now().date()
     hass_storage[DOMAIN] = {
@@ -191,9 +191,9 @@ async def test_ignored_write_is_not_counted(
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITION_DATA_RESPONSE_2,
+        MULTIPLE_POSITION_OTHER_MODES_DATA_RESPONSE,
         # Read API after services call
-        MULTIPLE_POSITION_DATA_RESPONSE_2,
+        MULTIPLE_POSITION_OTHER_MODES_DATA_RESPONSE,
     ]
     today: date = dt_util.now().date()
     week: list[int] = [today.isocalendar().year, today.isocalendar().week]
@@ -233,9 +233,9 @@ async def test_new_week_resets_write_counter(
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITION_DATA_RESPONSE_1,
+        MULTIPLE_POSITION_DATA_RESPONSE,
         # Read API after services call
-        MULTIPLE_POSITION_DATA_RESPONSE_1,
+        MULTIPLE_POSITION_DATA_RESPONSE,
     ]
     today: date = dt_util.now().date()
     last_week: date = today - timedelta(weeks=1)

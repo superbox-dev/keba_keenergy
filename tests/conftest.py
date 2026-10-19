@@ -25,7 +25,7 @@ from custom_components.keba_keenergy import PLATFORMS
 from custom_components.keba_keenergy.const import DOMAIN
 from tests import setup_integration
 from tests.api_data import DEVICE_INFO_RESPONSE
-from tests.api_data import HEATING_CURVES_RESPONSE_1_1
+from tests.api_data import HEATING_CURVES_RESPONSE
 from tests.api_data import HMI_RESPONSE
 from tests.api_data import SYSTEM_RESPONSE
 from tests.api_data import TIMEZONE_RESPONSE
@@ -120,7 +120,7 @@ class FakeKebaKeEnergyAPI:
         self.aioclient_mock: AiohttpClientMocker = aioclient_mock
         self.config_entry: MockConfigEntry = config_entry
         self.responses: list[list[dict[str, Any]] | HTTPStatus | Exception] = []
-        self.heating_curves: list[list[dict[str, Any]]] | HTTPStatus = HEATING_CURVES_RESPONSE_1_1
+        self.heating_curves: list[list[dict[str, Any]]] | HTTPStatus = HEATING_CURVES_RESPONSE
         self.system_name: str = SYSTEM_RESPONSE["name"]
         self.write_status: HTTPStatus = HTTPStatus.OK
         self.unsupported_variables: set[str] = set()

@@ -19,8 +19,8 @@ from homeassistant.helpers import entity_registry as er
 from keba_keenergy_api.constants import HeatCircuitMode
 
 from tests import get_platform_states
-from tests.api_data import MULTIPLE_POSITION_DATA_RESPONSE_1
-from tests.api_data import MULTIPLE_POSITION_DATA_RESPONSE_2
+from tests.api_data import MULTIPLE_POSITION_DATA_RESPONSE
+from tests.api_data import MULTIPLE_POSITION_OTHER_MODES_DATA_RESPONSE
 from tests.api_data import MULTIPLE_POSITIONS_RESPONSE
 from tests.api_data import get_multiple_position_fixed_data_response
 from tests.api_data import update_response
@@ -42,7 +42,7 @@ async def test_switches(
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(has_passive_cooling="true"),
-        MULTIPLE_POSITION_DATA_RESPONSE_1,
+        MULTIPLE_POSITION_DATA_RESPONSE,
     ]
     await fake_api.setup_integration()
 
@@ -55,12 +55,12 @@ async def test_switches(
     [
         (
             "switch.keba_keenergy_12345678_heat_pump_compressor_use_night_speed",
-            MULTIPLE_POSITION_DATA_RESPONSE_2,
+            MULTIPLE_POSITION_OTHER_MODES_DATA_RESPONSE,
             '[{"name": "APPL.CtrlAppl.sParam.heatpump[0].HeatPumpPowerCtrl.param.useDayNightSpeed", "value": "1"}]',
         ),
         (
             "switch.keba_keenergy_12345678_solar_circuit_priority_1_before_2_2",
-            MULTIPLE_POSITION_DATA_RESPONSE_2,
+            MULTIPLE_POSITION_OTHER_MODES_DATA_RESPONSE,
             (
                 '[{"name": "APPL.CtrlAppl.sParam.hmiRetainData.consumer1PrioritySolar[1]", "value": "1"}, '
                 '{"name": "APPL.CtrlAppl.sParam.genericHeat[2].param.priority", "value": "14"}]'
@@ -68,7 +68,7 @@ async def test_switches(
         ),
         (
             "switch.keba_keenergy_12345678_heat_circuit_use_heating_curve_1",
-            MULTIPLE_POSITION_DATA_RESPONSE_1,
+            MULTIPLE_POSITION_DATA_RESPONSE,
             '[{"name": "APPL.CtrlAppl.sParam.heatCircuit[0].param.enableHeatCurveLinTab", "value": "1"}]',
         ),
     ],
@@ -111,12 +111,12 @@ async def test_turn_on(
     [
         (
             "switch.keba_keenergy_12345678_heat_pump_compressor_use_night_speed",
-            MULTIPLE_POSITION_DATA_RESPONSE_1,
+            MULTIPLE_POSITION_DATA_RESPONSE,
             '[{"name": "APPL.CtrlAppl.sParam.heatpump[0].HeatPumpPowerCtrl.param.useDayNightSpeed", "value": "0"}]',
         ),
         (
             "switch.keba_keenergy_12345678_solar_circuit_priority_1_before_2_2",
-            MULTIPLE_POSITION_DATA_RESPONSE_1,
+            MULTIPLE_POSITION_DATA_RESPONSE,
             (
                 '[{"name": "APPL.CtrlAppl.sParam.hmiRetainData.consumer1PrioritySolar[1]", "value": "0"}, '
                 '{"name": "APPL.CtrlAppl.sParam.genericHeat[2].param.priority", "value": "15"}]'
@@ -160,8 +160,8 @@ async def test_turn_off(
 @pytest.mark.parametrize(
     ("service", "response"),
     [
-        (SERVICE_TURN_ON, MULTIPLE_POSITION_DATA_RESPONSE_1),
-        (SERVICE_TURN_OFF, MULTIPLE_POSITION_DATA_RESPONSE_2),
+        (SERVICE_TURN_ON, MULTIPLE_POSITION_DATA_RESPONSE),
+        (SERVICE_TURN_OFF, MULTIPLE_POSITION_OTHER_MODES_DATA_RESPONSE),
     ],
 )
 async def test_unchanged_state(
@@ -203,7 +203,7 @@ async def test_heating_and_cooling_circuit_has_one_curve_switch(
             "APPL.CtrlAppl.sParam.options.heatCircuit[1].type",
             value=str(HeatCircuitMode.HEATING_AND_COOLING.value),
         ),
-        MULTIPLE_POSITION_DATA_RESPONSE_1,
+        MULTIPLE_POSITION_DATA_RESPONSE,
     ]
     await fake_api.setup_integration()
 

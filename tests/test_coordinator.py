@@ -18,9 +18,9 @@ from homeassistant.helpers.update_coordinator import UpdateFailed
 from homeassistant.util import dt as dt_util
 from pytest_homeassistant_custom_component.common import async_fire_time_changed
 
-from tests.api_data import MULTIPLE_POSITION_DATA_RESPONSE_1
-from tests.api_data import MULTIPLE_POSITION_DATA_RESPONSE_3_1
-from tests.api_data import MULTIPLE_POSITION_DATA_RESPONSE_3_2
+from tests.api_data import MULTIPLE_POSITION_DATA_RESPONSE
+from tests.api_data import MULTIPLE_POSITION_WITHOUT_SOLAR_AND_HEATING_CIRCUITS_DATA_RESPONSE
+from tests.api_data import MULTIPLE_POSITION_WITHOUT_SOLAR_CIRCUITS_DATA_RESPONSE
 from tests.api_data import MULTIPLE_POSITIONS_RESPONSE
 from tests.api_data import SYSTEM_BUFFER_TANK_NUMBERS
 from tests.api_data import SYSTEM_EXTERNAL_HEAT_SOURCE_NUMBERS
@@ -49,7 +49,7 @@ async def test_update_authentication_error(
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITION_DATA_RESPONSE_1,
+        MULTIPLE_POSITION_DATA_RESPONSE,
     ]
     await fake_api.setup_integration()
 
@@ -78,7 +78,7 @@ async def test_update_api_error(
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITION_DATA_RESPONSE_1,
+        MULTIPLE_POSITION_DATA_RESPONSE,
     ]
     await fake_api.setup_integration()
 
@@ -135,10 +135,10 @@ async def test_update_interval_ticks(
             json.loads(SYSTEM_SWITCH_VALVE_NUMBERS % "2"),
         ],
         get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITION_DATA_RESPONSE_3_2,
-        MULTIPLE_POSITION_DATA_RESPONSE_3_2,
+        MULTIPLE_POSITION_WITHOUT_SOLAR_CIRCUITS_DATA_RESPONSE,
+        MULTIPLE_POSITION_WITHOUT_SOLAR_CIRCUITS_DATA_RESPONSE,
         # Without the values of the heating circuits
-        MULTIPLE_POSITION_DATA_RESPONSE_3_1,
+        MULTIPLE_POSITION_WITHOUT_SOLAR_AND_HEATING_CIRCUITS_DATA_RESPONSE,
     ]
     await fake_api.setup_integration()
 

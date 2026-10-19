@@ -41,8 +41,8 @@ from tests import get_platform_states
 from tests.api_data import DEFAULT_POSITION_DATA_RESPONSE
 from tests.api_data import DEFAULT_POSITION_FIXED_DATA_RESPONSE
 from tests.api_data import DEFAULT_POSITION_RESPONSE
-from tests.api_data import MULTIPLE_POSITION_DATA_RESPONSE_1
-from tests.api_data import MULTIPLE_POSITION_DATA_RESPONSE_2
+from tests.api_data import MULTIPLE_POSITION_DATA_RESPONSE
+from tests.api_data import MULTIPLE_POSITION_OTHER_MODES_DATA_RESPONSE
 from tests.api_data import MULTIPLE_POSITIONS_RESPONSE
 from tests.api_data import get_multiple_position_fixed_data_response
 from tests.api_data import get_single_position_data_response
@@ -73,7 +73,7 @@ ENTITY_ID_2: str = "climate.keba_keenergy_12345678_2"
             [
                 MULTIPLE_POSITIONS_RESPONSE,
                 get_multiple_position_fixed_data_response(),
-                MULTIPLE_POSITION_DATA_RESPONSE_1,
+                MULTIPLE_POSITION_DATA_RESPONSE,
             ],
             [ENTITY_ID_1, ENTITY_ID_2],
         ),
@@ -104,7 +104,7 @@ async def test_climate(
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITION_DATA_RESPONSE_1,
+        MULTIPLE_POSITION_DATA_RESPONSE,
     ]
     await fake_api.setup_integration()
 
@@ -223,9 +223,9 @@ async def test_turn_off(
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITION_DATA_RESPONSE_1,
+        MULTIPLE_POSITION_DATA_RESPONSE,
         # Read API after services call
-        MULTIPLE_POSITION_DATA_RESPONSE_1,
+        MULTIPLE_POSITION_DATA_RESPONSE,
     ]
     await fake_api.setup_integration()
 
@@ -252,9 +252,9 @@ async def test_turn_on(
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITION_DATA_RESPONSE_1,
+        MULTIPLE_POSITION_DATA_RESPONSE,
         # Read API after services call
-        MULTIPLE_POSITION_DATA_RESPONSE_1,
+        MULTIPLE_POSITION_DATA_RESPONSE,
     ]
     await fake_api.setup_integration()
 
@@ -291,9 +291,9 @@ async def test_set_hvac_mode(
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITION_DATA_RESPONSE_2,
+        MULTIPLE_POSITION_OTHER_MODES_DATA_RESPONSE,
         # Read API after services call
-        MULTIPLE_POSITION_DATA_RESPONSE_2,
+        MULTIPLE_POSITION_OTHER_MODES_DATA_RESPONSE,
     ]
     await fake_api.setup_integration()
 
@@ -320,7 +320,7 @@ async def test_set_unchanged_hvac_mode(
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITION_DATA_RESPONSE_1,
+        MULTIPLE_POSITION_DATA_RESPONSE,
     ]
     await fake_api.setup_integration()
 
@@ -340,10 +340,10 @@ async def test_set_unchanged_hvac_mode(
 @pytest.mark.parametrize(
     ("preset_mode", "response", "expected_preset_mode"),
     [
-        (PRESET_HOME, MULTIPLE_POSITION_DATA_RESPONSE_1, HeatCircuitOperatingMode.AUTO.value),
-        (PRESET_COMFORT, MULTIPLE_POSITION_DATA_RESPONSE_2, HeatCircuitOperatingMode.DAY.value),
-        (PRESET_SLEEP, MULTIPLE_POSITION_DATA_RESPONSE_1, HeatCircuitOperatingMode.NIGHT.value),
-        (PRESET_BOOST, MULTIPLE_POSITION_DATA_RESPONSE_1, HeatCircuitOperatingMode.PARTY.value),
+        (PRESET_HOME, MULTIPLE_POSITION_DATA_RESPONSE, HeatCircuitOperatingMode.AUTO.value),
+        (PRESET_COMFORT, MULTIPLE_POSITION_OTHER_MODES_DATA_RESPONSE, HeatCircuitOperatingMode.DAY.value),
+        (PRESET_SLEEP, MULTIPLE_POSITION_DATA_RESPONSE, HeatCircuitOperatingMode.NIGHT.value),
+        (PRESET_BOOST, MULTIPLE_POSITION_DATA_RESPONSE, HeatCircuitOperatingMode.PARTY.value),
     ],
 )
 async def test_set_preset_mode(
@@ -386,7 +386,7 @@ async def test_set_preset_mode_away(
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITION_DATA_RESPONSE_1,
+        MULTIPLE_POSITION_DATA_RESPONSE,
     ]
     await fake_api.setup_integration()
 
@@ -417,9 +417,9 @@ async def test_unset_preset_mode_away(
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITION_DATA_RESPONSE_2,
+        MULTIPLE_POSITION_OTHER_MODES_DATA_RESPONSE,
         # Read API after services call
-        MULTIPLE_POSITION_DATA_RESPONSE_1,
+        MULTIPLE_POSITION_DATA_RESPONSE,
     ]
     await fake_api.setup_integration()
 
@@ -454,9 +454,9 @@ async def test_set_temperature(
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITION_DATA_RESPONSE_1,
+        MULTIPLE_POSITION_DATA_RESPONSE,
         # Read API after services call
-        MULTIPLE_POSITION_DATA_RESPONSE_1,
+        MULTIPLE_POSITION_DATA_RESPONSE,
     ]
     await fake_api.setup_integration()
 
@@ -513,9 +513,9 @@ async def test_set_preset_mode_without_time_zone_request(
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITION_DATA_RESPONSE_1,
+        MULTIPLE_POSITION_DATA_RESPONSE,
         # Read API after services call
-        MULTIPLE_POSITION_DATA_RESPONSE_1,
+        MULTIPLE_POSITION_DATA_RESPONSE,
     ]
     await fake_api.setup_integration()
 
