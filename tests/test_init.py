@@ -176,7 +176,7 @@ async def test_remove_stale_devices(
 async def test_setup_failed(
     hass: HomeAssistant,
     fake_api: FakeKebaKeEnergyAPI,
-    error: HTTPStatus | Exception,
+    error: Exception | HTTPStatus,
     expected_state: ConfigEntryState,
     expected_flows: list[str],
 ) -> None:

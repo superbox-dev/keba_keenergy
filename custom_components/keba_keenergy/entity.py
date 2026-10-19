@@ -36,6 +36,7 @@ from .const import MANUFACTURER_INO
 from .const import MANUFACTURER_MTEC
 from .coordinator import KebaKeEnergyConfigEntry
 from .coordinator import KebaKeEnergyDataUpdateCoordinator
+from .coordinator import Values
 from .coordinator import get_device_identifier
 from .coordinator import get_value_by_index
 
@@ -320,7 +321,7 @@ class KebaKeEnergyBaseEntity(
 
     def get_entity_data(self, key: str, /) -> Value | None:
         """Get the real entity data from the coordinator data."""
-        values: list[list[Value]] | list[Value] | Value | None = self.coordinator.data[self.section_id].get(key)
+        values: Values | None = self.coordinator.data[self.section_id].get(key)
         return None if values is None else get_value_by_index(values, index=self.index, key_index=self.key_index)
 
     def get_attribute(self, key: str, /, *, attr: str) -> str:
@@ -394,7 +395,7 @@ def _async_setup_entities(
     for section_id, section_data in coordinator.data.items():
         for description in entity_types.get(section_id, ()):
             for key in (description.key, description.new_key):
-                values: list[list[Value]] | list[Value] | Value | None = section_data.get(key) if key else None
+                values: Values | None = section_data.get(key) if key else None
 
                 if values is None:
                     continue

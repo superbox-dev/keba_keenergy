@@ -172,7 +172,7 @@ class KebaKeEnergyHotWaterTankEntity(KebaKeEnergyWaterHeaterTankEntity, WaterHea
     async def async_set_temperature(self, **kwargs: object) -> None:
         """Set temperature for hot water tank."""
         temperature: object = kwargs.get(ATTR_TEMPERATURE)
-        self._schedule_debounced_write(float(temperature) if isinstance(temperature, int | float) else None)
+        self._schedule_debounced_write(float(temperature) if isinstance(temperature, float | int) else None)
 
 
 class KebaKeEnergyBufferTankEntity(KebaKeEnergyWaterHeaterTankEntity, WaterHeaterEntity):

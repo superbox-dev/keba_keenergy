@@ -119,8 +119,8 @@ class FakeKebaKeEnergyAPI:
         self.hass: HomeAssistant = hass
         self.aioclient_mock: AiohttpClientMocker = aioclient_mock
         self.config_entry: MockConfigEntry = config_entry
-        self.responses: list[list[dict[str, Any]] | HTTPStatus | Exception] = []
-        self.heating_curves: list[list[dict[str, Any]]] | HTTPStatus = HEATING_CURVES_RESPONSE
+        self.responses: list[Exception | HTTPStatus | list[dict[str, Any]]] = []
+        self.heating_curves: HTTPStatus | list[list[dict[str, Any]]] = HEATING_CURVES_RESPONSE
         self.system_name: str = SYSTEM_RESPONSE["name"]
         self.write_status: HTTPStatus = HTTPStatus.OK
         self.unsupported_variables: set[str] = set()
@@ -206,7 +206,7 @@ class FakeKebaKeEnergyAPI:
         payload: list[dict[str, str]] = json.loads(str(data))
         return all(item["attr"] == "0" and ".linTabPool[" not in item["name"] for item in payload)
 
-    def _heating_curve_response(self, payload: list[dict[str, str]], /) -> list[dict[str, Any]] | HTTPStatus:
+    def _heating_curve_response(self, payload: list[dict[str, str]], /) -> HTTPStatus | list[dict[str, Any]]:
         """Return the requested values of the heating curves.
 
         The names are read alone (`get_available_heating_curves()`), the points with the name of their heating curve,
@@ -234,7 +234,7 @@ class FakeKebaKeEnergyAPI:
 
     async def _read_side_effect(self, method: str, url: URL, data: object, *_: object) -> AiohttpClientMockResponse:
         payload: list[dict[str, str]] = json.loads(str(data))
-        response: list[dict[str, Any]] | HTTPStatus | Exception
+        response: Exception | HTTPStatus | list[dict[str, Any]]
 
         if self.is_filter_request(data):
             unknown: list[str] = [item["name"] for item in payload if item["name"] in self.unsupported_variables]

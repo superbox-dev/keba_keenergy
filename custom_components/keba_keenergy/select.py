@@ -49,7 +49,7 @@ class KebaKeEnergySelectEntityDescription(
     """Class describing KEBA KeEnergy select entities."""
 
     entity_class: type[KebaKeEnergySelectEntity]
-    value: Callable[[str], str | int]
+    value: Callable[[str], int | str]
 
 
 class KebaKeEnergySelectEntity(KebaKeEnergyEntity, SelectEntity):

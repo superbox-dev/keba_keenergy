@@ -293,7 +293,7 @@ class KebaKeEnergyClimateEntity(KebaKeEnergyBaseEntity, ClimateEntity):
 
         self._schedule_debounced_write(
             temperature - selected_target_temperature
-            if isinstance(temperature, int | float) and selected_target_temperature is not None
+            if isinstance(temperature, float | int) and selected_target_temperature is not None
             else None,
         )
 

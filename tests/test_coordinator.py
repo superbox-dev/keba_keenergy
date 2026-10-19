@@ -72,7 +72,7 @@ async def test_update_api_error(
     hass: HomeAssistant,
     config_entry: MockConfigEntry,
     fake_api: FakeKebaKeEnergyAPI,
-    error: HTTPStatus | Exception,
+    error: Exception | HTTPStatus,
 ) -> None:
     """Test that the entities are unavailable if an update fails or times out."""
     fake_api.responses = [

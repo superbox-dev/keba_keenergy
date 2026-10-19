@@ -65,6 +65,7 @@ if TYPE_CHECKING:
 _LOGGER = logging.getLogger(__name__)
 
 type KebaKeEnergyConfigEntry = ConfigEntry[KebaKeEnergyDataUpdateCoordinator]
+type Values = Value | list[Value] | list[list[Value]]
 
 
 REQUEST_DATA_GROUPS: dict[SectionPrefix, list[Section]] = {
@@ -267,14 +268,14 @@ def get_device_identifier(entry_unique_id: str | None, section_id: str, position
 
 
 def get_value_by_index(
-    values: list[list[Value]] | list[Value] | Value,
+    values: Values,
     /,
     *,
     index: int | None,
     key_index: int | None,
 ) -> Value:
     """Return the value of the device with the index, and of the key with the key index if the device has several."""
-    value: list[Value] | Value = values[index or 0] if isinstance(values, list) else values
+    value: Value | list[Value] = values[index or 0] if isinstance(values, list) else values
     return value[key_index or 0] if isinstance(value, list) else value
 
 
@@ -671,7 +672,7 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
     @property
     def heat_pump_names(self) -> list[Value]:
         """Return heat pump names."""
-        names: list[list[Value]] | list[Value] | Value = self.data[SectionPrefix.HEAT_PUMP]["name"]
+        names: Values = self.data[SectionPrefix.HEAT_PUMP]["name"]
         return [name for name in names if isinstance(name, dict)] if isinstance(names, list) else []
 
     def device_identifiers(self) -> set[str]:
@@ -794,7 +795,7 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
 
     def _get_fixed_value(self, prefix: SectionPrefix, key: str, /, *, index: int | None = None) -> object:
         """Return a value that is read once on setup, of the device with the index if the value is a list."""
-        data: list[list[Value]] | list[Value] | Value | None = self._fixed_data.get(prefix, {}).get(key)
+        data: Values | None = self._fixed_data.get(prefix, {}).get(key)
 
         if isinstance(data, list):
             data = data[index or 0]
