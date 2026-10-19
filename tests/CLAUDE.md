@@ -15,3 +15,4 @@
   - call actions (`hass.services.async_call`) instead of entity methods
   - trigger updates with `coordinator.async_refresh()` and debounced writes with `async_fire_time_changed()`
   - assert entity states, `ConfigEntryState`, the device registry or the requests
+- `pytest.mark.parametrize` with `ids=` naming each case

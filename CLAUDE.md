@@ -36,6 +36,10 @@ Before finishing a change, run `ruff format`, `lint.sh` and `pytest`, in this or
     single types and less nested first, `None` last (`float | int | str`, `Exception | HTTPStatus`,
     `Value | list[Value] | list[list[Value]] | None`)
   - type alias for complex annotations (nested or repeated unions)
+- Module-level constants with `Final` (`NAME: Final = ...`)
+- Comments as complete sentences with a trailing period
+- Log messages start with a capital letter, no trailing period, values as `%s` arguments
+- Style rules apply to new and changed code, existing code only adapted when asked
 - Every `.py` file starts with (after the shebang of an executable script, update the end year when editing a
   file, a single year while it equals the start year):
 
