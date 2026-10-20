@@ -101,3 +101,4 @@ Before finishing a change, run `ruff format`, `lint.sh` and `pytest`, in this or
 - `keba_keenergy_api` requirement is in `pyproject.toml` and `manifest.json`, run `uv lock` after changing it
 - Work on `develop`
 - Only commit or push when asked
+- Commit message of a change for an issue starts with its number (`#67 Fix sensors that are not in use`)
