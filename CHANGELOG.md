@@ -70,6 +70,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   ID of the control unit as attribute `message_id` (`0` means in use), which is read with one more request per update.
   ([Issue #67][issue-67])
 
+### Security
+
+- Removed the serial number of the control unit from the debug log of the discovery and of removed devices.
+
 [issue-67]: https://github.com/superbox-dev/keba_keenergy/issues/67
 
 ## [1.10.4] - 2026-09-30

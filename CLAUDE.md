@@ -44,6 +44,10 @@ Before finishing a change, run `ruff format`, `lint.sh` and `pytest`, in this or
 - `Enum` for a fixed set of values (modes, states, types, values of the Web HMI), never loose strings or ints
   for them
   - not for open values (names, IDs, numbers) or a one-off choice in a signature (`Literal`)
+- Parameters: options keyword-only (after `*`), `/` only for `_`-prefixed helpers
+- Credentials, tokens and serial numbers never in log or exception messages, dumps of device or portal data only
+  redacted (`async_redact_data(data, TO_REDACT)`)
+- New texts in `strings.json`, `translations/en.json` and `translations/de.json`, keys sorted
 - Log messages start with a capital letter, no trailing period, values as `%s` arguments
 - Style rules apply to new and changed code, existing code only adapted when asked
 - Every `.py` file starts with (after the shebang of an executable script, update the end year when editing a
@@ -70,8 +74,9 @@ Before finishing a change, run `ruff format`, `lint.sh` and `pytest`, in this or
 
 - Follow the Home Assistant integration conventions, code in `custom_components/keba_keenergy/`
 - Helpers are `_`-prefixed methods of the class that uses them (`@staticmethod` if they need no `self`)
-  - module-level functions only when shared across classes or modules, or for Home Assistant callbacks (action
-    handlers, validators)
+  - module-level functions only when shared across classes or modules, for Home Assistant callbacks (action
+    handlers, validators), as helpers of module-level Home Assistant functions (`async_setup_entry`) or to build
+    the entity descriptions of a platform
 - Constants always in `const.py`
   - except what Home Assistant reads from the module itself (`_LOGGER`, `PARALLEL_UPDATES`, `CONFIG_SCHEMA`) and
     the entity descriptions of a platform (`SENSOR_TYPES`, ...)
