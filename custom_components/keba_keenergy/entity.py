@@ -79,9 +79,9 @@ SECTIONS: Final[dict[str, type[Section]]] = {
 T = TypeVar("T", str, int, float)
 
 
-@dataclass(frozen=True)
-class KebaKeEnergyEntityDescriptionMixin:
-    """Required values for KEBA KeEnergy descriptions."""
+@dataclass(frozen=True, kw_only=True)
+class KebaKeEnergyEntityDescription:
+    """Shared values of the KEBA KeEnergy entity descriptions."""
 
     key_index: int | None = None
     new_key: str | None = None  # New key name, required for a future migration of the entity ID.

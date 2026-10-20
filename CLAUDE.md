@@ -38,6 +38,12 @@ Before finishing a change, run `ruff format`, `lint.sh` and `pytest`, in this or
   - type alias for complex annotations (nested or repeated unions)
 - Module-level constants with `Final` (`NAME: Final = ...`)
 - Comments as complete sentences with a trailing period
+- `TypedDict` only for JSON data from or to the Web HMI (optional keys as `NotRequired`), `NamedTuple` only for
+  small values that are unpacked (points, pairs), otherwise `@dataclass(frozen=True, kw_only=True)`, mutable only
+  when needed
+- `Enum` for a fixed set of values (modes, states, types, values of the Web HMI), never loose strings or ints
+  for them
+  - not for open values (names, IDs, numbers) or a one-off choice in a signature (`Literal`)
 - Log messages start with a capital letter, no trailing period, values as `%s` arguments
 - Style rules apply to new and changed code, existing code only adapted when asked
 - Every `.py` file starts with (after the shebang of an executable script, update the end year when editing a

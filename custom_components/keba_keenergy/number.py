@@ -21,7 +21,7 @@ from keba_keenergy_api.constants import SectionPrefix
 
 from .const import DOMAIN
 from .entity import KebaKeEnergyEntity
-from .entity import KebaKeEnergyEntityDescriptionMixin
+from .entity import KebaKeEnergyEntityDescription
 from .entity import _async_setup_entities
 
 if TYPE_CHECKING:
@@ -40,7 +40,7 @@ PARALLEL_UPDATES: Final[int] = 0
 @dataclass(frozen=True, kw_only=True)
 class KebaKeEnergyNumberEntityDescription(
     NumberEntityDescription,
-    KebaKeEnergyEntityDescriptionMixin,
+    KebaKeEnergyEntityDescription,
 ):
     """Class describing KEBA KeEnergy number entities."""
 

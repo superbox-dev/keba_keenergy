@@ -41,7 +41,7 @@ from keba_keenergy_api.constants import SystemOperatingMode
 
 from .const import DOMAIN
 from .entity import KebaKeEnergyEntity
-from .entity import KebaKeEnergyEntityDescriptionMixin
+from .entity import KebaKeEnergyEntityDescription
 from .entity import _async_setup_entities
 
 if TYPE_CHECKING:
@@ -64,7 +64,7 @@ _LOGGER: Final = logging.getLogger(__name__)
 @dataclass(frozen=True, kw_only=True)
 class KebaKeEnergySensorEntityDescription[T: StateType](
     SensorEntityDescription,
-    KebaKeEnergyEntityDescriptionMixin,
+    KebaKeEnergyEntityDescription,
 ):
     """Class describing KEBA KeEnergy sensor entities."""
 
