@@ -24,7 +24,6 @@ from yarl import URL
 
 from custom_components.keba_keenergy.const import DOMAIN
 from custom_components.keba_keenergy.const import PLATFORMS
-from tests import setup_integration
 from tests.api_data import DEVICE_INFO_RESPONSE
 from tests.api_data import HEATING_CURVES_RESPONSE
 from tests.api_data import HMI_RESPONSE
@@ -276,7 +275,10 @@ class FakeKebaKeEnergyAPI:
     async def setup_integration(self) -> None:
         """Register all requests for the host of the config entry and set up the integration."""
         self.register_requests(self.config_entry.data[CONF_HOST], ssl=self.config_entry.data[CONF_SSL])
-        await setup_integration(self.hass, self.config_entry)
+        self.config_entry.add_to_hass(self.hass)
+
+        assert await self.hass.config_entries.async_setup(self.config_entry.entry_id)
+        await self.hass.async_block_till_done()
 
     @staticmethod
     def is_filter_request(data: object, /) -> bool:

@@ -22,3 +22,5 @@
   - helpers that return a value and only assert to narrow types keep their name
   - shared by several test modules: `tests/asserts.py`, registered with `pytest.register_assert_rewrite()` in
     `tests/conftest.py`
+- Tests as functions, no test classes
+- Error cases next to the tests of the code they check, named `test_<function>_<condition>`
