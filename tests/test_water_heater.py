@@ -476,3 +476,22 @@ async def test_limits_after_update(
     state = hass.states.get(ENTITY_ID)
     assert isinstance(state, State)
     assert (state.attributes[ATTR_MIN_TEMP], state.attributes[ATTR_MAX_TEMP]) == (0, 52)
+
+
+async def test_buffer_tank_sensor_not_in_use(
+    hass: HomeAssistant,
+    fake_api: FakeKebaKeEnergyAPI,
+) -> None:
+    """Test that a buffer tank uses the other temperature if the control unit reports the top sensor as not in use."""
+    fake_api.message_ids = {"APPL.CtrlAppl.sParam.bufferTank[0].topTemp.state.msgId": 10}
+    fake_api.responses = [
+        MULTIPLE_POSITIONS_RESPONSE,
+        get_multiple_position_fixed_data_response(),
+        MULTIPLE_POSITION_DATA_RESPONSE,
+    ]
+    await fake_api.setup_integration()
+
+    state: State | None = hass.states.get("water_heater.keba_keenergy_12345678_buffer_tank_1")
+    assert isinstance(state, State)
+    # The bottom temperature, the top temperature 45.67 is not in use
+    assert (state.state, state.attributes["current_temperature"]) == (STATE_OFF, 15.7)

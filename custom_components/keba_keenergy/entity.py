@@ -29,6 +29,7 @@ from keba_keenergy_api.constants import SectionPrefix
 from keba_keenergy_api.constants import SolarCircuit
 from keba_keenergy_api.constants import System
 
+from .const import ATTR_MESSAGE_ID
 from .const import DOMAIN
 from .const import FLASH_WRITE_DELAY
 from .const import MANUFACTURER
@@ -320,7 +321,10 @@ class KebaKeEnergyBaseEntity(
         return self.get_value(self._pending_key, expected_type=float)
 
     def get_entity_data(self, key: str, /) -> Value | None:
-        """Get the real entity data from the coordinator data."""
+        """Get the real entity data from the coordinator data, or None if the sensor is not in use."""
+        if not self.coordinator.is_sensor_in_use(self.section_id, key, index=self.index, key_index=self.key_index):
+            return None
+
         values: Values | None = self.coordinator.data[self.section_id].get(key)
         return None if values is None else get_value_by_index(values, index=self.index, key_index=self.key_index)
 
@@ -378,6 +382,16 @@ class KebaKeEnergyEntity(KebaKeEnergyBaseEntity):
     def section(self) -> Section:
         """Get the section of the entity description key."""
         return SECTIONS[self.section_id][self.entity_description.key.upper()]
+
+    def _message_id_attributes(self, key: str, /) -> dict[str, int]:
+        """Return the message id of the sensor as attribute (0 means the sensor is in use), if the sensor has one."""
+        message_id: int | None = self.coordinator.get_message_id(
+            self.section_id,
+            key,
+            index=self.index,
+            key_index=self.key_index,
+        )
+        return {} if message_id is None else {ATTR_MESSAGE_ID: message_id}
 
 
 @callback

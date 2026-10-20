@@ -62,6 +62,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   curve with 7 points of 0 °C.
 - Fixed an error with a traceback in the log if a delayed write of a number, climate or water heater entity failed,
   e.g. of a temperature set with a slider. It is logged as a warning now.
+- Fixed values of sensors and failure inputs that the control unit reports as not in use (e.g. not connected), such
+  as a failure of the binary sensor `has_compressor_failure` without a connected input. These sensors are now unknown
+  and the climate and water heater entities leave out their values. The sensors and binary sensors have the message
+  ID of the control unit as attribute `message_id` (`0` means in use), which is read with one more request per update.
+  ([Issue #67][issue-67])
+
+[issue-67]: https://github.com/superbox-dev/keba_keenergy/issues/67
 
 ## [1.10.4] - 2026-09-30
 

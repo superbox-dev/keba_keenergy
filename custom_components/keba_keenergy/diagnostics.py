@@ -56,6 +56,7 @@ async def async_get_config_entry_diagnostics(
             "weekly_write_count": coordinator.weekly_write_count,
             "fixed_data": coordinator.fixed_data,
             "data": coordinator.data,
+            "message_ids": coordinator.message_ids,
         },
         TO_REDACT,
     )

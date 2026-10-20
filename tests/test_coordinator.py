@@ -12,6 +12,7 @@ from typing import TYPE_CHECKING
 import pytest
 from homeassistant.config_entries import SOURCE_REAUTH
 from homeassistant.const import STATE_UNAVAILABLE
+from homeassistant.const import STATE_UNKNOWN
 from homeassistant.core import State
 from homeassistant.exceptions import ConfigEntryAuthFailed
 from homeassistant.helpers.update_coordinator import UpdateFailed
@@ -157,6 +158,69 @@ async def test_update_interval_ticks(
     assert _state(hass, "sensor.keba_keenergy_12345678_buffer_tank_target_temperature_1") == "42.0"
     # The control unit has no solar circuit, so its values are never requested
     assert not any("solarCircuit" in body for body in fake_api.read_requests())
+
+
+@pytest.mark.parametrize(
+    "config_entry",
+    [
+        {
+            "options": {
+                "scan_interval": 20,
+                "scan_interval_tick_system": 1,
+                "scan_interval_tick_heat_pump": 1,
+                "scan_interval_tick_heat_circuit": 2,
+                "scan_interval_tick_solar_circuit": 1,
+                "scan_interval_tick_hot_water_tank": 1,
+                "scan_interval_tick_buffer_tank": 1,
+                "scan_interval_tick_switch_valve": 1,
+                "scan_interval_tick_external_heat_source": 1,
+            },
+        },
+    ],
+    indirect=True,
+)
+@pytest.mark.usefixtures("entity_registry_enabled_by_default")
+async def test_update_interval_ticks_keep_message_ids(
+    hass: HomeAssistant,
+    config_entry: MockConfigEntry,
+    fake_api: FakeKebaKeEnergyAPI,
+) -> None:
+    """Test that a skipped section keeps its message ids until it is requested again."""
+    entity_id: str = "sensor.keba_keenergy_12345678_heat_circuit_room_temperature_1"
+    fake_api.message_ids = {"APPL.CtrlAppl.sParam.heatCircuit[0].tempRoom.state.msgId": 10}
+    fake_api.responses = [
+        [
+            json.loads(SYSTEM_HEAT_PUMP_NUMBERS % "1"),
+            json.loads(SYSTEM_HEAT_CIRCUIT_NUMBERS % "2"),
+            json.loads(SYSTEM_SOLAR_CIRCUIT_NUMBERS % "0"),
+            json.loads(SYSTEM_BUFFER_TANK_NUMBERS % "2"),
+            json.loads(SYSTEM_HOT_WATER_TANK_NUMBERS % "2"),
+            json.loads(SYSTEM_EXTERNAL_HEAT_SOURCE_NUMBERS % "2"),
+            json.loads(SYSTEM_SWITCH_VALVE_NUMBERS % "2"),
+        ],
+        get_multiple_position_fixed_data_response(),
+        MULTIPLE_POSITION_WITHOUT_SOLAR_CIRCUITS_DATA_RESPONSE,
+        MULTIPLE_POSITION_WITHOUT_SOLAR_CIRCUITS_DATA_RESPONSE,
+        # Without the values of the heating circuits
+        MULTIPLE_POSITION_WITHOUT_SOLAR_AND_HEATING_CIRCUITS_DATA_RESPONSE,
+        MULTIPLE_POSITION_WITHOUT_SOLAR_CIRCUITS_DATA_RESPONSE,
+    ]
+    await fake_api.setup_integration()
+
+    coordinator: KebaKeEnergyDataUpdateCoordinator = config_entry.runtime_data
+    states: list[str] = []
+
+    # The heating circuits are requested on the first and the third refresh
+    for message_ids in ({"APPL.CtrlAppl.sParam.heatCircuit[0].tempRoom.state.msgId": 10}, {}, {}):
+        fake_api.message_ids = message_ids
+        await coordinator.async_refresh()
+        await hass.async_block_till_done()
+
+        state: State | None = hass.states.get(entity_id)
+        assert isinstance(state, State)
+        states.append(state.state)
+
+    assert states == [STATE_UNKNOWN, STATE_UNKNOWN, "22.42"]
 
 
 def _heat_circuit_reads(fake_api: FakeKebaKeEnergyAPI) -> int:

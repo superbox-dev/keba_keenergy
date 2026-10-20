@@ -7,6 +7,7 @@ from __future__ import annotations
 import logging
 from dataclasses import dataclass
 from typing import TYPE_CHECKING
+from typing import Any
 from typing import Final
 
 from homeassistant.components.binary_sensor import DOMAIN as BINARY_SENSOR_DOMAIN
@@ -23,6 +24,8 @@ from .entity import KebaKeEnergyEntityDescriptionMixin
 from .entity import _async_setup_entities
 
 if TYPE_CHECKING:
+    from collections.abc import Mapping
+
     from homeassistant.core import HomeAssistant
     from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
@@ -212,12 +215,20 @@ class KebaKeEnergyBinarySensorEntity(KebaKeEnergyEntity, BinarySensorEntity):
         self.entity_id: str = f"{BINARY_SENSOR_DOMAIN}.{DOMAIN}_{self.unique_id}"
 
     @property
+    def _data_key(self) -> str:
+        """Return the key of the value in the coordinator data, the new key if the API renamed it."""
+        return self.entity_description.new_key or self.entity_description.key
+
+    @property
     def is_on(self) -> bool | None:
         """Return true if the binary sensor is on."""
-        value: str | None = self.get_value(
-            self.entity_description.new_key or self.entity_description.key, expected_type=str
-        )
+        value: str | None = self.get_value(self._data_key, expected_type=str)
         return None if value is None else value == BoolEnum.ON.name.lower()
+
+    @property
+    def extra_state_attributes(self) -> Mapping[str, Any] | None:
+        """Return extra state attributes."""
+        return self._message_id_attributes(self._data_key)
 
 
 async def async_setup_entry(

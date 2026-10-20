@@ -288,6 +288,12 @@ The devices and entities are detected when the integration is set up. After you 
 reload the integration. Devices that the control unit no longer provides, e.g. a removed buffer tank, are removed
 with their entities.
 
+With every update, the integration also reads whether the control unit uses the sensors (the message ID of a sensor).
+The sensors and binary sensors have the message ID as attribute `message_id`, `0` means the sensor is in use. Sensors
+and failure inputs that the control unit reports as not in use, e.g. not connected or not configured, are unknown, and
+the climate and water heater entities leave out their values. They have a value again with the next update after the
+sensor is connected.
+
 ## Known limitations
 
 - The control unit stores every change in its flash memory, which only allows a limited number of write operations.
@@ -307,6 +313,8 @@ with their entities.
   password.
 - **Missing entities**: entities are only created for values that your control unit provides. Reload the integration
   after a change of your heat pump setup.
+- **Unknown sensors**: if the attribute `message_id` is not `0`, the control unit reports the sensor as not in use,
+  e.g. it is not connected or not configured. The Web HMI shows `-` instead of a value.
 
 If the problem persists, [enable debug logging][debug-logs], reproduce the problem and open an
 [issue](https://github.com/superbox-dev/keba_keenergy/issues/new/choose) with the log, the

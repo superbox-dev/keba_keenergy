@@ -2354,6 +2354,133 @@
         }),
       }),
     }),
+    'message_ids': dict({
+      'buffer_tank': dict({
+        'current_bottom_temperature': list([
+          0,
+          0,
+        ]),
+        'current_top_temperature': list([
+          0,
+          0,
+        ]),
+      }),
+      'heat_circuit': dict({
+        'dew_point': list([
+          0,
+          0,
+        ]),
+        'mixer_flow_temperature': list([
+          0,
+          0,
+        ]),
+        'mixer_return_flow_temperature': list([
+          0,
+          0,
+        ]),
+        'return_flow_temperature': list([
+          0,
+          0,
+        ]),
+        'room_humidity': list([
+          0,
+          0,
+        ]),
+        'room_temperature': list([
+          0,
+          0,
+        ]),
+      }),
+      'heat_pump': dict({
+        'compressor_input_temperature': list([
+          0,
+        ]),
+        'compressor_output_temperature': list([
+          0,
+        ]),
+        'flow_temperature': list([
+          0,
+        ]),
+        'has_compressor_failure': list([
+          0,
+        ]),
+        'has_source_actuator_failure': list([
+          0,
+        ]),
+        'has_source_failure': list([
+          0,
+        ]),
+        'has_source_pressure_failure': list([
+          0,
+        ]),
+        'has_three_phase_failure': list([
+          0,
+        ]),
+        'has_vfd_failure': list([
+          0,
+        ]),
+        'high_pressure': list([
+          0,
+        ]),
+        'low_pressure': list([
+          0,
+        ]),
+        'mixer_flow_temperature': list([
+          0,
+        ]),
+        'return_flow_temperature': list([
+          0,
+        ]),
+        'source_input_temperature': list([
+          0,
+        ]),
+        'source_output_temperature': list([
+          0,
+        ]),
+        'temperature': list([
+          0,
+        ]),
+      }),
+      'hot_water_tank': dict({
+        'circulation_return_temperature': list([
+          0,
+          0,
+        ]),
+        'current_temperature': list([
+          0,
+          0,
+        ]),
+        'fresh_water_flow': list([
+          0,
+          0,
+        ]),
+        'fresh_water_module_temperature': list([
+          0,
+          0,
+        ]),
+      }),
+      'solar_circuit': dict({
+        'current_temperature': list([
+          list([
+            0,
+            0,
+          ]),
+          list([
+            0,
+            0,
+          ]),
+        ]),
+        'source_temperature': list([
+          0,
+          0,
+        ]),
+      }),
+      'system': dict({
+        'outdoor_temperature': list([
+          0,
+        ]),
+      }),
+    }),
     'position': dict({
       'buffer_tank': 2,
       'external_heat_source': 2,

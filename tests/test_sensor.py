@@ -8,7 +8,9 @@ from typing import TYPE_CHECKING
 
 import pytest
 from homeassistant.components.sensor.const import ATTR_OPTIONS
+from homeassistant.const import STATE_UNKNOWN
 from homeassistant.const import Platform
+from homeassistant.core import State
 from homeassistant.helpers import entity_registry as er
 
 from tests import get_option_translations
@@ -70,3 +72,53 @@ async def test_converted_sensor_display_precision(
     entry: er.RegistryEntry | None = er.async_get(hass).async_get(entity_id)
     assert entry is not None
     assert entry.options["sensor"] == {"suggested_display_precision": 2}
+
+
+@pytest.mark.parametrize(
+    ("message_id", "expected"),
+    [
+        (
+            "APPL.CtrlAppl.sParam.outdoorTemp.state.msgId",
+            {"sensor.keba_keenergy_12345678_outdoor_temperature": (STATE_UNKNOWN, 10)},
+        ),
+        (
+            # The mixer flow temperature has a new key in the API, but keeps the entity of the old key
+            "APPL.CtrlAppl.sParam.heatCircuit[0].heatCircuitMixer.flowTemp.state.msgId",
+            {"sensor.keba_keenergy_12345678_heat_circuit_flow_temperature_1": (STATE_UNKNOWN, 10)},
+        ),
+        (
+            # Each solar circuit has two temperatures, the first of the second solar circuit is not in use
+            "APPL.CtrlAppl.sParam.genericHeat[2].referenceTemp.state.msgId",
+            {
+                "sensor.keba_keenergy_12345678_solar_circuit_current_temperature_1_1": ("36.76", 0),
+                "sensor.keba_keenergy_12345678_solar_circuit_current_temperature_2_1": ("26.76", 0),
+                "sensor.keba_keenergy_12345678_solar_circuit_current_temperature_1_2": (STATE_UNKNOWN, 10),
+                "sensor.keba_keenergy_12345678_solar_circuit_current_temperature_2_2": ("56.76", 0),
+            },
+        ),
+    ],
+)
+@pytest.mark.usefixtures("entity_registry_enabled_by_default")
+async def test_sensor_not_in_use(
+    hass: HomeAssistant,
+    fake_api: FakeKebaKeEnergyAPI,
+    message_id: str,
+    expected: dict[str, tuple[str, int]],
+) -> None:
+    """Test that a sensor is unknown and has the message id if the control unit reports it as not in use."""
+    fake_api.message_ids = {message_id: 10}
+    fake_api.responses = [
+        MULTIPLE_POSITIONS_RESPONSE,
+        get_multiple_position_fixed_data_response(),
+        MULTIPLE_POSITION_DATA_RESPONSE,
+    ]
+    await fake_api.setup_integration()
+
+    states: dict[str, tuple[str, int]] = {}
+
+    for entity_id in expected:
+        state: State | None = hass.states.get(entity_id)
+        assert isinstance(state, State)
+        states[entity_id] = (state.state, state.attributes["message_id"])
+
+    assert states == expected

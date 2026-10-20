@@ -99,17 +99,22 @@ class KebaKeEnergySensorEntity(KebaKeEnergyEntity, SensorEntity):
         self.entity_id: str = f"{SENSOR_DOMAIN}.{DOMAIN}_{self._attr_unique_id}"
 
     @property
+    def _data_key(self) -> str:
+        """Return the key of the value in the coordinator data, the new key if the API renamed it."""
+        return self.entity_description.new_key or self.entity_description.key
+
+    @property
     def native_value(self) -> StateType:
         """Return the state of the sensor."""
-        value: StateType = self.get_value(self.entity_description.new_key or self.entity_description.key)
+        value: StateType = self.get_value(self._data_key)
         return None if value is None else self.entity_description.value(value)
 
     @property
     def extra_state_attributes(self) -> Mapping[str, Any] | None:
         """Return extra state attributes."""
-        entity_data: Value | None = self.get_entity_data(self.entity_description.new_key or self.entity_description.key)
+        entity_data: Value | None = self.get_entity_data(self._data_key)
         attributes: Mapping[str, Any] = entity_data.get("attributes", {}) if entity_data else {}
-        return self.entity_description.attributes(attributes)
+        return {**self.entity_description.attributes(attributes), **self._message_id_attributes(self._data_key)}
 
 
 SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = {

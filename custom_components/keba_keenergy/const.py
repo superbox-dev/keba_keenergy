@@ -7,6 +7,7 @@ from __future__ import annotations
 from typing import Final
 
 ATTR_CONFIG_ENTRY: Final[str] = "config_entry"
+ATTR_MESSAGE_ID: Final[str] = "message_id"
 ATTR_OFFSET: Final[str] = "offset"
 CONF_EXTERNAL_HEAT_SOURCE_TICK: Final[str] = "scan_interval_tick_external_heat_source"
 CONF_BUFFER_TANK_TICK: Final[str] = "scan_interval_tick_buffer_tank"

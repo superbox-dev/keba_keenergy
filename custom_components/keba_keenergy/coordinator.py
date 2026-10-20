@@ -65,6 +65,7 @@ if TYPE_CHECKING:
 _LOGGER = logging.getLogger(__name__)
 
 type KebaKeEnergyConfigEntry = ConfigEntry[KebaKeEnergyDataUpdateCoordinator]
+type MessageIds = list[int] | list[list[int]]
 type Values = Value | list[Value] | list[list[Value]]
 
 
@@ -325,6 +326,7 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
         self._flash_issue_active: bool = False
 
         self._fixed_data: dict[str, ValueResponse] = {}
+        self._message_ids: dict[str, dict[str, MessageIds]] = {}
         self._tick_counter: int = 0
 
         self.request_data: list[Section] = [
@@ -450,6 +452,7 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
         self._tick_counter = (self._tick_counter + 1) % 1_000_000
 
         request: list[Section] = []
+        section_ids: dict[Section, str] = {}
 
         for section, section_data in self.request_data_groups.items():
             multiplier: int = self.config_entry.options.get(f"scan_interval_tick_{section.value}", 1)
@@ -463,6 +466,7 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
                 continue
 
             request.extend(section_data)
+            section_ids.update(dict.fromkeys(section_data, section.value))
 
             _LOGGER.debug(
                 "Requesting section '%s' (multiplier=%d, position=%d)",
@@ -476,6 +480,25 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
                 request=request,
                 position=self.position,
             ),
+        )
+
+        message_ids: dict[Section, list[int]] = await self._api_call_for_update(
+            self.api.read_message_ids(
+                request=request,
+                position=self.position,
+            ),
+        )
+
+        # Skipped sections keep their previous message ids
+        for message_section, ids in message_ids.items():
+            quantity: int = message_section.value.quantity
+            self._message_ids.setdefault(section_ids[message_section], {})[message_section.name.lower()] = (
+                ids if quantity == 1 else [ids[index : index + quantity] for index in range(0, len(ids), quantity)]
+            )
+
+        _LOGGER.debug(
+            "Sensors not in use: %s",
+            {str(message_section): ids for message_section, ids in message_ids.items() if any(ids)},
         )
 
         if self.data:
@@ -640,6 +663,11 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
         return self._fixed_data
 
     @property
+    def message_ids(self) -> dict[str, dict[str, MessageIds]]:
+        """Return the message ids of the sensors, 0 means the sensor is in use."""
+        return self._message_ids
+
+    @property
     def weekly_write_count(self) -> int:
         """Return the number of writes in the current week."""
         return self._weekly_write_count
@@ -792,6 +820,20 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
             HeatCircuitMode.HEATING_AND_COOLING.name.lower(),
             HeatCircuitMode.HEATING_AND_ACTIVE_COOLING.name.lower(),
         )
+
+    def get_message_id(self, section_id: str, key: str, /, *, index: int | None, key_index: int | None) -> int | None:
+        """Return the message id of a sensor (0 means the sensor is in use), or None if the sensor has none."""
+        ids: MessageIds | None = self._message_ids.get(section_id, {}).get(key)
+
+        if not ids:
+            return None
+
+        message_id: int | list[int] = ids[index or 0]
+        return message_id[key_index or 0] if isinstance(message_id, list) else message_id
+
+    def is_sensor_in_use(self, section_id: str, key: str, /, *, index: int | None, key_index: int | None) -> bool:
+        """Check if the control unit reports the sensor as in use (message id 0) or has no message id for it."""
+        return self.get_message_id(section_id, key, index=index, key_index=key_index) in (None, 0)
 
     def _get_fixed_value(self, prefix: SectionPrefix, key: str, /, *, index: int | None = None) -> object:
         """Return a value that is read once on setup, of the device with the index if the value is a list."""

@@ -124,6 +124,7 @@ class FakeKebaKeEnergyAPI:
         self.system_name: str = SYSTEM_RESPONSE["name"]
         self.write_status: HTTPStatus = HTTPStatus.OK
         self.unsupported_variables: set[str] = set()
+        self.message_ids: dict[str, int] = {}
 
     def register_auth_request(self, host: str, /, *, status: int = 200, exc: Exception | None = None) -> None:
         """Register the request that checks if the Web HMI requires authentication."""
@@ -154,6 +155,7 @@ class FakeKebaKeEnergyAPI:
 
         The read requests return the `responses` in order, an `HTTPStatus` returns an empty response with this status
         and an exception (e.g. `TimeoutError`) is raised by the request.
+        The message ids of the sensors come from `message_ids` (variable name to id, 0 if not given).
         The requests of `filter_request()` succeed, except for the `unsupported_variables`, which the Web HMI does not
         know and which are also left out of the responses. The values of the heating curves come from `heating_curves`
         (an `HTTPStatus` fails them). The system name and the status of the write requests can be changed with
@@ -236,7 +238,9 @@ class FakeKebaKeEnergyAPI:
         payload: list[dict[str, str]] = json.loads(str(data))
         response: Exception | HTTPStatus | list[dict[str, Any]]
 
-        if self.is_filter_request(data):
+        if all(item["name"].endswith(".state.msgId") for item in payload):
+            response = [{"name": item["name"], "value": str(self.message_ids.get(item["name"], 0))} for item in payload]
+        elif self.is_filter_request(data):
             unknown: list[str] = [item["name"] for item in payload if item["name"] in self.unsupported_variables]
 
             if unknown:

@@ -533,3 +533,28 @@ async def test_set_preset_mode_without_time_zone_request(
         '[{"name": "APPL.CtrlAppl.sParam.heatCircuit[0].param.operatingMode", "value": "5"}]',
     ]
     assert not [url for _, url, *_ in fake_api.aioclient_mock.mock_calls if url.path == "/dateTime"]
+
+
+async def test_room_sensor_not_in_use(
+    hass: HomeAssistant,
+    fake_api: FakeKebaKeEnergyAPI,
+) -> None:
+    """Test that the climate entity has no current temperature if the room sensor is not in use (message id not 0).
+
+    The climate entity stays available, the room humidity sensor is still in use.
+    """
+    fake_api.message_ids = {"APPL.CtrlAppl.sParam.heatCircuit[0].tempRoom.state.msgId": 10}
+    fake_api.responses = [
+        MULTIPLE_POSITIONS_RESPONSE,
+        get_multiple_position_fixed_data_response(),
+        MULTIPLE_POSITION_DATA_RESPONSE,
+    ]
+    await fake_api.setup_integration()
+
+    state: State | None = hass.states.get("climate.keba_keenergy_12345678_1")
+    assert isinstance(state, State)
+    assert (state.state, state.attributes["current_temperature"], state.attributes["current_humidity"]) == (
+        HVACMode.HEAT,
+        None,
+        53.0,
+    )
