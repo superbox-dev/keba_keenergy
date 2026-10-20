@@ -31,6 +31,9 @@
   --ifm-toc-border-color: transparent;
   --ifm-menu-color-background-active: #e6f6f1;
   --ifm-footer-background-color: #f2f4f9;
+  /* Explicit, otherwise a browser in the dark mode shows a dark page behind the light theme */
+  --ifm-background-color: #fff;
+  --ifm-background-surface-color: #fff;
   --ifm-footer-link-color: #555;
   --ifm-footer-title-color: #0c0c0c;
   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1);
@@ -202,6 +205,17 @@
   height: 1.1em;
   vertical-align: -0.2em;
   fill: currentColor;
+}
+
+/* The right column keeps a minimum width on smaller screens, the content column gets narrower instead */
+@media (min-width: 997px) {
+  .row:has(.ha-aside) > .col--3 {
+    --ifm-col-width: max(25%, 17.5rem);
+  }
+
+  .row:has(.ha-aside) > [class*='docItemCol'] {
+    min-width: 0;
+  }
 }
 
 /* The right column scrolls with the page, so the table of contents is neither sticky nor scrollable */

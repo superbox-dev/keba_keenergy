@@ -12,6 +12,7 @@
 - Preview image for shared links: `website/static/img/social-card.png` (1200 × 630, same layout in all projects)
 - Design after home-assistant.io:
   - `website/src/css/custom.css` and the wrapped `website/src/theme/TOC/`
+  - light mode by default, the right column at least `17.5rem` wide on smaller screens
   - the integration card in `website/src/components/ProjectInfo/` reads `manifest.json` and `hacs.json`
   - the brand logos are in `website/static/` (`logo.png`, `dark_logo.png`), the icon comes from
     `brands.home-assistant.io`
