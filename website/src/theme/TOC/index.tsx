@@ -2,7 +2,7 @@ import type {ReactNode} from 'react';
 import TOC from '@theme-original/TOC';
 import type TOCType from '@theme/TOC';
 import type {WrapperProps} from '@docusaurus/types';
-import {mdiTableOfContents} from '@mdi/js';
+import {ListTree} from 'lucide-react';
 
 import ProjectInfo from '@site/src/components/ProjectInfo';
 
@@ -15,9 +15,7 @@ export default function TOCWrapper(props: Props): ReactNode {
       <ProjectInfo />
       <section className="ha-aside__toc">
         <h2 className="ha-aside__title">
-          <svg viewBox="0 0 24 24" aria-hidden="true">
-            <path d={mdiTableOfContents} />
-          </svg>{' '}
+          <ListTree aria-hidden="true" />{' '}
           On this page
         </h2>
         <TOC {...props} />

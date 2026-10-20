@@ -261,7 +261,7 @@
   width: 1.1em;
   height: 1.1em;
   vertical-align: -0.2em;
-  fill: currentColor;
+  fill: none;
 }
 
 /* The right column keeps a minimum width on smaller screens, the content column gets narrower instead */

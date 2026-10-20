@@ -2,14 +2,7 @@ import type {ReactNode} from 'react';
 import Link from '@docusaurus/Link';
 import ThemedImage from '@theme/ThemedImage';
 import useBaseUrl from '@docusaurus/useBaseUrl';
-import {
-  mdiAccountGroup,
-  mdiBug,
-  mdiLan,
-  mdiGithub,
-  mdiLightbulbQuestion,
-  mdiShape,
-} from '@mdi/js';
+import {Bug, Github, Lightbulb, Network, Shapes, Users} from 'lucide-react';
 
 import hacs from '@site/../hacs.json';
 import manifest from '@site/../custom_components/keba_keenergy/manifest.json';
@@ -20,14 +13,6 @@ const repository = 'https://github.com/superbox-dev/keba_keenergy';
 // Explanation of the IoT classes in the Home Assistant blog
 const iotClasses = 'https://www.home-assistant.io/blog/2016/02/12/classifying-the-internet-of-things/';
 const categories = ['Climate', 'Energy', 'Sensor', 'Water heater'];
-
-function Icon({path}: {path: string}): ReactNode {
-  return (
-    <svg className={styles.icon} viewBox="0 0 24 24" aria-hidden="true">
-      <path d={path} />
-    </svg>
-  );
-}
 
 // "local_polling" -> "Local Polling", the anchor in the blog is "#local-polling"
 function iotClass(): {label: string; anchor: string} {
@@ -78,25 +63,25 @@ export default function ProjectInfo(): ReactNode {
           owner.
         </p>
         <p className={styles.section}>
-          <Icon path={mdiLan} /> Its IoT class is <Link href={`${iotClasses}#${anchor}`}>{label}</Link>.
+          <Network className={styles.icon} aria-hidden="true" /> Its IoT class is <Link href={`${iotClasses}#${anchor}`}>{label}</Link>.
         </p>
         <p className={styles.section}>
           <Link href={repository}>
-            <Icon path={mdiGithub} /> View source on GitHub
+            <Github className={styles.icon} aria-hidden="true" /> View source on GitHub
           </Link>
           <br />
           <Link href={`${repository}/issues?q=is%3Aissue+is%3Aopen+label%3Abug`}>
-            <Icon path={mdiBug} /> View known issues
+            <Bug className={styles.icon} aria-hidden="true" /> View known issues
           </Link>
           <br />
           <Link href={`${repository}/issues/new/choose`}>
-            <Icon path={mdiLightbulbQuestion} /> Request a feature
+            <Lightbulb className={styles.icon} aria-hidden="true" /> Request a feature
           </Link>
         </p>
       </section>
       <section className={styles.module}>
         <h2 className={styles.title}>
-          <Icon path={mdiShape} /> Categories
+          <Shapes className={styles.icon} aria-hidden="true" /> Categories
         </h2>
         <ul className={styles.list}>
           {categories.map((category) => (
@@ -106,7 +91,7 @@ export default function ProjectInfo(): ReactNode {
       </section>
       <section className={styles.module}>
         <h2 className={styles.title}>
-          <Icon path={mdiAccountGroup} /> Code owners
+          <Users className={styles.icon} aria-hidden="true" /> Code owners
         </h2>
         {manifest.codeowners.map((codeowner) => {
           const user = codeowner.replace(/^@/, '');
