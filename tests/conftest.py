@@ -32,6 +32,8 @@ from tests.api_data import TIMEZONE_RESPONSE
 
 if TYPE_CHECKING:
     from collections.abc import AsyncGenerator
+    from collections.abc import Awaitable
+    from collections.abc import Callable
     from collections.abc import Generator
 
     from _pytest.fixtures import SubRequest
@@ -125,6 +127,7 @@ class FakeKebaKeEnergyAPI:
         self.write_status: HTTPStatus = HTTPStatus.OK
         self.unsupported_variables: set[str] = set()
         self.message_ids: dict[str, int] = {}
+        self.during_read: Callable[[], Awaitable[None]] | None = None
 
     def register_auth_request(self, host: str, /, *, status: int = 200, exc: Exception | None = None) -> None:
         """Register the request that checks if the Web HMI requires authentication."""
@@ -156,6 +159,8 @@ class FakeKebaKeEnergyAPI:
         The read requests return the `responses` in order, an `HTTPStatus` returns an empty response with this status
         and an exception (e.g. `TimeoutError`) is raised by the request.
         The message ids of the sensors come from `message_ids` (variable name to id, 0 if not given).
+        The next read of the `responses` awaits `during_read` once before it responds, e.g. to set a value during an
+        update.
         The requests of `filter_request()` succeed, except for the `unsupported_variables`, which the Web HMI does not
         know and which are also left out of the responses. The values of the heating curves come from `heating_curves`
         (an `HTTPStatus` fails them). The system name and the status of the write requests can be changed with
@@ -231,6 +236,11 @@ class FakeKebaKeEnergyAPI:
             return AiohttpClientMockResponse(method, url=url)
         else:
             response = self.responses.pop(0)
+
+            if self.during_read:
+                during_read: Callable[[], Awaitable[None]] = self.during_read
+                self.during_read = None
+                await during_read()
 
             if isinstance(response, list):
                 response = [value for value in response if value["name"] not in self.unsupported_variables]

@@ -308,6 +308,7 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
 
         self._store: Store[dict[str, Any]] = Store(hass, version=1, key=DOMAIN)
         self._write_lock: Lock = Lock()
+        self._local_change_count: int = 0
 
         self.api: KebaKeEnergyAPI = KebaKeEnergyAPI(
             entry.data[CONF_HOST],
@@ -508,12 +509,8 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
                 self.device_count(section),
             )
 
-        response: dict[str, ValueResponse] = await self._api_call_for_update(
-            self.api.read_data(
-                request=request,
-                position=self.position,
-            ),
-        )
+        local_change_count: int = self._local_change_count
+        response: dict[str, ValueResponse] = await self._async_read_data(request)
 
         message_ids: dict[Section, list[int]] = await self._api_call_for_update(
             self.api.read_message_ids(
@@ -521,6 +518,12 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
                 position=self.position,
             ),
         )
+
+        # A value set during the reads (e.g. before its write) would be replaced by its previous value until the next
+        # update, so the values are read again after the write.
+        if self._local_change_count != local_change_count:
+            _LOGGER.debug("Reading the values again, a value was set during the update")
+            response = await self._async_read_data(request)
 
         # Skipped sections keep their previous message ids.
         for message_section, ids in message_ids.items():
@@ -540,6 +543,16 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
                     response[section_id] = previous_section_data
 
         return response
+
+    async def _async_read_data(self, request: list[Section], /) -> dict[str, ValueResponse]:
+        # The read waits for a running write, so it gets the written value.
+        async with self._write_lock:
+            return await self._api_call_for_update(
+                self.api.read_data(
+                    request=request,
+                    position=self.position,
+                ),
+            )
 
     def async_update_value(
         self,
@@ -579,6 +592,7 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
         entity_data: Value = get_value_by_index(data[section_id][key], index=index, key_index=key_index)
         previous_value: object = entity_data.get("value")
         entity_data["value"] = value
+        self._local_change_count += 1
 
         self.async_set_updated_data(data)
 

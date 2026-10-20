@@ -39,6 +39,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Fixed entities showing a new value until the next update, although writing it to the control unit failed.
+- Fixed a new value of an entity jumping back to the previous value until the next update, if the value was set
+  while the integration was reading the values of the control unit.
 - Fixed the error `Platform keba_keenergy does not generate unique IDs` in the log of heating circuits with
   cooling and photovoltaics, the number `excess_energy_cooling_limit_day` was defined twice.
 - Fixed the missing translations of the states of the `excess_energy_mode` and `mixer_position` sensors.

@@ -486,3 +486,45 @@ async def test_debounced_write_failed(
         caplog.text
     )
     assert [record for record in caplog.records if record.levelno >= logging.ERROR] == []
+
+
+async def test_debounced_write_during_update(
+    hass: HomeAssistant,
+    fake_api: FakeKebaKeEnergyAPI,
+) -> None:
+    """Test that a value written during an update is not replaced by the previous value of the update."""
+    entity_id: str = "number.keba_keenergy_12345678_heat_circuit_target_temperature_offset"
+    fake_api.responses = [
+        DEFAULT_POSITION_RESPONSE,
+        DEFAULT_POSITION_FIXED_DATA_RESPONSE,
+        get_single_position_data_response(heat_circuit_target_temperature_offset="1.5"),
+        # The update reads the previous value while the value is written.
+        get_single_position_data_response(heat_circuit_target_temperature_offset="1.5"),
+        # The update reads the values again after the write.
+        get_single_position_data_response(heat_circuit_target_temperature_offset="0.5"),
+    ]
+    await fake_api.setup_integration()
+
+    async def set_value() -> None:
+        await hass.services.async_call(
+            domain=NUMBER_DOMAIN,
+            service=SERVICE_SET_VALUE,
+            service_data={
+                ATTR_ENTITY_ID: entity_id,
+                ATTR_VALUE: 0.5,
+            },
+            blocking=True,
+        )
+        async_fire_time_changed(hass, dt_util.utcnow() + timedelta(seconds=FLASH_WRITE_DELAY))
+
+    fake_api.during_read = set_value
+    await fake_api.config_entry.runtime_data.async_refresh()
+    await hass.async_block_till_done()
+
+    state: State | None = hass.states.get(entity_id)
+    assert isinstance(state, State)
+    assert state.state == "0.5"
+    assert fake_api.responses == []
+    assert fake_api.write_requests() == [
+        '[{"name": "APPL.CtrlAppl.sParam.heatCircuit[0].param.offsetRoomTemp", "value": "0.5"}]',
+    ]
