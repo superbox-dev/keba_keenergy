@@ -66,17 +66,71 @@
   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
 }
 
-/* Header: translucent with blur */
+/* Header: translucent without blur, the page shows through while scrolling like on contributors.home-assistant.io */
 
 .navbar {
   background-color: var(--ha-header-background);
-  backdrop-filter: blur(24px);
   border-bottom: 1px solid var(--ha-divider);
 }
 
-/* backdrop-filter makes the navbar the containing block of the fixed mobile sidebar, which then gets cut off */
-.navbar.navbar-sidebar--show {
-  backdrop-filter: none;
+/* Search: a rounded field with a "/" key hint like on contributors.home-assistant.io */
+
+:root {
+  --ifm-navbar-search-input-background-color: var(--ha-card-background);
+  --ifm-navbar-search-input-color: var(--ifm-font-color-base);
+  --ifm-navbar-search-input-placeholder-color: var(--ha-secondary-text);
+}
+
+.navbar__search {
+  position: relative;
+}
+
+.navbar__search-input {
+  height: 2.25rem;
+  padding-right: 2.25rem;
+  border: 1px solid var(--ha-divider);
+  border-radius: 9999px;
+  font-size: 0.875rem;
+}
+
+.navbar__search-input:focus {
+  border-color: var(--ifm-color-primary);
+  outline: none;
+}
+
+.navbar__search::after {
+  content: '/';
+  position: absolute;
+  top: 50%;
+  right: 0.6rem;
+  transform: translateY(-50%);
+  min-width: 1.25rem;
+  padding: 0 0.3rem;
+  border: 1px solid var(--ha-divider);
+  border-radius: 6px;
+  color: var(--ha-secondary-text);
+  font-size: 0.75rem;
+  line-height: 1.25rem;
+  text-align: center;
+  pointer-events: none;
+}
+
+.navbar__search:focus-within::after {
+  display: none;
+}
+
+/* Cards of the category pages: flat like the cards on contributors.home-assistant.io */
+
+.theme-doc-card-container {
+  border: 1px solid var(--ha-divider);
+  border-radius: var(--ha-radius);
+  background: var(--ha-card-background);
+  box-shadow: none;
+}
+
+.theme-doc-card-container:hover {
+  border-color: var(--ifm-color-primary);
+  box-shadow: none;
 }
 
 /* Logo on a white tile like the superbox-dev avatar on GitHub */

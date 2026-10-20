@@ -39,6 +39,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Showed the documentation only in the light theme with the colors of the integration pages on home-assistant.io,
   the "My Home Assistant" button to add the integration below the logo and a wider right column on smaller
   screens.
+- Focused the search of the documentation with `/` instead of `Ctrl`/`Cmd` + `K`, styled the search like
+  home-assistant.io and made the header translucent.
 
 ### Fixed
 

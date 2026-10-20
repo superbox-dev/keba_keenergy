@@ -16,6 +16,8 @@
     except the links
   - `custom.css` is the same in all four projects, it has the light and the dark theme
   - the right column at least `17.5rem` wide on smaller screens
+  - translucent header without blur, search as a rounded field with a `/` hint, `/` focuses it on every keyboard
+    layout (`website/src/searchShortcut.ts`, the shortcut of the search plugin is off)
   - the integration card in `website/src/components/ProjectInfo/` reads `manifest.json` and `hacs.json`, shows the
     "My Home Assistant" badge below the logo and no changelog link
   - the brand logos are in `website/static/` (`logo.png`, `dark_logo.png`), the icon comes from
