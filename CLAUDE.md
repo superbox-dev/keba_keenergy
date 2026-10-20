@@ -65,6 +65,7 @@ Before finishing a change, run `ruff format`, `lint.sh` and `pytest`, in this or
   - values calculated from existing ones are fine in the integration
 - Limited flash writes: write only changed values, only via the coordinator write methods, debounce fast-changing
   values (e.g. temperatures set with a slider)
+- No new dependencies (`pyproject.toml`, `manifest.json`, also dev dependencies) without asking first
 - `git add` new files, the pre-commit hooks only check tracked files
 - Never edit generated files (`coverage-badge.svg`) or `config/` (except `config/configuration.yaml`)
 - **Never edit `CLAUDE.md` files or `.claude/skills/` on your own**, only when asked
