@@ -49,7 +49,7 @@ async def test_set_away_range(
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
         MULTIPLE_POSITION_DATA_RESPONSE,
-        # Read API after services call
+        # Read the API after the action call.
         MULTIPLE_POSITION_DATA_RESPONSE,
     ]
     await fake_api.setup_integration()
@@ -110,7 +110,7 @@ async def test_set_away_range_with_invalid_start_and_end_date(
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
         MULTIPLE_POSITION_DATA_RESPONSE,
-        # Read API after services call
+        # Read the API after the action call.
         MULTIPLE_POSITION_DATA_RESPONSE,
     ]
     hass.config.language = "de"
@@ -138,7 +138,7 @@ async def test_set_away_range_with_invalid_start_and_end_date(
     )
 
 
-@pytest.mark.parametrize("language", ["en", "de"], indirect=True)
+@pytest.mark.parametrize("language", ["en", "de"], indirect=True, ids=["en", "de"])
 @pytest.mark.usefixtures("language")
 async def test_set_away_range_with_invalid_config_entry(
     hass: HomeAssistant,
@@ -150,7 +150,7 @@ async def test_set_away_range_with_invalid_config_entry(
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
         MULTIPLE_POSITION_DATA_RESPONSE,
-        # Read API after services call
+        # Read the API after the action call.
         MULTIPLE_POSITION_DATA_RESPONSE,
     ]
     await fake_api.setup_integration()
@@ -171,7 +171,7 @@ async def test_set_away_range_with_invalid_config_entry(
     assert translations["component.keba_keenergy.exceptions.invalid_config_entry.message"] == snapshot
 
 
-@pytest.mark.parametrize("language", ["en", "de"], indirect=True)
+@pytest.mark.parametrize("language", ["en", "de"], indirect=True, ids=["en", "de"])
 @pytest.mark.usefixtures("language")
 async def test_set_away_range_with_unloaded_config_entry(
     hass: HomeAssistant,
@@ -184,13 +184,13 @@ async def test_set_away_range_with_unloaded_config_entry(
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
         MULTIPLE_POSITION_DATA_RESPONSE,
-        # Read API after services call
+        # Read the API after the action call.
         MULTIPLE_POSITION_DATA_RESPONSE,
     ]
     await fake_api.setup_integration()
     translations: dict[str, str] = await init_translations(hass, category="exceptions")
 
-    # Unload the config entry
+    # Unload the config entry.
     await hass.config_entries.async_unload(config_entry.entry_id)
     await hass.async_block_till_done()
 
@@ -281,7 +281,7 @@ async def test_set_heating_curve_points(
     )
 
 
-@pytest.mark.parametrize("language", ["en", "de"], indirect=True)
+@pytest.mark.parametrize("language", ["en", "de"], indirect=True, ids=["en", "de"])
 @pytest.mark.usefixtures("language")
 async def test_set_heating_curve_points_with_invalid_heating_curve(
     hass: HomeAssistant,
@@ -296,7 +296,7 @@ async def test_set_heating_curve_points_with_invalid_heating_curve(
         MULTIPLE_POSITION_DATA_RESPONSE,
     ]
     await fake_api.setup_integration()
-    # The points of the heating curve HC1 have another name on the control unit
+    # The points of the heating curve HC1 have another name on the control unit.
     fake_api.heating_curves = HEATING_CURVES_RENAMED_POINTS_RESPONSE
     translations: dict[str, str] = await init_translations(hass, category="exceptions")
 
@@ -328,7 +328,7 @@ async def test_set_heating_curve_points_with_invalid_heating_curve(
     assert translations["component.keba_keenergy.exceptions.cannot_find_heating_curve.message"] == snapshot
 
 
-@pytest.mark.parametrize("language", ["en", "de"], indirect=True)
+@pytest.mark.parametrize("language", ["en", "de"], indirect=True, ids=["en", "de"])
 @pytest.mark.usefixtures("language")
 async def test_set_heating_curve_points_with_duplicate_outdoor_temperatures(
     hass: HomeAssistant,
@@ -455,7 +455,7 @@ async def test_set_away_range_with_date_and_time(
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
         MULTIPLE_POSITION_DATA_RESPONSE,
-        # Read API after services call
+        # Read the API after the action call.
         MULTIPLE_POSITION_DATA_RESPONSE,
     ]
     await fake_api.setup_integration()

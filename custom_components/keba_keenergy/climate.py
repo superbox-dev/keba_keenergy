@@ -47,7 +47,7 @@ if TYPE_CHECKING:
     from .coordinator import KebaKeEnergyConfigEntry
     from .coordinator import KebaKeEnergyDataUpdateCoordinator
 
-_LOGGER = logging.getLogger(__name__)
+_LOGGER: Final = logging.getLogger(__name__)
 
 PARALLEL_UPDATES: Final[int] = 0
 
@@ -66,11 +66,11 @@ COOLING_CIRCUIT_PRESET_TO_HA: Final[dict[int, str]] = {
     HeatCircuitOperatingMode.PARTY.value: PRESET_BOOST,
 }
 
-TEMPERATURE_OFFSET_SCHEMA = {
+TEMPERATURE_OFFSET_SCHEMA: Final = {
     probatio.Required(ATTR_OFFSET, default=0): probatio.Coerce(float),
 }
 
-TEMPERATURE_SCHEMA = {
+TEMPERATURE_SCHEMA: Final = {
     probatio.Required(ATTR_TEMPERATURE): probatio.Coerce(float),
 }
 
@@ -121,7 +121,7 @@ class KebaKeEnergyClimateEntity(KebaKeEnergyBaseEntity, ClimateEntity):
 
     @cached_property
     def _hvac_mode_on(self) -> HVACMode:
-        # A heating circuit that supports heating and cooling uses HEAT_COOL, this is untested with a real device
+        # A heating circuit that supports heating and cooling uses HEAT_COOL, this is untested with a real device.
         return HVACMode.HEAT if self._is_heating else HVACMode.COOL if self._is_cooling else HVACMode.HEAT_COOL
 
     @cached_property
@@ -237,7 +237,7 @@ class KebaKeEnergyClimateEntity(KebaKeEnergyBaseEntity, ClimateEntity):
         """Return the current preset mode."""
         operating_mode: str | None = self.get_value("operating_mode", expected_type=str)
 
-        # Off and the modes without a preset (e.g. external or room control) return the home preset
+        # Off and the modes without a preset (e.g. external or room control) return the home preset.
         return (
             HEATING_CIRCUIT_PRESET_TO_HA.get(HeatCircuitOperatingMode[operating_mode.upper()].value, PRESET_HOME)
             if operating_mode
@@ -300,7 +300,7 @@ class KebaKeEnergyClimateEntity(KebaKeEnergyBaseEntity, ClimateEntity):
     async def _async_set_away_date_range(self, preset_mode: str, /) -> None:
         is_away: bool = preset_mode == PRESET_AWAY
 
-        # The time zone is only requested if the away date range changes
+        # The time zone is only requested if the away date range changes.
         if not is_away and self.preset_mode != PRESET_AWAY:
             return
 

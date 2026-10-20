@@ -7,6 +7,7 @@ from __future__ import annotations
 from datetime import timedelta
 from typing import TYPE_CHECKING
 from typing import Any
+from typing import Final
 
 import pytest
 from homeassistant.components.water_heater import ATTR_MAX_TEMP
@@ -49,11 +50,11 @@ if TYPE_CHECKING:
     from tests.conftest import FakeKebaKeEnergyAPI
 
 
-ENTITY_ID: str = "water_heater.keba_keenergy_12345678"
-ENTITY_ID_1: str = "water_heater.keba_keenergy_12345678_1"
-ENTITY_ID_2: str = "water_heater.keba_keenergy_12345678_2"
-ENTITY_ID_3: str = "water_heater.keba_keenergy_12345678_buffer_tank"
-ENTITY_ID_4: str = "water_heater.keba_keenergy_12345678_buffer_tank_1"
+ENTITY_ID: Final[str] = "water_heater.keba_keenergy_12345678"
+ENTITY_ID_1: Final[str] = "water_heater.keba_keenergy_12345678_1"
+ENTITY_ID_2: Final[str] = "water_heater.keba_keenergy_12345678_2"
+ENTITY_ID_3: Final[str] = "water_heater.keba_keenergy_12345678_buffer_tank"
+ENTITY_ID_4: Final[str] = "water_heater.keba_keenergy_12345678_buffer_tank_1"
 
 
 @pytest.mark.parametrize(
@@ -76,6 +77,7 @@ ENTITY_ID_4: str = "water_heater.keba_keenergy_12345678_buffer_tank_1"
             [ENTITY_ID_1, ENTITY_ID_2, ENTITY_ID_4],
         ),
     ],
+    ids=["single_position", "multiple_positions"],
 )
 async def test_water_heater_entities(
     hass: HomeAssistant,
@@ -91,7 +93,7 @@ async def test_water_heater_entities(
         assert isinstance(hass.states.get(entity), State)
 
 
-@pytest.mark.parametrize("language", ["en", "de"], indirect=True)
+@pytest.mark.parametrize("language", ["en", "de"], indirect=True, ids=["en", "de"])
 @pytest.mark.usefixtures("entity_registry_enabled_by_default", "language")
 async def test_water_heater(
     hass: HomeAssistant,
@@ -124,6 +126,7 @@ async def test_water_heater(
             '[{"name": "APPL.CtrlAppl.sParam.bufferTank[0].param.operatingMode", "value": "0"}]',
         ),
     ],
+    ids=["hot_water_tank", "buffer_tank"],
 )
 async def test_turn_off(
     hass: HomeAssistant,
@@ -137,7 +140,7 @@ async def test_turn_off(
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
         response,
-        # Read API after services call
+        # Read the API after the action call.
         response,
     ]
     await fake_api.setup_integration()
@@ -166,6 +169,7 @@ async def test_turn_off(
             '[{"name": "APPL.CtrlAppl.sParam.bufferTank[0].param.operatingMode", "value": "1"}]',
         ),
     ],
+    ids=["hot_water_tank", "buffer_tank"],
 )
 async def test_turn_on(
     hass: HomeAssistant,
@@ -178,7 +182,7 @@ async def test_turn_on(
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
         MULTIPLE_POSITION_DATA_RESPONSE,
-        # Read API after services call
+        # Read the API after the action call.
         MULTIPLE_POSITION_DATA_RESPONSE,
     ]
     await fake_api.setup_integration()
@@ -219,6 +223,7 @@ async def test_turn_on(
             '[{"name": "APPL.CtrlAppl.sParam.hotWaterTank[0].param.operatingMode", "value": "2"}]',
         ),
     ],
+    ids=["eco", "performance", "off", "heat_pump"],
 )
 async def test_set_operation_mode_hot_water_tank(
     hass: HomeAssistant,
@@ -232,7 +237,7 @@ async def test_set_operation_mode_hot_water_tank(
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
         response,
-        # Read API after services call
+        # Read the API after the action call.
         response,
     ]
     await fake_api.setup_integration()
@@ -269,6 +274,7 @@ async def test_set_operation_mode_hot_water_tank(
             '[{"name": "APPL.CtrlAppl.sParam.bufferTank[0].param.operatingMode", "value": "1"}]',
         ),
     ],
+    ids=["performance", "off", "heat_pump"],
 )
 async def test_set_operation_mode_buffer_tank(
     hass: HomeAssistant,
@@ -282,7 +288,7 @@ async def test_set_operation_mode_buffer_tank(
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
         response,
-        # Read API after services call
+        # Read the API after the action call.
         response,
     ]
     await fake_api.setup_integration()
@@ -309,6 +315,7 @@ async def test_set_operation_mode_buffer_tank(
             '[{"name": "APPL.CtrlAppl.sParam.hotWaterTank[0].param.normalSetTempMax.value", "value": "45.0"}]',
         ),
     ],
+    ids=["hot_water_tank"],
 )
 async def test_set_temperature(
     hass: HomeAssistant,
@@ -322,7 +329,7 @@ async def test_set_temperature(
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
         MULTIPLE_POSITION_DATA_RESPONSE,
-        # Read API after services call
+        # Read the API after the action call.
         MULTIPLE_POSITION_DATA_RESPONSE,
     ]
     await fake_api.setup_integration()
@@ -352,7 +359,7 @@ async def test_set_temperature_debounced(
         DEFAULT_POSITION_RESPONSE,
         DEFAULT_POSITION_FIXED_DATA_RESPONSE,
         get_single_position_data_response(hot_water_tank_target_temperature="51"),
-        # Read API after updating the entity
+        # Read the API after the update of the entity.
         get_single_position_data_response(hot_water_tank_target_temperature="51"),
     ]
     await fake_api.setup_integration()
@@ -393,6 +400,7 @@ async def test_set_temperature_debounced(
         (ENTITY_ID_4, SERVICE_TURN_OFF, MULTIPLE_POSITION_DATA_RESPONSE),
         (ENTITY_ID_4, SERVICE_TURN_ON, MULTIPLE_POSITION_OTHER_MODES_DATA_RESPONSE),
     ],
+    ids=["hot_water_tank_2_turn_off", "hot_water_tank_1_turn_on", "buffer_tank_turn_off", "buffer_tank_turn_on"],
 )
 async def test_unchanged_state(
     hass: HomeAssistant,
@@ -493,5 +501,5 @@ async def test_buffer_tank_sensor_not_in_use(
 
     state: State | None = hass.states.get("water_heater.keba_keenergy_12345678_buffer_tank_1")
     assert isinstance(state, State)
-    # The bottom temperature, the top temperature 45.67 is not in use
+    # This is the bottom temperature, the top temperature 45.67 is not in use.
     assert (state.state, state.attributes["current_temperature"]) == (STATE_OFF, 15.7)

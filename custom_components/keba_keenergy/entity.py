@@ -51,7 +51,7 @@ if TYPE_CHECKING:
     from homeassistant.helpers.typing import StateType
     from keba_keenergy_api.endpoints import Value
 
-_LOGGER = logging.getLogger(__name__)
+_LOGGER: Final = logging.getLogger(__name__)
 
 DEVICE_TRANSLATION_KEYS: Final[dict[str, str]] = {
     SectionPrefix.SYSTEM: "control_unit",
@@ -84,10 +84,10 @@ class KebaKeEnergyEntityDescriptionMixin:
     """Required values for KEBA KeEnergy descriptions."""
 
     key_index: int | None = None
-    new_key: str | None = None  # new key name (required for future migration of the entity id)
-    ref_key: str | None = None  # reference to another key (used for entity id)
+    new_key: str | None = None  # New key name, required for a future migration of the entity ID.
+    ref_key: str | None = None  # Reference to another key, used for the entity ID.
     condition: Callable[[KebaKeEnergyDataUpdateCoordinator, int], bool] | None = None
-    entity_class: type[Any] | None = None  # entity class instead of the default class of the platform
+    entity_class: type[Any] | None = None  # Entity class instead of the default class of the platform.
 
 
 class KebaKeEnergyBaseEntity(
@@ -310,7 +310,7 @@ class KebaKeEnergyBaseEntity(
                     device_numbers=self.device_numbers,
                 )
             except HomeAssistantError as error:
-                # No caller gets the error of a debounced write, the entity already shows the previous value again
+                # No caller gets the error of a debounced write, the entity already shows the previous value again.
                 _LOGGER.warning("Failed to write the value of %s: %s", self.entity_id, error)
 
     def _get_debounced_value(self) -> float | None:

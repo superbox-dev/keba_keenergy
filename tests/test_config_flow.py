@@ -7,6 +7,7 @@ from __future__ import annotations
 from http import HTTPStatus
 from ipaddress import ip_address
 from typing import TYPE_CHECKING
+from typing import Final
 
 import pytest
 from aiohttp import ClientError
@@ -32,7 +33,7 @@ if TYPE_CHECKING:
 
     from tests.conftest import FakeKebaKeEnergyAPI
 
-ZERO_CONF_SERVICE_INFO: ZeroconfServiceInfo = ZeroconfServiceInfo(
+ZERO_CONF_SERVICE_INFO: Final[ZeroconfServiceInfo] = ZeroconfServiceInfo(
     ip_address=ip_address("10.0.0.100"),
     ip_addresses=[ip_address("10.0.0.100")],
     port=0,
@@ -269,6 +270,7 @@ async def test_user_flow_authentication_cannot_connect(
         },
     ],
     indirect=True,
+    ids=["ssl"],
 )
 async def test_reauth_flow_success(
     hass: HomeAssistant,
@@ -354,6 +356,7 @@ async def test_reauth_flow_failure(
         },
     ],
     indirect=True,
+    ids=["other_unique_id"],
 )
 async def test_reauth_flow_wrong_account(
     hass: HomeAssistant,
@@ -396,6 +399,7 @@ async def test_reauth_flow_wrong_account(
         (HTTPStatus.UNAUTHORIZED, None, "invalid_auth"),
         (HTTPStatus.OK, ValueError("mocked client error"), "unknown"),
     ],
+    ids=["cannot_connect", "invalid_auth", "unknown"],
 )
 @pytest.mark.no_fail_on_keba_errors
 async def test_user_flow_cannot_connect(
@@ -547,6 +551,7 @@ async def test_zeroconf_flow_already_setup(
         ({"data": {CONF_HOST: "keba.local", CONF_SSL: False}}, "keba.local"),
     ],
     indirect=["config_entry"],
+    ids=["ip_address_updated", "hostname_kept"],
 )
 async def test_zeroconf_flow_updates_ip_address(
     hass: HomeAssistant,
@@ -603,6 +608,7 @@ async def test_zeroconf_flow_keeps_ip_address_for_ipv6(
         (APIError("mocked api error", status=HTTPStatus.UNAUTHORIZED), "invalid_auth"),
         (Exception("mocked client error"), "unknown"),
     ],
+    ids=["cannot_connect", "invalid_auth", "unknown"],
 )
 @pytest.mark.no_fail_on_keba_errors
 async def test_zeroconf_cannot_connect(
@@ -686,6 +692,7 @@ async def test_zeroconf_cannot_connect(
             },
         ),
     ],
+    ids=["divided_by_common_divisor", "no_common_divisor"],
 )
 async def test_option_flow(
     hass: HomeAssistant,
@@ -696,11 +703,11 @@ async def test_option_flow(
 ) -> None:
     """Test the options flow and the normalization of the update multipliers."""
     fake_api.responses = [
-        # 1. coordinator
+        # The first setup of the coordinator.
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
         MULTIPLE_POSITION_DATA_RESPONSE,
-        # 2. coordinator
+        # The second setup of the coordinator after the reload.
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
         MULTIPLE_POSITION_DATA_RESPONSE,
@@ -780,7 +787,7 @@ async def test_option_flow_when_integration_unloaded(
 ) -> None:
     """Test that the options flow aborts if the integration was unloaded."""
     fake_api.responses = [
-        # 1. coordinator
+        # The first setup of the coordinator.
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
         MULTIPLE_POSITION_DATA_RESPONSE,
@@ -806,11 +813,11 @@ async def test_option_flow_when_integration_reload_failed(
 ) -> None:
     """Test that the options flow aborts if a reload of the integration failed."""
     fake_api.responses = [
-        # 1. coordinator
+        # The first setup of the coordinator.
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
         MULTIPLE_POSITION_DATA_RESPONSE,
-        # 2. reload
+        # The reload fails.
         HTTPStatus.BAD_REQUEST,
     ]
     await fake_api.setup_integration()

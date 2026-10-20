@@ -30,6 +30,7 @@ if TYPE_CHECKING:
     "config_entry",
     [{"data": {CONF_HOST: "10.0.0.100", CONF_SSL: False, CONF_USERNAME: "test", CONF_PASSWORD: "test"}}],
     indirect=True,
+    ids=["with_credentials"],
 )
 async def test_diagnostics(
     hass: HomeAssistant,

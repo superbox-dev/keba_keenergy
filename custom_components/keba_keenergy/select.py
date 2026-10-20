@@ -36,7 +36,7 @@ if TYPE_CHECKING:
     from .coordinator import KebaKeEnergyDataUpdateCoordinator
 
 
-_LOGGER = logging.getLogger(__name__)
+_LOGGER: Final = logging.getLogger(__name__)
 
 PARALLEL_UPDATES: Final[int] = 0
 
@@ -139,7 +139,7 @@ class KebaKeEnergyHeatingCircuitHeatingCurveSelectEntity(KebaKeEnergySelectEntit
         return [name for _, name in self.coordinator.available_heating_curves]
 
 
-SELECT_TYPES: dict[str, tuple[KebaKeEnergySelectEntityDescription, ...]] = {
+SELECT_TYPES: Final[dict[str, tuple[KebaKeEnergySelectEntityDescription, ...]]] = {
     SectionPrefix.SYSTEM: (
         KebaKeEnergySelectEntityDescription(
             entity_class=KebaKeEnergySystemOperatingModeSelectEntity,

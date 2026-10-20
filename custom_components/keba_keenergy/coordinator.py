@@ -12,6 +12,7 @@ from datetime import timedelta
 from functools import cached_property
 from typing import TYPE_CHECKING
 from typing import Any
+from typing import Final
 from zoneinfo import ZoneInfo
 
 from homeassistant.config_entries import ConfigEntry
@@ -62,14 +63,14 @@ if TYPE_CHECKING:
     from aiohttp import ClientSession
     from homeassistant.core import HomeAssistant
 
-_LOGGER = logging.getLogger(__name__)
+_LOGGER: Final = logging.getLogger(__name__)
 
 type KebaKeEnergyConfigEntry = ConfigEntry[KebaKeEnergyDataUpdateCoordinator]
 type MessageIds = list[int] | list[list[int]]
 type Values = Value | list[Value] | list[list[Value]]
 
 
-REQUEST_DATA_GROUPS: dict[SectionPrefix, list[Section]] = {
+REQUEST_DATA_GROUPS: Final[dict[SectionPrefix, list[Section]]] = {
     SectionPrefix.EXTERNAL_HEAT_SOURCE: [
         ExternalHeatSource.OPERATING_MODE,
         ExternalHeatSource.TARGET_TEMPERATURE,
@@ -199,8 +200,7 @@ REQUEST_DATA_GROUPS: dict[SectionPrefix, list[Section]] = {
         HeatPump.HAS_THREE_PHASE_FAILURE,
         HeatPump.HAS_SOURCE_PRESSURE_FAILURE,
         HeatPump.HAS_VFD_FAILURE,
-        # Passive cooling has not an own group for the ticks
-        # It is always a part of heat pumps
+        # Passive cooling has no own group for the ticks, it is always a part of the heat pumps.
         PassiveCooling.TEMPERATURE,
         PassiveCooling.SWITCH_VALVE_POSITION,
         PassiveCooling.CIRCULATION_PUMP_SPEED,
@@ -439,7 +439,7 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
             section for section in self.request_data if section != System.OUTDOOR_TEMPERATURE or has_outdoor_temperature
         ]
 
-        # Group request data by device but only add data that are available for the heat pump setup
+        # Group request data by device but only add data that are available for the heat pump setup.
         self.request_data_groups = {
             prefix: [section for section in sections if section in self.request_data]
             for prefix, sections in REQUEST_DATA_GROUPS.items()
@@ -489,7 +489,7 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
             ),
         )
 
-        # Skipped sections keep their previous message ids
+        # Skipped sections keep their previous message ids.
         for message_section, ids in message_ids.items():
             quantity: int = message_section.value.quantity
             self._message_ids.setdefault(section_ids[message_section], {})[message_section.name.lower()] = (
@@ -541,7 +541,7 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
         key_index: int | None,
     ) -> object:
         """Set a single value, as stored in the coordinator data, and return the replaced value."""
-        # Only copy the changed section, the other sections are shared with the previous data
+        # Only copy the changed section, the other sections are shared with the previous data.
         data: dict[str, ValueResponse] = {**self.data, section_id: deepcopy(self.data[section_id])}
         entity_data: Value = get_value_by_index(data[section_id][key], index=index, key_index=key_index)
         previous_value: object = entity_data.get("value")
@@ -800,7 +800,7 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
     def has_cooling_circuits(self) -> bool:
         """Check if one heating circuit support cooling."""
         # Some KEBA KeEnergy software versions did not have an active or passive cooling options.
-        # Cooling support can only be detected with the heating circuit mode!
+        # Cooling support can only be detected with the heating circuit mode.
         return any(
             self.is_cooling_circuit(index=index) for index in range(self.device_count(SectionPrefix.HEAT_CIRCUIT))
         )

@@ -1,5 +1,5 @@
 # serializer version: 1
-# name: test_diagnostics[config_entry0]
+# name: test_diagnostics[with_credentials]
   dict({
     'available_heating_curves': list([
       list([

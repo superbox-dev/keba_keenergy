@@ -26,7 +26,7 @@ if TYPE_CHECKING:
     from tests.conftest import FakeKebaKeEnergyAPI
 
 
-@pytest.mark.parametrize("language", ["en", "de"], indirect=True)
+@pytest.mark.parametrize("language", ["en", "de"], indirect=True, ids=["en", "de"])
 @pytest.mark.usefixtures("entity_registry_enabled_by_default", "language")
 async def test_sensors(
     hass: HomeAssistant,
@@ -54,6 +54,7 @@ async def test_sensors(
         "sensor.keba_keenergy_12345678_heat_pump_operating_time",
         "sensor.keba_keenergy_12345678_photovoltaics_daily_energy",
     ],
+    ids=["heat_pump_operating_time", "photovoltaics_daily_energy"],
 )
 @pytest.mark.usefixtures("entity_registry_enabled_by_default")
 async def test_converted_sensor_display_precision(
@@ -82,12 +83,12 @@ async def test_converted_sensor_display_precision(
             {"sensor.keba_keenergy_12345678_outdoor_temperature": (STATE_UNKNOWN, 10)},
         ),
         (
-            # The mixer flow temperature has a new key in the API, but keeps the entity of the old key
+            # The mixer flow temperature has a new key in the API, but keeps the entity of the old key.
             "APPL.CtrlAppl.sParam.heatCircuit[0].heatCircuitMixer.flowTemp.state.msgId",
             {"sensor.keba_keenergy_12345678_heat_circuit_flow_temperature_1": (STATE_UNKNOWN, 10)},
         ),
         (
-            # Each solar circuit has two temperatures, the first of the second solar circuit is not in use
+            # Each solar circuit has two temperatures, the first of the second solar circuit is not in use.
             "APPL.CtrlAppl.sParam.genericHeat[2].referenceTemp.state.msgId",
             {
                 "sensor.keba_keenergy_12345678_solar_circuit_current_temperature_1_1": ("36.76", 0),
@@ -97,6 +98,7 @@ async def test_converted_sensor_display_precision(
             },
         ),
     ],
+    ids=["outdoor_temperature", "heat_circuit_flow_temperature", "solar_circuit_current_temperature"],
 )
 @pytest.mark.usefixtures("entity_registry_enabled_by_default")
 async def test_sensor_not_in_use(

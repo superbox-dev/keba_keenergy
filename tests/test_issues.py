@@ -45,9 +45,9 @@ async def test_issues(
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
         MULTIPLE_POSITION_DATA_RESPONSE,
-        # Read API after services call #1
+        # Read the API after the first action call.
         MULTIPLE_POSITION_DATA_RESPONSE,
-        # Read API after services call #1
+        # Read the API after the first action call.
         MULTIPLE_POSITION_DATA_RESPONSE,
     ]
     today: date = dt_util.now().date()
@@ -118,9 +118,9 @@ async def test_issues_translated(
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
         MULTIPLE_POSITION_DATA_RESPONSE,
-        # Read API after services call #1
+        # Read the API after the first action call.
         MULTIPLE_POSITION_DATA_RESPONSE,
-        # Read API after services call #2
+        # Read the API after the second action call.
         MULTIPLE_POSITION_DATA_RESPONSE,
     ]
     today: date = dt_util.now().date()
@@ -192,7 +192,7 @@ async def test_ignored_write_is_not_counted(
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
         MULTIPLE_POSITION_OTHER_MODES_DATA_RESPONSE,
-        # Read API after services call
+        # Read the API after the action call.
         MULTIPLE_POSITION_OTHER_MODES_DATA_RESPONSE,
     ]
     today: date = dt_util.now().date()
@@ -234,7 +234,7 @@ async def test_new_week_resets_write_counter(
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
         MULTIPLE_POSITION_DATA_RESPONSE,
-        # Read API after services call
+        # Read the API after the action call.
         MULTIPLE_POSITION_DATA_RESPONSE,
     ]
     today: date = dt_util.now().date()

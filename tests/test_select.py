@@ -5,6 +5,7 @@
 from __future__ import annotations
 
 from typing import TYPE_CHECKING
+from typing import Final
 
 import pytest
 from homeassistant.components.select import ATTR_OPTION
@@ -28,14 +29,14 @@ if TYPE_CHECKING:
     from tests.conftest import FakeKebaKeEnergyAPI
 
 
-# The options of these selects are the names of the heating curves on the Web HMI, so they are not translated
-HEATING_CURVE_SELECTS: tuple[str, ...] = (
+# The options of these selects are the names of the heating curves on the Web HMI, so they are not translated.
+HEATING_CURVE_SELECTS: Final[tuple[str, ...]] = (
     "select.keba_keenergy_12345678_heat_circuit_cooling_curve_2",
     "select.keba_keenergy_12345678_heat_circuit_heating_curve_1",
 )
 
 
-@pytest.mark.parametrize("language", ["en", "de"], indirect=True)
+@pytest.mark.parametrize("language", ["en", "de"], indirect=True, ids=["en", "de"])
 @pytest.mark.usefixtures("entity_registry_enabled_by_default", "language")
 async def test_selects(
     hass: HomeAssistant,
@@ -57,7 +58,7 @@ async def test_selects(
             assert await get_option_translations(hass, state) == snapshot(name=f"{state.entity_id}_options")
 
 
-@pytest.mark.parametrize("language", ["en", "de"], indirect=True)
+@pytest.mark.parametrize("language", ["en", "de"], indirect=True, ids=["en", "de"])
 @pytest.mark.usefixtures("language")
 async def test_selects_without_cooling(
     hass: HomeAssistant,
@@ -117,6 +118,14 @@ async def test_selects_without_cooling(
             '[{"name": "APPL.CtrlAppl.sParam.heatCircuit[0].param.linTab.fileName", "value": "HC FBH"}]',
         ),
     ],
+    ids=[
+        "operating_mode",
+        "heat_circuit_operating_mode",
+        "solar_circuit_operating_mode",
+        "hot_water_tank_operating_mode",
+        "external_heat_source_operating_mode",
+        "heat_circuit_heating_curve",
+    ],
 )
 @pytest.mark.usefixtures("entity_registry_enabled_by_default")
 async def test_select_option(
@@ -131,7 +140,7 @@ async def test_select_option(
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(has_passive_cooling="true"),
         MULTIPLE_POSITION_DATA_RESPONSE,
-        # Read API after services call
+        # Read the API after the action call.
         MULTIPLE_POSITION_DATA_RESPONSE,
     ]
     await fake_api.setup_integration()
@@ -164,6 +173,7 @@ async def test_select_option(
             ),
         ),
     ],
+    ids=["operating_mode"],
 )
 async def test_select_invalid_option(
     hass: HomeAssistant,
@@ -177,7 +187,7 @@ async def test_select_invalid_option(
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(has_passive_cooling="false", has_cooling_circuits=False),
         MULTIPLE_POSITION_DATA_RESPONSE,
-        # Read API after services call
+        # Read the API after the action call.
         MULTIPLE_POSITION_DATA_RESPONSE,
     ]
     await fake_api.setup_integration()

@@ -72,7 +72,7 @@ async def fail_on_log_errors(
 
     handler: ErrorHandler = ErrorHandler()
 
-    # The entity platforms log their errors (e.g. duplicate unique IDs) with the logger of the platform
+    # The entity platforms log their errors (e.g. duplicate unique IDs) with the logger of the platform.
     loggers: list[logging.Logger] = [
         logging.getLogger("custom_components.keba_keenergy"),
         logging.getLogger("homeassistant.helpers.entity_platform"),
@@ -223,7 +223,7 @@ class FakeKebaKeEnergyAPI:
         return [values[item["name"]] for item in payload]
 
     async def _write_side_effect(self, method: str, url: URL, *_: object) -> AiohttpClientMockResponse:
-        # A real request suspends, so other writes can queue for the write lock in the meantime
+        # A real request suspends, so other writes can queue for the write lock in the meantime.
         await asyncio.sleep(0)
 
         return AiohttpClientMockResponse(
@@ -244,7 +244,7 @@ class FakeKebaKeEnergyAPI:
             unknown: list[str] = [item["name"] for item in payload if item["name"] in self.unsupported_variables]
 
             if unknown:
-                # The Web HMI rejects the whole request and names the first unknown variable
+                # The Web HMI rejects the whole request and names the first unknown variable.
                 return AiohttpClientMockResponse(
                     method,
                     url=url,

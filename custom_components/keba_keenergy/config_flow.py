@@ -10,6 +10,7 @@ from http import HTTPStatus
 from ipaddress import IPv4Address
 from typing import TYPE_CHECKING
 from typing import Any
+from typing import Final
 
 import probatio
 from aiohttp import ClientError
@@ -59,20 +60,20 @@ if TYPE_CHECKING:
     from .coordinator import KebaKeEnergyConfigEntry
     from .coordinator import KebaKeEnergyDataUpdateCoordinator
 
-STEP_AUTH_DATA_SCHEMA: probatio.Schema = probatio.Schema(
+STEP_AUTH_DATA_SCHEMA: Final[probatio.Schema] = probatio.Schema(
     {
         probatio.Required(CONF_USERNAME): str,
         probatio.Required(CONF_PASSWORD): str,
     },
 )
 
-_LOGGER = logging.getLogger(__name__)
+_LOGGER: Final = logging.getLogger(__name__)
 
 
 async def validate_input(hass: HomeAssistant, /, *, data: dict[str, Any]) -> str:
     """Validate the user input allows us to connect."""
     session: ClientSession = async_get_clientsession(hass)
-    _LOGGER.debug("Try to connected to %s", data[CONF_HOST])
+    _LOGGER.debug("Try to connect to %s", data[CONF_HOST])
 
     client: KebaKeEnergyAPI = KebaKeEnergyAPI(
         data[CONF_HOST],

@@ -7,6 +7,7 @@ from __future__ import annotations
 import logging
 import socket
 from typing import TYPE_CHECKING
+from typing import Final
 
 from homeassistant.const import Platform
 from homeassistant.helpers import config_validation as cv
@@ -27,9 +28,9 @@ if TYPE_CHECKING:
     from homeassistant.helpers.device_registry import DeviceEntry
     from homeassistant.helpers.typing import ConfigType
 
-CONFIG_SCHEMA = cv.config_entry_only_config_schema(DOMAIN)
+CONFIG_SCHEMA: Final = cv.config_entry_only_config_schema(DOMAIN)
 
-PLATFORMS: list[Platform] = [
+PLATFORMS: Final[list[Platform]] = [
     Platform.BINARY_SENSOR,
     Platform.CLIMATE,
     Platform.NUMBER,
@@ -39,7 +40,7 @@ PLATFORMS: list[Platform] = [
     Platform.WATER_HEATER,
 ]
 
-_LOGGER = logging.getLogger(__name__)
+_LOGGER: Final = logging.getLogger(__name__)
 
 
 async def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:  # noqa: ARG001
@@ -50,7 +51,7 @@ async def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:  # noqa:
 
 async def async_setup_entry(hass: HomeAssistant, entry: KebaKeEnergyConfigEntry) -> bool:
     """Set up the KEBA KeEnergy platform."""
-    # Newer software versions of the Web HMI comes with self-signed SSL certificates
+    # Newer software versions of the Web HMI comes with self-signed SSL certificates.
     session: ClientSession = async_get_clientsession(hass, verify_ssl=False, family=socket.AF_INET)
 
     coordinator: KebaKeEnergyDataUpdateCoordinator = KebaKeEnergyDataUpdateCoordinator(
@@ -63,7 +64,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: KebaKeEnergyConfigEntry)
 
     entry.runtime_data = coordinator
 
-    # register keba_keenergy before via_device is used
+    # Register the control unit before other devices use it as `via_device`.
     device_registry = dr.async_get(hass)
 
     control_unit: DeviceEntry = device_registry.async_get_or_create(
@@ -78,7 +79,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: KebaKeEnergyConfigEntry)
 
     coordinator.control_unit_device_id = control_unit.id
 
-    # Remove the devices that the control unit no longer provides, e.g. a removed buffer tank
+    # Remove the devices that the control unit no longer provides, e.g. a removed buffer tank.
     device_identifiers: set[str] = coordinator.device_identifiers()
 
     for device in dr.async_entries_for_config_entry(device_registry, entry.entry_id):

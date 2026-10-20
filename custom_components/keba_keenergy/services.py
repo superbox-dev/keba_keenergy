@@ -36,7 +36,7 @@ if TYPE_CHECKING:
     from .coordinator import KebaKeEnergyConfigEntry
     from .coordinator import KebaKeEnergyDataUpdateCoordinator
 
-_LOGGER = logging.getLogger(__name__)
+_LOGGER: Final = logging.getLogger(__name__)
 
 ATTR_START_DATE: Final[str] = "start_date"
 ATTR_END_DATE: Final[str] = "end_date"
@@ -50,7 +50,7 @@ def _date(value: object) -> date:
         return cv.datetime(value).date()
 
 
-AWAY_DATE_RANGE_SCHEMA: probatio.Schema = probatio.Schema(
+AWAY_DATE_RANGE_SCHEMA: Final[probatio.Schema] = probatio.Schema(
     {
         probatio.Required(ATTR_CONFIG_ENTRY): selector.ConfigEntrySelector(
             {
@@ -67,7 +67,7 @@ ATTR_OUTDOOR: Final[str] = "outdoor"
 ATTR_FLOW: Final[str] = "flow"
 ATTR_HEATING_CURVE: Final[str] = "heating_curve"
 
-HEATING_CURVE_POINT_SCHEMA = probatio.Schema(
+HEATING_CURVE_POINT_SCHEMA: Final = probatio.Schema(
     {
         probatio.Required(ATTR_OUTDOOR): probatio.All(
             probatio.Coerce(float),
@@ -80,7 +80,7 @@ HEATING_CURVE_POINT_SCHEMA = probatio.Schema(
     },
 )
 
-HEATING_CURVE_POINTS_SCHEMA: probatio.Schema = probatio.Schema(
+HEATING_CURVE_POINTS_SCHEMA: Final[probatio.Schema] = probatio.Schema(
     {
         probatio.Required(ATTR_CONFIG_ENTRY): selector.ConfigEntrySelector(
             {
@@ -182,7 +182,7 @@ async def _async_set_heating_curve_points(call: ServiceCall) -> None:
             translation_key="duplicate_outdoor_temperature_values",
         )
 
-    # Only write changed points, the control unit stores them in its flash memory
+    # Only write changed points, the control unit stores them in its flash memory.
     current_points: HeatingCurvePoints = tuple(
         HeatingCurvePoint(outdoor=round(p.outdoor, 2), flow=round(p.flow, 2)) for p in heating_curves[heating_curve]
     )

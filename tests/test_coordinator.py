@@ -115,6 +115,7 @@ async def test_update_api_error(
         },
     ],
     indirect=True,
+    ids=["heat_circuit_every_second_tick"],
 )
 async def test_update_interval_ticks(
     hass: HomeAssistant,
@@ -138,7 +139,7 @@ async def test_update_interval_ticks(
         get_multiple_position_fixed_data_response(),
         MULTIPLE_POSITION_WITHOUT_SOLAR_CIRCUITS_DATA_RESPONSE,
         MULTIPLE_POSITION_WITHOUT_SOLAR_CIRCUITS_DATA_RESPONSE,
-        # Without the values of the heating circuits
+        # The values of the heating circuits are skipped on this refresh.
         MULTIPLE_POSITION_WITHOUT_SOLAR_AND_HEATING_CIRCUITS_DATA_RESPONSE,
     ]
     await fake_api.setup_integration()
@@ -156,7 +157,7 @@ async def test_update_interval_ticks(
     assert heat_circuit_reads == [1, 2, 2]
     assert _state(hass, "sensor.keba_keenergy_12345678_heat_circuit_target_temperature_1") == heat_circuit_state
     assert _state(hass, "sensor.keba_keenergy_12345678_buffer_tank_target_temperature_1") == "42.0"
-    # The control unit has no solar circuit, so its values are never requested
+    # The control unit has no solar circuit, so its values are never requested.
     assert not any("solarCircuit" in body for body in fake_api.read_requests())
 
 
@@ -178,6 +179,7 @@ async def test_update_interval_ticks(
         },
     ],
     indirect=True,
+    ids=["heat_circuit_every_second_tick"],
 )
 @pytest.mark.usefixtures("entity_registry_enabled_by_default")
 async def test_update_interval_ticks_keep_message_ids(
@@ -201,7 +203,7 @@ async def test_update_interval_ticks_keep_message_ids(
         get_multiple_position_fixed_data_response(),
         MULTIPLE_POSITION_WITHOUT_SOLAR_CIRCUITS_DATA_RESPONSE,
         MULTIPLE_POSITION_WITHOUT_SOLAR_CIRCUITS_DATA_RESPONSE,
-        # Without the values of the heating circuits
+        # The values of the heating circuits are skipped on this refresh.
         MULTIPLE_POSITION_WITHOUT_SOLAR_AND_HEATING_CIRCUITS_DATA_RESPONSE,
         MULTIPLE_POSITION_WITHOUT_SOLAR_CIRCUITS_DATA_RESPONSE,
     ]
@@ -210,7 +212,7 @@ async def test_update_interval_ticks_keep_message_ids(
     coordinator: KebaKeEnergyDataUpdateCoordinator = config_entry.runtime_data
     states: list[str] = []
 
-    # The heating circuits are requested on the first and the third refresh
+    # The heating circuits are requested on the first and the third refresh.
     for message_ids in ({"APPL.CtrlAppl.sParam.heatCircuit[0].tempRoom.state.msgId": 10}, {}, {}):
         fake_api.message_ids = message_ids
         await coordinator.async_refresh()

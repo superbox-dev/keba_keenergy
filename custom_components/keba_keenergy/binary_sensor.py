@@ -33,7 +33,7 @@ if TYPE_CHECKING:
     from .coordinator import KebaKeEnergyDataUpdateCoordinator
 
 
-_LOGGER = logging.getLogger(__name__)
+_LOGGER: Final = logging.getLogger(__name__)
 
 PARALLEL_UPDATES: Final[int] = 0
 
@@ -46,7 +46,7 @@ class KebaKeEnergyBinarySensorEntityDescription(
     """Class describing KEBA KeEnergy binary sensor entities."""
 
 
-BINARY_SENSOR_TYPES: dict[str, tuple[KebaKeEnergyBinarySensorEntityDescription, ...]] = {
+BINARY_SENSOR_TYPES: Final[dict[str, tuple[KebaKeEnergyBinarySensorEntityDescription, ...]]] = {
     SectionPrefix.SOLAR_CIRCUIT: (
         KebaKeEnergyBinarySensorEntityDescription(
             key="heat_request",

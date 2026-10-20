@@ -40,7 +40,7 @@ async def test_entity_update(
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
         MULTIPLE_POSITION_DATA_RESPONSE,
-        # Read API after services call
+        # Read the API after the action call.
         ENTITY_UPDATED_DATA_RESPONSE,
     ]
     await async_setup_component(hass, HA_DOMAIN, {})
@@ -107,6 +107,7 @@ async def test_entity_update_failed(
         ("Bartl 4.0", "ino"),
         ("KeEnergy", None),
     ],
+    ids=["m_tec", "ino", "unknown"],
 )
 async def test_heat_pump_manufacturer(
     hass: HomeAssistant,
@@ -183,7 +184,7 @@ async def test_entities_keep_their_state_if_queued_updates_failed(
     await fake_api.setup_integration()
 
     with pytest.raises(HomeAssistantError):
-        # The entities write at the same time, so the second write waits for the first one
+        # The entities write at the same time, so the second write waits for the first one.
         await hass.services.async_call(
             domain=SELECT_DOMAIN,
             service=SERVICE_SELECT_OPTION,

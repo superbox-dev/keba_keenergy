@@ -32,7 +32,7 @@ if TYPE_CHECKING:
     from tests.conftest import FakeKebaKeEnergyAPI
 
 
-@pytest.mark.parametrize("language", ["en", "de"], indirect=True)
+@pytest.mark.parametrize("language", ["en", "de"], indirect=True, ids=["en", "de"])
 @pytest.mark.usefixtures("entity_registry_enabled_by_default", "language")
 async def test_switches(
     hass: HomeAssistant,
@@ -78,6 +78,12 @@ async def test_switches(
             '[{"name": "APPL.CtrlAppl.sParam.heatCircuit[1].param.enableHeatCurveLinTab", "value": "1"}]',
         ),
     ],
+    ids=[
+        "heat_pump_compressor_use_night_speed",
+        "solar_circuit_priority_1_before_2",
+        "heat_circuit_use_heating_curve",
+        "heat_circuit_use_cooling_curve",
+    ],
 )
 @pytest.mark.usefixtures("entity_registry_enabled_by_default")
 async def test_turn_on(
@@ -92,7 +98,7 @@ async def test_turn_on(
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
         response,
-        # Read API after services call
+        # Read the API after the action call.
         response,
     ]
     await fake_api.setup_integration()
@@ -129,6 +135,7 @@ async def test_turn_on(
             ),
         ),
     ],
+    ids=["heat_pump_compressor_use_night_speed", "solar_circuit_priority_1_before_2"],
 )
 @pytest.mark.usefixtures("entity_registry_enabled_by_default")
 async def test_turn_off(
@@ -143,7 +150,7 @@ async def test_turn_off(
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
         response,
-        # Read API after services call
+        # Read the API after the action call.
         response,
     ]
     await fake_api.setup_integration()
@@ -169,6 +176,7 @@ async def test_turn_off(
         (SERVICE_TURN_ON, MULTIPLE_POSITION_DATA_RESPONSE),
         (SERVICE_TURN_OFF, MULTIPLE_POSITION_OTHER_MODES_DATA_RESPONSE),
     ],
+    ids=["turn_on", "turn_off"],
 )
 async def test_unchanged_state(
     hass: HomeAssistant,

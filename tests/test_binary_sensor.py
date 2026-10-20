@@ -5,6 +5,7 @@
 from __future__ import annotations
 
 from typing import TYPE_CHECKING
+from typing import Final
 
 import pytest
 from homeassistant.const import STATE_OFF
@@ -24,11 +25,11 @@ if TYPE_CHECKING:
     from custom_components.keba_keenergy.coordinator import KebaKeEnergyDataUpdateCoordinator
     from tests.conftest import FakeKebaKeEnergyAPI
 
-COMPRESSOR_FAILURE_ENTITY_ID: str = "binary_sensor.keba_keenergy_12345678_heat_pump_has_compressor_failure"
-COMPRESSOR_FAILURE_MESSAGE_ID: str = "APPL.CtrlAppl.sParam.heatpump[0].FailureCompressor.state.msgId"
+COMPRESSOR_FAILURE_ENTITY_ID: Final[str] = "binary_sensor.keba_keenergy_12345678_heat_pump_has_compressor_failure"
+COMPRESSOR_FAILURE_MESSAGE_ID: Final[str] = "APPL.CtrlAppl.sParam.heatpump[0].FailureCompressor.state.msgId"
 
 
-@pytest.mark.parametrize("language", ["en", "de"], indirect=True)
+@pytest.mark.parametrize("language", ["en", "de"], indirect=True, ids=["en", "de"])
 @pytest.mark.usefixtures("entity_registry_enabled_by_default", "language")
 async def test_binary_sensors(
     hass: HomeAssistant,
@@ -47,7 +48,9 @@ async def test_binary_sensors(
         assert state == snapshot(name=state.entity_id)
 
 
-@pytest.mark.parametrize(("message_id", "expected"), [(0, STATE_OFF), (50, STATE_UNKNOWN)])
+@pytest.mark.parametrize(
+    ("message_id", "expected"), [(0, STATE_OFF), (50, STATE_UNKNOWN)], ids=["confirmed", "unconfirmed"]
+)
 async def test_failure_input_not_in_use(
     hass: HomeAssistant,
     fake_api: FakeKebaKeEnergyAPI,

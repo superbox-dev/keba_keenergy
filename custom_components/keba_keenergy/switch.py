@@ -29,7 +29,7 @@ if TYPE_CHECKING:
     from .coordinator import KebaKeEnergyConfigEntry
     from .coordinator import KebaKeEnergyDataUpdateCoordinator
 
-_LOGGER = logging.getLogger(__name__)
+_LOGGER: Final = logging.getLogger(__name__)
 
 PARALLEL_UPDATES: Final[int] = 0
 
@@ -87,7 +87,7 @@ class KebaKeEnergySwitchEntity(KebaKeEnergyEntity, SwitchEntity):
             )
 
 
-SWITCH_TYPES: dict[str, tuple[KebaKeEnergySwitchEntityDescription, ...]] = {
+SWITCH_TYPES: Final[dict[str, tuple[KebaKeEnergySwitchEntityDescription, ...]]] = {
     SectionPrefix.HEAT_CIRCUIT: (
         KebaKeEnergySwitchEntityDescription(
             condition=lambda coordinator, _: coordinator.has_photovoltaics(),
@@ -105,7 +105,7 @@ SWITCH_TYPES: dict[str, tuple[KebaKeEnergySwitchEntityDescription, ...]] = {
             key="use_heating_curve",
             translation_key="use_heating_curve",
         ),
-        # Heating and cooling circuits have one curve setting, so only cooling circuits get the cooling curve switch
+        # Heating and cooling circuits have one curve setting, so only cooling circuits get the cooling curve switch.
         KebaKeEnergySwitchEntityDescription(
             condition=lambda coordinator, index: (
                 coordinator.is_cooling_circuit(index=index) and not coordinator.is_heating_circuit(index=index)

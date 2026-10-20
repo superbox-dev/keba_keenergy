@@ -44,7 +44,7 @@ if TYPE_CHECKING:
     from tests.conftest import FakeKebaKeEnergyAPI
 
 
-@pytest.mark.parametrize("language", ["en", "de"], indirect=True)
+@pytest.mark.parametrize("language", ["en", "de"], indirect=True, ids=["en", "de"])
 @pytest.mark.usefixtures("entity_registry_enabled_by_default", "language")
 async def test_numbers(
     hass: HomeAssistant,
@@ -122,6 +122,19 @@ async def test_numbers(
             '[{"name": "APPL.CtrlAppl.sParam.heatCircuit[0].param.heatCurveGradient", "value": "0.3"}]',
         ),
     ],
+    ids=[
+        "solar_circuit_target_temperature_1",
+        "solar_circuit_target_temperature_2",
+        "buffer_tank_standby_temperature",
+        "hot_water_tank_standby_temperature",
+        "hot_water_tank_target_temperature",
+        "heat_circuit_target_temperature_day",
+        "heat_circuit_target_temperature_night",
+        "heat_circuit_target_temperature_away",
+        "heat_circuit_target_temperature_offset",
+        "heat_circuit_heating_curve_offset",
+        "heat_circuit_heating_curve_slope",
+    ],
 )
 @pytest.mark.usefixtures("entity_registry_enabled_by_default")
 async def test_set_value(
@@ -136,7 +149,7 @@ async def test_set_value(
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
         MULTIPLE_POSITION_DATA_RESPONSE,
-        # Read API after services call
+        # Read the API after the action call.
         MULTIPLE_POSITION_DATA_RESPONSE,
     ]
     await fake_api.setup_integration()
@@ -204,6 +217,13 @@ async def test_set_value(
             ),
         ),
     ],
+    ids=[
+        "hot_water_tank_target_temperature",
+        "heat_circuit_target_temperature_day",
+        "heat_circuit_target_temperature_offset",
+        "heat_circuit_heating_curve_offset",
+        "heat_circuit_heating_curve_slope",
+    ],
 )
 @pytest.mark.usefixtures("entity_registry_enabled_by_default")
 async def test_set_value_bad_range(
@@ -218,7 +238,7 @@ async def test_set_value_bad_range(
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
         MULTIPLE_POSITION_DATA_RESPONSE,
-        # Read API after services call
+        # Read the API after the action call.
         MULTIPLE_POSITION_DATA_RESPONSE,
     ]
     await fake_api.setup_integration()
@@ -249,6 +269,7 @@ async def test_set_value_bad_range(
             r"expected float",
         ),
     ],
+    ids=["none", "string"],
 )
 async def test_set_value_bad_attr(
     hass: HomeAssistant,
@@ -262,7 +283,7 @@ async def test_set_value_bad_attr(
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
         MULTIPLE_POSITION_DATA_RESPONSE,
-        # Read API after services call
+        # Read the API after the action call.
         MULTIPLE_POSITION_DATA_RESPONSE,
     ]
     await fake_api.setup_integration()
@@ -289,7 +310,7 @@ async def test_set_value_debounced(
         DEFAULT_POSITION_RESPONSE,
         DEFAULT_POSITION_FIXED_DATA_RESPONSE,
         get_single_position_data_response(heat_circuit_target_temperature_offset="1.5"),
-        # Read API after updating the entity
+        # Read the API after the update of the entity.
         get_single_position_data_response(heat_circuit_target_temperature_offset="1.5"),
     ]
     await fake_api.setup_integration()

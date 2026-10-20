@@ -58,7 +58,7 @@ if TYPE_CHECKING:
 
 
 PARALLEL_UPDATES: Final[int] = 0
-_LOGGER = logging.getLogger(__name__)
+_LOGGER: Final = logging.getLogger(__name__)
 
 
 @dataclass(frozen=True, kw_only=True)
@@ -117,7 +117,7 @@ class KebaKeEnergySensorEntity(KebaKeEnergyEntity, SensorEntity):
         return {**self.entity_description.attributes(attributes), **self._message_id_attributes(self._data_key)}
 
 
-SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = {
+SENSOR_TYPES: Final[dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]]] = {
     SectionPrefix.SYSTEM: (
         KebaKeEnergySensorEntityDescription[float](
             device_class=SensorDeviceClass.TEMPERATURE,
@@ -563,7 +563,7 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
             state_class=SensorStateClass.TOTAL,
             suggested_display_precision=2,
             translation_key="heating_energy",
-            value=lambda data: data / 3_600_000,  # Convert Joule to kWh
+            value=lambda data: data / 3_600_000,  # Convert joule to kWh.
         ),
         KebaKeEnergySensorEntityDescription[float](
             device_class=SensorDeviceClass.ENERGY,
@@ -573,7 +573,7 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
             state_class=SensorStateClass.TOTAL,
             suggested_display_precision=2,
             translation_key="daily_energy",
-            value=lambda data: data / 3_600_000,  # Convert Joule to kWh
+            value=lambda data: data / 3_600_000,  # Convert joule to kWh.
         ),
         KebaKeEnergySensorEntityDescription[float](
             device_class=SensorDeviceClass.POWER,
@@ -1258,7 +1258,7 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
             state_class=SensorStateClass.TOTAL,
             suggested_display_precision=2,
             translation_key="daily_energy",
-            value=lambda data: data / 3_600_000,  # Convert Joule to kWh
+            value=lambda data: data / 3_600_000,  # Convert joule to kWh.
         ),
         KebaKeEnergySensorEntityDescription[float](
             device_class=SensorDeviceClass.ENERGY,
@@ -1267,7 +1267,7 @@ SENSOR_TYPES: dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]] = 
             state_class=SensorStateClass.TOTAL_INCREASING,
             suggested_display_precision=2,
             translation_key="total_energy",
-            value=lambda data: data / 3_600_000,  # Convert Joule to kWh
+            value=lambda data: data / 3_600_000,  # Convert joule to kWh.
         ),
     ),
 }

@@ -67,6 +67,7 @@ async def test_load_entry(
         ),
     ],
     indirect=["config_entry"],
+    ids=["hostname"],
 )
 async def test_unload_entry(
     hass: HomeAssistant,

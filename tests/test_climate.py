@@ -9,6 +9,7 @@ from datetime import datetime
 from datetime import timedelta
 from typing import TYPE_CHECKING
 from typing import Any
+from typing import Final
 from unittest.mock import patch
 
 import pytest
@@ -53,9 +54,9 @@ if TYPE_CHECKING:
 
     from tests.conftest import FakeKebaKeEnergyAPI
 
-ENTITY_ID: str = "climate.keba_keenergy_12345678"
-ENTITY_ID_1: str = "climate.keba_keenergy_12345678_1"
-ENTITY_ID_2: str = "climate.keba_keenergy_12345678_2"
+ENTITY_ID: Final[str] = "climate.keba_keenergy_12345678"
+ENTITY_ID_1: Final[str] = "climate.keba_keenergy_12345678_1"
+ENTITY_ID_2: Final[str] = "climate.keba_keenergy_12345678_2"
 
 
 @pytest.mark.parametrize(
@@ -78,6 +79,7 @@ ENTITY_ID_2: str = "climate.keba_keenergy_12345678_2"
             [ENTITY_ID_1, ENTITY_ID_2],
         ),
     ],
+    ids=["single_position", "multiple_positions"],
 )
 async def test_climate_entities(
     hass: HomeAssistant,
@@ -93,7 +95,7 @@ async def test_climate_entities(
         assert isinstance(hass.states.get(entity), State)
 
 
-@pytest.mark.parametrize("language", ["en", "de"], indirect=True)
+@pytest.mark.parametrize("language", ["en", "de"], indirect=True, ids=["en", "de"])
 @pytest.mark.usefixtures("entity_registry_enabled_by_default", "language")
 async def test_climate(
     hass: HomeAssistant,
@@ -118,8 +120,9 @@ async def test_climate(
         (
             get_single_position_data_response(heat_circuit_target_temperature_offset="1.5"),
             21.5,
-        ),  # Selected target temperature 20.0 + Offset 1.5
+        ),  # The selected target temperature 20.0 plus the offset 1.5.
     ],
+    ids=["with_offset"],
 )
 async def test_target_temperature(
     hass: HomeAssistant,
@@ -150,7 +153,7 @@ async def test_set_temperature_debounced(
         DEFAULT_POSITION_RESPONSE,
         DEFAULT_POSITION_FIXED_DATA_RESPONSE,
         get_single_position_data_response(heat_circuit_target_temperature_offset="1.5"),
-        # Read API after updating the entity
+        # Read the API after the update of the entity.
         get_single_position_data_response(heat_circuit_target_temperature_offset="1.5"),
     ]
     await fake_api.setup_integration()
@@ -224,7 +227,7 @@ async def test_turn_off(
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
         MULTIPLE_POSITION_DATA_RESPONSE,
-        # Read API after services call
+        # Read the API after the action call.
         MULTIPLE_POSITION_DATA_RESPONSE,
     ]
     await fake_api.setup_integration()
@@ -253,7 +256,7 @@ async def test_turn_on(
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
         MULTIPLE_POSITION_DATA_RESPONSE,
-        # Read API after services call
+        # Read the API after the action call.
         MULTIPLE_POSITION_DATA_RESPONSE,
     ]
     await fake_api.setup_integration()
@@ -280,6 +283,7 @@ async def test_turn_on(
         (HVACMode.HEAT, 2),
         (HVACMode.OFF, 0),
     ],
+    ids=["auto", "heat", "off"],
 )
 async def test_set_hvac_mode(
     hass: HomeAssistant,
@@ -292,7 +296,7 @@ async def test_set_hvac_mode(
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
         MULTIPLE_POSITION_OTHER_MODES_DATA_RESPONSE,
-        # Read API after services call
+        # Read the API after the action call.
         MULTIPLE_POSITION_OTHER_MODES_DATA_RESPONSE,
     ]
     await fake_api.setup_integration()
@@ -345,6 +349,7 @@ async def test_set_unchanged_hvac_mode(
         (PRESET_SLEEP, MULTIPLE_POSITION_DATA_RESPONSE, HeatCircuitOperatingMode.NIGHT.value),
         (PRESET_BOOST, MULTIPLE_POSITION_DATA_RESPONSE, HeatCircuitOperatingMode.PARTY.value),
     ],
+    ids=["home", "comfort", "sleep", "boost"],
 )
 async def test_set_preset_mode(
     hass: HomeAssistant,
@@ -358,7 +363,7 @@ async def test_set_preset_mode(
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
         response,
-        # Read API after services call
+        # Read the API after the action call.
         response,
     ]
     await fake_api.setup_integration()
@@ -418,7 +423,7 @@ async def test_unset_preset_mode_away(
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
         MULTIPLE_POSITION_OTHER_MODES_DATA_RESPONSE,
-        # Read API after services call
+        # Read the API after the action call.
         MULTIPLE_POSITION_DATA_RESPONSE,
     ]
     await fake_api.setup_integration()
@@ -455,7 +460,7 @@ async def test_set_temperature(
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
         MULTIPLE_POSITION_DATA_RESPONSE,
-        # Read API after services call
+        # Read the API after the action call.
         MULTIPLE_POSITION_DATA_RESPONSE,
     ]
     await fake_api.setup_integration()
@@ -481,6 +486,7 @@ async def test_set_temperature(
 @pytest.mark.parametrize(
     "operating_mode",
     [HeatCircuitOperatingMode.EXTERNAL, HeatCircuitOperatingMode.ROOM_CONTROL],
+    ids=["external", "room_control"],
 )
 async def test_operating_mode_without_preset(
     hass: HomeAssistant,
@@ -514,7 +520,7 @@ async def test_set_preset_mode_without_time_zone_request(
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
         MULTIPLE_POSITION_DATA_RESPONSE,
-        # Read API after services call
+        # Read the API after the action call.
         MULTIPLE_POSITION_DATA_RESPONSE,
     ]
     await fake_api.setup_integration()

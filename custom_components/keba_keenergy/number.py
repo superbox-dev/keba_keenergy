@@ -32,7 +32,7 @@ if TYPE_CHECKING:
     from .coordinator import KebaKeEnergyDataUpdateCoordinator
 
 
-_LOGGER = logging.getLogger(__name__)
+_LOGGER: Final = logging.getLogger(__name__)
 
 PARALLEL_UPDATES: Final[int] = 0
 
@@ -100,7 +100,7 @@ class KebaKeEnergyNumberEntity(KebaKeEnergyEntity, NumberEntity):
         self._schedule_debounced_write(value / self.entity_description.scale)
 
 
-NUMBER_TYPES: dict[str, tuple[KebaKeEnergyNumberEntityDescription, ...]] = {
+NUMBER_TYPES: Final[dict[str, tuple[KebaKeEnergyNumberEntityDescription, ...]]] = {
     SectionPrefix.HEAT_CIRCUIT: (
         KebaKeEnergyNumberEntityDescription(
             condition=lambda coordinator, index: coordinator.is_heating_circuit(index=index),
