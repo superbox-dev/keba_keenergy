@@ -1,4 +1,5 @@
-/* Styled after the Home Assistant documentation (home-assistant.io) */
+/* The integrations use the light theme of the home-assistant.io integration pages (e.g. /integrations/unifi/),
+   the API libraries the dark theme of contributors.home-assistant.io. Each website has only its one theme. */
 
 @import '@fontsource-variable/figtree';
 
@@ -7,9 +8,10 @@
   --ha-primary: #148567;
   --ha-accent: #1cb88f;
   --ha-radius: 16px;
-  --ha-card-background: #f2f4f9;
+  --ha-card-background: #fff;
   --ha-divider: #e8edf0;
-  --ha-header-background: rgba(255, 255, 255, 0.91);
+  --ha-header-background: rgba(251, 251, 251, 0.8);
+  --ha-secondary-text: #555;
 
   --ifm-color-primary: #148567;
   --ifm-color-primary-dark: #12785d;
@@ -21,8 +23,10 @@
 
   --ifm-font-family-base: 'Figtree Variable', 'Helvetica Neue', Arial, sans-serif;
   --ifm-heading-font-family: var(--ifm-font-family-base);
-  --ifm-font-color-base: #212121;
-  --ifm-heading-color: #0c0c0c;
+  --ifm-background-color: #fbfbfb;
+  --ifm-background-surface-color: #fbfbfb;
+  --ifm-font-color-base: #222;
+  --ifm-heading-color: #222;
   --ifm-link-hover-decoration: none;
   --ifm-code-font-size: 90%;
   --ifm-code-border-radius: 6px;
@@ -31,19 +35,17 @@
   --ifm-toc-border-color: transparent;
   --ifm-menu-color-background-active: #e6f6f1;
   --ifm-footer-background-color: #f2f4f9;
-  /* Explicit, otherwise a browser in the dark mode shows a dark page behind the light theme */
-  --ifm-background-color: #fff;
-  --ifm-background-surface-color: #fff;
   --ifm-footer-link-color: #555;
-  --ifm-footer-title-color: #0c0c0c;
+  --ifm-footer-title-color: #222;
   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1);
 }
 
 [data-theme='dark'] {
   --ha-primary: #1cb88f;
-  --ha-card-background: #1c1f24;
-  --ha-divider: #2c3138;
-  --ha-header-background: rgba(17, 19, 22, 0.88);
+  --ha-card-background: #072531;
+  --ha-divider: #15394a;
+  --ha-header-background: rgba(3, 22, 28, 0.82);
+  --ha-secondary-text: #a3b6c4;
 
   --ifm-color-primary: #1cb88f;
   --ifm-color-primary-dark: #19a681;
@@ -53,18 +55,18 @@
   --ifm-color-primary-lighter: #20d4a4;
   --ifm-color-primary-lightest: #34e0b3;
 
-  --ifm-background-color: #111316;
-  --ifm-background-surface-color: #111316;
-  --ifm-font-color-base: #e3e5e8;
-  --ifm-heading-color: #fafafa;
+  --ifm-background-color: #03161c;
+  --ifm-background-surface-color: #03161c;
+  --ifm-font-color-base: #f2f4f9;
+  --ifm-heading-color: #fff;
   --ifm-menu-color-background-active: rgba(28, 184, 143, 0.14);
-  --ifm-footer-background-color: #1c1f24;
-  --ifm-footer-link-color: #b8bec6;
-  --ifm-footer-title-color: #fafafa;
+  --ifm-footer-background-color: #072531;
+  --ifm-footer-link-color: #a3b6c4;
+  --ifm-footer-title-color: #f2f4f9;
   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
 }
 
-/* Header: translucent white with blur */
+/* Header: translucent with blur */
 
 .navbar {
   background-color: var(--ha-header-background);
@@ -196,8 +198,9 @@
   margin: 1rem 0 0.5rem;
   padding-bottom: 5px;
   border-bottom: 1px solid var(--ha-accent);
+  color: var(--ha-secondary-text);
   font-size: 1rem;
-  font-weight: 600;
+  font-weight: 800;
 }
 
 .ha-aside__title svg {

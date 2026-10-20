@@ -12,7 +12,11 @@
 - Preview image for shared links: `website/static/img/social-card.png` (1200 × 630, same layout in all projects)
 - Design after home-assistant.io:
   - `website/src/css/custom.css` and the wrapped `website/src/theme/TOC/`
-  - light mode by default, the right column at least `17.5rem` wide on smaller screens
-  - the integration card in `website/src/components/ProjectInfo/` reads `manifest.json` and `hacs.json`
+  - only the light theme, no switch, colors of the home-assistant.io integration pages (e.g. `/integrations/unifi/`),
+    except the links
+  - `custom.css` is the same in all four projects, it has the light and the dark theme
+  - the right column at least `17.5rem` wide on smaller screens
+  - the integration card in `website/src/components/ProjectInfo/` reads `manifest.json` and `hacs.json`, shows the
+    "My Home Assistant" badge below the logo and no changelog link
   - the brand logos are in `website/static/` (`logo.png`, `dark_logo.png`), the icon comes from
     `brands.home-assistant.io`

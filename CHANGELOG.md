@@ -36,7 +36,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   instead of rounding them to two decimals. They are still displayed with two decimals.
 - Wrote the points of the `keba_keenergy.set_heating_curve_points` action only if they differ from the points of the
   heating curve.
-- Showed the documentation in the light mode by default and kept the right column readable on smaller screens.
+- Showed the documentation only in the light theme with the colors of the integration pages on home-assistant.io,
+  the "My Home Assistant" button to add the integration below the logo and a wider right column on smaller
+  screens.
 
 ### Fixed
 

@@ -7,8 +7,6 @@ import {
   mdiBug,
   mdiLan,
   mdiGithub,
-  mdiHistory,
-  mdiHomeAssistant,
   mdiLightbulbQuestion,
   mdiShape,
 } from '@mdi/js';
@@ -55,6 +53,14 @@ export default function ProjectInfo(): ReactNode {
             width={995}
             height={256}
           />
+          {/* The "My Home Assistant" badge of the integration pages on home-assistant.io */}
+          <Link href={`https://my.home-assistant.io/redirect/config_flow_start/?domain=${manifest.domain}`}>
+            <img
+              src="https://my.home-assistant.io/badges/config_flow_start.svg"
+              alt="Add integration to my Home Assistant"
+              height={37}
+            />
+          </Link>
           <Link href={`${repository}/releases`}>
             <img
               src="https://img.shields.io/github/v/release/superbox-dev/keba_keenergy?label=Release"
@@ -85,14 +91,6 @@ export default function ProjectInfo(): ReactNode {
           <br />
           <Link href={`${repository}/issues/new/choose`}>
             <Icon path={mdiLightbulbQuestion} /> Request a feature
-          </Link>
-          <br />
-          <Link href={`https://my.home-assistant.io/redirect/config_flow_start/?domain=${manifest.domain}`}>
-            <Icon path={mdiHomeAssistant} /> Add to Home Assistant
-          </Link>
-          <br />
-          <Link to="/changelog">
-            <Icon path={mdiHistory} /> Changelog
           </Link>
         </p>
       </section>
