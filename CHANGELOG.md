@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   A configured hostname is kept.
 - Removed the devices that the control unit no longer provides (e.g. a removed buffer tank) with their entities
   when the integration is set up.
+- Added a preview image to the documentation for links shared on social media.
 
 ### Changed
 
