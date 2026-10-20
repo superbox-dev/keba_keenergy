@@ -15,6 +15,7 @@ from unittest.mock import patch
 import pytest
 from homeassistant.const import CONF_HOST
 from homeassistant.const import CONF_SSL
+from keba_keenergy_api.constants import MESSAGE_ID_SUFFIX
 from pytest_homeassistant_custom_component.common import MockConfigEntry
 from pytest_homeassistant_custom_component.syrupy import HomeAssistantSnapshotExtension
 from pytest_homeassistant_custom_component.test_util.aiohttp import AiohttpClientMocker
@@ -215,7 +216,7 @@ class FakeKebaKeEnergyAPI:
         payload: list[dict[str, str]] = json.loads(str(data))
         response: Exception | HTTPStatus | list[dict[str, Any]]
 
-        if all(item["name"].endswith(".state.msgId") for item in payload):
+        if all(item["name"].endswith(MESSAGE_ID_SUFFIX) for item in payload):
             response = [{"name": item["name"], "value": str(self.message_ids.get(item["name"], 0))} for item in payload]
         elif self.is_filter_request(data):
             unknown: list[str] = [item["name"] for item in payload if item["name"] in self.unsupported_variables]
