@@ -108,6 +108,16 @@ class KebaKeEnergyClimateEntity(KebaKeEnergyBaseEntity, ClimateEntity):
         self._pending_section = HeatCircuit.TARGET_TEMPERATURE_OFFSET
 
     @cached_property
+    def hvac_modes(self) -> list[HVACMode]:
+        """Return the list of available hvac operation modes."""
+        return [HVACMode.AUTO, self._hvac_mode_on, HVACMode.OFF]
+
+    @cached_property
+    def _hvac_mode_on(self) -> HVACMode:
+        # A heating circuit that supports heating and cooling uses HEAT_COOL, this is untested with a real device.
+        return HVACMode.HEAT if self._is_heating else HVACMode.COOL if self._is_cooling else HVACMode.HEAT_COOL
+
+    @cached_property
     def _is_heating(self) -> bool:
         return self.coordinator.is_heating_circuit(index=self.index) and not self.coordinator.is_cooling_circuit(
             index=self.index,
@@ -118,16 +128,6 @@ class KebaKeEnergyClimateEntity(KebaKeEnergyBaseEntity, ClimateEntity):
         return self.coordinator.is_cooling_circuit(index=self.index) and not self.coordinator.is_heating_circuit(
             index=self.index,
         )
-
-    @cached_property
-    def _hvac_mode_on(self) -> HVACMode:
-        # A heating circuit that supports heating and cooling uses HEAT_COOL, this is untested with a real device.
-        return HVACMode.HEAT if self._is_heating else HVACMode.COOL if self._is_cooling else HVACMode.HEAT_COOL
-
-    @cached_property
-    def hvac_modes(self) -> list[HVACMode]:
-        """Return the list of available hvac operation modes."""
-        return [HVACMode.AUTO, self._hvac_mode_on, HVACMode.OFF]
 
     @cached_property
     def preset_modes(self) -> list[str] | None:
@@ -274,29 +274,6 @@ class KebaKeEnergyClimateEntity(KebaKeEnergyBaseEntity, ClimateEntity):
                 device_numbers=self.device_numbers,
             )
 
-    async def async_set_preset_mode(self, preset_mode: str) -> None:
-        """Set preset mode for heat circuit."""
-        await self._async_set_away_date_range(preset_mode)
-
-        for key, value in HEATING_CIRCUIT_PRESET_TO_HA.items():
-            if value == preset_mode and preset_mode not in (self.preset_mode, PRESET_AWAY):
-                await self._async_write_data(
-                    key,
-                    section=HeatCircuit.OPERATING_MODE,
-                    device_numbers=self.device_numbers,
-                )
-
-    async def async_set_temperature(self, **kwargs: object) -> None:
-        """Set new target temperature."""
-        temperature: object = kwargs.get(ATTR_TEMPERATURE)
-        selected_target_temperature: float | None = self.get_value("selected_target_temperature", expected_type=float)
-
-        self._schedule_debounced_write(
-            temperature - selected_target_temperature
-            if isinstance(temperature, float | int) and selected_target_temperature is not None
-            else None,
-        )
-
     async def _async_set_away_date_range(self, preset_mode: str, /) -> None:
         is_away: bool = preset_mode == PRESET_AWAY
 
@@ -319,6 +296,29 @@ class KebaKeEnergyClimateEntity(KebaKeEnergyBaseEntity, ClimateEntity):
                 start_timestamp=(start_date_tz - timedelta(days=1)).timestamp(),
                 end_timestamp=(end_date_tz - timedelta(days=1)).timestamp(),
             )
+
+    async def async_set_preset_mode(self, preset_mode: str) -> None:
+        """Set preset mode for heat circuit."""
+        await self._async_set_away_date_range(preset_mode)
+
+        for key, value in HEATING_CIRCUIT_PRESET_TO_HA.items():
+            if value == preset_mode and preset_mode not in (self.preset_mode, PRESET_AWAY):
+                await self._async_write_data(
+                    key,
+                    section=HeatCircuit.OPERATING_MODE,
+                    device_numbers=self.device_numbers,
+                )
+
+    async def async_set_temperature(self, **kwargs: object) -> None:
+        """Set new target temperature."""
+        temperature: object = kwargs.get(ATTR_TEMPERATURE)
+        selected_target_temperature: float | None = self.get_value("selected_target_temperature", expected_type=float)
+
+        self._schedule_debounced_write(
+            temperature - selected_target_temperature
+            if isinstance(temperature, float | int) and selected_target_temperature is not None
+            else None,
+        )
 
 
 async def async_setup_entry(

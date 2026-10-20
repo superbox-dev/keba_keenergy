@@ -131,14 +131,6 @@ class KebaKeEnergyBaseEntity(
 
         return unique_id
 
-    async def async_will_remove_from_hass(self) -> None:
-        """Cancel a pending debounced write when the entity is removed."""
-        if self._async_call_later:
-            self._async_call_later()
-            self._async_call_later = None
-
-        await super().async_will_remove_from_hass()
-
     @property
     def position(self) -> int | None:
         """Return device position number."""
@@ -196,16 +188,6 @@ class KebaKeEnergyBaseEntity(
 
         return _device_model
 
-    @cached_property
-    def _translation_key(self) -> str | None:
-        return DEVICE_TRANSLATION_KEYS.get(self.section_id)
-
-    @property
-    def _translation_placeholders(self) -> Mapping[str, str] | None:
-        return {
-            "position": f" {self.position}" if self.position else "",
-        }
-
     @property
     def device_info(self) -> DeviceInfo:
         """Return updated device specific attributes."""
@@ -223,6 +205,61 @@ class KebaKeEnergyBaseEntity(
             _device_info["via_device_id"] = self.coordinator.control_unit_device_id
 
         return _device_info
+
+    @cached_property
+    def _translation_key(self) -> str | None:
+        return DEVICE_TRANSLATION_KEYS.get(self.section_id)
+
+    @property
+    def _translation_placeholders(self) -> Mapping[str, str] | None:
+        return {
+            "position": f" {self.position}" if self.position else "",
+        }
+
+    async def async_will_remove_from_hass(self) -> None:
+        """Cancel a pending debounced write when the entity is removed."""
+        if self._async_call_later:
+            self._async_call_later()
+            self._async_call_later = None
+
+        await super().async_will_remove_from_hass()
+
+    def get_entity_data(self, key: str, /) -> Value | None:
+        """Get the real entity data from the coordinator data, or None if the sensor is not in use."""
+        if not self.coordinator.is_sensor_in_use(self.section_id, key, index=self.index, key_index=self.key_index):
+            return None
+
+        values: Values | None = self.coordinator.data[self.section_id].get(key)
+        return None if values is None else get_value_by_index(values, index=self.index, key_index=self.key_index)
+
+    def get_attribute(self, key: str, /, *, attr: str) -> str:
+        """Get extra attribute from the API by key."""
+        entity_data: Value | None = self.get_entity_data(key)
+        attributes: dict[str, Any] = entity_data.get("attributes", {}) if entity_data else {}
+        return str(attributes.get(attr, ""))
+
+    def get_limit(self, key: str, /, *, attr: str) -> float | None:
+        """Get a limit (e.g. `lower_limit`) from the API by key, or None if the value has no valid limit."""
+        try:
+            return float(self.get_attribute(key, attr=attr))
+        except ValueError:
+            return None
+
+    @overload
+    def get_value(self, key: str, /, *, expected_type: type[T]) -> T | None: ...
+
+    @overload
+    def get_value(self, key: str, /) -> StateType: ...
+
+    def get_value(self, key: str, /, *, expected_type: type[T] | None = None) -> StateType:
+        """Get value from the API by key."""
+        entity_data: Value | None = self.get_entity_data(key)
+        value: StateType = entity_data.get("value") if entity_data else None
+
+        if expected_type and value is not None:
+            return expected_type(value)
+
+        return value
 
     async def _async_write_data(
         self,
@@ -320,43 +357,6 @@ class KebaKeEnergyBaseEntity(
 
         return self.get_value(self._pending_key, expected_type=float)
 
-    def get_entity_data(self, key: str, /) -> Value | None:
-        """Get the real entity data from the coordinator data, or None if the sensor is not in use."""
-        if not self.coordinator.is_sensor_in_use(self.section_id, key, index=self.index, key_index=self.key_index):
-            return None
-
-        values: Values | None = self.coordinator.data[self.section_id].get(key)
-        return None if values is None else get_value_by_index(values, index=self.index, key_index=self.key_index)
-
-    def get_attribute(self, key: str, /, *, attr: str) -> str:
-        """Get extra attribute from the API by key."""
-        entity_data: Value | None = self.get_entity_data(key)
-        attributes: dict[str, Any] = entity_data.get("attributes", {}) if entity_data else {}
-        return str(attributes.get(attr, ""))
-
-    def get_limit(self, key: str, /, *, attr: str) -> float | None:
-        """Get a limit (e.g. `lower_limit`) from the API by key, or None if the value has no valid limit."""
-        try:
-            return float(self.get_attribute(key, attr=attr))
-        except ValueError:
-            return None
-
-    @overload
-    def get_value(self, key: str, /, *, expected_type: type[T]) -> T | None: ...
-
-    @overload
-    def get_value(self, key: str, /) -> StateType: ...
-
-    def get_value(self, key: str, /, *, expected_type: type[T] | None = None) -> StateType:
-        """Get value from the API by key."""
-        entity_data: Value | None = self.get_entity_data(key)
-        value: StateType = entity_data.get("value") if entity_data else None
-
-        if expected_type and value is not None:
-            return expected_type(value)
-
-        return value
-
 
 class KebaKeEnergyEntity(KebaKeEnergyBaseEntity):
     """KEBA KeEnergy base extended entity."""
@@ -374,14 +374,14 @@ class KebaKeEnergyEntity(KebaKeEnergyBaseEntity):
 
         self._attr_unique_id: str | None = self.get_unique_id(self.entity_description.key)
 
-    def get_unique_id(self, key: str, /) -> str | None:
-        """Generate unique id."""
-        return self._build_unique_id(key) if self.is_system_device else self._build_unique_id(self.section_id, key)
-
     @property
     def section(self) -> Section:
         """Get the section of the entity description key."""
         return SECTIONS[self.section_id][self.entity_description.key.upper()]
+
+    def get_unique_id(self, key: str, /) -> str | None:
+        """Generate unique id."""
+        return self._build_unique_id(key) if self.is_system_device else self._build_unique_id(self.section_id, key)
 
     def _message_id_attributes(self, key: str, /) -> dict[str, int]:
         """Return the message id of the sensor as attribute (0 means the sensor is in use), if the sensor has one."""

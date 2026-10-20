@@ -85,9 +85,9 @@ async def test_issues(
         blocking=True,
     )
 
-    issue_registry = ir.async_get(hass)
+    issue_registry: ir.IssueRegistry = ir.async_get(hass)
 
-    issue = issue_registry.async_get_issue(
+    issue: ir.IssueEntry | None = issue_registry.async_get_issue(
         DOMAIN,
         "frequent_flash_writes",
     )
@@ -159,9 +159,9 @@ async def test_issues_translated(
         blocking=True,
     )
 
-    issue_registry = ir.async_get(hass)
+    issue_registry: ir.IssueRegistry = ir.async_get(hass)
 
-    issue = issue_registry.async_get_issue(
+    issue: ir.IssueEntry | None = issue_registry.async_get_issue(
         DOMAIN,
         "frequent_flash_writes",
     )

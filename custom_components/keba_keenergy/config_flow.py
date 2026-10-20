@@ -111,21 +111,6 @@ class KebaKeEnergyConfigFlow(ConfigFlow, domain=DOMAIN):
 
         self._entry: KebaKeEnergyConfigEntry | None = None
 
-    async def _async_check_authentication_required(self) -> bool:
-        """Check if authentication required."""
-        session: ClientSession = async_get_clientsession(self.hass)
-        has_authentication: bool = False
-
-        try:
-            async with session.get(f"https://{self.host}", ssl=False) as response:
-                if response.status == HTTPStatus.UNAUTHORIZED:
-                    self.ssl = True
-                    has_authentication = True
-        except ClientError as error:
-            _LOGGER.debug(error)
-
-        return has_authentication
-
     async def async_step_user(self, user_input: dict[str, Any] | None = None) -> ConfigFlowResult:
         """Handle a flow initialized by the user."""
         errors: dict[str, str] = {}
@@ -156,6 +141,57 @@ class KebaKeEnergyConfigFlow(ConfigFlow, domain=DOMAIN):
                 "host": self.host,
             },
         )
+
+    async def _async_check_authentication_required(self) -> bool:
+        """Check if authentication required."""
+        session: ClientSession = async_get_clientsession(self.hass)
+        has_authentication: bool = False
+
+        try:
+            async with session.get(f"https://{self.host}", ssl=False) as response:
+                if response.status == HTTPStatus.UNAUTHORIZED:
+                    self.ssl = True
+                    has_authentication = True
+        except ClientError as error:
+            _LOGGER.debug(error)
+
+        return has_authentication
+
+    async def _async_validate_or_error(self, user_input: dict[str, Any]) -> dict[str, Any]:
+        """Validate or error."""
+        errors: dict[str, str] = {}
+
+        try:
+            self.serial_number = await validate_input(self.hass, data=user_input)
+        except CannotConnectError:
+            errors["base"] = "cannot_connect"
+        except InvalidAuthError:
+            errors["base"] = "invalid_auth"
+        except Exception:
+            errors["base"] = "unknown"
+            _LOGGER.exception("Unexpected exception")
+
+        return errors
+
+    async def _async_complete_entry(self, user_input: dict[str, Any]) -> ConfigFlowResult:
+        await self.async_set_unique_id(self.serial_number)
+
+        if self._entry is not None:
+            self._abort_if_unique_id_mismatch(
+                reason="wrong_account",
+                description_placeholders={
+                    "name": f"{MANUFACTURER} {NAME}",
+                },
+            )
+
+            return self.async_update_reload_and_abort(
+                self._entry,
+                data_updates=user_input,
+            )
+
+        self._abort_if_unique_id_configured()
+
+        return self.async_create_entry(title=f"{MANUFACTURER} {NAME} ({self.host})", data=user_input)
 
     async def async_step_auth(self, user_input: dict[str, Any] | None = None) -> ConfigFlowResult:
         """Authenticate to the device."""
@@ -272,42 +308,6 @@ class KebaKeEnergyConfigFlow(ConfigFlow, domain=DOMAIN):
 
         return await self.async_step_user(user_input)
 
-    async def _async_validate_or_error(self, user_input: dict[str, Any]) -> dict[str, Any]:
-        """Validate or error."""
-        errors: dict[str, str] = {}
-
-        try:
-            self.serial_number = await validate_input(self.hass, data=user_input)
-        except CannotConnectError:
-            errors["base"] = "cannot_connect"
-        except InvalidAuthError:
-            errors["base"] = "invalid_auth"
-        except Exception:
-            errors["base"] = "unknown"
-            _LOGGER.exception("Unexpected exception")
-
-        return errors
-
-    async def _async_complete_entry(self, user_input: dict[str, Any]) -> ConfigFlowResult:
-        await self.async_set_unique_id(self.serial_number)
-
-        if self._entry is not None:
-            self._abort_if_unique_id_mismatch(
-                reason="wrong_account",
-                description_placeholders={
-                    "name": f"{MANUFACTURER} {NAME}",
-                },
-            )
-
-            return self.async_update_reload_and_abort(
-                self._entry,
-                data_updates=user_input,
-            )
-
-        self._abort_if_unique_id_configured()
-
-        return self.async_create_entry(title=f"{MANUFACTURER} {NAME} ({self.host})", data=user_input)
-
     @staticmethod
     @callback
     def async_get_options_flow(
@@ -319,33 +319,6 @@ class KebaKeEnergyConfigFlow(ConfigFlow, domain=DOMAIN):
 
 class KebaKeEnergyOptionsFlow(OptionsFlowWithReload):
     """Option flow for KEBA KeEnergy."""
-
-    @staticmethod
-    def _normalize_user_input(user_input: dict[str, Any]) -> dict[str, Any]:
-        scan_interval: int = user_input[CONF_SCAN_INTERVAL]
-
-        tick_keys: list[str] = [
-            CONF_SYSTEM_TICK,
-            CONF_HEAT_PUMP_TICK,
-            CONF_HEAT_CIRCUIT_TICK,
-            CONF_SOLAR_CIRCUIT_TICK,
-            CONF_HOT_WATER_TANK_TICK,
-            CONF_BUFFER_TANK_TICK,
-            CONF_SWITCH_VALVE_TICK,
-            CONF_EXTERNAL_HEAT_SOURCE_TICK,
-            CONF_PHOTOVOLTAICS_TICK,
-        ]
-
-        ticks: dict[str, int] = {key: int(user_input[key]) for key in tick_keys if key in user_input}
-        gcd: int = math.gcd(*ticks.values())
-
-        if gcd > 1:
-            user_input[CONF_SCAN_INTERVAL] = int(scan_interval * gcd)
-            user_input.update({key: tick // gcd for key, tick in ticks.items()})
-
-        _LOGGER.debug("Tick normalization: %s -> gcd=%s", user_input, gcd)
-
-        return user_input
 
     async def async_step_init(self, user_input: dict[str, Any] | None = None) -> ConfigFlowResult:
         """Handle options flow."""
@@ -417,6 +390,33 @@ class KebaKeEnergyOptionsFlow(OptionsFlowWithReload):
             step_id="init",
             data_schema=probatio.Schema(schema_fields),
         )
+
+    @staticmethod
+    def _normalize_user_input(user_input: dict[str, Any]) -> dict[str, Any]:
+        scan_interval: int = user_input[CONF_SCAN_INTERVAL]
+
+        tick_keys: list[str] = [
+            CONF_SYSTEM_TICK,
+            CONF_HEAT_PUMP_TICK,
+            CONF_HEAT_CIRCUIT_TICK,
+            CONF_SOLAR_CIRCUIT_TICK,
+            CONF_HOT_WATER_TANK_TICK,
+            CONF_BUFFER_TANK_TICK,
+            CONF_SWITCH_VALVE_TICK,
+            CONF_EXTERNAL_HEAT_SOURCE_TICK,
+            CONF_PHOTOVOLTAICS_TICK,
+        ]
+
+        ticks: dict[str, int] = {key: int(user_input[key]) for key in tick_keys if key in user_input}
+        gcd: int = math.gcd(*ticks.values())
+
+        if gcd > 1:
+            user_input[CONF_SCAN_INTERVAL] = int(scan_interval * gcd)
+            user_input.update({key: tick // gcd for key, tick in ticks.items()})
+
+        _LOGGER.debug("Tick normalization: %s -> gcd=%s", user_input, gcd)
+
+        return user_input
 
 
 class CannotConnectError(HomeAssistantError):

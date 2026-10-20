@@ -375,7 +375,7 @@ async def test_set_heating_curve_points_with_duplicate_outdoor_temperatures(
 
 def test_away_date_range_schema_valid() -> None:
     """Test the schema of the away date range action with valid data."""
-    data = {
+    data: dict[str, str] = {
         ATTR_CONFIG_ENTRY: "1234",
         ATTR_START_DATE: "2026-01-01",
         ATTR_END_DATE: "2026-01-10",
@@ -386,7 +386,7 @@ def test_away_date_range_schema_valid() -> None:
 
 def test_away_date_range_schema_missing_start() -> None:
     """Test the schema of the away date range action without a start date."""
-    data = {
+    data: dict[str, str] = {
         ATTR_CONFIG_ENTRY: "1234",
         ATTR_END_DATE: "2026-01-10",
     }
@@ -481,7 +481,7 @@ async def test_set_away_range_with_date_and_time(
 
 def test_away_date_range_schema_invalid_date() -> None:
     """Test the schema of the away date range action with an invalid date."""
-    data = {
+    data: dict[str, str] = {
         ATTR_CONFIG_ENTRY: "1234",
         ATTR_START_DATE: "2026-02-30",
         ATTR_END_DATE: "2026-03-10",

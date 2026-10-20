@@ -194,34 +194,6 @@ class FakeKebaKeEnergyAPI:
             side_effect=self._read_side_effect,
         )
 
-    async def setup_integration(self) -> None:
-        """Register all requests for the host of the config entry and set up the integration."""
-        self.register_requests(self.config_entry.data[CONF_HOST], ssl=self.config_entry.data[CONF_SSL])
-        await setup_integration(self.hass, self.config_entry)
-
-    @staticmethod
-    def is_filter_request(data: object, /) -> bool:
-        """Return True for a request of `filter_request()`, which reads all values without attributes.
-
-        The values of the heating curves are also read without attributes, but never by `filter_request()`.
-        """
-        payload: list[dict[str, str]] = json.loads(str(data))
-        return all(item["attr"] == "0" and ".linTabPool[" not in item["name"] for item in payload)
-
-    def _heating_curve_response(self, payload: list[dict[str, str]], /) -> HTTPStatus | list[dict[str, Any]]:
-        """Return the requested values of the heating curves.
-
-        The names are read alone (`get_available_heating_curves()`), the points with the name of their heating curve,
-        so `heating_curves` holds the names and the points separately, like the Web HMI may return different names.
-        """
-        if isinstance(self.heating_curves, HTTPStatus):
-            return self.heating_curves
-
-        names, points = self.heating_curves
-        is_names_request: bool = all(item["name"].endswith(".name") for item in payload)
-        values: dict[str, dict[str, Any]] = {value["name"]: value for value in (names if is_names_request else points)}
-        return [values[item["name"]] for item in payload]
-
     async def _write_side_effect(self, method: str, url: URL, *_: object) -> AiohttpClientMockResponse:
         # A real request suspends, so other writes can queue for the write lock in the meantime.
         await asyncio.sleep(0)
@@ -275,6 +247,34 @@ class FakeKebaKeEnergyAPI:
             text=json.dumps(response),
             headers={"Content-Type": "application/json;charset=utf-8"},
         )
+
+    def _heating_curve_response(self, payload: list[dict[str, str]], /) -> HTTPStatus | list[dict[str, Any]]:
+        """Return the requested values of the heating curves.
+
+        The names are read alone (`get_available_heating_curves()`), the points with the name of their heating curve,
+        so `heating_curves` holds the names and the points separately, like the Web HMI may return different names.
+        """
+        if isinstance(self.heating_curves, HTTPStatus):
+            return self.heating_curves
+
+        names, points = self.heating_curves
+        is_names_request: bool = all(item["name"].endswith(".name") for item in payload)
+        values: dict[str, dict[str, Any]] = {value["name"]: value for value in (names if is_names_request else points)}
+        return [values[item["name"]] for item in payload]
+
+    async def setup_integration(self) -> None:
+        """Register all requests for the host of the config entry and set up the integration."""
+        self.register_requests(self.config_entry.data[CONF_HOST], ssl=self.config_entry.data[CONF_SSL])
+        await setup_integration(self.hass, self.config_entry)
+
+    @staticmethod
+    def is_filter_request(data: object, /) -> bool:
+        """Return True for a request of `filter_request()`, which reads all values without attributes.
+
+        The values of the heating curves are also read without attributes, but never by `filter_request()`.
+        """
+        payload: list[dict[str, str]] = json.loads(str(data))
+        return all(item["attr"] == "0" and ".linTabPool[" not in item["name"] for item in payload)
 
     def read_requests(self) -> list[str]:
         """Return the bodies of all read requests, in order."""

@@ -351,6 +351,63 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
             ),
         )
 
+    @property
+    def fixed_data(self) -> dict[str, ValueResponse]:
+        """Return the values that are read once on setup."""
+        return self._fixed_data
+
+    @property
+    def message_ids(self) -> dict[str, dict[str, MessageIds]]:
+        """Return the message ids of the sensors, 0 means the sensor is in use."""
+        return self._message_ids
+
+    @property
+    def weekly_write_count(self) -> int:
+        """Return the number of writes in the current week."""
+        return self._weekly_write_count
+
+    @cached_property
+    def configuration_url(self) -> str:
+        """Return web gui url."""
+        return str(self.api.device_url)
+
+    @cached_property
+    def device_model(self) -> str:
+        """Return device model name."""
+        return str(self._api_device_info["name"])
+
+    @cached_property
+    def device_name(self) -> str:
+        """Return device name."""
+        return str(self._api_system_info["name"])
+
+    @cached_property
+    def device_hmi_sw_version(self) -> str:
+        """Return HMI software version."""
+        return str(self._api_hmi_info["name"].replace("KeEnergy.WebHmi_", ""))
+
+    @cached_property
+    def device_serial_number(self) -> str:
+        """Return serial number."""
+        return str(self._api_device_info["serNo"])
+
+    @property
+    def heat_pump_names(self) -> list[Value]:
+        """Return heat pump names."""
+        names: Values = self.data[SectionPrefix.HEAT_PUMP]["name"]
+        return [name for name in names if isinstance(name, dict)] if isinstance(names, list) else []
+
+    async def _async_setup(self) -> None:
+        """Set up the coordinator."""
+        store_data: dict[str, Any] = await self._store.async_load() or {}
+        counter: dict[str, Any] | None = store_data.get("flash_write_counter")
+
+        if isinstance(counter, dict):
+            self._write_count_week = tuple(counter["week"])
+            self._weekly_write_count = counter["count"]
+
+        await self._api_call_for_update(self._async_fixed_data())
+
     @staticmethod
     async def _api_call_for_update[R](coro: Awaitable[R]) -> R:
         try:
@@ -368,30 +425,6 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
                     "error": str(error),
                 },
             ) from error
-
-    @staticmethod
-    async def _api_call_for_user[R](coro: Awaitable[R]) -> R:
-        try:
-            return await coro
-        except APIError as error:
-            raise HomeAssistantError(
-                translation_domain=DOMAIN,
-                translation_key="communication_error",
-                translation_placeholders={
-                    "error": str(error),
-                },
-            ) from error
-
-    async def _async_setup(self) -> None:
-        """Set up the coordinator."""
-        store_data: dict[str, Any] = await self._store.async_load() or {}
-        counter: dict[str, Any] | None = store_data.get("flash_write_counter")
-
-        if isinstance(counter, dict):
-            self._write_count_week = tuple(counter["week"])
-            self._weekly_write_count = counter["count"]
-
-        await self._api_call_for_update(self._async_fixed_data())
 
     async def _async_fixed_data(self) -> None:
         self._api_device_info = await self.api.system.get_device_info()
@@ -586,26 +619,6 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
 
             await self._api_call_for_user(write_fn())
 
-    async def async_write_data(self, request: dict[Section, Any], *, ignore_weekly_write_count: bool = False) -> None:
-        """Write data to the NAND from the KEBA KeEnergy control unit."""
-        await self.async_execute_write(
-            write_fn=lambda: self.api.write_data(request=request),
-            ignore_weekly_write_count=ignore_weekly_write_count,
-        )
-
-    def _create_issue(self) -> None:
-        ir.async_create_issue(
-            self.hass,
-            domain=DOMAIN,
-            issue_id="frequent_flash_writes",
-            is_fixable=False,
-            translation_key="frequent_flash_writes",
-            translation_placeholders={
-                "limit": str(FLASH_WRITE_LIMIT_PER_WEEK),
-            },
-            severity=ir.IssueSeverity.WARNING,
-        )
-
     def _reset_weekly_counter_if_needed(self) -> bool:
         """Reset the write counter in a new week, return True if it was reset."""
         today: date = now().date()
@@ -625,6 +638,39 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
         )
 
         return True
+
+    def _create_issue(self) -> None:
+        ir.async_create_issue(
+            self.hass,
+            domain=DOMAIN,
+            issue_id="frequent_flash_writes",
+            is_fixable=False,
+            translation_key="frequent_flash_writes",
+            translation_placeholders={
+                "limit": str(FLASH_WRITE_LIMIT_PER_WEEK),
+            },
+            severity=ir.IssueSeverity.WARNING,
+        )
+
+    @staticmethod
+    async def _api_call_for_user[R](coro: Awaitable[R]) -> R:
+        try:
+            return await coro
+        except APIError as error:
+            raise HomeAssistantError(
+                translation_domain=DOMAIN,
+                translation_key="communication_error",
+                translation_placeholders={
+                    "error": str(error),
+                },
+            ) from error
+
+    async def async_write_data(self, request: dict[Section, Any], *, ignore_weekly_write_count: bool = False) -> None:
+        """Write data to the NAND from the KEBA KeEnergy control unit."""
+        await self.async_execute_write(
+            write_fn=lambda: self.api.write_data(request=request),
+            ignore_weekly_write_count=ignore_weekly_write_count,
+        )
 
     async def get_timezone(self) -> ZoneInfo:
         """Get the timezone from the Web HMI."""
@@ -656,52 +702,6 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
             get_value_by_index(self.data[SectionPrefix.HEAT_CIRCUIT][key], index=index, key_index=None).get("value")
             for index in range(self.device_count(SectionPrefix.HEAT_CIRCUIT))
         ]
-
-    @property
-    def fixed_data(self) -> dict[str, ValueResponse]:
-        """Return the values that are read once on setup."""
-        return self._fixed_data
-
-    @property
-    def message_ids(self) -> dict[str, dict[str, MessageIds]]:
-        """Return the message ids of the sensors, 0 means the sensor is in use."""
-        return self._message_ids
-
-    @property
-    def weekly_write_count(self) -> int:
-        """Return the number of writes in the current week."""
-        return self._weekly_write_count
-
-    @cached_property
-    def configuration_url(self) -> str:
-        """Return web gui url."""
-        return str(self.api.device_url)
-
-    @cached_property
-    def device_model(self) -> str:
-        """Return device model name."""
-        return str(self._api_device_info["name"])
-
-    @cached_property
-    def device_name(self) -> str:
-        """Return device name."""
-        return str(self._api_system_info["name"])
-
-    @cached_property
-    def device_hmi_sw_version(self) -> str:
-        """Return HMI software version."""
-        return str(self._api_hmi_info["name"].replace("KeEnergy.WebHmi_", ""))
-
-    @cached_property
-    def device_serial_number(self) -> str:
-        """Return serial number."""
-        return str(self._api_device_info["serNo"])
-
-    @property
-    def heat_pump_names(self) -> list[Value]:
-        """Return heat pump names."""
-        names: Values = self.data[SectionPrefix.HEAT_PUMP]["name"]
-        return [name for name in names if isinstance(name, dict)] if isinstance(names, list) else []
 
     def device_identifiers(self) -> set[str]:
         """Return the identifiers of all devices that the control unit is configured with.
@@ -746,6 +746,19 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
     def has_outdoor_temperature(self) -> bool:
         """Check if outdoor temperature sensor is available."""
         return self._is_fixed_value_on(SectionPrefix.SYSTEM, "has_outdoor_temperature")
+
+    def _is_fixed_value_on(self, prefix: SectionPrefix, key: str, /, *, index: int | None = None) -> bool:
+        """Return True if a value that is read once on setup is switched on."""
+        return self._get_fixed_value(prefix, key, index=index) == BoolEnum.ON.name.lower()
+
+    def _get_fixed_value(self, prefix: SectionPrefix, key: str, /, *, index: int | None = None) -> object:
+        """Return a value that is read once on setup, of the device with the index if the value is a list."""
+        data: Values | None = self._fixed_data.get(prefix, {}).get(key)
+
+        if isinstance(data, list):
+            data = data[index or 0]
+
+        return data.get("value") if isinstance(data, dict) else None
 
     def has_room_temperature(self, *, index: int | None = None) -> bool:
         """Check if room temperature sensor is available."""
@@ -834,16 +847,3 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
     def is_sensor_in_use(self, section_id: str, key: str, /, *, index: int | None, key_index: int | None) -> bool:
         """Check if the control unit reports the sensor as in use (message id 0) or has no message id for it."""
         return self.get_message_id(section_id, key, index=index, key_index=key_index) in (None, 0)
-
-    def _get_fixed_value(self, prefix: SectionPrefix, key: str, /, *, index: int | None = None) -> object:
-        """Return a value that is read once on setup, of the device with the index if the value is a list."""
-        data: Values | None = self._fixed_data.get(prefix, {}).get(key)
-
-        if isinstance(data, list):
-            data = data[index or 0]
-
-        return data.get("value") if isinstance(data, dict) else None
-
-    def _is_fixed_value_on(self, prefix: SectionPrefix, key: str, /, *, index: int | None = None) -> bool:
-        """Return True if a value that is read once on setup is switched on."""
-        return self._get_fixed_value(prefix, key, index=index) == BoolEnum.ON.name.lower()

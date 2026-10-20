@@ -215,15 +215,15 @@ class KebaKeEnergyBinarySensorEntity(KebaKeEnergyEntity, BinarySensorEntity):
         self.entity_id: str = f"{BINARY_SENSOR_DOMAIN}.{DOMAIN}_{self.unique_id}"
 
     @property
-    def _data_key(self) -> str:
-        """Return the key of the value in the coordinator data, the new key if the API renamed it."""
-        return self.entity_description.new_key or self.entity_description.key
-
-    @property
     def is_on(self) -> bool | None:
         """Return true if the binary sensor is on."""
         value: str | None = self.get_value(self._data_key, expected_type=str)
         return None if value is None else value == BoolEnum.ON.name.lower()
+
+    @property
+    def _data_key(self) -> str:
+        """Return the key of the value in the coordinator data, the new key if the API renamed it."""
+        return self.entity_description.new_key or self.entity_description.key
 
     @property
     def extra_state_attributes(self) -> Mapping[str, Any] | None:

@@ -65,7 +65,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: KebaKeEnergyConfigEntry)
     entry.runtime_data = coordinator
 
     # Register the control unit before other devices use it as `via_device`.
-    device_registry = dr.async_get(hass)
+    device_registry: dr.DeviceRegistry = dr.async_get(hass)
 
     control_unit: DeviceEntry = device_registry.async_get_or_create(
         config_entry_id=entry.entry_id,
