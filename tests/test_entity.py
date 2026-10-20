@@ -150,7 +150,7 @@ async def test_entity_keeps_state_if_update_failed(
     assert isinstance(state, State)
     previous_state: str = state.state
 
-    with pytest.raises(HomeAssistantError):
+    with pytest.raises(HomeAssistantError, match="400 Bad Request"):
         await hass.services.async_call(
             domain=SELECT_DOMAIN,
             service=SERVICE_SELECT_OPTION,
@@ -183,7 +183,7 @@ async def test_entities_keep_their_state_if_queued_updates_failed(
     fake_api.write_status = HTTPStatus.BAD_REQUEST
     await fake_api.setup_integration()
 
-    with pytest.raises(HomeAssistantError):
+    with pytest.raises(HomeAssistantError, match="400 Bad Request"):
         # The entities write at the same time, so the second write waits for the first one.
         await hass.services.async_call(
             domain=SELECT_DOMAIN,

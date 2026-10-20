@@ -24,3 +24,10 @@
     `tests/conftest.py`
 - Tests as functions, no test classes
 - Error cases next to the tests of the code they check, named `test_<function>_<condition>`
+- Every bug fix gets a regression test that fails without the fix
+- Exceptions: assert the type and the message (`pytest.raises(..., match=...)` or `error.value`)
+- Never wait in real time, advance the time (`async_fire_time_changed()`, patched `dt_util.now`), no `sleep()`
+- Fixtures only in `tests/conftest.py`
+- Tests are independent of each other, they run in parallel (`pytest-xdist`) and in any order
+- No logic in tests (`if`, loops over cases), use `parametrize` instead
+  - except loops that only build test data

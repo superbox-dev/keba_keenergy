@@ -156,7 +156,7 @@ async def test_set_away_range_with_invalid_config_entry(
     await fake_api.setup_integration()
     translations: dict[str, str] = await init_translations(hass, category="exceptions")
 
-    with pytest.raises(ServiceValidationError):
+    with pytest.raises(ServiceValidationError, match=r"Invalid integration provided\. Got invalid"):
         await hass.services.async_call(
             domain=DOMAIN,
             service=SERVICE_SET_AWAY_DATE_RANGE,
@@ -194,7 +194,7 @@ async def test_set_away_range_with_unloaded_config_entry(
     await hass.config_entries.async_unload(config_entry.entry_id)
     await hass.async_block_till_done()
 
-    with pytest.raises(ServiceValidationError):
+    with pytest.raises(ServiceValidationError, match="is not loaded"):
         await hass.services.async_call(
             domain=DOMAIN,
             service=SERVICE_SET_AWAY_DATE_RANGE,
@@ -391,7 +391,7 @@ def test_away_date_range_schema_missing_start() -> None:
         ATTR_END_DATE: "2026-01-10",
     }
 
-    with pytest.raises(probatio.Invalid):
+    with pytest.raises(probatio.Invalid, match="required key not provided at 'start_date'"):
         AWAY_DATE_RANGE_SCHEMA(data)
 
 
@@ -441,7 +441,7 @@ def test_heating_curve_points_schema_invalid_curve() -> None:
         ATTR_POINTS: [{"outdoor": 0, "flow": 30}],
     }
 
-    with pytest.raises(probatio.Invalid):
+    with pytest.raises(probatio.Invalid, match="does not match the expected pattern at 'heating_curve'"):
         HEATING_CURVE_POINTS_SCHEMA(data)
 
 
@@ -487,7 +487,7 @@ def test_away_date_range_schema_invalid_date() -> None:
         ATTR_END_DATE: "2026-03-10",
     }
 
-    with pytest.raises(probatio.Invalid):
+    with pytest.raises(probatio.Invalid, match="Invalid datetime specified: 2026-02-30 at 'start_date'"):
         AWAY_DATE_RANGE_SCHEMA(data)
 
 
