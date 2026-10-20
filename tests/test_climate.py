@@ -9,7 +9,6 @@ from datetime import datetime
 from datetime import timedelta
 from typing import TYPE_CHECKING
 from typing import Any
-from typing import Final
 from unittest.mock import patch
 
 import pytest
@@ -48,15 +47,14 @@ from tests.api_data import MULTIPLE_POSITIONS_RESPONSE
 from tests.api_data import get_multiple_position_fixed_data_response
 from tests.api_data import get_single_position_data_response
 from tests.api_data import update_response
+from tests.test_climate_data import ENTITY_ID
+from tests.test_climate_data import ENTITY_ID_1
+from tests.test_climate_data import ENTITY_ID_2
 
 if TYPE_CHECKING:
     from syrupy.assertion import SnapshotAssertion
 
     from tests.conftest import FakeKebaKeEnergyAPI
-
-ENTITY_ID: Final[str] = "climate.keba_keenergy_12345678"
-ENTITY_ID_1: Final[str] = "climate.keba_keenergy_12345678_1"
-ENTITY_ID_2: Final[str] = "climate.keba_keenergy_12345678_2"
 
 
 @pytest.mark.parametrize(

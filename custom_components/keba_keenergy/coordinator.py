@@ -31,18 +31,12 @@ from homeassistant.helpers.update_coordinator import UpdateFailed
 from homeassistant.util.dt import now
 from keba_keenergy_api.api import KebaKeEnergyAPI
 from keba_keenergy_api.constants import BoolEnum
-from keba_keenergy_api.constants import BufferTank
-from keba_keenergy_api.constants import ExternalHeatSource
 from keba_keenergy_api.constants import HeatCircuit
 from keba_keenergy_api.constants import HeatCircuitMode
 from keba_keenergy_api.constants import HeatPump
 from keba_keenergy_api.constants import HotWaterTank
-from keba_keenergy_api.constants import PassiveCooling
-from keba_keenergy_api.constants import Photovoltaics
 from keba_keenergy_api.constants import Section
 from keba_keenergy_api.constants import SectionPrefix
-from keba_keenergy_api.constants import SolarCircuit
-from keba_keenergy_api.constants import SwitchValve
 from keba_keenergy_api.constants import System
 from keba_keenergy_api.endpoints import HeatingCurves
 from keba_keenergy_api.endpoints import Position
@@ -54,6 +48,7 @@ from keba_keenergy_api.error import AuthenticationError
 from .const import DEFAULT_SCAN_INTERVAL
 from .const import DOMAIN
 from .const import FLASH_WRITE_LIMIT_PER_WEEK
+from .const import REQUEST_DATA_GROUPS
 from .const import REQUEST_REFRESH_COOLDOWN
 
 if TYPE_CHECKING:
@@ -68,195 +63,6 @@ _LOGGER: Final = logging.getLogger(__name__)
 type KebaKeEnergyConfigEntry = ConfigEntry[KebaKeEnergyDataUpdateCoordinator]
 type MessageIds = list[int] | list[list[int]]
 type Values = Value | list[Value] | list[list[Value]]
-
-
-REQUEST_DATA_GROUPS: Final[dict[SectionPrefix, list[Section]]] = {
-    SectionPrefix.EXTERNAL_HEAT_SOURCE: [
-        ExternalHeatSource.OPERATING_MODE,
-        ExternalHeatSource.TARGET_TEMPERATURE,
-        ExternalHeatSource.HEAT_REQUEST,
-        ExternalHeatSource.OPERATING_TIME,
-        ExternalHeatSource.MAX_RUNTIME,
-        ExternalHeatSource.ACTIVATION_COUNTER,
-        ExternalHeatSource.USE_EXCESS_ENERGY,
-        ExternalHeatSource.MIN_RUNTIME_EXCESS_ENERGY,
-        ExternalHeatSource.CONSUMING_EXCESS_ENERGY,
-        ExternalHeatSource.EXCESS_ENERGY_OPERATING_TIME,
-        ExternalHeatSource.EXCESS_ENERGY_MAX_RUNTIME,
-        ExternalHeatSource.EXCESS_ENERGY_ACTIVATION_COUNTER,
-    ],
-    SectionPrefix.HEAT_CIRCUIT: [
-        HeatCircuit.ROOM_TEMPERATURE,
-        HeatCircuit.ROOM_HUMIDITY,
-        HeatCircuit.DEW_POINT,
-        HeatCircuit.FLOW_TEMPERATURE_SETPOINT,
-        HeatCircuit.MIXER_FLOW_TEMPERATURE,
-        HeatCircuit.MIXER_RETURN_FLOW_TEMPERATURE,
-        HeatCircuit.MIXER_POSITION,
-        HeatCircuit.PUMP_STATE,
-        HeatCircuit.RETURN_FLOW_TEMPERATURE,
-        HeatCircuit.TARGET_TEMPERATURE_DAY,
-        HeatCircuit.TARGET_COOLING_TEMPERATURE_DAY,
-        HeatCircuit.HEATING_LIMIT_DAY,
-        HeatCircuit.COOLING_LIMIT_DAY,
-        HeatCircuit.EXCESS_ENERGY_HEATING_LIMIT_DAY,
-        HeatCircuit.EXCESS_ENERGY_COOLING_LIMIT_DAY,
-        HeatCircuit.HEAT_REQUEST,
-        HeatCircuit.COOL_REQUEST,
-        HeatCircuit.TARGET_TEMPERATURE_AWAY,
-        HeatCircuit.TARGET_TEMPERATURE_NIGHT,
-        HeatCircuit.TARGET_COOLING_TEMPERATURE_NIGHT,
-        HeatCircuit.HEATING_LIMIT_NIGHT,
-        HeatCircuit.COOLING_LIMIT_NIGHT,
-        HeatCircuit.EXCESS_ENERGY_HEATING_LIMIT_NIGHT,
-        HeatCircuit.EXCESS_ENERGY_COOLING_LIMIT_NIGHT,
-        HeatCircuit.OPERATING_MODE,
-        HeatCircuit.SELECTED_TARGET_TEMPERATURE,
-        HeatCircuit.TARGET_TEMPERATURE,
-        HeatCircuit.TARGET_TEMPERATURE_OFFSET,
-        HeatCircuit.USE_EXCESS_ENERGY,
-        HeatCircuit.EXCESS_ENERGY_TARGET_TEMPERATURE,
-        HeatCircuit.EXCESS_ENERGY_TARGET_TEMPERATURE_HYSTERESIS,
-        HeatCircuit.EXCESS_ENERGY_TARGET_COOLING_TEMPERATURE,
-        HeatCircuit.EXCESS_ENERGY_TARGET_COOLING_TEMPERATURE_HYSTERESIS,
-        HeatCircuit.EXCESS_ENERGY_MODE,
-        HeatCircuit.AWAY_START_DATE,
-        HeatCircuit.AWAY_END_DATE,
-        HeatCircuit.HEATING_CURVE_OFFSET,
-        HeatCircuit.COOLING_CURVE_OFFSET,
-        HeatCircuit.HEATING_CURVE_SLOPE,
-        HeatCircuit.COOLING_CURVE_SLOPE,
-        HeatCircuit.USE_HEATING_CURVE,
-        HeatCircuit.HEATING_CURVE,
-        HeatCircuit.COOLING_CURVE,
-        HeatCircuit.PUMP_SPEED,
-    ],
-    SectionPrefix.SOLAR_CIRCUIT: [
-        SolarCircuit.OPERATING_MODE,
-        SolarCircuit.SOURCE_TEMPERATURE,
-        SolarCircuit.PUMP_1,
-        SolarCircuit.PUMP_2,
-        SolarCircuit.CURRENT_TEMPERATURE,
-        SolarCircuit.TARGET_TEMPERATURE,
-        SolarCircuit.HEAT_REQUEST,
-        SolarCircuit.HEATING_ENERGY,
-        SolarCircuit.DAILY_ENERGY,
-        SolarCircuit.ACTUAL_POWER,
-        SolarCircuit.PRIORITY_1_BEFORE_2,
-    ],
-    SectionPrefix.HEAT_PUMP: [
-        HeatPump.CONSUMING_EXCESS_ENERGY,
-        HeatPump.EXCESS_ENERGY_OPERATING_TIME,
-        HeatPump.EXCESS_ENERGY_MAX_RUNTIME,
-        HeatPump.EXCESS_ENERGY_ACTIVATION_COUNTER,
-        HeatPump.CIRCULATION_PUMP_SPEED,
-        HeatPump.SOURCE_PUMP_SPEED,
-        HeatPump.COMPRESSOR,
-        HeatPump.COMPRESSOR_NIGHT_SPEED,
-        HeatPump.COMPRESSOR_INPUT_TEMPERATURE,
-        HeatPump.COMPRESSOR_OUTPUT_TEMPERATURE,
-        HeatPump.COMPRESSOR_USE_NIGHT_SPEED,
-        HeatPump.CONDENSER_TEMPERATURE,
-        HeatPump.VAPORIZER_TEMPERATURE,
-        HeatPump.TARGET_OVERHEATING,
-        HeatPump.CURRENT_OVERHEATING,
-        HeatPump.EXPANSION_VALVE_POSITION,
-        HeatPump.HEAT_REQUEST,
-        HeatPump.HIGH_PRESSURE,
-        HeatPump.FLOW_TEMPERATURE,
-        HeatPump.LOW_PRESSURE,
-        HeatPump.NAME,
-        HeatPump.RETURN_FLOW_TEMPERATURE,
-        HeatPump.SOURCE_INPUT_TEMPERATURE,
-        HeatPump.SOURCE_OUTPUT_TEMPERATURE,
-        HeatPump.STATE,
-        HeatPump.SUBSTATE,
-        HeatPump.COMPRESSOR_POWER,
-        HeatPump.HEATING_POWER,
-        HeatPump.HOT_WATER_POWER,
-        HeatPump.COP,
-        HeatPump.HEATING_ENERGY,
-        HeatPump.HEATING_ENERGY_CONSUMPTION,
-        HeatPump.HEATING_SPF,
-        HeatPump.COOLING_ENERGY,
-        HeatPump.COOLING_ENERGY_CONSUMPTION,
-        HeatPump.COOLING_SPF,
-        HeatPump.HOT_WATER_ENERGY,
-        HeatPump.HOT_WATER_ENERGY_CONSUMPTION,
-        HeatPump.HOT_WATER_SPF,
-        HeatPump.TOTAL_THERMAL_ENERGY,
-        HeatPump.TOTAL_ENERGY_CONSUMPTION,
-        HeatPump.TOTAL_SPF,
-        HeatPump.EXCESS_ENERGY_CONSUMPTION,
-        HeatPump.HEATING_EXCESS_ENERGY_CONSUMPTION,
-        HeatPump.COOLING_EXCESS_ENERGY_CONSUMPTION,
-        HeatPump.HOT_WATER_EXCESS_ENERGY_CONSUMPTION,
-        HeatPump.OPERATING_TIME,
-        HeatPump.MAX_RUNTIME,
-        HeatPump.ACTIVATION_COUNTER,
-        HeatPump.HAS_COMPRESSOR_FAILURE,
-        HeatPump.HAS_SOURCE_FAILURE,
-        HeatPump.HAS_SOURCE_ACTUATOR_FAILURE,
-        HeatPump.HAS_THREE_PHASE_FAILURE,
-        HeatPump.HAS_SOURCE_PRESSURE_FAILURE,
-        HeatPump.HAS_VFD_FAILURE,
-        # Passive cooling has no own group for the ticks, it is always a part of the heat pumps.
-        PassiveCooling.TEMPERATURE,
-        PassiveCooling.SWITCH_VALVE_POSITION,
-        PassiveCooling.CIRCULATION_PUMP_SPEED,
-        PassiveCooling.MIXER_FLOW_TEMPERATURE,
-        PassiveCooling.MIXER_TARGET_TEMPERATURE,
-        PassiveCooling.MIXER_POSITION,
-    ],
-    SectionPrefix.BUFFER_TANK: [
-        BufferTank.CURRENT_TOP_TEMPERATURE,
-        BufferTank.CURRENT_BOTTOM_TEMPERATURE,
-        BufferTank.EXCESS_ENERGY_TARGET_TEMPERATURE,
-        BufferTank.EXCESS_ENERGY_TARGET_TEMPERATURE_HYSTERESIS,
-        BufferTank.EXCESS_ENERGY_MODE,
-        BufferTank.OPERATING_MODE,
-        BufferTank.STANDBY_TEMPERATURE,
-        BufferTank.TARGET_TEMPERATURE,
-        BufferTank.HEAT_REQUEST,
-        BufferTank.COOL_REQUEST,
-        BufferTank.USE_EXCESS_ENERGY,
-        BufferTank.OUTDOOR_TEMPERATURE_EXCESS_ENERGY_LIMIT,
-    ],
-    SectionPrefix.HOT_WATER_TANK: [
-        HotWaterTank.USE_EXCESS_ENERGY,
-        HotWaterTank.EXCESS_ENERGY_TARGET_TEMPERATURE,
-        HotWaterTank.EXCESS_ENERGY_TARGET_TEMPERATURE_HYSTERESIS,
-        HotWaterTank.EXCESS_ENERGY_MODE,
-        HotWaterTank.HEAT_REQUEST,
-        HotWaterTank.FRESH_WATER_FLOW,
-        HotWaterTank.FRESH_WATER_MODULE_TEMPERATURE,
-        HotWaterTank.TARGET_TEMPERATURE,
-        HotWaterTank.STANDBY_TEMPERATURE,
-        HotWaterTank.OPERATING_MODE,
-        HotWaterTank.CURRENT_TEMPERATURE,
-        HotWaterTank.CIRCULATION_RETURN_TEMPERATURE,
-        HotWaterTank.CIRCULATION_PUMP_STATE,
-    ],
-    SectionPrefix.SWITCH_VALVE: [
-        SwitchValve.POSITION,
-    ],
-    SectionPrefix.PHOTOVOLTAICS: [
-        Photovoltaics.EXCESS_ENERGY_ACTIVE,
-        Photovoltaics.EXCESS_POWER,
-        Photovoltaics.DAILY_ENERGY,
-        Photovoltaics.TOTAL_ENERGY,
-    ],
-    SectionPrefix.SYSTEM: [
-        System.OUTDOOR_TEMPERATURE,
-        System.OPERATING_MODE,
-        System.CPU_USAGE,
-        System.WEBVIEW_CPU_USAGE,
-        System.WEBSERVER_CPU_USAGE,
-        System.CONTROL_CPU_USAGE,
-        System.RAM_USAGE,
-        System.FREE_RAM,
-    ],
-}
 
 
 def get_device_identifier(entry_unique_id: str | None, section_id: str, position: int | None) -> str:

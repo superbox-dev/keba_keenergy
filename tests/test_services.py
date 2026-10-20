@@ -14,15 +14,15 @@ from homeassistant.exceptions import HomeAssistantError
 from homeassistant.exceptions import ServiceValidationError
 
 from custom_components.keba_keenergy.const import ATTR_CONFIG_ENTRY
+from custom_components.keba_keenergy.const import ATTR_END_DATE
+from custom_components.keba_keenergy.const import ATTR_HEATING_CURVE
+from custom_components.keba_keenergy.const import ATTR_POINTS
+from custom_components.keba_keenergy.const import ATTR_START_DATE
 from custom_components.keba_keenergy.const import DOMAIN
+from custom_components.keba_keenergy.const import HEATING_CURVE_POINTS_SCHEMA
 from custom_components.keba_keenergy.const import SERVICE_SET_AWAY_DATE_RANGE
 from custom_components.keba_keenergy.const import SERVICE_SET_HEATING_CURVE_POINTS
-from custom_components.keba_keenergy.services import ATTR_END_DATE
-from custom_components.keba_keenergy.services import ATTR_HEATING_CURVE
-from custom_components.keba_keenergy.services import ATTR_POINTS
-from custom_components.keba_keenergy.services import ATTR_START_DATE
 from custom_components.keba_keenergy.services import AWAY_DATE_RANGE_SCHEMA
-from custom_components.keba_keenergy.services import HEATING_CURVE_POINTS_SCHEMA
 from tests import init_translations
 from tests.api_data import HEATING_CURVE_NAMES_RESPONSE
 from tests.api_data import HEATING_CURVES_RENAMED_POINTS_RESPONSE

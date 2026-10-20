@@ -7,7 +7,6 @@ from __future__ import annotations
 from http import HTTPStatus
 from ipaddress import ip_address
 from typing import TYPE_CHECKING
-from typing import Final
 
 import pytest
 from aiohttp import ClientError
@@ -25,6 +24,7 @@ from custom_components.keba_keenergy.const import DOMAIN
 from tests.api_data import MULTIPLE_POSITION_DATA_RESPONSE
 from tests.api_data import MULTIPLE_POSITIONS_RESPONSE
 from tests.api_data import get_multiple_position_fixed_data_response
+from tests.test_config_flow_data import ZERO_CONF_SERVICE_INFO
 
 if TYPE_CHECKING:
     from homeassistant.config_entries import ConfigFlowResult
@@ -32,19 +32,6 @@ if TYPE_CHECKING:
     from pytest_homeassistant_custom_component.common import MockConfigEntry
 
     from tests.conftest import FakeKebaKeEnergyAPI
-
-ZERO_CONF_SERVICE_INFO: Final[ZeroconfServiceInfo] = ZeroconfServiceInfo(
-    ip_address=ip_address("10.0.0.100"),
-    ip_addresses=[ip_address("10.0.0.100")],
-    port=0,
-    hostname="ap4400.local.",
-    type="_keba-device._tcp.local.",
-    name="ap4400._keba-device._tcp.local.'",
-    properties={
-        "devicename": "AP 440/H-A",
-        "serialnumber": "12345678",
-    },
-)
 
 
 async def test_user_flow(

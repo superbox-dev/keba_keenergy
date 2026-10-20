@@ -13,15 +13,11 @@ from functools import cached_property
 from typing import TYPE_CHECKING
 from typing import Final
 
-import probatio
 from homeassistant.components.climate import ClimateEntity
 from homeassistant.components.climate import ClimateEntityDescription
 from homeassistant.components.climate.const import DOMAIN as CLIMATE_DOMAIN
 from homeassistant.components.climate.const import PRESET_AWAY
-from homeassistant.components.climate.const import PRESET_BOOST
-from homeassistant.components.climate.const import PRESET_COMFORT
 from homeassistant.components.climate.const import PRESET_HOME
-from homeassistant.components.climate.const import PRESET_SLEEP
 from homeassistant.components.climate.const import ClimateEntityFeature
 from homeassistant.components.climate.const import HVACAction
 from homeassistant.components.climate.const import HVACMode
@@ -34,8 +30,9 @@ from keba_keenergy_api.constants import HeatCircuitHeatRequest
 from keba_keenergy_api.constants import HeatCircuitOperatingMode
 from keba_keenergy_api.constants import SectionPrefix
 
-from .const import ATTR_OFFSET
+from .const import COOLING_CIRCUIT_PRESET_TO_HA
 from .const import DOMAIN
+from .const import HEATING_CIRCUIT_PRESET_TO_HA
 from .entity import KebaKeEnergyBaseEntity
 
 if TYPE_CHECKING:
@@ -50,29 +47,6 @@ if TYPE_CHECKING:
 _LOGGER: Final = logging.getLogger(__name__)
 
 PARALLEL_UPDATES: Final[int] = 0
-
-HEATING_CIRCUIT_PRESET_TO_HA: Final[dict[int, str]] = {
-    HeatCircuitOperatingMode.AUTO.value: PRESET_HOME,
-    HeatCircuitOperatingMode.HOLIDAY.value: PRESET_AWAY,
-    HeatCircuitOperatingMode.DAY.value: PRESET_COMFORT,
-    HeatCircuitOperatingMode.NIGHT.value: PRESET_SLEEP,
-    HeatCircuitOperatingMode.PARTY.value: PRESET_BOOST,
-}
-
-COOLING_CIRCUIT_PRESET_TO_HA: Final[dict[int, str]] = {
-    HeatCircuitOperatingMode.AUTO.value: PRESET_HOME,
-    HeatCircuitOperatingMode.DAY.value: PRESET_COMFORT,
-    HeatCircuitOperatingMode.NIGHT.value: PRESET_SLEEP,
-    HeatCircuitOperatingMode.PARTY.value: PRESET_BOOST,
-}
-
-TEMPERATURE_OFFSET_SCHEMA: Final = {
-    probatio.Required(ATTR_OFFSET, default=0): probatio.Coerce(float),
-}
-
-TEMPERATURE_SCHEMA: Final = {
-    probatio.Required(ATTR_TEMPERATURE): probatio.Coerce(float),
-}
 
 
 class KebaKeEnergyClimateEntity(KebaKeEnergyBaseEntity, ClimateEntity):

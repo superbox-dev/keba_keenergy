@@ -19,22 +19,17 @@ from homeassistant.exceptions import HomeAssistantError
 from homeassistant.helpers.device_registry import DeviceInfo
 from homeassistant.helpers.event import async_call_later
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
-from keba_keenergy_api.constants import BufferTank
-from keba_keenergy_api.constants import ExternalHeatSource
-from keba_keenergy_api.constants import HeatCircuit
-from keba_keenergy_api.constants import HeatPump
-from keba_keenergy_api.constants import HotWaterTank
 from keba_keenergy_api.constants import Section
 from keba_keenergy_api.constants import SectionPrefix
-from keba_keenergy_api.constants import SolarCircuit
-from keba_keenergy_api.constants import System
 
 from .const import ATTR_MESSAGE_ID
+from .const import DEVICE_TRANSLATION_KEYS
 from .const import DOMAIN
 from .const import FLASH_WRITE_DELAY
 from .const import MANUFACTURER
 from .const import MANUFACTURER_INO
 from .const import MANUFACTURER_MTEC
+from .const import SECTIONS
 from .coordinator import KebaKeEnergyConfigEntry
 from .coordinator import KebaKeEnergyDataUpdateCoordinator
 from .coordinator import Values
@@ -53,28 +48,6 @@ if TYPE_CHECKING:
 
 _LOGGER: Final = logging.getLogger(__name__)
 
-DEVICE_TRANSLATION_KEYS: Final[dict[str, str]] = {
-    SectionPrefix.SYSTEM: "control_unit",
-    SectionPrefix.HEAT_CIRCUIT: "heat_circuit",
-    SectionPrefix.SOLAR_CIRCUIT: "solar_circuit",
-    SectionPrefix.HEAT_PUMP: "heat_pump",
-    SectionPrefix.BUFFER_TANK: "buffer_tank",
-    SectionPrefix.HOT_WATER_TANK: "hot_water_tank",
-    SectionPrefix.EXTERNAL_HEAT_SOURCE: "external_heat_source",
-    SectionPrefix.SWITCH_VALVE: "switch_valve",
-    SectionPrefix.PASSIVE_COOLING: "passive_cooling",
-    SectionPrefix.PHOTOVOLTAICS: "photovoltaics",
-}
-
-SECTIONS: Final[dict[str, type[Section]]] = {
-    SectionPrefix.SYSTEM: System,
-    SectionPrefix.HEAT_CIRCUIT: HeatCircuit,
-    SectionPrefix.SOLAR_CIRCUIT: SolarCircuit,
-    SectionPrefix.HEAT_PUMP: HeatPump,
-    SectionPrefix.BUFFER_TANK: BufferTank,
-    SectionPrefix.HOT_WATER_TANK: HotWaterTank,
-    SectionPrefix.EXTERNAL_HEAT_SOURCE: ExternalHeatSource,
-}
 
 T = TypeVar("T", str, int, float)
 

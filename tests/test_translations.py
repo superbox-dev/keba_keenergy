@@ -5,17 +5,17 @@
 from __future__ import annotations
 
 import json
-from pathlib import Path
+from typing import TYPE_CHECKING
 from typing import Any
-from typing import Final
 
 import pytest
 
-import custom_components.keba_keenergy
+from tests.test_translations_data import INTEGRATION_DIR
+from tests.test_translations_data import STRINGS
+from tests.test_translations_data import TRANSLATIONS
 
-INTEGRATION_DIR: Final[Path] = Path(custom_components.keba_keenergy.__file__).parent
-STRINGS: Final[Path] = INTEGRATION_DIR / "strings.json"
-TRANSLATIONS: Final[list[Path]] = sorted((INTEGRATION_DIR / "translations").glob("*.json"))
+if TYPE_CHECKING:
+    from pathlib import Path
 
 
 def _load(path: Path) -> dict[str, Any]:

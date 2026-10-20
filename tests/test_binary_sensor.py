@@ -5,7 +5,6 @@
 from __future__ import annotations
 
 from typing import TYPE_CHECKING
-from typing import Final
 
 import pytest
 from homeassistant.const import STATE_OFF
@@ -17,6 +16,8 @@ from tests import get_platform_states
 from tests.api_data import MULTIPLE_POSITION_DATA_RESPONSE
 from tests.api_data import MULTIPLE_POSITIONS_RESPONSE
 from tests.api_data import get_multiple_position_fixed_data_response
+from tests.test_binary_sensor_data import COMPRESSOR_FAILURE_ENTITY_ID
+from tests.test_binary_sensor_data import COMPRESSOR_FAILURE_MESSAGE_ID
 
 if TYPE_CHECKING:
     from homeassistant.core import HomeAssistant
@@ -24,9 +25,6 @@ if TYPE_CHECKING:
 
     from custom_components.keba_keenergy.coordinator import KebaKeEnergyDataUpdateCoordinator
     from tests.conftest import FakeKebaKeEnergyAPI
-
-COMPRESSOR_FAILURE_ENTITY_ID: Final[str] = "binary_sensor.keba_keenergy_12345678_heat_pump_has_compressor_failure"
-COMPRESSOR_FAILURE_MESSAGE_ID: Final[str] = "APPL.CtrlAppl.sParam.heatpump[0].FailureCompressor.state.msgId"
 
 
 @pytest.mark.parametrize("language", ["en", "de"], indirect=True, ids=["en", "de"])

@@ -16,3 +16,5 @@
   - trigger updates with `coordinator.async_refresh()` and debounced writes with `async_fire_time_changed()`
   - assert entity states, `ConfigEntryState`, the device registry or the requests
 - `pytest.mark.parametrize` with `ids=` naming each case
+- Constants of a test module in a module with its name and `_data.py` (`test_api.py` → `test_api_data.py`)
+  - shared by several test modules: `tests/api_data.py`

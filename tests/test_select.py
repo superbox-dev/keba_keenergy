@@ -5,7 +5,6 @@
 from __future__ import annotations
 
 from typing import TYPE_CHECKING
-from typing import Final
 
 import pytest
 from homeassistant.components.select import ATTR_OPTION
@@ -22,18 +21,12 @@ from tests import get_platform_states
 from tests.api_data import MULTIPLE_POSITION_DATA_RESPONSE
 from tests.api_data import MULTIPLE_POSITIONS_RESPONSE
 from tests.api_data import get_multiple_position_fixed_data_response
+from tests.test_select_data import HEATING_CURVE_SELECTS
 
 if TYPE_CHECKING:
     from syrupy.assertion import SnapshotAssertion
 
     from tests.conftest import FakeKebaKeEnergyAPI
-
-
-# The options of these selects are the names of the heating curves on the Web HMI, so they are not translated.
-HEATING_CURVE_SELECTS: Final[tuple[str, ...]] = (
-    "select.keba_keenergy_12345678_heat_circuit_cooling_curve_2",
-    "select.keba_keenergy_12345678_heat_circuit_heating_curve_1",
-)
 
 
 @pytest.mark.parametrize("language", ["en", "de"], indirect=True, ids=["en", "de"])

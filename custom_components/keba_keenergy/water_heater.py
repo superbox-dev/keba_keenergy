@@ -7,7 +7,6 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 from typing import Final
 
-from homeassistant.components.water_heater import STATE_ECO
 from homeassistant.components.water_heater import STATE_HEAT_PUMP
 from homeassistant.components.water_heater import STATE_PERFORMANCE
 from homeassistant.components.water_heater import WaterHeaterEntity
@@ -23,7 +22,11 @@ from keba_keenergy_api.constants import HotWaterTank
 from keba_keenergy_api.constants import HotWaterTankOperatingMode
 from keba_keenergy_api.constants import SectionPrefix
 
+from .const import BUFFER_TANK_OPERATING_MODE_TO_HA
+from .const import BUFFER_TANK_STATE_TO_HA
 from .const import DOMAIN
+from .const import HOT_WATER_TANK_OPERATING_MODE_TO_HA
+from .const import HOT_WATER_TANK_STATE_TO_HA
 from .entity import KebaKeEnergyBaseEntity
 
 if TYPE_CHECKING:
@@ -34,27 +37,6 @@ if TYPE_CHECKING:
     from .coordinator import KebaKeEnergyDataUpdateCoordinator
 
 PARALLEL_UPDATES: Final[int] = 0
-
-HOT_WATER_TANK_STATE_TO_HA: Final[dict[int, str]] = {
-    HotWaterTankOperatingMode.AUTO.value: STATE_ECO,
-    HotWaterTankOperatingMode.HEAT_UP.value: STATE_PERFORMANCE,
-    HotWaterTankOperatingMode.OFF.value: STATE_OFF,
-    HotWaterTankOperatingMode.ON.value: STATE_HEAT_PUMP,
-}
-
-BUFFER_TANK_STATE_TO_HA: Final[dict[int, str]] = {
-    BufferTankOperatingMode.HEAT_UP.value: STATE_PERFORMANCE,
-    BufferTankOperatingMode.OFF.value: STATE_OFF,
-    BufferTankOperatingMode.ON.value: STATE_HEAT_PUMP,
-}
-
-HOT_WATER_TANK_OPERATING_MODE_TO_HA: Final[dict[str, str]] = {
-    HotWaterTankOperatingMode(key).name.lower(): value for key, value in HOT_WATER_TANK_STATE_TO_HA.items()
-}
-
-BUFFER_TANK_OPERATING_MODE_TO_HA: Final[dict[str, str]] = {
-    BufferTankOperatingMode(key).name.lower(): value for key, value in BUFFER_TANK_STATE_TO_HA.items()
-}
 
 
 class KebaKeEnergyWaterHeaterTankEntity(KebaKeEnergyBaseEntity, WaterHeaterEntity):

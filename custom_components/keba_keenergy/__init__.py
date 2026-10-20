@@ -9,7 +9,6 @@ import socket
 from typing import TYPE_CHECKING
 from typing import Final
 
-from homeassistant.const import Platform
 from homeassistant.helpers import config_validation as cv
 from homeassistant.helpers import device_registry as dr
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
@@ -17,6 +16,7 @@ from keba_keenergy_api.constants import SectionPrefix
 
 from .const import DOMAIN
 from .const import MANUFACTURER
+from .const import PLATFORMS
 from .coordinator import KebaKeEnergyConfigEntry
 from .coordinator import KebaKeEnergyDataUpdateCoordinator
 from .coordinator import get_device_identifier
@@ -30,15 +30,6 @@ if TYPE_CHECKING:
 
 CONFIG_SCHEMA: Final = cv.config_entry_only_config_schema(DOMAIN)
 
-PLATFORMS: Final[list[Platform]] = [
-    Platform.BINARY_SENSOR,
-    Platform.CLIMATE,
-    Platform.NUMBER,
-    Platform.SELECT,
-    Platform.SENSOR,
-    Platform.SWITCH,
-    Platform.WATER_HEATER,
-]
 
 _LOGGER: Final = logging.getLogger(__name__)
 

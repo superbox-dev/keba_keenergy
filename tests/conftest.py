@@ -22,8 +22,8 @@ from pytest_homeassistant_custom_component.test_util.aiohttp import AiohttpClien
 from pytest_homeassistant_custom_component.test_util.aiohttp import AiohttpClientMockResponse
 from yarl import URL
 
-from custom_components.keba_keenergy import PLATFORMS
 from custom_components.keba_keenergy.const import DOMAIN
+from custom_components.keba_keenergy.const import PLATFORMS
 from tests import setup_integration
 from tests.api_data import DEVICE_INFO_RESPONSE
 from tests.api_data import HEATING_CURVES_RESPONSE

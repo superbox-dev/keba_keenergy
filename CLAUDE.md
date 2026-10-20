@@ -72,6 +72,9 @@ Before finishing a change, run `ruff format`, `lint.sh` and `pytest`, in this or
 - Helpers are `_`-prefixed methods of the class that uses them (`@staticmethod` if they need no `self`)
   - module-level functions only when shared across classes or modules, or for Home Assistant callbacks (action
     handlers, validators)
+- Constants always in `const.py`
+  - except what Home Assistant reads from the module itself (`_LOGGER`, `PARALLEL_UPDATES`, `CONFIG_SCHEMA`) and
+    the entity descriptions of a platform (`SENSOR_TYPES`, ...)
 - Class member order: `__init__`, dunder methods, properties, public methods (also Home Assistant overrides)
   grouped by topic, helpers directly below their first caller
   - applies to new methods, existing ones only moved when asked

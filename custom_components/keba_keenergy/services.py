@@ -17,13 +17,19 @@ from homeassistant.core import callback
 from homeassistant.exceptions import ServiceValidationError
 from homeassistant.helpers import config_validation as cv
 from homeassistant.helpers import selector
-from keba_keenergy_api.constants import MAX_HEATING_CURVE_POINTS
 from keba_keenergy_api.endpoints import HeatingCurvePoint
 from keba_keenergy_api.endpoints import HeatingCurvePoints
 from keba_keenergy_api.endpoints import HeatingCurves
 
 from .const import ATTR_CONFIG_ENTRY
+from .const import ATTR_END_DATE
+from .const import ATTR_FLOW
+from .const import ATTR_HEATING_CURVE
+from .const import ATTR_OUTDOOR
+from .const import ATTR_POINTS
+from .const import ATTR_START_DATE
 from .const import DOMAIN
+from .const import HEATING_CURVE_POINTS_SCHEMA
 from .const import SERVICE_SET_AWAY_DATE_RANGE
 from .const import SERVICE_SET_HEATING_CURVE_POINTS
 
@@ -37,9 +43,6 @@ if TYPE_CHECKING:
     from .coordinator import KebaKeEnergyDataUpdateCoordinator
 
 _LOGGER: Final = logging.getLogger(__name__)
-
-ATTR_START_DATE: Final[str] = "start_date"
-ATTR_END_DATE: Final[str] = "end_date"
 
 
 def _date(value: object) -> date:
@@ -59,44 +62,6 @@ AWAY_DATE_RANGE_SCHEMA: Final[probatio.Schema] = probatio.Schema(
         ),
         probatio.Required(ATTR_START_DATE): _date,
         probatio.Required(ATTR_END_DATE): _date,
-    },
-)
-
-ATTR_POINTS: Final[str] = "points"
-ATTR_OUTDOOR: Final[str] = "outdoor"
-ATTR_FLOW: Final[str] = "flow"
-ATTR_HEATING_CURVE: Final[str] = "heating_curve"
-
-HEATING_CURVE_POINT_SCHEMA: Final = probatio.Schema(
-    {
-        probatio.Required(ATTR_OUTDOOR): probatio.All(
-            probatio.Coerce(float),
-            probatio.Range(min=-40, max=40),
-        ),
-        probatio.Required(ATTR_FLOW): probatio.All(
-            probatio.Coerce(float),
-            probatio.Range(min=10, max=90),
-        ),
-    },
-)
-
-HEATING_CURVE_POINTS_SCHEMA: Final[probatio.Schema] = probatio.Schema(
-    {
-        probatio.Required(ATTR_CONFIG_ENTRY): selector.ConfigEntrySelector(
-            {
-                "integration": DOMAIN,
-            },
-        ),
-        probatio.Required(ATTR_HEATING_CURVE): probatio.All(
-            str,
-            probatio.Length(min=2),
-            probatio.Match(r"^HC"),
-        ),
-        probatio.Required(ATTR_POINTS): probatio.All(
-            cv.ensure_list,
-            probatio.Length(min=1, max=MAX_HEATING_CURVE_POINTS),
-            [HEATING_CURVE_POINT_SCHEMA],
-        ),
     },
 )
 

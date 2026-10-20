@@ -50,6 +50,7 @@ from .const import DOMAIN
 from .const import MANUFACTURER
 from .const import MIN_SCAN_INTERVAL
 from .const import NAME
+from .const import STEP_AUTH_DATA_SCHEMA
 
 if TYPE_CHECKING:
     from collections.abc import Mapping
@@ -60,12 +61,6 @@ if TYPE_CHECKING:
     from .coordinator import KebaKeEnergyConfigEntry
     from .coordinator import KebaKeEnergyDataUpdateCoordinator
 
-STEP_AUTH_DATA_SCHEMA: Final[probatio.Schema] = probatio.Schema(
-    {
-        probatio.Required(CONF_USERNAME): str,
-        probatio.Required(CONF_PASSWORD): str,
-    },
-)
 
 _LOGGER: Final = logging.getLogger(__name__)
 

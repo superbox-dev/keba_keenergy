@@ -7,7 +7,6 @@ from __future__ import annotations
 from datetime import timedelta
 from typing import TYPE_CHECKING
 from typing import Any
-from typing import Final
 
 import pytest
 from homeassistant.components.water_heater import ATTR_MAX_TEMP
@@ -42,19 +41,17 @@ from tests.api_data import MULTIPLE_POSITIONS_RESPONSE
 from tests.api_data import get_multiple_position_fixed_data_response
 from tests.api_data import get_single_position_data_response
 from tests.api_data import update_response
+from tests.test_water_heater_data import ENTITY_ID
+from tests.test_water_heater_data import ENTITY_ID_1
+from tests.test_water_heater_data import ENTITY_ID_2
+from tests.test_water_heater_data import ENTITY_ID_3
+from tests.test_water_heater_data import ENTITY_ID_4
 
 if TYPE_CHECKING:
     from pytest_homeassistant_custom_component.common import MockConfigEntry
     from syrupy.assertion import SnapshotAssertion
 
     from tests.conftest import FakeKebaKeEnergyAPI
-
-
-ENTITY_ID: Final[str] = "water_heater.keba_keenergy_12345678"
-ENTITY_ID_1: Final[str] = "water_heater.keba_keenergy_12345678_1"
-ENTITY_ID_2: Final[str] = "water_heater.keba_keenergy_12345678_2"
-ENTITY_ID_3: Final[str] = "water_heater.keba_keenergy_12345678_buffer_tank"
-ENTITY_ID_4: Final[str] = "water_heater.keba_keenergy_12345678_buffer_tank_1"
 
 
 @pytest.mark.parametrize(
