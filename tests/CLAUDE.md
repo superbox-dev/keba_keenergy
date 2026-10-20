@@ -18,3 +18,7 @@
 - `pytest.mark.parametrize` with `ids=` naming each case
 - Constants of a test module in a module with its name and `_data.py` (`test_api.py` → `test_api_data.py`)
   - shared by several test modules: `tests/api_data.py`
+- Helper functions that only check (no return value) start with `assert_`
+  - helpers that return a value and only assert to narrow types keep their name
+  - shared by several test modules: `tests/asserts.py`, registered with `pytest.register_assert_rewrite()` in
+    `tests/conftest.py`
