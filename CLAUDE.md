@@ -49,6 +49,7 @@ Before finishing a change, run `ruff format`, `lint.sh` and `pytest`, in this or
   redacted (`async_redact_data(data, TO_REDACT)`)
 - New texts in `strings.json`, `translations/en.json` and `translations/de.json`, keys sorted
 - Log messages start with a capital letter, no trailing period, values as `%s` arguments
+- Every file follows `.editorconfig`, whether a linter checks it or not
 - Style rules apply to new and changed code, existing code only adapted when asked
 - Every `.py` file starts with (after the shebang of an executable script, update the end year when editing a
   file, a single year while it equals the start year):
