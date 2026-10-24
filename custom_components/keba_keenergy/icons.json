@@ -1,308 +1,308 @@
 {
-    "entity": {
-        "binary_sensor": {
-            "circulation_pump_state": {
-                "state": {
-                    "off": "mdi:pump-off",
-                    "on": "mdi:pump"
-                }
-            },
-            "compressor_failure": {
-                "state": {
-                    "off": "mdi:check-circle",
-                    "on": "mdi:alert-circle"
-                }
-            },
-            "cool_request": {
-                "state": {
-                    "off": "mdi:power-off",
-                    "on": "mdi:snowflake"
-                }
-            },
-            "heat_request": {
-                "state": {
-                    "off": "mdi:power-off",
-                    "on": "mdi:fire"
-                }
-            },
-            "hot_water_flow": {
-                "state": {
-                    "off": "mdi:water-off",
-                    "on": "mdi:water"
-                }
-            },
-            "source_actuator_failure": {
-                "state": {
-                    "off": "mdi:check-circle",
-                    "on": "mdi:alert-circle"
-                }
-            },
-            "source_failure": {
-                "state": {
-                    "off": "mdi:check-circle",
-                    "on": "mdi:alert-circle"
-                }
-            },
-            "source_pressure_failure": {
-                "state": {
-                    "off": "mdi:check-circle",
-                    "on": "mdi:alert-circle"
-                }
-            },
-            "three_phase_failure": {
-                "state": {
-                    "off": "mdi:check-circle",
-                    "on": "mdi:alert-circle"
-                }
-            },
-            "vfd_failure": {
-                "state": {
-                    "off": "mdi:check-circle",
-                    "on": "mdi:alert-circle"
-                }
-            }
-        },
-        "climate": {
-            "heat_circuit": {
-                "default": "mdi:hvac",
-                "state": {
-                    "off": "mdi:hvac-off"
-                }
-            }
-        },
-        "number": {
-            "cooling_curve_slope": {
-                "default": "mdi:slope-uphill"
-            },
-            "excess_energy_target_room_cooling_temperature": {
-                "default": "mdi:sun-thermometer"
-            },
-            "excess_energy_target_room_cooling_temperature_hysteresis": {
-                "default": "mdi:thermometer-lines"
-            },
-            "excess_energy_target_room_temperature": {
-                "default": "mdi:sun-thermometer"
-            },
-            "excess_energy_target_room_temperature_hysteresis": {
-                "default": "mdi:thermometer-lines"
-            },
-            "excess_energy_target_temperature": {
-                "default": "mdi:sun-thermometer"
-            },
-            "excess_energy_target_temperature_hysteresis": {
-                "default": "mdi:thermometer-lines"
-            },
-            "heating_curve_slope": {
-                "default": "mdi:slope-uphill"
-            },
-            "outdoor_temperature_excess_energy_limit": {
-                "default": "mdi:thermometer"
-            },
-            "standby_temperature": {
-                "default": "mdi:thermometer-chevron-down"
-            }
-        },
-        "select": {
-            "buffer_tank_operating_mode": {
-                "default": "mdi:cog"
-            },
-            "cooling_curve": {
-                "default": "mdi:chart-bell-curve-cumulative"
-            },
-            "external_heat_source_operating_mode": {
-                "default": "mdi:cog"
-            },
-            "heat_circuit_operating_mode": {
-                "default": "mdi:cog"
-            },
-            "heating_curve": {
-                "default": "mdi:chart-bell-curve-cumulative"
-            },
-            "hot_water_tank_operating_mode": {
-                "default": "mdi:cog"
-            },
-            "solar_circuit_operating_mode": {
-                "default": "mdi:cog"
-            },
-            "system_operating_mode": {
-                "default": "mdi:cog"
-            }
-        },
-        "sensor": {
-            "buffer_tank_operating_mode": {
-                "state": {
-                    "heat_up": "mdi:fire",
-                    "off": "mdi:power-off",
-                    "on": "mdi:power"
-                }
-            },
-            "circulation_pump_speed": {
-                "default": "mdi:speedometer",
-                "range": {
-                    "0": "mdi:speedometer-slow",
-                    "50": "mdi:speedometer-medium",
-                    "75": "mdi:sun-thermometer"
-                }
-            },
-            "compressor": {
-                "default": "mdi:speedometer",
-                "range": {
-                    "0": "mdi:speedometer-slow",
-                    "50": "mdi:speedometer-medium",
-                    "75": "mdi:sun-thermometer"
-                }
-            },
-            "cool_request": {
-                "default": "mdi:snowflake",
-                "state": {
-                    "off": "mdi:snowflake-off",
-                    "on": "mdi:snowflake"
-                }
-            },
-            "cooling_curve": {
-                "default": "mdi:chart-bell-curve-cumulative"
-            },
-            "current_bottom_temperature": {
-                "default": "mdi:thermometer-water"
-            },
-            "current_temperature": {
-                "default": "mdi:thermometer-water"
-            },
-            "current_top_temperature": {
-                "default": "mdi:thermometer-water"
-            },
-            "dew_point": {
-                "default": "mdi:home-thermometer"
-            },
-            "excess_energy_mode": {
-                "default": "mdi:lightning-bolt",
-                "state": {
-                    "cooling": "mdi:snowflake",
-                    "heating": "mdi:fire",
-                    "off": "mdi:lightning-bolt"
-                }
-            },
-            "excess_energy_target_room_cooling_temperature": {
-                "default": "mdi:sun-thermometer"
-            },
-            "excess_energy_target_room_temperature": {
-                "default": "mdi:sun-thermometer"
-            },
-            "excess_energy_target_temperature": {
-                "default": "mdi:sun-thermometer"
-            },
-            "external_heat_source_operating_mode": {
-                "state": {
-                    "off": "mdi:power-off",
-                    "on": "mdi:power"
-                }
-            },
-            "fresh_water_module_temperature": {
-                "default": "mdi:thermometer-water"
-            },
-            "heat_circuit_operating_mode": {
-                "state": {
-                    "auto": "mdi:clock-outline",
-                    "day": "mdi:weather-sunny",
-                    "holiday": "mdi:bag-checked",
-                    "night": "mdi:weather-night",
-                    "off": "mdi:power-standby",
-                    "party": "mdi:glass-cocktail"
-                }
-            },
-            "heat_request": {
-                "default": "mdi:fire",
-                "state": {
-                    "off": "mdi:fire-off",
-                    "on": "mdi:fire"
-                }
-            },
-            "heating_curve": {
-                "default": "mdi:chart-bell-curve-cumulative"
-            },
-            "hot_water_tank_operating_mode": {
-                "state": {
-                    "auto": "mdi:thermometer-auto",
-                    "heat_up": "mdi:fire",
-                    "off": "mdi:power-off",
-                    "on": "mdi:power"
-                }
-            },
-            "outdoor_temperature": {
-                "default": "mdi:sun-thermometer",
-                "range": {
-                    "-30": "mdi:snowflake-thermometer",
-                    "10": "mdi:sun-thermometer"
-                }
-            },
-            "pump_speed": {
-                "default": "mdi:speedometer",
-                "range": {
-                    "0": "mdi:speedometer-slow",
-                    "50": "mdi:speedometer-medium",
-                    "75": "mdi:speedometer"
-                }
-            },
-            "room_temperature": {
-                "default": "mdi:home-thermometer"
-            },
-            "solar_circuit_pump_1": {
-                "default": "mdi:speedometer",
-                "range": {
-                    "0": "mdi:speedometer-slow",
-                    "50": "mdi:speedometer-medium",
-                    "75": "mdi:speedometer"
-                }
-            },
-            "solar_circuit_pump_2": {
-                "default": "mdi:speedometer",
-                "range": {
-                    "0": "mdi:speedometer-slow",
-                    "50": "mdi:speedometer-medium",
-                    "75": "mdi:speedometer"
-                }
-            },
-            "source_pump_speed": {
-                "default": "mdi:speedometer",
-                "range": {
-                    "0": "mdi:speedometer-slow",
-                    "50": "mdi:speedometer-medium",
-                    "75": "mdi:speedometer"
-                }
-            },
-            "source_temperature": {
-                "default": "mdi:sun-thermometer"
-            },
-            "standby_temperature": {
-                "default": "mdi:thermometer-chevron-down"
-            },
-            "state": {
-                "default": "mdi:cog"
-            },
-            "substate": {
-                "default": "mdi:cog"
-            },
-            "system_operating_mode": {
-                "default": "mdi:cog",
-                "state": {
-                    "auto": "mdi:thermometer-auto",
-                    "auto_cool": "mdi:snowflake",
-                    "auto_heat": "mdi:fire",
-                    "standby": "mdi:power-standby",
-                    "summer": "mdi:water-thermometer"
-                }
-            },
-            "temperature": {
-                "default": "mdi:snowflake-thermometer"
-            }
-        },
-        "switch": {
-            "use_cooling_curve": {
-                "default": "mdi:chart-bell-curve-cumulative"
-            },
-            "use_heating_curve": {
-                "default": "mdi:chart-bell-curve-cumulative"
-            }
+  "entity": {
+    "binary_sensor": {
+      "circulation_pump_state": {
+        "state": {
+          "off": "mdi:pump-off",
+          "on": "mdi:pump"
         }
+      },
+      "compressor_failure": {
+        "state": {
+          "off": "mdi:check-circle",
+          "on": "mdi:alert-circle"
+        }
+      },
+      "cool_request": {
+        "state": {
+          "off": "mdi:power-off",
+          "on": "mdi:snowflake"
+        }
+      },
+      "heat_request": {
+        "state": {
+          "off": "mdi:power-off",
+          "on": "mdi:fire"
+        }
+      },
+      "hot_water_flow": {
+        "state": {
+          "off": "mdi:water-off",
+          "on": "mdi:water"
+        }
+      },
+      "source_actuator_failure": {
+        "state": {
+          "off": "mdi:check-circle",
+          "on": "mdi:alert-circle"
+        }
+      },
+      "source_failure": {
+        "state": {
+          "off": "mdi:check-circle",
+          "on": "mdi:alert-circle"
+        }
+      },
+      "source_pressure_failure": {
+        "state": {
+          "off": "mdi:check-circle",
+          "on": "mdi:alert-circle"
+        }
+      },
+      "three_phase_failure": {
+        "state": {
+          "off": "mdi:check-circle",
+          "on": "mdi:alert-circle"
+        }
+      },
+      "vfd_failure": {
+        "state": {
+          "off": "mdi:check-circle",
+          "on": "mdi:alert-circle"
+        }
+      }
+    },
+    "climate": {
+      "heat_circuit": {
+        "default": "mdi:hvac",
+        "state": {
+          "off": "mdi:hvac-off"
+        }
+      }
+    },
+    "number": {
+      "cooling_curve_slope": {
+        "default": "mdi:slope-uphill"
+      },
+      "excess_energy_target_room_cooling_temperature": {
+        "default": "mdi:sun-thermometer"
+      },
+      "excess_energy_target_room_cooling_temperature_hysteresis": {
+        "default": "mdi:thermometer-lines"
+      },
+      "excess_energy_target_room_temperature": {
+        "default": "mdi:sun-thermometer"
+      },
+      "excess_energy_target_room_temperature_hysteresis": {
+        "default": "mdi:thermometer-lines"
+      },
+      "excess_energy_target_temperature": {
+        "default": "mdi:sun-thermometer"
+      },
+      "excess_energy_target_temperature_hysteresis": {
+        "default": "mdi:thermometer-lines"
+      },
+      "heating_curve_slope": {
+        "default": "mdi:slope-uphill"
+      },
+      "outdoor_temperature_excess_energy_limit": {
+        "default": "mdi:thermometer"
+      },
+      "standby_temperature": {
+        "default": "mdi:thermometer-chevron-down"
+      }
+    },
+    "select": {
+      "buffer_tank_operating_mode": {
+        "default": "mdi:cog"
+      },
+      "cooling_curve": {
+        "default": "mdi:chart-bell-curve-cumulative"
+      },
+      "external_heat_source_operating_mode": {
+        "default": "mdi:cog"
+      },
+      "heat_circuit_operating_mode": {
+        "default": "mdi:cog"
+      },
+      "heating_curve": {
+        "default": "mdi:chart-bell-curve-cumulative"
+      },
+      "hot_water_tank_operating_mode": {
+        "default": "mdi:cog"
+      },
+      "solar_circuit_operating_mode": {
+        "default": "mdi:cog"
+      },
+      "system_operating_mode": {
+        "default": "mdi:cog"
+      }
+    },
+    "sensor": {
+      "buffer_tank_operating_mode": {
+        "state": {
+          "heat_up": "mdi:fire",
+          "off": "mdi:power-off",
+          "on": "mdi:power"
+        }
+      },
+      "circulation_pump_speed": {
+        "default": "mdi:speedometer",
+        "range": {
+          "0": "mdi:speedometer-slow",
+          "50": "mdi:speedometer-medium",
+          "75": "mdi:sun-thermometer"
+        }
+      },
+      "compressor": {
+        "default": "mdi:speedometer",
+        "range": {
+          "0": "mdi:speedometer-slow",
+          "50": "mdi:speedometer-medium",
+          "75": "mdi:sun-thermometer"
+        }
+      },
+      "cool_request": {
+        "default": "mdi:snowflake",
+        "state": {
+          "off": "mdi:snowflake-off",
+          "on": "mdi:snowflake"
+        }
+      },
+      "cooling_curve": {
+        "default": "mdi:chart-bell-curve-cumulative"
+      },
+      "current_bottom_temperature": {
+        "default": "mdi:thermometer-water"
+      },
+      "current_temperature": {
+        "default": "mdi:thermometer-water"
+      },
+      "current_top_temperature": {
+        "default": "mdi:thermometer-water"
+      },
+      "dew_point": {
+        "default": "mdi:home-thermometer"
+      },
+      "excess_energy_mode": {
+        "default": "mdi:lightning-bolt",
+        "state": {
+          "cooling": "mdi:snowflake",
+          "heating": "mdi:fire",
+          "off": "mdi:lightning-bolt"
+        }
+      },
+      "excess_energy_target_room_cooling_temperature": {
+        "default": "mdi:sun-thermometer"
+      },
+      "excess_energy_target_room_temperature": {
+        "default": "mdi:sun-thermometer"
+      },
+      "excess_energy_target_temperature": {
+        "default": "mdi:sun-thermometer"
+      },
+      "external_heat_source_operating_mode": {
+        "state": {
+          "off": "mdi:power-off",
+          "on": "mdi:power"
+        }
+      },
+      "fresh_water_module_temperature": {
+        "default": "mdi:thermometer-water"
+      },
+      "heat_circuit_operating_mode": {
+        "state": {
+          "auto": "mdi:clock-outline",
+          "day": "mdi:weather-sunny",
+          "holiday": "mdi:bag-checked",
+          "night": "mdi:weather-night",
+          "off": "mdi:power-standby",
+          "party": "mdi:glass-cocktail"
+        }
+      },
+      "heat_request": {
+        "default": "mdi:fire",
+        "state": {
+          "off": "mdi:fire-off",
+          "on": "mdi:fire"
+        }
+      },
+      "heating_curve": {
+        "default": "mdi:chart-bell-curve-cumulative"
+      },
+      "hot_water_tank_operating_mode": {
+        "state": {
+          "auto": "mdi:thermometer-auto",
+          "heat_up": "mdi:fire",
+          "off": "mdi:power-off",
+          "on": "mdi:power"
+        }
+      },
+      "outdoor_temperature": {
+        "default": "mdi:sun-thermometer",
+        "range": {
+          "-30": "mdi:snowflake-thermometer",
+          "10": "mdi:sun-thermometer"
+        }
+      },
+      "pump_speed": {
+        "default": "mdi:speedometer",
+        "range": {
+          "0": "mdi:speedometer-slow",
+          "50": "mdi:speedometer-medium",
+          "75": "mdi:speedometer"
+        }
+      },
+      "room_temperature": {
+        "default": "mdi:home-thermometer"
+      },
+      "solar_circuit_pump_1": {
+        "default": "mdi:speedometer",
+        "range": {
+          "0": "mdi:speedometer-slow",
+          "50": "mdi:speedometer-medium",
+          "75": "mdi:speedometer"
+        }
+      },
+      "solar_circuit_pump_2": {
+        "default": "mdi:speedometer",
+        "range": {
+          "0": "mdi:speedometer-slow",
+          "50": "mdi:speedometer-medium",
+          "75": "mdi:speedometer"
+        }
+      },
+      "source_pump_speed": {
+        "default": "mdi:speedometer",
+        "range": {
+          "0": "mdi:speedometer-slow",
+          "50": "mdi:speedometer-medium",
+          "75": "mdi:speedometer"
+        }
+      },
+      "source_temperature": {
+        "default": "mdi:sun-thermometer"
+      },
+      "standby_temperature": {
+        "default": "mdi:thermometer-chevron-down"
+      },
+      "state": {
+        "default": "mdi:cog"
+      },
+      "substate": {
+        "default": "mdi:cog"
+      },
+      "system_operating_mode": {
+        "default": "mdi:cog",
+        "state": {
+          "auto": "mdi:thermometer-auto",
+          "auto_cool": "mdi:snowflake",
+          "auto_heat": "mdi:fire",
+          "standby": "mdi:power-standby",
+          "summer": "mdi:water-thermometer"
+        }
+      },
+      "temperature": {
+        "default": "mdi:snowflake-thermometer"
+      }
+    },
+    "switch": {
+      "use_cooling_curve": {
+        "default": "mdi:chart-bell-curve-cumulative"
+      },
+      "use_heating_curve": {
+        "default": "mdi:chart-bell-curve-cumulative"
+      }
     }
+  }
 }

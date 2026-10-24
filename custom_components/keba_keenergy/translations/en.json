@@ -1,874 +1,874 @@
 {
-    "config": {
-        "abort": {
-            "already_configured": "Device is already configured",
-            "already_in_progress": "Configuration flow is already in progress",
-            "reauth_successful": "Re-authentication was successful",
-            "reconfigure_successful": "Re-configuration was successful",
-            "wrong_account": "The user credentials provided do not match this {name} device"
-        },
-        "error": {
-            "cannot_connect": "Failed to connect",
-            "invalid_auth": "Invalid authentication",
-            "unknown": "Unexpected error"
-        },
-        "flow_title": "{name}",
-        "step": {
-            "auth": {
-                "data": {
-                    "password": "Password",
-                    "username": "Username"
-                },
-                "data_description": {
-                    "password": "The password to log in to your {name} device.",
-                    "username": "The username to log in to your {name} device."
-                },
-                "description": "Please enter the username and password."
-            },
-            "discovery_confirm": {
-                "description": "Do you want to add {name} ({host}) to Home Assistant?",
-                "title": "Discovered {name}"
-            },
-            "reauth_confirm": {
-                "data": {
-                    "password": "Password",
-                    "username": "Username"
-                },
-                "data_description": {
-                    "password": "The password to log in to your {name} device.",
-                    "username": "The username to log in to your {name} device."
-                },
-                "description": "Please re-enter the username and password."
-            },
-            "user": {
-                "data": {
-                    "host": "Host",
-                    "ssl": "Uses an SSL certificate"
-                },
-                "data_description": {
-                    "host": "The hostname or IP address of your {name} device."
-                },
-                "description": "Configure your {name} device."
-            }
-        }
+  "config": {
+    "abort": {
+      "already_configured": "Device is already configured",
+      "already_in_progress": "Configuration flow is already in progress",
+      "reauth_successful": "Re-authentication was successful",
+      "reconfigure_successful": "Re-configuration was successful",
+      "wrong_account": "The user credentials provided do not match this {name} device"
     },
-    "device": {
-        "buffer_tank": {
-            "name": "Buffer tank{position}"
-        },
-        "control_unit": {
-            "name": "Control unit"
-        },
-        "external_heat_source": {
-            "name": "External heat source{position}"
-        },
-        "heat_circuit": {
-            "name": "Heating circuit{position}"
-        },
-        "heat_pump": {
-            "name": "Heat pump{position}"
-        },
-        "hot_water_tank": {
-            "name": "Hot water tank{position}"
-        },
-        "passive_cooling": {
-            "name": "Passive cooling{position}"
-        },
-        "photovoltaics": {
-            "name": "Photovoltaics{position}"
-        },
-        "solar_circuit": {
-            "name": "Solar circuit{position}"
-        },
-        "switch_valve": {
-            "name": "Switch valve{position}"
-        }
+    "error": {
+      "cannot_connect": "Failed to connect",
+      "invalid_auth": "Invalid authentication",
+      "unknown": "Unexpected error"
     },
-    "entity": {
-        "binary_sensor": {
-            "circulation_pump_state": {
-                "name": "Circulation pump state"
-            },
-            "compressor_failure": {
-                "name": "Compressor"
-            },
-            "cool_request": {
-                "name": "Cool request"
-            },
-            "excess_energy": {
-                "name": "PV surplus"
-            },
-            "heat_request": {
-                "name": "Heat request{counter}"
-            },
-            "hot_water_flow": {
-                "name": "Hot water flow"
-            },
-            "pump_state": {
-                "name": "Pump state"
-            },
-            "source_actuator_failure": {
-                "name": "Source actuator"
-            },
-            "source_failure": {
-                "name": "Source"
-            },
-            "source_pressure_failure": {
-                "name": "Source pressure"
-            },
-            "three_phase_failure": {
-                "name": "Three-phase"
-            },
-            "vfd_failure": {
-                "name": "Frequency inverter"
-            }
+    "flow_title": "{name}",
+    "step": {
+      "auth": {
+        "data": {
+          "password": "Password",
+          "username": "Username"
         },
-        "climate": {
-            "heat_circuit": {
-                "state": {
-                    "heat": "On"
-                },
-                "state_attributes": {
-                    "preset_mode": {
-                        "state": {
-                            "away": "Away",
-                            "boost": "Party",
-                            "comfort": "Day",
-                            "eco": "Auto",
-                            "sleep": "Night"
-                        }
-                    }
-                }
-            }
+        "data_description": {
+          "password": "The password to log in to your {name} device.",
+          "username": "The username to log in to your {name} device."
         },
-        "number": {
-            "compressor_night_speed": {
-                "name": "Compressor speed (night)"
-            },
-            "cooling_curve_offset": {
-                "name": "Cooling curve offset"
-            },
-            "cooling_curve_slope": {
-                "name": "Cooling curve slope"
-            },
-            "cooling_limit_day": {
-                "name": "Cooling limit (day)"
-            },
-            "cooling_limit_night": {
-                "name": "Cooling limit (night)"
-            },
-            "excess_energy_cooling_limit_day": {
-                "name": "Cooling limit (PV surplus, day)"
-            },
-            "excess_energy_cooling_limit_night": {
-                "name": "Cooling limit (PV surplus, night)"
-            },
-            "excess_energy_heating_limit_day": {
-                "name": "Heating limit (PV surplus, day)"
-            },
-            "excess_energy_heating_limit_night": {
-                "name": "Heating limit (PV surplus, night)"
-            },
-            "excess_energy_target_room_cooling_temperature": {
-                "name": "Target room cooling temperature (PV surplus)"
-            },
-            "excess_energy_target_room_cooling_temperature_hysteresis": {
-                "name": "Target room cooling temperature hysteresis (PV surplus)"
-            },
-            "excess_energy_target_room_temperature": {
-                "name": "Target room temperature (PV surplus)"
-            },
-            "excess_energy_target_room_temperature_hysteresis": {
-                "name": "Target room temperature hysteresis (PV surplus)"
-            },
-            "excess_energy_target_temperature": {
-                "name": "Target temperature (PV surplus)"
-            },
-            "excess_energy_target_temperature_hysteresis": {
-                "name": "Target temperature hysteresis (PV surplus)"
-            },
-            "heating_curve_offset": {
-                "name": "Heating curve offset"
-            },
-            "heating_curve_slope": {
-                "name": "Heating curve slope"
-            },
-            "heating_limit_day": {
-                "name": "Heating limit (day)"
-            },
-            "heating_limit_night": {
-                "name": "Heating limit (night)"
-            },
-            "min_runtime_excess_energy": {
-                "name": "Minimum runtime (PV surplus)"
-            },
-            "outdoor_temperature_excess_energy_limit": {
-                "name": "Outdoor temperature limit (PV surplus)"
-            },
-            "standby_temperature": {
-                "name": "Standby temperature"
-            },
-            "target_room_cooling_temperature_day": {
-                "name": "Target room cooling temperature (day)"
-            },
-            "target_room_cooling_temperature_night": {
-                "name": "Target room cooling temperature (night)"
-            },
-            "target_room_temperature": {
-                "name": "Target room temperature"
-            },
-            "target_room_temperature_away": {
-                "name": "Target room temperature (away)"
-            },
-            "target_room_temperature_day": {
-                "name": "Target room temperature (day)"
-            },
-            "target_room_temperature_night": {
-                "name": "Target room temperature (night)"
-            },
-            "target_room_temperature_offset": {
-                "name": "Target room temperature (offset)"
-            },
-            "target_temperature": {
-                "name": "Target temperature{counter}"
-            }
+        "description": "Please enter the username and password."
+      },
+      "discovery_confirm": {
+        "description": "Do you want to add {name} ({host}) to Home Assistant?",
+        "title": "Discovered {name}"
+      },
+      "reauth_confirm": {
+        "data": {
+          "password": "Password",
+          "username": "Username"
         },
-        "select": {
-            "buffer_tank_operating_mode": {
-                "name": "Operating mode",
-                "state": {
-                    "heat_up": "Heat up",
-                    "off": "Off",
-                    "on": "On"
-                }
-            },
-            "cooling_curve": {
-                "name": "Cooling curve"
-            },
-            "external_heat_source_operating_mode": {
-                "name": "Operating mode",
-                "state": {
-                    "off": "Off",
-                    "on": "On"
-                }
-            },
-            "heat_circuit_operating_mode": {
-                "name": "Operating mode",
-                "state": {
-                    "auto": "Auto",
-                    "day": "Day",
-                    "holiday": "Away",
-                    "night": "Night",
-                    "off": "Off",
-                    "party": "Party"
-                }
-            },
-            "heating_curve": {
-                "name": "Heating curve"
-            },
-            "hot_water_tank_operating_mode": {
-                "name": "Operating mode",
-                "state": {
-                    "auto": "Schedule",
-                    "heat_up": "Heat up",
-                    "off": "Off",
-                    "on": "On"
-                }
-            },
-            "solar_circuit_operating_mode": {
-                "name": "Operating mode",
-                "state": {
-                    "off": "Off",
-                    "on": "On"
-                }
-            },
-            "system_operating_mode": {
-                "name": "Operating mode",
-                "state": {
-                    "auto": "Automatic",
-                    "auto_cool": "Cooling",
-                    "auto_heat": "Heating",
-                    "setup": "Setup",
-                    "standby": "Standby",
-                    "summer": "Hot water only"
-                }
-            }
+        "data_description": {
+          "password": "The password to log in to your {name} device.",
+          "username": "The username to log in to your {name} device."
         },
-        "sensor": {
-            "activation_counter": {
-                "name": "Activation counter"
-            },
-            "actual_power": {
-                "name": "Power"
-            },
-            "buffer_tank_operating_mode": {
-                "name": "Operating mode",
-                "state": {
-                    "heat_up": "Heat up",
-                    "off": "Off",
-                    "on": "On"
-                }
-            },
-            "circulation_pump_speed": {
-                "name": "Circulation pump speed"
-            },
-            "circulation_return_temperature": {
-                "name": "Circulation return temperature"
-            },
-            "compressor": {
-                "name": "Compressor speed"
-            },
-            "compressor_input_temperature": {
-                "name": "Compressor input temperature"
-            },
-            "compressor_output_temperature": {
-                "name": "Compressor output temperature"
-            },
-            "compressor_power": {
-                "name": "Compressor power"
-            },
-            "condenser_temperature": {
-                "name": "Condensation temperature"
-            },
-            "control_cpu_usage": {
-                "name": "Control CPU usage"
-            },
-            "cool_request": {
-                "name": "Cool request",
-                "state": {
-                    "flow_off": "Off (low flow temperature)",
-                    "inflow_off": "Off (high return flow temperature)",
-                    "off": "Off",
-                    "on": "On",
-                    "outdoor_off": "Off (low outside temperature)",
-                    "room_off": "Off (low room temperature)",
-                    "temporary_off": "Off (temporary)"
-                }
-            },
-            "cooling_curve": {
-                "name": "Cooling curve"
-            },
-            "cooling_energy": {
-                "name": "Cooling energy"
-            },
-            "cooling_energy_consumption": {
-                "name": "Cooling electricity consumption"
-            },
-            "cooling_excess_energy_consumption": {
-                "name": "Cooling electricity consumption (PV surplus)"
-            },
-            "cooling_limit_day": {
-                "name": "Cooling limit (day)"
-            },
-            "cooling_limit_night": {
-                "name": "Cooling limit (night)"
-            },
-            "cooling_spf": {
-                "name": "Cooling SPF"
-            },
-            "cop": {
-                "name": "Coefficient of performance"
-            },
-            "cpu_usage": {
-                "name": "CPU usage"
-            },
-            "current_bottom_temperature": {
-                "name": "Current temperature (bottom)"
-            },
-            "current_overheating": {
-                "name": "Current overheating"
-            },
-            "current_temperature": {
-                "name": "Current temperature{counter}"
-            },
-            "current_top_temperature": {
-                "name": "Current temperature (top)"
-            },
-            "daily_energy": {
-                "name": "Daily energy"
-            },
-            "dew_point": {
-                "name": "Dew point"
-            },
-            "excess_energy_activation_counter": {
-                "name": "Activation counter (PV surplus)"
-            },
-            "excess_energy_consumption": {
-                "name": "Electricity consumption (PV surplus)"
-            },
-            "excess_energy_cooling_limit_day": {
-                "name": "Cooling limit (PV surplus, day)"
-            },
-            "excess_energy_cooling_limit_night": {
-                "name": "Cooling limit (PV surplus, night)"
-            },
-            "excess_energy_heating_limit_day": {
-                "name": "Heating limit (PV surplus, day)"
-            },
-            "excess_energy_heating_limit_night": {
-                "name": "Heating limit (PV surplus, night)"
-            },
-            "excess_energy_max_runtime": {
-                "name": "Maximum runtime (PV surplus)"
-            },
-            "excess_energy_mode": {
-                "name": "PV surplus",
-                "state": {
-                    "cooling": "Cooling",
-                    "heating": "Heating",
-                    "off": "Off"
-                }
-            },
-            "excess_energy_operating_time": {
-                "name": "Operating hours (PV surplus)"
-            },
-            "excess_energy_target_room_cooling_temperature": {
-                "name": "Target room cooling temperature (PV surplus)"
-            },
-            "excess_energy_target_room_temperature": {
-                "name": "Target room temperature (PV surplus)"
-            },
-            "excess_energy_target_temperature": {
-                "name": "Target temperature (PV surplus)"
-            },
-            "excess_power": {
-                "name": "Excess power"
-            },
-            "expansion_valve_position": {
-                "name": "Expansion valve position"
-            },
-            "external_heat_source_operating_mode": {
-                "name": "Operating mode",
-                "state": {
-                    "off": "Off",
-                    "on": "On"
-                }
-            },
-            "flow_temperature": {
-                "name": "Flow temperature"
-            },
-            "flow_temperature_setpoint": {
-                "name": "Flow temperature setpoint"
-            },
-            "free_ram": {
-                "name": "Free RAM"
-            },
-            "fresh_water_module_temperature": {
-                "name": "Fresh water module temperature"
-            },
-            "heat_circuit_operating_mode": {
-                "name": "Operating mode",
-                "state": {
-                    "auto": "Auto",
-                    "day": "Day",
-                    "external": "External",
-                    "holiday": "Away",
-                    "night": "Night",
-                    "off": "Off",
-                    "party": "Party",
-                    "room_control": "Room control"
-                }
-            },
-            "heat_request": {
-                "name": "Heat request",
-                "state": {
-                    "flow_off": "Off (low flow temperature)",
-                    "inflow_off": "Off (high return flow temperature)",
-                    "off": "Off",
-                    "on": "On",
-                    "outdoor_off": "Off (high outside temperature)",
-                    "room_off": "Off (high room temperature)",
-                    "temporary_off": "Off (temporary)"
-                }
-            },
-            "heating_curve": {
-                "name": "Heating curve"
-            },
-            "heating_energy": {
-                "name": "Heating energy"
-            },
-            "heating_energy_consumption": {
-                "name": "Heating electricity consumption"
-            },
-            "heating_excess_energy_consumption": {
-                "name": "Heating electricity consumption (PV surplus)"
-            },
-            "heating_limit_day": {
-                "name": "Heating limit (day)"
-            },
-            "heating_limit_night": {
-                "name": "Heating limit (night)"
-            },
-            "heating_power": {
-                "name": "Heating power"
-            },
-            "heating_spf": {
-                "name": "Heating SPF"
-            },
-            "high_pressure": {
-                "name": "High pressure"
-            },
-            "hot_water_energy": {
-                "name": "Hot water energy"
-            },
-            "hot_water_energy_consumption": {
-                "name": "Hot water electricity consumption"
-            },
-            "hot_water_excess_energy_consumption": {
-                "name": "Hot water electricity consumption (PV surplus)"
-            },
-            "hot_water_power": {
-                "name": "Hot water power"
-            },
-            "hot_water_spf": {
-                "name": "Hot water SPF"
-            },
-            "hot_water_tank_operating_mode": {
-                "name": "Operating mode",
-                "state": {
-                    "auto": "Auto",
-                    "heat_up": "Heat up",
-                    "off": "Off",
-                    "on": "On"
-                }
-            },
-            "low_pressure": {
-                "name": "Low pressure"
-            },
-            "max_runtime": {
-                "name": "Maximum runtime"
-            },
-            "mixer_flow_temperature": {
-                "name": "Flow temperature (mixer)"
-            },
-            "mixer_position": {
-                "name": "Mixer",
-                "state": {
-                    "closed": "Closed",
-                    "off": "Off",
-                    "open": "Open"
-                }
-            },
-            "mixer_return_flow_temperature": {
-                "name": "Return flow temperature (mixer)"
-            },
-            "mixer_target_temperature": {
-                "name": "Target temperature (mixer)"
-            },
-            "operating_time": {
-                "name": "Operating hours"
-            },
-            "outdoor_temperature": {
-                "name": "Outdoor temperature"
-            },
-            "passive_cooling_valve_position": {
-                "name": "Switch valve position",
-                "state": {
-                    "closed": "Position 2",
-                    "neutral": "Neutral",
-                    "open": "Position 1"
-                }
-            },
-            "pump_speed": {
-                "name": "Pump speed"
-            },
-            "ram_usage": {
-                "name": "RAM usage"
-            },
-            "return_flow_temperature": {
-                "name": "Return flow temperature"
-            },
-            "room_humidity": {
-                "name": "Room humidity"
-            },
-            "room_temperature": {
-                "name": "Room temperature"
-            },
-            "selected_target_room_temperature": {
-                "name": "Target room temperature (selected)"
-            },
-            "solar_circuit_operating_mode": {
-                "name": "Operating mode",
-                "state": {
-                    "off": "Off",
-                    "on": "On"
-                }
-            },
-            "solar_circuit_pump_1": {
-                "name": "Pump 1"
-            },
-            "solar_circuit_pump_2": {
-                "name": "Pump 2"
-            },
-            "source_input_temperature": {
-                "name": "Source input temperature"
-            },
-            "source_output_temperature": {
-                "name": "Source output temperature"
-            },
-            "source_pump_speed": {
-                "name": "Source pump speed"
-            },
-            "source_temperature": {
-                "name": "Collector temperature"
-            },
-            "standby_temperature": {
-                "name": "Standby temperature"
-            },
-            "state": {
-                "name": "State",
-                "state": {
-                    "auto_cool": "Cooling",
-                    "auto_heat": "Heating",
-                    "defrost": "Defrost",
-                    "error": "Error",
-                    "flow": "Flow",
-                    "inflow": "Inflow",
-                    "pump_down": "Pump down",
-                    "shutdown": "Shutdown",
-                    "standby": "Standby"
-                }
-            },
-            "substate": {
-                "name": "Substate",
-                "state": {
-                    "bivalent_lock": "Bivalent lock",
-                    "compressor_delay": "Compressor delay",
-                    "compressor_post_run": "Compressor post-run",
-                    "compressor_stop": "Compressor stop",
-                    "counterflow_valve": "Counterflow valve",
-                    "defrost": "Defrost",
-                    "defrost_end": "Defrost end",
-                    "defrost_initialization": "Defrost initialization",
-                    "defrost_monitoring": "Defrost monitoring",
-                    "defrost_pre_flow": "Defrost pre-flow",
-                    "defrost_venting": "Defrost venting",
-                    "drip": "Drip",
-                    "electric_defrost": "Electric defrost",
-                    "flushing": "Flushing",
-                    "locked": "Locked",
-                    "lubrication_pulse": "Lubrication pulse",
-                    "mixer_open": "Mixer open",
-                    "none": "-",
-                    "oil_preheating": "Oil preheating",
-                    "open": "Open",
-                    "preheat_flow": "Preheat flow",
-                    "pressure_equalization": "Pressure equalization",
-                    "pump_post_run": "Pump post-run",
-                    "pump_pre_run": "Pump pre-run",
-                    "random_delay": "Random delay",
-                    "reduced_speed": "Reduced speed",
-                    "return_flow_off": "Return flow off",
-                    "snow_detection": "Snow detection",
-                    "switch_heating_cooling": "Switch heating/cooling",
-                    "wait_for_compressor": "Waiting for compressor",
-                    "zone_valve": "Zone valve"
-                }
-            },
-            "switch_valve_position": {
-                "name": "Position",
-                "state": {
-                    "closed": "Position 2",
-                    "neutral": "Neutral",
-                    "open": "Position 1"
-                }
-            },
-            "system_operating_mode": {
-                "name": "Operating mode",
-                "state": {
-                    "auto": "Automatic",
-                    "auto_cool": "Cooling",
-                    "auto_heat": "Heating",
-                    "setup": "Setup",
-                    "standby": "Standby",
-                    "summer": "Summer mode (hot water only)"
-                }
-            },
-            "target_overheating": {
-                "name": "Target overheating"
-            },
-            "target_room_cooling_temperature_day": {
-                "name": "Target room cooling temperature (day)"
-            },
-            "target_room_cooling_temperature_night": {
-                "name": "Target room cooling temperature (night)"
-            },
-            "target_room_temperature": {
-                "name": "Target room temperature"
-            },
-            "target_room_temperature_away": {
-                "name": "Target room temperature (away)"
-            },
-            "target_room_temperature_day": {
-                "name": "Target room temperature (day)"
-            },
-            "target_room_temperature_night": {
-                "name": "Target room temperature (night)"
-            },
-            "target_room_temperature_offset": {
-                "name": "Target room temperature (offset)"
-            },
-            "target_temperature": {
-                "name": "Target temperature{counter}"
-            },
-            "temperature": {
-                "name": "Temperature"
-            },
-            "total_energy": {
-                "name": "Total energy"
-            },
-            "total_energy_consumption": {
-                "name": "Total electricity consumption"
-            },
-            "total_spf": {
-                "name": "Total SPF"
-            },
-            "total_thermal_energy": {
-                "name": "Total thermal energy"
-            },
-            "vaporizer_temperature": {
-                "name": "Vaporization temperature"
-            },
-            "webserver_cpu_usage": {
-                "name": "WebServer CPU usage"
-            },
-            "webview_cpu_usage": {
-                "name": "WebView CPU usage"
-            }
+        "description": "Please re-enter the username and password."
+      },
+      "user": {
+        "data": {
+          "host": "Host",
+          "ssl": "Uses an SSL certificate"
         },
-        "switch": {
-            "compressor_use_night_speed": {
-                "name": "Compressor speed limit (night)"
-            },
-            "priority_1_before_2": {
-                "name": "Priority 1 before 2"
-            },
-            "use_cooling_curve": {
-                "name": "Use cooling curve"
-            },
-            "use_excess_energy": {
-                "name": "Use PV surplus"
-            },
-            "use_heating_curve": {
-                "name": "Use heating curve"
-            }
+        "data_description": {
+          "host": "The hostname or IP address of your {name} device."
         },
-        "water_heater": {
-            "buffer_tank": {
-                "state": {
-                    "heat_pump": "On",
-                    "off": "Off",
-                    "performance": "Heat up"
-                }
-            },
-            "hot_water_tank": {
-                "state": {
-                    "eco": "Schedule",
-                    "heat_pump": "On",
-                    "off": "Off",
-                    "performance": "Heat up"
-                }
-            }
-        }
-    },
-    "exceptions": {
-        "authentication_error": {
-            "message": "Authentication failed. Please check your credentials."
-        },
-        "cannot_find_heating_curve": {
-            "message": "Cannot find heating curve \"{heating_curve}\"."
-        },
-        "communication_error": {
-            "message": "An error occurred while communicating with the API: {error}"
-        },
-        "duplicate_outdoor_temperature_values": {
-            "message": "Duplicate outdoor temperature values found."
-        },
-        "end_date_smaller_than_start_date": {
-            "message": "The end date must not be earlier than the start date."
-        },
-        "invalid_config_entry": {
-            "message": "Invalid integration provided. Got {config_entry_id}."
-        },
-        "unloaded_config_entry": {
-            "message": "Invalid integration provided. {config_entry_id} is not loaded."
-        }
-    },
-    "issues": {
-        "frequent_flash_writes": {
-            "description": "More than {limit} write operations were performed on the device this week.\n\nVery frequent write operations (for example caused by automations) may reduce the lifetime of the device's flash memory.",
-            "title": "Frequent write operations detected"
-        }
-    },
-    "options": {
-        "abort": {
-            "options_not_ready": "Integration not fully loaded"
-        },
-        "step": {
-            "init": {
-                "data": {
-                    "scan_interval": "Scan interval",
-                    "scan_interval_tick_buffer_tank": "Buffer tank update multiplier",
-                    "scan_interval_tick_external_heat_source": "External heat source update multiplier",
-                    "scan_interval_tick_heat_circuit": "Heating circuit update multiplier",
-                    "scan_interval_tick_heat_pump": "Heat pump update multiplier",
-                    "scan_interval_tick_hot_water_tank": "Hot water tank update multiplier",
-                    "scan_interval_tick_photovoltaics": "Photovoltaics update multiplier",
-                    "scan_interval_tick_solar_circuit": "Solar circuit update multiplier",
-                    "scan_interval_tick_switch_valve": "Switch valve update multiplier",
-                    "scan_interval_tick_system": "Control unit update multiplier"
-                },
-                "data_description": {
-                    "scan_interval": "Time in seconds between updates",
-                    "scan_interval_tick_buffer_tank": "Update every X scan intervals",
-                    "scan_interval_tick_external_heat_source": "Update every X scan intervals",
-                    "scan_interval_tick_heat_circuit": "Update every X scan intervals",
-                    "scan_interval_tick_heat_pump": "Update every X scan intervals",
-                    "scan_interval_tick_hot_water_tank": "Update every X scan intervals",
-                    "scan_interval_tick_photovoltaics": "Update every X scan intervals",
-                    "scan_interval_tick_solar_circuit": "Update every X scan intervals",
-                    "scan_interval_tick_switch_valve": "Update every X scan intervals",
-                    "scan_interval_tick_system": "Update every X scan intervals"
-                }
-            }
-        }
-    },
-    "services": {
-        "set_away_date_range": {
-            "description": "Sets the start and end dates for the away period.",
-            "fields": {
-                "config_entry": {
-                    "description": "The integration to use for this action.",
-                    "name": "Integration"
-                },
-                "end_date": {
-                    "description": "Date on which the away period ends.",
-                    "name": "End date"
-                },
-                "start_date": {
-                    "description": "Date on which the away period starts.",
-                    "name": "Start date"
-                }
-            },
-            "name": "Set away date range"
-        },
-        "set_heating_curve_points": {
-            "description": "Sets the points of a heating curve.",
-            "fields": {
-                "config_entry": {
-                    "description": "The integration to use for this action.",
-                    "name": "Integration"
-                },
-                "heating_curve": {
-                    "description": "e.g. HC 1, HC 2, HC FBH, HC HK",
-                    "name": "Heating curve"
-                },
-                "points": {
-                    "description": "List of heating curve points, each with an outdoor temperature and a corresponding flow temperature.",
-                    "name": "Points"
-                }
-            },
-            "name": "Set heating curve points"
-        }
+        "description": "Configure your {name} device."
+      }
     }
+  },
+  "device": {
+    "buffer_tank": {
+      "name": "Buffer tank{position}"
+    },
+    "control_unit": {
+      "name": "Control unit"
+    },
+    "external_heat_source": {
+      "name": "External heat source{position}"
+    },
+    "heat_circuit": {
+      "name": "Heating circuit{position}"
+    },
+    "heat_pump": {
+      "name": "Heat pump{position}"
+    },
+    "hot_water_tank": {
+      "name": "Hot water tank{position}"
+    },
+    "passive_cooling": {
+      "name": "Passive cooling{position}"
+    },
+    "photovoltaics": {
+      "name": "Photovoltaics{position}"
+    },
+    "solar_circuit": {
+      "name": "Solar circuit{position}"
+    },
+    "switch_valve": {
+      "name": "Switch valve{position}"
+    }
+  },
+  "entity": {
+    "binary_sensor": {
+      "circulation_pump_state": {
+        "name": "Circulation pump state"
+      },
+      "compressor_failure": {
+        "name": "Compressor"
+      },
+      "cool_request": {
+        "name": "Cool request"
+      },
+      "excess_energy": {
+        "name": "PV surplus"
+      },
+      "heat_request": {
+        "name": "Heat request{counter}"
+      },
+      "hot_water_flow": {
+        "name": "Hot water flow"
+      },
+      "pump_state": {
+        "name": "Pump state"
+      },
+      "source_actuator_failure": {
+        "name": "Source actuator"
+      },
+      "source_failure": {
+        "name": "Source"
+      },
+      "source_pressure_failure": {
+        "name": "Source pressure"
+      },
+      "three_phase_failure": {
+        "name": "Three-phase"
+      },
+      "vfd_failure": {
+        "name": "Frequency inverter"
+      }
+    },
+    "climate": {
+      "heat_circuit": {
+        "state": {
+          "heat": "On"
+        },
+        "state_attributes": {
+          "preset_mode": {
+            "state": {
+              "away": "Away",
+              "boost": "Party",
+              "comfort": "Day",
+              "eco": "Auto",
+              "sleep": "Night"
+            }
+          }
+        }
+      }
+    },
+    "number": {
+      "compressor_night_speed": {
+        "name": "Compressor speed (night)"
+      },
+      "cooling_curve_offset": {
+        "name": "Cooling curve offset"
+      },
+      "cooling_curve_slope": {
+        "name": "Cooling curve slope"
+      },
+      "cooling_limit_day": {
+        "name": "Cooling limit (day)"
+      },
+      "cooling_limit_night": {
+        "name": "Cooling limit (night)"
+      },
+      "excess_energy_cooling_limit_day": {
+        "name": "Cooling limit (PV surplus, day)"
+      },
+      "excess_energy_cooling_limit_night": {
+        "name": "Cooling limit (PV surplus, night)"
+      },
+      "excess_energy_heating_limit_day": {
+        "name": "Heating limit (PV surplus, day)"
+      },
+      "excess_energy_heating_limit_night": {
+        "name": "Heating limit (PV surplus, night)"
+      },
+      "excess_energy_target_room_cooling_temperature": {
+        "name": "Target room cooling temperature (PV surplus)"
+      },
+      "excess_energy_target_room_cooling_temperature_hysteresis": {
+        "name": "Target room cooling temperature hysteresis (PV surplus)"
+      },
+      "excess_energy_target_room_temperature": {
+        "name": "Target room temperature (PV surplus)"
+      },
+      "excess_energy_target_room_temperature_hysteresis": {
+        "name": "Target room temperature hysteresis (PV surplus)"
+      },
+      "excess_energy_target_temperature": {
+        "name": "Target temperature (PV surplus)"
+      },
+      "excess_energy_target_temperature_hysteresis": {
+        "name": "Target temperature hysteresis (PV surplus)"
+      },
+      "heating_curve_offset": {
+        "name": "Heating curve offset"
+      },
+      "heating_curve_slope": {
+        "name": "Heating curve slope"
+      },
+      "heating_limit_day": {
+        "name": "Heating limit (day)"
+      },
+      "heating_limit_night": {
+        "name": "Heating limit (night)"
+      },
+      "min_runtime_excess_energy": {
+        "name": "Minimum runtime (PV surplus)"
+      },
+      "outdoor_temperature_excess_energy_limit": {
+        "name": "Outdoor temperature limit (PV surplus)"
+      },
+      "standby_temperature": {
+        "name": "Standby temperature"
+      },
+      "target_room_cooling_temperature_day": {
+        "name": "Target room cooling temperature (day)"
+      },
+      "target_room_cooling_temperature_night": {
+        "name": "Target room cooling temperature (night)"
+      },
+      "target_room_temperature": {
+        "name": "Target room temperature"
+      },
+      "target_room_temperature_away": {
+        "name": "Target room temperature (away)"
+      },
+      "target_room_temperature_day": {
+        "name": "Target room temperature (day)"
+      },
+      "target_room_temperature_night": {
+        "name": "Target room temperature (night)"
+      },
+      "target_room_temperature_offset": {
+        "name": "Target room temperature (offset)"
+      },
+      "target_temperature": {
+        "name": "Target temperature{counter}"
+      }
+    },
+    "select": {
+      "buffer_tank_operating_mode": {
+        "name": "Operating mode",
+        "state": {
+          "heat_up": "Heat up",
+          "off": "Off",
+          "on": "On"
+        }
+      },
+      "cooling_curve": {
+        "name": "Cooling curve"
+      },
+      "external_heat_source_operating_mode": {
+        "name": "Operating mode",
+        "state": {
+          "off": "Off",
+          "on": "On"
+        }
+      },
+      "heat_circuit_operating_mode": {
+        "name": "Operating mode",
+        "state": {
+          "auto": "Auto",
+          "day": "Day",
+          "holiday": "Away",
+          "night": "Night",
+          "off": "Off",
+          "party": "Party"
+        }
+      },
+      "heating_curve": {
+        "name": "Heating curve"
+      },
+      "hot_water_tank_operating_mode": {
+        "name": "Operating mode",
+        "state": {
+          "auto": "Schedule",
+          "heat_up": "Heat up",
+          "off": "Off",
+          "on": "On"
+        }
+      },
+      "solar_circuit_operating_mode": {
+        "name": "Operating mode",
+        "state": {
+          "off": "Off",
+          "on": "On"
+        }
+      },
+      "system_operating_mode": {
+        "name": "Operating mode",
+        "state": {
+          "auto": "Automatic",
+          "auto_cool": "Cooling",
+          "auto_heat": "Heating",
+          "setup": "Setup",
+          "standby": "Standby",
+          "summer": "Hot water only"
+        }
+      }
+    },
+    "sensor": {
+      "activation_counter": {
+        "name": "Activation counter"
+      },
+      "actual_power": {
+        "name": "Power"
+      },
+      "buffer_tank_operating_mode": {
+        "name": "Operating mode",
+        "state": {
+          "heat_up": "Heat up",
+          "off": "Off",
+          "on": "On"
+        }
+      },
+      "circulation_pump_speed": {
+        "name": "Circulation pump speed"
+      },
+      "circulation_return_temperature": {
+        "name": "Circulation return temperature"
+      },
+      "compressor": {
+        "name": "Compressor speed"
+      },
+      "compressor_input_temperature": {
+        "name": "Compressor input temperature"
+      },
+      "compressor_output_temperature": {
+        "name": "Compressor output temperature"
+      },
+      "compressor_power": {
+        "name": "Compressor power"
+      },
+      "condenser_temperature": {
+        "name": "Condensation temperature"
+      },
+      "control_cpu_usage": {
+        "name": "Control CPU usage"
+      },
+      "cool_request": {
+        "name": "Cool request",
+        "state": {
+          "flow_off": "Off (low flow temperature)",
+          "inflow_off": "Off (high return flow temperature)",
+          "off": "Off",
+          "on": "On",
+          "outdoor_off": "Off (low outside temperature)",
+          "room_off": "Off (low room temperature)",
+          "temporary_off": "Off (temporary)"
+        }
+      },
+      "cooling_curve": {
+        "name": "Cooling curve"
+      },
+      "cooling_energy": {
+        "name": "Cooling energy"
+      },
+      "cooling_energy_consumption": {
+        "name": "Cooling electricity consumption"
+      },
+      "cooling_excess_energy_consumption": {
+        "name": "Cooling electricity consumption (PV surplus)"
+      },
+      "cooling_limit_day": {
+        "name": "Cooling limit (day)"
+      },
+      "cooling_limit_night": {
+        "name": "Cooling limit (night)"
+      },
+      "cooling_spf": {
+        "name": "Cooling SPF"
+      },
+      "cop": {
+        "name": "Coefficient of performance"
+      },
+      "cpu_usage": {
+        "name": "CPU usage"
+      },
+      "current_bottom_temperature": {
+        "name": "Current temperature (bottom)"
+      },
+      "current_overheating": {
+        "name": "Current overheating"
+      },
+      "current_temperature": {
+        "name": "Current temperature{counter}"
+      },
+      "current_top_temperature": {
+        "name": "Current temperature (top)"
+      },
+      "daily_energy": {
+        "name": "Daily energy"
+      },
+      "dew_point": {
+        "name": "Dew point"
+      },
+      "excess_energy_activation_counter": {
+        "name": "Activation counter (PV surplus)"
+      },
+      "excess_energy_consumption": {
+        "name": "Electricity consumption (PV surplus)"
+      },
+      "excess_energy_cooling_limit_day": {
+        "name": "Cooling limit (PV surplus, day)"
+      },
+      "excess_energy_cooling_limit_night": {
+        "name": "Cooling limit (PV surplus, night)"
+      },
+      "excess_energy_heating_limit_day": {
+        "name": "Heating limit (PV surplus, day)"
+      },
+      "excess_energy_heating_limit_night": {
+        "name": "Heating limit (PV surplus, night)"
+      },
+      "excess_energy_max_runtime": {
+        "name": "Maximum runtime (PV surplus)"
+      },
+      "excess_energy_mode": {
+        "name": "PV surplus",
+        "state": {
+          "cooling": "Cooling",
+          "heating": "Heating",
+          "off": "Off"
+        }
+      },
+      "excess_energy_operating_time": {
+        "name": "Operating hours (PV surplus)"
+      },
+      "excess_energy_target_room_cooling_temperature": {
+        "name": "Target room cooling temperature (PV surplus)"
+      },
+      "excess_energy_target_room_temperature": {
+        "name": "Target room temperature (PV surplus)"
+      },
+      "excess_energy_target_temperature": {
+        "name": "Target temperature (PV surplus)"
+      },
+      "excess_power": {
+        "name": "Excess power"
+      },
+      "expansion_valve_position": {
+        "name": "Expansion valve position"
+      },
+      "external_heat_source_operating_mode": {
+        "name": "Operating mode",
+        "state": {
+          "off": "Off",
+          "on": "On"
+        }
+      },
+      "flow_temperature": {
+        "name": "Flow temperature"
+      },
+      "flow_temperature_setpoint": {
+        "name": "Flow temperature setpoint"
+      },
+      "free_ram": {
+        "name": "Free RAM"
+      },
+      "fresh_water_module_temperature": {
+        "name": "Fresh water module temperature"
+      },
+      "heat_circuit_operating_mode": {
+        "name": "Operating mode",
+        "state": {
+          "auto": "Auto",
+          "day": "Day",
+          "external": "External",
+          "holiday": "Away",
+          "night": "Night",
+          "off": "Off",
+          "party": "Party",
+          "room_control": "Room control"
+        }
+      },
+      "heat_request": {
+        "name": "Heat request",
+        "state": {
+          "flow_off": "Off (low flow temperature)",
+          "inflow_off": "Off (high return flow temperature)",
+          "off": "Off",
+          "on": "On",
+          "outdoor_off": "Off (high outside temperature)",
+          "room_off": "Off (high room temperature)",
+          "temporary_off": "Off (temporary)"
+        }
+      },
+      "heating_curve": {
+        "name": "Heating curve"
+      },
+      "heating_energy": {
+        "name": "Heating energy"
+      },
+      "heating_energy_consumption": {
+        "name": "Heating electricity consumption"
+      },
+      "heating_excess_energy_consumption": {
+        "name": "Heating electricity consumption (PV surplus)"
+      },
+      "heating_limit_day": {
+        "name": "Heating limit (day)"
+      },
+      "heating_limit_night": {
+        "name": "Heating limit (night)"
+      },
+      "heating_power": {
+        "name": "Heating power"
+      },
+      "heating_spf": {
+        "name": "Heating SPF"
+      },
+      "high_pressure": {
+        "name": "High pressure"
+      },
+      "hot_water_energy": {
+        "name": "Hot water energy"
+      },
+      "hot_water_energy_consumption": {
+        "name": "Hot water electricity consumption"
+      },
+      "hot_water_excess_energy_consumption": {
+        "name": "Hot water electricity consumption (PV surplus)"
+      },
+      "hot_water_power": {
+        "name": "Hot water power"
+      },
+      "hot_water_spf": {
+        "name": "Hot water SPF"
+      },
+      "hot_water_tank_operating_mode": {
+        "name": "Operating mode",
+        "state": {
+          "auto": "Auto",
+          "heat_up": "Heat up",
+          "off": "Off",
+          "on": "On"
+        }
+      },
+      "low_pressure": {
+        "name": "Low pressure"
+      },
+      "max_runtime": {
+        "name": "Maximum runtime"
+      },
+      "mixer_flow_temperature": {
+        "name": "Flow temperature (mixer)"
+      },
+      "mixer_position": {
+        "name": "Mixer",
+        "state": {
+          "closed": "Closed",
+          "off": "Off",
+          "open": "Open"
+        }
+      },
+      "mixer_return_flow_temperature": {
+        "name": "Return flow temperature (mixer)"
+      },
+      "mixer_target_temperature": {
+        "name": "Target temperature (mixer)"
+      },
+      "operating_time": {
+        "name": "Operating hours"
+      },
+      "outdoor_temperature": {
+        "name": "Outdoor temperature"
+      },
+      "passive_cooling_valve_position": {
+        "name": "Switch valve position",
+        "state": {
+          "closed": "Position 2",
+          "neutral": "Neutral",
+          "open": "Position 1"
+        }
+      },
+      "pump_speed": {
+        "name": "Pump speed"
+      },
+      "ram_usage": {
+        "name": "RAM usage"
+      },
+      "return_flow_temperature": {
+        "name": "Return flow temperature"
+      },
+      "room_humidity": {
+        "name": "Room humidity"
+      },
+      "room_temperature": {
+        "name": "Room temperature"
+      },
+      "selected_target_room_temperature": {
+        "name": "Target room temperature (selected)"
+      },
+      "solar_circuit_operating_mode": {
+        "name": "Operating mode",
+        "state": {
+          "off": "Off",
+          "on": "On"
+        }
+      },
+      "solar_circuit_pump_1": {
+        "name": "Pump 1"
+      },
+      "solar_circuit_pump_2": {
+        "name": "Pump 2"
+      },
+      "source_input_temperature": {
+        "name": "Source input temperature"
+      },
+      "source_output_temperature": {
+        "name": "Source output temperature"
+      },
+      "source_pump_speed": {
+        "name": "Source pump speed"
+      },
+      "source_temperature": {
+        "name": "Collector temperature"
+      },
+      "standby_temperature": {
+        "name": "Standby temperature"
+      },
+      "state": {
+        "name": "State",
+        "state": {
+          "auto_cool": "Cooling",
+          "auto_heat": "Heating",
+          "defrost": "Defrost",
+          "error": "Error",
+          "flow": "Flow",
+          "inflow": "Inflow",
+          "pump_down": "Pump down",
+          "shutdown": "Shutdown",
+          "standby": "Standby"
+        }
+      },
+      "substate": {
+        "name": "Substate",
+        "state": {
+          "bivalent_lock": "Bivalent lock",
+          "compressor_delay": "Compressor delay",
+          "compressor_post_run": "Compressor post-run",
+          "compressor_stop": "Compressor stop",
+          "counterflow_valve": "Counterflow valve",
+          "defrost": "Defrost",
+          "defrost_end": "Defrost end",
+          "defrost_initialization": "Defrost initialization",
+          "defrost_monitoring": "Defrost monitoring",
+          "defrost_pre_flow": "Defrost pre-flow",
+          "defrost_venting": "Defrost venting",
+          "drip": "Drip",
+          "electric_defrost": "Electric defrost",
+          "flushing": "Flushing",
+          "locked": "Locked",
+          "lubrication_pulse": "Lubrication pulse",
+          "mixer_open": "Mixer open",
+          "none": "-",
+          "oil_preheating": "Oil preheating",
+          "open": "Open",
+          "preheat_flow": "Preheat flow",
+          "pressure_equalization": "Pressure equalization",
+          "pump_post_run": "Pump post-run",
+          "pump_pre_run": "Pump pre-run",
+          "random_delay": "Random delay",
+          "reduced_speed": "Reduced speed",
+          "return_flow_off": "Return flow off",
+          "snow_detection": "Snow detection",
+          "switch_heating_cooling": "Switch heating/cooling",
+          "wait_for_compressor": "Waiting for compressor",
+          "zone_valve": "Zone valve"
+        }
+      },
+      "switch_valve_position": {
+        "name": "Position",
+        "state": {
+          "closed": "Position 2",
+          "neutral": "Neutral",
+          "open": "Position 1"
+        }
+      },
+      "system_operating_mode": {
+        "name": "Operating mode",
+        "state": {
+          "auto": "Automatic",
+          "auto_cool": "Cooling",
+          "auto_heat": "Heating",
+          "setup": "Setup",
+          "standby": "Standby",
+          "summer": "Summer mode (hot water only)"
+        }
+      },
+      "target_overheating": {
+        "name": "Target overheating"
+      },
+      "target_room_cooling_temperature_day": {
+        "name": "Target room cooling temperature (day)"
+      },
+      "target_room_cooling_temperature_night": {
+        "name": "Target room cooling temperature (night)"
+      },
+      "target_room_temperature": {
+        "name": "Target room temperature"
+      },
+      "target_room_temperature_away": {
+        "name": "Target room temperature (away)"
+      },
+      "target_room_temperature_day": {
+        "name": "Target room temperature (day)"
+      },
+      "target_room_temperature_night": {
+        "name": "Target room temperature (night)"
+      },
+      "target_room_temperature_offset": {
+        "name": "Target room temperature (offset)"
+      },
+      "target_temperature": {
+        "name": "Target temperature{counter}"
+      },
+      "temperature": {
+        "name": "Temperature"
+      },
+      "total_energy": {
+        "name": "Total energy"
+      },
+      "total_energy_consumption": {
+        "name": "Total electricity consumption"
+      },
+      "total_spf": {
+        "name": "Total SPF"
+      },
+      "total_thermal_energy": {
+        "name": "Total thermal energy"
+      },
+      "vaporizer_temperature": {
+        "name": "Vaporization temperature"
+      },
+      "webserver_cpu_usage": {
+        "name": "WebServer CPU usage"
+      },
+      "webview_cpu_usage": {
+        "name": "WebView CPU usage"
+      }
+    },
+    "switch": {
+      "compressor_use_night_speed": {
+        "name": "Compressor speed limit (night)"
+      },
+      "priority_1_before_2": {
+        "name": "Priority 1 before 2"
+      },
+      "use_cooling_curve": {
+        "name": "Use cooling curve"
+      },
+      "use_excess_energy": {
+        "name": "Use PV surplus"
+      },
+      "use_heating_curve": {
+        "name": "Use heating curve"
+      }
+    },
+    "water_heater": {
+      "buffer_tank": {
+        "state": {
+          "heat_pump": "On",
+          "off": "Off",
+          "performance": "Heat up"
+        }
+      },
+      "hot_water_tank": {
+        "state": {
+          "eco": "Schedule",
+          "heat_pump": "On",
+          "off": "Off",
+          "performance": "Heat up"
+        }
+      }
+    }
+  },
+  "exceptions": {
+    "authentication_error": {
+      "message": "Authentication failed. Please check your credentials."
+    },
+    "cannot_find_heating_curve": {
+      "message": "Cannot find heating curve \"{heating_curve}\"."
+    },
+    "communication_error": {
+      "message": "An error occurred while communicating with the API: {error}"
+    },
+    "duplicate_outdoor_temperature_values": {
+      "message": "Duplicate outdoor temperature values found."
+    },
+    "end_date_smaller_than_start_date": {
+      "message": "The end date must not be earlier than the start date."
+    },
+    "invalid_config_entry": {
+      "message": "Invalid integration provided. Got {config_entry_id}."
+    },
+    "unloaded_config_entry": {
+      "message": "Invalid integration provided. {config_entry_id} is not loaded."
+    }
+  },
+  "issues": {
+    "frequent_flash_writes": {
+      "description": "More than {limit} write operations were performed on the device this week.\n\nVery frequent write operations (for example caused by automations) may reduce the lifetime of the device's flash memory.",
+      "title": "Frequent write operations detected"
+    }
+  },
+  "options": {
+    "abort": {
+      "options_not_ready": "Integration not fully loaded"
+    },
+    "step": {
+      "init": {
+        "data": {
+          "scan_interval": "Scan interval",
+          "scan_interval_tick_buffer_tank": "Buffer tank update multiplier",
+          "scan_interval_tick_external_heat_source": "External heat source update multiplier",
+          "scan_interval_tick_heat_circuit": "Heating circuit update multiplier",
+          "scan_interval_tick_heat_pump": "Heat pump update multiplier",
+          "scan_interval_tick_hot_water_tank": "Hot water tank update multiplier",
+          "scan_interval_tick_photovoltaics": "Photovoltaics update multiplier",
+          "scan_interval_tick_solar_circuit": "Solar circuit update multiplier",
+          "scan_interval_tick_switch_valve": "Switch valve update multiplier",
+          "scan_interval_tick_system": "Control unit update multiplier"
+        },
+        "data_description": {
+          "scan_interval": "Time in seconds between updates",
+          "scan_interval_tick_buffer_tank": "Update every X scan intervals",
+          "scan_interval_tick_external_heat_source": "Update every X scan intervals",
+          "scan_interval_tick_heat_circuit": "Update every X scan intervals",
+          "scan_interval_tick_heat_pump": "Update every X scan intervals",
+          "scan_interval_tick_hot_water_tank": "Update every X scan intervals",
+          "scan_interval_tick_photovoltaics": "Update every X scan intervals",
+          "scan_interval_tick_solar_circuit": "Update every X scan intervals",
+          "scan_interval_tick_switch_valve": "Update every X scan intervals",
+          "scan_interval_tick_system": "Update every X scan intervals"
+        }
+      }
+    }
+  },
+  "services": {
+    "set_away_date_range": {
+      "description": "Sets the start and end dates for the away period.",
+      "fields": {
+        "config_entry": {
+          "description": "The integration to use for this action.",
+          "name": "Integration"
+        },
+        "end_date": {
+          "description": "Date on which the away period ends.",
+          "name": "End date"
+        },
+        "start_date": {
+          "description": "Date on which the away period starts.",
+          "name": "Start date"
+        }
+      },
+      "name": "Set away date range"
+    },
+    "set_heating_curve_points": {
+      "description": "Sets the points of a heating curve.",
+      "fields": {
+        "config_entry": {
+          "description": "The integration to use for this action.",
+          "name": "Integration"
+        },
+        "heating_curve": {
+          "description": "e.g. HC 1, HC 2, HC FBH, HC HK",
+          "name": "Heating curve"
+        },
+        "points": {
+          "description": "List of heating curve points, each with an outdoor temperature and a corresponding flow temperature.",
+          "name": "Points"
+        }
+      },
+      "name": "Set heating curve points"
+    }
+  }
 }
