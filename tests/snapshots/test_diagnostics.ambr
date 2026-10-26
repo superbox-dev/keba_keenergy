@@ -2491,5 +2491,7 @@
       'switch_valve': 2,
     }),
     'weekly_write_count': 0,
+    'weekly_writes': dict({
+    }),
   })
 # ---

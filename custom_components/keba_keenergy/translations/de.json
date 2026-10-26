@@ -734,6 +734,14 @@
       },
       "webview_cpu_usage": {
         "name": "CPU-Auslastung WebView"
+      },
+      "weekly_write_count": {
+        "name": "Schreibzugriffe diese Woche",
+        "state_attributes": {
+          "writes": {
+            "name": "Schreibzugriffe pro Wert"
+          }
+        }
       }
     },
     "switch": {
@@ -796,7 +804,7 @@
   },
   "issues": {
     "frequent_flash_writes": {
-      "description": "In dieser Woche wurden mehr als {limit} Schreibzugriffe auf das Gerät durchgeführt.\n\nSehr häufige Schreibzugriffe (zum Beispiel durch Automationen) können die Lebensdauer des Flash-Speichers des Geräts reduzieren.",
+      "description": "In dieser Woche wurden mehr als {limit} Schreibzugriffe auf {name} durchgeführt.\n\nSehr häufige Schreibzugriffe (zum Beispiel durch Automationen) können die Lebensdauer des Flash-Speichers des Geräts reduzieren. Der Sensor „Schreibzugriffe diese Woche“ zeigt, welche Werte wie oft geschrieben wurden.",
       "title": "Viele Schreibzugriffe erkannt"
     }
   },

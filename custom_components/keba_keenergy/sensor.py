@@ -39,7 +39,9 @@ from keba_keenergy_api.constants import SectionPrefix
 from keba_keenergy_api.constants import SwitchValvePosition
 from keba_keenergy_api.constants import SystemOperatingMode
 
+from .const import ATTR_WRITES
 from .const import DOMAIN
+from .entity import KebaKeEnergyBaseEntity
 from .entity import KebaKeEnergyEntity
 from .entity import KebaKeEnergyEntityDescription
 from .entity import _async_setup_entities
@@ -116,6 +118,44 @@ class KebaKeEnergySensorEntity(KebaKeEnergyEntity, SensorEntity):
         attributes: Mapping[str, Any] = entity_data.get("attributes", {}) if entity_data else {}
         return {**self.entity_description.attributes(attributes), **self._message_id_attributes(self._data_key)}
 
+
+class KebaKeEnergyWriteCountSensorEntity(KebaKeEnergyBaseEntity, SensorEntity):
+    """KEBA KeEnergy sensor of the write operations of the current week, counted by the integration."""
+
+    # The writes per value change with every write, they are not needed in the history.
+    _unrecorded_attributes: frozenset[str] = frozenset({ATTR_WRITES})
+
+    def __init__(
+        self,
+        coordinator: KebaKeEnergyDataUpdateCoordinator,
+        description: SensorEntityDescription,
+        entry: KebaKeEnergyConfigEntry,
+    ) -> None:
+        """Initialize the entity."""
+        self.entity_description = description
+
+        super().__init__(coordinator, entry=entry, section_id=SectionPrefix.SYSTEM, index=None)
+
+        self._attr_unique_id = self._build_unique_id(description.key)
+        self.entity_id: str = f"{SENSOR_DOMAIN}.{DOMAIN}_{self._attr_unique_id}"
+
+    @property
+    def native_value(self) -> int:
+        """Return the number of write operations of the current week."""
+        return self.coordinator.weekly_write_count
+
+    @property
+    def extra_state_attributes(self) -> Mapping[str, Any]:
+        """Return how often each value was written in the current week."""
+        return {ATTR_WRITES: self.coordinator.weekly_writes}
+
+
+WRITE_COUNT_SENSOR_TYPE: Final[SensorEntityDescription] = SensorEntityDescription(
+    entity_category=EntityCategory.DIAGNOSTIC,
+    key="weekly_write_count",
+    state_class=SensorStateClass.TOTAL_INCREASING,
+    translation_key="weekly_write_count",
+)
 
 SENSOR_TYPES: Final[dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]]] = {
     SectionPrefix.SYSTEM: (
@@ -1285,4 +1325,7 @@ async def async_setup_entry(
         SENSOR_TYPES,
         KebaKeEnergySensorEntity,
         "sensor",
+    )
+    async_add_entities(
+        [KebaKeEnergyWriteCountSensorEntity(entry.runtime_data, WRITE_COUNT_SENSOR_TYPE, entry)],
     )

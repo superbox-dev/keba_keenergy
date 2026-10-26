@@ -160,6 +160,7 @@ async def _async_set_heating_curve_points(call: ServiceCall) -> None:
             heating_curve=heating_curve,
             points=points,
         ),
+        names=(f"heating_curve_points.{heating_curve}",),
     )
 
 

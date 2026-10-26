@@ -734,6 +734,14 @@
       },
       "webview_cpu_usage": {
         "name": "WebView CPU usage"
+      },
+      "weekly_write_count": {
+        "name": "Write operations this week",
+        "state_attributes": {
+          "writes": {
+            "name": "Write operations per value"
+          }
+        }
       }
     },
     "switch": {
@@ -796,7 +804,7 @@
   },
   "issues": {
     "frequent_flash_writes": {
-      "description": "More than {limit} write operations were performed on the device this week.\n\nVery frequent write operations (for example caused by automations) may reduce the lifetime of the device's flash memory.",
+      "description": "More than {limit} write operations were performed on {name} this week.\n\nVery frequent write operations (for example caused by automations) may reduce the lifetime of the device's flash memory. The sensor \"Write operations this week\" shows which values were written how often.",
       "title": "Frequent write operations detected"
     }
   },

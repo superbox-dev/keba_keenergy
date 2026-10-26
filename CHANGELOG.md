@@ -17,6 +17,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Removed the devices that the control unit no longer provides (e.g. a removed buffer tank) with their entities
   when the integration is set up.
 - Added a preview image to the documentation for links shared on social media.
+- Added the diagnostic sensor `weekly_write_count` to the control unit with the write operations of the current week.
+  The attribute `writes` shows how often each value was written, e.g. `heat_circuit_1.target_temperature_offset`.
+  ([Issue #71][issue-71])
 
 ### Changed
 
@@ -58,6 +61,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   unloaded.
 - Fixed an untranslated error of the `keba_keenergy.set_heating_curve_points` action if the Web HMI is not reachable.
 - Fixed an untranslated error of the `keba_keenergy.set_away_date_range` action for an invalid date.
+- Fixed the weekly write counter and the repair issue for frequent write operations being shared by all control
+  units. Each control unit now has its own counter and repair issue, which names the control unit. The counter is
+  reset at the start of a week without a write operation. After the update, the counter starts at 0.
+  ([Issue #71][issue-71])
 - Fixed an error of number, climate and water heater entities if the Web HMI provides no limits.
 - Fixed a second switch `Use cooling curve` for heating circuits that heat and cool. Both switches changed the same
   setting, so these heating circuits now only have the switch `Use heating curve`. The switch `Use cooling curve` of
@@ -81,6 +88,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Removed the serial number of the control unit from the debug log of the discovery and of removed devices.
 
 [issue-67]: https://github.com/superbox-dev/keba_keenergy/issues/67
+[issue-71]: https://github.com/superbox-dev/keba_keenergy/issues/71
 
 ## [1.10.4] - 2026-09-30
 

@@ -294,6 +294,9 @@
       },
       "temperature": {
         "default": "mdi:snowflake-thermometer"
+      },
+      "weekly_write_count": {
+        "default": "mdi:content-save-edit"
       }
     },
     "switch": {

@@ -3257,6 +3257,22 @@
     'state': '3.4',
   })
 # ---
+# name: test_sensors[de][sensor.keba_keenergy_12345678_weekly_write_count]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Bedieneinheit Schreibzugriffe diese Woche',
+      <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.TOTAL_INCREASING: 'total_increasing'>,
+      'writes': dict({
+      }),
+    }),
+    'context': <ANY>,
+    'entity_id': 'sensor.keba_keenergy_12345678_weekly_write_count',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': '0',
+  })
+# ---
 # name: test_sensors[en][sensor.keba_keenergy_12345678_buffer_tank_current_bottom_temperature_1]
   StateSnapshot({
     'attributes': ReadOnlyDict({
@@ -6513,5 +6529,21 @@
     'last_reported': <ANY>,
     'last_updated': <ANY>,
     'state': '3.4',
+  })
+# ---
+# name: test_sensors[en][sensor.keba_keenergy_12345678_weekly_write_count]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Control unit Write operations this week',
+      <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.TOTAL_INCREASING: 'total_increasing'>,
+      'writes': dict({
+      }),
+    }),
+    'context': <ANY>,
+    'entity_id': 'sensor.keba_keenergy_12345678_weekly_write_count',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': '0',
   })
 # ---

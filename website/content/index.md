@@ -109,7 +109,8 @@ provide are not created. Changes are written to the control unit, see [Known lim
 ### Control unit
 
 - **Select**: operating mode
-- **Sensors**: outdoor temperature, operating mode, CPU and RAM usage (diagnostic)
+- **Sensors**: outdoor temperature, operating mode, CPU and RAM usage (diagnostic), write operations this week
+  (diagnostic)
 
 ### Heat pump
 
@@ -297,8 +298,14 @@ sensor is connected.
 ## Known limitations
 
 - The control unit stores every change in its flash memory, which only allows a limited number of write operations.
-  Avoid automations that change values very often. If more than 30 changes are written in a week, Home Assistant shows
-  a repair issue. See [Issue #23](https://github.com/superbox-dev/keba_keenergy/issues/23).
+  Avoid automations that change values very often. If more than 30 changes are written to a control unit in a week,
+  Home Assistant shows a repair issue for this control unit. See
+  [Issue #23](https://github.com/superbox-dev/keba_keenergy/issues/23).
+- The diagnostic sensor **Write operations this week** of the control unit counts the write operations since Monday.
+  Its attribute `writes` shows how often each value was written, e.g. `heat_circuit_1.target_temperature_offset`,
+  `system.operating_mode` or `heating_curve_points.HC1`. A change of several values at once (e.g. the away date range
+  of all heating circuits) counts once in the sensor, but once for each value in `writes`. Switching a hot water tank
+  to heat up is not counted.
 - Changes of numbers, target temperatures and the climate entity are written after a short delay, so several quick
   changes result in one write operation.
 - Only values that the Web HMI provides are supported. Missing values have to be added to the

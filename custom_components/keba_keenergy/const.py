@@ -43,6 +43,7 @@ from keba_keenergy_api.constants import System
 ATTR_CONFIG_ENTRY: Final[str] = "config_entry"
 ATTR_MESSAGE_ID: Final[str] = "message_id"
 ATTR_OFFSET: Final[str] = "offset"
+ATTR_WRITES: Final[str] = "writes"
 CONF_EXTERNAL_HEAT_SOURCE_TICK: Final[str] = "scan_interval_tick_external_heat_source"
 CONF_BUFFER_TANK_TICK: Final[str] = "scan_interval_tick_buffer_tank"
 CONF_HEAT_CIRCUIT_TICK: Final[str] = "scan_interval_tick_heat_circuit"
@@ -56,6 +57,7 @@ CONFIG_ENTRY_VERSION: Final[int] = 1
 DEFAULT_SCAN_INTERVAL: Final[int] = 20
 DEFAULT_SSL: Final[bool] = False
 DOMAIN: Final[str] = "keba_keenergy"
+FLASH_WRITE_ISSUE_ID: Final[str] = "frequent_flash_writes"
 FLASH_WRITE_LIMIT_PER_WEEK: Final[int] = 30
 FLASH_WRITE_DELAY: Final[float] = 1
 MANUFACTURER: Final[str] = "KEBA"
@@ -328,6 +330,8 @@ SECTIONS: Final[dict[str, type[Section]]] = {
     SectionPrefix.HOT_WATER_TANK: HotWaterTank,
     SectionPrefix.EXTERNAL_HEAT_SOURCE: ExternalHeatSource,
 }
+
+SECTION_PREFIXES: Final[dict[type[Section], str]] = {section: prefix for prefix, section in SECTIONS.items()}
 
 HOT_WATER_TANK_STATE_TO_HA: Final[dict[int, str]] = {
     HotWaterTankOperatingMode.AUTO.value: STATE_ECO,

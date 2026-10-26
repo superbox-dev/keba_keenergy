@@ -688,6 +688,9 @@
     'sensor.keba_keenergy_12345678_switch_valve_position_2': None,
     'sensor.keba_keenergy_12345678_webserver_cpu_usage': None,
     'sensor.keba_keenergy_12345678_webview_cpu_usage': None,
+    'sensor.keba_keenergy_12345678_weekly_write_count': dict({
+      'default': 'mdi:content-save-edit',
+    }),
     'switch.keba_keenergy_12345678_buffer_tank_use_excess_energy_1': None,
     'switch.keba_keenergy_12345678_buffer_tank_use_excess_energy_2': None,
     'switch.keba_keenergy_12345678_external_heat_source_use_excess_energy_1': None,

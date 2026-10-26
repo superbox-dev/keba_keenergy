@@ -43,6 +43,7 @@ async def async_get_config_entry_diagnostics(
             "position": asdict(coordinator.position) if coordinator.position else None,
             "available_heating_curves": coordinator.available_heating_curves,
             "weekly_write_count": coordinator.weekly_write_count,
+            "weekly_writes": coordinator.weekly_writes,
             "fixed_data": coordinator.fixed_data,
             "data": coordinator.data,
             "message_ids": coordinator.message_ids,
