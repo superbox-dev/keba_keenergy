@@ -292,10 +292,16 @@ reload the integration. Devices that the control unit no longer provides, e.g. a
 with their entities.
 
 With every update, the integration also reads whether the control unit uses the sensors (the message ID of a sensor).
-The sensors and binary sensors have the message ID as attribute `message_id`, `0` means the sensor is in use. Sensors
-and failure inputs that the control unit reports as not in use, e.g. not connected or not configured, are unknown, and
-the climate and water heater entities leave out their values. They have a value again with the next update after the
-sensor is connected.
+The sensors and binary sensors have the message ID as attribute `message_id`, `0` means the sensor is in use. Like
+the Web HMI, the integration distinguishes two cases of sensors that are not in use:
+
+- **Not configured** (message ID `10`): the Web HMI hides the sensor. Its entity is not created, an existing entity is
+  removed when the integration is set up. After you configure the sensor, reload the integration.
+- **Invalid value** (any other message ID), e.g. a sensor that is not connected: the Web HMI shows `-`. The sensor is
+  unknown and has a value again with the next update after the sensor is connected.
+
+The climate and water heater entities are still created, but leave out the current temperature and humidity (e.g.
+`current_temperature`) if their sensor is not in use.
 
 ## Known limitations
 
@@ -322,8 +328,10 @@ sensor is connected.
   password.
 - **Missing entities**: entities are only created for values that your control unit provides. Reload the integration
   after a change of your heat pump setup.
-- **Unknown sensors**: if the attribute `message_id` is not `0`, the control unit reports the sensor as not in use,
-  e.g. it is not connected or not configured. The Web HMI shows `-` instead of a value.
+- **Unknown sensors**: if the attribute `message_id` is not `0`, the control unit reports the value of the sensor as
+  not valid, e.g. it is not connected. The Web HMI shows `-` instead of a value.
+- **Missing sensors**: sensors that are not configured on the control unit (message ID `10`) are not created, the
+  Web HMI hides them as well.
 
 If the problem persists, [enable debug logging][debug-logs], reproduce the problem and open an
 [issue](https://github.com/superbox-dev/keba_keenergy/issues/new/choose) with the log, the

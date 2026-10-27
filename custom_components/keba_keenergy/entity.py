@@ -16,6 +16,7 @@ from typing import overload
 from homeassistant.core import HassJob
 from homeassistant.core import callback
 from homeassistant.exceptions import HomeAssistantError
+from homeassistant.helpers import entity_registry as er
 from homeassistant.helpers.device_registry import DeviceInfo
 from homeassistant.helpers.event import async_call_later
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
@@ -378,6 +379,7 @@ def _async_setup_entities(
     """Set up KEBA KeEnergy entities."""
     coordinator: KebaKeEnergyDataUpdateCoordinator = entry.runtime_data
     entities: list[Any] = []
+    deactivated_unique_ids: set[str] = set()
 
     for section_id, section_data in coordinator.data.items():
         for description in entity_types.get(section_id, ()):
@@ -399,6 +401,31 @@ def _async_setup_entities(
                         )
                         continue
 
+                    cls: type[Any] = description.entity_class or entity_cls
+                    entity: Any = cls(
+                        coordinator=coordinator,
+                        description=description,
+                        entry=entry,
+                        section_id=section_id,
+                        index=index if device_numbers > 1 else None,
+                    )
+
+                    # A deactivated sensor is not configured on the control unit, the Web HMI hides it as well.
+                    if coordinator.is_sensor_deactivated(
+                        section_id,
+                        key,
+                        index=entity.index,
+                        key_index=entity.key_index,
+                    ):
+                        _LOGGER.debug(
+                            'Skip deactivated %s with key "%s" (index: %s)',
+                            entity_name,
+                            description.ref_key or description.key,
+                            index,
+                        )
+                        deactivated_unique_ids.add(entity.unique_id)
+                        continue
+
                     _LOGGER.debug(
                         'Add %s with key "%s" (index: %s)',
                         entity_name,
@@ -406,16 +433,18 @@ def _async_setup_entities(
                         index,
                     )
 
-                    cls: type[Any] = description.entity_class or entity_cls
+                    entities.append(entity)
 
-                    entities.append(
-                        cls(
-                            coordinator=coordinator,
-                            description=description,
-                            entry=entry,
-                            section_id=section_id,
-                            index=index if device_numbers > 1 else None,
-                        ),
-                    )
-
+    _async_remove_deactivated_entities(entry, deactivated_unique_ids)
     async_add_entities(entities)
+
+
+@callback
+def _async_remove_deactivated_entities(entry: KebaKeEnergyConfigEntry, unique_ids: set[str], /) -> None:
+    """Remove the entities of deactivated sensors that were created before from the entity registry."""
+    entity_registry: er.EntityRegistry = er.async_get(entry.runtime_data.hass)
+
+    for registry_entry in er.async_entries_for_config_entry(entity_registry, entry.entry_id):
+        if registry_entry.unique_id in unique_ids:
+            _LOGGER.debug("Remove entity %s of a deactivated sensor", registry_entry.entity_id)
+            entity_registry.async_remove(registry_entry.entity_id)

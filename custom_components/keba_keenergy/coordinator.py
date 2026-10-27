@@ -36,6 +36,7 @@ from keba_keenergy_api.constants import HeatCircuit
 from keba_keenergy_api.constants import HeatCircuitMode
 from keba_keenergy_api.constants import HeatPump
 from keba_keenergy_api.constants import HotWaterTank
+from keba_keenergy_api.constants import MessageIdKind
 from keba_keenergy_api.constants import Section
 from keba_keenergy_api.constants import SectionPrefix
 from keba_keenergy_api.constants import System
@@ -640,10 +641,6 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
 
         return self.device_count(prefix) > 0
 
-    def has_outdoor_temperature(self) -> bool:
-        """Check if outdoor temperature sensor is available."""
-        return self._is_fixed_value_on(SectionPrefix.SYSTEM, "has_outdoor_temperature")
-
     def _is_fixed_value_on(self, prefix: SectionPrefix, key: str, /, *, index: int | None = None) -> bool:
         """Return True if a value that is read once on setup is switched on."""
         return self._get_fixed_value(prefix, key, index=index) == BoolEnum.ON.name.lower()
@@ -656,6 +653,10 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
             data = data[index or 0]
 
         return data.get("value") if isinstance(data, dict) else None
+
+    def has_outdoor_temperature(self) -> bool:
+        """Check if outdoor temperature sensor is available."""
+        return self._is_fixed_value_on(SectionPrefix.SYSTEM, "has_outdoor_temperature")
 
     def has_room_temperature(self, *, index: int | None = None) -> bool:
         """Check if room temperature sensor is available."""
@@ -745,6 +746,23 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
         message_id: int | list[int] = ids[index or 0]
         return message_id[key_index or 0] if isinstance(message_id, list) else message_id
 
+    def get_message_id_kind(
+        self,
+        section_id: str,
+        key: str,
+        /,
+        *,
+        index: int | None,
+        key_index: int | None,
+    ) -> MessageIdKind | None:
+        """Return the kind of the message id of a sensor, or None if the sensor has none."""
+        message_id: int | None = self.get_message_id(section_id, key, index=index, key_index=key_index)
+        return None if message_id is None else MessageIdKind.from_message_id(message_id)
+
     def is_sensor_in_use(self, section_id: str, key: str, /, *, index: int | None, key_index: int | None) -> bool:
         """Check if the control unit reports the sensor as in use (message id 0) or has no message id for it."""
-        return self.get_message_id(section_id, key, index=index, key_index=key_index) in (None, 0)
+        return self.get_message_id_kind(section_id, key, index=index, key_index=key_index) in (MessageIdKind.OK, None)
+
+    def is_sensor_deactivated(self, section_id: str, key: str, /, *, index: int | None, key_index: int | None) -> bool:
+        """Check if the control unit reports the sensor as deactivated (message id 10), i.e. not configured."""
+        return self.get_message_id_kind(section_id, key, index=index, key_index=key_index) is MessageIdKind.DEACTIVATED

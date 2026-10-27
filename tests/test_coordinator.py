@@ -189,7 +189,7 @@ async def test_update_interval_ticks_keep_message_ids(
 ) -> None:
     """Test that a skipped section keeps its message ids until it is requested again."""
     entity_id: str = "sensor.keba_keenergy_12345678_heat_circuit_room_temperature_1"
-    fake_api.message_ids = {"APPL.CtrlAppl.sParam.heatCircuit[0].tempRoom.state.msgId": 10}
+    fake_api.message_ids = {"APPL.CtrlAppl.sParam.heatCircuit[0].tempRoom.state.msgId": 50}
     fake_api.responses = [
         [
             json.loads(SYSTEM_HEAT_PUMP_NUMBERS % "1"),
@@ -213,7 +213,7 @@ async def test_update_interval_ticks_keep_message_ids(
     states: list[str] = []
 
     # The heating circuits are requested on the first and the third refresh.
-    for message_ids in ({"APPL.CtrlAppl.sParam.heatCircuit[0].tempRoom.state.msgId": 10}, {}, {}):
+    for message_ids in ({"APPL.CtrlAppl.sParam.heatCircuit[0].tempRoom.state.msgId": 50}, {}, {}):
         fake_api.message_ids = message_ids
         await coordinator.async_refresh()
         await hass.async_block_till_done()

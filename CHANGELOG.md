@@ -26,7 +26,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Required `keba_keenergy_api` 2.14.0b2, which needs fewer requests to set up the integration.
+- Required `keba_keenergy_api` 2.14.0b3, which needs fewer requests to set up the integration.
 - Moved the documentation to Docusaurus on <https://superbox-dev.github.io/keba_keenergy/>, styled after the
   integration pages of Home Assistant, with all information on one page. The domain `superbox.one` is no longer used.
 - Shortened the `README.md` to the installation and moved the details to the documentation.
@@ -80,11 +80,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   curve with 7 points of 0 °C.
 - Fixed an error with a traceback in the log if a delayed write of a number, climate or water heater entity failed,
   e.g. of a temperature set with a slider. It is logged as a warning now.
-- Fixed values of sensors and failure inputs that the control unit reports as not in use (e.g. not connected), such
-  as a failure of the binary sensor `has_compressor_failure` without a connected input. These sensors are now unknown
-  and the climate and water heater entities leave out their values. The sensors and binary sensors have the message
-  ID of the control unit as attribute `message_id` (`0` means in use), which is read with one more request per update.
-  ([Issue #67][issue-67])
+- Fixed values of sensors and failure inputs that the control unit reports as not in use, like the Web HMI. Sensors
+  that are not configured (message ID `10`) are no longer created and their existing entities are removed when the
+  integration is set up. Sensors with an invalid value (any other message ID than `0`), such as a failure of the
+  binary sensor `has_compressor_failure` without a connected input, are now unknown. The climate and water heater
+  entities are still created, but leave out the current temperature and humidity (e.g. `current_temperature`) if
+  their sensor is not in use. The sensors and binary sensors have the message ID of the control unit as
+  attribute `message_id` (`0` means in use), which is read with one more request per update. ([Issue #67][issue-67])
 - Fixed the update failing while the heat pump is in the state source flush or an external heat source is in the
   operating mode flue. ([Issue #72][issue-72])
 - Fixed entity names and state translations that differed from the texts of the Web HMI, e.g. `Compressor power` is
