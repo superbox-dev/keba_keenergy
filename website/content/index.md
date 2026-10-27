@@ -109,8 +109,8 @@ provide are not created. Changes are written to the control unit, see [Known lim
 ### Control unit
 
 - **Select**: operating mode
-- **Sensors**: outdoor temperature, operating mode, CPU and RAM usage (diagnostic), write operations this week
-  (diagnostic), flash erase counter (diagnostic)
+- **Sensors**: outdoor temperature, operating mode, CPU and temporary memory usage (diagnostic), write operations
+  this week (diagnostic), flash erase counter (diagnostic)
 
 ### Heat pump
 

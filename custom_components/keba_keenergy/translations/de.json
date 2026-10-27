@@ -419,7 +419,7 @@
         "name": "Maximale Laufzeit (PV-Überschuss)"
       },
       "excess_energy_mode": {
-        "name": "PV-Überschuss",
+        "name": "PV-Überschuss-Status",
         "state": {
           "cooling": "Kühlen",
           "heating": "Heizen",
@@ -584,7 +584,7 @@
         "name": "Pumpendrehzahl"
       },
       "ram_usage": {
-        "name": "RAM-Verbrauch"
+        "name": "Temporär genutzter Speicher"
       },
       "return_flow_temperature": {
         "name": "Rücklauftemperatur"

@@ -419,7 +419,7 @@
         "name": "Maximum runtime (PV surplus)"
       },
       "excess_energy_mode": {
-        "name": "PV surplus",
+        "name": "PV surplus state",
         "state": {
           "cooling": "Cooling",
           "heating": "Heating",
@@ -584,7 +584,7 @@
         "name": "Pump speed"
       },
       "ram_usage": {
-        "name": "RAM usage"
+        "name": "Temporary memory usage"
       },
       "return_flow_temperature": {
         "name": "Return flow temperature"

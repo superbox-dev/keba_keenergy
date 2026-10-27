@@ -93,8 +93,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   operating mode flue. ([Issue #72][issue-72])
 - Fixed entity names and state translations that differed from the texts of the Web HMI, e.g. `Compressor power` is
   now `Electrical power`, `Compressor speed (night)` is now `Compressor power limit (night)` and the solar circuit
-  sensors `current_temperature` are now `Consumer temperature`. The heat pump and external heat source binary
-  sensors `consuming_excess_energy` are now `Using PV surplus`, so they differ from `PV surplus` of photovoltaics.
+  sensors `current_temperature` are now `Consumer temperature`. The control unit sensor `ram_usage` is now
+  `Temporary memory usage` and the heating circuit, buffer tank and hot water tank sensors `excess_energy_mode` are
+  now `PV surplus state`. The heat pump and external heat source binary sensors `consuming_excess_energy` are now
+  `Using PV surplus`, so they differ from `PV surplus` of photovoltaics.
   In English, the heat pump states `Flow` / `Inflow` are now `Pre-run` / `Post-run`. The off states of the heat and
   cool request sensors only name the cause like the Web HMI, e.g. `Off (room temperature)`, the causes of `flow_off`
   and `inflow_off` were swapped. The sensors of the operating modes have the texts of the selects, e.g. `Schedule`

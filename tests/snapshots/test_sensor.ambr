@@ -79,7 +79,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'enum',
-      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Pufferspeicher 1 PV-Überschuss',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Pufferspeicher 1 PV-Überschuss-Status',
       'lower_limit': '0',
       <SensorEntityCapabilityAttribute.OPTIONS: 'options'>: list([
         'off',
@@ -108,7 +108,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'enum',
-      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Pufferspeicher 2 PV-Überschuss',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Pufferspeicher 2 PV-Überschuss-Status',
       'lower_limit': '0',
       <SensorEntityCapabilityAttribute.OPTIONS: 'options'>: list([
         'off',
@@ -819,7 +819,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'enum',
-      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Heizkreis 1 PV-Überschuss',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Heizkreis 1 PV-Überschuss-Status',
       'lower_limit': '0',
       <SensorEntityCapabilityAttribute.OPTIONS: 'options'>: list([
         'off',
@@ -848,7 +848,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'enum',
-      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Heizkreis 2 PV-Überschuss',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Heizkreis 2 PV-Überschuss-Status',
       'lower_limit': '0',
       <SensorEntityCapabilityAttribute.OPTIONS: 'options'>: list([
         'off',
@@ -2349,7 +2349,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'enum',
-      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Warmwasserspeicher 1 PV-Überschuss',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Warmwasserspeicher 1 PV-Überschuss-Status',
       'lower_limit': '0',
       <SensorEntityCapabilityAttribute.OPTIONS: 'options'>: list([
         'off',
@@ -2378,7 +2378,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'enum',
-      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Warmwasserspeicher 2 PV-Überschuss',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Warmwasserspeicher 2 PV-Überschuss-Status',
       'lower_limit': '0',
       <SensorEntityCapabilityAttribute.OPTIONS: 'options'>: list([
         'off',
@@ -2827,7 +2827,7 @@
 # name: test_sensors[de][sensor.keba_keenergy_12345678_ram_usage]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Bedieneinheit RAM-Verbrauch',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Bedieneinheit Temporär genutzter Speicher',
       <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.MEASUREMENT: 'measurement'>,
       <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfInformation.KILOBYTES: 'kB'>,
     }),
@@ -3373,7 +3373,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'enum',
-      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Buffer tank 1 PV surplus',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Buffer tank 1 PV surplus state',
       'lower_limit': '0',
       <SensorEntityCapabilityAttribute.OPTIONS: 'options'>: list([
         'off',
@@ -3402,7 +3402,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'enum',
-      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Buffer tank 2 PV surplus',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Buffer tank 2 PV surplus state',
       'lower_limit': '0',
       <SensorEntityCapabilityAttribute.OPTIONS: 'options'>: list([
         'off',
@@ -4113,7 +4113,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'enum',
-      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Heating circuit 1 PV surplus',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Heating circuit 1 PV surplus state',
       'lower_limit': '0',
       <SensorEntityCapabilityAttribute.OPTIONS: 'options'>: list([
         'off',
@@ -4142,7 +4142,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'enum',
-      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Heating circuit 2 PV surplus',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Heating circuit 2 PV surplus state',
       'lower_limit': '0',
       <SensorEntityCapabilityAttribute.OPTIONS: 'options'>: list([
         'off',
@@ -5643,7 +5643,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'enum',
-      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Hot water tank 1 PV surplus',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Hot water tank 1 PV surplus state',
       'lower_limit': '0',
       <SensorEntityCapabilityAttribute.OPTIONS: 'options'>: list([
         'off',
@@ -5672,7 +5672,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'enum',
-      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Hot water tank 2 PV surplus',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Hot water tank 2 PV surplus state',
       'lower_limit': '0',
       <SensorEntityCapabilityAttribute.OPTIONS: 'options'>: list([
         'off',
@@ -6121,7 +6121,7 @@
 # name: test_sensors[en][sensor.keba_keenergy_12345678_ram_usage]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Control unit RAM usage',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Control unit Temporary memory usage',
       <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.MEASUREMENT: 'measurement'>,
       <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfInformation.KILOBYTES: 'kB'>,
     }),
