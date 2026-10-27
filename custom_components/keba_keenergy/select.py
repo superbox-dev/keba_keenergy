@@ -16,6 +16,7 @@ from homeassistant.components.select import SelectEntityDescription
 from homeassistant.const import EntityCategory
 from keba_keenergy_api.constants import BoolEnum
 from keba_keenergy_api.constants import BufferTankOperatingMode
+from keba_keenergy_api.constants import ExternalHeatSourceOperatingMode
 from keba_keenergy_api.constants import HeatCircuitOperatingMode
 from keba_keenergy_api.constants import HotWaterTankOperatingMode
 from keba_keenergy_api.constants import SectionPrefix
@@ -130,6 +131,23 @@ class KebaKeEnergyHeatCircuitOperatingModeSelectEntity(KebaKeEnergySelectEntity)
         return options
 
 
+class KebaKeEnergyExternalHeatSourceOperatingModeSelectEntity(KebaKeEnergySelectEntity):
+    """KEBA KeEnergy external heat source operating mode select entity."""
+
+    @cached_property
+    def options(self) -> list[str]:
+        """Return a set of selectable options."""
+        options: list[str] = super().options
+
+        if self.coordinator.has_emissions(index=self.index):
+            return [
+                *options,
+                ExternalHeatSourceOperatingMode.FLUE.name.lower(),
+            ]
+
+        return options
+
+
 class KebaKeEnergyHeatingCircuitHeatingCurveSelectEntity(KebaKeEnergySelectEntity):
     """KEBA KeEnergy heating curve select entity."""
 
@@ -220,13 +238,16 @@ SELECT_TYPES: Final[dict[str, tuple[KebaKeEnergySelectEntityDescription, ...]]] 
     ),
     SectionPrefix.EXTERNAL_HEAT_SOURCE: (
         KebaKeEnergySelectEntityDescription(
-            entity_class=KebaKeEnergySelectEntity,
+            entity_class=KebaKeEnergyExternalHeatSourceOperatingModeSelectEntity,
             entity_category=EntityCategory.CONFIG,
             entity_registry_enabled_default=False,
             key="operating_mode",
-            options=[_.name.lower() for _ in BoolEnum],
+            options=[
+                ExternalHeatSourceOperatingMode.OFF.name.lower(),
+                ExternalHeatSourceOperatingMode.ON.name.lower(),
+            ],
             translation_key="external_heat_source_operating_mode",
-            value=lambda data: BoolEnum[data.upper()].value,
+            value=lambda data: ExternalHeatSourceOperatingMode[data.upper()].value,
         ),
     ),
 }

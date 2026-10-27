@@ -626,7 +626,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'speed',
-      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Wärmepumpe Kompressordrehzahl (Nacht)',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Wärmepumpe Kompressor-Leistungsbegrenzung (Nacht)',
       <NumberEntityCapabilityAttribute.MAX: 'max'>: 100.0,
       <NumberEntityCapabilityAttribute.MIN: 'min'>: 50.0,
       <NumberEntityCapabilityAttribute.MODE: 'mode'>: <NumberMode.AUTO: 'auto'>,
@@ -1502,7 +1502,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'speed',
-      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Heat pump Compressor speed (night)',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Heat pump Compressor power limit (night)',
       <NumberEntityCapabilityAttribute.MAX: 'max'>: 100.0,
       <NumberEntityCapabilityAttribute.MIN: 'min'>: 50.0,
       <NumberEntityCapabilityAttribute.MODE: 'mode'>: <NumberMode.AUTO: 'auto'>,

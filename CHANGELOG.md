@@ -20,10 +20,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added the diagnostic sensor `weekly_write_count` to the control unit with the write operations of the current week.
   The attribute `writes` shows how often each value was written, e.g. `heat_circuit_1.target_temperature_offset`.
   ([Issue #71][issue-71])
+- Added the state `source_flush` to the heat pump sensor `state` and the operating mode `flue` to the external heat
+  source sensor and select `operating_mode`. The select only offers `flue` if the external heat source has emissions.
+  ([Issue #72][issue-72])
 
 ### Changed
 
-- Required `keba_keenergy_api` 2.13.0, which needs fewer requests to set up the integration.
+- Required `keba_keenergy_api` 2.14.0b2, which needs fewer requests to set up the integration.
 - Moved the documentation to Docusaurus on <https://superbox-dev.github.io/keba_keenergy/>, styled after the
   integration pages of Home Assistant, with all information on one page. The domain `superbox.one` is no longer used.
 - Shortened the `README.md` to the installation and moved the details to the documentation.
@@ -82,6 +85,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   and the climate and water heater entities leave out their values. The sensors and binary sensors have the message
   ID of the control unit as attribute `message_id` (`0` means in use), which is read with one more request per update.
   ([Issue #67][issue-67])
+- Fixed the update failing while the heat pump is in the state source flush or an external heat source is in the
+  operating mode flue. ([Issue #72][issue-72])
+- Fixed entity names and state translations that differed from the texts of the Web HMI, e.g. `Compressor power` is
+  now `Electrical power`, `Compressor speed (night)` is now `Compressor power limit (night)` and the solar circuit
+  sensors `current_temperature` are now `Consumer temperature`. The heat pump and external heat source binary
+  sensors `consuming_excess_energy` are now `Using PV surplus`, so they differ from `PV surplus` of photovoltaics.
+  In English, the heat pump states `Flow` / `Inflow` are now `Pre-run` / `Post-run`. The off states of the heat and
+  cool request sensors only name the cause like the Web HMI, e.g. `Off (room temperature)`, the causes of `flow_off`
+  and `inflow_off` were swapped. The sensors of the operating modes have the texts of the selects, e.g. `Schedule`
+  instead of `Auto` for the hot water tank. Entity IDs, unique IDs and states are unchanged.
+  ([Issue #72][issue-72])
 
 ### Security
 
@@ -89,6 +103,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 [issue-67]: https://github.com/superbox-dev/keba_keenergy/issues/67
 [issue-71]: https://github.com/superbox-dev/keba_keenergy/issues/71
+[issue-72]: https://github.com/superbox-dev/keba_keenergy/issues/72
 
 ## [1.10.4] - 2026-09-30
 

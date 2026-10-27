@@ -492,6 +492,7 @@
       <SensorEntityCapabilityAttribute.OPTIONS: 'options'>: list([
         'off',
         'on',
+        'flue',
       ]),
       'raw_value': 0,
       'upper_limit': '2',
@@ -506,6 +507,7 @@
 # ---
 # name: test_sensors[de][sensor.keba_keenergy_12345678_external_heat_source_operating_mode_1_options]
   dict({
+    'flue': 'Rauchfang',
     'off': 'Aus',
     'on': 'Ein',
   })
@@ -519,6 +521,7 @@
       <SensorEntityCapabilityAttribute.OPTIONS: 'options'>: list([
         'off',
         'on',
+        'flue',
       ]),
       'raw_value': 1,
       'upper_limit': '2',
@@ -533,6 +536,7 @@
 # ---
 # name: test_sensors[de][sensor.keba_keenergy_12345678_external_heat_source_operating_mode_2_options]
   dict({
+    'flue': 'Rauchfang',
     'off': 'Aus',
     'on': 'Ein',
   })
@@ -648,13 +652,13 @@
 # ---
 # name: test_sensors[de][sensor.keba_keenergy_12345678_heat_circuit_cool_request_2_options]
   dict({
-    'flow_off': 'Aus (Niedrige Vorlauftemperatur)',
-    'inflow_off': 'Aus (Hohe Rücklauftemperatur)',
+    'flow_off': 'Aus (Rücklauftemperatur)',
+    'inflow_off': 'Aus (Vorlauftemperatur)',
     'off': 'Aus',
     'on': 'Ein',
-    'outdoor_off': 'Aus (Niedrige Außentemperatur)',
-    'room_off': 'Aus (Niedrige Raumtemperatur)',
-    'temporary_off': 'Aus (Vorübergehend)',
+    'outdoor_off': 'Aus (Außentemperatur)',
+    'room_off': 'Aus (Raumtemperatur)',
+    'temporary_off': 'Aus (Vorrang)',
   })
 # ---
 # name: test_sensors[de][sensor.keba_keenergy_12345678_heat_circuit_cooling_curve_2]
@@ -974,13 +978,13 @@
 # ---
 # name: test_sensors[de][sensor.keba_keenergy_12345678_heat_circuit_heat_request_1_options]
   dict({
-    'flow_off': 'Aus (Niedrige Vorlauftemperatur)',
-    'inflow_off': 'Aus (Hohe Rücklauftemperatur)',
+    'flow_off': 'Aus (Rücklauftemperatur)',
+    'inflow_off': 'Aus (Vorlauftemperatur)',
     'off': 'Aus',
     'on': 'Ein',
-    'outdoor_off': 'Aus (Hohe Außentemperatur)',
-    'room_off': 'Aus (Hohe Raumtemperatur)',
-    'temporary_off': 'Aus (Vorübergehend)',
+    'outdoor_off': 'Aus (Außentemperatur)',
+    'room_off': 'Aus (Raumtemperatur)',
+    'temporary_off': 'Aus (Vorrang)',
   })
 # ---
 # name: test_sensors[de][sensor.keba_keenergy_12345678_heat_circuit_heating_curve_1]
@@ -1472,7 +1476,7 @@
 # name: test_sensors[de][sensor.keba_keenergy_12345678_heat_pump_circulation_pump]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Wärmepumpe Umwälzpumpedrehzahl',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Wärmepumpe Umwälzpumpendrehzahl',
       'lower_limit': '0.0',
       <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.MEASUREMENT: 'measurement'>,
       <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: '%',
@@ -1507,7 +1511,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
-      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Wärmepumpe Kompressor Eingangstemperatur',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Wärmepumpe Kompressor Eintrittstemperatur',
       'message_id': 0,
       <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.MEASUREMENT: 'measurement'>,
       <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfTemperature.CELSIUS: '°C'>,
@@ -1524,7 +1528,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
-      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Wärmepumpe Kompressor Ausgangstemperatur',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Wärmepumpe Kompressor Austrittstemperatur',
       'message_id': 0,
       <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.MEASUREMENT: 'measurement'>,
       <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfTemperature.CELSIUS: '°C'>,
@@ -1541,7 +1545,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'power',
-      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Wärmepumpe Leistung Kompressor',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Wärmepumpe Elektrische Leistung',
       <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.MEASUREMENT: 'measurement'>,
       <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfPower.WATT: 'W'>,
     }),
@@ -1575,7 +1579,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'energy',
-      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Wärmepumpe Kühlmenge',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Wärmepumpe Kältemenge',
       <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.TOTAL: 'total'>,
       <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
     }),
@@ -1728,7 +1732,7 @@
 # name: test_sensors[de][sensor.keba_keenergy_12345678_heat_pump_expansion_valve_position]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Wärmepumpe Expansionsventil',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Wärmepumpe Expansionsventilposition',
     }),
     'context': <ANY>,
     'entity_id': 'sensor.keba_keenergy_12345678_heat_pump_expansion_valve_position',
@@ -1998,7 +2002,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
-      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Wärmepumpe Quelle-Eingangstemperatur',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Wärmepumpe Quelle Eintrittstemperatur',
       'message_id': 0,
       <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.MEASUREMENT: 'measurement'>,
       <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfTemperature.CELSIUS: '°C'>,
@@ -2015,7 +2019,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
-      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Wärmepumpe Quelle-Ausgangstemperatur',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Wärmepumpe Quelle Austrittstemperatur',
       'message_id': 0,
       <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.MEASUREMENT: 'measurement'>,
       <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfTemperature.CELSIUS: '°C'>,
@@ -2031,7 +2035,7 @@
 # name: test_sensors[de][sensor.keba_keenergy_12345678_heat_pump_source_pump_speed]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Wärmepumpe Quellenpumpendrehzahl',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Wärmepumpe Drehzahl Lüfter/Quellenpumpe',
       'lower_limit': '0.0',
       <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.MEASUREMENT: 'measurement'>,
       <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: '%',
@@ -2061,6 +2065,7 @@
         'pump_down',
         'shutdown',
         'error',
+        'source_flush',
       ]),
       'raw_value': 0,
       'upper_limit': '32767',
@@ -2083,6 +2088,7 @@
     'inflow': 'Nachlauf',
     'pump_down': 'Pump-Down-Vorgang',
     'shutdown': 'Herunterfahren',
+    'source_flush': 'Quellenspülung',
     'standby': 'Standby',
   })
 # ---
@@ -2148,7 +2154,7 @@
     'defrost_initialization': 'Abtauinitialisierung',
     'defrost_monitoring': 'Abtauüberwachung',
     'defrost_pre_flow': 'Abtauvorlauf',
-    'defrost_venting': 'Abtaulüften',
+    'defrost_venting': 'Abtaulüfter',
     'drip': 'Abtropfen',
     'electric_defrost': 'Elektrisches Abtauen',
     'flushing': 'Spülen',
@@ -2158,7 +2164,7 @@
     'none': '-',
     'oil_preheating': 'Ölvorwärmung',
     'open': 'Öffnen',
-    'preheat_flow': 'Heizvorlauf',
+    'preheat_flow': 'Vorlauf Aufheizen',
     'pressure_equalization': 'Druckausgleich',
     'pump_post_run': 'Pumpennachlauf',
     'pump_pre_run': 'Pumpenvorlauf',
@@ -2463,7 +2469,7 @@
 # ---
 # name: test_sensors[de][sensor.keba_keenergy_12345678_hot_water_tank_operating_mode_1_options]
   dict({
-    'auto': 'Auto',
+    'auto': 'Zeitplan',
     'heat_up': 'Aufheizen',
     'off': 'Aus',
     'on': 'Ein',
@@ -2494,7 +2500,7 @@
 # ---
 # name: test_sensors[de][sensor.keba_keenergy_12345678_hot_water_tank_operating_mode_2_options]
   dict({
-    'auto': 'Auto',
+    'auto': 'Zeitplan',
     'heat_up': 'Aufheizen',
     'off': 'Aus',
     'on': 'Ein',
@@ -2606,7 +2612,7 @@
     'auto_heat': 'Heizen',
     'setup': 'Einrichtung',
     'standby': 'Standby',
-    'summer': 'Sommerbetrieb (nur Warmwasser)',
+    'summer': 'nur Warmwasser',
   })
 # ---
 # name: test_sensors[de][sensor.keba_keenergy_12345678_outdoor_temperature]
@@ -2631,7 +2637,7 @@
 # name: test_sensors[de][sensor.keba_keenergy_12345678_passive_cooling_circulation_pump_speed]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Passivkühlung Umwälzpumpedrehzahl',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Passivkühlung Umwälzpumpendrehzahl',
       'lower_limit': '0.0',
       <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.MEASUREMENT: 'measurement'>,
       <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: '%',
@@ -2855,7 +2861,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
-      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Solarkreis 1 Ist-Temperatur 1',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Solarkreis 1 Verbrauchertemperatur 1',
       'message_id': 0,
       <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.MEASUREMENT: 'measurement'>,
       <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfTemperature.CELSIUS: '°C'>,
@@ -2872,7 +2878,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
-      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Solarkreis 2 Ist-Temperatur 1',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Solarkreis 2 Verbrauchertemperatur 1',
       'message_id': 0,
       <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.MEASUREMENT: 'measurement'>,
       <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfTemperature.CELSIUS: '°C'>,
@@ -2889,7 +2895,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
-      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Solarkreis 1 Ist-Temperatur 2',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Solarkreis 1 Verbrauchertemperatur 2',
       'message_id': 0,
       <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.MEASUREMENT: 'measurement'>,
       <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfTemperature.CELSIUS: '°C'>,
@@ -2906,7 +2912,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
-      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Solarkreis 2 Ist-Temperatur 2',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Solarkreis 2 Verbrauchertemperatur 2',
       'message_id': 0,
       <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.MEASUREMENT: 'measurement'>,
       <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfTemperature.CELSIUS: '°C'>,
@@ -2990,7 +2996,7 @@
 # name: test_sensors[de][sensor.keba_keenergy_12345678_solar_circuit_pump_1_1]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Solarkreis 1 Pumpe 1',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Solarkreis 1 Pumpe 1 Drehzahl',
       'lower_limit': '0.0',
       <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.MEASUREMENT: 'measurement'>,
       <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: '%',
@@ -3007,7 +3013,7 @@
 # name: test_sensors[de][sensor.keba_keenergy_12345678_solar_circuit_pump_1_2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Solarkreis 2 Pumpe 1',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Solarkreis 2 Pumpe 1 Drehzahl',
       'lower_limit': '0.0',
       <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.MEASUREMENT: 'measurement'>,
       <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: '%',
@@ -3024,7 +3030,7 @@
 # name: test_sensors[de][sensor.keba_keenergy_12345678_solar_circuit_pump_2_1]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Solarkreis 1 Pumpe 2',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Solarkreis 1 Pumpe 2 Drehzahl',
       'lower_limit': '0.0',
       <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.MEASUREMENT: 'measurement'>,
       <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: '%',
@@ -3041,7 +3047,7 @@
 # name: test_sensors[de][sensor.keba_keenergy_12345678_solar_circuit_pump_2_2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Solarkreis 2 Pumpe 2',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Solarkreis 2 Pumpe 2 Drehzahl',
       'lower_limit': '0.0',
       <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.MEASUREMENT: 'measurement'>,
       <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: '%',
@@ -3766,6 +3772,7 @@
       <SensorEntityCapabilityAttribute.OPTIONS: 'options'>: list([
         'off',
         'on',
+        'flue',
       ]),
       'raw_value': 0,
       'upper_limit': '2',
@@ -3780,6 +3787,7 @@
 # ---
 # name: test_sensors[en][sensor.keba_keenergy_12345678_external_heat_source_operating_mode_1_options]
   dict({
+    'flue': 'Flue',
     'off': 'Off',
     'on': 'On',
   })
@@ -3793,6 +3801,7 @@
       <SensorEntityCapabilityAttribute.OPTIONS: 'options'>: list([
         'off',
         'on',
+        'flue',
       ]),
       'raw_value': 1,
       'upper_limit': '2',
@@ -3807,6 +3816,7 @@
 # ---
 # name: test_sensors[en][sensor.keba_keenergy_12345678_external_heat_source_operating_mode_2_options]
   dict({
+    'flue': 'Flue',
     'off': 'Off',
     'on': 'On',
   })
@@ -3922,13 +3932,13 @@
 # ---
 # name: test_sensors[en][sensor.keba_keenergy_12345678_heat_circuit_cool_request_2_options]
   dict({
-    'flow_off': 'Off (low flow temperature)',
-    'inflow_off': 'Off (high return flow temperature)',
+    'flow_off': 'Off (return flow temperature)',
+    'inflow_off': 'Off (flow temperature)',
     'off': 'Off',
     'on': 'On',
-    'outdoor_off': 'Off (low outside temperature)',
-    'room_off': 'Off (low room temperature)',
-    'temporary_off': 'Off (temporary)',
+    'outdoor_off': 'Off (outdoor temperature)',
+    'room_off': 'Off (room temperature)',
+    'temporary_off': 'Off (priority)',
   })
 # ---
 # name: test_sensors[en][sensor.keba_keenergy_12345678_heat_circuit_cooling_curve_2]
@@ -4188,7 +4198,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
-      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Heating circuit 1 Flow temperature setpoint',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Heating circuit 1 Target flow temperature',
       'lower_limit': '0',
       <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.MEASUREMENT: 'measurement'>,
       <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfTemperature.CELSIUS: '°C'>,
@@ -4206,7 +4216,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
-      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Heating circuit 2 Flow temperature setpoint',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Heating circuit 2 Target flow temperature',
       'lower_limit': '0',
       <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.MEASUREMENT: 'measurement'>,
       <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfTemperature.CELSIUS: '°C'>,
@@ -4248,13 +4258,13 @@
 # ---
 # name: test_sensors[en][sensor.keba_keenergy_12345678_heat_circuit_heat_request_1_options]
   dict({
-    'flow_off': 'Off (low flow temperature)',
-    'inflow_off': 'Off (high return flow temperature)',
+    'flow_off': 'Off (return flow temperature)',
+    'inflow_off': 'Off (flow temperature)',
     'off': 'Off',
     'on': 'On',
-    'outdoor_off': 'Off (high outside temperature)',
-    'room_off': 'Off (high room temperature)',
-    'temporary_off': 'Off (temporary)',
+    'outdoor_off': 'Off (outdoor temperature)',
+    'room_off': 'Off (room temperature)',
+    'temporary_off': 'Off (priority)',
   })
 # ---
 # name: test_sensors[en][sensor.keba_keenergy_12345678_heat_circuit_heating_curve_1]
@@ -4781,7 +4791,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
-      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Heat pump Compressor input temperature',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Heat pump Compressor inlet temperature',
       'message_id': 0,
       <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.MEASUREMENT: 'measurement'>,
       <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfTemperature.CELSIUS: '°C'>,
@@ -4798,7 +4808,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
-      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Heat pump Compressor output temperature',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Heat pump Compressor outlet temperature',
       'message_id': 0,
       <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.MEASUREMENT: 'measurement'>,
       <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfTemperature.CELSIUS: '°C'>,
@@ -4815,7 +4825,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'power',
-      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Heat pump Compressor power',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Heat pump Electrical power',
       <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.MEASUREMENT: 'measurement'>,
       <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfPower.WATT: 'W'>,
     }),
@@ -4925,7 +4935,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
-      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Heat pump Current overheating',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Heat pump Current superheat',
       <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.MEASUREMENT: 'measurement'>,
       <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfTemperature.CELSIUS: '°C'>,
     }),
@@ -5272,7 +5282,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
-      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Heat pump Source input temperature',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Heat pump Source inlet temperature',
       'message_id': 0,
       <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.MEASUREMENT: 'measurement'>,
       <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfTemperature.CELSIUS: '°C'>,
@@ -5289,7 +5299,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
-      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Heat pump Source output temperature',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Heat pump Source outlet temperature',
       'message_id': 0,
       <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.MEASUREMENT: 'measurement'>,
       <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfTemperature.CELSIUS: '°C'>,
@@ -5305,7 +5315,7 @@
 # name: test_sensors[en][sensor.keba_keenergy_12345678_heat_pump_source_pump_speed]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Heat pump Source pump speed',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Heat pump Fan/source pump speed',
       'lower_limit': '0.0',
       <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.MEASUREMENT: 'measurement'>,
       <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: '%',
@@ -5335,6 +5345,7 @@
         'pump_down',
         'shutdown',
         'error',
+        'source_flush',
       ]),
       'raw_value': 0,
       'upper_limit': '32767',
@@ -5353,10 +5364,11 @@
     'auto_heat': 'Heating',
     'defrost': 'Defrost',
     'error': 'Error',
-    'flow': 'Flow',
-    'inflow': 'Inflow',
+    'flow': 'Pre-run',
+    'inflow': 'Post-run',
     'pump_down': 'Pump down',
     'shutdown': 'Shutdown',
+    'source_flush': 'Source flush',
     'standby': 'Standby',
   })
 # ---
@@ -5421,8 +5433,8 @@
     'defrost_end': 'Defrost end',
     'defrost_initialization': 'Defrost initialization',
     'defrost_monitoring': 'Defrost monitoring',
-    'defrost_pre_flow': 'Defrost pre-flow',
-    'defrost_venting': 'Defrost venting',
+    'defrost_pre_flow': 'Defrost pre-run',
+    'defrost_venting': 'Defrost fan',
     'drip': 'Drip',
     'electric_defrost': 'Electric defrost',
     'flushing': 'Flushing',
@@ -5431,8 +5443,8 @@
     'mixer_open': 'Mixer open',
     'none': '-',
     'oil_preheating': 'Oil preheating',
-    'open': 'Open',
-    'preheat_flow': 'Preheat flow',
+    'open': 'Opening',
+    'preheat_flow': 'Pre-run heat-up',
     'pressure_equalization': 'Pressure equalization',
     'pump_post_run': 'Pump post-run',
     'pump_pre_run': 'Pump pre-run',
@@ -5449,7 +5461,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
-      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Heat pump Target overheating',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Heat pump Target superheat',
       <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.MEASUREMENT: 'measurement'>,
       <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfTemperature.CELSIUS: '°C'>,
     }),
@@ -5511,7 +5523,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
-      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Heat pump Vaporization temperature',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Heat pump Evaporation temperature',
       <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.MEASUREMENT: 'measurement'>,
       <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfTemperature.CELSIUS: '°C'>,
     }),
@@ -5737,7 +5749,7 @@
 # ---
 # name: test_sensors[en][sensor.keba_keenergy_12345678_hot_water_tank_operating_mode_1_options]
   dict({
-    'auto': 'Auto',
+    'auto': 'Schedule',
     'heat_up': 'Heat up',
     'off': 'Off',
     'on': 'On',
@@ -5768,7 +5780,7 @@
 # ---
 # name: test_sensors[en][sensor.keba_keenergy_12345678_hot_water_tank_operating_mode_2_options]
   dict({
-    'auto': 'Auto',
+    'auto': 'Schedule',
     'heat_up': 'Heat up',
     'off': 'Off',
     'on': 'On',
@@ -5880,7 +5892,7 @@
     'auto_heat': 'Heating',
     'setup': 'Setup',
     'standby': 'Standby',
-    'summer': 'Summer mode (hot water only)',
+    'summer': 'Hot water only',
   })
 # ---
 # name: test_sensors[en][sensor.keba_keenergy_12345678_outdoor_temperature]
@@ -6129,7 +6141,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
-      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Solar circuit 1 Current temperature 1',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Solar circuit 1 Consumer temperature 1',
       'message_id': 0,
       <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.MEASUREMENT: 'measurement'>,
       <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfTemperature.CELSIUS: '°C'>,
@@ -6146,7 +6158,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
-      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Solar circuit 2 Current temperature 1',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Solar circuit 2 Consumer temperature 1',
       'message_id': 0,
       <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.MEASUREMENT: 'measurement'>,
       <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfTemperature.CELSIUS: '°C'>,
@@ -6163,7 +6175,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
-      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Solar circuit 1 Current temperature 2',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Solar circuit 1 Consumer temperature 2',
       'message_id': 0,
       <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.MEASUREMENT: 'measurement'>,
       <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfTemperature.CELSIUS: '°C'>,
@@ -6180,7 +6192,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
-      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Solar circuit 2 Current temperature 2',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Solar circuit 2 Consumer temperature 2',
       'message_id': 0,
       <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.MEASUREMENT: 'measurement'>,
       <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfTemperature.CELSIUS: '°C'>,
@@ -6264,7 +6276,7 @@
 # name: test_sensors[en][sensor.keba_keenergy_12345678_solar_circuit_pump_1_1]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Solar circuit 1 Pump 1',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Solar circuit 1 Pump 1 speed',
       'lower_limit': '0.0',
       <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.MEASUREMENT: 'measurement'>,
       <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: '%',
@@ -6281,7 +6293,7 @@
 # name: test_sensors[en][sensor.keba_keenergy_12345678_solar_circuit_pump_1_2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Solar circuit 2 Pump 1',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Solar circuit 2 Pump 1 speed',
       'lower_limit': '0.0',
       <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.MEASUREMENT: 'measurement'>,
       <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: '%',
@@ -6298,7 +6310,7 @@
 # name: test_sensors[en][sensor.keba_keenergy_12345678_solar_circuit_pump_2_1]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Solar circuit 1 Pump 2',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Solar circuit 1 Pump 2 speed',
       'lower_limit': '0.0',
       <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.MEASUREMENT: 'measurement'>,
       <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: '%',
@@ -6315,7 +6327,7 @@
 # name: test_sensors[en][sensor.keba_keenergy_12345678_solar_circuit_pump_2_2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Solar circuit 2 Pump 2',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Solar circuit 2 Pump 2 speed',
       'lower_limit': '0.0',
       <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.MEASUREMENT: 'measurement'>,
       <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: '%',

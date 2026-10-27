@@ -1555,6 +1555,16 @@ HEAT_PUMP_HAS_PASSIVE_COOLING: Final[str] = """
     }
 """
 
+EXTERNAL_HEAT_SOURCE_HAS_EMISSIONS: Final[str] = """
+    {
+        "name": "APPL.CtrlAppl.sParam.extHeatSource[%s].param.hasEmmission",
+        "attributes": {
+            "longText": "Has emission"
+        },
+        "value": "%s"
+    }
+"""
+
 HEAT_PUMP_ELECTRIC_ENERGY_METER_TYPE: Final[str] = """
     {
         "name": "APPL.CtrlAppl.sParam.options.heatpump[0].ElectricEnergyMeter.type",
@@ -2374,6 +2384,7 @@ DEFAULT_POSITION_FIXED_DATA_RESPONSE: Final[list[dict[str, Any]]] = [
     json.loads(HEAT_PUMP_HAS_PASSIVE_COOLING % "true"),
     json.loads(HEAT_PUMP_ELECTRIC_ENERGY_METER_TYPE % "1"),
     json.loads(HEAT_PUMP_HEAT_METER_TYPE % "1"),
+    json.loads(EXTERNAL_HEAT_SOURCE_HAS_EMISSIONS % ("0", "false")),
 ]
 
 
@@ -2407,6 +2418,8 @@ def get_multiple_position_fixed_data_response(
         json.loads(HEAT_PUMP_HAS_PASSIVE_COOLING % f"{has_passive_cooling}"),
         json.loads(HEAT_PUMP_ELECTRIC_ENERGY_METER_TYPE % "1"),
         json.loads(HEAT_PUMP_HEAT_METER_TYPE % "1"),
+        json.loads(EXTERNAL_HEAT_SOURCE_HAS_EMISSIONS % ("0", "true")),
+        json.loads(EXTERNAL_HEAT_SOURCE_HAS_EMISSIONS % ("1", "false")),
     ]
 
 

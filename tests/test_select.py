@@ -106,6 +106,11 @@ async def test_selects_without_cooling(
             '[{"name": "APPL.CtrlAppl.sParam.extHeatSource[0].param.operatingMode", "value": "1"}]',
         ),
         (
+            "select.keba_keenergy_12345678_external_heat_source_operating_mode_1",
+            "flue",
+            '[{"name": "APPL.CtrlAppl.sParam.extHeatSource[0].param.operatingMode", "value": "2"}]',
+        ),
+        (
             "select.keba_keenergy_12345678_heat_circuit_heating_curve_1",
             "HC FBH",
             '[{"name": "APPL.CtrlAppl.sParam.heatCircuit[0].param.linTab.fileName", "value": "HC FBH"}]',
@@ -117,6 +122,7 @@ async def test_selects_without_cooling(
         "solar_circuit_operating_mode",
         "hot_water_tank_operating_mode",
         "external_heat_source_operating_mode",
+        "external_heat_source_operating_mode_flue",
         "heat_circuit_heating_curve",
     ],
 )

@@ -87,10 +87,13 @@
   "entity": {
     "binary_sensor": {
       "circulation_pump_state": {
-        "name": "Circulation pump state"
+        "name": "Circulation pump"
       },
       "compressor_failure": {
         "name": "Compressor"
+      },
+      "consuming_excess_energy": {
+        "name": "Using PV surplus"
       },
       "cool_request": {
         "name": "Cool request"
@@ -105,7 +108,7 @@
         "name": "Hot water flow"
       },
       "pump_state": {
-        "name": "Pump state"
+        "name": "Pump"
       },
       "source_actuator_failure": {
         "name": "Source actuator"
@@ -143,7 +146,7 @@
     },
     "number": {
       "compressor_night_speed": {
-        "name": "Compressor speed (night)"
+        "name": "Compressor power limit (night)"
       },
       "cooling_curve_offset": {
         "name": "Cooling curve offset"
@@ -248,6 +251,7 @@
       "external_heat_source_operating_mode": {
         "name": "Operating mode",
         "state": {
+          "flue": "Flue",
           "off": "Off",
           "on": "On"
         }
@@ -319,16 +323,19 @@
         "name": "Compressor speed"
       },
       "compressor_input_temperature": {
-        "name": "Compressor input temperature"
+        "name": "Compressor inlet temperature"
       },
       "compressor_output_temperature": {
-        "name": "Compressor output temperature"
+        "name": "Compressor outlet temperature"
       },
       "compressor_power": {
-        "name": "Compressor power"
+        "name": "Electrical power"
       },
       "condenser_temperature": {
         "name": "Condensation temperature"
+      },
+      "consumer_temperature": {
+        "name": "Consumer temperature{counter}"
       },
       "control_cpu_usage": {
         "name": "Control CPU usage"
@@ -336,13 +343,13 @@
       "cool_request": {
         "name": "Cool request",
         "state": {
-          "flow_off": "Off (low flow temperature)",
-          "inflow_off": "Off (high return flow temperature)",
+          "flow_off": "Off (return flow temperature)",
+          "inflow_off": "Off (flow temperature)",
           "off": "Off",
           "on": "On",
-          "outdoor_off": "Off (low outside temperature)",
-          "room_off": "Off (low room temperature)",
-          "temporary_off": "Off (temporary)"
+          "outdoor_off": "Off (outdoor temperature)",
+          "room_off": "Off (room temperature)",
+          "temporary_off": "Off (priority)"
         }
       },
       "cooling_curve": {
@@ -376,7 +383,7 @@
         "name": "Current temperature (bottom)"
       },
       "current_overheating": {
-        "name": "Current overheating"
+        "name": "Current superheat"
       },
       "current_temperature": {
         "name": "Current temperature{counter}"
@@ -440,6 +447,7 @@
       "external_heat_source_operating_mode": {
         "name": "Operating mode",
         "state": {
+          "flue": "Flue",
           "off": "Off",
           "on": "On"
         }
@@ -448,7 +456,7 @@
         "name": "Flow temperature"
       },
       "flow_temperature_setpoint": {
-        "name": "Flow temperature setpoint"
+        "name": "Target flow temperature"
       },
       "free_ram": {
         "name": "Free RAM"
@@ -472,13 +480,13 @@
       "heat_request": {
         "name": "Heat request",
         "state": {
-          "flow_off": "Off (low flow temperature)",
-          "inflow_off": "Off (high return flow temperature)",
+          "flow_off": "Off (return flow temperature)",
+          "inflow_off": "Off (flow temperature)",
           "off": "Off",
           "on": "On",
-          "outdoor_off": "Off (high outside temperature)",
-          "room_off": "Off (high room temperature)",
-          "temporary_off": "Off (temporary)"
+          "outdoor_off": "Off (outdoor temperature)",
+          "room_off": "Off (room temperature)",
+          "temporary_off": "Off (priority)"
         }
       },
       "heating_curve": {
@@ -526,7 +534,7 @@
       "hot_water_tank_operating_mode": {
         "name": "Operating mode",
         "state": {
-          "auto": "Auto",
+          "auto": "Schedule",
           "heat_up": "Heat up",
           "off": "Off",
           "on": "On"
@@ -595,19 +603,19 @@
         }
       },
       "solar_circuit_pump_1": {
-        "name": "Pump 1"
+        "name": "Pump 1 speed"
       },
       "solar_circuit_pump_2": {
-        "name": "Pump 2"
+        "name": "Pump 2 speed"
       },
       "source_input_temperature": {
-        "name": "Source input temperature"
+        "name": "Source inlet temperature"
       },
       "source_output_temperature": {
-        "name": "Source output temperature"
+        "name": "Source outlet temperature"
       },
       "source_pump_speed": {
-        "name": "Source pump speed"
+        "name": "Fan/source pump speed"
       },
       "source_temperature": {
         "name": "Collector temperature"
@@ -622,10 +630,11 @@
           "auto_heat": "Heating",
           "defrost": "Defrost",
           "error": "Error",
-          "flow": "Flow",
-          "inflow": "Inflow",
+          "flow": "Pre-run",
+          "inflow": "Post-run",
           "pump_down": "Pump down",
           "shutdown": "Shutdown",
+          "source_flush": "Source flush",
           "standby": "Standby"
         }
       },
@@ -641,8 +650,8 @@
           "defrost_end": "Defrost end",
           "defrost_initialization": "Defrost initialization",
           "defrost_monitoring": "Defrost monitoring",
-          "defrost_pre_flow": "Defrost pre-flow",
-          "defrost_venting": "Defrost venting",
+          "defrost_pre_flow": "Defrost pre-run",
+          "defrost_venting": "Defrost fan",
           "drip": "Drip",
           "electric_defrost": "Electric defrost",
           "flushing": "Flushing",
@@ -651,8 +660,8 @@
           "mixer_open": "Mixer open",
           "none": "-",
           "oil_preheating": "Oil preheating",
-          "open": "Open",
-          "preheat_flow": "Preheat flow",
+          "open": "Opening",
+          "preheat_flow": "Pre-run heat-up",
           "pressure_equalization": "Pressure equalization",
           "pump_post_run": "Pump post-run",
           "pump_pre_run": "Pump pre-run",
@@ -681,11 +690,11 @@
           "auto_heat": "Heating",
           "setup": "Setup",
           "standby": "Standby",
-          "summer": "Summer mode (hot water only)"
+          "summer": "Hot water only"
         }
       },
       "target_overheating": {
-        "name": "Target overheating"
+        "name": "Target superheat"
       },
       "target_room_cooling_temperature_day": {
         "name": "Target room cooling temperature (day)"
@@ -727,7 +736,7 @@
         "name": "Total thermal energy"
       },
       "vaporizer_temperature": {
-        "name": "Vaporization temperature"
+        "name": "Evaporation temperature"
       },
       "webserver_cpu_usage": {
         "name": "WebServer CPU usage"
@@ -746,19 +755,19 @@
     },
     "switch": {
       "compressor_use_night_speed": {
-        "name": "Compressor speed limit (night)"
+        "name": "Use compressor power limit (night)"
       },
       "priority_1_before_2": {
         "name": "Priority 1 before 2"
       },
       "use_cooling_curve": {
-        "name": "Use cooling curve"
+        "name": "Use cooling curve table"
       },
       "use_excess_energy": {
         "name": "Use PV surplus"
       },
       "use_heating_curve": {
-        "name": "Use heating curve"
+        "name": "Use heating curve table"
       }
     },
     "water_heater": {

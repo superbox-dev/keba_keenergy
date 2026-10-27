@@ -56,6 +56,7 @@
       <SelectEntityCapabilityAttribute.OPTIONS: 'options'>: list([
         'off',
         'on',
+        'flue',
       ]),
     }),
     'context': <ANY>,
@@ -68,6 +69,7 @@
 # ---
 # name: test_selects[de][select.keba_keenergy_12345678_external_heat_source_operating_mode_1_options]
   dict({
+    'flue': 'Rauchfang',
     'off': 'Aus',
     'on': 'Ein',
   })
@@ -391,6 +393,7 @@
       <SelectEntityCapabilityAttribute.OPTIONS: 'options'>: list([
         'off',
         'on',
+        'flue',
       ]),
     }),
     'context': <ANY>,
@@ -403,6 +406,7 @@
 # ---
 # name: test_selects[en][select.keba_keenergy_12345678_external_heat_source_operating_mode_1_options]
   dict({
+    'flue': 'Flue',
     'off': 'Off',
     'on': 'On',
   })

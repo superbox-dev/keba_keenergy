@@ -18,6 +18,7 @@ from tests import get_platform_states
 from tests.api_data import MULTIPLE_POSITION_DATA_RESPONSE
 from tests.api_data import MULTIPLE_POSITIONS_RESPONSE
 from tests.api_data import get_multiple_position_fixed_data_response
+from tests.api_data import update_response
 
 if TYPE_CHECKING:
     from homeassistant.core import HomeAssistant
@@ -124,3 +125,42 @@ async def test_sensor_not_in_use(
         states[entity_id] = (state.state, state.attributes["message_id"])
 
     assert states == expected
+
+
+@pytest.mark.parametrize(
+    ("value", "entity_id", "expected"),
+    [
+        (
+            ("APPL.CtrlAppl.sParam.heatpump[0].values.heatpumpState", "9"),
+            "sensor.keba_keenergy_12345678_heat_pump_state",
+            "source_flush",
+        ),
+        (
+            ("APPL.CtrlAppl.sParam.extHeatSource[0].param.operatingMode", "2"),
+            "sensor.keba_keenergy_12345678_external_heat_source_operating_mode_1",
+            "flue",
+        ),
+    ],
+    ids=["heat_pump_state_source_flush", "external_heat_source_operating_mode_flue"],
+)
+@pytest.mark.usefixtures("entity_registry_enabled_by_default")
+async def test_sensor_enum_state(
+    hass: HomeAssistant,
+    fake_api: FakeKebaKeEnergyAPI,
+    value: tuple[str, str],
+    entity_id: str,
+    expected: str,
+) -> None:
+    """Test the enum sensor states that are only reported in rare situations."""
+    name, raw_value = value
+    fake_api.responses = [
+        MULTIPLE_POSITIONS_RESPONSE,
+        get_multiple_position_fixed_data_response(),
+        update_response(MULTIPLE_POSITION_DATA_RESPONSE, name, value=raw_value),
+    ]
+    await fake_api.setup_integration()
+
+    state: State | None = hass.states.get(entity_id)
+    assert isinstance(state, State)
+    assert state.state == expected
+    assert expected in state.attributes[ATTR_OPTIONS]

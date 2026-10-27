@@ -87,10 +87,13 @@
   "entity": {
     "binary_sensor": {
       "circulation_pump_state": {
-        "name": "Zirkulationspumpe Status"
+        "name": "Zirkulationspumpe"
       },
       "compressor_failure": {
         "name": "Kompressor"
+      },
+      "consuming_excess_energy": {
+        "name": "Nutzt PV-Überschuss"
       },
       "cool_request": {
         "name": "Kühlanforderung"
@@ -105,7 +108,7 @@
         "name": "Warmwasser läuft"
       },
       "pump_state": {
-        "name": "Pumpe Status"
+        "name": "Pumpe"
       },
       "source_actuator_failure": {
         "name": "Quellenaktor"
@@ -117,7 +120,7 @@
         "name": "Quellendruck"
       },
       "three_phase_failure": {
-        "name": "Drehstrom"
+        "name": "3-Phasen"
       },
       "vfd_failure": {
         "name": "Frequenzumrichter"
@@ -143,7 +146,7 @@
     },
     "number": {
       "compressor_night_speed": {
-        "name": "Kompressordrehzahl (Nacht)"
+        "name": "Kompressor-Leistungsbegrenzung (Nacht)"
       },
       "cooling_curve_offset": {
         "name": "Kühlkurven-Offset"
@@ -248,6 +251,7 @@
       "external_heat_source_operating_mode": {
         "name": "Betriebsart",
         "state": {
+          "flue": "Rauchfang",
           "off": "Aus",
           "on": "Ein"
         }
@@ -310,7 +314,7 @@
         }
       },
       "circulation_pump_speed": {
-        "name": "Umwälzpumpedrehzahl"
+        "name": "Umwälzpumpendrehzahl"
       },
       "circulation_return_temperature": {
         "name": "Zirkulations-Rücklauftemperatur"
@@ -319,16 +323,19 @@
         "name": "Kompressordrehzahl"
       },
       "compressor_input_temperature": {
-        "name": "Kompressor Eingangstemperatur"
+        "name": "Kompressor Eintrittstemperatur"
       },
       "compressor_output_temperature": {
-        "name": "Kompressor Ausgangstemperatur"
+        "name": "Kompressor Austrittstemperatur"
       },
       "compressor_power": {
-        "name": "Leistung Kompressor"
+        "name": "Elektrische Leistung"
       },
       "condenser_temperature": {
         "name": "Kondensationstemperatur"
+      },
+      "consumer_temperature": {
+        "name": "Verbrauchertemperatur{counter}"
       },
       "control_cpu_usage": {
         "name": "CPU-Auslastung Steuerung"
@@ -336,20 +343,20 @@
       "cool_request": {
         "name": "Kühlanforderung",
         "state": {
-          "flow_off": "Aus (Niedrige Vorlauftemperatur)",
-          "inflow_off": "Aus (Hohe Rücklauftemperatur)",
+          "flow_off": "Aus (Rücklauftemperatur)",
+          "inflow_off": "Aus (Vorlauftemperatur)",
           "off": "Aus",
           "on": "Ein",
-          "outdoor_off": "Aus (Niedrige Außentemperatur)",
-          "room_off": "Aus (Niedrige Raumtemperatur)",
-          "temporary_off": "Aus (Vorübergehend)"
+          "outdoor_off": "Aus (Außentemperatur)",
+          "room_off": "Aus (Raumtemperatur)",
+          "temporary_off": "Aus (Vorrang)"
         }
       },
       "cooling_curve": {
         "name": "Kühlkurve"
       },
       "cooling_energy": {
-        "name": "Kühlmenge"
+        "name": "Kältemenge"
       },
       "cooling_energy_consumption": {
         "name": "Stromverbrauch Kühlen"
@@ -435,11 +442,12 @@
         "name": "Überschussleistung"
       },
       "expansion_valve_position": {
-        "name": "Expansionsventil"
+        "name": "Expansionsventilposition"
       },
       "external_heat_source_operating_mode": {
         "name": "Betriebsart",
         "state": {
+          "flue": "Rauchfang",
           "off": "Aus",
           "on": "Ein"
         }
@@ -472,13 +480,13 @@
       "heat_request": {
         "name": "Heizanforderung",
         "state": {
-          "flow_off": "Aus (Niedrige Vorlauftemperatur)",
-          "inflow_off": "Aus (Hohe Rücklauftemperatur)",
+          "flow_off": "Aus (Rücklauftemperatur)",
+          "inflow_off": "Aus (Vorlauftemperatur)",
           "off": "Aus",
           "on": "Ein",
-          "outdoor_off": "Aus (Hohe Außentemperatur)",
-          "room_off": "Aus (Hohe Raumtemperatur)",
-          "temporary_off": "Aus (Vorübergehend)"
+          "outdoor_off": "Aus (Außentemperatur)",
+          "room_off": "Aus (Raumtemperatur)",
+          "temporary_off": "Aus (Vorrang)"
         }
       },
       "heating_curve": {
@@ -526,7 +534,7 @@
       "hot_water_tank_operating_mode": {
         "name": "Betriebsart",
         "state": {
-          "auto": "Auto",
+          "auto": "Zeitplan",
           "heat_up": "Aufheizen",
           "off": "Aus",
           "on": "Ein"
@@ -595,19 +603,19 @@
         }
       },
       "solar_circuit_pump_1": {
-        "name": "Pumpe 1"
+        "name": "Pumpe 1 Drehzahl"
       },
       "solar_circuit_pump_2": {
-        "name": "Pumpe 2"
+        "name": "Pumpe 2 Drehzahl"
       },
       "source_input_temperature": {
-        "name": "Quelle-Eingangstemperatur"
+        "name": "Quelle Eintrittstemperatur"
       },
       "source_output_temperature": {
-        "name": "Quelle-Ausgangstemperatur"
+        "name": "Quelle Austrittstemperatur"
       },
       "source_pump_speed": {
-        "name": "Quellenpumpendrehzahl"
+        "name": "Drehzahl Lüfter/Quellenpumpe"
       },
       "source_temperature": {
         "name": "Kollektortemperatur"
@@ -626,6 +634,7 @@
           "inflow": "Nachlauf",
           "pump_down": "Pump-Down-Vorgang",
           "shutdown": "Herunterfahren",
+          "source_flush": "Quellenspülung",
           "standby": "Standby"
         }
       },
@@ -642,7 +651,7 @@
           "defrost_initialization": "Abtauinitialisierung",
           "defrost_monitoring": "Abtauüberwachung",
           "defrost_pre_flow": "Abtauvorlauf",
-          "defrost_venting": "Abtaulüften",
+          "defrost_venting": "Abtaulüfter",
           "drip": "Abtropfen",
           "electric_defrost": "Elektrisches Abtauen",
           "flushing": "Spülen",
@@ -652,7 +661,7 @@
           "none": "-",
           "oil_preheating": "Ölvorwärmung",
           "open": "Öffnen",
-          "preheat_flow": "Heizvorlauf",
+          "preheat_flow": "Vorlauf Aufheizen",
           "pressure_equalization": "Druckausgleich",
           "pump_post_run": "Pumpennachlauf",
           "pump_pre_run": "Pumpenvorlauf",
@@ -681,7 +690,7 @@
           "auto_heat": "Heizen",
           "setup": "Einrichtung",
           "standby": "Standby",
-          "summer": "Sommerbetrieb (nur Warmwasser)"
+          "summer": "nur Warmwasser"
         }
       },
       "target_overheating": {
@@ -746,19 +755,19 @@
     },
     "switch": {
       "compressor_use_night_speed": {
-        "name": "Kompressor-Drehzahlbegrenzung (Nacht)"
+        "name": "Kompressor-Leistungsbegrenzung (Nacht) verwenden"
       },
       "priority_1_before_2": {
         "name": "Vorrang 1 vor 2"
       },
       "use_cooling_curve": {
-        "name": "Kühlkurve verwenden"
+        "name": "Kühlkurventabelle verwenden"
       },
       "use_excess_energy": {
         "name": "PV-Überschuss verwenden"
       },
       "use_heating_curve": {
-        "name": "Heizkurve verwenden"
+        "name": "Heizkurventabelle verwenden"
       }
     },
     "water_heater": {

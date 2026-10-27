@@ -114,15 +114,16 @@ provide are not created. Changes are written to the control unit, see [Known lim
 
 ### Heat pump
 
-- **Sensors**: state and substate, temperatures of flow, return flow, source, compressor, condensation and
-  vaporization, overheating, expansion valve position, pressures, pump and compressor speeds
-- **Energy sensors**: compressor, heating and hot water power, coefficient of performance, thermal energy and
+- **Sensors**: state and substate, temperatures of flow, return flow, source inlet and
+  outlet, compressor inlet and outlet, condensation and evaporation, superheat, expansion valve position, pressures,
+  pump, fan and compressor speeds
+- **Energy sensors**: electrical, heating and hot water power, coefficient of performance, thermal energy and
   electricity consumption of heating, cooling and hot water, seasonal performance factor (SPF), consumption from
   PV surplus
 - **Statistics**: operating hours, maximum runtime and activation counter, also for PV surplus
 - **Binary sensors**: compressor, heat request, source, source actuator, source pressure, three-phase, frequency
-  inverter, PV surplus
-- **Number and switch**: compressor speed limit at night
+  inverter, using PV surplus
+- **Number and switch**: compressor power limit at night
 
 ### Heating circuit
 
@@ -131,11 +132,11 @@ provide are not created. Changes are written to the control unit, see [Known lim
 - **Numbers**: target room temperatures (day, night, away, offset, PV surplus), heating and cooling limits,
   heating and cooling curve offset and slope
 - **Selects**: operating mode, heating curve, cooling curve
-- **Switches**: use PV surplus, use heating curve, use cooling curve (only for cooling circuits, a heating and cooling
-  circuit uses one setting for both and only has **Use heating curve**)
+- **Switches**: use PV surplus, use heating curve table, use cooling curve table (only for cooling circuits, a
+  heating and cooling circuit uses one setting for both and only has **Use heating curve table**)
 - **Sensors**: room temperature and humidity, dew point, flow and return flow temperatures, mixer, pump speed,
   heat and cool request, the current setpoints
-- **Binary sensor**: pump state
+- **Binary sensor**: pump
 
 ### Hot water tank and buffer tank
 
@@ -143,13 +144,14 @@ provide are not created. Changes are written to the control unit, see [Known lim
 - **Numbers**: target and standby temperatures, PV surplus target temperature and hysteresis
 - **Select and switch**: operating mode, use PV surplus
 - **Sensors**: current temperatures, fresh water module and circulation return temperature
-- **Binary sensors**: heat request, cool request, hot water flow, circulation pump state
+- **Binary sensors**: heat request, cool request, hot water flow, circulation pump
 
 ### Solar circuit, external heat source, passive cooling, switch valve and photovoltaics
 
-- **Solar circuit**: collector and tank temperatures, pumps, power and energy, target temperatures, operating mode,
-  priority switch
-- **External heat source**: operating mode, target temperature, statistics, use PV surplus and minimum runtime
+- **Solar circuit**: collector and consumer temperatures, pump speeds, power and energy, target temperatures,
+  operating mode, priority switch
+- **External heat source**: operating mode (off, on and, for an external heat source with emissions, flue), target
+  temperature, statistics, use PV surplus and minimum runtime
 - **Passive cooling**: temperature, switch valve position, mixer and circulation pump
 - **Switch valve**: position
 - **Photovoltaics**: excess power, daily and total energy, PV surplus

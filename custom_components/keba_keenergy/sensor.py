@@ -23,9 +23,9 @@ from homeassistant.const import UnitOfPower
 from homeassistant.const import UnitOfPressure
 from homeassistant.const import UnitOfTemperature
 from homeassistant.const import UnitOfTime
-from keba_keenergy_api.constants import BoolEnum
 from keba_keenergy_api.constants import BufferTankExcessEnergyMode
 from keba_keenergy_api.constants import BufferTankOperatingMode
+from keba_keenergy_api.constants import ExternalHeatSourceOperatingMode
 from keba_keenergy_api.constants import HeatCircuitCoolRequest
 from keba_keenergy_api.constants import HeatCircuitExcessEnergyMode
 from keba_keenergy_api.constants import HeatCircuitHeatRequest
@@ -555,7 +555,7 @@ SENSOR_TYPES: Final[dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ..
             key_index=0,
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             state_class=SensorStateClass.MEASUREMENT,
-            translation_key="current_temperature",
+            translation_key="consumer_temperature",
             translation_placeholders={
                 "counter": " 1",
             },
@@ -566,7 +566,7 @@ SENSOR_TYPES: Final[dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ..
             key_index=1,
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             state_class=SensorStateClass.MEASUREMENT,
-            translation_key="current_temperature",
+            translation_key="consumer_temperature",
             translation_placeholders={
                 "counter": " 2",
             },
@@ -1199,7 +1199,7 @@ SENSOR_TYPES: Final[dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ..
         KebaKeEnergySensorEntityDescription[str](
             device_class=SensorDeviceClass.ENUM,
             key="operating_mode",
-            options=[_.name.lower() for _ in BoolEnum],
+            options=[_.name.lower() for _ in ExternalHeatSourceOperatingMode],
             translation_key="external_heat_source_operating_mode",
         ),
         KebaKeEnergySensorEntityDescription[float](

@@ -78,7 +78,7 @@ BINARY_SENSOR_TYPES: Final[dict[str, tuple[KebaKeEnergyBinarySensorEntityDescrip
         KebaKeEnergyBinarySensorEntityDescription(
             condition=lambda coordinator, _: coordinator.has_photovoltaics(),
             key="consuming_excess_energy",
-            translation_key="excess_energy",
+            translation_key="consuming_excess_energy",
             icon="mdi:solar-power",
         ),
         KebaKeEnergyBinarySensorEntityDescription(
@@ -168,7 +168,7 @@ BINARY_SENSOR_TYPES: Final[dict[str, tuple[KebaKeEnergyBinarySensorEntityDescrip
         KebaKeEnergyBinarySensorEntityDescription(
             condition=lambda coordinator, _: coordinator.has_photovoltaics(),
             key="consuming_excess_energy",
-            translation_key="excess_energy",
+            translation_key="consuming_excess_energy",
             icon="mdi:solar-power",
         ),
         KebaKeEnergyBinarySensorEntityDescription(

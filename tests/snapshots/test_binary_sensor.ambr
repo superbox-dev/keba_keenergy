@@ -54,7 +54,7 @@
 # name: test_binary_sensors[de][binary_sensor.keba_keenergy_12345678_external_heat_source_consuming_excess_energy_1]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Externe Wärmequelle 1 PV-Überschuss',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Externe Wärmequelle 1 Nutzt PV-Überschuss',
       <EntityStateAttribute.ICON: 'icon'>: 'mdi:solar-power',
     }),
     'context': <ANY>,
@@ -68,7 +68,7 @@
 # name: test_binary_sensors[de][binary_sensor.keba_keenergy_12345678_external_heat_source_consuming_excess_energy_2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Externe Wärmequelle 2 PV-Überschuss',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Externe Wärmequelle 2 Nutzt PV-Überschuss',
       <EntityStateAttribute.ICON: 'icon'>: 'mdi:solar-power',
     }),
     'context': <ANY>,
@@ -109,7 +109,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'running',
-      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Heizkreis 1 Pumpe Status',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Heizkreis 1 Pumpe',
     }),
     'context': <ANY>,
     'entity_id': 'binary_sensor.keba_keenergy_12345678_heat_circuit_pump_state_1',
@@ -122,7 +122,7 @@
 # name: test_binary_sensors[de][binary_sensor.keba_keenergy_12345678_heat_pump_consuming_excess_energy]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Wärmepumpe PV-Überschuss',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Wärmepumpe Nutzt PV-Überschuss',
       <EntityStateAttribute.ICON: 'icon'>: 'mdi:solar-power',
     }),
     'context': <ANY>,
@@ -197,7 +197,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'problem',
-      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Wärmepumpe Drehstrom',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Wärmepumpe 3-Phasen',
       'message_id': 0,
     }),
     'context': <ANY>,
@@ -240,7 +240,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'running',
-      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Warmwasserspeicher 1 Zirkulationspumpe Status',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Warmwasserspeicher 1 Zirkulationspumpe',
     }),
     'context': <ANY>,
     'entity_id': 'binary_sensor.keba_keenergy_12345678_hot_water_tank_circulation_pump_state_1',
@@ -254,7 +254,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'running',
-      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Warmwasserspeicher 2 Zirkulationspumpe Status',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Warmwasserspeicher 2 Zirkulationspumpe',
     }),
     'context': <ANY>,
     'entity_id': 'binary_sensor.keba_keenergy_12345678_hot_water_tank_circulation_pump_state_2',
@@ -424,7 +424,7 @@
 # name: test_binary_sensors[en][binary_sensor.keba_keenergy_12345678_external_heat_source_consuming_excess_energy_1]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'External heat source 1 PV surplus',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'External heat source 1 Using PV surplus',
       <EntityStateAttribute.ICON: 'icon'>: 'mdi:solar-power',
     }),
     'context': <ANY>,
@@ -438,7 +438,7 @@
 # name: test_binary_sensors[en][binary_sensor.keba_keenergy_12345678_external_heat_source_consuming_excess_energy_2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'External heat source 2 PV surplus',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'External heat source 2 Using PV surplus',
       <EntityStateAttribute.ICON: 'icon'>: 'mdi:solar-power',
     }),
     'context': <ANY>,
@@ -479,7 +479,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'running',
-      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Heating circuit 1 Pump state',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Heating circuit 1 Pump',
     }),
     'context': <ANY>,
     'entity_id': 'binary_sensor.keba_keenergy_12345678_heat_circuit_pump_state_1',
@@ -492,7 +492,7 @@
 # name: test_binary_sensors[en][binary_sensor.keba_keenergy_12345678_heat_pump_consuming_excess_energy]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Heat pump PV surplus',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Heat pump Using PV surplus',
       <EntityStateAttribute.ICON: 'icon'>: 'mdi:solar-power',
     }),
     'context': <ANY>,
@@ -610,7 +610,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'running',
-      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Hot water tank 1 Circulation pump state',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Hot water tank 1 Circulation pump',
     }),
     'context': <ANY>,
     'entity_id': 'binary_sensor.keba_keenergy_12345678_hot_water_tank_circulation_pump_state_1',
@@ -624,7 +624,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'running',
-      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Hot water tank 2 Circulation pump state',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Hot water tank 2 Circulation pump',
     }),
     'context': <ANY>,
     'entity_id': 'binary_sensor.keba_keenergy_12345678_hot_water_tank_circulation_pump_state_2',

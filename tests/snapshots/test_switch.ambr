@@ -59,7 +59,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'switch',
-      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Heizkreis 2 Kühlkurve verwenden',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Heizkreis 2 Kühlkurventabelle verwenden',
     }),
     'context': <ANY>,
     'entity_id': 'switch.keba_keenergy_12345678_heat_circuit_use_cooling_curve_2',
@@ -101,7 +101,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'switch',
-      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Heizkreis 1 Heizkurve verwenden',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Heizkreis 1 Heizkurventabelle verwenden',
     }),
     'context': <ANY>,
     'entity_id': 'switch.keba_keenergy_12345678_heat_circuit_use_heating_curve_1',
@@ -115,7 +115,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'switch',
-      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Wärmepumpe Kompressor-Drehzahlbegrenzung (Nacht)',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Wärmepumpe Kompressor-Leistungsbegrenzung (Nacht) verwenden',
     }),
     'context': <ANY>,
     'entity_id': 'switch.keba_keenergy_12345678_heat_pump_compressor_use_night_speed',
@@ -241,7 +241,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'switch',
-      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Heating circuit 2 Use cooling curve',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Heating circuit 2 Use cooling curve table',
     }),
     'context': <ANY>,
     'entity_id': 'switch.keba_keenergy_12345678_heat_circuit_use_cooling_curve_2',
@@ -283,7 +283,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'switch',
-      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Heating circuit 1 Use heating curve',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Heating circuit 1 Use heating curve table',
     }),
     'context': <ANY>,
     'entity_id': 'switch.keba_keenergy_12345678_heat_circuit_use_heating_curve_1',
@@ -297,7 +297,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'switch',
-      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Heat pump Compressor speed limit (night)',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Heat pump Use compressor power limit (night)',
     }),
     'context': <ANY>,
     'entity_id': 'switch.keba_keenergy_12345678_heat_pump_compressor_use_night_speed',

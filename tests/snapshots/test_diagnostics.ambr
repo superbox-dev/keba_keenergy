@@ -2174,6 +2174,20 @@
       'buffer_tank': dict({
       }),
       'external_heat_source': dict({
+        'has_emissions': list([
+          dict({
+            'attributes': dict({
+              'raw_value': 1,
+            }),
+            'value': 'on',
+          }),
+          dict({
+            'attributes': dict({
+              'raw_value': 0,
+            }),
+            'value': 'off',
+          }),
+        ]),
       }),
       'heat_circuit': dict({
         'has_mixer': list([

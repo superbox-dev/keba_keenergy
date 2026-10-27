@@ -152,6 +152,9 @@
           "75": "mdi:sun-thermometer"
         }
       },
+      "consumer_temperature": {
+        "default": "mdi:thermometer-water"
+      },
       "cool_request": {
         "default": "mdi:snowflake",
         "state": {
@@ -193,6 +196,7 @@
       },
       "external_heat_source_operating_mode": {
         "state": {
+          "flue": "mdi:fireplace",
           "off": "mdi:power-off",
           "on": "mdi:power"
         }

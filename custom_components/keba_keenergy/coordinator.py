@@ -31,6 +31,7 @@ from homeassistant.helpers.update_coordinator import UpdateFailed
 from homeassistant.util.dt import now
 from keba_keenergy_api.api import KebaKeEnergyAPI
 from keba_keenergy_api.constants import BoolEnum
+from keba_keenergy_api.constants import ExternalHeatSource
 from keba_keenergy_api.constants import HeatCircuit
 from keba_keenergy_api.constants import HeatCircuitMode
 from keba_keenergy_api.constants import HeatPump
@@ -289,6 +290,7 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
                 HeatPump.HAS_PASSIVE_COOLING,
                 HeatPump.ELECTRIC_ENERGY_METER_TYPE,
                 HeatPump.HEAT_METER_TYPE,
+                ExternalHeatSource.HAS_EMISSIONS,
             ],
             position=self.position,
         )
@@ -704,6 +706,10 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
     def has_passive_cooling(self, *, index: int | None = None) -> bool:
         """Check if passive cooling is available."""
         return self._is_fixed_value_on(SectionPrefix.HEAT_PUMP, "has_passive_cooling", index=index)
+
+    def has_emissions(self, *, index: int | None = None) -> bool:
+        """Check if the external heat source has emissions."""
+        return self._is_fixed_value_on(SectionPrefix.EXTERNAL_HEAT_SOURCE, "has_emissions", index=index)
 
     def has_cooling_circuits(self) -> bool:
         """Check if one heating circuit support cooling."""

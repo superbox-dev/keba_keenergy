@@ -345,12 +345,14 @@
     'sensor.keba_keenergy_12345678_external_heat_source_max_runtime_2': None,
     'sensor.keba_keenergy_12345678_external_heat_source_operating_mode_1': dict({
       'state': dict({
+        'flue': 'mdi:fireplace',
         'off': 'mdi:power-off',
         'on': 'mdi:power',
       }),
     }),
     'sensor.keba_keenergy_12345678_external_heat_source_operating_mode_2': dict({
       'state': dict({
+        'flue': 'mdi:fireplace',
         'off': 'mdi:power-off',
         'on': 'mdi:power',
       }),
