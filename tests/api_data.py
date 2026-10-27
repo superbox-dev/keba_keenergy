@@ -2281,6 +2281,15 @@ SYSTEM_FREE_RAM: Final[dict[str, Any]] = {
     "value": "100060",
 }
 
+SYSTEM_FLASH_ERASE_COUNTER: Final[dict[str, Any]] = {
+    "name": "APPL.CtrlAppl.sParam.values.UBIMaxEraseCounter",
+    "attributes": {
+        "formatId": "fmt6p0",
+        "longText": "Erase counter partition 2",
+    },
+    "value": "341",
+}
+
 DEFAULT_POSITION_RESPONSE: Final[list[dict[str, Any]]] = [
     json.loads(SYSTEM_HEAT_PUMP_NUMBERS % "1"),
     json.loads(SYSTEM_HEAT_CIRCUIT_NUMBERS % "1"),
@@ -2538,6 +2547,7 @@ def get_single_position_data_response(
         SYSTEM_CONTROL_CPU_USAGE,
         SYSTEM_RAM_USAGE,
         SYSTEM_FREE_RAM,
+        SYSTEM_FLASH_ERASE_COUNTER,
     ]
 
 
@@ -2772,6 +2782,7 @@ MULTIPLE_POSITION_HEAT_PUMP_TO_SYSTEM_DATA: Final[list[dict[str, Any]]] = [
     SYSTEM_CONTROL_CPU_USAGE,
     SYSTEM_RAM_USAGE,
     SYSTEM_FREE_RAM,
+    SYSTEM_FLASH_ERASE_COUNTER,
 ]
 
 MULTIPLE_POSITION_DATA_RESPONSE: Final[list[dict[str, Any]]] = [

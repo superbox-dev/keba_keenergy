@@ -296,6 +296,7 @@ REQUEST_DATA_GROUPS: Final[dict[SectionPrefix, list[Section]]] = {
         System.CONTROL_CPU_USAGE,
         System.RAM_USAGE,
         System.FREE_RAM,
+        System.FLASH_ERASE_COUNTER,
     ],
 }
 

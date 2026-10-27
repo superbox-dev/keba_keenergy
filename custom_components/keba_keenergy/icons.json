@@ -201,6 +201,9 @@
           "on": "mdi:power"
         }
       },
+      "flash_erase_counter": {
+        "default": "mdi:memory"
+      },
       "fresh_water_module_temperature": {
         "default": "mdi:thermometer-water"
       },

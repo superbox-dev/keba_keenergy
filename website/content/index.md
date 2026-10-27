@@ -110,7 +110,7 @@ provide are not created. Changes are written to the control unit, see [Known lim
 
 - **Select**: operating mode
 - **Sensors**: outdoor temperature, operating mode, CPU and RAM usage (diagnostic), write operations this week
-  (diagnostic)
+  (diagnostic), flash erase counter (diagnostic)
 
 ### Heat pump
 
@@ -314,6 +314,9 @@ The climate and water heater entities are still created, but leave out the curre
   `system.operating_mode` or `heating_curve_points.HC1`. A change of several values at once (e.g. the away date range
   of all heating circuits) counts once in the sensor, but once for each value in `writes`. Switching a hot water tank
   to heat up is not counted.
+- The diagnostic sensor **Flash erase counter** of the control unit (disabled by default) shows the long-term wear of
+  the flash memory, also from changes in the Web HMI or on the display. It is the highest erase count of a flash
+  block and rises slowly, not with every write operation.
 - Changes of numbers, target temperatures and the climate entity are written after a short delay, so several quick
   changes result in one write operation.
 - Only values that the Web HMI provides are supported. Missing values have to be added to the

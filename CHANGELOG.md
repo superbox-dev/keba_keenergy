@@ -20,13 +20,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added the diagnostic sensor `weekly_write_count` to the control unit with the write operations of the current week.
   The attribute `writes` shows how often each value was written, e.g. `heat_circuit_1.target_temperature_offset`.
   ([Issue #71][issue-71])
+- Added the diagnostic sensor `flash_erase_counter` (disabled by default) to the control unit with the long-term
+  wear of the flash memory, which also counts writes from the Web HMI and the display. ([Issue #71][issue-71])
 - Added the state `source_flush` to the heat pump sensor `state` and the operating mode `flue` to the external heat
   source sensor and select `operating_mode`. The select only offers `flue` if the external heat source has emissions.
   ([Issue #72][issue-72])
 
 ### Changed
 
-- Required `keba_keenergy_api` 2.14.0b3, which needs fewer requests to set up the integration.
+- Required `keba_keenergy_api` 2.14.0b4, which needs fewer requests to set up the integration.
 - Moved the documentation to Docusaurus on <https://superbox-dev.github.io/keba_keenergy/>, styled after the
   integration pages of Home Assistant, with all information on one page. The domain `superbox.one` is no longer used.
 - Shortened the `README.md` to the installation and moved the details to the documentation.

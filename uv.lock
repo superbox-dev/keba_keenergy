@@ -1458,7 +1458,7 @@ test = [
 [package.metadata]
 requires-dist = [
     { name = "homeassistant", specifier = ">=2026.9.4" },
-    { name = "keba-keenergy-api", specifier = "~=2.14.0b3" },
+    { name = "keba-keenergy-api", specifier = "~=2.14.0b4" },
 ]
 
 [package.metadata.requires-dev]
@@ -1491,14 +1491,14 @@ test = [
 
 [[package]]
 name = "keba-keenergy-api"
-version = "2.14.0b3"
+version = "2.14.0b4"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "aiohttp" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/03/47/6286bf648d209c0fafd43b3bf165758097e30c88ec4e18585612b84ff0f1/keba_keenergy_api-2.14.0b3.tar.gz", hash = "sha256:83a4878a2820d60a8c9f791f4e1f1a485cb9b9c0153499dea07cd2b88f3a1a16", size = 476990, upload-time = "2026-10-27T15:45:04.566Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/94/9d/5f5fd3d0b7c7cf5d5f373816e8174015f58bf7daedf12148246b8865a67a/keba_keenergy_api-2.14.0b4.tar.gz", hash = "sha256:e3681effea78401a9ee7e1429c5f10c397a10eae25a83ca9d7da1c7d782112e9", size = 477314, upload-time = "2026-10-27T16:15:37.536Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/f8/66/2d08b9593dee26b997bad641d59d3227904ca1f313e17b64ae021a1dd7a8/keba_keenergy_api-2.14.0b3-py3-none-any.whl", hash = "sha256:1c2be458072f3a8df74c8466dd88ecbfd556fcc24c50c157ddb35ceaa0a83d7f", size = 38334, upload-time = "2026-10-27T15:45:03.561Z" },
+    { url = "https://files.pythonhosted.org/packages/95/8b/de5943f9ef82a04475444802aa75b39845617c28e6b39c7daf53be8cd715/keba_keenergy_api-2.14.0b4-py3-none-any.whl", hash = "sha256:cb7d0783ece861b2940d28b58e79eef4264d61a3a27dddfa14ebc570f924f2e1", size = 38454, upload-time = "2026-10-27T16:15:36.334Z" },
 ]
 
 [[package]]

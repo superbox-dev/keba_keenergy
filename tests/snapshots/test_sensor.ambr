@@ -609,6 +609,20 @@
     'state': '17.23',
   })
 # ---
+# name: test_sensors[de][sensor.keba_keenergy_12345678_flash_erase_counter]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Bedieneinheit Flash-Löschzähler',
+      <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.TOTAL_INCREASING: 'total_increasing'>,
+    }),
+    'context': <ANY>,
+    'entity_id': 'sensor.keba_keenergy_12345678_flash_erase_counter',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': '341',
+  })
+# ---
 # name: test_sensors[de][sensor.keba_keenergy_12345678_free_ram]
   StateSnapshot({
     'attributes': ReadOnlyDict({
@@ -3887,6 +3901,20 @@
     'last_reported': <ANY>,
     'last_updated': <ANY>,
     'state': '17.23',
+  })
+# ---
+# name: test_sensors[en][sensor.keba_keenergy_12345678_flash_erase_counter]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Control unit Flash erase counter',
+      <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.TOTAL_INCREASING: 'total_increasing'>,
+    }),
+    'context': <ANY>,
+    'entity_id': 'sensor.keba_keenergy_12345678_flash_erase_counter',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': '341',
   })
 # ---
 # name: test_sensors[en][sensor.keba_keenergy_12345678_free_ram]

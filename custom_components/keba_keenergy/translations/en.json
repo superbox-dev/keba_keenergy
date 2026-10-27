@@ -452,6 +452,9 @@
           "on": "On"
         }
       },
+      "flash_erase_counter": {
+        "name": "Flash erase counter"
+      },
       "flow_temperature": {
         "name": "Flow temperature"
       },

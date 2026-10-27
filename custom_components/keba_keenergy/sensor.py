@@ -228,6 +228,14 @@ SENSOR_TYPES: Final[dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ..
             translation_key="free_ram",
             value=lambda data: data,
         ),
+        KebaKeEnergySensorEntityDescription[int](
+            entity_category=EntityCategory.DIAGNOSTIC,
+            entity_registry_enabled_default=False,
+            key="flash_erase_counter",
+            state_class=SensorStateClass.TOTAL_INCREASING,
+            translation_key="flash_erase_counter",
+            value=lambda data: data,
+        ),
     ),
     SectionPrefix.HEAT_CIRCUIT: (
         KebaKeEnergySensorEntityDescription[float](

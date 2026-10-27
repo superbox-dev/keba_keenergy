@@ -452,6 +452,9 @@
           "on": "Ein"
         }
       },
+      "flash_erase_counter": {
+        "name": "Flash-Löschzähler"
+      },
       "flow_temperature": {
         "name": "Vorlauftemperatur"
       },

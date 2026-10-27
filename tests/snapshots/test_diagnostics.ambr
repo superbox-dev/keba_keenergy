@@ -2104,6 +2104,11 @@
           }),
           'value': 27.0,
         }),
+        'flash_erase_counter': dict({
+          'attributes': dict({
+          }),
+          'value': 341,
+        }),
         'free_ram': dict({
           'attributes': dict({
           }),
