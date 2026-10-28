@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!--start-->
 
+## [1.11.0] - 2026-10-28
+
 ### Added
 
 - Added diagnostics. The host, the credentials and the serial number are redacted.
@@ -28,7 +30,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Required `keba_keenergy_api` 2.14.0b4, which needs fewer requests to set up the integration.
+- Required `keba_keenergy_api` 2.14.0, which needs fewer requests to set up the integration.
 - Moved the documentation to Docusaurus on <https://superbox-dev.github.io/keba_keenergy/>, styled after the
   integration pages of Home Assistant, with all information on one page. The domain `superbox.one` is no longer used.
 - Shortened the `README.md` to the installation and moved the details to the documentation.
@@ -488,7 +490,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added the sensors for the outdoor temperature, the operating modes, the heat pump state, temperatures, pressures
   and compressor, and the binary sensor for the heat request.
 
-[Unreleased]: https://github.com/superbox-dev/keba_keenergy/compare/v1.10.4...HEAD
+[Unreleased]: https://github.com/superbox-dev/keba_keenergy/compare/v1.11.0...HEAD
+[1.11.0]: https://github.com/superbox-dev/keba_keenergy/compare/v1.10.4...v1.11.0
 [1.10.4]: https://github.com/superbox-dev/keba_keenergy/compare/v1.10.3...v1.10.4
 [1.10.3]: https://github.com/superbox-dev/keba_keenergy/compare/v1.10.2...v1.10.3
 [1.10.2]: https://github.com/superbox-dev/keba_keenergy/compare/v1.10.1...v1.10.2
