@@ -1,6 +1,6 @@
 [build-system]
 requires = [
-    "setuptools>=84.0.0",
+  "setuptools>=84.0.0",
 ]
 build-backend = "setuptools.build_meta"
 
@@ -9,72 +9,67 @@ name = "keba_keenergy"
 description = "A Home Assistant integration that seamlessly connects to KEBA KeEnergy heat pumps via the Web HMI API, turning system data into easy-to-use Home Assistant entities for monitoring and control"
 readme = "README.md"
 authors = [
-    { name = "Michael Hacker", email = "mh@superbox.one" },
+  { name = "Michael Hacker", email = "mh@superbox.one" },
 ]
 maintainers = [
-    { name = "Michael Hacker", email = "mh@superbox.one" },
+  { name = "Michael Hacker", email = "mh@superbox.one" },
 ]
 license-files = [
-    "LICENSE"
+  "LICENSE"
 ]
 keywords = [
-    "component",
-    "custom component",
-    "custom integration",
-    "keba",
-    "keenergy",
-    "hacs-component",
-    "hacs-integration",
-    "hacs-repository",
-    "hacs",
-    "hass",
-    "home assistant",
-    "home-assistant",
-    "homeassistant",
-    "integration",
+  "component",
+  "custom component",
+  "custom integration",
+  "keba",
+  "keenergy",
+  "hacs-component",
+  "hacs-integration",
+  "hacs-repository",
+  "hacs",
+  "hass",
+  "home assistant",
+  "home-assistant",
+  "homeassistant",
+  "integration",
 ]
 classifiers = [
-    "Development Status :: 5 - Production/Stable",
-    "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.14",
-    "Programming Language :: Python :: 3 :: Only",
-    "Operating System :: OS Independent",
+  "Development Status :: 5 - Production/Stable",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.14",
+  "Programming Language :: Python :: 3 :: Only",
+  "Operating System :: OS Independent",
 ]
 requires-python = ">= 3.14.2"
 dependencies = [
-    "keba_keenergy_api~=2.12.2",
-    "homeassistant>=2026.9.4"
+  "keba_keenergy_api~=2.14.0",
+  "homeassistant>=2026.9.4"
 ]
-version = "1.10.4"
+version = "1.11.0"
 
 [project.urls]
 "Repository" = "https://github.com/superbox-dev/keba_keenergy"
+"Documentation" = "https://superbox-dev.github.io/keba_keenergy/"
 "Issues" = "https://github.com/superbox-dev/keba_keenergy/issues"
 
 [dependency-groups]
 dev = [
-    { include-group = "docs" },
-    { include-group = "lint" },
-    { include-group = "test" },
-]
-docs = [
-    "mkdocs~=1.6.1",
-    "mkdocs-include-markdown-plugin>=7.2.2",
-    "mkdocs-material>=9.7.1",
+  { include-group = "lint" },
+  { include-group = "test" },
 ]
 lint = [
-    "prek>=0.4.13",
-    "ruff>=0.16.2",
-    "rumdl>=0.2.54",
-    "ty>=0.0.70",
-    "types-PyYAML>=6.0.12.20260724",
-    "yamllint>=1.38.0",
+  "prek>=0.4.13",
+  "ruff>=0.16.2",
+  "rumdl>=0.2.54",
+  "ty>=0.0.70",
+  "types-PyYAML>=6.0.12.20260724",
+  "yamllint>=1.38.0",
 ]
 test = [
-    "coverage>=7.15.2",
-    "genbadge[coverage]>=1.1.3",
-    "pytest>=9.0.3",
-    "pytest-homeassistant-custom-component>=0.13.355",
+  "coverage>=7.15.2",
+  "genbadge[coverage]>=1.1.3",
+  "pytest>=9.0.3",
+  "pytest-homeassistant-custom-component>=0.13.355",
 ]
 
 [tool.setuptools]

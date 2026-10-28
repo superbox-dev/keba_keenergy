@@ -1,4 +1,4 @@
-name: CI
+name: CI/CD
 
 permissions:
   contents: read
@@ -7,6 +7,8 @@ permissions:
 on:
   workflow_dispatch:
   pull_request:
+  schedule:
+    - cron: 30 5 * * *
   push:
     branches:
       - main
@@ -18,6 +20,7 @@ jobs:
   code-analysis:
     name: Code analysis
     runs-on: ubuntu-latest
+    if: github.event_name != 'schedule'
     steps:
       - name: Check out repository
         uses: actions/checkout@v7
@@ -34,9 +37,28 @@ jobs:
       - name: Lint Markdown files
         run: uv run rumdl check $(git ls-files '*.md')
 
+  documentation:
+    name: Documentation
+    runs-on: ubuntu-latest
+    if: github.event_name != 'schedule'
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v7
+      - name: Set up project
+        uses: ./.github/actions/setup-project
+      - name: Set up Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: lts/*
+          cache: npm
+          cache-dependency-path: website/package-lock.json
+      - name: Build website
+        run: ./scripts/docs.sh
+
   validation:
     name: Validation
     runs-on: ubuntu-latest
+    if: github.event_name != 'schedule'
     steps:
       - name: Check out repository
         uses: actions/checkout@v7
@@ -48,12 +70,21 @@ jobs:
           category: integration
 
   security:
-    name: Security
-    uses: ./.github/workflows/security.yml
+    name: Audit packages
+    runs-on: ubuntu-latest
+    continue-on-error: True
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v7
+      - name: Set up project
+        uses: ./.github/actions/setup-project
+      - name: Audit python packages
+        run: uv audit
 
   tests:
     name: Tests
     runs-on: ubuntu-latest
+    if: github.event_name != 'schedule'
     steps:
       - name: Check out repository
         uses: actions/checkout@v7
@@ -72,7 +103,7 @@ jobs:
   coverage:
     name: Generate coverage badge
     runs-on: ubuntu-latest
-    if: github.ref_type != 'tag'
+    if: github.event_name == 'push' && github.ref_type != 'tag'
     needs:
       - tests
     permissions:
@@ -137,6 +168,27 @@ jobs:
             echo "🟢 Regular release"
             echo "prerelease=false" >> "$GITHUB_OUTPUT"
           fi
+      - name: Create release notes
+        env:
+          PRERELEASE: ${{ steps.check_prerelease.outputs.prerelease }}
+        run: |
+          TAG_NAME="${GITHUB_REF#refs/tags/}"
+          VERSION="${TAG_NAME#v}"
+          HEADING="$(grep -m 1 -F "## [${VERSION}]" CHANGELOG.md | sed 's/^## //' || true)"
+
+          if [[ -n "$HEADING" ]]; then
+            # Same anchor as GitHub: lowercase, without punctuation, spaces as hyphens.
+            ANCHOR="$(echo "$HEADING" | tr '[:upper:]' '[:lower:]' | tr -d -c 'a-z0-9 _-' | tr ' ' '-')"
+          elif [[ "$PRERELEASE" == "true" ]]; then
+            ANCHOR="unreleased"
+          else
+            echo "::error::No section for ${VERSION} in CHANGELOG.md"
+            exit 1
+          fi
+
+          URL="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/blob/${TAG_NAME}/CHANGELOG.md#${ANCHOR}"
+          echo "See the [changelog](${URL}) for all changes." > release-notes.md
+          cat release-notes.md
       - name: Create ZIP file
         run: |
           cd ${{ github.workspace }}/custom_components/keba_keenergy
@@ -145,4 +197,25 @@ jobs:
         uses: softprops/action-gh-release@v3
         with:
           prerelease: ${{ steps.check_prerelease.outputs.prerelease }}
+          body_path: release-notes.md
           files: ${{ github.workspace }}/keba_keenergy.zip
+      - name: Delete old pre-releases and their tags
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          TAG_NAME="${GITHUB_REF#refs/tags/}"
+
+          git ls-remote --tags --refs origin 'v*' | sed 's|.*refs/tags/||' |
+            while read -r TAG; do
+              if [[ ! "$TAG" =~ ^v[0-9]+\.[0-9]+\.[0-9]+b[0-9]+$ || "$TAG" == "$TAG_NAME" ]]; then
+                continue
+              fi
+
+              if gh release view "$TAG" > /dev/null 2>&1; then
+                echo "Deleting pre-release and tag $TAG"
+                gh release delete "$TAG" --yes --cleanup-tag
+              else
+                echo "Deleting tag $TAG"
+                gh api --method DELETE "repos/${GITHUB_REPOSITORY}/git/refs/tags/${TAG}"
+              fi
+            done

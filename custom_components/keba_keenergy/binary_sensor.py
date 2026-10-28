@@ -1,3 +1,5 @@
+# Copyright 2025-2026 Michael Hacker
+# SPDX-License-Identifier: Apache-2.0
 """Support for KEBA KeEnergy binary sensors."""
 
 from __future__ import annotations
@@ -5,6 +7,7 @@ from __future__ import annotations
 import logging
 from dataclasses import dataclass
 from typing import TYPE_CHECKING
+from typing import Any
 from typing import Final
 
 from homeassistant.components.binary_sensor import DOMAIN as BINARY_SENSOR_DOMAIN
@@ -12,14 +15,17 @@ from homeassistant.components.binary_sensor import BinarySensorDeviceClass
 from homeassistant.components.binary_sensor import BinarySensorEntity
 from homeassistant.components.binary_sensor import BinarySensorEntityDescription
 from homeassistant.const import EntityCategory
+from keba_keenergy_api.constants import BoolEnum
 from keba_keenergy_api.constants import SectionPrefix
 
 from .const import DOMAIN
 from .entity import KebaKeEnergyEntity
-from .entity import KebaKeEnergyEntityDescriptionMixin
+from .entity import KebaKeEnergyEntityDescription
 from .entity import _async_setup_entities
 
 if TYPE_CHECKING:
+    from collections.abc import Mapping
+
     from homeassistant.core import HomeAssistant
     from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
@@ -27,7 +33,7 @@ if TYPE_CHECKING:
     from .coordinator import KebaKeEnergyDataUpdateCoordinator
 
 
-_LOGGER = logging.getLogger(__name__)
+_LOGGER: Final = logging.getLogger(__name__)
 
 PARALLEL_UPDATES: Final[int] = 0
 
@@ -35,12 +41,12 @@ PARALLEL_UPDATES: Final[int] = 0
 @dataclass(frozen=True, kw_only=True)
 class KebaKeEnergyBinarySensorEntityDescription(
     BinarySensorEntityDescription,
-    KebaKeEnergyEntityDescriptionMixin,
+    KebaKeEnergyEntityDescription,
 ):
     """Class describing KEBA KeEnergy binary sensor entities."""
 
 
-BINARY_SENSOR_TYPES: dict[str, tuple[KebaKeEnergyBinarySensorEntityDescription, ...]] = {
+BINARY_SENSOR_TYPES: Final[dict[str, tuple[KebaKeEnergyBinarySensorEntityDescription, ...]]] = {
     SectionPrefix.SOLAR_CIRCUIT: (
         KebaKeEnergyBinarySensorEntityDescription(
             key="heat_request",
@@ -72,7 +78,7 @@ BINARY_SENSOR_TYPES: dict[str, tuple[KebaKeEnergyBinarySensorEntityDescription, 
         KebaKeEnergyBinarySensorEntityDescription(
             condition=lambda coordinator, _: coordinator.has_photovoltaics(),
             key="consuming_excess_energy",
-            translation_key="excess_energy",
+            translation_key="consuming_excess_energy",
             icon="mdi:solar-power",
         ),
         KebaKeEnergyBinarySensorEntityDescription(
@@ -162,7 +168,7 @@ BINARY_SENSOR_TYPES: dict[str, tuple[KebaKeEnergyBinarySensorEntityDescription, 
         KebaKeEnergyBinarySensorEntityDescription(
             condition=lambda coordinator, _: coordinator.has_photovoltaics(),
             key="consuming_excess_energy",
-            translation_key="excess_energy",
+            translation_key="consuming_excess_energy",
             icon="mdi:solar-power",
         ),
         KebaKeEnergyBinarySensorEntityDescription(
@@ -209,9 +215,20 @@ class KebaKeEnergyBinarySensorEntity(KebaKeEnergyEntity, BinarySensorEntity):
         self.entity_id: str = f"{BINARY_SENSOR_DOMAIN}.{DOMAIN}_{self.unique_id}"
 
     @property
-    def is_on(self) -> bool:
+    def is_on(self) -> bool | None:
         """Return true if the binary sensor is on."""
-        return self.get_value(self.entity_description.new_key or self.entity_description.key, expected_type=str) == "on"
+        value: str | None = self.get_value(self._data_key, expected_type=str)
+        return None if value is None else value == BoolEnum.ON.name.lower()
+
+    @property
+    def _data_key(self) -> str:
+        """Return the key of the value in the coordinator data, the new key if the API renamed it."""
+        return self.entity_description.new_key or self.entity_description.key
+
+    @property
+    def extra_state_attributes(self) -> Mapping[str, Any] | None:
+        """Return extra state attributes."""
+        return self._message_id_attributes(self._data_key)
 
 
 async def async_setup_entry(
@@ -220,7 +237,7 @@ async def async_setup_entry(
     async_add_entities: AddEntitiesCallback,
 ) -> None:
     """Set up KEBA KeEnergy binary sensors from a config entry."""
-    await _async_setup_entities(
+    _async_setup_entities(
         entry,
         async_add_entities,
         BINARY_SENSOR_TYPES,

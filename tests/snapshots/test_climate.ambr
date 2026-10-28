@@ -1,5 +1,5 @@
 # serializer version: 1
-# name: test_climate[de-climate.keba_keenergy_12345678_1]
+# name: test_climate[de][climate.keba_keenergy_12345678_1]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <ClimateEntityStateAttribute.CURRENT_HUMIDITY: 'current_humidity'>: 53.0,
@@ -11,7 +11,6 @@
         <HVACMode.HEAT: 'heat'>,
         <HVACMode.OFF: 'off'>,
       ]),
-      <EntityStateAttribute.ICON: 'icon'>: 'mdi:hvac',
       <ClimateEntityCapabilityAttribute.MAX_TEMP: 'max_temp'>: 22.5,
       <ClimateEntityCapabilityAttribute.MIN_TEMP: 'min_temp'>: 17.5,
       <ClimateEntityStateAttribute.PRESET_MODE: 'preset_mode'>: 'comfort',
@@ -34,7 +33,7 @@
     'state': 'heat',
   })
 # ---
-# name: test_climate[de-climate.keba_keenergy_12345678_2]
+# name: test_climate[de][climate.keba_keenergy_12345678_2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <ClimateEntityStateAttribute.CURRENT_TEMPERATURE: 'current_temperature'>: None,
@@ -45,7 +44,6 @@
         <HVACMode.COOL: 'cool'>,
         <HVACMode.OFF: 'off'>,
       ]),
-      <EntityStateAttribute.ICON: 'icon'>: 'mdi:hvac-off',
       <ClimateEntityCapabilityAttribute.MAX_TEMP: 'max_temp'>: 22.5,
       <ClimateEntityCapabilityAttribute.MIN_TEMP: 'min_temp'>: 17.5,
       <ClimateEntityStateAttribute.PRESET_MODE: 'preset_mode'>: 'home',
@@ -67,7 +65,7 @@
     'state': 'auto',
   })
 # ---
-# name: test_climate[en-climate.keba_keenergy_12345678_1]
+# name: test_climate[en][climate.keba_keenergy_12345678_1]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <ClimateEntityStateAttribute.CURRENT_HUMIDITY: 'current_humidity'>: 53.0,
@@ -79,7 +77,6 @@
         <HVACMode.HEAT: 'heat'>,
         <HVACMode.OFF: 'off'>,
       ]),
-      <EntityStateAttribute.ICON: 'icon'>: 'mdi:hvac',
       <ClimateEntityCapabilityAttribute.MAX_TEMP: 'max_temp'>: 22.5,
       <ClimateEntityCapabilityAttribute.MIN_TEMP: 'min_temp'>: 17.5,
       <ClimateEntityStateAttribute.PRESET_MODE: 'preset_mode'>: 'comfort',
@@ -102,7 +99,7 @@
     'state': 'heat',
   })
 # ---
-# name: test_climate[en-climate.keba_keenergy_12345678_2]
+# name: test_climate[en][climate.keba_keenergy_12345678_2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <ClimateEntityStateAttribute.CURRENT_TEMPERATURE: 'current_temperature'>: None,
@@ -113,7 +110,6 @@
         <HVACMode.COOL: 'cool'>,
         <HVACMode.OFF: 'off'>,
       ]),
-      <EntityStateAttribute.ICON: 'icon'>: 'mdi:hvac-off',
       <ClimateEntityCapabilityAttribute.MAX_TEMP: 'max_temp'>: 22.5,
       <ClimateEntityCapabilityAttribute.MIN_TEMP: 'min_temp'>: 17.5,
       <ClimateEntityStateAttribute.PRESET_MODE: 'preset_mode'>: 'home',

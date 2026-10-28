@@ -1,12 +1,37 @@
+# Copyright 2025-2026 Michael Hacker
+# SPDX-License-Identifier: Apache-2.0
+"""Fake responses of the KEBA KeEnergy Web HMI for the tests."""
+
 from __future__ import annotations
 
 import json
+from copy import deepcopy
 from typing import Any
+from typing import Final
 
-FILTER_REQUESTS: dict[str, Any] = {"ret": "OK", "children": []}
+
+def replace_values(response: list[dict[str, Any]], /, *values: tuple[str, ...]) -> list[dict[str, Any]]:
+    """Return a copy of the response with other values, given as `(template, *parameters)` like in the responses.
+
+    The parameters fill the template, e.g. `(HEAT_CIRCUIT_OPERATION_MODE, "0", "4")` for the device index and the value.
+    """
+    replaced: dict[str, dict[str, Any]] = {
+        value["name"]: value for value in (json.loads(template % tuple(parameters)) for template, *parameters in values)
+    }
+    assert replaced.keys() <= {value["name"] for value in response}, "every replaced value is in the response"
+    return [replaced.get(value["name"], value) for value in response]
 
 
-EXTERNAL_HEAT_SOURCE_OPERATING_MODE: str = """
+def update_response(response: list[dict[str, Any]], name: str, /, **changes: object) -> list[dict[str, Any]]:
+    """Return a copy of the response, in which the value with the name has the changes (e.g. `value`)."""
+    updated: list[dict[str, Any]] = deepcopy(response)
+    values: list[dict[str, Any]] = [value for value in updated if value["name"] == name]
+    assert len(values) == 1, f"{name} is not in the response"
+    values[0].update(changes)
+    return updated
+
+
+EXTERNAL_HEAT_SOURCE_OPERATING_MODE: Final[str] = """
     {
         "name": "APPL.CtrlAppl.sParam.extHeatSource[%s].param.operatingMode",
         "attributes": {
@@ -20,7 +45,7 @@ EXTERNAL_HEAT_SOURCE_OPERATING_MODE: str = """
     }
 """
 
-EXTERNAL_HEAT_SOURCE_TARGET_TEMPERATURE: str = """
+EXTERNAL_HEAT_SOURCE_TARGET_TEMPERATURE: Final[str] = """
     {
         "name": "APPL.CtrlAppl.sParam.extHeatSource[%s].values.setTemp",
         "attributes": {
@@ -34,7 +59,7 @@ EXTERNAL_HEAT_SOURCE_TARGET_TEMPERATURE: str = """
     }
 """
 
-EXTERNAL_HEAT_SOURCE_HEAT_REQUEST: str = """
+EXTERNAL_HEAT_SOURCE_HEAT_REQUEST: Final[str] = """
     {
         "name": "APPL.CtrlAppl.sParam.extHeatSource[%s].DO.values.setValueB",
         "attributes": {
@@ -44,7 +69,7 @@ EXTERNAL_HEAT_SOURCE_HEAT_REQUEST: str = """
     }
 """
 
-EXTERNAL_HEAT_SOURCE_OPERATING_TIME: str = """
+EXTERNAL_HEAT_SOURCE_OPERATING_TIME: Final[str] = """
     {
         "name": "APPL.CtrlAppl.sParam.extHeatSource[%s].DO.operationalData.operationalTimeS",
         "attributes": {
@@ -56,7 +81,7 @@ EXTERNAL_HEAT_SOURCE_OPERATING_TIME: str = """
     }
 """
 
-EXTERNAL_HEAT_SOURCE_MAX_RUNTIME: str = """
+EXTERNAL_HEAT_SOURCE_MAX_RUNTIME: Final[str] = """
     {
         "name": "APPL.CtrlAppl.sParam.extHeatSource[%s].DO.operationalData.maxRunTimeS",
         "attributes": {
@@ -68,7 +93,7 @@ EXTERNAL_HEAT_SOURCE_MAX_RUNTIME: str = """
     }
 """
 
-EXTERNAL_HEAT_SOURCE_ACTIVATION_COUNTER: str = """
+EXTERNAL_HEAT_SOURCE_ACTIVATION_COUNTER: Final[str] = """
     {
         "name": "APPL.CtrlAppl.sParam.extHeatSource[%s].DO.operationalData.activationCounter",
         "attributes": {
@@ -79,7 +104,7 @@ EXTERNAL_HEAT_SOURCE_ACTIVATION_COUNTER: str = """
     }
 """
 
-EXTERNAL_HEAT_SOURCE_USE_EXCESS_ENERGY: str = """
+EXTERNAL_HEAT_SOURCE_USE_EXCESS_ENERGY: Final[str] = """
     {
         "name": "APPL.CtrlAppl.sParam.extHeatSource[%s].param.supportExcessEnergy",
         "attributes": {
@@ -89,7 +114,7 @@ EXTERNAL_HEAT_SOURCE_USE_EXCESS_ENERGY: str = """
     }
 """
 
-EXTERNAL_HEAT_SOURCE_MIN_RUNTIME_EXCESS_ENERGY: str = """
+EXTERNAL_HEAT_SOURCE_MIN_RUNTIME_EXCESS_ENERGY: Final[str] = """
     {
         "name": "APPL.CtrlAppl.sParam.extHeatSource[%s].param.minRunTimeExcessEnergy",
         "attributes": {
@@ -103,7 +128,7 @@ EXTERNAL_HEAT_SOURCE_MIN_RUNTIME_EXCESS_ENERGY: str = """
     }
 """
 
-EXTERNAL_HEAT_SOURCE_CONSUMING_EXCESS_ENERGY: str = """
+EXTERNAL_HEAT_SOURCE_CONSUMING_EXCESS_ENERGY: Final[str] = """
     {
         "name": "APPL.CtrlAppl.sParam.extHeatSource[%s].values.consumingExcessEnergy",
         "attributes": {
@@ -113,7 +138,7 @@ EXTERNAL_HEAT_SOURCE_CONSUMING_EXCESS_ENERGY: str = """
     }
 """
 
-EXTERNAL_HEAT_SOURCE_EXCESS_ENERGY_OPERATING_TIME: str = """
+EXTERNAL_HEAT_SOURCE_EXCESS_ENERGY_OPERATING_TIME: Final[str] = """
     {
         "name": "APPL.CtrlAppl.sParam.extHeatSource[%s].operationalDataExcessEnergy.operationalTimeS",
         "attributes": {
@@ -125,7 +150,7 @@ EXTERNAL_HEAT_SOURCE_EXCESS_ENERGY_OPERATING_TIME: str = """
     }
 """
 
-EXTERNAL_HEAT_SOURCE_EXCESS_ENERGY_MAX_RUNTIME: str = """
+EXTERNAL_HEAT_SOURCE_EXCESS_ENERGY_MAX_RUNTIME: Final[str] = """
     {
         "name": "APPL.CtrlAppl.sParam.extHeatSource[%s].operationalDataExcessEnergy.maxRunTimeS",
         "attributes": {
@@ -137,7 +162,7 @@ EXTERNAL_HEAT_SOURCE_EXCESS_ENERGY_MAX_RUNTIME: str = """
     }
 """
 
-EXTERNAL_HEAT_SOURCE_EXCESS_ENERGY_ACTIVATION_COUNTER: str = """
+EXTERNAL_HEAT_SOURCE_EXCESS_ENERGY_ACTIVATION_COUNTER: Final[str] = """
     {
         "name": "APPL.CtrlAppl.sParam.extHeatSource[%s].operationalDataExcessEnergy.activationCounter",
         "attributes": {
@@ -148,7 +173,7 @@ EXTERNAL_HEAT_SOURCE_EXCESS_ENERGY_ACTIVATION_COUNTER: str = """
     }
 """
 
-HEAT_CIRCUIT_HAS_ROOM_TEMPERATURE: str = """
+HEAT_CIRCUIT_HAS_ROOM_TEMPERATURE: Final[str] = """
     {
         "name": "APPL.CtrlAppl.sParam.options.heatCircuit[%s].hasRoomTemp",
         "attributes": {
@@ -158,7 +183,7 @@ HEAT_CIRCUIT_HAS_ROOM_TEMPERATURE: str = """
     }
 """
 
-HEAT_CIRCUIT_HAS_ROOM_HUMIDITY: str = """
+HEAT_CIRCUIT_HAS_ROOM_HUMIDITY: Final[str] = """
     {
         "name": "APPL.CtrlAppl.sParam.options.heatCircuit[%s].hasRoomHumidity",
         "attributes": {
@@ -168,7 +193,7 @@ HEAT_CIRCUIT_HAS_ROOM_HUMIDITY: str = """
     }
 """
 
-HEAT_CIRCUIT_HAS_MIXER: str = """
+HEAT_CIRCUIT_HAS_MIXER: Final[str] = """
     {
         "name": "APPL.CtrlAppl.sParam.options.heatCircuit[%s].hasMixer",
         "attributes": {
@@ -178,7 +203,7 @@ HEAT_CIRCUIT_HAS_MIXER: str = """
     }
 """
 
-HEAT_CIRCUIT_HAS_RETURN_FLOW_TEMPERATURE: str = """
+HEAT_CIRCUIT_HAS_RETURN_FLOW_TEMPERATURE: Final[str] = """
     {
         "name": "APPL.CtrlAppl.sParam.options.heatCircuit[%s].hasRefluxTemp",
         "attributes": {
@@ -188,7 +213,7 @@ HEAT_CIRCUIT_HAS_RETURN_FLOW_TEMPERATURE: str = """
     }
 """
 
-HEAT_CIRCUIT_HAS_PUMP: str = """
+HEAT_CIRCUIT_HAS_PUMP: Final[str] = """
     {
         "name": "APPL.CtrlAppl.sParam.options.heatCircuit[%s].hasPump",
         "attributes": {
@@ -198,7 +223,7 @@ HEAT_CIRCUIT_HAS_PUMP: str = """
     }
 """
 
-HEAT_CIRCUIT_HAS_VAR_SPEED_PUMP: str = """
+HEAT_CIRCUIT_HAS_VAR_SPEED_PUMP: Final[str] = """
     {
         "name": "APPL.CtrlAppl.sParam.options.heatCircuit[%s].hasVarSpeedPump",
         "attributes": {
@@ -208,7 +233,7 @@ HEAT_CIRCUIT_HAS_VAR_SPEED_PUMP: str = """
     }
 """
 
-HEAT_CIRCUIT_MODE: str = """
+HEAT_CIRCUIT_MODE: Final[str] = """
     {
         "name": "APPL.CtrlAppl.sParam.options.heatCircuit[%s].type",
         "attributes": {
@@ -222,7 +247,7 @@ HEAT_CIRCUIT_MODE: str = """
     }
 """
 
-HEAT_CIRCUIT_ROOM_TEMPERATURE: str = """
+HEAT_CIRCUIT_ROOM_TEMPERATURE: Final[str] = """
     {
         "name": "APPL.CtrlAppl.sParam.heatCircuit[%s].tempRoom.values.actValue",
         "attributes": {
@@ -236,7 +261,7 @@ HEAT_CIRCUIT_ROOM_TEMPERATURE: str = """
     }
 """
 
-HEAT_CIRCUIT_ROOM_HUMIDITY: str = """
+HEAT_CIRCUIT_ROOM_HUMIDITY: Final[str] = """
     {
         "name": "APPL.CtrlAppl.sParam.heatCircuit[%s].humidityRoom.values.actValue",
         "attributes": {
@@ -250,7 +275,7 @@ HEAT_CIRCUIT_ROOM_HUMIDITY: str = """
     }
 """
 
-HEAT_CIRCUIT_DEW_POINT: str = """
+HEAT_CIRCUIT_DEW_POINT: Final[str] = """
     {
         "name": "APPL.CtrlAppl.sParam.heatCircuit[%s].dewPoint.values.actValue",
         "attributes": {
@@ -264,7 +289,7 @@ HEAT_CIRCUIT_DEW_POINT: str = """
     }
 """
 
-HEAT_CIRCUIT_FLOW_TEMPERATURE_SETPOINT: str = """
+HEAT_CIRCUIT_FLOW_TEMPERATURE_SETPOINT: Final[str] = """
     {
         "name": "APPL.CtrlAppl.sParam.heatCircuit[%s].values.flowSetTemp",
         "attributes": {
@@ -278,7 +303,7 @@ HEAT_CIRCUIT_FLOW_TEMPERATURE_SETPOINT: str = """
     }
 """
 
-HEAT_CIRCUIT_MIXER_FLOW_TEMPERATURE: str = """
+HEAT_CIRCUIT_MIXER_FLOW_TEMPERATURE: Final[str] = """
     {
         "name": "APPL.CtrlAppl.sParam.heatCircuit[%s].heatCircuitMixer.flowTemp.values.actValue",
         "attributes": {
@@ -292,7 +317,7 @@ HEAT_CIRCUIT_MIXER_FLOW_TEMPERATURE: str = """
     }
 """
 
-HEAT_CIRCUIT_MIXER_RETURN_FLOW_TEMPERATURE: str = """
+HEAT_CIRCUIT_MIXER_RETURN_FLOW_TEMPERATURE: Final[str] = """
     {
         "name": "APPL.CtrlAppl.sParam.heatCircuit[%s].heatCircuitMixer.refluxTemp.values.actValue",
         "attributes": {
@@ -306,7 +331,7 @@ HEAT_CIRCUIT_MIXER_RETURN_FLOW_TEMPERATURE: str = """
     }
 """
 
-HEAT_CIRCUIT_MIXER_POSITION: str = """
+HEAT_CIRCUIT_MIXER_POSITION: Final[str] = """
     {
         "name": "APPL.CtrlAppl.sParam.heatCircuit[%s].heatCircuitMixer.mixer.values.setValueScaled",
         "attributes": {
@@ -320,7 +345,7 @@ HEAT_CIRCUIT_MIXER_POSITION: str = """
     }
 """
 
-HEAT_CIRCUIT_PUMP_STATE: str = """
+HEAT_CIRCUIT_PUMP_STATE: Final[str] = """
     {
         "name": "APPL.CtrlAppl.sParam.heatCircuit[%s].pump.values.setValueB",
         "attributes": {
@@ -330,7 +355,7 @@ HEAT_CIRCUIT_PUMP_STATE: str = """
     }
 """
 
-HEAT_CIRCUIT_RETURN_FLOW_TEMPERATURE: str = """
+HEAT_CIRCUIT_RETURN_FLOW_TEMPERATURE: Final[str] = """
     {
         "name": "APPL.CtrlAppl.sParam.heatpump[%s].TempHeatReflux.values.actValue",
         "attributes": {
@@ -342,7 +367,7 @@ HEAT_CIRCUIT_RETURN_FLOW_TEMPERATURE: str = """
     }
 """
 
-HEAT_CIRCUIT_TARGET_TEMPERATURE_DAY: str = """
+HEAT_CIRCUIT_TARGET_TEMPERATURE_DAY: Final[str] = """
     {
         "name": "APPL.CtrlAppl.sParam.heatCircuit[%s].param.normalSetTemp",
         "attributes": {
@@ -356,7 +381,7 @@ HEAT_CIRCUIT_TARGET_TEMPERATURE_DAY: str = """
     }
 """
 
-HEAT_CIRCUIT_TARGET_COOLING_TEMPERATURE_DAY: str = """
+HEAT_CIRCUIT_TARGET_COOLING_TEMPERATURE_DAY: Final[str] = """
     {
         "name": "APPL.CtrlAppl.sParam.heatCircuit[%s].param.normalCoolSetTemp",
         "attributes": {
@@ -370,7 +395,7 @@ HEAT_CIRCUIT_TARGET_COOLING_TEMPERATURE_DAY: str = """
     }
 """
 
-HEAT_CIRCUIT_HEATING_LIMIT_DAY: str = """
+HEAT_CIRCUIT_HEATING_LIMIT_DAY: Final[str] = """
     {
         "name": "APPL.CtrlAppl.sParam.heatCircuit[%s].param.thresholdDayTemp.value",
         "attributes": {
@@ -384,7 +409,7 @@ HEAT_CIRCUIT_HEATING_LIMIT_DAY: str = """
     }
 """
 
-HEAT_CIRCUIT_COOLING_LIMIT_DAY: str = """
+HEAT_CIRCUIT_COOLING_LIMIT_DAY: Final[str] = """
     {
         "name": "APPL.CtrlAppl.sParam.heatCircuit[%s].param.thresholdDayTemp.value",
         "attributes": {
@@ -398,7 +423,7 @@ HEAT_CIRCUIT_COOLING_LIMIT_DAY: str = """
     }
 """
 
-HEAT_CIRCUIT_EXCESS_ENERGY_HEATING_LIMIT_DAY: str = """
+HEAT_CIRCUIT_EXCESS_ENERGY_HEATING_LIMIT_DAY: Final[str] = """
     {
         "name": "APPL.CtrlAppl.sParam.heatCircuit[%s].param.excessEnergy.thresholdDayTemp",
         "attributes": {
@@ -412,7 +437,7 @@ HEAT_CIRCUIT_EXCESS_ENERGY_HEATING_LIMIT_DAY: str = """
     }
 """
 
-HEAT_CIRCUIT_EXCESS_ENERGY_COOLING_LIMIT_DAY: str = """
+HEAT_CIRCUIT_EXCESS_ENERGY_COOLING_LIMIT_DAY: Final[str] = """
     {
         "name": "APPL.CtrlAppl.sParam.heatCircuit[%s].param.excessEnergy.thresholdDayCoolTemp",
         "attributes": {
@@ -426,7 +451,7 @@ HEAT_CIRCUIT_EXCESS_ENERGY_COOLING_LIMIT_DAY: str = """
     }
 """
 
-HEAT_CIRCUIT_HEAT_REQUEST: str = """
+HEAT_CIRCUIT_HEAT_REQUEST: Final[str] = """
     {
         "name": "APPL.CtrlAppl.sParam.heatCircuit[%s].values.heatRequest",
         "attributes": {
@@ -440,7 +465,7 @@ HEAT_CIRCUIT_HEAT_REQUEST: str = """
     }
 """
 
-HEAT_CIRCUIT_COOL_REQUEST: str = """
+HEAT_CIRCUIT_COOL_REQUEST: Final[str] = """
     {
         "name": "APPL.CtrlAppl.sParam.heatCircuit[%s].values.coolRequest",
         "attributes": {
@@ -454,7 +479,7 @@ HEAT_CIRCUIT_COOL_REQUEST: str = """
     }
 """
 
-HEAT_CIRCUIT_TARGET_TEMPERATURE_AWAY: str = """
+HEAT_CIRCUIT_TARGET_TEMPERATURE_AWAY: Final[str] = """
     {
         "name": "APPL.CtrlAppl.sParam.heatCircuit[%s].param.holidaySetTemp",
         "attributes": {
@@ -468,7 +493,7 @@ HEAT_CIRCUIT_TARGET_TEMPERATURE_AWAY: str = """
     }
 """
 
-HEAT_CIRCUIT_TARGET_TEMPERATURE_NIGHT: str = """
+HEAT_CIRCUIT_TARGET_TEMPERATURE_NIGHT: Final[str] = """
     {
         "name": "APPL.CtrlAppl.sParam.heatCircuit[%s].param.reducedSetTemp",
         "attributes": {
@@ -482,7 +507,7 @@ HEAT_CIRCUIT_TARGET_TEMPERATURE_NIGHT: str = """
     }
 """
 
-HEAT_CIRCUIT_TARGET_COOLING_TEMPERATURE_NIGHT: str = """
+HEAT_CIRCUIT_TARGET_COOLING_TEMPERATURE_NIGHT: Final[str] = """
     {
         "name": "APPL.CtrlAppl.sParam.heatCircuit[%s].param.reducedCoolSetTemp",
         "attributes": {
@@ -496,7 +521,7 @@ HEAT_CIRCUIT_TARGET_COOLING_TEMPERATURE_NIGHT: str = """
     }
 """
 
-HEAT_CIRCUIT_HEATING_LIMIT_NIGHT: str = """
+HEAT_CIRCUIT_HEATING_LIMIT_NIGHT: Final[str] = """
     {
         "name": "APPL.CtrlAppl.sParam.heatCircuit[%s].param.thresholdNightTemp.value",
         "attributes": {
@@ -510,7 +535,7 @@ HEAT_CIRCUIT_HEATING_LIMIT_NIGHT: str = """
     }
 """
 
-HEAT_CIRCUIT_COOLING_LIMIT_NIGHT: str = """
+HEAT_CIRCUIT_COOLING_LIMIT_NIGHT: Final[str] = """
     {
         "name": "APPL.CtrlAppl.sParam.heatCircuit[%s].param.thresholdNightCoolTemp.value",
         "attributes": {
@@ -524,7 +549,7 @@ HEAT_CIRCUIT_COOLING_LIMIT_NIGHT: str = """
     }
 """
 
-HEAT_CIRCUIT_EXCESS_ENERGY_HEATING_LIMIT_NIGHT: str = """
+HEAT_CIRCUIT_EXCESS_ENERGY_HEATING_LIMIT_NIGHT: Final[str] = """
     {
         "name": "APPL.CtrlAppl.sParam.heatCircuit[%s].param.excessEnergy.thresholdNightTemp",
         "attributes": {
@@ -538,7 +563,7 @@ HEAT_CIRCUIT_EXCESS_ENERGY_HEATING_LIMIT_NIGHT: str = """
     }
 """
 
-HEAT_CIRCUIT_EXCESS_ENERGY_COOLING_LIMIT_NIGHT: str = """
+HEAT_CIRCUIT_EXCESS_ENERGY_COOLING_LIMIT_NIGHT: Final[str] = """
     {
         "name": "APPL.CtrlAppl.sParam.heatCircuit[%s].param.excessEnergy.thresholdNightCoolTemp",
         "attributes": {
@@ -552,7 +577,7 @@ HEAT_CIRCUIT_EXCESS_ENERGY_COOLING_LIMIT_NIGHT: str = """
     }
 """
 
-HEAT_CIRCUIT_OPERATION_MODE: str = """
+HEAT_CIRCUIT_OPERATION_MODE: Final[str] = """
     {
         "name": "APPL.CtrlAppl.sParam.heatCircuit[%s].param.operatingMode",
         "attributes": {
@@ -566,7 +591,7 @@ HEAT_CIRCUIT_OPERATION_MODE: str = """
     }
 """
 
-HEAT_CIRCUIT_SELECTED_TARGET_TEMPERATURE: str = """
+HEAT_CIRCUIT_SELECTED_TARGET_TEMPERATURE: Final[str] = """
     {
         "name": "APPL.CtrlAppl.sParam.heatCircuit[%s].values.selectedSetTemp",
         "attributes": {
@@ -575,7 +600,7 @@ HEAT_CIRCUIT_SELECTED_TARGET_TEMPERATURE: str = """
     }
 """
 
-HEAT_CIRCUIT_TARGET_TEMPERATURE: str = """
+HEAT_CIRCUIT_TARGET_TEMPERATURE: Final[str] = """
     {
         "name": "APPL.CtrlAppl.sParam.heatCircuit[%s].values.setValue",
         "attributes": {
@@ -589,7 +614,7 @@ HEAT_CIRCUIT_TARGET_TEMPERATURE: str = """
     }
 """
 
-HEAT_CIRCUIT_TARGET_TEMPERATURE_OFFSET: str = """
+HEAT_CIRCUIT_TARGET_TEMPERATURE_OFFSET: Final[str] = """
     {
         "name": "APPL.CtrlAppl.sParam.heatCircuit[%s].param.offsetRoomTemp",
         "attributes": {
@@ -603,7 +628,7 @@ HEAT_CIRCUIT_TARGET_TEMPERATURE_OFFSET: str = """
     }
 """
 
-HEAT_CIRCUIT_USE_EXCESS_ENERGY: str = """
+HEAT_CIRCUIT_USE_EXCESS_ENERGY: Final[str] = """
     {
         "name": "APPL.CtrlAppl.sParam.heatCircuit[%s].param.useExcessEnergy",
         "attributes": {
@@ -613,7 +638,7 @@ HEAT_CIRCUIT_USE_EXCESS_ENERGY: str = """
     }
 """
 
-HEAT_CIRCUIT_EXCESS_ENERGY_TARGET_TEMPERATURE: str = """
+HEAT_CIRCUIT_EXCESS_ENERGY_TARGET_TEMPERATURE: Final[str] = """
     {
         "name": "APPL.CtrlAppl.sParam.heatCircuit[%s].param.excessEnergyTemp.value",
         "attributes": {
@@ -627,7 +652,7 @@ HEAT_CIRCUIT_EXCESS_ENERGY_TARGET_TEMPERATURE: str = """
     }
 """
 
-HEAT_CIRCUIT_EXCESS_ENERGY_TARGET_TEMPERATURE_HYSTERESIS: str = """
+HEAT_CIRCUIT_EXCESS_ENERGY_TARGET_TEMPERATURE_HYSTERESIS: Final[str] = """
     {
         "name": "APPL.CtrlAppl.sParam.heatCircuit[%s].param.excessEnergyTemp.hyst",
         "attributes": {
@@ -641,7 +666,7 @@ HEAT_CIRCUIT_EXCESS_ENERGY_TARGET_TEMPERATURE_HYSTERESIS: str = """
     }
 """
 
-HEAT_CIRCUIT_EXCESS_ENERGY_TARGET_COOLING_TEMPERATURE: str = """
+HEAT_CIRCUIT_EXCESS_ENERGY_TARGET_COOLING_TEMPERATURE: Final[str] = """
     {
         "name": "APPL.CtrlAppl.sParam.heatCircuit[%s].param.excessEnergyTempCool.value",
         "attributes": {
@@ -655,7 +680,7 @@ HEAT_CIRCUIT_EXCESS_ENERGY_TARGET_COOLING_TEMPERATURE: str = """
     }
 """
 
-HEAT_CIRCUIT_EXCESS_ENERGY_TARGET_COOLING_TEMPERATURE_HYSTERESIS: str = """
+HEAT_CIRCUIT_EXCESS_ENERGY_TARGET_COOLING_TEMPERATURE_HYSTERESIS: Final[str] = """
     {
         "name": "APPL.CtrlAppl.sParam.heatCircuit[%s].param.excessEnergyTempCool.hyst",
         "attributes": {
@@ -669,7 +694,7 @@ HEAT_CIRCUIT_EXCESS_ENERGY_TARGET_COOLING_TEMPERATURE_HYSTERESIS: str = """
     }
 """
 
-HEAT_CIRCUIT_EXCESS_ENERGY_MODE: str = """
+HEAT_CIRCUIT_EXCESS_ENERGY_MODE: Final[str] = """
     {
         "name": "APPL.CtrlAppl.sParam.heatCircuit[%s].values.useExcessEnergy",
         "attributes": {
@@ -683,7 +708,7 @@ HEAT_CIRCUIT_EXCESS_ENERGY_MODE: str = """
     }
 """
 
-HEAT_CIRCUIT_AWAY_START_DATE: str = """
+HEAT_CIRCUIT_AWAY_START_DATE: Final[str] = """
     {
         "name": "APPL.CtrlAppl.sParam.heatCircuit[%s].param.holiday.start",
         "attributes": {
@@ -696,7 +721,7 @@ HEAT_CIRCUIT_AWAY_START_DATE: str = """
     }
 """
 
-HEAT_CIRCUIT_AWAY_END_DATE: str = """
+HEAT_CIRCUIT_AWAY_END_DATE: Final[str] = """
     {
         "name": "APPL.CtrlAppl.sParam.heatCircuit[%s].param.holiday.stop",
         "attributes": {
@@ -709,7 +734,7 @@ HEAT_CIRCUIT_AWAY_END_DATE: str = """
     }
 """
 
-HEAT_CIRCUIT_HEATING_CURVE_OFFSET: str = """
+HEAT_CIRCUIT_HEATING_CURVE_OFFSET: Final[str] = """
     {
         "name": "APPL.CtrlAppl.sParam.heatCircuit[%s].param.heatCurveOffset",
         "attributes": {
@@ -723,7 +748,7 @@ HEAT_CIRCUIT_HEATING_CURVE_OFFSET: str = """
     }
 """
 
-HEAT_CIRCUIT_COOLING_CURVE_OFFSET: str = """
+HEAT_CIRCUIT_COOLING_CURVE_OFFSET: Final[str] = """
     {
         "name": "APPL.CtrlAppl.sParam.heatCircuit[%s].param.coolCurveOffset",
         "attributes": {
@@ -737,7 +762,7 @@ HEAT_CIRCUIT_COOLING_CURVE_OFFSET: str = """
     }
 """
 
-HEAT_CIRCUIT_HEATING_CURVE_SLOPE: str = """
+HEAT_CIRCUIT_HEATING_CURVE_SLOPE: Final[str] = """
     {
         "name": "APPL.CtrlAppl.sParam.heatCircuit[%s].param.heatCurveGradient",
         "attributes": {
@@ -750,7 +775,7 @@ HEAT_CIRCUIT_HEATING_CURVE_SLOPE: str = """
     }
 """
 
-HEAT_CIRCUIT_COOLING_CURVE_SLOPE: str = """
+HEAT_CIRCUIT_COOLING_CURVE_SLOPE: Final[str] = """
     {
         "name": "APPL.CtrlAppl.sParam.heatCircuit[%s].param.coolCurveGradient",
         "attributes": {
@@ -763,7 +788,7 @@ HEAT_CIRCUIT_COOLING_CURVE_SLOPE: str = """
     }
 """
 
-HEAT_CIRCUIT_USE_HEATING_CURVE: str = """
+HEAT_CIRCUIT_USE_HEATING_CURVE: Final[str] = """
     {
         "name": "APPL.CtrlAppl.sParam.heatCircuit[%s].param.enableHeatCurveLinTab",
         "attributes": {},
@@ -771,7 +796,7 @@ HEAT_CIRCUIT_USE_HEATING_CURVE: str = """
     }
 """
 
-HEAT_CIRCUIT_HEATING_CURVE: str = """
+HEAT_CIRCUIT_HEATING_CURVE: Final[str] = """
     {
         "name": "APPL.CtrlAppl.sParam.heatCircuit[%s].param.linTab.fileName",
         "attributes": {
@@ -781,7 +806,7 @@ HEAT_CIRCUIT_HEATING_CURVE: str = """
     }
 """
 
-HEAT_CIRCUIT_COOLING_CURVE: str = """
+HEAT_CIRCUIT_COOLING_CURVE: Final[str] = """
     {
         "name": "APPL.CtrlAppl.sParam.heatCircuit[%s].param.coollinTab.fileName",
         "attributes": {
@@ -791,7 +816,7 @@ HEAT_CIRCUIT_COOLING_CURVE: str = """
     }
 """
 
-HEAT_CIRCUIT_PUMP_SPEED: str = """
+HEAT_CIRCUIT_PUMP_SPEED: Final[str] = """
     {
         "name": "APPL.CtrlAppl.sParam.heatCircuit[%s]pumpAO.values.setValueScaled",
         "attributes": {
@@ -805,7 +830,7 @@ HEAT_CIRCUIT_PUMP_SPEED: str = """
     }
 """
 
-SOLAR_CIRCUIT_OPERATION_MODE: str = """
+SOLAR_CIRCUIT_OPERATION_MODE: Final[str] = """
     {
         "name": "APPL.CtrlAppl.sParam.solarCircuit[%s].param.operatingMode",
         "attributes": {
@@ -819,7 +844,7 @@ SOLAR_CIRCUIT_OPERATION_MODE: str = """
     }
 """
 
-SOLAR_CIRCUIT_SOURCE_TEMPERATURE: str = """
+SOLAR_CIRCUIT_SOURCE_TEMPERATURE: Final[str] = """
     {
         "name": "APPL.CtrlAppl.sParam.solarCircuit[%s].collectorTemp.values.actValue",
         "attributes": {
@@ -833,7 +858,7 @@ SOLAR_CIRCUIT_SOURCE_TEMPERATURE: str = """
     }
 """
 
-SOLAR_CIRCUIT_PUMP_1: str = """
+SOLAR_CIRCUIT_PUMP_1: Final[str] = """
     {
         "name": "APPL.CtrlAppl.sParam.solarCircuit[%s].values.pump1",
         "attributes": {
@@ -847,7 +872,7 @@ SOLAR_CIRCUIT_PUMP_1: str = """
     }
 """
 
-SOLAR_CIRCUIT_PUMP_2: str = """
+SOLAR_CIRCUIT_PUMP_2: Final[str] = """
     {
         "name": "APPL.CtrlAppl.sParam.solarCircuit[%s].values.pump2",
         "attributes": {
@@ -861,7 +886,7 @@ SOLAR_CIRCUIT_PUMP_2: str = """
     }
 """
 
-SOLAR_CIRCUIT_CURRENT_TEMPERATURE_1: str = """
+SOLAR_CIRCUIT_CURRENT_TEMPERATURE_1: Final[str] = """
     {
         "name": "APPL.CtrlAppl.sParam.genericHeat[%s].referenceTemp.values.actValue",
         "attributes": {
@@ -873,7 +898,7 @@ SOLAR_CIRCUIT_CURRENT_TEMPERATURE_1: str = """
     }
 """
 
-SOLAR_CIRCUIT_CURRENT_TEMPERATURE_2: str = """
+SOLAR_CIRCUIT_CURRENT_TEMPERATURE_2: Final[str] = """
     {
         "name": "APPL.CtrlAppl.sParam.genericHeat[%s].referenceTemp.values.actValue",
         "attributes": {
@@ -885,7 +910,7 @@ SOLAR_CIRCUIT_CURRENT_TEMPERATURE_2: str = """
     }
 """
 
-SOLAR_CIRCUIT_TARGET_TEMPERATURE_1: str = """
+SOLAR_CIRCUIT_TARGET_TEMPERATURE_1: Final[str] = """
     {
         "name": "APPL.CtrlAppl.sParam.genericHeat[%s].param.setTempMax.value",
          "attributes": {
@@ -899,7 +924,7 @@ SOLAR_CIRCUIT_TARGET_TEMPERATURE_1: str = """
     }
 """
 
-SOLAR_CIRCUIT_TARGET_TEMPERATURE_2: str = """
+SOLAR_CIRCUIT_TARGET_TEMPERATURE_2: Final[str] = """
     {
         "name": "APPL.CtrlAppl.sParam.genericHeat[%s].param.setTempMax.value",
          "attributes": {
@@ -913,7 +938,7 @@ SOLAR_CIRCUIT_TARGET_TEMPERATURE_2: str = """
     }
 """
 
-SOLAR_CIRCUIT_HEAT_REQUEST: str = """
+SOLAR_CIRCUIT_HEAT_REQUEST: Final[str] = """
     {
         "name": "APPL.CtrlAppl.sParam.genericHeat[%s].values.heatRequest",
         "attributes": {
@@ -925,7 +950,7 @@ SOLAR_CIRCUIT_HEAT_REQUEST: str = """
     }
 """
 
-SOLAR_CIRCUIT_HEATING_ENERGY: str = """
+SOLAR_CIRCUIT_HEATING_ENERGY: Final[str] = """
     {
         "name": "APPL.CtrlAppl.sParam.solarCircuit[%s].heatMeter.values.accumulatedHeat",
         "attributes": {
@@ -939,7 +964,7 @@ SOLAR_CIRCUIT_HEATING_ENERGY: str = """
     }
 """
 
-SOLAR_CIRCUIT_DAILY_ENERGY: str = """
+SOLAR_CIRCUIT_DAILY_ENERGY: Final[str] = """
     {
         "name": "APPL.CtrlAppl.sParam.solarCircuit[%s].heatMeter.values.heatDay",
         "attributes": {
@@ -951,7 +976,7 @@ SOLAR_CIRCUIT_DAILY_ENERGY: str = """
     }
 """
 
-SOLAR_CIRCUIT_ACTUAL_POWER: str = """
+SOLAR_CIRCUIT_ACTUAL_POWER: Final[str] = """
     {
         "name": "APPL.CtrlAppl.sParam.solarCircuit[%s].heatMeter.values.power",
         "attributes": {
@@ -963,7 +988,7 @@ SOLAR_CIRCUIT_ACTUAL_POWER: str = """
     }
 """
 
-SOLAR_CIRCUIT_PRIORITY_1_BEFORE_2: str = """
+SOLAR_CIRCUIT_PRIORITY_1_BEFORE_2: Final[str] = """
     {
        "name": "APPL.CtrlAppl.sParam.hmiRetainData.consumer1PrioritySolar[%s]",
         "attributes": {
@@ -973,7 +998,7 @@ SOLAR_CIRCUIT_PRIORITY_1_BEFORE_2: str = """
     }
 """
 
-HEAT_PUMP_CONSUMING_EXCESS_ENERGY: dict[str, Any] = {
+HEAT_PUMP_CONSUMING_EXCESS_ENERGY: Final[dict[str, Any]] = {
     "name": "APPL.CtrlAppl.sParam.heatpump[0].values.consumingExcessEnergy",
     "attributes": {
         "longText": "HP 1 with excess energy",
@@ -981,7 +1006,7 @@ HEAT_PUMP_CONSUMING_EXCESS_ENERGY: dict[str, Any] = {
     "value": "true",
 }
 
-HEAT_PUMP_EXCESS_ENERGY_OPERATING_TIME: dict[str, Any] = {
+HEAT_PUMP_EXCESS_ENERGY_OPERATING_TIME: Final[dict[str, Any]] = {
     "name": "APPL.CtrlAppl.sParam.heatpump[0].operationalDataExcessEnergy.operationalTimeS",
     "attributes": {
         "formatId": "fmt6p0",
@@ -991,7 +1016,7 @@ HEAT_PUMP_EXCESS_ENERGY_OPERATING_TIME: dict[str, Any] = {
     "value": "3600",
 }
 
-HEAT_PUMP_EXCESS_ENERGY_MAX_RUNTIME: dict[str, Any] = {
+HEAT_PUMP_EXCESS_ENERGY_MAX_RUNTIME: Final[dict[str, Any]] = {
     "name": "APPL.CtrlAppl.sParam.heatpump[0].operationalDataExcessEnergy.maxRunTimeS",
     "attributes": {
         "formatId": "fmt6p1",
@@ -1001,7 +1026,7 @@ HEAT_PUMP_EXCESS_ENERGY_MAX_RUNTIME: dict[str, Any] = {
     "value": "3600",
 }
 
-HEAT_PUMP_EXCESS_ENERGY_ACTIVATION_COUNTER: dict[str, Any] = {
+HEAT_PUMP_EXCESS_ENERGY_ACTIVATION_COUNTER: Final[dict[str, Any]] = {
     "name": "APPL.CtrlAppl.sParam.heatpump[0].operationalDataExcessEnergy.activationCounter",
     "attributes": {
         "formatId": "fmt6p0",
@@ -1010,7 +1035,7 @@ HEAT_PUMP_EXCESS_ENERGY_ACTIVATION_COUNTER: dict[str, Any] = {
     "value": "3600",
 }
 
-HEAT_PUMP_CIRCULATION_PUMP_SPEED: dict[str, Any] = {
+HEAT_PUMP_CIRCULATION_PUMP_SPEED: Final[dict[str, Any]] = {
     "name": "APPL.CtrlAppl.sParam.heatpump[0].CircPump.values.setValueScaled",
     "attributes": {
         "formatId": "fmt3p0",
@@ -1022,7 +1047,7 @@ HEAT_PUMP_CIRCULATION_PUMP_SPEED: dict[str, Any] = {
     "value": "0",
 }
 
-HEAT_PUMP_SOURCE_PUMP_SPEED: dict[str, Any] = {
+HEAT_PUMP_SOURCE_PUMP_SPEED: Final[dict[str, Any]] = {
     "name": "APPL.CtrlAppl.sParam.heatpump[0].Source.values.setValueScaled",
     "attributes": {
         "formatId": "fmt3p0",
@@ -1034,7 +1059,7 @@ HEAT_PUMP_SOURCE_PUMP_SPEED: dict[str, Any] = {
     "value": "0.44875106",
 }
 
-HEAT_PUMP_COMPRESSOR: dict[str, Any] = {
+HEAT_PUMP_COMPRESSOR: Final[dict[str, Any]] = {
     "name": "APPL.CtrlAppl.sParam.heatpump[0].Compressor.values.setValueScaled",
     "attributes": {
         "formatId": "fmtTemp",
@@ -1046,7 +1071,7 @@ HEAT_PUMP_COMPRESSOR: dict[str, Any] = {
     "value": "0",
 }
 
-HEAT_PUMP_COMPRESSOR_NIGHT_SPEED: dict[str, Any] = {
+HEAT_PUMP_COMPRESSOR_NIGHT_SPEED: Final[dict[str, Any]] = {
     "name": "APPL.CtrlAppl.sParam.heatpump[0].HeatPumpPowerCtrl.param.maxPowerScaledNight",
     "attributes": {
         "formatId": "fmt3p0",
@@ -1058,7 +1083,7 @@ HEAT_PUMP_COMPRESSOR_NIGHT_SPEED: dict[str, Any] = {
     "value": "0.5",
 }
 
-HEAT_PUMP_COMPRESSOR_INPUT_TEMPERATURE: dict[str, Any] = {
+HEAT_PUMP_COMPRESSOR_INPUT_TEMPERATURE: Final[dict[str, Any]] = {
     "name": "APPL.CtrlAppl.sParam.heatpump[0].TempCompressorIn.values.actValue",
     "attributes": {
         "formatId": "fmtTemp",
@@ -1068,7 +1093,7 @@ HEAT_PUMP_COMPRESSOR_INPUT_TEMPERATURE: dict[str, Any] = {
     "value": "27.200001",
 }
 
-HEAT_PUMP_COMPRESSOR_OUTPUT_TEMPERATURE: dict[str, Any] = {
+HEAT_PUMP_COMPRESSOR_OUTPUT_TEMPERATURE: Final[dict[str, Any]] = {
     "name": "APPL.CtrlAppl.sParam.heatpump[0].TempCompressorOut.values.actValue",
     "attributes": {
         "formatId": "fmtTemp",
@@ -1079,7 +1104,7 @@ HEAT_PUMP_COMPRESSOR_OUTPUT_TEMPERATURE: dict[str, Any] = {
 }
 
 
-HEAT_PUMP_COMPRESSOR_USE_NIGHT_SPEED: str = """
+HEAT_PUMP_COMPRESSOR_USE_NIGHT_SPEED: Final[str] = """
     {
         "name": "APPL.CtrlAppl.sParam.heatpump[0].HeatPumpPowerCtrl.param.useDayNightSpeed",
         "attributes": {
@@ -1089,7 +1114,7 @@ HEAT_PUMP_COMPRESSOR_USE_NIGHT_SPEED: str = """
     }
 """
 
-HEAT_PUMP_CONDENSER_TEMPERATURE: dict[str, Any] = {
+HEAT_PUMP_CONDENSER_TEMPERATURE: Final[dict[str, Any]] = {
     "name": "APPL.CtrlAppl.sParam.heatpump[0].OverHeatCtrl.values.tempCond",
     "attributes": {
         "formatId": "fmtTemp",
@@ -1101,7 +1126,7 @@ HEAT_PUMP_CONDENSER_TEMPERATURE: dict[str, Any] = {
     "value": "31.514103",
 }
 
-HEAT_PUMP_VAPORIZER_TEMPERATURE: dict[str, Any] = {
+HEAT_PUMP_VAPORIZER_TEMPERATURE: Final[dict[str, Any]] = {
     "name": "APPL.CtrlAppl.sParam.heatpump[0].OverHeatCtrl.values.tempVap",
     "attributes": {
         "formatId": "fmtTemp",
@@ -1111,7 +1136,7 @@ HEAT_PUMP_VAPORIZER_TEMPERATURE: dict[str, Any] = {
     "value": "-4.5617409",
 }
 
-HEAT_PUMP_TARGET_OVERHEATING: dict[str, Any] = {
+HEAT_PUMP_TARGET_OVERHEATING: Final[dict[str, Any]] = {
     "name": "APPL.CtrlAppl.sParam.heatpump[0].OverHeatCtrl.values.setOH",
     "attributes": {
         "formatId": "fmtTemp",
@@ -1121,7 +1146,7 @@ HEAT_PUMP_TARGET_OVERHEATING: dict[str, Any] = {
     "value": "5.4999752",
 }
 
-HEAT_PUMP_CURRENT_OVERHEATING: dict[str, Any] = {
+HEAT_PUMP_CURRENT_OVERHEATING: Final[dict[str, Any]] = {
     "name": "APPL.CtrlAppl.sParam.heatpump[0].OverHeatCtrl.values.actOH",
     "attributes": {
         "formatId": "fmtTemp",
@@ -1131,7 +1156,7 @@ HEAT_PUMP_CURRENT_OVERHEATING: dict[str, Any] = {
     "value": "18.676249",
 }
 
-HEAT_PUMP_EXPANSION_VALVE_POSITION: dict[str, Any] = {
+HEAT_PUMP_EXPANSION_VALVE_POSITION: Final[dict[str, Any]] = {
     "name": "APPL.CtrlAppl.sParam.heatpump[0].OverHeatCtrl.values.stepperPos",
     "attributes": {
         "formatId": "fmt4p0",
@@ -1140,7 +1165,7 @@ HEAT_PUMP_EXPANSION_VALVE_POSITION: dict[str, Any] = {
     "value": "20",
 }
 
-HEAT_PUMP_HEAT_REQUEST: dict[str, Any] = {
+HEAT_PUMP_HEAT_REQUEST: Final[dict[str, Any]] = {
     "name": "APPL.CtrlAppl.sParam.heatpump[0].values.request",
     "attributes": {
         "longText": "Heat pump request",
@@ -1148,7 +1173,7 @@ HEAT_PUMP_HEAT_REQUEST: dict[str, Any] = {
     "value": "false",
 }
 
-HEAT_PUMP_HIGH_PRESSURE: dict[str, Any] = {
+HEAT_PUMP_HIGH_PRESSURE: Final[dict[str, Any]] = {
     "name": "APPL.CtrlAppl.sParam.heatpump[0].HighPressure.values.actValue",
     "attributes": {
         "formatId": "fmt3p2",
@@ -1158,7 +1183,7 @@ HEAT_PUMP_HIGH_PRESSURE: dict[str, Any] = {
     "value": "15.61875",
 }
 
-HEAT_PUMP_LOW_PRESSURE: dict[str, Any] = {
+HEAT_PUMP_LOW_PRESSURE: Final[dict[str, Any]] = {
     "name": "APPL.CtrlAppl.sParam.heatpump[0].LowPressure.values.actValue",
     "attributes": {
         "formatId": "fmt3p2",
@@ -1168,7 +1193,7 @@ HEAT_PUMP_LOW_PRESSURE: dict[str, Any] = {
     "value": "15.354687",
 }
 
-HEAT_PUMP_FLOW_TEMPERATURE: dict[str, Any] = {
+HEAT_PUMP_FLOW_TEMPERATURE: Final[dict[str, Any]] = {
     "name": "APPL.CtrlAppl.sParam.heatpump[0].TempHeatFlow.values.actValue",
     "attributes": {
         "formatId": "fmtTemp",
@@ -1178,7 +1203,7 @@ HEAT_PUMP_FLOW_TEMPERATURE: dict[str, Any] = {
     "value": "24.800001",
 }
 
-HEAT_PUMP_RETURN_FLOW_TEMPERATURE: dict[str, Any] = {
+HEAT_PUMP_RETURN_FLOW_TEMPERATURE: Final[dict[str, Any]] = {
     "name": "APPL.CtrlAppl.sParam.heatpump[0].TempHeatReflux.values.actValue",
     "attributes": {
         "formatId": "fmtTemp",
@@ -1188,13 +1213,13 @@ HEAT_PUMP_RETURN_FLOW_TEMPERATURE: dict[str, Any] = {
     "value": "23.9",
 }
 
-HEAT_PUMP_NAME: dict[str, Any] = {
+HEAT_PUMP_NAME: Final[dict[str, Any]] = {
     "name": "APPL.CtrlAppl.sParam.heatpump[0].param.name",
     "attributes": {"longText": "Name"},
     "value": "WPS26",
 }
 
-HEAT_PUMP_SOURCE_INPUT_TEMPERATURE: dict[str, Any] = {
+HEAT_PUMP_SOURCE_INPUT_TEMPERATURE: Final[dict[str, Any]] = {
     "name": "APPL.CtrlAppl.sParam.heatpump[0].TempSourceIn.values.actValue",
     "attributes": {
         "formatId": "fmtTemp",
@@ -1204,7 +1229,7 @@ HEAT_PUMP_SOURCE_INPUT_TEMPERATURE: dict[str, Any] = {
     "value": "25.700001",
 }
 
-HEAT_PUMP_SOURCE_OUTPUT_TEMPERATURE: dict[str, Any] = {
+HEAT_PUMP_SOURCE_OUTPUT_TEMPERATURE: Final[dict[str, Any]] = {
     "name": "APPL.CtrlAppl.sParam.heatpump[0].TempSourceOut.values.actValue",
     "attributes": {
         "formatId": "fmtTemp",
@@ -1214,7 +1239,7 @@ HEAT_PUMP_SOURCE_OUTPUT_TEMPERATURE: dict[str, Any] = {
     "value": "24.9",
 }
 
-HEAT_PUMP_STATE: dict[str, Any] = {
+HEAT_PUMP_STATE: Final[dict[str, Any]] = {
     "name": "APPL.CtrlAppl.sParam.heatpump[0].values.heatpumpState",
     "attributes": {
         "formatId": "fmtHPState",
@@ -1226,7 +1251,7 @@ HEAT_PUMP_STATE: dict[str, Any] = {
     "value": "0",
 }
 
-HEAT_PUMP_SUBSTATE: dict[str, Any] = {
+HEAT_PUMP_SUBSTATE: Final[dict[str, Any]] = {
     "name": "APPL.CtrlAppl.sParam.heatpump[0].values.heatpumpSubState",
     "attributes": {
         "formatId": "fmtHPSubState",
@@ -1238,7 +1263,7 @@ HEAT_PUMP_SUBSTATE: dict[str, Any] = {
     "value": "1",
 }
 
-HEAT_PUMP_COMPRESSOR_POWER: dict[str, Any] = {
+HEAT_PUMP_COMPRESSOR_POWER: Final[dict[str, Any]] = {
     "name": "APPL.CtrlAppl.sParam.heatpump[0].ElectricEnergyMeter.values.power",
     "attributes": {
         "formatId": "fmt3p2",
@@ -1248,7 +1273,7 @@ HEAT_PUMP_COMPRESSOR_POWER: dict[str, Any] = {
     "value": "5.52",
 }
 
-HEAT_PUMP_HEATING_POWER: dict[str, Any] = {
+HEAT_PUMP_HEATING_POWER: Final[dict[str, Any]] = {
     "name": "APPL.CtrlAppl.sParam.heatpump[0].HeatMeter.values.power",
     "attributes": {
         "formatId": "fmt3p2",
@@ -1258,7 +1283,7 @@ HEAT_PUMP_HEATING_POWER: dict[str, Any] = {
     "value": "3.22",
 }
 
-HEAT_PUMP_HOT_WATER_POWER: dict[str, Any] = {
+HEAT_PUMP_HOT_WATER_POWER: Final[dict[str, Any]] = {
     "name": "APPL.CtrlAppl.sParam.heatpump[0].HotWaterMeter.values.power",
     "attributes": {
         "formatId": "fmt3p2",
@@ -1268,7 +1293,7 @@ HEAT_PUMP_HOT_WATER_POWER: dict[str, Any] = {
     "value": "2.77",
 }
 
-HEAT_PUMP_COP: dict[str, Any] = {
+HEAT_PUMP_COP: Final[dict[str, Any]] = {
     "name": "APPL.CtrlAppl.sParam.heatpump[0].values.COP",
     "attributes": {
         "formatId": "fmt3p2",
@@ -1277,7 +1302,7 @@ HEAT_PUMP_COP: dict[str, Any] = {
     "value": "2.55",
 }
 
-HEAT_PUMP_HEATING_ENERGY: dict[str, Any] = {
+HEAT_PUMP_HEATING_ENERGY: Final[dict[str, Any]] = {
     "name": "APPL.CtrlAppl.sStatisticalData.heatpump[0].consumption.heating.energy",
     "attributes": {
         "formatId": "fmt4p0",
@@ -1287,7 +1312,7 @@ HEAT_PUMP_HEATING_ENERGY: dict[str, Any] = {
     "value": "8.43",
 }
 
-HEAT_PUMP_HEATING_ENERGY_CONSUMPTION: dict[str, Any] = {
+HEAT_PUMP_HEATING_ENERGY_CONSUMPTION: Final[dict[str, Any]] = {
     "name": "APPL.CtrlAppl.sStatisticalData.heatpump[0].consumption.heating.electricalenergy",
     "attributes": {
         "formatId": "fmt4p0",
@@ -1297,7 +1322,7 @@ HEAT_PUMP_HEATING_ENERGY_CONSUMPTION: dict[str, Any] = {
     "value": "7.33",
 }
 
-HEAT_PUMP_HEATING_SPF: dict[str, Any] = {
+HEAT_PUMP_HEATING_SPF: Final[dict[str, Any]] = {
     "name": "APPL.CtrlAppl.sStatisticalData.heatpump[0].EnergyEfficiencyRatioHeat",
     "attributes": {
         "longText": "SPF heating",
@@ -1305,7 +1330,7 @@ HEAT_PUMP_HEATING_SPF: dict[str, Any] = {
     "value": "3.32",
 }
 
-HEAT_PUMP_COOLING_ENERGY: dict[str, Any] = {
+HEAT_PUMP_COOLING_ENERGY: Final[dict[str, Any]] = {
     "name": "APPL.CtrlAppl.sStatisticalData.heatpump[0].consumption.cooling.energy",
     "attributes": {
         "formatId": "fmt4p0",
@@ -1315,7 +1340,7 @@ HEAT_PUMP_COOLING_ENERGY: dict[str, Any] = {
     "value": "7.21",
 }
 
-HEAT_PUMP_COOLING_ENERGY_CONSUMPTION: dict[str, Any] = {
+HEAT_PUMP_COOLING_ENERGY_CONSUMPTION: Final[dict[str, Any]] = {
     "name": "APPL.CtrlAppl.sStatisticalData.heatpump[0].consumption.cooling.electricalenergy",
     "attributes": {
         "formatId": "fmt4p0",
@@ -1325,7 +1350,7 @@ HEAT_PUMP_COOLING_ENERGY_CONSUMPTION: dict[str, Any] = {
     "value": "8.72",
 }
 
-HEAT_PUMP_COOLING_SPF: dict[str, Any] = {
+HEAT_PUMP_COOLING_SPF: Final[dict[str, Any]] = {
     "name": "APPL.CtrlAppl.sStatisticalData.heatpump[0].EnergyEfficiencyRatioCool",
     "attributes": {
         "formatId": "fmt3p2",
@@ -1334,7 +1359,7 @@ HEAT_PUMP_COOLING_SPF: dict[str, Any] = {
     "value": "4.22",
 }
 
-HEAT_PUMP_HOT_WATER_ENERGY: dict[str, Any] = {
+HEAT_PUMP_HOT_WATER_ENERGY: Final[dict[str, Any]] = {
     "name": "APPL.CtrlAppl.sStatisticalData.heatpump[0].consumption.domHotWater.energy",
     "attributes": {
         "formatId": "fmt4p0",
@@ -1344,7 +1369,7 @@ HEAT_PUMP_HOT_WATER_ENERGY: dict[str, Any] = {
     "value": "7.86",
 }
 
-HEAT_PUMP_HOT_WATER_ENERGY_CONSUMPTION: dict[str, Any] = {
+HEAT_PUMP_HOT_WATER_ENERGY_CONSUMPTION: Final[dict[str, Any]] = {
     "name": "APPL.CtrlAppl.sStatisticalData.heatpump[0].consumption.domHotWater.electricalenergy",
     "attributes": {
         "formatId": "fmt4p0",
@@ -1354,7 +1379,7 @@ HEAT_PUMP_HOT_WATER_ENERGY_CONSUMPTION: dict[str, Any] = {
     "value": "2.77",
 }
 
-HEAT_PUMP_HOT_WATER_SPF: dict[str, Any] = {
+HEAT_PUMP_HOT_WATER_SPF: Final[dict[str, Any]] = {
     "name": "APPL.CtrlAppl.sStatisticalData.heatpump[0].EnergyEfficiencyRatioDomHotWater",
     "attributes": {
         "longText": "SPF DHW",
@@ -1362,7 +1387,7 @@ HEAT_PUMP_HOT_WATER_SPF: dict[str, Any] = {
     "value": "2.50",
 }
 
-HEAT_PUMP_TOTAL_THERMAL_ENERGY: dict[str, Any] = {
+HEAT_PUMP_TOTAL_THERMAL_ENERGY: Final[dict[str, Any]] = {
     "name": "APPL.CtrlAppl.sStatisticalData.heatpump[0].consumption.energy",
     "attributes": {
         "formatId": "fmt4p0",
@@ -1372,7 +1397,7 @@ HEAT_PUMP_TOTAL_THERMAL_ENERGY: dict[str, Any] = {
     "value": "8.22",
 }
 
-HEAT_PUMP_TOTAL_ENERGY_CONSUMPTION: dict[str, Any] = {
+HEAT_PUMP_TOTAL_ENERGY_CONSUMPTION: Final[dict[str, Any]] = {
     "name": "APPL.CtrlAppl.sStatisticalData.heatpump[0].consumption.electricalenergy",
     "attributes": {
         "formatId": "fmt4p0",
@@ -1382,7 +1407,7 @@ HEAT_PUMP_TOTAL_ENERGY_CONSUMPTION: dict[str, Any] = {
     "value": "5.21",
 }
 
-HEAT_PUMP_TOTAL_SPF: dict[str, Any] = {
+HEAT_PUMP_TOTAL_SPF: Final[dict[str, Any]] = {
     "name": "APPL.CtrlAppl.sStatisticalData.heatpump[0].EnergyEfficiencyRatio",
     "attributes": {
         "formatId": "fmt3p2",
@@ -1391,7 +1416,7 @@ HEAT_PUMP_TOTAL_SPF: dict[str, Any] = {
     "value": "2.43",
 }
 
-HEAT_PUMP_EXCESS_ENERGY_CONSUMPTION: dict[str, Any] = {
+HEAT_PUMP_EXCESS_ENERGY_CONSUMPTION: Final[dict[str, Any]] = {
     "name": "APPL.CtrlAppl.sStatisticalData.heatpump[0].consumption.consumedExcessEnergy",
     "attributes": {
         "formatId": "fmt4p0",
@@ -1401,7 +1426,7 @@ HEAT_PUMP_EXCESS_ENERGY_CONSUMPTION: dict[str, Any] = {
     "value": "10.00",
 }
 
-HEAT_PUMP_HEATING_EXCESS_ENERGY_CONSUMPTION: dict[str, Any] = {
+HEAT_PUMP_HEATING_EXCESS_ENERGY_CONSUMPTION: Final[dict[str, Any]] = {
     "name": "APPL.CtrlAppl.sStatisticalData.heatpump[0].consumption.heating.consumedExcessEnergy",
     "attributes": {
         "formatId": "fmt4p0",
@@ -1411,7 +1436,7 @@ HEAT_PUMP_HEATING_EXCESS_ENERGY_CONSUMPTION: dict[str, Any] = {
     "value": "10.00",
 }
 
-HEAT_PUMP_COOLING_EXCESS_ENERGY_CONSUMPTION: dict[str, Any] = {
+HEAT_PUMP_COOLING_EXCESS_ENERGY_CONSUMPTION: Final[dict[str, Any]] = {
     "name": "APPL.CtrlAppl.sStatisticalData.heatpump[0].consumption.cooling.consumedExcessEnergy",
     "attributes": {
         "formatId": "fmt4p0",
@@ -1421,7 +1446,7 @@ HEAT_PUMP_COOLING_EXCESS_ENERGY_CONSUMPTION: dict[str, Any] = {
     "value": "10.00",
 }
 
-HEAT_PUMP_HOT_WATER_EXCESS_ENERGY_CONSUMPTION: dict[str, Any] = {
+HEAT_PUMP_HOT_WATER_EXCESS_ENERGY_CONSUMPTION: Final[dict[str, Any]] = {
     "name": "APPL.CtrlAppl.sStatisticalData.heatpump[0].consumption.domHotWater.consumedExcessEnergy",
     "attributes": {
         "formatId": "fmt4p0",
@@ -1431,7 +1456,7 @@ HEAT_PUMP_HOT_WATER_EXCESS_ENERGY_CONSUMPTION: dict[str, Any] = {
     "value": "10.00",
 }
 
-HEAT_PUMP_OPERATING_TIME: dict[str, Any] = {
+HEAT_PUMP_OPERATING_TIME: Final[dict[str, Any]] = {
     "name": "APPL.CtrlAppl.sParam.heatpump[0].operationalData.operationalTimeS",
     "attributes": {
         "formatId": "fmt6p0",
@@ -1442,7 +1467,7 @@ HEAT_PUMP_OPERATING_TIME: dict[str, Any] = {
 }
 
 
-HEAT_PUMP_MAX_RUNTIME: dict[str, Any] = {
+HEAT_PUMP_MAX_RUNTIME: Final[dict[str, Any]] = {
     "name": "APPL.CtrlAppl.sParam.heatpump[0].operationalData.maxRunTimeS",
     "attributes": {
         "formatId": "fmt6p1",
@@ -1453,7 +1478,7 @@ HEAT_PUMP_MAX_RUNTIME: dict[str, Any] = {
 }
 
 
-HEAT_PUMP_ACTIVATION_COUNTER: dict[str, Any] = {
+HEAT_PUMP_ACTIVATION_COUNTER: Final[dict[str, Any]] = {
     "name": "APPL.CtrlAppl.sParam.heatpump[0].operationalData.activationCounter",
     "attributes": {
         "formatId": "fmt6p0",
@@ -1462,7 +1487,7 @@ HEAT_PUMP_ACTIVATION_COUNTER: dict[str, Any] = {
     "value": "477",
 }
 
-HEAT_PUMP_HAS_COMPRESSOR_FAILURE: dict[str, Any] = {
+HEAT_PUMP_HAS_COMPRESSOR_FAILURE: Final[dict[str, Any]] = {
     "name": "APPL.CtrlAppl.sParam.heatpump[0].FailureCompressor.values.actValue",
     "attributes": {
         "longText": "Failure compressor",
@@ -1470,7 +1495,7 @@ HEAT_PUMP_HAS_COMPRESSOR_FAILURE: dict[str, Any] = {
     "value": "false",
 }
 
-HEAT_PUMP_HAS_SOURCE_FAILURE: dict[str, Any] = {
+HEAT_PUMP_HAS_SOURCE_FAILURE: Final[dict[str, Any]] = {
     "name": "APPL.CtrlAppl.sParam.heatpump[0].FailureSource.values.actValue",
     "attributes": {
         "longText": "Failure Source",
@@ -1478,7 +1503,7 @@ HEAT_PUMP_HAS_SOURCE_FAILURE: dict[str, Any] = {
     "value": "false",
 }
 
-HEAT_PUMP_HAS_SOURCE_ACTUATOR_FAILURE: dict[str, Any] = {
+HEAT_PUMP_HAS_SOURCE_ACTUATOR_FAILURE: Final[dict[str, Any]] = {
     "name": "APPL.CtrlAppl.sParam.heatpump[0].FailureActuatorSource.values.actValue",
     "attributes": {
         "longText": "Failure actuator src",
@@ -1486,7 +1511,7 @@ HEAT_PUMP_HAS_SOURCE_ACTUATOR_FAILURE: dict[str, Any] = {
     "value": "false",
 }
 
-HEAT_PUMP_HAS_THREE_PHASE_FAILURE: dict[str, Any] = {
+HEAT_PUMP_HAS_THREE_PHASE_FAILURE: Final[dict[str, Any]] = {
     "name": "APPL.CtrlAppl.sParam.heatpump[0].FailureThreePhase.values.actValue",
     "attributes": {
         "longText": "Failure 3-Phase",
@@ -1494,7 +1519,7 @@ HEAT_PUMP_HAS_THREE_PHASE_FAILURE: dict[str, Any] = {
     "value": "false",
 }
 
-HEAT_PUMP_HAS_SOURCE_PRESSURE_FAILURE: dict[str, Any] = {
+HEAT_PUMP_HAS_SOURCE_PRESSURE_FAILURE: Final[dict[str, Any]] = {
     "name": "APPL.CtrlAppl.sParam.heatpump[0].FailureSrcPressure.values.actValue",
     "attributes": {
         "longText": "Failure src pressure",
@@ -1502,7 +1527,7 @@ HEAT_PUMP_HAS_SOURCE_PRESSURE_FAILURE: dict[str, Any] = {
     "value": "false",
 }
 
-HEAT_PUMP_HAS_VFD_FAILURE: dict[str, Any] = {
+HEAT_PUMP_HAS_VFD_FAILURE: Final[dict[str, Any]] = {
     "name": "APPL.CtrlAppl.sParam.heatpump[0].FailureVFD.values.actValue",
     "attributes": {
         "longText": "Failure VFD",
@@ -1510,7 +1535,7 @@ HEAT_PUMP_HAS_VFD_FAILURE: dict[str, Any] = {
     "value": "false",
 }
 
-HEAT_PUMP_HAS_ACTIVE_COOLING: str = """
+HEAT_PUMP_HAS_ACTIVE_COOLING: Final[str] = """
     {
         "name": "APPL.CtrlAppl.sParam.options.heatpump[0].hasActiveCooling",
         "attributes": {
@@ -1520,7 +1545,7 @@ HEAT_PUMP_HAS_ACTIVE_COOLING: str = """
     }
 """
 
-HEAT_PUMP_HAS_PASSIVE_COOLING: str = """
+HEAT_PUMP_HAS_PASSIVE_COOLING: Final[str] = """
     {
         "name": "APPL.CtrlAppl.sParam.options.heatpump[0].hasPassiveCooling",
         "attributes": {
@@ -1530,7 +1555,17 @@ HEAT_PUMP_HAS_PASSIVE_COOLING: str = """
     }
 """
 
-HEAT_PUMP_ELECTRIC_ENERGY_METER_TYPE: str = """
+EXTERNAL_HEAT_SOURCE_HAS_EMISSIONS: Final[str] = """
+    {
+        "name": "APPL.CtrlAppl.sParam.extHeatSource[%s].param.hasEmmission",
+        "attributes": {
+            "longText": "Has emission"
+        },
+        "value": "%s"
+    }
+"""
+
+HEAT_PUMP_ELECTRIC_ENERGY_METER_TYPE: Final[str] = """
     {
         "name": "APPL.CtrlAppl.sParam.options.heatpump[0].ElectricEnergyMeter.type",
         "attributes": {
@@ -1544,7 +1579,7 @@ HEAT_PUMP_ELECTRIC_ENERGY_METER_TYPE: str = """
     }
 """
 
-HEAT_PUMP_HEAT_METER_TYPE: str = """
+HEAT_PUMP_HEAT_METER_TYPE: Final[str] = """
     {
         "name":"APPL.CtrlAppl.sParam.options.heatpump[0].HeatMeter.type",
         "attributes": {
@@ -1558,7 +1593,7 @@ HEAT_PUMP_HEAT_METER_TYPE: str = """
     }
 """
 
-BUFFER_TANK_CURRENT_TOP_TEMPERATURE: str = """
+BUFFER_TANK_CURRENT_TOP_TEMPERATURE: Final[str] = """
     {
         "name": "APPL.CtrlAppl.sParam.bufferTank[%s].topTemp.values.actValue",
         "attributes": {
@@ -1572,7 +1607,7 @@ BUFFER_TANK_CURRENT_TOP_TEMPERATURE: str = """
     }
 """
 
-BUFFER_TANK_CURRENT_BOTTOM_TEMPERATURE: str = """
+BUFFER_TANK_CURRENT_BOTTOM_TEMPERATURE: Final[str] = """
     {
         "name": "APPL.CtrlAppl.sParam.bufferTank[%s].midTemp.values.actValue",
         "attributes": {
@@ -1586,7 +1621,7 @@ BUFFER_TANK_CURRENT_BOTTOM_TEMPERATURE: str = """
     }
 """
 
-BUFFER_TANK_EXCESS_ENERGY_TARGET_TEMPERATURE: str = """
+BUFFER_TANK_EXCESS_ENERGY_TARGET_TEMPERATURE: Final[str] = """
     {
         "name": "APPL.CtrlAppl.sParam.bufferTank[%s].param.excessEnergyTemp.value",
         "attributes": {
@@ -1600,7 +1635,7 @@ BUFFER_TANK_EXCESS_ENERGY_TARGET_TEMPERATURE: str = """
     }
 """
 
-BUFFER_TANK_EXCESS_ENERGY_TARGET_TEMPERATURE_HYSTERESIS: str = """
+BUFFER_TANK_EXCESS_ENERGY_TARGET_TEMPERATURE_HYSTERESIS: Final[str] = """
     {
         "name": "APPL.CtrlAppl.sParam.bufferTank[%s].param.excessEnergyTemp.hyst",
         "attributes": {
@@ -1614,7 +1649,7 @@ BUFFER_TANK_EXCESS_ENERGY_TARGET_TEMPERATURE_HYSTERESIS: str = """
     }
 """
 
-BUFFER_TANK_EXCESS_ENERGY_MODE: str = """
+BUFFER_TANK_EXCESS_ENERGY_MODE: Final[str] = """
     {
         "name": "APPL.CtrlAppl.sParam.bufferTank[%s].values.useExcessEnergy",
         "attributes": {
@@ -1628,7 +1663,7 @@ BUFFER_TANK_EXCESS_ENERGY_MODE: str = """
     }
 """
 
-BUFFER_TANK_OPERATING_MODE: str = """
+BUFFER_TANK_OPERATING_MODE: Final[str] = """
     {
         "name": "APPL.CtrlAppl.sParam.bufferTank[%s].param.operatingMode",
         "attributes": {
@@ -1642,7 +1677,7 @@ BUFFER_TANK_OPERATING_MODE: str = """
     }
 """
 
-BUFFER_TANK_STANDBY_TEMPERATURE: str = """
+BUFFER_TANK_STANDBY_TEMPERATURE: Final[str] = """
     {
         "name": "APPL.CtrlAppl.sParam.bufferTank[%s].param.backupTemp",
         "attributes": {
@@ -1656,7 +1691,7 @@ BUFFER_TANK_STANDBY_TEMPERATURE: str = """
     }
 """
 
-BUFFER_TANK_TARGET_TEMPERATURE: str = """
+BUFFER_TANK_TARGET_TEMPERATURE: Final[str] = """
     {
         "name": "APPL.CtrlAppl.sParam.bufferTank[%s].values.setTemp",
         "attributes": {
@@ -1670,7 +1705,7 @@ BUFFER_TANK_TARGET_TEMPERATURE: str = """
     }
 """
 
-BUFFER_TANK_HEAT_REQUEST: str = """
+BUFFER_TANK_HEAT_REQUEST: Final[str] = """
     {
         "name": "APPL.CtrlAppl.sParam.bufferTank[%s].values.heatRequestTop",
         "attributes": {},
@@ -1678,7 +1713,7 @@ BUFFER_TANK_HEAT_REQUEST: str = """
     }
 """
 
-BUFFER_TANK_COOL_REQUEST: str = """
+BUFFER_TANK_COOL_REQUEST: Final[str] = """
     {
         "name": "APPL.CtrlAppl.sParam.bufferTank[%s].values.coolRequestBot",
         "attributes": {},
@@ -1686,7 +1721,7 @@ BUFFER_TANK_COOL_REQUEST: str = """
     }
 """
 
-BUFFER_TANK_USE_EXCESS_ENERGY: str = """
+BUFFER_TANK_USE_EXCESS_ENERGY: Final[str] = """
     {
         "name": "APPL.CtrlAppl.sParam.bufferTank[%s].param.useExcessEnergy",
         "attributes": {
@@ -1696,7 +1731,7 @@ BUFFER_TANK_USE_EXCESS_ENERGY: str = """
     }
 """
 
-BUFFER_TANK_OUTDOOR_TEMPERATURE_EXCESS_ENERGY_LIMIT: str = """
+BUFFER_TANK_OUTDOOR_TEMPERATURE_EXCESS_ENERGY_LIMIT: Final[str] = """
     {
         "name": "APPL.CtrlAppl.sParam.bufferTank[%s].param.thresholdOutTempExcessEnergy.value",
         "attributes": {
@@ -1710,7 +1745,7 @@ BUFFER_TANK_OUTDOOR_TEMPERATURE_EXCESS_ENERGY_LIMIT: str = """
     }
 """
 
-HOT_WATER_TANK_USE_EXCESS_ENERGY: str = """
+HOT_WATER_TANK_USE_EXCESS_ENERGY: Final[str] = """
     {
         "name": "APPL.CtrlAppl.sParam.hotWaterTank[%s].param.useExcessEnergy",
         "attributes": {
@@ -1720,7 +1755,7 @@ HOT_WATER_TANK_USE_EXCESS_ENERGY: str = """
     }
 """
 
-HOT_WATER_TANK_EXCESS_ENERGY_TARGET_TEMPERATURE: str = """
+HOT_WATER_TANK_EXCESS_ENERGY_TARGET_TEMPERATURE: Final[str] = """
     {
         "name": "APPL.CtrlAppl.sParam.hotWaterTank[%s].param.excessEnergyTemp.value",
         "attributes": {
@@ -1734,7 +1769,7 @@ HOT_WATER_TANK_EXCESS_ENERGY_TARGET_TEMPERATURE: str = """
     }
 """
 
-HOT_WATER_TANK_EXCESS_ENERGY_TARGET_TEMPERATURE_HYSTERESIS: str = """
+HOT_WATER_TANK_EXCESS_ENERGY_TARGET_TEMPERATURE_HYSTERESIS: Final[str] = """
     {
         "name": "APPL.CtrlAppl.sParam.hotWaterTank[%s].param.excessEnergyTemp.hyst",
         "attributes": {
@@ -1749,7 +1784,7 @@ HOT_WATER_TANK_EXCESS_ENERGY_TARGET_TEMPERATURE_HYSTERESIS: str = """
 """
 
 
-HOT_WATER_TANK_EXCESS_ENERGY_MODE: str = """
+HOT_WATER_TANK_EXCESS_ENERGY_MODE: Final[str] = """
     {
         "name": "APPL.CtrlAppl.sParam.hotWaterTank[%s].values.useExcessEnergy",
         "attributes": {
@@ -1763,7 +1798,7 @@ HOT_WATER_TANK_EXCESS_ENERGY_MODE: str = """
     }
 """
 
-HOT_WATER_TANK_HEAT_REQUEST: str = """
+HOT_WATER_TANK_HEAT_REQUEST: Final[str] = """
     {
         "name": "APPL.CtrlAppl.sParam.hotWaterTank[%s].values.heatRequestTop",
         "attributes": {
@@ -1773,7 +1808,7 @@ HOT_WATER_TANK_HEAT_REQUEST: str = """
     }
 """
 
-HOT_WATER_TANK_FRESH_WATER_FLOW: str = """
+HOT_WATER_TANK_FRESH_WATER_FLOW: Final[str] = """
     {
         "name": "APPL.CtrlAppl.sParam.hotWaterTank[%s].FreshWater.freshWaterFlow.values.actValue",
         "attributes": {
@@ -1783,7 +1818,7 @@ HOT_WATER_TANK_FRESH_WATER_FLOW: str = """
     }
 """
 
-HOT_WATER_TANK_FRESH_WATER_MODULE_TEMPERATURE: str = """
+HOT_WATER_TANK_FRESH_WATER_MODULE_TEMPERATURE: Final[str] = """
     {
         "name": "APPL.CtrlAppl.sParam.hotWaterTank[%s].FreshWater.freshWaterTemp.values.actValue",
         "attributes": {
@@ -1797,7 +1832,7 @@ HOT_WATER_TANK_FRESH_WATER_MODULE_TEMPERATURE: str = """
     }
 """
 
-HOT_WATER_TANK_TARGET_TEMPERATURE: str = """
+HOT_WATER_TANK_TARGET_TEMPERATURE: Final[str] = """
     {
         "name": "APPL.CtrlAppl.sParam.hotWaterTank[%s].param.normalSetTempMax.value",
         "attributes": {
@@ -1812,7 +1847,7 @@ HOT_WATER_TANK_TARGET_TEMPERATURE: str = """
     }
 """
 
-HOT_WATER_TANK_STANDBY_TEMPERATURE: str = """
+HOT_WATER_TANK_STANDBY_TEMPERATURE: Final[str] = """
     {
         "name": "APPL.CtrlAppl.sParam.hotWaterTank[%s].param.reducedSetTempMax.value",
         "attributes": {
@@ -1827,7 +1862,7 @@ HOT_WATER_TANK_STANDBY_TEMPERATURE: str = """
     }
 """
 
-HOT_WATER_TANK_OPERATION_MODE: str = """
+HOT_WATER_TANK_OPERATION_MODE: Final[str] = """
     {
         "name": "APPL.CtrlAppl.sParam.hotWaterTank[%s].param.operatingMode",
         "attributes": {
@@ -1841,7 +1876,7 @@ HOT_WATER_TANK_OPERATION_MODE: str = """
     }
 """
 
-HOT_WATER_TANK_CURRENT_TEMPERATURE: str = """
+HOT_WATER_TANK_CURRENT_TEMPERATURE: Final[str] = """
     {
         "name": "APPL.CtrlAppl.sParam.hotWaterTank[%s].topTemp.values.actValue",
         "attributes": {
@@ -1855,7 +1890,7 @@ HOT_WATER_TANK_CURRENT_TEMPERATURE: str = """
     }
 """
 
-HOT_WATER_TANK_CIRCULATION_RETURN_TEMPERATURE: str = """
+HOT_WATER_TANK_CIRCULATION_RETURN_TEMPERATURE: Final[str] = """
     {
         "name": "APPL.CtrlAppl.sParam.hotWaterTank[%s].circTemp.values.actValue",
         "attributes": {
@@ -1869,7 +1904,7 @@ HOT_WATER_TANK_CIRCULATION_RETURN_TEMPERATURE: str = """
     }
 """
 
-HOT_WATER_TANK_CIRCULATION_PUMP_STATE: str = """
+HOT_WATER_TANK_CIRCULATION_PUMP_STATE: Final[str] = """
     {
         "name": "APPL.CtrlAppl.sParam.hotWaterTank[%s].circPump.pump.values.setValueB",
         "attributes": {
@@ -1879,7 +1914,7 @@ HOT_WATER_TANK_CIRCULATION_PUMP_STATE: str = """
     }
 """
 
-HOT_WATER_TANK_HAS_FRESH_WATER_MODULE: str = """
+HOT_WATER_TANK_HAS_FRESH_WATER_MODULE: Final[str] = """
     {
         "name": "APPL.CtrlAppl.sParam.options.hotWaterTank[%s].hasFreshWaterModule",
         "attributes": {
@@ -1889,7 +1924,7 @@ HOT_WATER_TANK_HAS_FRESH_WATER_MODULE: str = """
     }
 """
 
-PASSIVE_COOLING_TEMPERATURE: dict[str, Any] = {
+PASSIVE_COOLING_TEMPERATURE: Final[dict[str, Any]] = {
     "name": "APPL.CtrlAppl.sParam.passivecooling[0].TempCoolPassive.values.actValue",
     "attributes": {
         "formatId": "fmtTemp",
@@ -1901,7 +1936,7 @@ PASSIVE_COOLING_TEMPERATURE: dict[str, Any] = {
     "value": "22.34",
 }
 
-PASSIVE_COOLING_SWITCH_VALVE_POSITION: dict[str, Any] = {
+PASSIVE_COOLING_SWITCH_VALVE_POSITION: Final[dict[str, Any]] = {
     "name": "APPL.CtrlAppl.sParam.passivecooling[0].SwitchValvePassiveCool.values.actPosition",
     "attributes": {
         "formatId": "fmtSwitchValveState",
@@ -1913,7 +1948,7 @@ PASSIVE_COOLING_SWITCH_VALVE_POSITION: dict[str, Any] = {
     "value": "1",
 }
 
-PASSIVE_COOLING_CIRCULATION_PUMP_SPEED: dict[str, Any] = {
+PASSIVE_COOLING_CIRCULATION_PUMP_SPEED: Final[dict[str, Any]] = {
     "name": "APPL.CtrlAppl.sParam.passivecooling[0].Pump.values.setValueScaled",
     "attributes": {
         "formatId": "fmt3p0",
@@ -1925,7 +1960,7 @@ PASSIVE_COOLING_CIRCULATION_PUMP_SPEED: dict[str, Any] = {
     "value": "0.23",
 }
 
-PASSIVE_COOLING_MIXER_TARGET_TEMPERATURE: dict[str, Any] = {
+PASSIVE_COOLING_MIXER_TARGET_TEMPERATURE: Final[dict[str, Any]] = {
     "name": "APPL.CtrlAppl.sParam.passivecooling[0].Mixer.values.setValue",
     "attributes": {
         "longText": "Set temp",
@@ -1933,7 +1968,7 @@ PASSIVE_COOLING_MIXER_TARGET_TEMPERATURE: dict[str, Any] = {
     "value": "19.22",
 }
 
-PASSIVE_COOLING_MIXER_POSITION: dict[str, Any] = {
+PASSIVE_COOLING_MIXER_POSITION: Final[dict[str, Any]] = {
     "name": "APPL.CtrlAppl.sParam.passivecooling[0].Mixer.mixer.values.setValueScaled",
     "attributes": {
         "formatId": "fmt3p0",
@@ -1945,7 +1980,7 @@ PASSIVE_COOLING_MIXER_POSITION: dict[str, Any] = {
     "value": "-1",
 }
 
-PASSIVE_COOLING_MIXER_FLOW_TEMPERATURE: dict[str, Any] = {
+PASSIVE_COOLING_MIXER_FLOW_TEMPERATURE: Final[dict[str, Any]] = {
     "name": "APPL.CtrlAppl.sParam.passivecooling[0].Mixer.flowTemp.values.actValue",
     "attributes": {
         "formatId": "fmtTemp",
@@ -1957,7 +1992,7 @@ PASSIVE_COOLING_MIXER_FLOW_TEMPERATURE: dict[str, Any] = {
     "value": "24.26",
 }
 
-PHOTOVOLTAIC_EXCESS_ENERGY_ACTIVE: str = """
+PHOTOVOLTAIC_EXCESS_ENERGY_ACTIVE: Final[str] = """
     {
         "name": "APPL.CtrlAppl.sParam.photovoltaics.values.excessEnergyActive",
         "attributes": {
@@ -1967,7 +2002,7 @@ PHOTOVOLTAIC_EXCESS_ENERGY_ACTIVE: str = """
     }
 """
 
-PHOTOVOLTAIC_EXCESS_POWER: str = """
+PHOTOVOLTAIC_EXCESS_POWER: Final[str] = """
     {
         "name": "APPL.CtrlAppl.sParam.photovoltaics.ElectricEnergyMeter.values.power",
         "attributes": {
@@ -1979,7 +2014,7 @@ PHOTOVOLTAIC_EXCESS_POWER: str = """
     }
 """
 
-PHOTOVOLTAIC_DAILY_ENERGY: str = """
+PHOTOVOLTAIC_DAILY_ENERGY: Final[str] = """
     {
         "name": "APPL.CtrlAppl.sParam.photovoltaics.ElectricEnergyMeter.values.heatDay",
         "attributes": {
@@ -1991,7 +2026,7 @@ PHOTOVOLTAIC_DAILY_ENERGY: str = """
     }
 """
 
-PHOTOVOLTAIC_TOTAL_ENERGY: str = """
+PHOTOVOLTAIC_TOTAL_ENERGY: Final[str] = """
     {
         "name": "APPL.CtrlAppl.sParam.photovoltaics.ElectricEnergyMeter.values.accumulatedHeat",
         "attributes": {
@@ -2003,7 +2038,7 @@ PHOTOVOLTAIC_TOTAL_ENERGY: str = """
     }
 """
 
-SYSTEM_HAS_OUTDOOR_TEMPERATURE: str = """
+SYSTEM_HAS_OUTDOOR_TEMPERATURE: Final[str] = """
     {
         "name": "APPL.CtrlAppl.sParam.options.hasOutdoorTemp",
         "attributes": {
@@ -2013,7 +2048,7 @@ SYSTEM_HAS_OUTDOOR_TEMPERATURE: str = """
     }
 """
 
-SYSTEM_HEAT_CIRCUIT_NUMBERS: str = """
+SYSTEM_HEAT_CIRCUIT_NUMBERS: Final[str] = """
     {
         "name": "APPL.CtrlAppl.sParam.options.systemNumberOfHeatingCircuits",
         "attributes": {
@@ -2028,7 +2063,7 @@ SYSTEM_HEAT_CIRCUIT_NUMBERS: str = """
     }
 """
 
-SYSTEM_SOLAR_CIRCUIT_NUMBERS: str = """
+SYSTEM_SOLAR_CIRCUIT_NUMBERS: Final[str] = """
     {
         "name": "APPL.CtrlAppl.sParam.options.systemNumberOfSolarCircuits",
         "attributes": {
@@ -2043,7 +2078,7 @@ SYSTEM_SOLAR_CIRCUIT_NUMBERS: str = """
     }
 """
 
-SYSTEM_HEAT_PUMP_NUMBERS: str = """
+SYSTEM_HEAT_PUMP_NUMBERS: Final[str] = """
     {
         "name": "APPL.CtrlAppl.sParam.options.systemNumberOfHeatPumps",
         "attributes": {
@@ -2058,7 +2093,7 @@ SYSTEM_HEAT_PUMP_NUMBERS: str = """
     }
 """
 
-SYSTEM_BUFFER_TANK_NUMBERS: str = """
+SYSTEM_BUFFER_TANK_NUMBERS: Final[str] = """
     {
         "name": "APPL.CtrlAppl.sParam.options.systemNumberOfBuffers",
         "attributes": {
@@ -2073,7 +2108,7 @@ SYSTEM_BUFFER_TANK_NUMBERS: str = """
     }
 """
 
-SYSTEM_HOT_WATER_TANK_NUMBERS: str = """
+SYSTEM_HOT_WATER_TANK_NUMBERS: Final[str] = """
     {
         "name": "APPL.CtrlAppl.sParam.options.systemNumberOfHotWaterTanks",
         "attributes": {
@@ -2088,7 +2123,7 @@ SYSTEM_HOT_WATER_TANK_NUMBERS: str = """
     }
 """
 
-SYSTEM_EXTERNAL_HEAT_SOURCE_NUMBERS: str = """
+SYSTEM_EXTERNAL_HEAT_SOURCE_NUMBERS: Final[str] = """
     {
         "name": "APPL.CtrlAppl.sParam.options.systemNumberOfExtHeatSources",
         "attributes": {
@@ -2101,7 +2136,7 @@ SYSTEM_EXTERNAL_HEAT_SOURCE_NUMBERS: str = """
     }
 """
 
-SYSTEM_SWITCH_VALVE_NUMBERS: str = """
+SYSTEM_SWITCH_VALVE_NUMBERS: Final[str] = """
     {
         "name": "APPL.CtrlAppl.sParam.options.systemNumberOfSwitchValves",
         "attributes": {
@@ -2116,7 +2151,7 @@ SYSTEM_SWITCH_VALVE_NUMBERS: str = """
     }
 """
 
-SYSTEM_OUTDOOR_TEMPERATURE: dict[str, Any] = {
+SYSTEM_OUTDOOR_TEMPERATURE: Final[dict[str, Any]] = {
     "name": "APPL.CtrlAppl.sParam.outdoorTemp.values.actValue",
     "attributes": {
         "formatId": "fmtTemp",
@@ -2128,7 +2163,7 @@ SYSTEM_OUTDOOR_TEMPERATURE: dict[str, Any] = {
     "value": "20.504164",
 }
 
-SYSTEM_OPERATING_MODE: dict[str, Any] = {
+SYSTEM_OPERATING_MODE: Final[dict[str, Any]] = {
     "name": "APPL.CtrlAppl.sParam.param.operatingMode",
     "attributes": {
         "formatId": "fmtOperatingMode",
@@ -2140,7 +2175,7 @@ SYSTEM_OPERATING_MODE: dict[str, Any] = {
     "value": "2",
 }
 
-SYSTEM_HAS_PHOTOVOLTAICS: str = """
+SYSTEM_HAS_PHOTOVOLTAICS: Final[str] = """
     {
         "name": "APPL.CtrlAppl.sParam.options.hasPhotovoltaics",
         "attributes": {"longText": "With photovoltaics"},
@@ -2148,7 +2183,7 @@ SYSTEM_HAS_PHOTOVOLTAICS: str = """
     }
 """
 
-SWITCH_VALVE_POSITION: str = """
+SWITCH_VALVE_POSITION: Final[str] = """
     {
         "name": "APPL.CtrlAppl.sParam.switchvalve[%s].values.actPosition",
         "attributes": {
@@ -2162,7 +2197,7 @@ SWITCH_VALVE_POSITION: str = """
     }
 """
 
-DEVICE_INFO_RESPONSE: dict[str, Any] = {
+DEVICE_INFO_RESPONSE: Final[dict[str, Any]] = {
     "ret": "OK",
     "revNo": 2,
     "orderNo": 000000,
@@ -2171,22 +2206,22 @@ DEVICE_INFO_RESPONSE: dict[str, Any] = {
     "variantNo": 0,
 }
 
-SYSTEM_RESPONSE: dict[str, str] = {
+SYSTEM_RESPONSE: Final[dict[str, str]] = {
     "ret": "OK",
     "name": "KeEnergy.MTec",
     "version": "2.2.2",
 }
 
-HMI_RESPONSE: dict[str, str] = {
+HMI_RESPONSE: Final[dict[str, str]] = {
     "ret": "OK",
     "name": "KeEnergy.WebHmi_2.2.0.0",
 }
 
-TIMEZONE_RESPONSE: dict[str, str] = {
+TIMEZONE_RESPONSE: Final[dict[str, str]] = {
     "timezone": "Europe/Vienna",
 }
 
-SYSTEM_CPU_USAGE: dict[str, Any] = {
+SYSTEM_CPU_USAGE: Final[dict[str, Any]] = {
     "name": "APPL.CtrlAppl.sProcData.globalCpuTimePercent",
     "attributes": {
         "formatId": "fmt3p1",
@@ -2196,7 +2231,7 @@ SYSTEM_CPU_USAGE: dict[str, Any] = {
     "value": "27",
 }
 
-SYSTEM_WEBVIEW_CPU_USAGE: dict[str, Any] = {
+SYSTEM_WEBVIEW_CPU_USAGE: Final[dict[str, Any]] = {
     "name": "APPL.CtrlAppl.sProcData.processStatus[0].cpuTimePercent",
     "attributes": {
         "formatId": "fmt3p1",
@@ -2206,7 +2241,7 @@ SYSTEM_WEBVIEW_CPU_USAGE: dict[str, Any] = {
     "value": "34",
 }
 
-SYSTEM_WEBSERVER_CPU_USAGE: dict[str, Any] = {
+SYSTEM_WEBSERVER_CPU_USAGE: Final[dict[str, Any]] = {
     "name": "APPL.CtrlAppl.sProcData.processStatus[1].cpuTimePercent",
     "attributes": {
         "formatId": "fmt3p1",
@@ -2216,7 +2251,7 @@ SYSTEM_WEBSERVER_CPU_USAGE: dict[str, Any] = {
     "value": "67",
 }
 
-SYSTEM_CONTROL_CPU_USAGE: dict[str, Any] = {
+SYSTEM_CONTROL_CPU_USAGE: Final[dict[str, Any]] = {
     "name": "APPL.CtrlAppl.sProcData.processStatus[2].cpuTimePercent",
     "attributes": {
         "formatId": "fmt3p1",
@@ -2226,7 +2261,7 @@ SYSTEM_CONTROL_CPU_USAGE: dict[str, Any] = {
     "value": "7",
 }
 
-SYSTEM_RAM_USAGE: dict[str, Any] = {
+SYSTEM_RAM_USAGE: Final[dict[str, Any]] = {
     "name": "APPL.CtrlAppl.sProcData.RAMstatus.tmpfs",
     "attributes": {
         "formatId": "fmt6p0",
@@ -2236,7 +2271,7 @@ SYSTEM_RAM_USAGE: dict[str, Any] = {
     "value": "6432",
 }
 
-SYSTEM_FREE_RAM: dict[str, Any] = {
+SYSTEM_FREE_RAM: Final[dict[str, Any]] = {
     "name": "APPL.CtrlAppl.sProcData.totFreeRAM",
     "attributes": {
         "formatId": "fmt6p0",
@@ -2246,7 +2281,16 @@ SYSTEM_FREE_RAM: dict[str, Any] = {
     "value": "100060",
 }
 
-DEFAULT_POSITION_RESPONSE: list[dict[str, Any]] = [
+SYSTEM_FLASH_ERASE_COUNTER: Final[dict[str, Any]] = {
+    "name": "APPL.CtrlAppl.sParam.values.UBIMaxEraseCounter",
+    "attributes": {
+        "formatId": "fmt6p0",
+        "longText": "Erase counter partition 2",
+    },
+    "value": "341",
+}
+
+DEFAULT_POSITION_RESPONSE: Final[list[dict[str, Any]]] = [
     json.loads(SYSTEM_HEAT_PUMP_NUMBERS % "1"),
     json.loads(SYSTEM_HEAT_CIRCUIT_NUMBERS % "1"),
     json.loads(SYSTEM_SOLAR_CIRCUIT_NUMBERS % "1"),
@@ -2256,7 +2300,7 @@ DEFAULT_POSITION_RESPONSE: list[dict[str, Any]] = [
     json.loads(SYSTEM_SWITCH_VALVE_NUMBERS % "1"),
 ]
 
-MULTIPLE_POSITIONS_RESPONSE: list[dict[str, Any]] = [
+MULTIPLE_POSITIONS_RESPONSE: Final[list[dict[str, Any]]] = [
     json.loads(SYSTEM_HEAT_PUMP_NUMBERS % "1"),
     json.loads(SYSTEM_HEAT_CIRCUIT_NUMBERS % "2"),
     json.loads(SYSTEM_SOLAR_CIRCUIT_NUMBERS % "2"),
@@ -2268,6 +2312,7 @@ MULTIPLE_POSITIONS_RESPONSE: list[dict[str, Any]] = [
 
 
 def get_heat_pump_data(compressor_night_speed: str = "true") -> list[dict[str, Any]]:
+    """Return the values of a heat pump."""
     return [
         HEAT_PUMP_CONSUMING_EXCESS_ENERGY,
         HEAT_PUMP_EXCESS_ENERGY_OPERATING_TIME,
@@ -2333,7 +2378,7 @@ def get_heat_pump_data(compressor_night_speed: str = "true") -> list[dict[str, A
     ]
 
 
-DEFAULT_POSITION_FIXED_DATA_RESPONSE: list[dict[str, Any]] = [
+DEFAULT_POSITION_FIXED_DATA_RESPONSE: Final[list[dict[str, Any]]] = [
     json.loads(SYSTEM_HAS_OUTDOOR_TEMPERATURE % "true"),
     json.loads(SYSTEM_HAS_PHOTOVOLTAICS % "true"),
     json.loads(HEAT_CIRCUIT_MODE % ("0", "0")),
@@ -2348,6 +2393,7 @@ DEFAULT_POSITION_FIXED_DATA_RESPONSE: list[dict[str, Any]] = [
     json.loads(HEAT_PUMP_HAS_PASSIVE_COOLING % "true"),
     json.loads(HEAT_PUMP_ELECTRIC_ENERGY_METER_TYPE % "1"),
     json.loads(HEAT_PUMP_HEAT_METER_TYPE % "1"),
+    json.loads(EXTERNAL_HEAT_SOURCE_HAS_EMISSIONS % ("0", "false")),
 ]
 
 
@@ -2355,10 +2401,12 @@ def get_multiple_position_fixed_data_response(
     *,
     has_passive_cooling: str = "false",
     has_cooling_circuits: bool = True,
+    has_photovoltaics: str = "true",
 ) -> list[dict[str, Any]]:
+    """Return the values that are read once on setup, for a setup with several devices of each type."""
     return [
         json.loads(SYSTEM_HAS_OUTDOOR_TEMPERATURE % "true"),
-        json.loads(SYSTEM_HAS_PHOTOVOLTAICS % "true"),
+        json.loads(SYSTEM_HAS_PHOTOVOLTAICS % has_photovoltaics),
         json.loads(HEAT_CIRCUIT_MODE % ("0", "0")),
         json.loads(HEAT_CIRCUIT_MODE % ("1", "1" if has_cooling_circuits else "0")),
         json.loads(HEAT_CIRCUIT_HAS_ROOM_TEMPERATURE % ("0", "true")),
@@ -2379,333 +2427,16 @@ def get_multiple_position_fixed_data_response(
         json.loads(HEAT_PUMP_HAS_PASSIVE_COOLING % f"{has_passive_cooling}"),
         json.loads(HEAT_PUMP_ELECTRIC_ENERGY_METER_TYPE % "1"),
         json.loads(HEAT_PUMP_HEAT_METER_TYPE % "1"),
+        json.loads(EXTERNAL_HEAT_SOURCE_HAS_EMISSIONS % ("0", "true")),
+        json.loads(EXTERNAL_HEAT_SOURCE_HAS_EMISSIONS % ("1", "false")),
     ]
-
-
-DEFAULT_POSITION_DATA_RESPONSE: list[dict[str, Any]] = [
-    json.loads(EXTERNAL_HEAT_SOURCE_OPERATING_MODE % ("0", "1")),
-    json.loads(EXTERNAL_HEAT_SOURCE_TARGET_TEMPERATURE % ("0", "1")),
-    json.loads(EXTERNAL_HEAT_SOURCE_HEAT_REQUEST % ("0", "true")),
-    json.loads(EXTERNAL_HEAT_SOURCE_OPERATING_TIME % ("0", "812999")),
-    json.loads(EXTERNAL_HEAT_SOURCE_MAX_RUNTIME % ("0", "8129")),
-    json.loads(EXTERNAL_HEAT_SOURCE_ACTIVATION_COUNTER % ("0", "812")),
-    json.loads(EXTERNAL_HEAT_SOURCE_USE_EXCESS_ENERGY % ("0", "true")),
-    json.loads(EXTERNAL_HEAT_SOURCE_MIN_RUNTIME_EXCESS_ENERGY % ("0", "5")),
-    json.loads(EXTERNAL_HEAT_SOURCE_CONSUMING_EXCESS_ENERGY % ("0", "true")),
-    json.loads(EXTERNAL_HEAT_SOURCE_EXCESS_ENERGY_OPERATING_TIME % ("0", "3600")),
-    json.loads(EXTERNAL_HEAT_SOURCE_EXCESS_ENERGY_MAX_RUNTIME % ("0", "3600")),
-    json.loads(EXTERNAL_HEAT_SOURCE_EXCESS_ENERGY_ACTIVATION_COUNTER % ("0", "23")),
-    json.loads(HEAT_CIRCUIT_ROOM_TEMPERATURE % ("0", "22.42")),
-    json.loads(HEAT_CIRCUIT_ROOM_HUMIDITY % ("0", "53")),
-    json.loads(HEAT_CIRCUIT_DEW_POINT % ("0", "13.1")),
-    json.loads(HEAT_CIRCUIT_FLOW_TEMPERATURE_SETPOINT % ("0", "26.5543")),
-    json.loads(HEAT_CIRCUIT_MIXER_FLOW_TEMPERATURE % ("0", "22.2143")),
-    json.loads(HEAT_CIRCUIT_MIXER_RETURN_FLOW_TEMPERATURE % ("0", "20.2143")),
-    json.loads(HEAT_CIRCUIT_MIXER_POSITION % ("0", "-1")),
-    json.loads(HEAT_CIRCUIT_PUMP_STATE % ("0", "true")),
-    json.loads(HEAT_CIRCUIT_RETURN_FLOW_TEMPERATURE % ("0", "21.2143")),
-    json.loads(HEAT_CIRCUIT_TARGET_TEMPERATURE_DAY % ("0", "20.5")),
-    json.loads(HEAT_CIRCUIT_TARGET_COOLING_TEMPERATURE_DAY % ("0", "20.5")),
-    json.loads(HEAT_CIRCUIT_HEATING_LIMIT_DAY % ("0", "20")),
-    json.loads(HEAT_CIRCUIT_COOLING_LIMIT_DAY % ("0", "20")),
-    json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_HEATING_LIMIT_DAY % ("0", "30")),
-    json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_COOLING_LIMIT_DAY % ("0", "10")),
-    json.loads(HEAT_CIRCUIT_HEAT_REQUEST % ("0", "1")),
-    json.loads(HEAT_CIRCUIT_COOL_REQUEST % ("0", "0")),
-    json.loads(HEAT_CIRCUIT_TARGET_TEMPERATURE_AWAY % ("0", "18")),
-    json.loads(HEAT_CIRCUIT_TARGET_TEMPERATURE_NIGHT % ("0", "20")),
-    json.loads(HEAT_CIRCUIT_TARGET_COOLING_TEMPERATURE_NIGHT % ("0", "20")),
-    json.loads(HEAT_CIRCUIT_HEATING_LIMIT_NIGHT % ("0", "18")),
-    json.loads(HEAT_CIRCUIT_COOLING_LIMIT_NIGHT % ("0", "18")),
-    json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_HEATING_LIMIT_NIGHT % ("0", "28")),
-    json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_COOLING_LIMIT_NIGHT % ("0", "28")),
-    json.loads(HEAT_CIRCUIT_OPERATION_MODE % ("0", "3")),
-    json.loads(HEAT_CIRCUIT_SELECTED_TARGET_TEMPERATURE % ("0", "20")),
-    json.loads(HEAT_CIRCUIT_TARGET_TEMPERATURE % ("0", "20.5")),
-    json.loads(HEAT_CIRCUIT_TARGET_TEMPERATURE_OFFSET % ("0", "1.5")),
-    json.loads(HEAT_CIRCUIT_USE_EXCESS_ENERGY % ("0", "true")),
-    json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_TARGET_TEMPERATURE % ("0", "30")),
-    json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_TARGET_TEMPERATURE_HYSTERESIS % ("0", "0.7")),
-    json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_TARGET_COOLING_TEMPERATURE % ("0", "10")),
-    json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_TARGET_COOLING_TEMPERATURE_HYSTERESIS % ("0", "0.7")),
-    json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_MODE % ("0", "1")),
-    json.loads(HEAT_CIRCUIT_AWAY_START_DATE % ("0", "1769036400")),
-    json.loads(HEAT_CIRCUIT_AWAY_END_DATE % ("0", "1769122799")),
-    json.loads(HEAT_CIRCUIT_HEATING_CURVE_OFFSET % ("0", "0.5")),
-    json.loads(HEAT_CIRCUIT_COOLING_CURVE_OFFSET % ("0", "0.5")),
-    json.loads(HEAT_CIRCUIT_HEATING_CURVE_SLOPE % ("0", "0.1")),
-    json.loads(HEAT_CIRCUIT_COOLING_CURVE_SLOPE % ("0", "0.1")),
-    json.loads(HEAT_CIRCUIT_USE_HEATING_CURVE % ("0", "true")),
-    json.loads(HEAT_CIRCUIT_HEATING_CURVE % ("0", "HC1")),
-    json.loads(HEAT_CIRCUIT_COOLING_CURVE % ("0", "HC2")),
-    json.loads(HEAT_CIRCUIT_PUMP_SPEED % ("0", "0.5")),
-    json.loads(SOLAR_CIRCUIT_OPERATION_MODE % ("0", "0")),
-    json.loads(SOLAR_CIRCUIT_SOURCE_TEMPERATURE % ("0", "44.43")),
-    json.loads(SOLAR_CIRCUIT_PUMP_1 % ("0", "0.63")),
-    json.loads(SOLAR_CIRCUIT_PUMP_2 % ("0", "0.43")),
-    json.loads(SOLAR_CIRCUIT_CURRENT_TEMPERATURE_1 % ("0", "36.76")),
-    json.loads(SOLAR_CIRCUIT_CURRENT_TEMPERATURE_2 % ("1", "26.76")),
-    json.loads(SOLAR_CIRCUIT_TARGET_TEMPERATURE_1 % ("0", "55")),
-    json.loads(SOLAR_CIRCUIT_TARGET_TEMPERATURE_2 % ("1", "55")),
-    json.loads(SOLAR_CIRCUIT_HEAT_REQUEST % ("0", "true")),
-    json.loads(SOLAR_CIRCUIT_HEAT_REQUEST % ("1", "false")),
-    json.loads(SOLAR_CIRCUIT_HEATING_ENERGY % ("0", "1098456400")),
-    json.loads(SOLAR_CIRCUIT_DAILY_ENERGY % ("0", "298018")),
-    json.loads(SOLAR_CIRCUIT_ACTUAL_POWER % ("0", "3452")),
-    json.loads(SOLAR_CIRCUIT_PRIORITY_1_BEFORE_2 % ("0", "true")),
-    *get_heat_pump_data(compressor_night_speed="true"),
-    json.loads(BUFFER_TANK_CURRENT_TOP_TEMPERATURE % ("0", "45.67")),
-    json.loads(BUFFER_TANK_CURRENT_BOTTOM_TEMPERATURE % ("0", "25.67")),
-    json.loads(BUFFER_TANK_EXCESS_ENERGY_TARGET_TEMPERATURE % ("0", "75.0")),
-    json.loads(BUFFER_TANK_EXCESS_ENERGY_TARGET_TEMPERATURE_HYSTERESIS % ("0", "2.00")),
-    json.loads(BUFFER_TANK_EXCESS_ENERGY_MODE % ("0", "1")),
-    json.loads(BUFFER_TANK_OPERATING_MODE % ("0", "0")),
-    json.loads(BUFFER_TANK_STANDBY_TEMPERATURE % ("0", "10.00")),
-    json.loads(BUFFER_TANK_TARGET_TEMPERATURE % ("0", "44.00")),
-    json.loads(BUFFER_TANK_HEAT_REQUEST % ("0", "false")),
-    json.loads(BUFFER_TANK_COOL_REQUEST % ("0", "true")),
-    json.loads(BUFFER_TANK_USE_EXCESS_ENERGY % ("0", "true")),
-    json.loads(BUFFER_TANK_OUTDOOR_TEMPERATURE_EXCESS_ENERGY_LIMIT % ("0", "25.00")),
-    json.loads(HOT_WATER_TANK_USE_EXCESS_ENERGY % ("0", "true")),
-    json.loads(HOT_WATER_TANK_EXCESS_ENERGY_TARGET_TEMPERATURE % ("0", "75.00")),
-    json.loads(HOT_WATER_TANK_EXCESS_ENERGY_TARGET_TEMPERATURE_HYSTERESIS % ("0", "4.00")),
-    json.loads(HOT_WATER_TANK_EXCESS_ENERGY_MODE % ("0", "1")),
-    json.loads(HOT_WATER_TANK_HEAT_REQUEST % ("0", "false")),
-    json.loads(HOT_WATER_TANK_FRESH_WATER_FLOW % ("0", "false")),
-    json.loads(HOT_WATER_TANK_FRESH_WATER_MODULE_TEMPERATURE % ("0", "51")),
-    json.loads(HOT_WATER_TANK_TARGET_TEMPERATURE % ("0", "51")),
-    json.loads(HOT_WATER_TANK_STANDBY_TEMPERATURE % ("0", "32.5")),
-    json.loads(HOT_WATER_TANK_OPERATION_MODE % ("0", "3")),
-    json.loads(HOT_WATER_TANK_CURRENT_TEMPERATURE % ("0", "47.700001")),
-    json.loads(HOT_WATER_TANK_CIRCULATION_RETURN_TEMPERATURE % ("0", "30.45")),
-    json.loads(HOT_WATER_TANK_CIRCULATION_PUMP_STATE % ("0", "false")),
-    json.loads(SWITCH_VALVE_POSITION % ("0", "1")),
-    json.loads(PHOTOVOLTAIC_EXCESS_ENERGY_ACTIVE % "true"),
-    json.loads(PHOTOVOLTAIC_EXCESS_POWER % "437.700001"),
-    json.loads(PHOTOVOLTAIC_DAILY_ENERGY % "1575720000"),
-    json.loads(PHOTOVOLTAIC_TOTAL_ENERGY % "1575720000"),
-    SYSTEM_OUTDOOR_TEMPERATURE,
-    SYSTEM_OPERATING_MODE,
-    SYSTEM_CPU_USAGE,
-    SYSTEM_WEBVIEW_CPU_USAGE,
-    SYSTEM_WEBSERVER_CPU_USAGE,
-    SYSTEM_CONTROL_CPU_USAGE,
-    SYSTEM_RAM_USAGE,
-    SYSTEM_FREE_RAM,
-]
-ENTITY_UPDATED_DATA_RESPONSE: list[dict[str, Any]] = [
-    json.loads(EXTERNAL_HEAT_SOURCE_OPERATING_MODE % ("0", "1")),
-    json.loads(EXTERNAL_HEAT_SOURCE_OPERATING_MODE % ("1", "0")),
-    json.loads(EXTERNAL_HEAT_SOURCE_TARGET_TEMPERATURE % ("0", "13")),
-    json.loads(EXTERNAL_HEAT_SOURCE_TARGET_TEMPERATURE % ("1", "12")),
-    json.loads(EXTERNAL_HEAT_SOURCE_HEAT_REQUEST % ("0", "true")),
-    json.loads(EXTERNAL_HEAT_SOURCE_HEAT_REQUEST % ("1", "true")),
-    json.loads(EXTERNAL_HEAT_SOURCE_OPERATING_TIME % ("0", "812999")),
-    json.loads(EXTERNAL_HEAT_SOURCE_OPERATING_TIME % ("1", "812999")),
-    json.loads(EXTERNAL_HEAT_SOURCE_MAX_RUNTIME % ("0", "8129")),
-    json.loads(EXTERNAL_HEAT_SOURCE_MAX_RUNTIME % ("1", "8129")),
-    json.loads(EXTERNAL_HEAT_SOURCE_ACTIVATION_COUNTER % ("0", "812")),
-    json.loads(EXTERNAL_HEAT_SOURCE_ACTIVATION_COUNTER % ("1", "812")),
-    json.loads(EXTERNAL_HEAT_SOURCE_USE_EXCESS_ENERGY % ("0", "true")),
-    json.loads(EXTERNAL_HEAT_SOURCE_USE_EXCESS_ENERGY % ("1", "false")),
-    json.loads(EXTERNAL_HEAT_SOURCE_MIN_RUNTIME_EXCESS_ENERGY % ("0", "5")),
-    json.loads(EXTERNAL_HEAT_SOURCE_MIN_RUNTIME_EXCESS_ENERGY % ("1", "5")),
-    json.loads(EXTERNAL_HEAT_SOURCE_CONSUMING_EXCESS_ENERGY % ("0", "true")),
-    json.loads(EXTERNAL_HEAT_SOURCE_CONSUMING_EXCESS_ENERGY % ("1", "true")),
-    json.loads(EXTERNAL_HEAT_SOURCE_EXCESS_ENERGY_OPERATING_TIME % ("0", "3600")),
-    json.loads(EXTERNAL_HEAT_SOURCE_EXCESS_ENERGY_OPERATING_TIME % ("1", "3600")),
-    json.loads(EXTERNAL_HEAT_SOURCE_EXCESS_ENERGY_MAX_RUNTIME % ("0", "3600")),
-    json.loads(EXTERNAL_HEAT_SOURCE_EXCESS_ENERGY_MAX_RUNTIME % ("1", "3600")),
-    json.loads(EXTERNAL_HEAT_SOURCE_EXCESS_ENERGY_ACTIVATION_COUNTER % ("0", "23")),
-    json.loads(EXTERNAL_HEAT_SOURCE_EXCESS_ENERGY_ACTIVATION_COUNTER % ("1", "23")),
-    json.loads(HEAT_CIRCUIT_ROOM_TEMPERATURE % ("0", "22.42")),
-    json.loads(HEAT_CIRCUIT_ROOM_TEMPERATURE % ("1", "22.42")),
-    json.loads(HEAT_CIRCUIT_ROOM_HUMIDITY % ("0", "53")),
-    json.loads(HEAT_CIRCUIT_ROOM_HUMIDITY % ("1", "53")),
-    json.loads(HEAT_CIRCUIT_DEW_POINT % ("0", "13.1")),
-    json.loads(HEAT_CIRCUIT_DEW_POINT % ("1", "13.1")),
-    json.loads(HEAT_CIRCUIT_FLOW_TEMPERATURE_SETPOINT % ("0", "26.5543")),
-    json.loads(HEAT_CIRCUIT_FLOW_TEMPERATURE_SETPOINT % ("1", "26.5543")),
-    json.loads(HEAT_CIRCUIT_MIXER_FLOW_TEMPERATURE % ("0", "22.2143")),
-    json.loads(HEAT_CIRCUIT_MIXER_FLOW_TEMPERATURE % ("1", "22.2143")),
-    json.loads(HEAT_CIRCUIT_MIXER_RETURN_FLOW_TEMPERATURE % ("0", "20.2143")),
-    json.loads(HEAT_CIRCUIT_MIXER_RETURN_FLOW_TEMPERATURE % ("1", "20.2143")),
-    json.loads(HEAT_CIRCUIT_MIXER_POSITION % ("0", "-1")),
-    json.loads(HEAT_CIRCUIT_MIXER_POSITION % ("1", "-1")),
-    json.loads(HEAT_CIRCUIT_PUMP_STATE % ("0", "true")),
-    json.loads(HEAT_CIRCUIT_PUMP_STATE % ("1", "true")),
-    json.loads(HEAT_CIRCUIT_RETURN_FLOW_TEMPERATURE % ("0", "21.2143")),
-    json.loads(HEAT_CIRCUIT_RETURN_FLOW_TEMPERATURE % ("1", "21.2143")),
-    json.loads(HEAT_CIRCUIT_TARGET_TEMPERATURE_DAY % ("0", "20.5")),
-    json.loads(HEAT_CIRCUIT_TARGET_TEMPERATURE_DAY % ("1", "20.5")),
-    json.loads(HEAT_CIRCUIT_TARGET_COOLING_TEMPERATURE_DAY % ("0", "20.5")),
-    json.loads(HEAT_CIRCUIT_TARGET_COOLING_TEMPERATURE_DAY % ("1", "20.5")),
-    json.loads(HEAT_CIRCUIT_HEATING_LIMIT_DAY % ("0", "20")),
-    json.loads(HEAT_CIRCUIT_HEATING_LIMIT_DAY % ("1", "20")),
-    json.loads(HEAT_CIRCUIT_COOLING_LIMIT_DAY % ("0", "20")),
-    json.loads(HEAT_CIRCUIT_COOLING_LIMIT_DAY % ("1", "20")),
-    json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_HEATING_LIMIT_DAY % ("0", "30")),
-    json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_HEATING_LIMIT_DAY % ("1", "30")),
-    json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_COOLING_LIMIT_DAY % ("0", "10")),
-    json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_COOLING_LIMIT_DAY % ("1", "10")),
-    json.loads(HEAT_CIRCUIT_HEAT_REQUEST % ("0", "1")),
-    json.loads(HEAT_CIRCUIT_HEAT_REQUEST % ("1", "0")),
-    json.loads(HEAT_CIRCUIT_COOL_REQUEST % ("0", "0")),
-    json.loads(HEAT_CIRCUIT_COOL_REQUEST % ("1", "1")),
-    json.loads(HEAT_CIRCUIT_TARGET_TEMPERATURE_AWAY % ("0", "18")),
-    json.loads(HEAT_CIRCUIT_TARGET_TEMPERATURE_AWAY % ("1", "18")),
-    json.loads(HEAT_CIRCUIT_TARGET_TEMPERATURE_NIGHT % ("0", "20")),
-    json.loads(HEAT_CIRCUIT_TARGET_TEMPERATURE_NIGHT % ("1", "20")),
-    json.loads(HEAT_CIRCUIT_TARGET_COOLING_TEMPERATURE_NIGHT % ("0", "20")),
-    json.loads(HEAT_CIRCUIT_TARGET_COOLING_TEMPERATURE_NIGHT % ("1", "20")),
-    json.loads(HEAT_CIRCUIT_HEATING_LIMIT_NIGHT % ("0", "18")),
-    json.loads(HEAT_CIRCUIT_HEATING_LIMIT_NIGHT % ("1", "18")),
-    json.loads(HEAT_CIRCUIT_COOLING_LIMIT_NIGHT % ("0", "18")),
-    json.loads(HEAT_CIRCUIT_COOLING_LIMIT_NIGHT % ("1", "18")),
-    json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_HEATING_LIMIT_NIGHT % ("0", "28")),
-    json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_HEATING_LIMIT_NIGHT % ("1", "28")),
-    json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_COOLING_LIMIT_NIGHT % ("0", "28")),
-    json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_COOLING_LIMIT_NIGHT % ("1", "28")),
-    json.loads(HEAT_CIRCUIT_OPERATION_MODE % ("0", "3")),
-    json.loads(HEAT_CIRCUIT_OPERATION_MODE % ("1", "1")),
-    json.loads(HEAT_CIRCUIT_SELECTED_TARGET_TEMPERATURE % ("0", "20")),
-    json.loads(HEAT_CIRCUIT_SELECTED_TARGET_TEMPERATURE % ("1", "20")),
-    json.loads(HEAT_CIRCUIT_TARGET_TEMPERATURE % ("0", "20.5")),
-    json.loads(HEAT_CIRCUIT_TARGET_TEMPERATURE % ("1", "20.5")),
-    json.loads(HEAT_CIRCUIT_TARGET_TEMPERATURE_OFFSET % ("0", "1.5")),
-    json.loads(HEAT_CIRCUIT_TARGET_TEMPERATURE_OFFSET % ("1", "0")),
-    json.loads(HEAT_CIRCUIT_USE_EXCESS_ENERGY % ("0", "true")),
-    json.loads(HEAT_CIRCUIT_USE_EXCESS_ENERGY % ("1", "false")),
-    json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_TARGET_TEMPERATURE % ("0", "30")),
-    json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_TARGET_TEMPERATURE % ("1", "30")),
-    json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_TARGET_TEMPERATURE_HYSTERESIS % ("0", "0.7")),
-    json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_TARGET_TEMPERATURE_HYSTERESIS % ("1", "0.7")),
-    json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_TARGET_COOLING_TEMPERATURE % ("0", "10")),
-    json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_TARGET_COOLING_TEMPERATURE % ("1", "10")),
-    json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_TARGET_COOLING_TEMPERATURE_HYSTERESIS % ("0", "0.7")),
-    json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_TARGET_COOLING_TEMPERATURE_HYSTERESIS % ("1", "0.7")),
-    json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_MODE % ("0", "1")),
-    json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_MODE % ("1", "0")),
-    json.loads(HEAT_CIRCUIT_AWAY_START_DATE % ("0", "1769036400")),
-    json.loads(HEAT_CIRCUIT_AWAY_START_DATE % ("1", "1769036400")),
-    json.loads(HEAT_CIRCUIT_AWAY_END_DATE % ("0", "1769122799")),
-    json.loads(HEAT_CIRCUIT_AWAY_END_DATE % ("1", "1769122799")),
-    json.loads(HEAT_CIRCUIT_HEATING_CURVE_OFFSET % ("0", "0.5")),
-    json.loads(HEAT_CIRCUIT_HEATING_CURVE_OFFSET % ("1", "-0.5")),
-    json.loads(HEAT_CIRCUIT_COOLING_CURVE_OFFSET % ("0", "0.5")),
-    json.loads(HEAT_CIRCUIT_COOLING_CURVE_OFFSET % ("1", "-0.5")),
-    json.loads(HEAT_CIRCUIT_HEATING_CURVE_SLOPE % ("0", "0.2")),
-    json.loads(HEAT_CIRCUIT_HEATING_CURVE_SLOPE % ("1", "0.3")),
-    json.loads(HEAT_CIRCUIT_COOLING_CURVE_SLOPE % ("0", "0.2")),
-    json.loads(HEAT_CIRCUIT_COOLING_CURVE_SLOPE % ("1", "0.3")),
-    json.loads(HEAT_CIRCUIT_USE_HEATING_CURVE % ("0", "true")),
-    json.loads(HEAT_CIRCUIT_USE_HEATING_CURVE % ("1", "false")),
-    json.loads(HEAT_CIRCUIT_HEATING_CURVE % ("0", "HC2")),
-    json.loads(HEAT_CIRCUIT_HEATING_CURVE % ("1", "HC3")),
-    json.loads(HEAT_CIRCUIT_COOLING_CURVE % ("0", "HC4")),
-    json.loads(HEAT_CIRCUIT_COOLING_CURVE % ("1", "HC4")),
-    json.loads(HEAT_CIRCUIT_PUMP_SPEED % ("0", "0.5")),
-    json.loads(HEAT_CIRCUIT_PUMP_SPEED % ("1", "0.5")),
-    json.loads(SOLAR_CIRCUIT_OPERATION_MODE % ("0", "0")),
-    json.loads(SOLAR_CIRCUIT_OPERATION_MODE % ("1", "1")),
-    json.loads(SOLAR_CIRCUIT_SOURCE_TEMPERATURE % ("0", "44.43")),
-    json.loads(SOLAR_CIRCUIT_SOURCE_TEMPERATURE % ("1", "34.43")),
-    json.loads(SOLAR_CIRCUIT_PUMP_1 % ("0", "0.63")),
-    json.loads(SOLAR_CIRCUIT_PUMP_1 % ("1", "0.67")),
-    json.loads(SOLAR_CIRCUIT_PUMP_2 % ("0", "0.43")),
-    json.loads(SOLAR_CIRCUIT_PUMP_2 % ("1", "0.53")),
-    json.loads(SOLAR_CIRCUIT_CURRENT_TEMPERATURE_1 % ("0", "36.76")),
-    json.loads(SOLAR_CIRCUIT_CURRENT_TEMPERATURE_2 % ("1", "26.76")),
-    json.loads(SOLAR_CIRCUIT_CURRENT_TEMPERATURE_1 % ("2", "36.76")),
-    json.loads(SOLAR_CIRCUIT_CURRENT_TEMPERATURE_2 % ("3", "26.76")),
-    json.loads(SOLAR_CIRCUIT_TARGET_TEMPERATURE_1 % ("0", "55")),
-    json.loads(SOLAR_CIRCUIT_TARGET_TEMPERATURE_2 % ("1", "55")),
-    json.loads(SOLAR_CIRCUIT_TARGET_TEMPERATURE_1 % ("2", "55")),
-    json.loads(SOLAR_CIRCUIT_TARGET_TEMPERATURE_2 % ("3", "55")),
-    json.loads(SOLAR_CIRCUIT_HEAT_REQUEST % ("0", "true")),
-    json.loads(SOLAR_CIRCUIT_HEAT_REQUEST % ("1", "false")),
-    json.loads(SOLAR_CIRCUIT_HEAT_REQUEST % ("2", "true")),
-    json.loads(SOLAR_CIRCUIT_HEAT_REQUEST % ("3", "false")),
-    json.loads(SOLAR_CIRCUIT_HEATING_ENERGY % ("0", "1098456400")),
-    json.loads(SOLAR_CIRCUIT_HEATING_ENERGY % ("1", "1098456400")),
-    json.loads(SOLAR_CIRCUIT_DAILY_ENERGY % ("0", "298018")),
-    json.loads(SOLAR_CIRCUIT_DAILY_ENERGY % ("1", "298018")),
-    json.loads(SOLAR_CIRCUIT_ACTUAL_POWER % ("0", "3452")),
-    json.loads(SOLAR_CIRCUIT_ACTUAL_POWER % ("1", "3452")),
-    json.loads(SOLAR_CIRCUIT_PRIORITY_1_BEFORE_2 % ("0", "true")),
-    json.loads(SOLAR_CIRCUIT_PRIORITY_1_BEFORE_2 % ("1", "false")),
-    *get_heat_pump_data(compressor_night_speed="true"),
-    json.loads(BUFFER_TANK_CURRENT_TOP_TEMPERATURE % ("0", "47.67")),
-    json.loads(BUFFER_TANK_CURRENT_TOP_TEMPERATURE % ("1", "37.67")),
-    json.loads(BUFFER_TANK_CURRENT_BOTTOM_TEMPERATURE % ("0", "25.67")),
-    json.loads(BUFFER_TANK_CURRENT_BOTTOM_TEMPERATURE % ("1", "15.67")),
-    json.loads(BUFFER_TANK_EXCESS_ENERGY_TARGET_TEMPERATURE % ("0", "75.0")),
-    json.loads(BUFFER_TANK_EXCESS_ENERGY_TARGET_TEMPERATURE % ("1", "75.0")),
-    json.loads(BUFFER_TANK_EXCESS_ENERGY_TARGET_TEMPERATURE_HYSTERESIS % ("0", "2.00")),
-    json.loads(BUFFER_TANK_EXCESS_ENERGY_TARGET_TEMPERATURE_HYSTERESIS % ("1", "2.00")),
-    json.loads(BUFFER_TANK_EXCESS_ENERGY_MODE % ("0", "1")),
-    json.loads(BUFFER_TANK_EXCESS_ENERGY_MODE % ("1", "0")),
-    json.loads(BUFFER_TANK_OPERATING_MODE % ("0", "0")),
-    json.loads(BUFFER_TANK_OPERATING_MODE % ("1", "1")),
-    json.loads(BUFFER_TANK_STANDBY_TEMPERATURE % ("0", "10.00")),
-    json.loads(BUFFER_TANK_STANDBY_TEMPERATURE % ("1", "11.00")),
-    json.loads(BUFFER_TANK_TARGET_TEMPERATURE % ("0", "44.00")),
-    json.loads(BUFFER_TANK_TARGET_TEMPERATURE % ("1", "43.00")),
-    json.loads(BUFFER_TANK_HEAT_REQUEST % ("0", "false")),
-    json.loads(BUFFER_TANK_HEAT_REQUEST % ("1", "true")),
-    json.loads(BUFFER_TANK_COOL_REQUEST % ("0", "true")),
-    json.loads(BUFFER_TANK_COOL_REQUEST % ("1", "false")),
-    json.loads(BUFFER_TANK_USE_EXCESS_ENERGY % ("0", "true")),
-    json.loads(BUFFER_TANK_USE_EXCESS_ENERGY % ("1", "false")),
-    json.loads(BUFFER_TANK_OUTDOOR_TEMPERATURE_EXCESS_ENERGY_LIMIT % ("0", "25.00")),
-    json.loads(BUFFER_TANK_OUTDOOR_TEMPERATURE_EXCESS_ENERGY_LIMIT % ("1", "25.00")),
-    json.loads(HOT_WATER_TANK_USE_EXCESS_ENERGY % ("0", "true")),
-    json.loads(HOT_WATER_TANK_USE_EXCESS_ENERGY % ("1", "false")),
-    json.loads(HOT_WATER_TANK_EXCESS_ENERGY_TARGET_TEMPERATURE % ("0", "75.00")),
-    json.loads(HOT_WATER_TANK_EXCESS_ENERGY_TARGET_TEMPERATURE % ("1", "75.00")),
-    json.loads(HOT_WATER_TANK_EXCESS_ENERGY_TARGET_TEMPERATURE_HYSTERESIS % ("0", "4.00")),
-    json.loads(HOT_WATER_TANK_EXCESS_ENERGY_TARGET_TEMPERATURE_HYSTERESIS % ("1", "4.00")),
-    json.loads(HOT_WATER_TANK_EXCESS_ENERGY_MODE % ("0", "1")),
-    json.loads(HOT_WATER_TANK_EXCESS_ENERGY_MODE % ("1", "2")),
-    json.loads(HOT_WATER_TANK_HEAT_REQUEST % ("0", "false")),
-    json.loads(HOT_WATER_TANK_HEAT_REQUEST % ("1", "true")),
-    json.loads(HOT_WATER_TANK_FRESH_WATER_FLOW % ("0", "false")),
-    json.loads(HOT_WATER_TANK_FRESH_WATER_FLOW % ("1", "true")),
-    json.loads(HOT_WATER_TANK_FRESH_WATER_MODULE_TEMPERATURE % ("0", "51.23")),
-    json.loads(HOT_WATER_TANK_FRESH_WATER_MODULE_TEMPERATURE % ("1", "51.23")),
-    json.loads(HOT_WATER_TANK_TARGET_TEMPERATURE % ("0", "51")),
-    json.loads(HOT_WATER_TANK_TARGET_TEMPERATURE % ("1", "51")),
-    json.loads(HOT_WATER_TANK_STANDBY_TEMPERATURE % ("0", "32.5")),
-    json.loads(HOT_WATER_TANK_STANDBY_TEMPERATURE % ("1", "32.5")),
-    json.loads(HOT_WATER_TANK_OPERATION_MODE % ("0", "3")),
-    json.loads(HOT_WATER_TANK_OPERATION_MODE % ("0", "0")),
-    json.loads(HOT_WATER_TANK_CURRENT_TEMPERATURE % ("0", "47.700001")),
-    json.loads(HOT_WATER_TANK_CURRENT_TEMPERATURE % ("1", "47.700001")),
-    json.loads(HOT_WATER_TANK_CIRCULATION_RETURN_TEMPERATURE % ("0", "30.45")),
-    json.loads(HOT_WATER_TANK_CIRCULATION_RETURN_TEMPERATURE % ("1", "32.45")),
-    json.loads(HOT_WATER_TANK_CIRCULATION_PUMP_STATE % ("0", "false")),
-    json.loads(HOT_WATER_TANK_CIRCULATION_PUMP_STATE % ("1", "true")),
-    json.loads(SWITCH_VALVE_POSITION % ("0", "1")),
-    json.loads(SWITCH_VALVE_POSITION % ("1", "0")),
-    json.loads(PHOTOVOLTAIC_EXCESS_ENERGY_ACTIVE % "true"),
-    json.loads(PHOTOVOLTAIC_EXCESS_POWER % "437.700001"),
-    json.loads(PHOTOVOLTAIC_DAILY_ENERGY % "1575720000"),
-    json.loads(PHOTOVOLTAIC_TOTAL_ENERGY % "1575720000"),
-    SYSTEM_OUTDOOR_TEMPERATURE,
-    SYSTEM_OPERATING_MODE,
-    SYSTEM_CPU_USAGE,
-    SYSTEM_WEBVIEW_CPU_USAGE,
-    SYSTEM_WEBSERVER_CPU_USAGE,
-    SYSTEM_CONTROL_CPU_USAGE,
-    SYSTEM_RAM_USAGE,
-    SYSTEM_FREE_RAM,
-]
 
 
 def get_single_position_data_response(
     heat_circuit_target_temperature_offset: str = "0",
     hot_water_tank_target_temperature: str = "51",
 ) -> list[dict[str, Any]]:
+    """Return the values of a setup with one device of each type."""
     return [
         json.loads(EXTERNAL_HEAT_SOURCE_OPERATING_MODE % ("0", "1")),
         json.loads(EXTERNAL_HEAT_SOURCE_TARGET_TEMPERATURE % ("0", "23")),
@@ -2714,7 +2445,7 @@ def get_single_position_data_response(
         json.loads(EXTERNAL_HEAT_SOURCE_MAX_RUNTIME % ("0", "8129")),
         json.loads(EXTERNAL_HEAT_SOURCE_ACTIVATION_COUNTER % ("0", "812")),
         json.loads(EXTERNAL_HEAT_SOURCE_USE_EXCESS_ENERGY % ("0", "true")),
-        json.loads(EXTERNAL_HEAT_SOURCE_MIN_RUNTIME_EXCESS_ENERGY % ("0", "5")),
+        json.loads(EXTERNAL_HEAT_SOURCE_MIN_RUNTIME_EXCESS_ENERGY % ("0", "300")),
         json.loads(EXTERNAL_HEAT_SOURCE_CONSUMING_EXCESS_ENERGY % ("0", "true")),
         json.loads(EXTERNAL_HEAT_SOURCE_EXCESS_ENERGY_OPERATING_TIME % ("0", "3600")),
         json.loads(EXTERNAL_HEAT_SOURCE_EXCESS_ENERGY_MAX_RUNTIME % ("0", "3600")),
@@ -2733,7 +2464,7 @@ def get_single_position_data_response(
         json.loads(HEAT_CIRCUIT_HEATING_LIMIT_DAY % ("0", "20")),
         json.loads(HEAT_CIRCUIT_COOLING_LIMIT_DAY % ("0", "20")),
         json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_HEATING_LIMIT_DAY % ("0", "30")),
-        json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_COOLING_LIMIT_DAY % ("1", "10")),
+        json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_COOLING_LIMIT_DAY % ("0", "10")),
         json.loads(HEAT_CIRCUIT_HEAT_REQUEST % ("0", "1")),
         json.loads(HEAT_CIRCUIT_COOL_REQUEST % ("0", "1")),
         json.loads(HEAT_CIRCUIT_TARGET_TEMPERATURE_AWAY % ("0", "18")),
@@ -2758,7 +2489,7 @@ def get_single_position_data_response(
         json.loads(HEAT_CIRCUIT_HEATING_CURVE_OFFSET % ("0", "0.5")),
         json.loads(HEAT_CIRCUIT_COOLING_CURVE_OFFSET % ("0", "0.5")),
         json.loads(HEAT_CIRCUIT_HEATING_CURVE_SLOPE % ("0", "0.4")),
-        json.loads(HEAT_CIRCUIT_COOLING_CURVE_SLOPE % ("1", "0.4")),
+        json.loads(HEAT_CIRCUIT_COOLING_CURVE_SLOPE % ("0", "0.4")),
         json.loads(HEAT_CIRCUIT_USE_HEATING_CURVE % ("0", "false")),
         json.loads(HEAT_CIRCUIT_HEATING_CURVE % ("0", "HC4")),
         json.loads(HEAT_CIRCUIT_COOLING_CURVE % ("0", "HC2")),
@@ -2816,10 +2547,25 @@ def get_single_position_data_response(
         SYSTEM_CONTROL_CPU_USAGE,
         SYSTEM_RAM_USAGE,
         SYSTEM_FREE_RAM,
+        SYSTEM_FLASH_ERASE_COUNTER,
     ]
 
 
-MULTIPLE_POSITION_DATA_RESPONSE_1: list[dict[str, Any]] = [
+# The response of `get_single_position_data_response()` with other values.
+DEFAULT_POSITION_DATA_RESPONSE: Final[list[dict[str, Any]]] = replace_values(
+    get_single_position_data_response(heat_circuit_target_temperature_offset="1.5"),
+    (EXTERNAL_HEAT_SOURCE_TARGET_TEMPERATURE, "0", "1"),
+    (HEAT_CIRCUIT_COOL_REQUEST, "0", "0"),
+    (HEAT_CIRCUIT_HEATING_CURVE_SLOPE, "0", "0.1"),
+    (HEAT_CIRCUIT_COOLING_CURVE_SLOPE, "0", "0.1"),
+    (HEAT_CIRCUIT_USE_HEATING_CURVE, "0", "true"),
+    (HEAT_CIRCUIT_HEATING_CURVE, "0", "HC1"),
+    (HOT_WATER_TANK_FRESH_WATER_FLOW, "0", "false"),
+    (HOT_WATER_TANK_CIRCULATION_RETURN_TEMPERATURE, "0", "30.45"),
+)
+
+# The values of `MULTIPLE_POSITION_DATA_RESPONSE` are split by section.
+MULTIPLE_POSITION_EXTERNAL_HEAT_SOURCE_DATA: Final[list[dict[str, Any]]] = [
     json.loads(EXTERNAL_HEAT_SOURCE_OPERATING_MODE % ("0", "0")),
     json.loads(EXTERNAL_HEAT_SOURCE_OPERATING_MODE % ("1", "1")),
     json.loads(EXTERNAL_HEAT_SOURCE_TARGET_TEMPERATURE % ("0", "17.23")),
@@ -2834,8 +2580,8 @@ MULTIPLE_POSITION_DATA_RESPONSE_1: list[dict[str, Any]] = [
     json.loads(EXTERNAL_HEAT_SOURCE_ACTIVATION_COUNTER % ("1", "812")),
     json.loads(EXTERNAL_HEAT_SOURCE_USE_EXCESS_ENERGY % ("0", "true")),
     json.loads(EXTERNAL_HEAT_SOURCE_USE_EXCESS_ENERGY % ("1", "true")),
-    json.loads(EXTERNAL_HEAT_SOURCE_MIN_RUNTIME_EXCESS_ENERGY % ("0", "5")),
-    json.loads(EXTERNAL_HEAT_SOURCE_MIN_RUNTIME_EXCESS_ENERGY % ("1", "5")),
+    json.loads(EXTERNAL_HEAT_SOURCE_MIN_RUNTIME_EXCESS_ENERGY % ("0", "300")),
+    json.loads(EXTERNAL_HEAT_SOURCE_MIN_RUNTIME_EXCESS_ENERGY % ("1", "300")),
     json.loads(EXTERNAL_HEAT_SOURCE_CONSUMING_EXCESS_ENERGY % ("0", "true")),
     json.loads(EXTERNAL_HEAT_SOURCE_CONSUMING_EXCESS_ENERGY % ("1", "true")),
     json.loads(EXTERNAL_HEAT_SOURCE_EXCESS_ENERGY_OPERATING_TIME % ("0", "3600")),
@@ -2844,6 +2590,9 @@ MULTIPLE_POSITION_DATA_RESPONSE_1: list[dict[str, Any]] = [
     json.loads(EXTERNAL_HEAT_SOURCE_EXCESS_ENERGY_MAX_RUNTIME % ("1", "3600")),
     json.loads(EXTERNAL_HEAT_SOURCE_EXCESS_ENERGY_ACTIVATION_COUNTER % ("0", "23")),
     json.loads(EXTERNAL_HEAT_SOURCE_EXCESS_ENERGY_ACTIVATION_COUNTER % ("1", "23")),
+]
+
+MULTIPLE_POSITION_HEAT_CIRCUIT_DATA: Final[list[dict[str, Any]]] = [
     json.loads(HEAT_CIRCUIT_ROOM_TEMPERATURE % ("0", "22.42")),
     json.loads(HEAT_CIRCUIT_ROOM_TEMPERATURE % ("1", "22.42")),
     json.loads(HEAT_CIRCUIT_ROOM_HUMIDITY % ("0", "53")),
@@ -2932,6 +2681,9 @@ MULTIPLE_POSITION_DATA_RESPONSE_1: list[dict[str, Any]] = [
     json.loads(HEAT_CIRCUIT_COOLING_CURVE % ("1", "HC5")),
     json.loads(HEAT_CIRCUIT_PUMP_SPEED % ("0", "0.5")),
     json.loads(HEAT_CIRCUIT_PUMP_SPEED % ("1", "0.5")),
+]
+
+MULTIPLE_POSITION_SOLAR_CIRCUIT_DATA: Final[list[dict[str, Any]]] = [
     json.loads(SOLAR_CIRCUIT_OPERATION_MODE % ("0", "0")),
     json.loads(SOLAR_CIRCUIT_OPERATION_MODE % ("1", "1")),
     json.loads(SOLAR_CIRCUIT_SOURCE_TEMPERATURE % ("0", "44.43")),
@@ -2960,6 +2712,11 @@ MULTIPLE_POSITION_DATA_RESPONSE_1: list[dict[str, Any]] = [
     json.loads(SOLAR_CIRCUIT_ACTUAL_POWER % ("1", "2452")),
     json.loads(SOLAR_CIRCUIT_PRIORITY_1_BEFORE_2 % ("0", "false")),
     json.loads(SOLAR_CIRCUIT_PRIORITY_1_BEFORE_2 % ("1", "true")),
+]
+
+# The heat pump, buffer and hot water tanks, switch valves, photovoltaics and system, the sections after the solar
+# circuits.
+MULTIPLE_POSITION_HEAT_PUMP_TO_SYSTEM_DATA: Final[list[dict[str, Any]]] = [
     *get_heat_pump_data(compressor_night_speed="true"),
     json.loads(BUFFER_TANK_CURRENT_TOP_TEMPERATURE % ("0", "45.67")),
     json.loads(BUFFER_TANK_CURRENT_TOP_TEMPERATURE % ("1", "35.67")),
@@ -3025,7421 +2782,208 @@ MULTIPLE_POSITION_DATA_RESPONSE_1: list[dict[str, Any]] = [
     SYSTEM_CONTROL_CPU_USAGE,
     SYSTEM_RAM_USAGE,
     SYSTEM_FREE_RAM,
+    SYSTEM_FLASH_ERASE_COUNTER,
 ]
 
-MULTIPLE_POSITION_DATA_RESPONSE_2: list[dict[str, Any]] = [
-    json.loads(EXTERNAL_HEAT_SOURCE_OPERATING_MODE % ("0", "0")),
-    json.loads(EXTERNAL_HEAT_SOURCE_OPERATING_MODE % ("1", "1")),
-    json.loads(EXTERNAL_HEAT_SOURCE_TARGET_TEMPERATURE % ("0", "17.23")),
-    json.loads(EXTERNAL_HEAT_SOURCE_TARGET_TEMPERATURE % ("1", "17.23")),
-    json.loads(EXTERNAL_HEAT_SOURCE_HEAT_REQUEST % ("0", "true")),
-    json.loads(EXTERNAL_HEAT_SOURCE_HEAT_REQUEST % ("1", "true")),
-    json.loads(EXTERNAL_HEAT_SOURCE_OPERATING_TIME % ("0", "812999")),
-    json.loads(EXTERNAL_HEAT_SOURCE_OPERATING_TIME % ("1", "812999")),
-    json.loads(EXTERNAL_HEAT_SOURCE_MAX_RUNTIME % ("0", "8129")),
-    json.loads(EXTERNAL_HEAT_SOURCE_MAX_RUNTIME % ("1", "8129")),
-    json.loads(EXTERNAL_HEAT_SOURCE_ACTIVATION_COUNTER % ("0", "812")),
-    json.loads(EXTERNAL_HEAT_SOURCE_ACTIVATION_COUNTER % ("1", "812")),
-    json.loads(EXTERNAL_HEAT_SOURCE_USE_EXCESS_ENERGY % ("0", "true")),
-    json.loads(EXTERNAL_HEAT_SOURCE_USE_EXCESS_ENERGY % ("1", "false")),
-    json.loads(EXTERNAL_HEAT_SOURCE_MIN_RUNTIME_EXCESS_ENERGY % ("0", "5")),
-    json.loads(EXTERNAL_HEAT_SOURCE_MIN_RUNTIME_EXCESS_ENERGY % ("1", "5")),
-    json.loads(EXTERNAL_HEAT_SOURCE_CONSUMING_EXCESS_ENERGY % ("0", "true")),
-    json.loads(EXTERNAL_HEAT_SOURCE_CONSUMING_EXCESS_ENERGY % ("1", "true")),
-    json.loads(EXTERNAL_HEAT_SOURCE_EXCESS_ENERGY_OPERATING_TIME % ("0", "3600")),
-    json.loads(EXTERNAL_HEAT_SOURCE_EXCESS_ENERGY_OPERATING_TIME % ("1", "3600")),
-    json.loads(EXTERNAL_HEAT_SOURCE_EXCESS_ENERGY_MAX_RUNTIME % ("0", "3600")),
-    json.loads(EXTERNAL_HEAT_SOURCE_EXCESS_ENERGY_MAX_RUNTIME % ("1", "3600")),
-    json.loads(EXTERNAL_HEAT_SOURCE_EXCESS_ENERGY_ACTIVATION_COUNTER % ("0", "23")),
-    json.loads(EXTERNAL_HEAT_SOURCE_EXCESS_ENERGY_ACTIVATION_COUNTER % ("1", "23")),
-    json.loads(HEAT_CIRCUIT_ROOM_TEMPERATURE % ("0", "22.42")),
-    json.loads(HEAT_CIRCUIT_ROOM_TEMPERATURE % ("1", "22.42")),
-    json.loads(HEAT_CIRCUIT_ROOM_HUMIDITY % ("0", "53")),
-    json.loads(HEAT_CIRCUIT_ROOM_HUMIDITY % ("1", "53")),
-    json.loads(HEAT_CIRCUIT_DEW_POINT % ("0", "13.1")),
-    json.loads(HEAT_CIRCUIT_DEW_POINT % ("1", "13.1")),
-    json.loads(HEAT_CIRCUIT_FLOW_TEMPERATURE_SETPOINT % ("0", "26.5543")),
-    json.loads(HEAT_CIRCUIT_FLOW_TEMPERATURE_SETPOINT % ("1", "26.5543")),
-    json.loads(HEAT_CIRCUIT_MIXER_FLOW_TEMPERATURE % ("0", "22.2143")),
-    json.loads(HEAT_CIRCUIT_MIXER_FLOW_TEMPERATURE % ("1", "22.2143")),
-    json.loads(HEAT_CIRCUIT_MIXER_RETURN_FLOW_TEMPERATURE % ("0", "20.2143")),
-    json.loads(HEAT_CIRCUIT_MIXER_RETURN_FLOW_TEMPERATURE % ("1", "20.2143")),
-    json.loads(HEAT_CIRCUIT_MIXER_POSITION % ("0", "-1")),
-    json.loads(HEAT_CIRCUIT_MIXER_POSITION % ("1", "-1")),
-    json.loads(HEAT_CIRCUIT_PUMP_STATE % ("0", "true")),
-    json.loads(HEAT_CIRCUIT_PUMP_STATE % ("1", "true")),
-    json.loads(HEAT_CIRCUIT_RETURN_FLOW_TEMPERATURE % ("0", "21.2143")),
-    json.loads(HEAT_CIRCUIT_RETURN_FLOW_TEMPERATURE % ("1", "21.2143")),
-    json.loads(HEAT_CIRCUIT_TARGET_TEMPERATURE_DAY % ("0", "20.5")),
-    json.loads(HEAT_CIRCUIT_TARGET_TEMPERATURE_DAY % ("1", "20.5")),
-    json.loads(HEAT_CIRCUIT_TARGET_COOLING_TEMPERATURE_DAY % ("0", "20.5")),
-    json.loads(HEAT_CIRCUIT_TARGET_COOLING_TEMPERATURE_DAY % ("1", "20.5")),
-    json.loads(HEAT_CIRCUIT_HEATING_LIMIT_DAY % ("0", "20")),
-    json.loads(HEAT_CIRCUIT_HEATING_LIMIT_DAY % ("1", "20")),
-    json.loads(HEAT_CIRCUIT_COOLING_LIMIT_DAY % ("0", "20")),
-    json.loads(HEAT_CIRCUIT_COOLING_LIMIT_DAY % ("1", "20")),
-    json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_HEATING_LIMIT_DAY % ("0", "30")),
-    json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_HEATING_LIMIT_DAY % ("1", "30")),
-    json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_COOLING_LIMIT_DAY % ("0", "10")),
-    json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_COOLING_LIMIT_DAY % ("1", "10")),
-    json.loads(HEAT_CIRCUIT_HEAT_REQUEST % ("0", "1")),
-    json.loads(HEAT_CIRCUIT_HEAT_REQUEST % ("1", "0")),
-    json.loads(HEAT_CIRCUIT_COOL_REQUEST % ("0", "0")),
-    json.loads(HEAT_CIRCUIT_COOL_REQUEST % ("1", "1")),
-    json.loads(HEAT_CIRCUIT_TARGET_TEMPERATURE_AWAY % ("0", "18")),
-    json.loads(HEAT_CIRCUIT_TARGET_TEMPERATURE_AWAY % ("1", "18")),
-    json.loads(HEAT_CIRCUIT_TARGET_TEMPERATURE_NIGHT % ("0", "20")),
-    json.loads(HEAT_CIRCUIT_TARGET_TEMPERATURE_NIGHT % ("1", "20")),
-    json.loads(HEAT_CIRCUIT_TARGET_COOLING_TEMPERATURE_NIGHT % ("0", "20")),
-    json.loads(HEAT_CIRCUIT_TARGET_COOLING_TEMPERATURE_NIGHT % ("1", "20")),
-    json.loads(HEAT_CIRCUIT_HEATING_LIMIT_NIGHT % ("0", "18")),
-    json.loads(HEAT_CIRCUIT_HEATING_LIMIT_NIGHT % ("1", "18")),
-    json.loads(HEAT_CIRCUIT_COOLING_LIMIT_NIGHT % ("0", "18")),
-    json.loads(HEAT_CIRCUIT_COOLING_LIMIT_NIGHT % ("1", "18")),
-    json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_HEATING_LIMIT_NIGHT % ("0", "28")),
-    json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_HEATING_LIMIT_NIGHT % ("1", "28")),
-    json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_COOLING_LIMIT_NIGHT % ("0", "28")),
-    json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_COOLING_LIMIT_NIGHT % ("1", "28")),
-    json.loads(HEAT_CIRCUIT_OPERATION_MODE % ("0", "4")),
-    json.loads(HEAT_CIRCUIT_OPERATION_MODE % ("1", "4")),
-    json.loads(HEAT_CIRCUIT_SELECTED_TARGET_TEMPERATURE % ("0", "20")),
-    json.loads(HEAT_CIRCUIT_SELECTED_TARGET_TEMPERATURE % ("1", "20")),
-    json.loads(HEAT_CIRCUIT_TARGET_TEMPERATURE % ("0", "20.5")),
-    json.loads(HEAT_CIRCUIT_TARGET_TEMPERATURE % ("1", "20.5")),
-    json.loads(HEAT_CIRCUIT_TARGET_TEMPERATURE_OFFSET % ("0", "1.5")),
-    json.loads(HEAT_CIRCUIT_TARGET_TEMPERATURE_OFFSET % ("1", "0")),
-    json.loads(HEAT_CIRCUIT_USE_EXCESS_ENERGY % ("0", "true")),
-    json.loads(HEAT_CIRCUIT_USE_EXCESS_ENERGY % ("1", "false")),
-    json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_TARGET_TEMPERATURE % ("0", "30")),
-    json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_TARGET_TEMPERATURE % ("1", "30")),
-    json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_TARGET_TEMPERATURE_HYSTERESIS % ("0", "0.7")),
-    json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_TARGET_TEMPERATURE_HYSTERESIS % ("1", "0.7")),
-    json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_TARGET_COOLING_TEMPERATURE % ("0", "10")),
-    json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_TARGET_COOLING_TEMPERATURE % ("1", "10")),
-    json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_TARGET_COOLING_TEMPERATURE_HYSTERESIS % ("0", "0.7")),
-    json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_TARGET_COOLING_TEMPERATURE_HYSTERESIS % ("1", "0.7")),
-    json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_MODE % ("0", "1")),
-    json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_MODE % ("1", "0")),
-    json.loads(HEAT_CIRCUIT_AWAY_START_DATE % ("0", "1769036400")),
-    json.loads(HEAT_CIRCUIT_AWAY_START_DATE % ("1", "1769036400")),
-    json.loads(HEAT_CIRCUIT_AWAY_END_DATE % ("0", "1769122799")),
-    json.loads(HEAT_CIRCUIT_AWAY_END_DATE % ("1", "1769122799")),
-    json.loads(HEAT_CIRCUIT_HEATING_CURVE_OFFSET % ("0", "4.5")),
-    json.loads(HEAT_CIRCUIT_HEATING_CURVE_OFFSET % ("1", "-4.5")),
-    json.loads(HEAT_CIRCUIT_COOLING_CURVE_OFFSET % ("0", "4.5")),
-    json.loads(HEAT_CIRCUIT_COOLING_CURVE_OFFSET % ("1", "-4.5")),
-    json.loads(HEAT_CIRCUIT_HEATING_CURVE_SLOPE % ("0", "0.7")),
-    json.loads(HEAT_CIRCUIT_HEATING_CURVE_SLOPE % ("1", "0.8")),
-    json.loads(HEAT_CIRCUIT_COOLING_CURVE_SLOPE % ("0", "0.7")),
-    json.loads(HEAT_CIRCUIT_COOLING_CURVE_SLOPE % ("1", "0.8")),
-    json.loads(HEAT_CIRCUIT_USE_HEATING_CURVE % ("0", "false")),
-    json.loads(HEAT_CIRCUIT_USE_HEATING_CURVE % ("1", "true")),
-    json.loads(HEAT_CIRCUIT_HEATING_CURVE % ("0", "HC FBH")),
-    json.loads(HEAT_CIRCUIT_HEATING_CURVE % ("1", "HC HK")),
-    json.loads(HEAT_CIRCUIT_COOLING_CURVE % ("0", "HC2")),
-    json.loads(HEAT_CIRCUIT_COOLING_CURVE % ("1", "HC2")),
-    json.loads(HEAT_CIRCUIT_PUMP_SPEED % ("0", "0.5")),
-    json.loads(HEAT_CIRCUIT_PUMP_SPEED % ("1", "0.5")),
-    json.loads(SOLAR_CIRCUIT_OPERATION_MODE % ("0", "0")),
-    json.loads(SOLAR_CIRCUIT_OPERATION_MODE % ("1", "1")),
-    json.loads(SOLAR_CIRCUIT_SOURCE_TEMPERATURE % ("0", "44.43")),
-    json.loads(SOLAR_CIRCUIT_SOURCE_TEMPERATURE % ("1", "34.43")),
-    json.loads(SOLAR_CIRCUIT_PUMP_1 % ("0", "0.63")),
-    json.loads(SOLAR_CIRCUIT_PUMP_1 % ("1", "0.43")),
-    json.loads(SOLAR_CIRCUIT_PUMP_2 % ("0", "0.73")),
-    json.loads(SOLAR_CIRCUIT_PUMP_2 % ("1", "0.53")),
-    json.loads(SOLAR_CIRCUIT_CURRENT_TEMPERATURE_1 % ("0", "36.76")),
-    json.loads(SOLAR_CIRCUIT_CURRENT_TEMPERATURE_2 % ("1", "26.76")),
-    json.loads(SOLAR_CIRCUIT_CURRENT_TEMPERATURE_1 % ("2", "46.76")),
-    json.loads(SOLAR_CIRCUIT_CURRENT_TEMPERATURE_2 % ("3", "56.76")),
-    json.loads(SOLAR_CIRCUIT_TARGET_TEMPERATURE_1 % ("0", "55")),
-    json.loads(SOLAR_CIRCUIT_TARGET_TEMPERATURE_2 % ("1", "54")),
-    json.loads(SOLAR_CIRCUIT_TARGET_TEMPERATURE_1 % ("2", "53")),
-    json.loads(SOLAR_CIRCUIT_TARGET_TEMPERATURE_2 % ("3", "52")),
-    json.loads(SOLAR_CIRCUIT_HEAT_REQUEST % ("0", "true")),
-    json.loads(SOLAR_CIRCUIT_HEAT_REQUEST % ("1", "false")),
-    json.loads(SOLAR_CIRCUIT_HEAT_REQUEST % ("2", "false")),
-    json.loads(SOLAR_CIRCUIT_HEAT_REQUEST % ("3", "true")),
-    json.loads(SOLAR_CIRCUIT_HEATING_ENERGY % ("0", "1098456400")),
-    json.loads(SOLAR_CIRCUIT_HEATING_ENERGY % ("1", "1098456400")),
-    json.loads(SOLAR_CIRCUIT_DAILY_ENERGY % ("0", "298018")),
-    json.loads(SOLAR_CIRCUIT_DAILY_ENERGY % ("1", "298018")),
-    json.loads(SOLAR_CIRCUIT_ACTUAL_POWER % ("0", "3452")),
-    json.loads(SOLAR_CIRCUIT_ACTUAL_POWER % ("1", "2452")),
-    json.loads(SOLAR_CIRCUIT_PRIORITY_1_BEFORE_2 % ("0", "true")),
-    json.loads(SOLAR_CIRCUIT_PRIORITY_1_BEFORE_2 % ("1", "false")),
-    *get_heat_pump_data(compressor_night_speed="false"),
-    json.loads(BUFFER_TANK_CURRENT_TOP_TEMPERATURE % ("0", "45.67")),
-    json.loads(BUFFER_TANK_CURRENT_TOP_TEMPERATURE % ("1", "35.67")),
-    json.loads(BUFFER_TANK_CURRENT_BOTTOM_TEMPERATURE % ("0", "15.67")),
-    json.loads(BUFFER_TANK_CURRENT_BOTTOM_TEMPERATURE % ("1", "25.67")),
-    json.loads(BUFFER_TANK_EXCESS_ENERGY_TARGET_TEMPERATURE % ("0", "75.0")),
-    json.loads(BUFFER_TANK_EXCESS_ENERGY_TARGET_TEMPERATURE % ("1", "75.0")),
-    json.loads(BUFFER_TANK_EXCESS_ENERGY_TARGET_TEMPERATURE_HYSTERESIS % ("0", "2.00")),
-    json.loads(BUFFER_TANK_EXCESS_ENERGY_TARGET_TEMPERATURE_HYSTERESIS % ("1", "2.00")),
-    json.loads(BUFFER_TANK_EXCESS_ENERGY_MODE % ("0", "1")),
-    json.loads(BUFFER_TANK_EXCESS_ENERGY_MODE % ("1", "0")),
-    json.loads(BUFFER_TANK_OPERATING_MODE % ("0", "1")),
-    json.loads(BUFFER_TANK_OPERATING_MODE % ("1", "2")),
-    json.loads(BUFFER_TANK_STANDBY_TEMPERATURE % ("0", "10.00")),
-    json.loads(BUFFER_TANK_STANDBY_TEMPERATURE % ("1", "11.00")),
-    json.loads(BUFFER_TANK_TARGET_TEMPERATURE % ("0", "44.00")),
-    json.loads(BUFFER_TANK_TARGET_TEMPERATURE % ("1", "43.00")),
-    json.loads(BUFFER_TANK_HEAT_REQUEST % ("0", "false")),
-    json.loads(BUFFER_TANK_HEAT_REQUEST % ("1", "true")),
-    json.loads(BUFFER_TANK_COOL_REQUEST % ("0", "true")),
-    json.loads(BUFFER_TANK_COOL_REQUEST % ("1", "false")),
-    json.loads(BUFFER_TANK_USE_EXCESS_ENERGY % ("0", "true")),
-    json.loads(BUFFER_TANK_USE_EXCESS_ENERGY % ("1", "false")),
-    json.loads(BUFFER_TANK_OUTDOOR_TEMPERATURE_EXCESS_ENERGY_LIMIT % ("0", "25.00")),
-    json.loads(BUFFER_TANK_OUTDOOR_TEMPERATURE_EXCESS_ENERGY_LIMIT % ("1", "25.00")),
-    json.loads(HOT_WATER_TANK_USE_EXCESS_ENERGY % ("0", "true")),
-    json.loads(HOT_WATER_TANK_USE_EXCESS_ENERGY % ("1", "false")),
-    json.loads(HOT_WATER_TANK_EXCESS_ENERGY_TARGET_TEMPERATURE % ("0", "75.00")),
-    json.loads(HOT_WATER_TANK_EXCESS_ENERGY_TARGET_TEMPERATURE % ("1", "75.00")),
-    json.loads(HOT_WATER_TANK_EXCESS_ENERGY_TARGET_TEMPERATURE_HYSTERESIS % ("0", "4.00")),
-    json.loads(HOT_WATER_TANK_EXCESS_ENERGY_TARGET_TEMPERATURE_HYSTERESIS % ("1", "4.00")),
-    json.loads(HOT_WATER_TANK_EXCESS_ENERGY_MODE % ("0", "1")),
-    json.loads(HOT_WATER_TANK_EXCESS_ENERGY_MODE % ("1", "0")),
-    json.loads(HOT_WATER_TANK_HEAT_REQUEST % ("0", "false")),
-    json.loads(HOT_WATER_TANK_HEAT_REQUEST % ("1", "true")),
-    json.loads(HOT_WATER_TANK_FRESH_WATER_FLOW % ("0", "false")),
-    json.loads(HOT_WATER_TANK_FRESH_WATER_FLOW % ("1", "true")),
-    json.loads(HOT_WATER_TANK_FRESH_WATER_MODULE_TEMPERATURE % ("0", "51.23")),
-    json.loads(HOT_WATER_TANK_FRESH_WATER_MODULE_TEMPERATURE % ("1", "51.23")),
-    json.loads(HOT_WATER_TANK_TARGET_TEMPERATURE % ("0", "51")),
-    json.loads(HOT_WATER_TANK_TARGET_TEMPERATURE % ("1", "51")),
-    json.loads(HOT_WATER_TANK_STANDBY_TEMPERATURE % ("0", "32.5")),
-    json.loads(HOT_WATER_TANK_STANDBY_TEMPERATURE % ("1", "32.5")),
-    json.loads(HOT_WATER_TANK_OPERATION_MODE % ("0", "2")),
-    json.loads(HOT_WATER_TANK_OPERATION_MODE % ("1", "1")),
-    json.loads(HOT_WATER_TANK_CURRENT_TEMPERATURE % ("0", "47.700001")),
-    json.loads(HOT_WATER_TANK_CURRENT_TEMPERATURE % ("1", "47.700001")),
-    json.loads(HOT_WATER_TANK_CIRCULATION_RETURN_TEMPERATURE % ("0", "30.45")),
-    json.loads(HOT_WATER_TANK_CIRCULATION_RETURN_TEMPERATURE % ("1", "36.45")),
-    json.loads(HOT_WATER_TANK_CIRCULATION_PUMP_STATE % ("0", "false")),
-    json.loads(HOT_WATER_TANK_CIRCULATION_PUMP_STATE % ("1", "true")),
-    json.loads(SWITCH_VALVE_POSITION % ("0", "0")),
-    json.loads(SWITCH_VALVE_POSITION % ("1", "1")),
-    json.loads(PHOTOVOLTAIC_EXCESS_ENERGY_ACTIVE % "true"),
-    json.loads(PHOTOVOLTAIC_EXCESS_POWER % "437.700001"),
-    json.loads(PHOTOVOLTAIC_DAILY_ENERGY % "1575720000"),
-    json.loads(PHOTOVOLTAIC_TOTAL_ENERGY % "1575720000"),
-    SYSTEM_OUTDOOR_TEMPERATURE,
-    SYSTEM_OPERATING_MODE,
-    SYSTEM_CPU_USAGE,
-    SYSTEM_WEBVIEW_CPU_USAGE,
-    SYSTEM_WEBSERVER_CPU_USAGE,
-    SYSTEM_CONTROL_CPU_USAGE,
-    SYSTEM_RAM_USAGE,
-    SYSTEM_FREE_RAM,
+MULTIPLE_POSITION_DATA_RESPONSE: Final[list[dict[str, Any]]] = [
+    *MULTIPLE_POSITION_EXTERNAL_HEAT_SOURCE_DATA,
+    *MULTIPLE_POSITION_HEAT_CIRCUIT_DATA,
+    *MULTIPLE_POSITION_SOLAR_CIRCUIT_DATA,
+    *MULTIPLE_POSITION_HEAT_PUMP_TO_SYSTEM_DATA,
 ]
 
-MULTIPLE_POSITION_DATA_RESPONSE_3_1: list[dict[str, Any]] = [
-    json.loads(EXTERNAL_HEAT_SOURCE_OPERATING_MODE % ("0", "0")),
-    json.loads(EXTERNAL_HEAT_SOURCE_OPERATING_MODE % ("1", "1")),
-    json.loads(EXTERNAL_HEAT_SOURCE_TARGET_TEMPERATURE % ("0", "17.23")),
-    json.loads(EXTERNAL_HEAT_SOURCE_TARGET_TEMPERATURE % ("1", "17.23")),
-    json.loads(EXTERNAL_HEAT_SOURCE_HEAT_REQUEST % ("0", "true")),
-    json.loads(EXTERNAL_HEAT_SOURCE_HEAT_REQUEST % ("1", "true")),
-    json.loads(EXTERNAL_HEAT_SOURCE_OPERATING_TIME % ("0", "812999")),
-    json.loads(EXTERNAL_HEAT_SOURCE_OPERATING_TIME % ("1", "812999")),
-    json.loads(EXTERNAL_HEAT_SOURCE_MAX_RUNTIME % ("0", "8129")),
-    json.loads(EXTERNAL_HEAT_SOURCE_MAX_RUNTIME % ("1", "8129")),
-    json.loads(EXTERNAL_HEAT_SOURCE_ACTIVATION_COUNTER % ("0", "812")),
-    json.loads(EXTERNAL_HEAT_SOURCE_ACTIVATION_COUNTER % ("1", "812")),
-    json.loads(EXTERNAL_HEAT_SOURCE_USE_EXCESS_ENERGY % ("0", "true")),
-    json.loads(EXTERNAL_HEAT_SOURCE_USE_EXCESS_ENERGY % ("1", "false")),
-    json.loads(EXTERNAL_HEAT_SOURCE_MIN_RUNTIME_EXCESS_ENERGY % ("0", "5")),
-    json.loads(EXTERNAL_HEAT_SOURCE_MIN_RUNTIME_EXCESS_ENERGY % ("1", "5")),
-    json.loads(EXTERNAL_HEAT_SOURCE_CONSUMING_EXCESS_ENERGY % ("0", "true")),
-    json.loads(EXTERNAL_HEAT_SOURCE_CONSUMING_EXCESS_ENERGY % ("1", "true")),
-    json.loads(EXTERNAL_HEAT_SOURCE_EXCESS_ENERGY_OPERATING_TIME % ("0", "3600")),
-    json.loads(EXTERNAL_HEAT_SOURCE_EXCESS_ENERGY_OPERATING_TIME % ("1", "3600")),
-    json.loads(EXTERNAL_HEAT_SOURCE_EXCESS_ENERGY_MAX_RUNTIME % ("0", "3600")),
-    json.loads(EXTERNAL_HEAT_SOURCE_EXCESS_ENERGY_MAX_RUNTIME % ("1", "3600")),
-    json.loads(EXTERNAL_HEAT_SOURCE_EXCESS_ENERGY_ACTIVATION_COUNTER % ("0", "23")),
-    json.loads(EXTERNAL_HEAT_SOURCE_EXCESS_ENERGY_ACTIVATION_COUNTER % ("1", "23")),
-    *get_heat_pump_data(compressor_night_speed="true"),
-    json.loads(BUFFER_TANK_CURRENT_TOP_TEMPERATURE % ("0", "45.67")),
-    json.loads(BUFFER_TANK_CURRENT_TOP_TEMPERATURE % ("1", "35.67")),
-    json.loads(BUFFER_TANK_CURRENT_BOTTOM_TEMPERATURE % ("0", "15.67")),
-    json.loads(BUFFER_TANK_CURRENT_BOTTOM_TEMPERATURE % ("1", "25.67")),
-    json.loads(BUFFER_TANK_EXCESS_ENERGY_TARGET_TEMPERATURE % ("0", "75.0")),
-    json.loads(BUFFER_TANK_EXCESS_ENERGY_TARGET_TEMPERATURE % ("1", "75.0")),
-    json.loads(BUFFER_TANK_EXCESS_ENERGY_TARGET_TEMPERATURE_HYSTERESIS % ("0", "2.00")),
-    json.loads(BUFFER_TANK_EXCESS_ENERGY_TARGET_TEMPERATURE_HYSTERESIS % ("1", "2.00")),
-    json.loads(BUFFER_TANK_EXCESS_ENERGY_MODE % ("0", "1")),
-    json.loads(BUFFER_TANK_EXCESS_ENERGY_MODE % ("1", "0")),
-    json.loads(BUFFER_TANK_OPERATING_MODE % ("0", "0")),
-    json.loads(BUFFER_TANK_OPERATING_MODE % ("1", "1")),
-    json.loads(BUFFER_TANK_STANDBY_TEMPERATURE % ("0", "10.00")),
-    json.loads(BUFFER_TANK_STANDBY_TEMPERATURE % ("1", "11.00")),
-    json.loads(BUFFER_TANK_TARGET_TEMPERATURE % ("0", "42.00")),
-    json.loads(BUFFER_TANK_TARGET_TEMPERATURE % ("1", "43.00")),
-    json.loads(BUFFER_TANK_HEAT_REQUEST % ("0", "false")),
-    json.loads(BUFFER_TANK_HEAT_REQUEST % ("1", "true")),
-    json.loads(BUFFER_TANK_COOL_REQUEST % ("0", "true")),
-    json.loads(BUFFER_TANK_COOL_REQUEST % ("1", "false")),
-    json.loads(BUFFER_TANK_USE_EXCESS_ENERGY % ("0", "true")),
-    json.loads(BUFFER_TANK_USE_EXCESS_ENERGY % ("1", "false")),
-    json.loads(BUFFER_TANK_OUTDOOR_TEMPERATURE_EXCESS_ENERGY_LIMIT % ("0", "25.00")),
-    json.loads(BUFFER_TANK_OUTDOOR_TEMPERATURE_EXCESS_ENERGY_LIMIT % ("1", "25.00")),
-    json.loads(HOT_WATER_TANK_USE_EXCESS_ENERGY % ("0", "true")),
-    json.loads(HOT_WATER_TANK_USE_EXCESS_ENERGY % ("1", "false")),
-    json.loads(HOT_WATER_TANK_EXCESS_ENERGY_TARGET_TEMPERATURE % ("0", "75.00")),
-    json.loads(HOT_WATER_TANK_EXCESS_ENERGY_TARGET_TEMPERATURE % ("1", "75.00")),
-    json.loads(HOT_WATER_TANK_EXCESS_ENERGY_TARGET_TEMPERATURE_HYSTERESIS % ("0", "4.00")),
-    json.loads(HOT_WATER_TANK_EXCESS_ENERGY_TARGET_TEMPERATURE_HYSTERESIS % ("1", "4.00")),
-    json.loads(HOT_WATER_TANK_EXCESS_ENERGY_MODE % ("0", "1")),
-    json.loads(HOT_WATER_TANK_EXCESS_ENERGY_MODE % ("1", "0")),
-    json.loads(HOT_WATER_TANK_HEAT_REQUEST % ("0", "false")),
-    json.loads(HOT_WATER_TANK_HEAT_REQUEST % ("1", "true")),
-    json.loads(HOT_WATER_TANK_FRESH_WATER_FLOW % ("0", "false")),
-    json.loads(HOT_WATER_TANK_FRESH_WATER_FLOW % ("1", "true")),
-    json.loads(HOT_WATER_TANK_FRESH_WATER_MODULE_TEMPERATURE % ("0", "51.23")),
-    json.loads(HOT_WATER_TANK_FRESH_WATER_MODULE_TEMPERATURE % ("1", "51.23")),
-    json.loads(HOT_WATER_TANK_TARGET_TEMPERATURE % ("0", "51")),
-    json.loads(HOT_WATER_TANK_TARGET_TEMPERATURE % ("1", "51")),
-    json.loads(HOT_WATER_TANK_STANDBY_TEMPERATURE % ("0", "32.5")),
-    json.loads(HOT_WATER_TANK_STANDBY_TEMPERATURE % ("1", "32.5")),
-    json.loads(HOT_WATER_TANK_OPERATION_MODE % ("0", "3")),
-    json.loads(HOT_WATER_TANK_OPERATION_MODE % ("1", "0")),
-    json.loads(HOT_WATER_TANK_CURRENT_TEMPERATURE % ("0", "47.700001")),
-    json.loads(HOT_WATER_TANK_CURRENT_TEMPERATURE % ("1", "47.700001")),
-    json.loads(HOT_WATER_TANK_CIRCULATION_RETURN_TEMPERATURE % ("0", "30.45")),
-    json.loads(HOT_WATER_TANK_CIRCULATION_RETURN_TEMPERATURE % ("1", "27.45")),
-    json.loads(HOT_WATER_TANK_CIRCULATION_PUMP_STATE % ("0", "true")),
-    json.loads(HOT_WATER_TANK_CIRCULATION_PUMP_STATE % ("1", "false")),
-    json.loads(SWITCH_VALVE_POSITION % ("0", "0")),
-    json.loads(SWITCH_VALVE_POSITION % ("1", "1")),
-    json.loads(PHOTOVOLTAIC_EXCESS_ENERGY_ACTIVE % "true"),
-    json.loads(PHOTOVOLTAIC_EXCESS_POWER % "437.700001"),
-    json.loads(PHOTOVOLTAIC_DAILY_ENERGY % "1575720000"),
-    json.loads(PHOTOVOLTAIC_TOTAL_ENERGY % "1575720000"),
-    SYSTEM_OUTDOOR_TEMPERATURE,
-    SYSTEM_OPERATING_MODE,
-    SYSTEM_CPU_USAGE,
-    SYSTEM_WEBVIEW_CPU_USAGE,
-    SYSTEM_WEBSERVER_CPU_USAGE,
-    SYSTEM_CONTROL_CPU_USAGE,
-    SYSTEM_RAM_USAGE,
-    SYSTEM_FREE_RAM,
-]
-
-MULTIPLE_POSITION_DATA_RESPONSE_3_2: list[dict[str, Any]] = [
-    json.loads(EXTERNAL_HEAT_SOURCE_OPERATING_MODE % ("0", "0")),
-    json.loads(EXTERNAL_HEAT_SOURCE_OPERATING_MODE % ("1", "1")),
-    json.loads(EXTERNAL_HEAT_SOURCE_TARGET_TEMPERATURE % ("0", "17.23")),
-    json.loads(EXTERNAL_HEAT_SOURCE_TARGET_TEMPERATURE % ("1", "17.23")),
-    json.loads(EXTERNAL_HEAT_SOURCE_HEAT_REQUEST % ("0", "true")),
-    json.loads(EXTERNAL_HEAT_SOURCE_HEAT_REQUEST % ("1", "true")),
-    json.loads(EXTERNAL_HEAT_SOURCE_OPERATING_TIME % ("0", "812999")),
-    json.loads(EXTERNAL_HEAT_SOURCE_OPERATING_TIME % ("1", "812999")),
-    json.loads(EXTERNAL_HEAT_SOURCE_MAX_RUNTIME % ("0", "8129")),
-    json.loads(EXTERNAL_HEAT_SOURCE_MAX_RUNTIME % ("1", "8129")),
-    json.loads(EXTERNAL_HEAT_SOURCE_ACTIVATION_COUNTER % ("0", "812")),
-    json.loads(EXTERNAL_HEAT_SOURCE_ACTIVATION_COUNTER % ("1", "812")),
-    json.loads(EXTERNAL_HEAT_SOURCE_USE_EXCESS_ENERGY % ("0", "true")),
-    json.loads(EXTERNAL_HEAT_SOURCE_USE_EXCESS_ENERGY % ("1", "false")),
-    json.loads(EXTERNAL_HEAT_SOURCE_MIN_RUNTIME_EXCESS_ENERGY % ("0", "5")),
-    json.loads(EXTERNAL_HEAT_SOURCE_MIN_RUNTIME_EXCESS_ENERGY % ("1", "5")),
-    json.loads(EXTERNAL_HEAT_SOURCE_CONSUMING_EXCESS_ENERGY % ("0", "true")),
-    json.loads(EXTERNAL_HEAT_SOURCE_CONSUMING_EXCESS_ENERGY % ("1", "true")),
-    json.loads(EXTERNAL_HEAT_SOURCE_EXCESS_ENERGY_OPERATING_TIME % ("0", "3600")),
-    json.loads(EXTERNAL_HEAT_SOURCE_EXCESS_ENERGY_OPERATING_TIME % ("1", "3600")),
-    json.loads(EXTERNAL_HEAT_SOURCE_EXCESS_ENERGY_MAX_RUNTIME % ("0", "3600")),
-    json.loads(EXTERNAL_HEAT_SOURCE_EXCESS_ENERGY_MAX_RUNTIME % ("1", "3600")),
-    json.loads(EXTERNAL_HEAT_SOURCE_EXCESS_ENERGY_ACTIVATION_COUNTER % ("0", "23")),
-    json.loads(EXTERNAL_HEAT_SOURCE_EXCESS_ENERGY_ACTIVATION_COUNTER % ("1", "23")),
-    json.loads(HEAT_CIRCUIT_ROOM_TEMPERATURE % ("0", "22.42")),
-    json.loads(HEAT_CIRCUIT_ROOM_TEMPERATURE % ("1", "22.42")),
-    json.loads(HEAT_CIRCUIT_ROOM_HUMIDITY % ("0", "53")),
-    json.loads(HEAT_CIRCUIT_ROOM_HUMIDITY % ("1", "53")),
-    json.loads(HEAT_CIRCUIT_DEW_POINT % ("0", "13.1")),
-    json.loads(HEAT_CIRCUIT_DEW_POINT % ("1", "13.1")),
-    json.loads(HEAT_CIRCUIT_FLOW_TEMPERATURE_SETPOINT % ("0", "26.5543")),
-    json.loads(HEAT_CIRCUIT_FLOW_TEMPERATURE_SETPOINT % ("1", "26.5543")),
-    json.loads(HEAT_CIRCUIT_MIXER_FLOW_TEMPERATURE % ("0", "22.2143")),
-    json.loads(HEAT_CIRCUIT_MIXER_FLOW_TEMPERATURE % ("1", "22.2143")),
-    json.loads(HEAT_CIRCUIT_MIXER_RETURN_FLOW_TEMPERATURE % ("0", "20.2143")),
-    json.loads(HEAT_CIRCUIT_MIXER_RETURN_FLOW_TEMPERATURE % ("1", "20.2143")),
-    json.loads(HEAT_CIRCUIT_MIXER_POSITION % ("0", "-1")),
-    json.loads(HEAT_CIRCUIT_MIXER_POSITION % ("1", "-1")),
-    json.loads(HEAT_CIRCUIT_PUMP_STATE % ("0", "true")),
-    json.loads(HEAT_CIRCUIT_PUMP_STATE % ("1", "true")),
-    json.loads(HEAT_CIRCUIT_RETURN_FLOW_TEMPERATURE % ("0", "21.2143")),
-    json.loads(HEAT_CIRCUIT_RETURN_FLOW_TEMPERATURE % ("1", "21.2143")),
-    json.loads(HEAT_CIRCUIT_TARGET_TEMPERATURE_DAY % ("0", "20.5")),
-    json.loads(HEAT_CIRCUIT_TARGET_TEMPERATURE_DAY % ("1", "20.5")),
-    json.loads(HEAT_CIRCUIT_TARGET_COOLING_TEMPERATURE_DAY % ("0", "20.5")),
-    json.loads(HEAT_CIRCUIT_TARGET_COOLING_TEMPERATURE_DAY % ("1", "20.5")),
-    json.loads(HEAT_CIRCUIT_HEATING_LIMIT_DAY % ("0", "20")),
-    json.loads(HEAT_CIRCUIT_HEATING_LIMIT_DAY % ("1", "20")),
-    json.loads(HEAT_CIRCUIT_COOLING_LIMIT_DAY % ("0", "20")),
-    json.loads(HEAT_CIRCUIT_COOLING_LIMIT_DAY % ("1", "20")),
-    json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_HEATING_LIMIT_DAY % ("0", "30")),
-    json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_HEATING_LIMIT_DAY % ("1", "30")),
-    json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_COOLING_LIMIT_DAY % ("0", "10")),
-    json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_COOLING_LIMIT_DAY % ("1", "10")),
-    json.loads(HEAT_CIRCUIT_HEAT_REQUEST % ("0", "1")),
-    json.loads(HEAT_CIRCUIT_HEAT_REQUEST % ("1", "0")),
-    json.loads(HEAT_CIRCUIT_COOL_REQUEST % ("0", "0")),
-    json.loads(HEAT_CIRCUIT_COOL_REQUEST % ("1", "1")),
-    json.loads(HEAT_CIRCUIT_TARGET_TEMPERATURE_AWAY % ("0", "18")),
-    json.loads(HEAT_CIRCUIT_TARGET_TEMPERATURE_AWAY % ("1", "18")),
-    json.loads(HEAT_CIRCUIT_TARGET_TEMPERATURE_NIGHT % ("0", "20")),
-    json.loads(HEAT_CIRCUIT_TARGET_TEMPERATURE_NIGHT % ("1", "20")),
-    json.loads(HEAT_CIRCUIT_TARGET_COOLING_TEMPERATURE_NIGHT % ("0", "20")),
-    json.loads(HEAT_CIRCUIT_TARGET_COOLING_TEMPERATURE_NIGHT % ("1", "20")),
-    json.loads(HEAT_CIRCUIT_HEATING_LIMIT_NIGHT % ("0", "18")),
-    json.loads(HEAT_CIRCUIT_HEATING_LIMIT_NIGHT % ("1", "18")),
-    json.loads(HEAT_CIRCUIT_COOLING_LIMIT_NIGHT % ("0", "18")),
-    json.loads(HEAT_CIRCUIT_COOLING_LIMIT_NIGHT % ("1", "18")),
-    json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_HEATING_LIMIT_NIGHT % ("0", "28")),
-    json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_HEATING_LIMIT_NIGHT % ("1", "28")),
-    json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_COOLING_LIMIT_NIGHT % ("0", "28")),
-    json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_COOLING_LIMIT_NIGHT % ("1", "28")),
-    json.loads(HEAT_CIRCUIT_OPERATION_MODE % ("0", "2")),
-    json.loads(HEAT_CIRCUIT_OPERATION_MODE % ("1", "0")),
-    json.loads(HEAT_CIRCUIT_SELECTED_TARGET_TEMPERATURE % ("0", "20")),
-    json.loads(HEAT_CIRCUIT_SELECTED_TARGET_TEMPERATURE % ("1", "20")),
-    json.loads(HEAT_CIRCUIT_TARGET_TEMPERATURE % ("0", "20.5")),
-    json.loads(HEAT_CIRCUIT_TARGET_TEMPERATURE % ("1", "20.5")),
-    json.loads(HEAT_CIRCUIT_TARGET_TEMPERATURE_OFFSET % ("0", "1.5")),
-    json.loads(HEAT_CIRCUIT_TARGET_TEMPERATURE_OFFSET % ("1", "0")),
-    json.loads(HEAT_CIRCUIT_USE_EXCESS_ENERGY % ("0", "true")),
-    json.loads(HEAT_CIRCUIT_USE_EXCESS_ENERGY % ("1", "false")),
-    json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_TARGET_TEMPERATURE % ("0", "30")),
-    json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_TARGET_TEMPERATURE % ("1", "30")),
-    json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_TARGET_TEMPERATURE_HYSTERESIS % ("0", "0.7")),
-    json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_TARGET_TEMPERATURE_HYSTERESIS % ("1", "0.7")),
-    json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_TARGET_COOLING_TEMPERATURE % ("0", "10")),
-    json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_TARGET_COOLING_TEMPERATURE % ("1", "10")),
-    json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_TARGET_COOLING_TEMPERATURE_HYSTERESIS % ("0", "0.7")),
-    json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_TARGET_COOLING_TEMPERATURE_HYSTERESIS % ("1", "0.7")),
-    json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_MODE % ("0", "1")),
-    json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_MODE % ("1", "0")),
-    json.loads(HEAT_CIRCUIT_AWAY_START_DATE % ("0", "1769036400")),
-    json.loads(HEAT_CIRCUIT_AWAY_START_DATE % ("1", "1769036400")),
-    json.loads(HEAT_CIRCUIT_AWAY_END_DATE % ("0", "1769122799")),
-    json.loads(HEAT_CIRCUIT_AWAY_END_DATE % ("1", "1769122799")),
-    json.loads(HEAT_CIRCUIT_HEATING_CURVE_OFFSET % ("0", "1.5")),
-    json.loads(HEAT_CIRCUIT_HEATING_CURVE_OFFSET % ("1", "-1.5")),
-    json.loads(HEAT_CIRCUIT_COOLING_CURVE_OFFSET % ("0", "1.5")),
-    json.loads(HEAT_CIRCUIT_COOLING_CURVE_OFFSET % ("1", "-1.5")),
-    json.loads(HEAT_CIRCUIT_HEATING_CURVE_SLOPE % ("0", "0.5")),
-    json.loads(HEAT_CIRCUIT_HEATING_CURVE_SLOPE % ("1", "0.6")),
-    json.loads(HEAT_CIRCUIT_COOLING_CURVE_SLOPE % ("0", "0.5")),
-    json.loads(HEAT_CIRCUIT_COOLING_CURVE_SLOPE % ("1", "0.6")),
-    json.loads(HEAT_CIRCUIT_USE_HEATING_CURVE % ("0", "false")),
-    json.loads(HEAT_CIRCUIT_USE_HEATING_CURVE % ("1", "true")),
-    json.loads(HEAT_CIRCUIT_HEATING_CURVE % ("0", "HC6")),
-    json.loads(HEAT_CIRCUIT_HEATING_CURVE % ("1", "HC7")),
-    json.loads(HEAT_CIRCUIT_COOLING_CURVE % ("0", "HC2")),
-    json.loads(HEAT_CIRCUIT_COOLING_CURVE % ("1", "HC2")),
-    json.loads(HEAT_CIRCUIT_PUMP_SPEED % ("0", "0.5")),
-    json.loads(HEAT_CIRCUIT_PUMP_SPEED % ("1", "0.5")),
-    *get_heat_pump_data(compressor_night_speed="true"),
-    json.loads(BUFFER_TANK_CURRENT_TOP_TEMPERATURE % ("0", "45.67")),
-    json.loads(BUFFER_TANK_CURRENT_TOP_TEMPERATURE % ("1", "35.67")),
-    json.loads(BUFFER_TANK_CURRENT_BOTTOM_TEMPERATURE % ("0", "15.67")),
-    json.loads(BUFFER_TANK_CURRENT_BOTTOM_TEMPERATURE % ("1", "25.67")),
-    json.loads(BUFFER_TANK_EXCESS_ENERGY_TARGET_TEMPERATURE % ("0", "75.0")),
-    json.loads(BUFFER_TANK_EXCESS_ENERGY_TARGET_TEMPERATURE % ("1", "75.0")),
-    json.loads(BUFFER_TANK_EXCESS_ENERGY_TARGET_TEMPERATURE_HYSTERESIS % ("0", "2.00")),
-    json.loads(BUFFER_TANK_EXCESS_ENERGY_TARGET_TEMPERATURE_HYSTERESIS % ("1", "2.00")),
-    json.loads(BUFFER_TANK_EXCESS_ENERGY_MODE % ("0", "1")),
-    json.loads(BUFFER_TANK_EXCESS_ENERGY_MODE % ("1", "0")),
-    json.loads(BUFFER_TANK_OPERATING_MODE % ("0", "0")),
-    json.loads(BUFFER_TANK_OPERATING_MODE % ("1", "1")),
-    json.loads(BUFFER_TANK_STANDBY_TEMPERATURE % ("0", "10.00")),
-    json.loads(BUFFER_TANK_STANDBY_TEMPERATURE % ("1", "11.00")),
-    json.loads(BUFFER_TANK_TARGET_TEMPERATURE % ("0", "44.00")),
-    json.loads(BUFFER_TANK_TARGET_TEMPERATURE % ("1", "43.00")),
-    json.loads(BUFFER_TANK_HEAT_REQUEST % ("0", "false")),
-    json.loads(BUFFER_TANK_HEAT_REQUEST % ("1", "true")),
-    json.loads(BUFFER_TANK_COOL_REQUEST % ("0", "true")),
-    json.loads(BUFFER_TANK_COOL_REQUEST % ("1", "false")),
-    json.loads(BUFFER_TANK_USE_EXCESS_ENERGY % ("0", "true")),
-    json.loads(BUFFER_TANK_USE_EXCESS_ENERGY % ("1", "false")),
-    json.loads(BUFFER_TANK_OUTDOOR_TEMPERATURE_EXCESS_ENERGY_LIMIT % ("0", "25.00")),
-    json.loads(BUFFER_TANK_OUTDOOR_TEMPERATURE_EXCESS_ENERGY_LIMIT % ("1", "25.00")),
-    json.loads(HOT_WATER_TANK_USE_EXCESS_ENERGY % ("0", "true")),
-    json.loads(HOT_WATER_TANK_USE_EXCESS_ENERGY % ("1", "false")),
-    json.loads(HOT_WATER_TANK_EXCESS_ENERGY_TARGET_TEMPERATURE % ("0", "75.00")),
-    json.loads(HOT_WATER_TANK_EXCESS_ENERGY_TARGET_TEMPERATURE % ("1", "75.00")),
-    json.loads(HOT_WATER_TANK_EXCESS_ENERGY_TARGET_TEMPERATURE_HYSTERESIS % ("0", "4.00")),
-    json.loads(HOT_WATER_TANK_EXCESS_ENERGY_TARGET_TEMPERATURE_HYSTERESIS % ("1", "4.00")),
-    json.loads(HOT_WATER_TANK_EXCESS_ENERGY_MODE % ("0", "1")),
-    json.loads(HOT_WATER_TANK_EXCESS_ENERGY_MODE % ("1", "0")),
-    json.loads(HOT_WATER_TANK_HEAT_REQUEST % ("0", "false")),
-    json.loads(HOT_WATER_TANK_HEAT_REQUEST % ("1", "true")),
-    json.loads(HOT_WATER_TANK_FRESH_WATER_FLOW % ("0", "false")),
-    json.loads(HOT_WATER_TANK_FRESH_WATER_FLOW % ("1", "true")),
-    json.loads(HOT_WATER_TANK_FRESH_WATER_MODULE_TEMPERATURE % ("0", "51.23")),
-    json.loads(HOT_WATER_TANK_FRESH_WATER_MODULE_TEMPERATURE % ("1", "51.23")),
-    json.loads(HOT_WATER_TANK_TARGET_TEMPERATURE % ("0", "51")),
-    json.loads(HOT_WATER_TANK_TARGET_TEMPERATURE % ("1", "51")),
-    json.loads(HOT_WATER_TANK_STANDBY_TEMPERATURE % ("0", "32.5")),
-    json.loads(HOT_WATER_TANK_STANDBY_TEMPERATURE % ("1", "32.5")),
-    json.loads(HOT_WATER_TANK_OPERATION_MODE % ("0", "3")),
-    json.loads(HOT_WATER_TANK_OPERATION_MODE % ("1", "0")),
-    json.loads(HOT_WATER_TANK_CURRENT_TEMPERATURE % ("0", "47.700001")),
-    json.loads(HOT_WATER_TANK_CURRENT_TEMPERATURE % ("1", "47.700001")),
-    json.loads(HOT_WATER_TANK_CIRCULATION_RETURN_TEMPERATURE % ("0", "30.45")),
-    json.loads(HOT_WATER_TANK_CIRCULATION_RETURN_TEMPERATURE % ("1", "27.45")),
-    json.loads(HOT_WATER_TANK_CIRCULATION_PUMP_STATE % ("0", "true")),
-    json.loads(HOT_WATER_TANK_CIRCULATION_PUMP_STATE % ("1", "false")),
-    json.loads(SWITCH_VALVE_POSITION % ("0", "0")),
-    json.loads(SWITCH_VALVE_POSITION % ("1", "1")),
-    json.loads(PHOTOVOLTAIC_EXCESS_ENERGY_ACTIVE % "true"),
-    json.loads(PHOTOVOLTAIC_EXCESS_POWER % "437.700001"),
-    json.loads(PHOTOVOLTAIC_DAILY_ENERGY % "1575720000"),
-    json.loads(PHOTOVOLTAIC_TOTAL_ENERGY % "1575720000"),
-    SYSTEM_OUTDOOR_TEMPERATURE,
-    SYSTEM_OPERATING_MODE,
-    SYSTEM_CPU_USAGE,
-    SYSTEM_WEBVIEW_CPU_USAGE,
-    SYSTEM_WEBSERVER_CPU_USAGE,
-    SYSTEM_CONTROL_CPU_USAGE,
-    SYSTEM_RAM_USAGE,
-    SYSTEM_FREE_RAM,
-]
+# The `MULTIPLE_POSITION_DATA_RESPONSE` with other modes and settings.
+MULTIPLE_POSITION_OTHER_MODES_DATA_RESPONSE: Final[list[dict[str, Any]]] = replace_values(
+    MULTIPLE_POSITION_DATA_RESPONSE,
+    (EXTERNAL_HEAT_SOURCE_USE_EXCESS_ENERGY, "1", "false"),
+    (HEAT_CIRCUIT_OPERATION_MODE, "0", "4"),
+    (HEAT_CIRCUIT_OPERATION_MODE, "1", "4"),
+    (HEAT_CIRCUIT_HEATING_CURVE_OFFSET, "0", "4.5"),
+    (HEAT_CIRCUIT_HEATING_CURVE_OFFSET, "1", "-4.5"),
+    (HEAT_CIRCUIT_COOLING_CURVE_OFFSET, "0", "4.5"),
+    (HEAT_CIRCUIT_COOLING_CURVE_OFFSET, "1", "-4.5"),
+    (HEAT_CIRCUIT_HEATING_CURVE_SLOPE, "0", "0.7"),
+    (HEAT_CIRCUIT_HEATING_CURVE_SLOPE, "1", "0.8"),
+    (HEAT_CIRCUIT_COOLING_CURVE_SLOPE, "0", "0.7"),
+    (HEAT_CIRCUIT_COOLING_CURVE_SLOPE, "1", "0.8"),
+    (HEAT_CIRCUIT_HEATING_CURVE, "0", "HC FBH"),
+    (HEAT_CIRCUIT_HEATING_CURVE, "1", "HC HK"),
+    (HEAT_CIRCUIT_COOLING_CURVE, "0", "HC2"),
+    (HEAT_CIRCUIT_COOLING_CURVE, "1", "HC2"),
+    (SOLAR_CIRCUIT_PRIORITY_1_BEFORE_2, "0", "true"),
+    (SOLAR_CIRCUIT_PRIORITY_1_BEFORE_2, "1", "false"),
+    (HEAT_PUMP_COMPRESSOR_USE_NIGHT_SPEED, "false"),
+    (BUFFER_TANK_OPERATING_MODE, "0", "1"),
+    (BUFFER_TANK_OPERATING_MODE, "1", "2"),
+    (HOT_WATER_TANK_OPERATION_MODE, "0", "2"),
+    (HOT_WATER_TANK_OPERATION_MODE, "1", "1"),
+    (HOT_WATER_TANK_CIRCULATION_RETURN_TEMPERATURE, "1", "36.45"),
+    (HOT_WATER_TANK_CIRCULATION_PUMP_STATE, "0", "false"),
+    (HOT_WATER_TANK_CIRCULATION_PUMP_STATE, "1", "true"),
+)
 
 
-HEATING_CURVE_NAMES_RESPONSE: list[dict[str, Any]] = [
-    {
-        "name": "APPL.CtrlAppl.sParam.linTabPool[0].name",
-        "attributes": {
-            "longText": "Table name",
-        },
-        "value": "HC1",
-    },
-    {
-        "name": "APPL.CtrlAppl.sParam.linTabPool[1].name",
-        "attributes": {
-            "longText": "Table name",
-        },
-        "value": "HC2",
-    },
-    {
-        "name": "APPL.CtrlAppl.sParam.linTabPool[2].name",
-        "attributes": {
-            "longText": "Table name",
-        },
-        "value": "HC3",
-    },
-    {
-        "name": "APPL.CtrlAppl.sParam.linTabPool[3].name",
-        "attributes": {
-            "longText": "Table name",
-        },
-        "value": "HC4",
-    },
-    {
-        "name": "APPL.CtrlAppl.sParam.linTabPool[4].name",
-        "attributes": {
-            "longText": "Table name",
-        },
-        "value": "HC5",
-    },
-    {
-        "name": "APPL.CtrlAppl.sParam.linTabPool[5].name",
-        "attributes": {
-            "longText": "Table name",
-        },
-        "value": "HC6",
-    },
-    {
-        "name": "APPL.CtrlAppl.sParam.linTabPool[6].name",
-        "attributes": {
-            "longText": "Table name",
-        },
-        "value": "HC7",
-    },
-    {
-        "name": "APPL.CtrlAppl.sParam.linTabPool[7].name",
-        "attributes": {
-            "longText": "Table name",
-        },
-        "value": "HC8",
-    },
-    {
-        "name": "APPL.CtrlAppl.sParam.linTabPool[8].name",
-        "attributes": {
-            "longText": "Table name",
-        },
-        "value": "ValveOffset",
-    },
-    {
-        "name": "APPL.CtrlAppl.sParam.linTabPool[9].name",
-        "attributes": {
-            "longText": "Table name",
-        },
-        "value": "VFS5-100",
-    },
-    {
-        "name": "APPL.CtrlAppl.sParam.linTabPool[10].name",
-        "attributes": {
-            "longText": "Table name",
-        },
-        "value": "Fan",
-    },
-    {
-        "name": "APPL.CtrlAppl.sParam.linTabPool[11].name",
-        "attributes": {
-            "longText": "Table name",
-        },
-        "value": "PowerLimit",
-    },
-    {
-        "name": "APPL.CtrlAppl.sParam.linTabPool[12].name",
-        "attributes": {
-            "longText": "Table name",
-        },
-        "value": "HC FBH",
-    },
-    {
-        "name": "APPL.CtrlAppl.sParam.linTabPool[13].name",
-        "attributes": {
-            "longText": "Table name",
-        },
-        "value": "HC HK",
-    },
-    {
-        "name": "APPL.CtrlAppl.sParam.linTabPool[14].name",
-        "attributes": {
-            "longText": "Table name",
-        },
-        "value": "ValveOffsetAT",
-    },
-    {
-        "name": "APPL.CtrlAppl.sParam.linTabPool[15].name",
-        "attributes": {
-            "longText": "Table name",
-        },
-        "value": "Fan WPLK412",
-    },
-    {
-        "name": "APPL.CtrlAppl.sParam.linTabPool[16].name",
-        "attributes": {
-            "longText": "Table name",
-        },
-        "value": "",
-    },
-    {
-        "name": "APPL.CtrlAppl.sParam.linTabPool[17].name",
-        "attributes": {
-            "longText": "Table name",
-        },
-        "value": "",
-    },
-    {
-        "name": "APPL.CtrlAppl.sParam.linTabPool[18].name",
-        "attributes": {
-            "longText": "Table name",
-        },
-        "value": "",
-    },
-    {
-        "name": "APPL.CtrlAppl.sParam.linTabPool[19].name",
-        "attributes": {
-            "longText": "Table name",
-        },
-        "value": "",
-    },
-    {
-        "name": "APPL.CtrlAppl.sParam.linTabPool[20].name",
-        "attributes": {
-            "longText": "Table name",
-        },
-        "value": "",
-    },
-    {
-        "name": "APPL.CtrlAppl.sParam.linTabPool[21].name",
-        "attributes": {
-            "longText": "Table name",
-        },
-        "value": "",
-    },
-    {
-        "name": "APPL.CtrlAppl.sParam.linTabPool[22].name",
-        "attributes": {
-            "longText": "Table name",
-        },
-        "value": "",
-    },
-    {
-        "name": "APPL.CtrlAppl.sParam.linTabPool[23].name",
-        "attributes": {
-            "longText": "Table name",
-        },
-        "value": "",
-    },
-    {
-        "name": "APPL.CtrlAppl.sParam.linTabPool[24].name",
-        "attributes": {
-            "longText": "Table name",
-        },
-        "value": "",
-    },
-    {
-        "name": "APPL.CtrlAppl.sParam.linTabPool[25].name",
-        "attributes": {
-            "longText": "Table name",
-        },
-        "value": "",
-    },
-    {
-        "name": "APPL.CtrlAppl.sParam.linTabPool[26].name",
-        "attributes": {
-            "longText": "Table name",
-        },
-        "value": "",
-    },
-    {
-        "name": "APPL.CtrlAppl.sParam.linTabPool[27].name",
-        "attributes": {
-            "longText": "Table name",
-        },
-        "value": "",
-    },
-    {
-        "name": "APPL.CtrlAppl.sParam.linTabPool[28].name",
-        "attributes": {
-            "longText": "Table name",
-        },
-        "value": "",
-    },
-    {
-        "name": "APPL.CtrlAppl.sParam.linTabPool[29].name",
-        "attributes": {
-            "longText": "Table name",
-        },
-        "value": "",
-    },
-]
+# The `MULTIPLE_POSITION_DATA_RESPONSE` after an update of the entities.
+ENTITY_UPDATED_DATA_RESPONSE: Final[list[dict[str, Any]]] = replace_values(
+    MULTIPLE_POSITION_DATA_RESPONSE,
+    (EXTERNAL_HEAT_SOURCE_OPERATING_MODE, "0", "1"),
+    (EXTERNAL_HEAT_SOURCE_OPERATING_MODE, "1", "0"),
+    (EXTERNAL_HEAT_SOURCE_TARGET_TEMPERATURE, "0", "13"),
+    (EXTERNAL_HEAT_SOURCE_TARGET_TEMPERATURE, "1", "12"),
+    (EXTERNAL_HEAT_SOURCE_USE_EXCESS_ENERGY, "1", "false"),
+    (HEAT_CIRCUIT_OPERATION_MODE, "0", "3"),
+    (HEAT_CIRCUIT_HEATING_CURVE_OFFSET, "0", "0.5"),
+    (HEAT_CIRCUIT_HEATING_CURVE_OFFSET, "1", "-0.5"),
+    (HEAT_CIRCUIT_COOLING_CURVE_OFFSET, "1", "-0.5"),
+    (HEAT_CIRCUIT_HEATING_CURVE_SLOPE, "0", "0.2"),
+    (HEAT_CIRCUIT_HEATING_CURVE_SLOPE, "1", "0.3"),
+    (HEAT_CIRCUIT_COOLING_CURVE_SLOPE, "0", "0.2"),
+    (HEAT_CIRCUIT_COOLING_CURVE_SLOPE, "1", "0.3"),
+    (HEAT_CIRCUIT_USE_HEATING_CURVE, "0", "true"),
+    (HEAT_CIRCUIT_USE_HEATING_CURVE, "1", "false"),
+    (HEAT_CIRCUIT_HEATING_CURVE, "0", "HC2"),
+    (HEAT_CIRCUIT_HEATING_CURVE, "1", "HC3"),
+    (HEAT_CIRCUIT_COOLING_CURVE, "0", "HC4"),
+    (HEAT_CIRCUIT_COOLING_CURVE, "1", "HC4"),
+    (SOLAR_CIRCUIT_PUMP_1, "1", "0.67"),
+    (SOLAR_CIRCUIT_PUMP_2, "0", "0.43"),
+    (SOLAR_CIRCUIT_CURRENT_TEMPERATURE_1, "2", "36.76"),
+    (SOLAR_CIRCUIT_CURRENT_TEMPERATURE_2, "3", "26.76"),
+    (SOLAR_CIRCUIT_TARGET_TEMPERATURE_2, "1", "55"),
+    (SOLAR_CIRCUIT_TARGET_TEMPERATURE_1, "2", "55"),
+    (SOLAR_CIRCUIT_TARGET_TEMPERATURE_2, "3", "55"),
+    (SOLAR_CIRCUIT_HEAT_REQUEST, "2", "true"),
+    (SOLAR_CIRCUIT_HEAT_REQUEST, "3", "false"),
+    (SOLAR_CIRCUIT_ACTUAL_POWER, "1", "3452"),
+    (SOLAR_CIRCUIT_PRIORITY_1_BEFORE_2, "0", "true"),
+    (SOLAR_CIRCUIT_PRIORITY_1_BEFORE_2, "1", "false"),
+    (BUFFER_TANK_CURRENT_TOP_TEMPERATURE, "0", "47.67"),
+    (BUFFER_TANK_CURRENT_TOP_TEMPERATURE, "1", "37.67"),
+    (BUFFER_TANK_CURRENT_BOTTOM_TEMPERATURE, "0", "25.67"),
+    (BUFFER_TANK_CURRENT_BOTTOM_TEMPERATURE, "1", "15.67"),
+    (HOT_WATER_TANK_EXCESS_ENERGY_MODE, "1", "2"),
+    (HOT_WATER_TANK_CIRCULATION_RETURN_TEMPERATURE, "1", "32.45"),
+    (HOT_WATER_TANK_CIRCULATION_PUMP_STATE, "0", "false"),
+    (HOT_WATER_TANK_CIRCULATION_PUMP_STATE, "1", "true"),
+    (SWITCH_VALVE_POSITION, "0", "1"),
+    (SWITCH_VALVE_POSITION, "1", "0"),
+)
 
-HEATING_CURVES_RESPONSE_1_1: list[list[dict[str, Any]]] = [
-    HEATING_CURVE_NAMES_RESPONSE,
+
+# The `MULTIPLE_POSITION_DATA_RESPONSE` without the solar circuits and with other values.
+MULTIPLE_POSITION_WITHOUT_SOLAR_CIRCUITS_DATA_RESPONSE: Final[list[dict[str, Any]]] = replace_values(
     [
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[0].name",
-            "attributes": {"longText": "Table name"},
-            "value": "HC1",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[0].noOfPoints",
-            "attributes": {
-                "formatId": "fmt2p0",
-                "longText": "QTY points",
-                "upperLimit": "16",
-                "lowerLimit": "0",
-            },
-            "value": "7",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[0].points[0].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[0].points[0].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[0].points[1].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[0].points[1].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[0].points[2].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[0].points[2].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[0].points[3].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[0].points[3].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[0].points[4].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[0].points[4].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[0].points[5].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[0].points[5].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[0].points[6].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[0].points[6].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[0].points[7].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[0].points[7].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[0].points[8].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[0].points[8].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[0].points[9].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[0].points[9].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[0].points[10].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[0].points[10].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[0].points[11].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[0].points[11].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[0].points[12].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[0].points[12].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[0].points[13].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[0].points[13].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[0].points[14].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[0].points[14].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[0].points[15].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[0].points[15].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[1].name",
-            "attributes": {"longText": "Table name"},
-            "value": "HC2",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[1].noOfPoints",
-            "attributes": {
-                "formatId": "fmt2p0",
-                "longText": "QTY points",
-                "upperLimit": "16",
-                "lowerLimit": "0",
-            },
-            "value": "7",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[1].points[0].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[1].points[0].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[1].points[1].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[1].points[1].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[1].points[2].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[1].points[2].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[1].points[3].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[1].points[3].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[1].points[4].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[1].points[4].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[1].points[5].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[1].points[5].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[1].points[6].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[1].points[6].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[1].points[7].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[1].points[7].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[1].points[8].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[1].points[8].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[1].points[9].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[1].points[9].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[1].points[10].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[1].points[10].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[1].points[11].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[1].points[11].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[1].points[12].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[1].points[12].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[1].points[13].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[1].points[13].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[1].points[14].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[1].points[14].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[1].points[15].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[1].points[15].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[2].name",
-            "attributes": {"longText": "Table name"},
-            "value": "HC3",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[2].noOfPoints",
-            "attributes": {
-                "formatId": "fmt2p0",
-                "longText": "QTY points",
-                "upperLimit": "16",
-                "lowerLimit": "0",
-            },
-            "value": "7",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[2].points[0].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[2].points[0].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[2].points[1].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[2].points[1].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[2].points[2].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[2].points[2].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[2].points[3].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[2].points[3].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[2].points[4].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[2].points[4].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[2].points[5].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[2].points[5].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[2].points[6].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[2].points[6].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[2].points[7].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[2].points[7].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[2].points[8].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[2].points[8].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[2].points[9].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[2].points[9].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[2].points[10].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[2].points[10].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[2].points[11].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[2].points[11].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[2].points[12].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[2].points[12].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[2].points[13].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[2].points[13].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[2].points[14].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[2].points[14].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[2].points[15].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[2].points[15].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[3].name",
-            "attributes": {"longText": "Table name"},
-            "value": "HC4",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[3].noOfPoints",
-            "attributes": {
-                "formatId": "fmt2p0",
-                "longText": "QTY points",
-                "upperLimit": "16",
-                "lowerLimit": "0",
-            },
-            "value": "7",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[3].points[0].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[3].points[0].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[3].points[1].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[3].points[1].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[3].points[2].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[3].points[2].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[3].points[3].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[3].points[3].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[3].points[4].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[3].points[4].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[3].points[5].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[3].points[5].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[3].points[6].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[3].points[6].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[3].points[7].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[3].points[7].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[3].points[8].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[3].points[8].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[3].points[9].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[3].points[9].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[3].points[10].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[3].points[10].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[3].points[11].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[3].points[11].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[3].points[12].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[3].points[12].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[3].points[13].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[3].points[13].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[3].points[14].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[3].points[14].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[3].points[15].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[3].points[15].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[4].name",
-            "attributes": {"longText": "Table name"},
-            "value": "HC5",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[4].noOfPoints",
-            "attributes": {
-                "formatId": "fmt2p0",
-                "longText": "QTY points",
-                "upperLimit": "16",
-                "lowerLimit": "0",
-            },
-            "value": "7",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[4].points[0].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[4].points[0].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[4].points[1].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[4].points[1].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[4].points[2].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[4].points[2].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[4].points[3].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[4].points[3].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[4].points[4].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[4].points[4].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[4].points[5].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[4].points[5].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[4].points[6].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[4].points[6].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[4].points[7].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[4].points[7].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[4].points[8].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[4].points[8].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[4].points[9].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[4].points[9].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[4].points[10].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[4].points[10].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[4].points[11].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[4].points[11].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[4].points[12].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[4].points[12].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[4].points[13].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[4].points[13].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[4].points[14].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[4].points[14].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[4].points[15].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[4].points[15].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[5].name",
-            "attributes": {"longText": "Table name"},
-            "value": "HC6",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[5].noOfPoints",
-            "attributes": {
-                "formatId": "fmt2p0",
-                "longText": "QTY points",
-                "upperLimit": "16",
-                "lowerLimit": "0",
-            },
-            "value": "7",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[5].points[0].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[5].points[0].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[5].points[1].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[5].points[1].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[5].points[2].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[5].points[2].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[5].points[3].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[5].points[3].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[5].points[4].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[5].points[4].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[5].points[5].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[5].points[5].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[5].points[6].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[5].points[6].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[5].points[7].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[5].points[7].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[5].points[8].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[5].points[8].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[5].points[9].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[5].points[9].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[5].points[10].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[5].points[10].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[5].points[11].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[5].points[11].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[5].points[12].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[5].points[12].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[5].points[13].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[5].points[13].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[5].points[14].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[5].points[14].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[5].points[15].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[5].points[15].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[6].name",
-            "attributes": {"longText": "Table name"},
-            "value": "HC7",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[6].noOfPoints",
-            "attributes": {
-                "formatId": "fmt2p0",
-                "longText": "QTY points",
-                "upperLimit": "16",
-                "lowerLimit": "0",
-            },
-            "value": "7",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[6].points[0].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[6].points[0].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[6].points[1].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[6].points[1].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[6].points[2].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[6].points[2].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[6].points[3].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[6].points[3].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[6].points[4].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[6].points[4].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[6].points[5].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[6].points[5].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[6].points[6].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[6].points[6].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[6].points[7].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[6].points[7].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[6].points[8].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[6].points[8].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[6].points[9].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[6].points[9].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[6].points[10].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[6].points[10].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[6].points[11].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[6].points[11].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[6].points[12].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[6].points[12].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[6].points[13].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[6].points[13].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[6].points[14].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[6].points[14].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[6].points[15].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[6].points[15].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[7].name",
-            "attributes": {"longText": "Table name"},
-            "value": "HC8",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[7].noOfPoints",
-            "attributes": {
-                "formatId": "fmt2p0",
-                "longText": "QTY points",
-                "upperLimit": "16",
-                "lowerLimit": "0",
-            },
-            "value": "7",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[7].points[0].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[7].points[0].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[7].points[1].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[7].points[1].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[7].points[2].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[7].points[2].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[7].points[3].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[7].points[3].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[7].points[4].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[7].points[4].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[7].points[5].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[7].points[5].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[7].points[6].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[7].points[6].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[7].points[7].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[7].points[7].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[7].points[8].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[7].points[8].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[7].points[9].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[7].points[9].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[7].points[10].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[7].points[10].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[7].points[11].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[7].points[11].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[7].points[12].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[7].points[12].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[7].points[13].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[7].points[13].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[7].points[14].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[7].points[14].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[7].points[15].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[7].points[15].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[12].name",
-            "attributes": {"longText": "Table name"},
-            "value": "HC FBH",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[12].noOfPoints",
-            "attributes": {
-                "formatId": "fmt2p0",
-                "longText": "QTY points",
-                "upperLimit": "16",
-                "lowerLimit": "0",
-            },
-            "value": "7",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[12].points[0].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[12].points[0].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[12].points[1].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[12].points[1].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[12].points[2].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[12].points[2].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[12].points[3].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[12].points[3].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[12].points[4].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[12].points[4].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[12].points[5].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[12].points[5].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[12].points[6].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[12].points[6].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[12].points[7].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[12].points[7].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[12].points[8].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[12].points[8].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[12].points[9].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[12].points[9].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[12].points[10].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[12].points[10].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[12].points[11].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[12].points[11].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[12].points[12].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[12].points[12].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[12].points[13].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[12].points[13].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[12].points[14].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[12].points[14].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[12].points[15].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[12].points[15].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[13].name",
-            "attributes": {"longText": "Table name"},
-            "value": "HC HK",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[13].noOfPoints",
-            "attributes": {
-                "formatId": "fmt2p0",
-                "longText": "QTY points",
-                "upperLimit": "16",
-                "lowerLimit": "0",
-            },
-            "value": "7",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[13].points[0].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[13].points[0].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[13].points[1].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[13].points[1].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[13].points[2].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[13].points[2].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[13].points[3].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[13].points[3].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[13].points[4].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[13].points[4].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[13].points[5].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[13].points[5].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[13].points[6].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[13].points[6].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[13].points[7].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[13].points[7].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[13].points[8].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[13].points[8].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[13].points[9].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[13].points[9].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[13].points[10].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[13].points[10].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[13].points[11].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[13].points[11].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[13].points[12].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[13].points[12].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[13].points[13].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[13].points[13].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[13].points[14].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[13].points[14].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[13].points[15].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[13].points[15].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
+        *MULTIPLE_POSITION_EXTERNAL_HEAT_SOURCE_DATA,
+        *MULTIPLE_POSITION_HEAT_CIRCUIT_DATA,
+        *MULTIPLE_POSITION_HEAT_PUMP_TO_SYSTEM_DATA,
     ],
+    (EXTERNAL_HEAT_SOURCE_USE_EXCESS_ENERGY, "1", "false"),
+    (HEAT_CIRCUIT_OPERATION_MODE, "1", "0"),
+    (HEAT_CIRCUIT_COOLING_CURVE_OFFSET, "0", "1.5"),
+    (HEAT_CIRCUIT_COOLING_CURVE, "0", "HC2"),
+    (HEAT_CIRCUIT_COOLING_CURVE, "1", "HC2"),
+)
+
+# The `MULTIPLE_POSITION_WITHOUT_SOLAR_CIRCUITS_DATA_RESPONSE` without the heating circuits, which are skipped by
+# their multiplier.
+MULTIPLE_POSITION_WITHOUT_SOLAR_AND_HEATING_CIRCUITS_DATA_RESPONSE: Final[list[dict[str, Any]]] = replace_values(
+    [
+        *MULTIPLE_POSITION_EXTERNAL_HEAT_SOURCE_DATA,
+        *MULTIPLE_POSITION_HEAT_PUMP_TO_SYSTEM_DATA,
+    ],
+    (EXTERNAL_HEAT_SOURCE_USE_EXCESS_ENERGY, "1", "false"),
+    (BUFFER_TANK_TARGET_TEMPERATURE, "0", "42.00"),
+)
+
+
+HEATING_CURVE_POOL: Final[tuple[str, ...]] = (
+    "HC1",
+    "HC2",
+    "HC3",
+    "HC4",
+    "HC5",
+    "HC6",
+    "HC7",
+    "HC8",
+    "ValveOffset",
+    "VFS5-100",
+    "Fan",
+    "PowerLimit",
+    "HC FBH",
+    "HC HK",
+    "ValveOffsetAT",
+    "Fan WPLK412",
+    *("",) * 14,
+)
+
+HEATING_CURVE_NAMES_RESPONSE: Final[list[dict[str, Any]]] = [
+    {
+        "name": f"APPL.CtrlAppl.sParam.linTabPool[{index}].name",
+        "attributes": {"longText": "Table name"},
+        "value": name,
+    }
+    for index, name in enumerate(HEATING_CURVE_POOL)
 ]
 
-HEATING_CURVES_RESPONSE_1_2: list[list[dict[str, Any]]] = [
+
+def get_heating_curve_points_response(
+    *,
+    renamed: dict[str, str] | None = None,
+    points: tuple[tuple[str, str], ...] | None = None,
+) -> list[dict[str, Any]]:
+    """Return the name, the number of points and the 16 points of each heating curve (`HC...`) of the pool.
+
+    Every heating curve has 7 points from -15 °C outdoor to 20 °C flow temperature. `renamed` changes the name of a
+    heating curve in the points, e.g. to a name that does not match the names of `HEATING_CURVE_NAMES_RESPONSE`.
+    `points` replaces the (outdoor, flow) points and their number of every heating curve.
+    """
+    curve_points: tuple[tuple[str, str], ...] = points or (("-15", "20"),) * 7
+    point_attributes: dict[str, str] = {"formatId": "fmtCurrent", "upperLimit": "90000", "lowerLimit": "-90000"}
+    response: list[dict[str, Any]] = []
+
+    for index, name in enumerate(HEATING_CURVE_POOL):
+        if not name.startswith("HC"):
+            continue
+
+        prefix: str = f"APPL.CtrlAppl.sParam.linTabPool[{index}]"
+        response += [
+            {
+                "name": f"{prefix}.name",
+                "attributes": {"longText": "Table name"},
+                "value": (renamed or {}).get(name, name),
+            },
+            {
+                "name": f"{prefix}.noOfPoints",
+                "attributes": {"formatId": "fmt2p0", "longText": "QTY points", "upperLimit": "16", "lowerLimit": "0"},
+                "value": str(len(curve_points)),
+            },
+        ]
+
+        for point in range(16):
+            outdoor, flow = curve_points[point] if point < len(curve_points) else ("-15", "20")
+            response += [
+                {
+                    "name": f"{prefix}.points[{point}].x",
+                    "attributes": {**point_attributes, "longText": "Point X"},
+                    "value": outdoor,
+                },
+                {
+                    "name": f"{prefix}.points[{point}].y",
+                    "attributes": {**point_attributes, "longText": "Point Y"},
+                    "value": flow,
+                },
+            ]
+
+    return response
+
+
+HEATING_CURVES_RESPONSE: Final[list[list[dict[str, Any]]]] = [
     HEATING_CURVE_NAMES_RESPONSE,
-    [
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[0].name",
-            "attributes": {"longText": "Table name"},
-            "value": "INVALID",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[0].noOfPoints",
-            "attributes": {
-                "formatId": "fmt2p0",
-                "longText": "QTY points",
-                "upperLimit": "16",
-                "lowerLimit": "0",
-            },
-            "value": "7",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[0].points[0].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[0].points[0].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[0].points[1].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[0].points[1].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[0].points[2].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[0].points[2].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[0].points[3].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[0].points[3].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[0].points[4].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[0].points[4].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[0].points[5].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[0].points[5].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[0].points[6].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[0].points[6].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[0].points[7].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[0].points[7].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[0].points[8].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[0].points[8].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[0].points[9].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[0].points[9].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[0].points[10].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[0].points[10].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[0].points[11].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[0].points[11].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[0].points[12].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[0].points[12].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[0].points[13].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[0].points[13].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[0].points[14].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[0].points[14].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[0].points[15].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[0].points[15].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[1].name",
-            "attributes": {"longText": "Table name"},
-            "value": "HC2",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[1].noOfPoints",
-            "attributes": {
-                "formatId": "fmt2p0",
-                "longText": "QTY points",
-                "upperLimit": "16",
-                "lowerLimit": "0",
-            },
-            "value": "7",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[1].points[0].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[1].points[0].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[1].points[1].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[1].points[1].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[1].points[2].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[1].points[2].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[1].points[3].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[1].points[3].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[1].points[4].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[1].points[4].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[1].points[5].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[1].points[5].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[1].points[6].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[1].points[6].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[1].points[7].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[1].points[7].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[1].points[8].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[1].points[8].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[1].points[9].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[1].points[9].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[1].points[10].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[1].points[10].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[1].points[11].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[1].points[11].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[1].points[12].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[1].points[12].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[1].points[13].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[1].points[13].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[1].points[14].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[1].points[14].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[1].points[15].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[1].points[15].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[2].name",
-            "attributes": {"longText": "Table name"},
-            "value": "HC3",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[2].noOfPoints",
-            "attributes": {
-                "formatId": "fmt2p0",
-                "longText": "QTY points",
-                "upperLimit": "16",
-                "lowerLimit": "0",
-            },
-            "value": "7",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[2].points[0].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[2].points[0].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[2].points[1].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[2].points[1].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[2].points[2].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[2].points[2].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[2].points[3].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[2].points[3].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[2].points[4].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[2].points[4].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[2].points[5].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[2].points[5].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[2].points[6].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[2].points[6].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[2].points[7].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[2].points[7].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[2].points[8].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[2].points[8].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[2].points[9].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[2].points[9].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[2].points[10].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[2].points[10].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[2].points[11].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[2].points[11].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[2].points[12].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[2].points[12].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[2].points[13].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[2].points[13].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[2].points[14].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[2].points[14].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[2].points[15].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[2].points[15].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[3].name",
-            "attributes": {"longText": "Table name"},
-            "value": "HC4",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[3].noOfPoints",
-            "attributes": {
-                "formatId": "fmt2p0",
-                "longText": "QTY points",
-                "upperLimit": "16",
-                "lowerLimit": "0",
-            },
-            "value": "7",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[3].points[0].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[3].points[0].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[3].points[1].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[3].points[1].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[3].points[2].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[3].points[2].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[3].points[3].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[3].points[3].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[3].points[4].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[3].points[4].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[3].points[5].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[3].points[5].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[3].points[6].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[3].points[6].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[3].points[7].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[3].points[7].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[3].points[8].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[3].points[8].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[3].points[9].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[3].points[9].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[3].points[10].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[3].points[10].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[3].points[11].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[3].points[11].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[3].points[12].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[3].points[12].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[3].points[13].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[3].points[13].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[3].points[14].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[3].points[14].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[3].points[15].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[3].points[15].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[4].name",
-            "attributes": {"longText": "Table name"},
-            "value": "HC5",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[4].noOfPoints",
-            "attributes": {
-                "formatId": "fmt2p0",
-                "longText": "QTY points",
-                "upperLimit": "16",
-                "lowerLimit": "0",
-            },
-            "value": "7",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[4].points[0].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[4].points[0].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[4].points[1].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[4].points[1].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[4].points[2].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[4].points[2].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[4].points[3].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[4].points[3].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[4].points[4].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[4].points[4].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[4].points[5].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[4].points[5].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[4].points[6].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[4].points[6].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[4].points[7].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[4].points[7].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[4].points[8].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[4].points[8].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[4].points[9].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[4].points[9].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[4].points[10].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[4].points[10].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[4].points[11].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[4].points[11].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[4].points[12].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[4].points[12].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[4].points[13].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[4].points[13].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[4].points[14].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[4].points[14].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[4].points[15].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[4].points[15].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[5].name",
-            "attributes": {"longText": "Table name"},
-            "value": "HC6",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[5].noOfPoints",
-            "attributes": {
-                "formatId": "fmt2p0",
-                "longText": "QTY points",
-                "upperLimit": "16",
-                "lowerLimit": "0",
-            },
-            "value": "7",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[5].points[0].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[5].points[0].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[5].points[1].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[5].points[1].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[5].points[2].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[5].points[2].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[5].points[3].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[5].points[3].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[5].points[4].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[5].points[4].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[5].points[5].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[5].points[5].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[5].points[6].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[5].points[6].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[5].points[7].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[5].points[7].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[5].points[8].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[5].points[8].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[5].points[9].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[5].points[9].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[5].points[10].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[5].points[10].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[5].points[11].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[5].points[11].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[5].points[12].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[5].points[12].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[5].points[13].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[5].points[13].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[5].points[14].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[5].points[14].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[5].points[15].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[5].points[15].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[6].name",
-            "attributes": {"longText": "Table name"},
-            "value": "HC7",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[6].noOfPoints",
-            "attributes": {
-                "formatId": "fmt2p0",
-                "longText": "QTY points",
-                "upperLimit": "16",
-                "lowerLimit": "0",
-            },
-            "value": "7",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[6].points[0].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[6].points[0].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[6].points[1].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[6].points[1].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[6].points[2].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[6].points[2].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[6].points[3].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[6].points[3].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[6].points[4].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[6].points[4].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[6].points[5].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[6].points[5].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[6].points[6].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[6].points[6].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[6].points[7].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[6].points[7].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[6].points[8].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[6].points[8].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[6].points[9].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[6].points[9].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[6].points[10].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[6].points[10].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[6].points[11].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[6].points[11].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[6].points[12].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[6].points[12].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[6].points[13].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[6].points[13].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[6].points[14].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[6].points[14].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[6].points[15].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[6].points[15].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[7].name",
-            "attributes": {"longText": "Table name"},
-            "value": "HC8",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[7].noOfPoints",
-            "attributes": {
-                "formatId": "fmt2p0",
-                "longText": "QTY points",
-                "upperLimit": "16",
-                "lowerLimit": "0",
-            },
-            "value": "7",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[7].points[0].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[7].points[0].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[7].points[1].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[7].points[1].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[7].points[2].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[7].points[2].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[7].points[3].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[7].points[3].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[7].points[4].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[7].points[4].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[7].points[5].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[7].points[5].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[7].points[6].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[7].points[6].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[7].points[7].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[7].points[7].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[7].points[8].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[7].points[8].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[7].points[9].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[7].points[9].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[7].points[10].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[7].points[10].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[7].points[11].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[7].points[11].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[7].points[12].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[7].points[12].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[7].points[13].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[7].points[13].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[7].points[14].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[7].points[14].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[7].points[15].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[7].points[15].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[12].name",
-            "attributes": {"longText": "Table name"},
-            "value": "HC FBH",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[12].noOfPoints",
-            "attributes": {
-                "formatId": "fmt2p0",
-                "longText": "QTY points",
-                "upperLimit": "16",
-                "lowerLimit": "0",
-            },
-            "value": "7",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[12].points[0].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[12].points[0].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[12].points[1].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[12].points[1].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[12].points[2].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[12].points[2].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[12].points[3].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[12].points[3].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[12].points[4].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[12].points[4].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[12].points[5].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[12].points[5].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[12].points[6].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[12].points[6].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[12].points[7].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[12].points[7].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[12].points[8].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[12].points[8].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[12].points[9].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[12].points[9].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[12].points[10].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[12].points[10].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[12].points[11].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[12].points[11].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[12].points[12].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[12].points[12].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[12].points[13].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[12].points[13].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[12].points[14].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[12].points[14].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[12].points[15].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[12].points[15].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[13].name",
-            "attributes": {"longText": "Table name"},
-            "value": "HC HK",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[13].noOfPoints",
-            "attributes": {
-                "formatId": "fmt2p0",
-                "longText": "QTY points",
-                "upperLimit": "16",
-                "lowerLimit": "0",
-            },
-            "value": "7",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[13].points[0].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[13].points[0].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[13].points[1].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[13].points[1].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[13].points[2].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[13].points[2].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[13].points[3].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[13].points[3].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[13].points[4].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[13].points[4].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[13].points[5].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[13].points[5].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[13].points[6].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[13].points[6].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[13].points[7].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[13].points[7].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[13].points[8].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[13].points[8].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[13].points[9].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[13].points[9].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[13].points[10].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[13].points[10].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[13].points[11].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[13].points[11].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[13].points[12].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[13].points[12].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[13].points[13].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[13].points[13].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[13].points[14].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[13].points[14].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[13].points[15].x",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point X",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "-15",
-        },
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[13].points[15].y",
-            "attributes": {
-                "formatId": "fmtCurrent",
-                "longText": "Point Y",
-                "upperLimit": "90000",
-                "lowerLimit": "-90000",
-            },
-            "value": "20",
-        },
-    ],
+    get_heating_curve_points_response(),
 ]
 
-HEATING_CURVES_RESPONSE_2: list[list[dict[str, Any]]] = [
+# The heating curve HC1 has another name in the points than in the names.
+HEATING_CURVES_RENAMED_POINTS_RESPONSE: Final[list[list[dict[str, Any]]]] = [
     HEATING_CURVE_NAMES_RESPONSE,
-    [
-        {
-            "name": "APPL.CtrlAppl.sParam.linTabPool[0].name",
-            "attributes": {"longText": "Table name"},
-            "value": "HC1",
-        },
-    ],
+    get_heating_curve_points_response(renamed={"HC1": "INVALID"}),
 ]

@@ -7,7 +7,7 @@ rules:
   truthy:
     allowed-values: ['True', 'False', 'yes', 'no', 'on', 'off']  # yamllint disable rule:brackets
   line-length:
-    max: 140
+    max: 120
     allow-non-breakable-words: True
     allow-non-breakable-inline-mappings: True
   quoted-strings:

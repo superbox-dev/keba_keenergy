@@ -1,288 +1,208 @@
+# Copyright 2025-2026 Michael Hacker
+# SPDX-License-Identifier: Apache-2.0
+"""Tests for the sensors."""
+
 from __future__ import annotations
 
 from typing import TYPE_CHECKING
+from typing import Any
 
 import pytest
 from homeassistant.components.sensor.const import ATTR_OPTIONS
-from homeassistant.const import CONF_HOST
-from homeassistant.core import HomeAssistant
+from homeassistant.const import STATE_UNKNOWN
+from homeassistant.const import Platform
 from homeassistant.core import State
+from homeassistant.helpers import entity_registry as er
 
-from tests import init_translations
-from tests import setup_integration
-from tests.api_data import HEATING_CURVE_NAMES_RESPONSE
-from tests.api_data import HEATING_CURVES_RESPONSE_1_1
-from tests.api_data import MULTIPLE_POSITION_DATA_RESPONSE_1
+from tests import get_option_translations
+from tests import get_platform_states
+from tests.api_data import MULTIPLE_POSITION_DATA_RESPONSE
 from tests.api_data import MULTIPLE_POSITIONS_RESPONSE
 from tests.api_data import get_multiple_position_fixed_data_response
+from tests.api_data import update_response
 
 if TYPE_CHECKING:
-    from pytest_homeassistant_custom_component.common import MockConfigEntry
+    from homeassistant.core import HomeAssistant
     from syrupy.assertion import SnapshotAssertion
 
     from tests.conftest import FakeKebaKeEnergyAPI
 
 
-@pytest.mark.parametrize(
-    "entity",
-    [
-        # system
-        "sensor.keba_keenergy_12345678_control_cpu_usage",
-        "sensor.keba_keenergy_12345678_cpu_usage",
-        "sensor.keba_keenergy_12345678_free_ram",
-        "sensor.keba_keenergy_12345678_operating_mode",
-        "sensor.keba_keenergy_12345678_outdoor_temperature",
-        "sensor.keba_keenergy_12345678_ram_usage",
-        "sensor.keba_keenergy_12345678_webserver_cpu_usage",
-        "sensor.keba_keenergy_12345678_webview_cpu_usage",
-        # buffer tank
-        "sensor.keba_keenergy_12345678_buffer_tank_current_bottom_temperature_1",
-        "sensor.keba_keenergy_12345678_buffer_tank_current_bottom_temperature_2",
-        "sensor.keba_keenergy_12345678_buffer_tank_current_top_temperature_1",
-        "sensor.keba_keenergy_12345678_buffer_tank_current_top_temperature_2",
-        "sensor.keba_keenergy_12345678_buffer_tank_excess_energy_mode_1",
-        "sensor.keba_keenergy_12345678_buffer_tank_excess_energy_mode_2",
-        "sensor.keba_keenergy_12345678_buffer_tank_excess_energy_target_temperature_1",
-        "sensor.keba_keenergy_12345678_buffer_tank_excess_energy_target_temperature_2",
-        "sensor.keba_keenergy_12345678_buffer_tank_operating_mode_1",
-        "sensor.keba_keenergy_12345678_buffer_tank_operating_mode_2",
-        "sensor.keba_keenergy_12345678_buffer_tank_standby_temperature_1",
-        "sensor.keba_keenergy_12345678_buffer_tank_standby_temperature_2",
-        "sensor.keba_keenergy_12345678_buffer_tank_target_temperature_1",
-        "sensor.keba_keenergy_12345678_buffer_tank_target_temperature_2",
-        # hot water tank
-        "sensor.keba_keenergy_12345678_hot_water_tank_circulation_return_temperature_1",
-        "sensor.keba_keenergy_12345678_hot_water_tank_circulation_return_temperature_2",
-        "sensor.keba_keenergy_12345678_hot_water_tank_current_temperature_1",
-        "sensor.keba_keenergy_12345678_hot_water_tank_current_temperature_2",
-        "sensor.keba_keenergy_12345678_hot_water_tank_excess_energy_mode_1",
-        "sensor.keba_keenergy_12345678_hot_water_tank_excess_energy_mode_2",
-        "sensor.keba_keenergy_12345678_hot_water_tank_excess_energy_target_temperature_1",
-        "sensor.keba_keenergy_12345678_hot_water_tank_excess_energy_target_temperature_2",
-        "sensor.keba_keenergy_12345678_hot_water_tank_fresh_water_module_temperature_1",
-        "sensor.keba_keenergy_12345678_hot_water_tank_operating_mode_1",
-        "sensor.keba_keenergy_12345678_hot_water_tank_operating_mode_2",
-        "sensor.keba_keenergy_12345678_hot_water_tank_standby_temperature_1",
-        "sensor.keba_keenergy_12345678_hot_water_tank_standby_temperature_2",
-        "sensor.keba_keenergy_12345678_hot_water_tank_target_temperature_1",
-        "sensor.keba_keenergy_12345678_hot_water_tank_target_temperature_2",
-        # heat pump
-        "sensor.keba_keenergy_12345678_heat_pump_activation_counter",
-        "sensor.keba_keenergy_12345678_heat_pump_circulation_pump",
-        "sensor.keba_keenergy_12345678_heat_pump_compressor",
-        "sensor.keba_keenergy_12345678_heat_pump_compressor_input_temperature",
-        "sensor.keba_keenergy_12345678_heat_pump_compressor_output_temperature",
-        "sensor.keba_keenergy_12345678_heat_pump_compressor_power",
-        "sensor.keba_keenergy_12345678_heat_pump_condenser_temperature",
-        "sensor.keba_keenergy_12345678_heat_pump_cooling_energy",
-        "sensor.keba_keenergy_12345678_heat_pump_cooling_energy_consumption",
-        "sensor.keba_keenergy_12345678_heat_pump_cooling_excess_energy_consumption",
-        "sensor.keba_keenergy_12345678_heat_pump_cooling_spf",
-        "sensor.keba_keenergy_12345678_heat_pump_cop",
-        "sensor.keba_keenergy_12345678_heat_pump_current_overheating",
-        "sensor.keba_keenergy_12345678_heat_pump_excess_energy_activation_counter",
-        "sensor.keba_keenergy_12345678_heat_pump_excess_energy_consumption",
-        "sensor.keba_keenergy_12345678_heat_pump_excess_energy_max_runtime",
-        "sensor.keba_keenergy_12345678_heat_pump_excess_energy_operating_time",
-        "sensor.keba_keenergy_12345678_heat_pump_expansion_valve_position",
-        "sensor.keba_keenergy_12345678_heat_pump_flow_temperature",
-        "sensor.keba_keenergy_12345678_heat_pump_heating_energy",
-        "sensor.keba_keenergy_12345678_heat_pump_heating_energy_consumption",
-        "sensor.keba_keenergy_12345678_heat_pump_heating_excess_energy_consumption",
-        "sensor.keba_keenergy_12345678_heat_pump_heating_power",
-        "sensor.keba_keenergy_12345678_heat_pump_heating_spf",
-        "sensor.keba_keenergy_12345678_heat_pump_high_pressure",
-        "sensor.keba_keenergy_12345678_heat_pump_hot_water_energy",
-        "sensor.keba_keenergy_12345678_heat_pump_hot_water_energy_consumption",
-        "sensor.keba_keenergy_12345678_heat_pump_hot_water_excess_energy_consumption",
-        "sensor.keba_keenergy_12345678_heat_pump_hot_water_power",
-        "sensor.keba_keenergy_12345678_heat_pump_hot_water_spf",
-        "sensor.keba_keenergy_12345678_heat_pump_low_pressure",
-        "sensor.keba_keenergy_12345678_heat_pump_max_runtime",
-        "sensor.keba_keenergy_12345678_heat_pump_operating_time",
-        "sensor.keba_keenergy_12345678_heat_pump_return_flow_temperature",
-        "sensor.keba_keenergy_12345678_heat_pump_source_input_temperature",
-        "sensor.keba_keenergy_12345678_heat_pump_source_output_temperature",
-        "sensor.keba_keenergy_12345678_heat_pump_source_pump_speed",
-        "sensor.keba_keenergy_12345678_heat_pump_state",
-        "sensor.keba_keenergy_12345678_heat_pump_substate",
-        "sensor.keba_keenergy_12345678_heat_pump_target_overheating",
-        "sensor.keba_keenergy_12345678_heat_pump_total_energy_consumption",
-        "sensor.keba_keenergy_12345678_heat_pump_total_spf",
-        "sensor.keba_keenergy_12345678_heat_pump_total_thermal_energy",
-        "sensor.keba_keenergy_12345678_heat_pump_vaporizer_temperature",
-        # passive cooling
-        "sensor.keba_keenergy_12345678_passive_cooling_circulation_pump_speed",
-        "sensor.keba_keenergy_12345678_passive_cooling_mixer_flow_temperature",
-        "sensor.keba_keenergy_12345678_passive_cooling_mixer_position",
-        "sensor.keba_keenergy_12345678_passive_cooling_mixer_target_temperature",
-        "sensor.keba_keenergy_12345678_passive_cooling_switch_valve_position",
-        "sensor.keba_keenergy_12345678_passive_cooling_temperature",
-        # heating circuit
-        "sensor.keba_keenergy_12345678_heat_circuit_cool_request_2",
-        "sensor.keba_keenergy_12345678_heat_circuit_cooling_curve_2",
-        "sensor.keba_keenergy_12345678_heat_circuit_cooling_limit_day_2",
-        "sensor.keba_keenergy_12345678_heat_circuit_cooling_limit_night_2",
-        "sensor.keba_keenergy_12345678_heat_circuit_dew_point_1",
-        "sensor.keba_keenergy_12345678_heat_circuit_excess_energy_cooling_limit_day_2",
-        "sensor.keba_keenergy_12345678_heat_circuit_excess_energy_cooling_limit_night_2",
-        "sensor.keba_keenergy_12345678_heat_circuit_excess_energy_heating_limit_day_1",
-        "sensor.keba_keenergy_12345678_heat_circuit_excess_energy_heating_limit_night_1",
-        "sensor.keba_keenergy_12345678_heat_circuit_excess_energy_mode_1",
-        "sensor.keba_keenergy_12345678_heat_circuit_excess_energy_mode_2",
-        "sensor.keba_keenergy_12345678_heat_circuit_excess_energy_target_cooling_temperature_2",
-        "sensor.keba_keenergy_12345678_heat_circuit_excess_energy_target_temperature_1",
-        "sensor.keba_keenergy_12345678_heat_circuit_flow_temperature_1",
-        "sensor.keba_keenergy_12345678_heat_circuit_flow_temperature_setpoint_1",
-        "sensor.keba_keenergy_12345678_heat_circuit_flow_temperature_setpoint_2",
-        "sensor.keba_keenergy_12345678_heat_circuit_heat_request_1",
-        "sensor.keba_keenergy_12345678_heat_circuit_heating_curve_1",
-        "sensor.keba_keenergy_12345678_heat_circuit_heating_limit_day_1",
-        "sensor.keba_keenergy_12345678_heat_circuit_heating_limit_night_1",
-        "sensor.keba_keenergy_12345678_heat_circuit_mixer_position_1",
-        "sensor.keba_keenergy_12345678_heat_circuit_operating_mode_1",
-        "sensor.keba_keenergy_12345678_heat_circuit_operating_mode_2",
-        "sensor.keba_keenergy_12345678_heat_circuit_pump_speed_1",
-        "sensor.keba_keenergy_12345678_heat_circuit_return_flow_temperature_1",
-        "sensor.keba_keenergy_12345678_heat_circuit_room_humidity_1",
-        "sensor.keba_keenergy_12345678_heat_circuit_room_temperature_1",
-        "sensor.keba_keenergy_12345678_heat_circuit_selected_target_temperature_1",
-        "sensor.keba_keenergy_12345678_heat_circuit_selected_target_temperature_2",
-        "sensor.keba_keenergy_12345678_heat_circuit_target_cooling_temperature_day_2",
-        "sensor.keba_keenergy_12345678_heat_circuit_target_cooling_temperature_night_2",
-        "sensor.keba_keenergy_12345678_heat_circuit_target_temperature_1",
-        "sensor.keba_keenergy_12345678_heat_circuit_target_temperature_2",
-        "sensor.keba_keenergy_12345678_heat_circuit_target_temperature_away_1",
-        "sensor.keba_keenergy_12345678_heat_circuit_target_temperature_day_1",
-        "sensor.keba_keenergy_12345678_heat_circuit_target_temperature_night_1",
-        "sensor.keba_keenergy_12345678_heat_circuit_target_temperature_offset_1",
-        "sensor.keba_keenergy_12345678_heat_circuit_target_temperature_offset_2",
-        # solar circuit
-        "sensor.keba_keenergy_12345678_solar_circuit_actual_power_1",
-        "sensor.keba_keenergy_12345678_solar_circuit_actual_power_2",
-        "sensor.keba_keenergy_12345678_solar_circuit_current_temperature_1_1",
-        "sensor.keba_keenergy_12345678_solar_circuit_current_temperature_1_2",
-        "sensor.keba_keenergy_12345678_solar_circuit_current_temperature_2_1",
-        "sensor.keba_keenergy_12345678_solar_circuit_current_temperature_2_2",
-        "sensor.keba_keenergy_12345678_solar_circuit_daily_energy_1",
-        "sensor.keba_keenergy_12345678_solar_circuit_daily_energy_2",
-        "sensor.keba_keenergy_12345678_solar_circuit_heating_energy_1",
-        "sensor.keba_keenergy_12345678_solar_circuit_heating_energy_2",
-        "sensor.keba_keenergy_12345678_solar_circuit_pump_1_1",
-        "sensor.keba_keenergy_12345678_solar_circuit_pump_1_2",
-        "sensor.keba_keenergy_12345678_solar_circuit_pump_2_1",
-        "sensor.keba_keenergy_12345678_solar_circuit_pump_2_2",
-        "sensor.keba_keenergy_12345678_solar_circuit_source_temperature_1",
-        "sensor.keba_keenergy_12345678_solar_circuit_source_temperature_2",
-        "sensor.keba_keenergy_12345678_solar_circuit_target_temperature_1_1",
-        "sensor.keba_keenergy_12345678_solar_circuit_target_temperature_1_2",
-        "sensor.keba_keenergy_12345678_solar_circuit_target_temperature_2_1",
-        "sensor.keba_keenergy_12345678_solar_circuit_target_temperature_2_2",
-        # external heat source
-        "sensor.keba_keenergy_12345678_external_heat_source_activation_counter_1",
-        "sensor.keba_keenergy_12345678_external_heat_source_activation_counter_2",
-        "sensor.keba_keenergy_12345678_external_heat_source_excess_energy_activation_counter_1",
-        "sensor.keba_keenergy_12345678_external_heat_source_excess_energy_activation_counter_2",
-        "sensor.keba_keenergy_12345678_external_heat_source_excess_energy_max_runtime_1",
-        "sensor.keba_keenergy_12345678_external_heat_source_excess_energy_max_runtime_2",
-        "sensor.keba_keenergy_12345678_external_heat_source_excess_energy_operating_time_1",
-        "sensor.keba_keenergy_12345678_external_heat_source_excess_energy_operating_time_2",
-        "sensor.keba_keenergy_12345678_external_heat_source_max_runtime_1",
-        "sensor.keba_keenergy_12345678_external_heat_source_max_runtime_2",
-        "sensor.keba_keenergy_12345678_external_heat_source_operating_mode_1",
-        "sensor.keba_keenergy_12345678_external_heat_source_operating_mode_2",
-        "sensor.keba_keenergy_12345678_external_heat_source_operating_time_1",
-        "sensor.keba_keenergy_12345678_external_heat_source_operating_time_2",
-        "sensor.keba_keenergy_12345678_external_heat_source_target_temperature_1",
-        "sensor.keba_keenergy_12345678_external_heat_source_target_temperature_2",
-        # switch valve
-        "sensor.keba_keenergy_12345678_switch_valve_position_1",
-        "sensor.keba_keenergy_12345678_switch_valve_position_2",
-        # photovoltaics
-        "sensor.keba_keenergy_12345678_photovoltaics_daily_energy",
-        "sensor.keba_keenergy_12345678_photovoltaics_excess_power",
-        "sensor.keba_keenergy_12345678_photovoltaics_total_energy",
-    ],
-)
-@pytest.mark.parametrize("language", ["en", "de"])
-@pytest.mark.usefixtures("entity_registry_enabled_by_default")
+@pytest.mark.parametrize("language", ["en", "de"], indirect=True, ids=["en", "de"])
+@pytest.mark.usefixtures("entity_registry_enabled_by_default", "language")
 async def test_sensors(
     hass: HomeAssistant,
-    config_entry: MockConfigEntry,
     fake_api: FakeKebaKeEnergyAPI,
     snapshot: SnapshotAssertion,
-    language: str,
-    entity: str,
 ) -> None:
+    """Test the states of all sensors and the translated options of the enum sensors."""
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
-        HEATING_CURVE_NAMES_RESPONSE,
         get_multiple_position_fixed_data_response(has_passive_cooling="true"),
-        MULTIPLE_POSITION_DATA_RESPONSE_1,
-        *HEATING_CURVES_RESPONSE_1_1,
+        MULTIPLE_POSITION_DATA_RESPONSE,
     ]
-    fake_api.register_requests(config_entry.data[CONF_HOST])
-    hass.config.language = language
+    await fake_api.setup_integration()
 
-    await setup_integration(hass, config_entry)
+    for state in get_platform_states(hass, fake_api.config_entry, Platform.SENSOR):
+        assert state == snapshot(name=state.entity_id)
 
-    _entity: State | None = hass.states.get(entity)
-    assert isinstance(_entity, State)
-    assert _entity == snapshot
+        if ATTR_OPTIONS in state.attributes:
+            assert await get_option_translations(hass, state) == snapshot(name=f"{state.entity_id}_options")
 
 
 @pytest.mark.parametrize(
-    ("entity", "translation"),
+    "entity_id",
     [
-        # system
-        ("sensor.keba_keenergy_12345678_operating_mode", "system_operating_mode"),
-        # buffer tank
-        ("sensor.keba_keenergy_12345678_buffer_tank_operating_mode_1", "buffer_tank_operating_mode"),
-        ("sensor.keba_keenergy_12345678_buffer_tank_operating_mode_2", "buffer_tank_operating_mode"),
-        # hot water tank
-        ("sensor.keba_keenergy_12345678_hot_water_tank_operating_mode_1", "hot_water_tank_operating_mode"),
-        ("sensor.keba_keenergy_12345678_hot_water_tank_operating_mode_2", "hot_water_tank_operating_mode"),
-        # heat pump
-        ("sensor.keba_keenergy_12345678_heat_pump_state", "state"),
-        ("sensor.keba_keenergy_12345678_heat_pump_substate", "substate"),
-        # heating circuit
-        ("sensor.keba_keenergy_12345678_heat_circuit_operating_mode_1", "heat_circuit_operating_mode"),
-        ("sensor.keba_keenergy_12345678_heat_circuit_operating_mode_2", "heat_circuit_operating_mode"),
-        ("sensor.keba_keenergy_12345678_heat_circuit_heat_request_1", "heat_request"),
-        # external heat source
-        ("sensor.keba_keenergy_12345678_external_heat_source_operating_mode_1", "external_heat_source_operating_mode"),
-        # switch valve
-        ("sensor.keba_keenergy_12345678_switch_valve_position_1", "switch_valve_position"),
-        ("sensor.keba_keenergy_12345678_switch_valve_position_2", "switch_valve_position"),
+        "sensor.keba_keenergy_12345678_heat_pump_operating_time",
+        "sensor.keba_keenergy_12345678_photovoltaics_daily_energy",
     ],
+    ids=["heat_pump_operating_time", "photovoltaics_daily_energy"],
 )
-@pytest.mark.parametrize("language", ["en", "de"])
 @pytest.mark.usefixtures("entity_registry_enabled_by_default")
-async def test_sensors_options_translations(
+async def test_converted_sensor_display_precision(
     hass: HomeAssistant,
-    config_entry: MockConfigEntry,
     fake_api: FakeKebaKeEnergyAPI,
-    snapshot: SnapshotAssertion,
-    language: str,
-    entity: str,
-    translation: str,
+    entity_id: str,
 ) -> None:
+    """Test that converted sensors keep the exact value and are displayed with two decimals."""
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
-        HEATING_CURVE_NAMES_RESPONSE,
-        get_multiple_position_fixed_data_response(has_passive_cooling="true"),
-        MULTIPLE_POSITION_DATA_RESPONSE_1,
-        *HEATING_CURVES_RESPONSE_1_1,
+        get_multiple_position_fixed_data_response(),
+        MULTIPLE_POSITION_DATA_RESPONSE,
     ]
-    fake_api.register_requests(config_entry.data[CONF_HOST])
-    hass.config.language = language
+    await fake_api.setup_integration()
 
-    await setup_integration(hass, config_entry)
-    translations: dict[str, str] = await init_translations(hass, config_entry, category="entity")
+    entry: er.RegistryEntry | None = er.async_get(hass).async_get(entity_id)
+    assert entry is not None
+    assert entry.options["sensor"] == {"suggested_display_precision": 2}
 
-    _entity: State | None = hass.states.get(entity)
-    assert isinstance(_entity, State)
-    assert {
-        opt: translations[f"component.keba_keenergy.entity.sensor.{translation}.state.{opt}"]
-        for opt in _entity.attributes[ATTR_OPTIONS]
-    } == snapshot
+
+@pytest.mark.parametrize(
+    ("message_id", "expected"),
+    [
+        (
+            "APPL.CtrlAppl.sParam.outdoorTemp.state.msgId",
+            {"sensor.keba_keenergy_12345678_outdoor_temperature": (STATE_UNKNOWN, 50)},
+        ),
+        (
+            # The mixer flow temperature has a new key in the API, but keeps the entity of the old key.
+            "APPL.CtrlAppl.sParam.heatCircuit[0].heatCircuitMixer.flowTemp.state.msgId",
+            {"sensor.keba_keenergy_12345678_heat_circuit_flow_temperature_1": (STATE_UNKNOWN, 50)},
+        ),
+        (
+            # Each solar circuit has two temperatures, the first of the second solar circuit is not in use.
+            "APPL.CtrlAppl.sParam.genericHeat[2].referenceTemp.state.msgId",
+            {
+                "sensor.keba_keenergy_12345678_solar_circuit_current_temperature_1_1": ("36.76", 0),
+                "sensor.keba_keenergy_12345678_solar_circuit_current_temperature_2_1": ("26.76", 0),
+                "sensor.keba_keenergy_12345678_solar_circuit_current_temperature_1_2": (STATE_UNKNOWN, 50),
+                "sensor.keba_keenergy_12345678_solar_circuit_current_temperature_2_2": ("56.76", 0),
+            },
+        ),
+    ],
+    ids=["outdoor_temperature", "heat_circuit_flow_temperature", "solar_circuit_current_temperature"],
+)
+@pytest.mark.usefixtures("entity_registry_enabled_by_default")
+async def test_sensor_not_in_use(
+    hass: HomeAssistant,
+    fake_api: FakeKebaKeEnergyAPI,
+    message_id: str,
+    expected: dict[str, tuple[str, int]],
+) -> None:
+    """Test that a sensor is unknown and has the message id if the control unit reports it as not in use."""
+    fake_api.message_ids = {message_id: 50}
+    fake_api.responses = [
+        MULTIPLE_POSITIONS_RESPONSE,
+        get_multiple_position_fixed_data_response(),
+        MULTIPLE_POSITION_DATA_RESPONSE,
+    ]
+    await fake_api.setup_integration()
+
+    states: dict[str, tuple[str, int]] = {}
+
+    for entity_id in expected:
+        state: State | None = hass.states.get(entity_id)
+        assert isinstance(state, State)
+        states[entity_id] = (state.state, state.attributes["message_id"])
+
+    assert states == expected
+
+
+@pytest.mark.parametrize(
+    ("message_id", "entity_id"),
+    [
+        ("APPL.CtrlAppl.sParam.outdoorTemp.state.msgId", "sensor.keba_keenergy_12345678_outdoor_temperature"),
+        (
+            # Each solar circuit has two temperatures, the first of the second solar circuit is deactivated.
+            "APPL.CtrlAppl.sParam.genericHeat[2].referenceTemp.state.msgId",
+            "sensor.keba_keenergy_12345678_solar_circuit_current_temperature_1_2",
+        ),
+    ],
+    ids=["outdoor_temperature", "solar_circuit_current_temperature"],
+)
+@pytest.mark.usefixtures("entity_registry_enabled_by_default")
+async def test_sensor_deactivated(
+    hass: HomeAssistant,
+    fake_api: FakeKebaKeEnergyAPI,
+    message_id: str,
+    entity_id: str,
+) -> None:
+    """Test that the entity of a deactivated sensor is removed and no longer created."""
+    responses: list[list[dict[str, Any]]] = [
+        MULTIPLE_POSITIONS_RESPONSE,
+        get_multiple_position_fixed_data_response(),
+        MULTIPLE_POSITION_DATA_RESPONSE,
+    ]
+    fake_api.responses = list(responses)
+    await fake_api.setup_integration()
+
+    entity_registry: er.EntityRegistry = er.async_get(hass)
+    assert entity_registry.async_get(entity_id) is not None
+
+    fake_api.message_ids = {message_id: 10}
+    fake_api.responses = list(responses)
+    await hass.config_entries.async_reload(fake_api.config_entry.entry_id)
+    await hass.async_block_till_done()
+
+    assert entity_registry.async_get(entity_id) is None
+    assert hass.states.get(entity_id) is None
+    assert hass.states.get("sensor.keba_keenergy_12345678_solar_circuit_current_temperature_2_2") is not None
+
+
+@pytest.mark.parametrize(
+    ("value", "entity_id", "expected"),
+    [
+        (
+            ("APPL.CtrlAppl.sParam.heatpump[0].values.heatpumpState", "9"),
+            "sensor.keba_keenergy_12345678_heat_pump_state",
+            "source_flush",
+        ),
+        (
+            ("APPL.CtrlAppl.sParam.extHeatSource[0].param.operatingMode", "2"),
+            "sensor.keba_keenergy_12345678_external_heat_source_operating_mode_1",
+            "flue",
+        ),
+    ],
+    ids=["heat_pump_state_source_flush", "external_heat_source_operating_mode_flue"],
+)
+@pytest.mark.usefixtures("entity_registry_enabled_by_default")
+async def test_sensor_enum_state(
+    hass: HomeAssistant,
+    fake_api: FakeKebaKeEnergyAPI,
+    value: tuple[str, str],
+    entity_id: str,
+    expected: str,
+) -> None:
+    """Test the enum sensor states that are only reported in rare situations."""
+    name, raw_value = value
+    fake_api.responses = [
+        MULTIPLE_POSITIONS_RESPONSE,
+        get_multiple_position_fixed_data_response(),
+        update_response(MULTIPLE_POSITION_DATA_RESPONSE, name, value=raw_value),
+    ]
+    await fake_api.setup_integration()
+
+    state: State | None = hass.states.get(entity_id)
+    assert isinstance(state, State)
+    assert state.state == expected
+    assert expected in state.attributes[ATTR_OPTIONS]

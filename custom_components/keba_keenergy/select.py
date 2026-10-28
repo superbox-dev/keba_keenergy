@@ -1,3 +1,5 @@
+# Copyright 2025-2026 Michael Hacker
+# SPDX-License-Identifier: Apache-2.0
 """Support for the KEBA KeEnergy selects."""
 
 from __future__ import annotations
@@ -14,6 +16,7 @@ from homeassistant.components.select import SelectEntityDescription
 from homeassistant.const import EntityCategory
 from keba_keenergy_api.constants import BoolEnum
 from keba_keenergy_api.constants import BufferTankOperatingMode
+from keba_keenergy_api.constants import ExternalHeatSourceOperatingMode
 from keba_keenergy_api.constants import HeatCircuitOperatingMode
 from keba_keenergy_api.constants import HotWaterTankOperatingMode
 from keba_keenergy_api.constants import SectionPrefix
@@ -21,7 +24,7 @@ from keba_keenergy_api.constants import SystemOperatingMode
 
 from .const import DOMAIN
 from .entity import KebaKeEnergyEntity
-from .entity import KebaKeEnergyEntityDescriptionMixin
+from .entity import KebaKeEnergyEntityDescription
 from .entity import _async_setup_entities
 
 if TYPE_CHECKING:
@@ -34,7 +37,7 @@ if TYPE_CHECKING:
     from .coordinator import KebaKeEnergyDataUpdateCoordinator
 
 
-_LOGGER = logging.getLogger(__name__)
+_LOGGER: Final = logging.getLogger(__name__)
 
 PARALLEL_UPDATES: Final[int] = 0
 
@@ -42,12 +45,12 @@ PARALLEL_UPDATES: Final[int] = 0
 @dataclass(frozen=True, kw_only=True)
 class KebaKeEnergySelectEntityDescription(
     SelectEntityDescription,
-    KebaKeEnergyEntityDescriptionMixin,
+    KebaKeEnergyEntityDescription,
 ):
     """Class describing KEBA KeEnergy select entities."""
 
     entity_class: type[KebaKeEnergySelectEntity]
-    value: Callable[[str], str | int]
+    value: Callable[[str], int | str]
 
 
 class KebaKeEnergySelectEntity(KebaKeEnergyEntity, SelectEntity):
@@ -128,6 +131,23 @@ class KebaKeEnergyHeatCircuitOperatingModeSelectEntity(KebaKeEnergySelectEntity)
         return options
 
 
+class KebaKeEnergyExternalHeatSourceOperatingModeSelectEntity(KebaKeEnergySelectEntity):
+    """KEBA KeEnergy external heat source operating mode select entity."""
+
+    @cached_property
+    def options(self) -> list[str]:
+        """Return a set of selectable options."""
+        options: list[str] = super().options
+
+        if self.coordinator.has_emissions(index=self.index):
+            return [
+                *options,
+                ExternalHeatSourceOperatingMode.FLUE.name.lower(),
+            ]
+
+        return options
+
+
 class KebaKeEnergyHeatingCircuitHeatingCurveSelectEntity(KebaKeEnergySelectEntity):
     """KEBA KeEnergy heating curve select entity."""
 
@@ -137,7 +157,7 @@ class KebaKeEnergyHeatingCircuitHeatingCurveSelectEntity(KebaKeEnergySelectEntit
         return [name for _, name in self.coordinator.available_heating_curves]
 
 
-SELECT_TYPES: dict[str, tuple[KebaKeEnergySelectEntityDescription, ...]] = {
+SELECT_TYPES: Final[dict[str, tuple[KebaKeEnergySelectEntityDescription, ...]]] = {
     SectionPrefix.SYSTEM: (
         KebaKeEnergySelectEntityDescription(
             entity_class=KebaKeEnergySystemOperatingModeSelectEntity,
@@ -149,7 +169,6 @@ SELECT_TYPES: dict[str, tuple[KebaKeEnergySelectEntityDescription, ...]] = {
                 SystemOperatingMode.AUTO_HEAT.name.lower(),
             ],
             translation_key="system_operating_mode",
-            icon="mdi:cog",
             value=lambda data: SystemOperatingMode[data.upper()].value,
         ),
     ),
@@ -166,7 +185,6 @@ SELECT_TYPES: dict[str, tuple[KebaKeEnergySelectEntityDescription, ...]] = {
                 HeatCircuitOperatingMode.PARTY.name.lower(),
             ],
             translation_key="heat_circuit_operating_mode",
-            icon="mdi:cog",
             value=lambda data: HeatCircuitOperatingMode[data.upper()].value,
         ),
         KebaKeEnergySelectEntityDescription(
@@ -176,7 +194,6 @@ SELECT_TYPES: dict[str, tuple[KebaKeEnergySelectEntityDescription, ...]] = {
             entity_registry_enabled_default=False,
             key="heating_curve",
             translation_key="heating_curve",
-            icon="mdi:chart-bell-curve-cumulative",
             value=lambda data: data,
         ),
         KebaKeEnergySelectEntityDescription(
@@ -186,7 +203,6 @@ SELECT_TYPES: dict[str, tuple[KebaKeEnergySelectEntityDescription, ...]] = {
             entity_registry_enabled_default=False,
             key="cooling_curve",
             translation_key="cooling_curve",
-            icon="mdi:chart-bell-curve-cumulative",
             value=lambda data: data,
         ),
     ),
@@ -197,7 +213,6 @@ SELECT_TYPES: dict[str, tuple[KebaKeEnergySelectEntityDescription, ...]] = {
             key="operating_mode",
             options=[_.name.lower() for _ in BoolEnum],
             translation_key="solar_circuit_operating_mode",
-            icon="mdi:cog",
             value=lambda data: BoolEnum[data.upper()].value,
         ),
     ),
@@ -208,7 +223,6 @@ SELECT_TYPES: dict[str, tuple[KebaKeEnergySelectEntityDescription, ...]] = {
             key="operating_mode",
             options=[_.name.lower() for _ in BufferTankOperatingMode],
             translation_key="buffer_tank_operating_mode",
-            icon="mdi:cog",
             value=lambda data: BufferTankOperatingMode[data.upper()].value,
         ),
     ),
@@ -219,20 +233,21 @@ SELECT_TYPES: dict[str, tuple[KebaKeEnergySelectEntityDescription, ...]] = {
             key="operating_mode",
             options=[_.name.lower() for _ in HotWaterTankOperatingMode],
             translation_key="hot_water_tank_operating_mode",
-            icon="mdi:cog",
             value=lambda data: HotWaterTankOperatingMode[data.upper()].value,
         ),
     ),
     SectionPrefix.EXTERNAL_HEAT_SOURCE: (
         KebaKeEnergySelectEntityDescription(
-            entity_class=KebaKeEnergySelectEntity,
+            entity_class=KebaKeEnergyExternalHeatSourceOperatingModeSelectEntity,
             entity_category=EntityCategory.CONFIG,
             entity_registry_enabled_default=False,
             key="operating_mode",
-            options=[_.name.lower() for _ in BoolEnum],
+            options=[
+                ExternalHeatSourceOperatingMode.OFF.name.lower(),
+                ExternalHeatSourceOperatingMode.ON.name.lower(),
+            ],
             translation_key="external_heat_source_operating_mode",
-            icon="mdi:cog",
-            value=lambda data: BoolEnum[data.upper()].value,
+            value=lambda data: ExternalHeatSourceOperatingMode[data.upper()].value,
         ),
     ),
 }
@@ -244,10 +259,10 @@ async def async_setup_entry(
     async_add_entities: AddEntitiesCallback,
 ) -> None:
     """Set up KEBA KeEnergy selects from a config entry."""
-    await _async_setup_entities(
+    _async_setup_entities(
         entry,
         async_add_entities,
         SELECT_TYPES,
-        None,
+        KebaKeEnergySelectEntity,
         "select",
     )

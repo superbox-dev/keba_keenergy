@@ -1,10 +1,11 @@
+# Copyright 2025-2026 Michael Hacker
+# SPDX-License-Identifier: Apache-2.0
 """Support for the KEBA KeEnergy numbers."""
 
 from __future__ import annotations
 
 import logging
 from dataclasses import dataclass
-from functools import cached_property
 from typing import TYPE_CHECKING
 from typing import Final
 
@@ -16,14 +17,11 @@ from homeassistant.const import PERCENTAGE
 from homeassistant.const import EntityCategory
 from homeassistant.const import UnitOfTemperature
 from homeassistant.const import UnitOfTime
-from homeassistant.core import HassJob
-from homeassistant.helpers.event import async_call_later
 from keba_keenergy_api.constants import SectionPrefix
 
 from .const import DOMAIN
-from .const import FLASH_WRITE_DELAY
 from .entity import KebaKeEnergyEntity
-from .entity import KebaKeEnergyEntityDescriptionMixin
+from .entity import KebaKeEnergyEntityDescription
 from .entity import _async_setup_entities
 
 if TYPE_CHECKING:
@@ -34,7 +32,7 @@ if TYPE_CHECKING:
     from .coordinator import KebaKeEnergyDataUpdateCoordinator
 
 
-_LOGGER = logging.getLogger(__name__)
+_LOGGER: Final = logging.getLogger(__name__)
 
 PARALLEL_UPDATES: Final[int] = 0
 
@@ -42,11 +40,11 @@ PARALLEL_UPDATES: Final[int] = 0
 @dataclass(frozen=True, kw_only=True)
 class KebaKeEnergyNumberEntityDescription(
     NumberEntityDescription,
-    KebaKeEnergyEntityDescriptionMixin,
+    KebaKeEnergyEntityDescription,
 ):
     """Class describing KEBA KeEnergy number entities."""
 
-    scale: int
+    scale: float
 
 
 class KebaKeEnergyNumberEntity(KebaKeEnergyEntity, NumberEntity):
@@ -77,56 +75,32 @@ class KebaKeEnergyNumberEntity(KebaKeEnergyEntity, NumberEntity):
 
         self._pending_key = self.entity_description.key
         self._pending_section = self.section
-        self._pending_device_numbers = self.device_numbers
 
-    @cached_property
+    @property
     def native_min_value(self) -> float:
-        """Return the maximum value."""
-        return (
-            float(self.get_attribute(self.entity_description.key, attr="lower_limit")) * self.entity_description.scale
-        )
+        """Return the minimum value."""
+        lower_limit: float | None = self.get_limit(self.entity_description.key, attr="lower_limit")
+        return super().native_min_value if lower_limit is None else lower_limit * self.entity_description.scale
 
-    @cached_property
+    @property
     def native_max_value(self) -> float:
         """Return the maximum value."""
-        return (
-            float(self.get_attribute(self.entity_description.key, attr="upper_limit")) * self.entity_description.scale
-        )
+        upper_limit: float | None = self.get_limit(self.entity_description.key, attr="upper_limit")
+        return super().native_max_value if upper_limit is None else upper_limit * self.entity_description.scale
 
     @property
     def native_value(self) -> float | None:
         """Return the state of the number."""
-        native_value: float | None
+        native_value: float | None = self._get_debounced_value()
 
-        if self._pending_value is not None and self._async_call_later:
-            native_value = self._pending_value * self.entity_description.scale
-        else:
-            native_value = self.get_value(self.entity_description.key, expected_type=float)
-
-            if native_value:
-                native_value = native_value * self.entity_description.scale
-
-        return native_value
+        return None if native_value is None else native_value * self.entity_description.scale
 
     async def async_set_native_value(self, value: float) -> None:
         """Set new value."""
-        self._pending_value = value / self.entity_description.scale
-
-        if self._async_call_later:
-            self._async_call_later()
-            self._async_call_later = None
-
-        self._async_call_later = async_call_later(
-            hass=self.hass,
-            delay=FLASH_WRITE_DELAY,
-            action=HassJob(
-                self._async_debounced_write_data,
-                cancel_on_shutdown=True,
-            ),
-        )
+        self._schedule_debounced_write(value / self.entity_description.scale)
 
 
-NUMBER_TYPES: dict[str, tuple[KebaKeEnergyNumberEntityDescription, ...]] = {
+NUMBER_TYPES: Final[dict[str, tuple[KebaKeEnergyNumberEntityDescription, ...]]] = {
     SectionPrefix.HEAT_CIRCUIT: (
         KebaKeEnergyNumberEntityDescription(
             condition=lambda coordinator, index: coordinator.is_heating_circuit(index=index),
@@ -185,21 +159,6 @@ NUMBER_TYPES: dict[str, tuple[KebaKeEnergyNumberEntityDescription, ...]] = {
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             native_step=0.5,
             translation_key="excess_energy_heating_limit_day",
-            scale=1,
-        ),
-        KebaKeEnergyNumberEntityDescription(
-            condition=(
-                lambda coordinator, index: (
-                    coordinator.is_cooling_circuit(index=index) and coordinator.has_photovoltaics()
-                )
-            ),
-            device_class=NumberDeviceClass.TEMPERATURE,
-            entity_category=EntityCategory.CONFIG,
-            entity_registry_enabled_default=False,
-            key="excess_energy_cooling_limit_day",
-            native_unit_of_measurement=UnitOfTemperature.CELSIUS,
-            native_step=0.5,
-            translation_key="excess_energy_cooling_limit_day",
             scale=1,
         ),
         KebaKeEnergyNumberEntityDescription(
@@ -324,7 +283,6 @@ NUMBER_TYPES: dict[str, tuple[KebaKeEnergyNumberEntityDescription, ...]] = {
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             native_step=0.5,
             translation_key="excess_energy_target_room_temperature",
-            icon="mdi:sun-thermometer",
             scale=1,
         ),
         KebaKeEnergyNumberEntityDescription(
@@ -340,7 +298,6 @@ NUMBER_TYPES: dict[str, tuple[KebaKeEnergyNumberEntityDescription, ...]] = {
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             native_step=0.1,
             translation_key="excess_energy_target_room_temperature_hysteresis",
-            icon="mdi:thermometer-lines",
             scale=1,
         ),
         KebaKeEnergyNumberEntityDescription(
@@ -356,7 +313,6 @@ NUMBER_TYPES: dict[str, tuple[KebaKeEnergyNumberEntityDescription, ...]] = {
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             native_step=0.5,
             translation_key="excess_energy_target_room_cooling_temperature",
-            icon="mdi:sun-thermometer",
             scale=1,
         ),
         KebaKeEnergyNumberEntityDescription(
@@ -372,7 +328,6 @@ NUMBER_TYPES: dict[str, tuple[KebaKeEnergyNumberEntityDescription, ...]] = {
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             native_step=0.1,
             translation_key="excess_energy_target_room_cooling_temperature_hysteresis",
-            icon="mdi:thermometer-lines",
             scale=1,
         ),
         KebaKeEnergyNumberEntityDescription(
@@ -404,7 +359,6 @@ NUMBER_TYPES: dict[str, tuple[KebaKeEnergyNumberEntityDescription, ...]] = {
             key="heating_curve_slope",
             native_step=0.01,
             translation_key="heating_curve_slope",
-            icon="mdi:slope-uphill",
             scale=1,
         ),
         KebaKeEnergyNumberEntityDescription(
@@ -414,7 +368,6 @@ NUMBER_TYPES: dict[str, tuple[KebaKeEnergyNumberEntityDescription, ...]] = {
             key="cooling_curve_slope",
             native_step=0.01,
             translation_key="cooling_curve_slope",
-            icon="mdi:slope-uphill",
             scale=1,
         ),
     ),
@@ -470,7 +423,6 @@ NUMBER_TYPES: dict[str, tuple[KebaKeEnergyNumberEntityDescription, ...]] = {
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             native_step=0.5,
             translation_key="excess_energy_target_temperature",
-            icon="mdi:sun-thermometer",
             scale=1,
         ),
         KebaKeEnergyNumberEntityDescription(
@@ -482,7 +434,6 @@ NUMBER_TYPES: dict[str, tuple[KebaKeEnergyNumberEntityDescription, ...]] = {
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             native_step=0.1,
             translation_key="excess_energy_target_temperature_hysteresis",
-            icon="mdi:thermometer-lines",
             scale=1,
         ),
         KebaKeEnergyNumberEntityDescription(
@@ -492,7 +443,6 @@ NUMBER_TYPES: dict[str, tuple[KebaKeEnergyNumberEntityDescription, ...]] = {
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             native_step=0.5,
             translation_key="standby_temperature",
-            icon="mdi:thermometer-chevron-down",
             scale=1,
         ),
         KebaKeEnergyNumberEntityDescription(
@@ -504,7 +454,6 @@ NUMBER_TYPES: dict[str, tuple[KebaKeEnergyNumberEntityDescription, ...]] = {
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             native_step=0.5,
             translation_key="outdoor_temperature_excess_energy_limit",
-            icon="mdi:thermometer",
             scale=1,
         ),
     ),
@@ -516,7 +465,6 @@ NUMBER_TYPES: dict[str, tuple[KebaKeEnergyNumberEntityDescription, ...]] = {
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             native_step=0.5,
             translation_key="standby_temperature",
-            icon="mdi:thermometer-chevron-down",
             scale=1,
         ),
         KebaKeEnergyNumberEntityDescription(
@@ -541,7 +489,6 @@ NUMBER_TYPES: dict[str, tuple[KebaKeEnergyNumberEntityDescription, ...]] = {
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             native_step=0.5,
             translation_key="excess_energy_target_temperature",
-            icon="mdi:sun-thermometer",
             scale=1,
         ),
         KebaKeEnergyNumberEntityDescription(
@@ -553,7 +500,6 @@ NUMBER_TYPES: dict[str, tuple[KebaKeEnergyNumberEntityDescription, ...]] = {
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             native_step=0.1,
             translation_key="excess_energy_target_temperature_hysteresis",
-            icon="mdi:thermometer-lines",
             scale=1,
         ),
     ),
@@ -565,7 +511,7 @@ NUMBER_TYPES: dict[str, tuple[KebaKeEnergyNumberEntityDescription, ...]] = {
             native_unit_of_measurement=UnitOfTime.MINUTES,
             native_step=1,
             translation_key="min_runtime_excess_energy",
-            scale=1,
+            scale=1 / 60,
         ),
     ),
 }
@@ -577,7 +523,7 @@ async def async_setup_entry(
     async_add_entities: AddEntitiesCallback,
 ) -> None:
     """Set up KEBA KeEnergy numbers from a config entry."""
-    await _async_setup_entities(
+    _async_setup_entities(
         entry,
         async_add_entities,
         NUMBER_TYPES,

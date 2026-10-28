@@ -1,5 +1,5 @@
 # serializer version: 1
-# name: test_binary_sensors[de-switch.keba_keenergy_12345678_buffer_tank_use_excess_energy_1]
+# name: test_switches[de][switch.keba_keenergy_12345678_buffer_tank_use_excess_energy_1]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'switch',
@@ -13,7 +13,7 @@
     'state': 'on',
   })
 # ---
-# name: test_binary_sensors[de-switch.keba_keenergy_12345678_buffer_tank_use_excess_energy_2]
+# name: test_switches[de][switch.keba_keenergy_12345678_buffer_tank_use_excess_energy_2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'switch',
@@ -27,7 +27,7 @@
     'state': 'off',
   })
 # ---
-# name: test_binary_sensors[de-switch.keba_keenergy_12345678_external_heat_source_use_excess_energy_1]
+# name: test_switches[de][switch.keba_keenergy_12345678_external_heat_source_use_excess_energy_1]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'switch',
@@ -41,7 +41,7 @@
     'state': 'on',
   })
 # ---
-# name: test_binary_sensors[de-switch.keba_keenergy_12345678_external_heat_source_use_excess_energy_2]
+# name: test_switches[de][switch.keba_keenergy_12345678_external_heat_source_use_excess_energy_2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'switch',
@@ -55,7 +55,21 @@
     'state': 'on',
   })
 # ---
-# name: test_binary_sensors[de-switch.keba_keenergy_12345678_heat_circuit_use_excess_energy_1]
+# name: test_switches[de][switch.keba_keenergy_12345678_heat_circuit_use_cooling_curve_2]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'switch',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Heizkreis 2 Kühlkurventabelle verwenden',
+    }),
+    'context': <ANY>,
+    'entity_id': 'switch.keba_keenergy_12345678_heat_circuit_use_cooling_curve_2',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': 'on',
+  })
+# ---
+# name: test_switches[de][switch.keba_keenergy_12345678_heat_circuit_use_excess_energy_1]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'switch',
@@ -69,7 +83,7 @@
     'state': 'on',
   })
 # ---
-# name: test_binary_sensors[de-switch.keba_keenergy_12345678_heat_circuit_use_excess_energy_2]
+# name: test_switches[de][switch.keba_keenergy_12345678_heat_circuit_use_excess_energy_2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'switch',
@@ -83,12 +97,11 @@
     'state': 'off',
   })
 # ---
-# name: test_binary_sensors[de-switch.keba_keenergy_12345678_heat_circuit_use_heating_curve_1]
+# name: test_switches[de][switch.keba_keenergy_12345678_heat_circuit_use_heating_curve_1]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'switch',
-      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Heizkreis 1 Heizkurve verwenden',
-      <EntityStateAttribute.ICON: 'icon'>: 'mdi:chart-bell-curve-cumulative',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Heizkreis 1 Heizkurventabelle verwenden',
     }),
     'context': <ANY>,
     'entity_id': 'switch.keba_keenergy_12345678_heat_circuit_use_heating_curve_1',
@@ -98,26 +111,11 @@
     'state': 'off',
   })
 # ---
-# name: test_binary_sensors[de-switch.keba_keenergy_12345678_heat_circuit_use_heating_curve_2]
+# name: test_switches[de][switch.keba_keenergy_12345678_heat_pump_compressor_use_night_speed]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'switch',
-      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Heizkreis 2 Kühlkurve verwenden',
-      <EntityStateAttribute.ICON: 'icon'>: 'mdi:chart-bell-curve-cumulative',
-    }),
-    'context': <ANY>,
-    'entity_id': 'switch.keba_keenergy_12345678_heat_circuit_use_heating_curve_2',
-    'last_changed': <ANY>,
-    'last_reported': <ANY>,
-    'last_updated': <ANY>,
-    'state': 'on',
-  })
-# ---
-# name: test_binary_sensors[de-switch.keba_keenergy_12345678_heat_pump_compressor_use_night_speed]
-  StateSnapshot({
-    'attributes': ReadOnlyDict({
-      <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'switch',
-      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Wärmepumpe Kompressor-Drehzahlbegrenzung (Nacht)',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Wärmepumpe Kompressor-Leistungsbegrenzung (Nacht) verwenden',
     }),
     'context': <ANY>,
     'entity_id': 'switch.keba_keenergy_12345678_heat_pump_compressor_use_night_speed',
@@ -127,7 +125,7 @@
     'state': 'on',
   })
 # ---
-# name: test_binary_sensors[de-switch.keba_keenergy_12345678_hot_water_tank_use_excess_energy_1]
+# name: test_switches[de][switch.keba_keenergy_12345678_hot_water_tank_use_excess_energy_1]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'switch',
@@ -141,7 +139,7 @@
     'state': 'on',
   })
 # ---
-# name: test_binary_sensors[de-switch.keba_keenergy_12345678_hot_water_tank_use_excess_energy_2]
+# name: test_switches[de][switch.keba_keenergy_12345678_hot_water_tank_use_excess_energy_2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'switch',
@@ -155,7 +153,7 @@
     'state': 'off',
   })
 # ---
-# name: test_binary_sensors[de-switch.keba_keenergy_12345678_solar_circuit_priority_1_before_2_1]
+# name: test_switches[de][switch.keba_keenergy_12345678_solar_circuit_priority_1_before_2_1]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'switch',
@@ -169,7 +167,7 @@
     'state': 'off',
   })
 # ---
-# name: test_binary_sensors[de-switch.keba_keenergy_12345678_solar_circuit_priority_1_before_2_2]
+# name: test_switches[de][switch.keba_keenergy_12345678_solar_circuit_priority_1_before_2_2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'switch',
@@ -183,7 +181,7 @@
     'state': 'on',
   })
 # ---
-# name: test_binary_sensors[en-switch.keba_keenergy_12345678_buffer_tank_use_excess_energy_1]
+# name: test_switches[en][switch.keba_keenergy_12345678_buffer_tank_use_excess_energy_1]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'switch',
@@ -197,7 +195,7 @@
     'state': 'on',
   })
 # ---
-# name: test_binary_sensors[en-switch.keba_keenergy_12345678_buffer_tank_use_excess_energy_2]
+# name: test_switches[en][switch.keba_keenergy_12345678_buffer_tank_use_excess_energy_2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'switch',
@@ -211,7 +209,7 @@
     'state': 'off',
   })
 # ---
-# name: test_binary_sensors[en-switch.keba_keenergy_12345678_external_heat_source_use_excess_energy_1]
+# name: test_switches[en][switch.keba_keenergy_12345678_external_heat_source_use_excess_energy_1]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'switch',
@@ -225,7 +223,7 @@
     'state': 'on',
   })
 # ---
-# name: test_binary_sensors[en-switch.keba_keenergy_12345678_external_heat_source_use_excess_energy_2]
+# name: test_switches[en][switch.keba_keenergy_12345678_external_heat_source_use_excess_energy_2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'switch',
@@ -239,7 +237,21 @@
     'state': 'on',
   })
 # ---
-# name: test_binary_sensors[en-switch.keba_keenergy_12345678_heat_circuit_use_excess_energy_1]
+# name: test_switches[en][switch.keba_keenergy_12345678_heat_circuit_use_cooling_curve_2]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'switch',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Heating circuit 2 Use cooling curve table',
+    }),
+    'context': <ANY>,
+    'entity_id': 'switch.keba_keenergy_12345678_heat_circuit_use_cooling_curve_2',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': 'on',
+  })
+# ---
+# name: test_switches[en][switch.keba_keenergy_12345678_heat_circuit_use_excess_energy_1]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'switch',
@@ -253,7 +265,7 @@
     'state': 'on',
   })
 # ---
-# name: test_binary_sensors[en-switch.keba_keenergy_12345678_heat_circuit_use_excess_energy_2]
+# name: test_switches[en][switch.keba_keenergy_12345678_heat_circuit_use_excess_energy_2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'switch',
@@ -267,12 +279,11 @@
     'state': 'off',
   })
 # ---
-# name: test_binary_sensors[en-switch.keba_keenergy_12345678_heat_circuit_use_heating_curve_1]
+# name: test_switches[en][switch.keba_keenergy_12345678_heat_circuit_use_heating_curve_1]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'switch',
-      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Heating circuit 1 Use heating curve',
-      <EntityStateAttribute.ICON: 'icon'>: 'mdi:chart-bell-curve-cumulative',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Heating circuit 1 Use heating curve table',
     }),
     'context': <ANY>,
     'entity_id': 'switch.keba_keenergy_12345678_heat_circuit_use_heating_curve_1',
@@ -282,26 +293,11 @@
     'state': 'off',
   })
 # ---
-# name: test_binary_sensors[en-switch.keba_keenergy_12345678_heat_circuit_use_heating_curve_2]
+# name: test_switches[en][switch.keba_keenergy_12345678_heat_pump_compressor_use_night_speed]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'switch',
-      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Heating circuit 2 Use cooling curve',
-      <EntityStateAttribute.ICON: 'icon'>: 'mdi:chart-bell-curve-cumulative',
-    }),
-    'context': <ANY>,
-    'entity_id': 'switch.keba_keenergy_12345678_heat_circuit_use_heating_curve_2',
-    'last_changed': <ANY>,
-    'last_reported': <ANY>,
-    'last_updated': <ANY>,
-    'state': 'on',
-  })
-# ---
-# name: test_binary_sensors[en-switch.keba_keenergy_12345678_heat_pump_compressor_use_night_speed]
-  StateSnapshot({
-    'attributes': ReadOnlyDict({
-      <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'switch',
-      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Heat pump Compressor speed limit (night)',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Heat pump Use compressor power limit (night)',
     }),
     'context': <ANY>,
     'entity_id': 'switch.keba_keenergy_12345678_heat_pump_compressor_use_night_speed',
@@ -311,7 +307,7 @@
     'state': 'on',
   })
 # ---
-# name: test_binary_sensors[en-switch.keba_keenergy_12345678_hot_water_tank_use_excess_energy_1]
+# name: test_switches[en][switch.keba_keenergy_12345678_hot_water_tank_use_excess_energy_1]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'switch',
@@ -325,7 +321,7 @@
     'state': 'on',
   })
 # ---
-# name: test_binary_sensors[en-switch.keba_keenergy_12345678_hot_water_tank_use_excess_energy_2]
+# name: test_switches[en][switch.keba_keenergy_12345678_hot_water_tank_use_excess_energy_2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'switch',
@@ -339,7 +335,7 @@
     'state': 'off',
   })
 # ---
-# name: test_binary_sensors[en-switch.keba_keenergy_12345678_solar_circuit_priority_1_before_2_1]
+# name: test_switches[en][switch.keba_keenergy_12345678_solar_circuit_priority_1_before_2_1]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'switch',
@@ -353,7 +349,7 @@
     'state': 'off',
   })
 # ---
-# name: test_binary_sensors[en-switch.keba_keenergy_12345678_solar_circuit_priority_1_before_2_2]
+# name: test_switches[en][switch.keba_keenergy_12345678_solar_circuit_priority_1_before_2_2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'switch',

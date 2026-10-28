@@ -1,3 +1,5 @@
+# Copyright 2025-2026 Michael Hacker
+# SPDX-License-Identifier: Apache-2.0
 """Support for the KEBA KeEnergy services."""
 
 from __future__ import annotations
@@ -9,19 +11,25 @@ from datetime import time
 from typing import TYPE_CHECKING
 from typing import Final
 
-import voluptuous as vol
-from ciso8601 import parse_datetime_as_naive
+import probatio
 from homeassistant.config_entries import ConfigEntryState
+from homeassistant.core import callback
 from homeassistant.exceptions import ServiceValidationError
 from homeassistant.helpers import config_validation as cv
 from homeassistant.helpers import selector
-from keba_keenergy_api.constants import MAX_HEATING_CURVE_POINTS
 from keba_keenergy_api.endpoints import HeatingCurvePoint
 from keba_keenergy_api.endpoints import HeatingCurvePoints
 from keba_keenergy_api.endpoints import HeatingCurves
 
 from .const import ATTR_CONFIG_ENTRY
+from .const import ATTR_END_DATE
+from .const import ATTR_FLOW
+from .const import ATTR_HEATING_CURVE
+from .const import ATTR_OUTDOOR
+from .const import ATTR_POINTS
+from .const import ATTR_START_DATE
 from .const import DOMAIN
+from .const import HEATING_CURVE_POINTS_SCHEMA
 from .const import SERVICE_SET_AWAY_DATE_RANGE
 from .const import SERVICE_SET_HEATING_CURVE_POINTS
 
@@ -34,63 +42,31 @@ if TYPE_CHECKING:
     from .coordinator import KebaKeEnergyConfigEntry
     from .coordinator import KebaKeEnergyDataUpdateCoordinator
 
-_LOGGER = logging.getLogger(__name__)
+_LOGGER: Final = logging.getLogger(__name__)
 
-ATTR_START_DATE: Final[str] = "start_date"
-ATTR_END_DATE: Final[str] = "end_date"
 
-AWAY_DATE_RANGE_SCHEMA: vol.Schema = vol.Schema(
+def _date(value: object) -> date:
+    """Validate a date, a date with time (as before) only uses the date."""
+    try:
+        return cv.date(value)
+    except probatio.Invalid:
+        return cv.datetime(value).date()
+
+
+AWAY_DATE_RANGE_SCHEMA: Final[probatio.Schema] = probatio.Schema(
     {
-        vol.Required(ATTR_CONFIG_ENTRY): selector.ConfigEntrySelector(
+        probatio.Required(ATTR_CONFIG_ENTRY): selector.ConfigEntrySelector(
             {
                 "integration": DOMAIN,
             },
         ),
-        vol.Required(ATTR_START_DATE): cv.string,
-        vol.Required(ATTR_END_DATE): cv.string,
-    },
-)
-
-ATTR_POINTS: Final[str] = "points"
-ATTR_OUTDOOR: Final[str] = "outdoor"
-ATTR_FLOW: Final[str] = "flow"
-ATTR_HEATING_CURVE: Final[str] = "heating_curve"
-
-HEATING_CURVE_POINT_SCHEMA = vol.Schema(
-    {
-        vol.Required(ATTR_OUTDOOR): vol.All(
-            vol.Coerce(float),
-            vol.Range(min=-40, max=40),
-        ),
-        vol.Required(ATTR_FLOW): vol.All(
-            vol.Coerce(float),
-            vol.Range(min=10, max=90),
-        ),
-    },
-)
-
-HEATING_CURVE_POINTS_SCHEMA: vol.Schema = vol.Schema(
-    {
-        vol.Required(ATTR_CONFIG_ENTRY): selector.ConfigEntrySelector(
-            {
-                "integration": DOMAIN,
-            },
-        ),
-        vol.Required(ATTR_HEATING_CURVE): vol.All(
-            str,
-            vol.Length(min=2),
-            vol.Match(r"^HC"),
-        ),
-        vol.Required(ATTR_POINTS): vol.All(
-            cv.ensure_list,
-            vol.Length(max=MAX_HEATING_CURVE_POINTS),
-            [HEATING_CURVE_POINT_SCHEMA],
-        ),
+        probatio.Required(ATTR_START_DATE): _date,
+        probatio.Required(ATTR_END_DATE): _date,
     },
 )
 
 
-def __get_coordinator(call: ServiceCall) -> KebaKeEnergyDataUpdateCoordinator:
+def _get_coordinator(call: ServiceCall) -> KebaKeEnergyDataUpdateCoordinator:
     """Get the coordinator from the entry."""
     entry_id: str = call.data[ATTR_CONFIG_ENTRY]
     entry: KebaKeEnergyConfigEntry | None = call.hass.config_entries.async_get_entry(entry_id)
@@ -119,37 +95,33 @@ def __get_coordinator(call: ServiceCall) -> KebaKeEnergyDataUpdateCoordinator:
 
 
 async def _async_set_away_range(call: ServiceCall) -> None:
-    coordinator: KebaKeEnergyDataUpdateCoordinator = __get_coordinator(call)
+    coordinator: KebaKeEnergyDataUpdateCoordinator = _get_coordinator(call)
 
-    start_date: str | None = call.data.get(ATTR_START_DATE)
-    end_date: str | None = call.data.get(ATTR_END_DATE)
+    start_date: date = call.data[ATTR_START_DATE]
+    end_date: date = call.data[ATTR_END_DATE]
 
-    if start_date and end_date:
-        tz: ZoneInfo = await coordinator.get_timezone()
-
-        start_date_naive: date = parse_datetime_as_naive(start_date).date()
-        end_date_naive: date = parse_datetime_as_naive(end_date).date()
-
-        start_date_tz = datetime.combine(start_date_naive, time.min, tzinfo=tz)
-        end_date_tz = datetime.combine(end_date_naive, time.max, tzinfo=tz)
-
-        if end_date_tz < start_date_tz:
-            raise ServiceValidationError(
-                translation_domain=DOMAIN,
-                translation_key="end_date_smaller_than_start_date",
-            )
-
-        await coordinator.set_away_date_range(
-            start_timestamp=start_date_tz.timestamp(),
-            end_timestamp=end_date_tz.timestamp(),
+    if end_date < start_date:
+        raise ServiceValidationError(
+            translation_domain=DOMAIN,
+            translation_key="end_date_smaller_than_start_date",
         )
+
+    tz: ZoneInfo = await coordinator.get_timezone()
+
+    start_date_tz: datetime = datetime.combine(start_date, time.min, tzinfo=tz)
+    end_date_tz: datetime = datetime.combine(end_date, time.max, tzinfo=tz)
+
+    await coordinator.set_away_date_range(
+        start_timestamp=start_date_tz.timestamp(),
+        end_timestamp=end_date_tz.timestamp(),
+    )
 
 
 async def _async_set_heating_curve_points(call: ServiceCall) -> None:
-    coordinator: KebaKeEnergyDataUpdateCoordinator = __get_coordinator(call)
+    coordinator: KebaKeEnergyDataUpdateCoordinator = _get_coordinator(call)
 
     heating_curve: str = call.data[ATTR_HEATING_CURVE]
-    heating_curves: HeatingCurves = await coordinator.api.heat_circuit.get_heating_curve_points()
+    heating_curves: HeatingCurves = await coordinator.get_heating_curve_points()
 
     if heating_curve not in heating_curves:
         raise ServiceValidationError(
@@ -175,15 +147,25 @@ async def _async_set_heating_curve_points(call: ServiceCall) -> None:
             translation_key="duplicate_outdoor_temperature_values",
         )
 
+    # Only write changed points, the control unit stores them in its flash memory.
+    current_points: HeatingCurvePoints = tuple(
+        HeatingCurvePoint(outdoor=round(p.outdoor, 2), flow=round(p.flow, 2)) for p in heating_curves[heating_curve]
+    )
+
+    if current_points == points:
+        return
+
     await coordinator.async_execute_write(
         write_fn=lambda: coordinator.api.heat_circuit.set_heating_curve_points(
             heating_curve=heating_curve,
             points=points,
         ),
+        names=(f"heating_curve_points.{heating_curve}",),
     )
 
 
-async def async_setup_services(hass: HomeAssistant) -> None:
+@callback
+def async_setup_services(hass: HomeAssistant) -> None:
     """KEBA KeEnergy services setup."""
     hass.services.async_register(
         DOMAIN,

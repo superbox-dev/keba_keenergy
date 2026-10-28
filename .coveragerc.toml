@@ -1,5 +1,5 @@
 [tool.coverage.run]
-branch = false
+branch = true
 source = ["custom_components"]
 
 [tool.coverage.report]
@@ -7,5 +7,5 @@ fail_under = 100
 show_missing = true
 skip_covered = true
 exclude_also = [
-    "if TYPE_CHECKING:",
+  "if TYPE_CHECKING:",
 ]

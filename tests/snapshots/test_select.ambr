@@ -1,9 +1,8 @@
 # serializer version: 1
-# name: test_selects[de-select.keba_keenergy_12345678_buffer_tank_operating_mode_1-buffer_tank_operating_mode]
+# name: test_selects[de][select.keba_keenergy_12345678_buffer_tank_operating_mode_1]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Pufferspeicher 1 Betriebsart',
-      <EntityStateAttribute.ICON: 'icon'>: 'mdi:cog',
       <SelectEntityCapabilityAttribute.OPTIONS: 'options'>: list([
         'off',
         'on',
@@ -18,18 +17,17 @@
     'state': 'off',
   })
 # ---
-# name: test_selects[de-select.keba_keenergy_12345678_buffer_tank_operating_mode_1-buffer_tank_operating_mode].1
+# name: test_selects[de][select.keba_keenergy_12345678_buffer_tank_operating_mode_1_options]
   dict({
     'heat_up': 'Aufheizen',
     'off': 'Aus',
     'on': 'Ein',
   })
 # ---
-# name: test_selects[de-select.keba_keenergy_12345678_buffer_tank_operating_mode_2-buffer_tank_operating_mode]
+# name: test_selects[de][select.keba_keenergy_12345678_buffer_tank_operating_mode_2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Pufferspeicher 2 Betriebsart',
-      <EntityStateAttribute.ICON: 'icon'>: 'mdi:cog',
       <SelectEntityCapabilityAttribute.OPTIONS: 'options'>: list([
         'off',
         'on',
@@ -44,21 +42,21 @@
     'state': 'on',
   })
 # ---
-# name: test_selects[de-select.keba_keenergy_12345678_buffer_tank_operating_mode_2-buffer_tank_operating_mode].1
+# name: test_selects[de][select.keba_keenergy_12345678_buffer_tank_operating_mode_2_options]
   dict({
     'heat_up': 'Aufheizen',
     'off': 'Aus',
     'on': 'Ein',
   })
 # ---
-# name: test_selects[de-select.keba_keenergy_12345678_external_heat_source_operating_mode_1-external_heat_source_operating_mode]
+# name: test_selects[de][select.keba_keenergy_12345678_external_heat_source_operating_mode_1]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Externe Wärmequelle 1 Betriebsart',
-      <EntityStateAttribute.ICON: 'icon'>: 'mdi:cog',
       <SelectEntityCapabilityAttribute.OPTIONS: 'options'>: list([
         'off',
         'on',
+        'flue',
       ]),
     }),
     'context': <ANY>,
@@ -69,17 +67,17 @@
     'state': 'off',
   })
 # ---
-# name: test_selects[de-select.keba_keenergy_12345678_external_heat_source_operating_mode_1-external_heat_source_operating_mode].1
+# name: test_selects[de][select.keba_keenergy_12345678_external_heat_source_operating_mode_1_options]
   dict({
+    'flue': 'Rauchfang',
     'off': 'Aus',
     'on': 'Ein',
   })
 # ---
-# name: test_selects[de-select.keba_keenergy_12345678_external_heat_source_operating_mode_2-external_heat_source_operating_mode]
+# name: test_selects[de][select.keba_keenergy_12345678_external_heat_source_operating_mode_2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Externe Wärmequelle 2 Betriebsart',
-      <EntityStateAttribute.ICON: 'icon'>: 'mdi:cog',
       <SelectEntityCapabilityAttribute.OPTIONS: 'options'>: list([
         'off',
         'on',
@@ -93,17 +91,16 @@
     'state': 'on',
   })
 # ---
-# name: test_selects[de-select.keba_keenergy_12345678_external_heat_source_operating_mode_2-external_heat_source_operating_mode].1
+# name: test_selects[de][select.keba_keenergy_12345678_external_heat_source_operating_mode_2_options]
   dict({
     'off': 'Aus',
     'on': 'Ein',
   })
 # ---
-# name: test_selects[de-select.keba_keenergy_12345678_heat_circuit_cooling_curve_2-None]
+# name: test_selects[de][select.keba_keenergy_12345678_heat_circuit_cooling_curve_2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Heizkreis 2 Kühlkurve',
-      <EntityStateAttribute.ICON: 'icon'>: 'mdi:chart-bell-curve-cumulative',
       <SelectEntityCapabilityAttribute.OPTIONS: 'options'>: list([
         'HC1',
         'HC2',
@@ -125,11 +122,10 @@
     'state': 'HC5',
   })
 # ---
-# name: test_selects[de-select.keba_keenergy_12345678_heat_circuit_heating_curve_1-None]
+# name: test_selects[de][select.keba_keenergy_12345678_heat_circuit_heating_curve_1]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Heizkreis 1 Heizkurve',
-      <EntityStateAttribute.ICON: 'icon'>: 'mdi:chart-bell-curve-cumulative',
       <SelectEntityCapabilityAttribute.OPTIONS: 'options'>: list([
         'HC1',
         'HC2',
@@ -151,371 +147,10 @@
     'state': 'HC6',
   })
 # ---
-# name: test_selects[de-select.keba_keenergy_12345678_hot_water_tank_operating_mode_1-hot_water_tank_operating_mode]
-  StateSnapshot({
-    'attributes': ReadOnlyDict({
-      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Warmwasserspeicher 1 Betriebsart',
-      <EntityStateAttribute.ICON: 'icon'>: 'mdi:cog',
-      <SelectEntityCapabilityAttribute.OPTIONS: 'options'>: list([
-        'off',
-        'auto',
-        'on',
-        'heat_up',
-      ]),
-    }),
-    'context': <ANY>,
-    'entity_id': 'select.keba_keenergy_12345678_hot_water_tank_operating_mode_1',
-    'last_changed': <ANY>,
-    'last_reported': <ANY>,
-    'last_updated': <ANY>,
-    'state': 'heat_up',
-  })
-# ---
-# name: test_selects[de-select.keba_keenergy_12345678_hot_water_tank_operating_mode_1-hot_water_tank_operating_mode].1
-  dict({
-    'auto': 'Zeitplan',
-    'heat_up': 'Aufheizen',
-    'off': 'Aus',
-    'on': 'Ein',
-  })
-# ---
-# name: test_selects[de-select.keba_keenergy_12345678_hot_water_tank_operating_mode_2-hot_water_tank_operating_mode]
-  StateSnapshot({
-    'attributes': ReadOnlyDict({
-      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Warmwasserspeicher 2 Betriebsart',
-      <EntityStateAttribute.ICON: 'icon'>: 'mdi:cog',
-      <SelectEntityCapabilityAttribute.OPTIONS: 'options'>: list([
-        'off',
-        'auto',
-        'on',
-        'heat_up',
-      ]),
-    }),
-    'context': <ANY>,
-    'entity_id': 'select.keba_keenergy_12345678_hot_water_tank_operating_mode_2',
-    'last_changed': <ANY>,
-    'last_reported': <ANY>,
-    'last_updated': <ANY>,
-    'state': 'off',
-  })
-# ---
-# name: test_selects[de-select.keba_keenergy_12345678_hot_water_tank_operating_mode_2-hot_water_tank_operating_mode].1
-  dict({
-    'auto': 'Zeitplan',
-    'heat_up': 'Aufheizen',
-    'off': 'Aus',
-    'on': 'Ein',
-  })
-# ---
-# name: test_selects[de-select.keba_keenergy_12345678_solar_circuit_operating_mode_1-solar_circuit_operating_mode]
-  StateSnapshot({
-    'attributes': ReadOnlyDict({
-      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Solarkreis 1 Betriebsart',
-      <EntityStateAttribute.ICON: 'icon'>: 'mdi:cog',
-      <SelectEntityCapabilityAttribute.OPTIONS: 'options'>: list([
-        'off',
-        'on',
-      ]),
-    }),
-    'context': <ANY>,
-    'entity_id': 'select.keba_keenergy_12345678_solar_circuit_operating_mode_1',
-    'last_changed': <ANY>,
-    'last_reported': <ANY>,
-    'last_updated': <ANY>,
-    'state': 'off',
-  })
-# ---
-# name: test_selects[de-select.keba_keenergy_12345678_solar_circuit_operating_mode_1-solar_circuit_operating_mode].1
-  dict({
-    'off': 'Aus',
-    'on': 'Ein',
-  })
-# ---
-# name: test_selects[de-select.keba_keenergy_12345678_solar_circuit_operating_mode_2-solar_circuit_operating_mode]
-  StateSnapshot({
-    'attributes': ReadOnlyDict({
-      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Solarkreis 2 Betriebsart',
-      <EntityStateAttribute.ICON: 'icon'>: 'mdi:cog',
-      <SelectEntityCapabilityAttribute.OPTIONS: 'options'>: list([
-        'off',
-        'on',
-      ]),
-    }),
-    'context': <ANY>,
-    'entity_id': 'select.keba_keenergy_12345678_solar_circuit_operating_mode_2',
-    'last_changed': <ANY>,
-    'last_reported': <ANY>,
-    'last_updated': <ANY>,
-    'state': 'on',
-  })
-# ---
-# name: test_selects[de-select.keba_keenergy_12345678_solar_circuit_operating_mode_2-solar_circuit_operating_mode].1
-  dict({
-    'off': 'Aus',
-    'on': 'Ein',
-  })
-# ---
-# name: test_selects[en-select.keba_keenergy_12345678_buffer_tank_operating_mode_1-buffer_tank_operating_mode]
-  StateSnapshot({
-    'attributes': ReadOnlyDict({
-      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Buffer tank 1 Operating mode',
-      <EntityStateAttribute.ICON: 'icon'>: 'mdi:cog',
-      <SelectEntityCapabilityAttribute.OPTIONS: 'options'>: list([
-        'off',
-        'on',
-        'heat_up',
-      ]),
-    }),
-    'context': <ANY>,
-    'entity_id': 'select.keba_keenergy_12345678_buffer_tank_operating_mode_1',
-    'last_changed': <ANY>,
-    'last_reported': <ANY>,
-    'last_updated': <ANY>,
-    'state': 'off',
-  })
-# ---
-# name: test_selects[en-select.keba_keenergy_12345678_buffer_tank_operating_mode_1-buffer_tank_operating_mode].1
-  dict({
-    'heat_up': 'Heat up',
-    'off': 'Off',
-    'on': 'On',
-  })
-# ---
-# name: test_selects[en-select.keba_keenergy_12345678_buffer_tank_operating_mode_2-buffer_tank_operating_mode]
-  StateSnapshot({
-    'attributes': ReadOnlyDict({
-      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Buffer tank 2 Operating mode',
-      <EntityStateAttribute.ICON: 'icon'>: 'mdi:cog',
-      <SelectEntityCapabilityAttribute.OPTIONS: 'options'>: list([
-        'off',
-        'on',
-        'heat_up',
-      ]),
-    }),
-    'context': <ANY>,
-    'entity_id': 'select.keba_keenergy_12345678_buffer_tank_operating_mode_2',
-    'last_changed': <ANY>,
-    'last_reported': <ANY>,
-    'last_updated': <ANY>,
-    'state': 'on',
-  })
-# ---
-# name: test_selects[en-select.keba_keenergy_12345678_buffer_tank_operating_mode_2-buffer_tank_operating_mode].1
-  dict({
-    'heat_up': 'Heat up',
-    'off': 'Off',
-    'on': 'On',
-  })
-# ---
-# name: test_selects[en-select.keba_keenergy_12345678_external_heat_source_operating_mode_1-external_heat_source_operating_mode]
-  StateSnapshot({
-    'attributes': ReadOnlyDict({
-      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'External heat source 1 Operating mode',
-      <EntityStateAttribute.ICON: 'icon'>: 'mdi:cog',
-      <SelectEntityCapabilityAttribute.OPTIONS: 'options'>: list([
-        'off',
-        'on',
-      ]),
-    }),
-    'context': <ANY>,
-    'entity_id': 'select.keba_keenergy_12345678_external_heat_source_operating_mode_1',
-    'last_changed': <ANY>,
-    'last_reported': <ANY>,
-    'last_updated': <ANY>,
-    'state': 'off',
-  })
-# ---
-# name: test_selects[en-select.keba_keenergy_12345678_external_heat_source_operating_mode_1-external_heat_source_operating_mode].1
-  dict({
-    'off': 'Off',
-    'on': 'On',
-  })
-# ---
-# name: test_selects[en-select.keba_keenergy_12345678_external_heat_source_operating_mode_2-external_heat_source_operating_mode]
-  StateSnapshot({
-    'attributes': ReadOnlyDict({
-      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'External heat source 2 Operating mode',
-      <EntityStateAttribute.ICON: 'icon'>: 'mdi:cog',
-      <SelectEntityCapabilityAttribute.OPTIONS: 'options'>: list([
-        'off',
-        'on',
-      ]),
-    }),
-    'context': <ANY>,
-    'entity_id': 'select.keba_keenergy_12345678_external_heat_source_operating_mode_2',
-    'last_changed': <ANY>,
-    'last_reported': <ANY>,
-    'last_updated': <ANY>,
-    'state': 'on',
-  })
-# ---
-# name: test_selects[en-select.keba_keenergy_12345678_external_heat_source_operating_mode_2-external_heat_source_operating_mode].1
-  dict({
-    'off': 'Off',
-    'on': 'On',
-  })
-# ---
-# name: test_selects[en-select.keba_keenergy_12345678_heat_circuit_cooling_curve_2-None]
-  StateSnapshot({
-    'attributes': ReadOnlyDict({
-      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Heating circuit 2 Cooling curve',
-      <EntityStateAttribute.ICON: 'icon'>: 'mdi:chart-bell-curve-cumulative',
-      <SelectEntityCapabilityAttribute.OPTIONS: 'options'>: list([
-        'HC1',
-        'HC2',
-        'HC3',
-        'HC4',
-        'HC5',
-        'HC6',
-        'HC7',
-        'HC8',
-        'HC FBH',
-        'HC HK',
-      ]),
-    }),
-    'context': <ANY>,
-    'entity_id': 'select.keba_keenergy_12345678_heat_circuit_cooling_curve_2',
-    'last_changed': <ANY>,
-    'last_reported': <ANY>,
-    'last_updated': <ANY>,
-    'state': 'HC5',
-  })
-# ---
-# name: test_selects[en-select.keba_keenergy_12345678_heat_circuit_heating_curve_1-None]
-  StateSnapshot({
-    'attributes': ReadOnlyDict({
-      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Heating circuit 1 Heating curve',
-      <EntityStateAttribute.ICON: 'icon'>: 'mdi:chart-bell-curve-cumulative',
-      <SelectEntityCapabilityAttribute.OPTIONS: 'options'>: list([
-        'HC1',
-        'HC2',
-        'HC3',
-        'HC4',
-        'HC5',
-        'HC6',
-        'HC7',
-        'HC8',
-        'HC FBH',
-        'HC HK',
-      ]),
-    }),
-    'context': <ANY>,
-    'entity_id': 'select.keba_keenergy_12345678_heat_circuit_heating_curve_1',
-    'last_changed': <ANY>,
-    'last_reported': <ANY>,
-    'last_updated': <ANY>,
-    'state': 'HC6',
-  })
-# ---
-# name: test_selects[en-select.keba_keenergy_12345678_hot_water_tank_operating_mode_1-hot_water_tank_operating_mode]
-  StateSnapshot({
-    'attributes': ReadOnlyDict({
-      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Hot water tank 1 Operating mode',
-      <EntityStateAttribute.ICON: 'icon'>: 'mdi:cog',
-      <SelectEntityCapabilityAttribute.OPTIONS: 'options'>: list([
-        'off',
-        'auto',
-        'on',
-        'heat_up',
-      ]),
-    }),
-    'context': <ANY>,
-    'entity_id': 'select.keba_keenergy_12345678_hot_water_tank_operating_mode_1',
-    'last_changed': <ANY>,
-    'last_reported': <ANY>,
-    'last_updated': <ANY>,
-    'state': 'heat_up',
-  })
-# ---
-# name: test_selects[en-select.keba_keenergy_12345678_hot_water_tank_operating_mode_1-hot_water_tank_operating_mode].1
-  dict({
-    'auto': 'Schedule',
-    'heat_up': 'Heat up',
-    'off': 'Off',
-    'on': 'On',
-  })
-# ---
-# name: test_selects[en-select.keba_keenergy_12345678_hot_water_tank_operating_mode_2-hot_water_tank_operating_mode]
-  StateSnapshot({
-    'attributes': ReadOnlyDict({
-      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Hot water tank 2 Operating mode',
-      <EntityStateAttribute.ICON: 'icon'>: 'mdi:cog',
-      <SelectEntityCapabilityAttribute.OPTIONS: 'options'>: list([
-        'off',
-        'auto',
-        'on',
-        'heat_up',
-      ]),
-    }),
-    'context': <ANY>,
-    'entity_id': 'select.keba_keenergy_12345678_hot_water_tank_operating_mode_2',
-    'last_changed': <ANY>,
-    'last_reported': <ANY>,
-    'last_updated': <ANY>,
-    'state': 'off',
-  })
-# ---
-# name: test_selects[en-select.keba_keenergy_12345678_hot_water_tank_operating_mode_2-hot_water_tank_operating_mode].1
-  dict({
-    'auto': 'Schedule',
-    'heat_up': 'Heat up',
-    'off': 'Off',
-    'on': 'On',
-  })
-# ---
-# name: test_selects[en-select.keba_keenergy_12345678_solar_circuit_operating_mode_1-solar_circuit_operating_mode]
-  StateSnapshot({
-    'attributes': ReadOnlyDict({
-      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Solar circuit 1 Operating mode',
-      <EntityStateAttribute.ICON: 'icon'>: 'mdi:cog',
-      <SelectEntityCapabilityAttribute.OPTIONS: 'options'>: list([
-        'off',
-        'on',
-      ]),
-    }),
-    'context': <ANY>,
-    'entity_id': 'select.keba_keenergy_12345678_solar_circuit_operating_mode_1',
-    'last_changed': <ANY>,
-    'last_reported': <ANY>,
-    'last_updated': <ANY>,
-    'state': 'off',
-  })
-# ---
-# name: test_selects[en-select.keba_keenergy_12345678_solar_circuit_operating_mode_1-solar_circuit_operating_mode].1
-  dict({
-    'off': 'Off',
-    'on': 'On',
-  })
-# ---
-# name: test_selects[en-select.keba_keenergy_12345678_solar_circuit_operating_mode_2-solar_circuit_operating_mode]
-  StateSnapshot({
-    'attributes': ReadOnlyDict({
-      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Solar circuit 2 Operating mode',
-      <EntityStateAttribute.ICON: 'icon'>: 'mdi:cog',
-      <SelectEntityCapabilityAttribute.OPTIONS: 'options'>: list([
-        'off',
-        'on',
-      ]),
-    }),
-    'context': <ANY>,
-    'entity_id': 'select.keba_keenergy_12345678_solar_circuit_operating_mode_2',
-    'last_changed': <ANY>,
-    'last_reported': <ANY>,
-    'last_updated': <ANY>,
-    'state': 'on',
-  })
-# ---
-# name: test_selects[en-select.keba_keenergy_12345678_solar_circuit_operating_mode_2-solar_circuit_operating_mode].1
-  dict({
-    'off': 'Off',
-    'on': 'On',
-  })
-# ---
-# name: test_selects_with_cooling[de-select.keba_keenergy_12345678_heat_circuit_operating_mode_1-heat_circuit_operating_mode]
+# name: test_selects[de][select.keba_keenergy_12345678_heat_circuit_operating_mode_1]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Heizkreis 1 Betriebsart',
-      <EntityStateAttribute.ICON: 'icon'>: 'mdi:cog',
       <SelectEntityCapabilityAttribute.OPTIONS: 'options'>: list([
         'off',
         'auto',
@@ -533,7 +168,7 @@
     'state': 'day',
   })
 # ---
-# name: test_selects_with_cooling[de-select.keba_keenergy_12345678_heat_circuit_operating_mode_1-heat_circuit_operating_mode].1
+# name: test_selects[de][select.keba_keenergy_12345678_heat_circuit_operating_mode_1_options]
   dict({
     'auto': 'Auto',
     'day': 'Tag',
@@ -543,11 +178,10 @@
     'party': 'Party',
   })
 # ---
-# name: test_selects_with_cooling[de-select.keba_keenergy_12345678_heat_circuit_operating_mode_2-heat_circuit_operating_mode]
+# name: test_selects[de][select.keba_keenergy_12345678_heat_circuit_operating_mode_2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Heizkreis 2 Betriebsart',
-      <EntityStateAttribute.ICON: 'icon'>: 'mdi:cog',
       <SelectEntityCapabilityAttribute.OPTIONS: 'options'>: list([
         'off',
         'auto',
@@ -564,7 +198,7 @@
     'state': 'auto',
   })
 # ---
-# name: test_selects_with_cooling[de-select.keba_keenergy_12345678_heat_circuit_operating_mode_2-heat_circuit_operating_mode].1
+# name: test_selects[de][select.keba_keenergy_12345678_heat_circuit_operating_mode_2_options]
   dict({
     'auto': 'Auto',
     'day': 'Tag',
@@ -573,11 +207,64 @@
     'party': 'Party',
   })
 # ---
-# name: test_selects_with_cooling[de-select.keba_keenergy_12345678_operating_mode-system_operating_mode]
+# name: test_selects[de][select.keba_keenergy_12345678_hot_water_tank_operating_mode_1]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Warmwasserspeicher 1 Betriebsart',
+      <SelectEntityCapabilityAttribute.OPTIONS: 'options'>: list([
+        'off',
+        'auto',
+        'on',
+        'heat_up',
+      ]),
+    }),
+    'context': <ANY>,
+    'entity_id': 'select.keba_keenergy_12345678_hot_water_tank_operating_mode_1',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': 'heat_up',
+  })
+# ---
+# name: test_selects[de][select.keba_keenergy_12345678_hot_water_tank_operating_mode_1_options]
+  dict({
+    'auto': 'Zeitplan',
+    'heat_up': 'Aufheizen',
+    'off': 'Aus',
+    'on': 'Ein',
+  })
+# ---
+# name: test_selects[de][select.keba_keenergy_12345678_hot_water_tank_operating_mode_2]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Warmwasserspeicher 2 Betriebsart',
+      <SelectEntityCapabilityAttribute.OPTIONS: 'options'>: list([
+        'off',
+        'auto',
+        'on',
+        'heat_up',
+      ]),
+    }),
+    'context': <ANY>,
+    'entity_id': 'select.keba_keenergy_12345678_hot_water_tank_operating_mode_2',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': 'off',
+  })
+# ---
+# name: test_selects[de][select.keba_keenergy_12345678_hot_water_tank_operating_mode_2_options]
+  dict({
+    'auto': 'Zeitplan',
+    'heat_up': 'Aufheizen',
+    'off': 'Aus',
+    'on': 'Ein',
+  })
+# ---
+# name: test_selects[de][select.keba_keenergy_12345678_operating_mode]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Bedieneinheit Betriebsart',
-      <EntityStateAttribute.ICON: 'icon'>: 'mdi:cog',
       <SelectEntityCapabilityAttribute.OPTIONS: 'options'>: list([
         'standby',
         'summer',
@@ -594,7 +281,7 @@
     'state': 'auto_heat',
   })
 # ---
-# name: test_selects_with_cooling[de-select.keba_keenergy_12345678_operating_mode-system_operating_mode].1
+# name: test_selects[de][select.keba_keenergy_12345678_operating_mode_options]
   dict({
     'auto': 'Automatik',
     'auto_cool': 'Kühlen',
@@ -603,11 +290,204 @@
     'summer': 'nur Warmwasser',
   })
 # ---
-# name: test_selects_with_cooling[en-select.keba_keenergy_12345678_heat_circuit_operating_mode_1-heat_circuit_operating_mode]
+# name: test_selects[de][select.keba_keenergy_12345678_solar_circuit_operating_mode_1]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Solarkreis 1 Betriebsart',
+      <SelectEntityCapabilityAttribute.OPTIONS: 'options'>: list([
+        'off',
+        'on',
+      ]),
+    }),
+    'context': <ANY>,
+    'entity_id': 'select.keba_keenergy_12345678_solar_circuit_operating_mode_1',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': 'off',
+  })
+# ---
+# name: test_selects[de][select.keba_keenergy_12345678_solar_circuit_operating_mode_1_options]
+  dict({
+    'off': 'Aus',
+    'on': 'Ein',
+  })
+# ---
+# name: test_selects[de][select.keba_keenergy_12345678_solar_circuit_operating_mode_2]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Solarkreis 2 Betriebsart',
+      <SelectEntityCapabilityAttribute.OPTIONS: 'options'>: list([
+        'off',
+        'on',
+      ]),
+    }),
+    'context': <ANY>,
+    'entity_id': 'select.keba_keenergy_12345678_solar_circuit_operating_mode_2',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': 'on',
+  })
+# ---
+# name: test_selects[de][select.keba_keenergy_12345678_solar_circuit_operating_mode_2_options]
+  dict({
+    'off': 'Aus',
+    'on': 'Ein',
+  })
+# ---
+# name: test_selects[en][select.keba_keenergy_12345678_buffer_tank_operating_mode_1]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Buffer tank 1 Operating mode',
+      <SelectEntityCapabilityAttribute.OPTIONS: 'options'>: list([
+        'off',
+        'on',
+        'heat_up',
+      ]),
+    }),
+    'context': <ANY>,
+    'entity_id': 'select.keba_keenergy_12345678_buffer_tank_operating_mode_1',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': 'off',
+  })
+# ---
+# name: test_selects[en][select.keba_keenergy_12345678_buffer_tank_operating_mode_1_options]
+  dict({
+    'heat_up': 'Heat up',
+    'off': 'Off',
+    'on': 'On',
+  })
+# ---
+# name: test_selects[en][select.keba_keenergy_12345678_buffer_tank_operating_mode_2]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Buffer tank 2 Operating mode',
+      <SelectEntityCapabilityAttribute.OPTIONS: 'options'>: list([
+        'off',
+        'on',
+        'heat_up',
+      ]),
+    }),
+    'context': <ANY>,
+    'entity_id': 'select.keba_keenergy_12345678_buffer_tank_operating_mode_2',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': 'on',
+  })
+# ---
+# name: test_selects[en][select.keba_keenergy_12345678_buffer_tank_operating_mode_2_options]
+  dict({
+    'heat_up': 'Heat up',
+    'off': 'Off',
+    'on': 'On',
+  })
+# ---
+# name: test_selects[en][select.keba_keenergy_12345678_external_heat_source_operating_mode_1]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'External heat source 1 Operating mode',
+      <SelectEntityCapabilityAttribute.OPTIONS: 'options'>: list([
+        'off',
+        'on',
+        'flue',
+      ]),
+    }),
+    'context': <ANY>,
+    'entity_id': 'select.keba_keenergy_12345678_external_heat_source_operating_mode_1',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': 'off',
+  })
+# ---
+# name: test_selects[en][select.keba_keenergy_12345678_external_heat_source_operating_mode_1_options]
+  dict({
+    'flue': 'Flue',
+    'off': 'Off',
+    'on': 'On',
+  })
+# ---
+# name: test_selects[en][select.keba_keenergy_12345678_external_heat_source_operating_mode_2]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'External heat source 2 Operating mode',
+      <SelectEntityCapabilityAttribute.OPTIONS: 'options'>: list([
+        'off',
+        'on',
+      ]),
+    }),
+    'context': <ANY>,
+    'entity_id': 'select.keba_keenergy_12345678_external_heat_source_operating_mode_2',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': 'on',
+  })
+# ---
+# name: test_selects[en][select.keba_keenergy_12345678_external_heat_source_operating_mode_2_options]
+  dict({
+    'off': 'Off',
+    'on': 'On',
+  })
+# ---
+# name: test_selects[en][select.keba_keenergy_12345678_heat_circuit_cooling_curve_2]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Heating circuit 2 Cooling curve',
+      <SelectEntityCapabilityAttribute.OPTIONS: 'options'>: list([
+        'HC1',
+        'HC2',
+        'HC3',
+        'HC4',
+        'HC5',
+        'HC6',
+        'HC7',
+        'HC8',
+        'HC FBH',
+        'HC HK',
+      ]),
+    }),
+    'context': <ANY>,
+    'entity_id': 'select.keba_keenergy_12345678_heat_circuit_cooling_curve_2',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': 'HC5',
+  })
+# ---
+# name: test_selects[en][select.keba_keenergy_12345678_heat_circuit_heating_curve_1]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Heating circuit 1 Heating curve',
+      <SelectEntityCapabilityAttribute.OPTIONS: 'options'>: list([
+        'HC1',
+        'HC2',
+        'HC3',
+        'HC4',
+        'HC5',
+        'HC6',
+        'HC7',
+        'HC8',
+        'HC FBH',
+        'HC HK',
+      ]),
+    }),
+    'context': <ANY>,
+    'entity_id': 'select.keba_keenergy_12345678_heat_circuit_heating_curve_1',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': 'HC6',
+  })
+# ---
+# name: test_selects[en][select.keba_keenergy_12345678_heat_circuit_operating_mode_1]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Heating circuit 1 Operating mode',
-      <EntityStateAttribute.ICON: 'icon'>: 'mdi:cog',
       <SelectEntityCapabilityAttribute.OPTIONS: 'options'>: list([
         'off',
         'auto',
@@ -625,7 +505,7 @@
     'state': 'day',
   })
 # ---
-# name: test_selects_with_cooling[en-select.keba_keenergy_12345678_heat_circuit_operating_mode_1-heat_circuit_operating_mode].1
+# name: test_selects[en][select.keba_keenergy_12345678_heat_circuit_operating_mode_1_options]
   dict({
     'auto': 'Auto',
     'day': 'Day',
@@ -635,11 +515,10 @@
     'party': 'Party',
   })
 # ---
-# name: test_selects_with_cooling[en-select.keba_keenergy_12345678_heat_circuit_operating_mode_2-heat_circuit_operating_mode]
+# name: test_selects[en][select.keba_keenergy_12345678_heat_circuit_operating_mode_2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Heating circuit 2 Operating mode',
-      <EntityStateAttribute.ICON: 'icon'>: 'mdi:cog',
       <SelectEntityCapabilityAttribute.OPTIONS: 'options'>: list([
         'off',
         'auto',
@@ -656,7 +535,7 @@
     'state': 'auto',
   })
 # ---
-# name: test_selects_with_cooling[en-select.keba_keenergy_12345678_heat_circuit_operating_mode_2-heat_circuit_operating_mode].1
+# name: test_selects[en][select.keba_keenergy_12345678_heat_circuit_operating_mode_2_options]
   dict({
     'auto': 'Auto',
     'day': 'Day',
@@ -665,11 +544,64 @@
     'party': 'Party',
   })
 # ---
-# name: test_selects_with_cooling[en-select.keba_keenergy_12345678_operating_mode-system_operating_mode]
+# name: test_selects[en][select.keba_keenergy_12345678_hot_water_tank_operating_mode_1]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Hot water tank 1 Operating mode',
+      <SelectEntityCapabilityAttribute.OPTIONS: 'options'>: list([
+        'off',
+        'auto',
+        'on',
+        'heat_up',
+      ]),
+    }),
+    'context': <ANY>,
+    'entity_id': 'select.keba_keenergy_12345678_hot_water_tank_operating_mode_1',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': 'heat_up',
+  })
+# ---
+# name: test_selects[en][select.keba_keenergy_12345678_hot_water_tank_operating_mode_1_options]
+  dict({
+    'auto': 'Schedule',
+    'heat_up': 'Heat up',
+    'off': 'Off',
+    'on': 'On',
+  })
+# ---
+# name: test_selects[en][select.keba_keenergy_12345678_hot_water_tank_operating_mode_2]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Hot water tank 2 Operating mode',
+      <SelectEntityCapabilityAttribute.OPTIONS: 'options'>: list([
+        'off',
+        'auto',
+        'on',
+        'heat_up',
+      ]),
+    }),
+    'context': <ANY>,
+    'entity_id': 'select.keba_keenergy_12345678_hot_water_tank_operating_mode_2',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': 'off',
+  })
+# ---
+# name: test_selects[en][select.keba_keenergy_12345678_hot_water_tank_operating_mode_2_options]
+  dict({
+    'auto': 'Schedule',
+    'heat_up': 'Heat up',
+    'off': 'Off',
+    'on': 'On',
+  })
+# ---
+# name: test_selects[en][select.keba_keenergy_12345678_operating_mode]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Control unit Operating mode',
-      <EntityStateAttribute.ICON: 'icon'>: 'mdi:cog',
       <SelectEntityCapabilityAttribute.OPTIONS: 'options'>: list([
         'standby',
         'summer',
@@ -686,7 +618,7 @@
     'state': 'auto_heat',
   })
 # ---
-# name: test_selects_with_cooling[en-select.keba_keenergy_12345678_operating_mode-system_operating_mode].1
+# name: test_selects[en][select.keba_keenergy_12345678_operating_mode_options]
   dict({
     'auto': 'Automatic',
     'auto_cool': 'Cooling',
@@ -695,11 +627,56 @@
     'summer': 'Hot water only',
   })
 # ---
-# name: test_selects_without_cooling[de-select.keba_keenergy_12345678_heat_circuit_operating_mode_1-heat_circuit_operating_mode]
+# name: test_selects[en][select.keba_keenergy_12345678_solar_circuit_operating_mode_1]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Solar circuit 1 Operating mode',
+      <SelectEntityCapabilityAttribute.OPTIONS: 'options'>: list([
+        'off',
+        'on',
+      ]),
+    }),
+    'context': <ANY>,
+    'entity_id': 'select.keba_keenergy_12345678_solar_circuit_operating_mode_1',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': 'off',
+  })
+# ---
+# name: test_selects[en][select.keba_keenergy_12345678_solar_circuit_operating_mode_1_options]
+  dict({
+    'off': 'Off',
+    'on': 'On',
+  })
+# ---
+# name: test_selects[en][select.keba_keenergy_12345678_solar_circuit_operating_mode_2]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Solar circuit 2 Operating mode',
+      <SelectEntityCapabilityAttribute.OPTIONS: 'options'>: list([
+        'off',
+        'on',
+      ]),
+    }),
+    'context': <ANY>,
+    'entity_id': 'select.keba_keenergy_12345678_solar_circuit_operating_mode_2',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': 'on',
+  })
+# ---
+# name: test_selects[en][select.keba_keenergy_12345678_solar_circuit_operating_mode_2_options]
+  dict({
+    'off': 'Off',
+    'on': 'On',
+  })
+# ---
+# name: test_selects_without_cooling[de][select.keba_keenergy_12345678_heat_circuit_operating_mode_1]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Heizkreis 1 Betriebsart',
-      <EntityStateAttribute.ICON: 'icon'>: 'mdi:cog',
       <SelectEntityCapabilityAttribute.OPTIONS: 'options'>: list([
         'off',
         'auto',
@@ -717,7 +694,7 @@
     'state': 'day',
   })
 # ---
-# name: test_selects_without_cooling[de-select.keba_keenergy_12345678_heat_circuit_operating_mode_1-heat_circuit_operating_mode].1
+# name: test_selects_without_cooling[de][select.keba_keenergy_12345678_heat_circuit_operating_mode_1_options]
   dict({
     'auto': 'Auto',
     'day': 'Tag',
@@ -727,11 +704,10 @@
     'party': 'Party',
   })
 # ---
-# name: test_selects_without_cooling[de-select.keba_keenergy_12345678_heat_circuit_operating_mode_2-heat_circuit_operating_mode]
+# name: test_selects_without_cooling[de][select.keba_keenergy_12345678_heat_circuit_operating_mode_2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Heizkreis 2 Betriebsart',
-      <EntityStateAttribute.ICON: 'icon'>: 'mdi:cog',
       <SelectEntityCapabilityAttribute.OPTIONS: 'options'>: list([
         'off',
         'auto',
@@ -749,7 +725,7 @@
     'state': 'auto',
   })
 # ---
-# name: test_selects_without_cooling[de-select.keba_keenergy_12345678_heat_circuit_operating_mode_2-heat_circuit_operating_mode].1
+# name: test_selects_without_cooling[de][select.keba_keenergy_12345678_heat_circuit_operating_mode_2_options]
   dict({
     'auto': 'Auto',
     'day': 'Tag',
@@ -759,11 +735,10 @@
     'party': 'Party',
   })
 # ---
-# name: test_selects_without_cooling[de-select.keba_keenergy_12345678_operating_mode-system_operating_mode]
+# name: test_selects_without_cooling[de][select.keba_keenergy_12345678_operating_mode]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Bedieneinheit Betriebsart',
-      <EntityStateAttribute.ICON: 'icon'>: 'mdi:cog',
       <SelectEntityCapabilityAttribute.OPTIONS: 'options'>: list([
         'standby',
         'summer',
@@ -778,18 +753,17 @@
     'state': 'auto_heat',
   })
 # ---
-# name: test_selects_without_cooling[de-select.keba_keenergy_12345678_operating_mode-system_operating_mode].1
+# name: test_selects_without_cooling[de][select.keba_keenergy_12345678_operating_mode_options]
   dict({
     'auto_heat': 'Heizen',
     'standby': 'Standby',
     'summer': 'nur Warmwasser',
   })
 # ---
-# name: test_selects_without_cooling[en-select.keba_keenergy_12345678_heat_circuit_operating_mode_1-heat_circuit_operating_mode]
+# name: test_selects_without_cooling[en][select.keba_keenergy_12345678_heat_circuit_operating_mode_1]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Heating circuit 1 Operating mode',
-      <EntityStateAttribute.ICON: 'icon'>: 'mdi:cog',
       <SelectEntityCapabilityAttribute.OPTIONS: 'options'>: list([
         'off',
         'auto',
@@ -807,7 +781,7 @@
     'state': 'day',
   })
 # ---
-# name: test_selects_without_cooling[en-select.keba_keenergy_12345678_heat_circuit_operating_mode_1-heat_circuit_operating_mode].1
+# name: test_selects_without_cooling[en][select.keba_keenergy_12345678_heat_circuit_operating_mode_1_options]
   dict({
     'auto': 'Auto',
     'day': 'Day',
@@ -817,11 +791,10 @@
     'party': 'Party',
   })
 # ---
-# name: test_selects_without_cooling[en-select.keba_keenergy_12345678_heat_circuit_operating_mode_2-heat_circuit_operating_mode]
+# name: test_selects_without_cooling[en][select.keba_keenergy_12345678_heat_circuit_operating_mode_2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Heating circuit 2 Operating mode',
-      <EntityStateAttribute.ICON: 'icon'>: 'mdi:cog',
       <SelectEntityCapabilityAttribute.OPTIONS: 'options'>: list([
         'off',
         'auto',
@@ -839,7 +812,7 @@
     'state': 'auto',
   })
 # ---
-# name: test_selects_without_cooling[en-select.keba_keenergy_12345678_heat_circuit_operating_mode_2-heat_circuit_operating_mode].1
+# name: test_selects_without_cooling[en][select.keba_keenergy_12345678_heat_circuit_operating_mode_2_options]
   dict({
     'auto': 'Auto',
     'day': 'Day',
@@ -849,11 +822,10 @@
     'party': 'Party',
   })
 # ---
-# name: test_selects_without_cooling[en-select.keba_keenergy_12345678_operating_mode-system_operating_mode]
+# name: test_selects_without_cooling[en][select.keba_keenergy_12345678_operating_mode]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Control unit Operating mode',
-      <EntityStateAttribute.ICON: 'icon'>: 'mdi:cog',
       <SelectEntityCapabilityAttribute.OPTIONS: 'options'>: list([
         'standby',
         'summer',
@@ -868,7 +840,7 @@
     'state': 'auto_heat',
   })
 # ---
-# name: test_selects_without_cooling[en-select.keba_keenergy_12345678_operating_mode-system_operating_mode].1
+# name: test_selects_without_cooling[en][select.keba_keenergy_12345678_operating_mode_options]
   dict({
     'auto_heat': 'Heating',
     'standby': 'Standby',

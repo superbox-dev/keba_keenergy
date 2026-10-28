@@ -1,7 +1,13 @@
+# Copyright 2025-2026 Michael Hacker
+# SPDX-License-Identifier: Apache-2.0
+"""Fixtures for the KEBA KeEnergy tests."""
+
 from __future__ import annotations
 
+import asyncio
 import json
 import logging
+from http import HTTPStatus
 from typing import TYPE_CHECKING
 from typing import Any
 from unittest.mock import patch
@@ -9,6 +15,7 @@ from unittest.mock import patch
 import pytest
 from homeassistant.const import CONF_HOST
 from homeassistant.const import CONF_SSL
+from keba_keenergy_api.constants import MESSAGE_ID_SUFFIX
 from pytest_homeassistant_custom_component.common import MockConfigEntry
 from pytest_homeassistant_custom_component.syrupy import HomeAssistantSnapshotExtension
 from pytest_homeassistant_custom_component.test_util.aiohttp import AiohttpClientMocker
@@ -16,14 +23,17 @@ from pytest_homeassistant_custom_component.test_util.aiohttp import AiohttpClien
 from yarl import URL
 
 from custom_components.keba_keenergy.const import DOMAIN
+from custom_components.keba_keenergy.const import PLATFORMS
 from tests.api_data import DEVICE_INFO_RESPONSE
-from tests.api_data import FILTER_REQUESTS
+from tests.api_data import HEATING_CURVES_RESPONSE
 from tests.api_data import HMI_RESPONSE
 from tests.api_data import SYSTEM_RESPONSE
 from tests.api_data import TIMEZONE_RESPONSE
 
 if TYPE_CHECKING:
     from collections.abc import AsyncGenerator
+    from collections.abc import Awaitable
+    from collections.abc import Callable
     from collections.abc import Generator
 
     from _pytest.fixtures import SubRequest
@@ -38,8 +48,8 @@ def snapshot(snapshot: SnapshotAssertion) -> SnapshotAssertion:
 
 
 @pytest.fixture(autouse=True)
-def auto_enable_custom_integrations(enable_custom_integrations: None) -> None:  # noqa: ARG001
-    return
+def auto_enable_custom_integrations(enable_custom_integrations: None) -> None:
+    """Enable the custom integrations in Home Assistant."""
 
 
 @pytest.fixture(autouse=True)
@@ -48,7 +58,6 @@ async def fail_on_log_errors(
     request: pytest.FixtureRequest,
 ) -> AsyncGenerator[None]:
     """Fail test on Home Assistant or integration errors."""
-
     if request.node.get_closest_marker("no_fail_on_keba_errors"):
         yield
         return
@@ -59,15 +68,17 @@ async def fail_on_log_errors(
         """Capture error log records."""
 
         def emit(self, record: logging.LogRecord) -> None:
+            """Capture the record if it is an error."""
             if record.levelno >= logging.ERROR:
                 records.append(record)
 
     handler: ErrorHandler = ErrorHandler()
 
+    # The entity platforms log their errors (e.g. duplicate unique IDs) with the logger of the platform.
     loggers: list[logging.Logger] = [
         logging.getLogger("custom_components.keba_keenergy"),
-        logging.getLogger("homeassistant.components.sensor"),
         logging.getLogger("homeassistant.helpers.entity_platform"),
+        *(logging.getLogger(f"homeassistant.components.{platform}") for platform in PLATFORMS),
     ]
 
     for logger in loggers:
@@ -87,19 +98,39 @@ async def fail_on_log_errors(
 
 
 class FakeKebaKeEnergyAPI:
-    def __init__(self, aioclient_mock: AiohttpClientMocker) -> None:
+    """Fake Web HMI of a KEBA KeEnergy control unit, based on the mocked HTTP requests."""
+
+    def __init__(
+        self,
+        hass: HomeAssistant,
+        aioclient_mock: AiohttpClientMocker,
+        config_entry: MockConfigEntry,
+    ) -> None:
+        """Initialize the fake Web HMI.
+
+        Parameters
+        ----------
+        hass
+            The Home Assistant instance of the test.
+        aioclient_mock
+            The mocker of the HTTP requests.
+        config_entry
+            The config entry that is set up by `setup_integration()`.
+
+        """
+        self.hass: HomeAssistant = hass
         self.aioclient_mock: AiohttpClientMocker = aioclient_mock
-        self._responses: list[list[dict[str, Any]]] = []
-
-    @property
-    def responses(self) -> list[list[dict[str, Any]]]:
-        return self._responses
-
-    @responses.setter
-    def responses(self, value: list[list[dict[str, Any]]]) -> None:
-        self._responses = value
+        self.config_entry: MockConfigEntry = config_entry
+        self.responses: list[Exception | HTTPStatus | list[dict[str, Any]]] = []
+        self.heating_curves: HTTPStatus | list[list[dict[str, Any]]] = HEATING_CURVES_RESPONSE
+        self.system_name: str = SYSTEM_RESPONSE["name"]
+        self.write_status: HTTPStatus = HTTPStatus.OK
+        self.unsupported_variables: set[str] = set()
+        self.message_ids: dict[str, int] = {}
+        self.during_read: Callable[[], Awaitable[None]] | None = None
 
     def register_auth_request(self, host: str, /, *, status: int = 200, exc: Exception | None = None) -> None:
+        """Register the request that checks if the Web HMI requires authentication."""
         self.aioclient_mock.get(f"https://{host}", status=status, exc=exc)
 
     def register_get_device_info(
@@ -111,6 +142,7 @@ class FakeKebaKeEnergyAPI:
         status: int = 200,
         exc: Exception | None = None,
     ) -> None:
+        """Register the request of the device info."""
         schema: str = "https" if ssl else "http"
 
         self.aioclient_mock.post(
@@ -122,13 +154,25 @@ class FakeKebaKeEnergyAPI:
         )
 
     def register_requests(self, host: str, /, *, ssl: bool = False) -> None:
+        """Register all requests of the setup and the updates.
+
+        The read requests return the `responses` in order, an `HTTPStatus` returns an empty response with this status
+        and an exception (e.g. `TimeoutError`) is raised by the request.
+        The message ids of the sensors come from `message_ids` (variable name to id, 0 if not given).
+        The next read of the `responses` awaits `during_read` once before it responds, e.g. to set a value during an
+        update.
+        The requests of `filter_request()` succeed, except for the `unsupported_variables`, which the Web HMI does not
+        know and which are also left out of the responses. The values of the heating curves come from `heating_curves`
+        (an `HTTPStatus` fails them). The system name and the status of the write requests can be changed with
+        `system_name` and `write_status`.
+        """
         schema: str = "https" if ssl else "http"
 
         self.register_get_device_info(host, ssl=ssl)
 
         self.aioclient_mock.post(
             f"{schema}://{host}/swupdate?action=getSystemInstalled",
-            text=json.dumps(SYSTEM_RESPONSE),
+            text=json.dumps({**SYSTEM_RESPONSE, "name": self.system_name}),
             headers={"Content-Type": "application/json;charset=utf-8"},
         )
 
@@ -145,54 +189,150 @@ class FakeKebaKeEnergyAPI:
         )
 
         self.aioclient_mock.post(
-            f"{schema}://{host}/var/readVarChildren",
-            text=json.dumps(FILTER_REQUESTS),
-            headers={"Content-Type": "application/json;charset=utf-8"},
-        )
-
-        self.aioclient_mock.post(
             f"{schema}://{host}/var/readWriteVars",
-            text="[{}]",
             params={"action": "set"},
-            headers={"Content-Type": "application/json;charset=utf-8"},
+            side_effect=self._write_side_effect,
         )
 
         self.aioclient_mock.post(
             f"{schema}://{host}/var/readWriteVars",
-            side_effect=self._add_sideeffect,
+            side_effect=self._read_side_effect,
         )
 
-    async def _add_sideeffect(self, method: str, url: URL, *args: Any) -> AiohttpClientMockResponse:  # noqa: ARG002
-        if len(self._responses) > 0:
-            response = self._responses.pop(0)
+    async def _write_side_effect(self, method: str, url: URL, *_: object) -> AiohttpClientMockResponse:
+        # A real request suspends, so other writes can queue for the write lock in the meantime.
+        await asyncio.sleep(0)
 
-            return AiohttpClientMockResponse(
-                method,
-                url=url,
-                text=json.dumps(response),
-                headers={"Content-Type": "application/json;charset=utf-8"},
-            )
+        return AiohttpClientMockResponse(
+            method,
+            url=url,
+            text="[{}]",
+            status=self.write_status,
+            headers={"Content-Type": "application/json;charset=utf-8"},
+        )
 
-        return AiohttpClientMockResponse(method, url=url)
+    async def _read_side_effect(self, method: str, url: URL, data: object, *_: object) -> AiohttpClientMockResponse:
+        payload: list[dict[str, str]] = json.loads(str(data))
+        response: Exception | HTTPStatus | list[dict[str, Any]]
+
+        if all(item["name"].endswith(MESSAGE_ID_SUFFIX) for item in payload):
+            response = [{"name": item["name"], "value": str(self.message_ids.get(item["name"], 0))} for item in payload]
+        elif self.is_filter_request(data):
+            unknown: list[str] = [item["name"] for item in payload if item["name"] in self.unsupported_variables]
+
+            if unknown:
+                # The Web HMI rejects the whole request and names the first unknown variable.
+                return AiohttpClientMockResponse(
+                    method,
+                    url=url,
+                    status=HTTPStatus.INTERNAL_SERVER_ERROR,
+                    text=f"Reading variable: {unknown[0]} failed",
+                )
+
+            response = []
+        elif all(".linTabPool[" in item["name"] for item in payload):
+            response = self._heating_curve_response(payload)
+        elif not self.responses:
+            return AiohttpClientMockResponse(method, url=url)
+        else:
+            response = self.responses.pop(0)
+
+            if self.during_read:
+                during_read: Callable[[], Awaitable[None]] = self.during_read
+                self.during_read = None
+                await during_read()
+
+            if isinstance(response, list):
+                response = [value for value in response if value["name"] not in self.unsupported_variables]
+
+        if isinstance(response, Exception):
+            raise response
+
+        if isinstance(response, HTTPStatus):
+            return AiohttpClientMockResponse(method, url=url, status=response)
+
+        return AiohttpClientMockResponse(
+            method,
+            url=url,
+            text=json.dumps(response),
+            headers={"Content-Type": "application/json;charset=utf-8"},
+        )
+
+    def _heating_curve_response(self, payload: list[dict[str, str]], /) -> HTTPStatus | list[dict[str, Any]]:
+        """Return the requested values of the heating curves.
+
+        The names are read alone (`get_available_heating_curves()`), the points with the name of their heating curve,
+        so `heating_curves` holds the names and the points separately, like the Web HMI may return different names.
+        """
+        if isinstance(self.heating_curves, HTTPStatus):
+            return self.heating_curves
+
+        names, points = self.heating_curves
+        is_names_request: bool = all(item["name"].endswith(".name") for item in payload)
+        values: dict[str, dict[str, Any]] = {value["name"]: value for value in (names if is_names_request else points)}
+        return [values[item["name"]] for item in payload]
+
+    async def setup_integration(self) -> None:
+        """Register all requests for the host of the config entry and set up the integration."""
+        self.register_requests(self.config_entry.data[CONF_HOST], ssl=self.config_entry.data[CONF_SSL])
+        self.config_entry.add_to_hass(self.hass)
+
+        assert await self.hass.config_entries.async_setup(self.config_entry.entry_id)
+        await self.hass.async_block_till_done()
+
+    @staticmethod
+    def is_filter_request(data: object, /) -> bool:
+        """Return True for a request of `filter_request()`, which reads all values without attributes.
+
+        The values of the heating curves are also read without attributes, but never by `filter_request()`.
+        """
+        payload: list[dict[str, str]] = json.loads(str(data))
+        return all(item["attr"] == "0" and ".linTabPool[" not in item["name"] for item in payload)
+
+    def read_requests(self) -> list[str]:
+        """Return the bodies of all read requests, in order."""
+        return [
+            str(data)
+            for method, url, data, _ in self.aioclient_mock.mock_calls
+            if method == "POST"
+            and url.path == "/var/readWriteVars"
+            and "action" not in url.query
+            and not self.is_filter_request(data)
+        ]
 
     def assert_called_write_with(self, data: str, /) -> None:
-        assert (
-            "POST",
-            URL("http://10.0.0.100/var/readWriteVars?action=set"),
-            data,
-            {},
-        ) in self.aioclient_mock.mock_calls
+        """Assert that the data was written to the Web HMI."""
+        assert data in self.write_requests()
+
+    def write_requests(self) -> list[str]:
+        """Return the bodies of all write requests, in order."""
+        return [
+            str(data)
+            for method, url, data, _ in self.aioclient_mock.mock_calls
+            if method == "POST" and url == URL("http://10.0.0.100/var/readWriteVars?action=set")
+        ]
 
 
 @pytest.fixture
 async def fake_api(
+    hass: HomeAssistant,
     aioclient_mock: AiohttpClientMocker,
+    config_entry: MockConfigEntry,
 ) -> FakeKebaKeEnergyAPI:
-    return FakeKebaKeEnergyAPI(aioclient_mock)
+    """Return the fake Web HMI."""
+    return FakeKebaKeEnergyAPI(hass, aioclient_mock, config_entry)
+
+
+@pytest.fixture
+def language(hass: HomeAssistant, request: SubRequest) -> str:
+    """Set the language of Home Assistant, parametrized indirectly."""
+    hass.config.language = request.param
+    return request.param
 
 
 @pytest.fixture
 def config_entry(request: SubRequest) -> MockConfigEntry:
+    """Return the config entry, parametrized indirectly with `data` and `options` to update."""
     mock_config_entry_data: dict[str, Any] = {
         "title": "KEBA KeEnergy (ap4400.local)",
         "data": {

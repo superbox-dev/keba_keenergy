@@ -1,3 +1,7 @@
+# Copyright 2025-2026 Michael Hacker
+# SPDX-License-Identifier: Apache-2.0
+"""Tests for the select entities."""
+
 from __future__ import annotations
 
 from typing import TYPE_CHECKING
@@ -6,166 +10,71 @@ import pytest
 from homeassistant.components.select import ATTR_OPTION
 from homeassistant.components.select import DOMAIN as SELECT_DOMAIN
 from homeassistant.components.select import SERVICE_SELECT_OPTION
-from homeassistant.components.sensor.const import ATTR_OPTIONS
 from homeassistant.const import ATTR_ENTITY_ID
-from homeassistant.const import CONF_HOST
+from homeassistant.const import Platform
 from homeassistant.core import HomeAssistant
 from homeassistant.core import State
 from homeassistant.exceptions import ServiceValidationError
 
-from tests import init_translations
-from tests import setup_integration
-from tests.api_data import HEATING_CURVE_NAMES_RESPONSE
-from tests.api_data import HEATING_CURVES_RESPONSE_1_1
-from tests.api_data import MULTIPLE_POSITION_DATA_RESPONSE_1
+from tests import get_option_translations
+from tests import get_platform_states
+from tests.api_data import MULTIPLE_POSITION_DATA_RESPONSE
 from tests.api_data import MULTIPLE_POSITIONS_RESPONSE
 from tests.api_data import get_multiple_position_fixed_data_response
+from tests.test_select_data import HEATING_CURVE_SELECTS
 
 if TYPE_CHECKING:
-    from pytest_homeassistant_custom_component.common import MockConfigEntry
     from syrupy.assertion import SnapshotAssertion
 
     from tests.conftest import FakeKebaKeEnergyAPI
 
 
-@pytest.mark.parametrize(
-    ("entity", "translation"),
-    [
-        # buffer tank
-        ("select.keba_keenergy_12345678_buffer_tank_operating_mode_1", "buffer_tank_operating_mode"),
-        ("select.keba_keenergy_12345678_buffer_tank_operating_mode_2", "buffer_tank_operating_mode"),
-        # hot water tank
-        ("select.keba_keenergy_12345678_hot_water_tank_operating_mode_1", "hot_water_tank_operating_mode"),
-        ("select.keba_keenergy_12345678_hot_water_tank_operating_mode_2", "hot_water_tank_operating_mode"),
-        # heating circuit
-        ("select.keba_keenergy_12345678_heat_circuit_cooling_curve_2", None),
-        ("select.keba_keenergy_12345678_heat_circuit_heating_curve_1", None),
-        # solar circuit
-        ("select.keba_keenergy_12345678_solar_circuit_operating_mode_1", "solar_circuit_operating_mode"),
-        ("select.keba_keenergy_12345678_solar_circuit_operating_mode_2", "solar_circuit_operating_mode"),
-        # external heat source
-        ("select.keba_keenergy_12345678_external_heat_source_operating_mode_1", "external_heat_source_operating_mode"),
-        ("select.keba_keenergy_12345678_external_heat_source_operating_mode_2", "external_heat_source_operating_mode"),
-    ],
-)
-@pytest.mark.parametrize("language", ["en", "de"])
-@pytest.mark.usefixtures("entity_registry_enabled_by_default")
+@pytest.mark.parametrize("language", ["en", "de"], indirect=True, ids=["en", "de"])
+@pytest.mark.usefixtures("entity_registry_enabled_by_default", "language")
 async def test_selects(
     hass: HomeAssistant,
-    config_entry: MockConfigEntry,
     fake_api: FakeKebaKeEnergyAPI,
     snapshot: SnapshotAssertion,
-    language: str,
-    entity: str,
-    translation: str | None,
 ) -> None:
+    """Test the states and the translated options of all select entities, with cooling."""
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
-        HEATING_CURVE_NAMES_RESPONSE,
         get_multiple_position_fixed_data_response(has_passive_cooling="true"),
-        MULTIPLE_POSITION_DATA_RESPONSE_1,
-        *HEATING_CURVES_RESPONSE_1_1,
+        MULTIPLE_POSITION_DATA_RESPONSE,
     ]
-    fake_api.register_requests(config_entry.data[CONF_HOST])
-    hass.config.language = language
+    await fake_api.setup_integration()
 
-    await setup_integration(hass, config_entry)
+    for state in get_platform_states(hass, fake_api.config_entry, Platform.SELECT):
+        assert state == snapshot(name=state.entity_id)
 
-    _entity: State | None = hass.states.get(entity)
-    assert isinstance(_entity, State)
-    assert _entity == snapshot
-
-    if translation:
-        translations: dict[str, str] = await init_translations(hass, config_entry, category="entity")
-
-        assert {
-            opt: translations[f"component.keba_keenergy.entity.select.{translation}.state.{opt}"]
-            for opt in _entity.attributes[ATTR_OPTIONS]
-        } == snapshot
+        if state.entity_id not in HEATING_CURVE_SELECTS:
+            assert await get_option_translations(hass, state) == snapshot(name=f"{state.entity_id}_options")
 
 
-@pytest.mark.parametrize(
-    ("entity", "translation"),
-    [
-        # system
-        ("select.keba_keenergy_12345678_operating_mode", "system_operating_mode"),
-        # heating circuit
-        ("select.keba_keenergy_12345678_heat_circuit_operating_mode_1", "heat_circuit_operating_mode"),
-        ("select.keba_keenergy_12345678_heat_circuit_operating_mode_2", "heat_circuit_operating_mode"),
-    ],
-)
-@pytest.mark.parametrize("language", ["en", "de"])
-async def test_selects_with_cooling(
-    hass: HomeAssistant,
-    config_entry: MockConfigEntry,
-    fake_api: FakeKebaKeEnergyAPI,
-    snapshot: SnapshotAssertion,
-    language: str,
-    entity: str,
-    translation: str,
-) -> None:
-    fake_api.responses = [
-        MULTIPLE_POSITIONS_RESPONSE,
-        HEATING_CURVE_NAMES_RESPONSE,
-        get_multiple_position_fixed_data_response(has_passive_cooling="true"),
-        MULTIPLE_POSITION_DATA_RESPONSE_1,
-        *HEATING_CURVES_RESPONSE_1_1,
-    ]
-    fake_api.register_requests(config_entry.data[CONF_HOST])
-    hass.config.language = language
-
-    await setup_integration(hass, config_entry)
-    translations: dict[str, str] = await init_translations(hass, config_entry, category="entity")
-
-    _entity: State | None = hass.states.get(entity)
-    assert isinstance(_entity, State)
-    assert _entity == snapshot
-    assert {
-        opt: translations[f"component.keba_keenergy.entity.select.{translation}.state.{opt}"]
-        for opt in _entity.attributes[ATTR_OPTIONS]
-    } == snapshot
-
-
-@pytest.mark.parametrize(
-    ("entity", "translation"),
-    [
-        # system
-        ("select.keba_keenergy_12345678_operating_mode", "system_operating_mode"),
-        # heating circuit
-        ("select.keba_keenergy_12345678_heat_circuit_operating_mode_1", "heat_circuit_operating_mode"),
-        ("select.keba_keenergy_12345678_heat_circuit_operating_mode_2", "heat_circuit_operating_mode"),
-    ],
-)
-@pytest.mark.parametrize("language", ["en", "de"])
+@pytest.mark.parametrize("language", ["en", "de"], indirect=True, ids=["en", "de"])
+@pytest.mark.usefixtures("language")
 async def test_selects_without_cooling(
     hass: HomeAssistant,
-    config_entry: MockConfigEntry,
     fake_api: FakeKebaKeEnergyAPI,
     snapshot: SnapshotAssertion,
-    language: str,
-    entity: str,
-    translation: str,
 ) -> None:
+    """Test the operating mode selects of a setup without cooling."""
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
-        HEATING_CURVE_NAMES_RESPONSE,
         get_multiple_position_fixed_data_response(has_passive_cooling="false", has_cooling_circuits=False),
-        MULTIPLE_POSITION_DATA_RESPONSE_1,
-        *HEATING_CURVES_RESPONSE_1_1,
+        MULTIPLE_POSITION_DATA_RESPONSE,
     ]
-    fake_api.register_requests(config_entry.data[CONF_HOST])
-    hass.config.language = language
+    await fake_api.setup_integration()
 
-    await setup_integration(hass, config_entry)
-    translations: dict[str, str] = await init_translations(hass, config_entry, category="entity")
-
-    _entity: State | None = hass.states.get(entity)
-    assert isinstance(_entity, State)
-    assert _entity == snapshot
-    assert {
-        opt: translations[f"component.keba_keenergy.entity.select.{translation}.state.{opt}"]
-        for opt in _entity.attributes[ATTR_OPTIONS]
-    } == snapshot
+    for entity_id in (
+        "select.keba_keenergy_12345678_operating_mode",
+        "select.keba_keenergy_12345678_heat_circuit_operating_mode_1",
+        "select.keba_keenergy_12345678_heat_circuit_operating_mode_2",
+    ):
+        state: State | None = hass.states.get(entity_id)
+        assert isinstance(state, State)
+        assert state == snapshot(name=entity_id)
+        assert await get_option_translations(hass, state) == snapshot(name=f"{entity_id}_options")
 
 
 @pytest.mark.parametrize(
@@ -197,34 +106,43 @@ async def test_selects_without_cooling(
             '[{"name": "APPL.CtrlAppl.sParam.extHeatSource[0].param.operatingMode", "value": "1"}]',
         ),
         (
+            "select.keba_keenergy_12345678_external_heat_source_operating_mode_1",
+            "flue",
+            '[{"name": "APPL.CtrlAppl.sParam.extHeatSource[0].param.operatingMode", "value": "2"}]',
+        ),
+        (
             "select.keba_keenergy_12345678_heat_circuit_heating_curve_1",
             "HC FBH",
             '[{"name": "APPL.CtrlAppl.sParam.heatCircuit[0].param.linTab.fileName", "value": "HC FBH"}]',
         ),
     ],
+    ids=[
+        "operating_mode",
+        "heat_circuit_operating_mode",
+        "solar_circuit_operating_mode",
+        "hot_water_tank_operating_mode",
+        "external_heat_source_operating_mode",
+        "external_heat_source_operating_mode_flue",
+        "heat_circuit_heating_curve",
+    ],
 )
 @pytest.mark.usefixtures("entity_registry_enabled_by_default")
 async def test_select_option(
     hass: HomeAssistant,
-    config_entry: MockConfigEntry,
     fake_api: FakeKebaKeEnergyAPI,
     entity_id: str,
     option: int,
     expected: str,
 ) -> None:
+    """Test selecting an option of a select entity."""
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
-        HEATING_CURVE_NAMES_RESPONSE,
         get_multiple_position_fixed_data_response(has_passive_cooling="true"),
-        MULTIPLE_POSITION_DATA_RESPONSE_1,
-        *HEATING_CURVES_RESPONSE_1_1,
-        # Read API after services call
-        MULTIPLE_POSITION_DATA_RESPONSE_1,
-        *HEATING_CURVES_RESPONSE_1_1,
+        MULTIPLE_POSITION_DATA_RESPONSE,
+        # Read the API after the action call.
+        MULTIPLE_POSITION_DATA_RESPONSE,
     ]
-    fake_api.register_requests("10.0.0.100")
-
-    await setup_integration(hass, config_entry)
+    await fake_api.setup_integration()
 
     state: State | None = hass.states.get(entity_id)
     assert isinstance(state, State)
@@ -254,28 +172,24 @@ async def test_select_option(
             ),
         ),
     ],
+    ids=["operating_mode"],
 )
 async def test_select_invalid_option(
     hass: HomeAssistant,
-    config_entry: MockConfigEntry,
     fake_api: FakeKebaKeEnergyAPI,
     entity_id: str,
     option: int,
     expected: str,
 ) -> None:
+    """Test selecting an invalid option of a select entity."""
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
-        HEATING_CURVE_NAMES_RESPONSE,
         get_multiple_position_fixed_data_response(has_passive_cooling="false", has_cooling_circuits=False),
-        MULTIPLE_POSITION_DATA_RESPONSE_1,
-        *HEATING_CURVES_RESPONSE_1_1,
-        # Read API after services call
-        MULTIPLE_POSITION_DATA_RESPONSE_1,
-        *HEATING_CURVES_RESPONSE_1_1,
+        MULTIPLE_POSITION_DATA_RESPONSE,
+        # Read the API after the action call.
+        MULTIPLE_POSITION_DATA_RESPONSE,
     ]
-    fake_api.register_requests("10.0.0.100")
-
-    await setup_integration(hass, config_entry)
+    await fake_api.setup_integration()
 
     state: State | None = hass.states.get(entity_id)
     assert isinstance(state, State)
@@ -290,3 +204,28 @@ async def test_select_invalid_option(
             },
             blocking=True,
         )
+
+
+async def test_select_unchanged_option(
+    hass: HomeAssistant,
+    fake_api: FakeKebaKeEnergyAPI,
+) -> None:
+    """Test that the current option of a select entity is not written again."""
+    fake_api.responses = [
+        MULTIPLE_POSITIONS_RESPONSE,
+        get_multiple_position_fixed_data_response(),
+        MULTIPLE_POSITION_DATA_RESPONSE,
+    ]
+    await fake_api.setup_integration()
+
+    await hass.services.async_call(
+        domain=SELECT_DOMAIN,
+        service=SERVICE_SELECT_OPTION,
+        service_data={
+            ATTR_ENTITY_ID: "select.keba_keenergy_12345678_hot_water_tank_operating_mode_1",
+            ATTR_OPTION: "heat_up",
+        },
+        blocking=True,
+    )
+
+    assert fake_api.write_requests() == []
