@@ -121,6 +121,11 @@ async def test_numbers(
             0.3,
             '[{"name": "APPL.CtrlAppl.sParam.heatCircuit[0].param.heatCurveGradient", "value": "0.3"}]',
         ),
+        (
+            "number.keba_keenergy_12345678_external_heat_source_min_runtime_excess_energy_1",
+            30,
+            '[{"name": "APPL.CtrlAppl.sParam.extHeatSource[0].param.minRunTimeExcessEnergy", "value": "1800.0"}]',
+        ),
     ],
     ids=[
         "solar_circuit_target_temperature_1",
@@ -134,6 +139,7 @@ async def test_numbers(
         "heat_circuit_target_temperature_offset",
         "heat_circuit_heating_curve_offset",
         "heat_circuit_heating_curve_slope",
+        "external_heat_source_min_runtime_excess_energy",
     ],
 )
 @pytest.mark.usefixtures("entity_registry_enabled_by_default")
@@ -216,6 +222,14 @@ async def test_set_value(
                 r"is outside valid range 0\.0 - 5\.0"
             ),
         ),
+        (
+            "number.keba_keenergy_12345678_external_heat_source_min_runtime_excess_energy_1",
+            181,
+            (
+                r"Value 181\.0 for number\.keba_keenergy_12345678_external_heat_source_min_runtime_excess_energy_1 "
+                r"is outside valid range 0\.0 - 180\.0"
+            ),
+        ),
     ],
     ids=[
         "hot_water_tank_target_temperature",
@@ -223,6 +237,7 @@ async def test_set_value(
         "heat_circuit_target_temperature_offset",
         "heat_circuit_heating_curve_offset",
         "heat_circuit_heating_curve_slope",
+        "external_heat_source_min_runtime_excess_energy",
     ],
 )
 @pytest.mark.usefixtures("entity_registry_enabled_by_default")

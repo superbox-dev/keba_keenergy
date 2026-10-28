@@ -156,7 +156,7 @@
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'duration',
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Externe Wärmequelle 1 Mindestlaufzeit (PV-Überschuss)',
-      <NumberEntityCapabilityAttribute.MAX: 'max'>: 10800.0,
+      <NumberEntityCapabilityAttribute.MAX: 'max'>: 180.0,
       <NumberEntityCapabilityAttribute.MIN: 'min'>: 0.0,
       <NumberEntityCapabilityAttribute.MODE: 'mode'>: <NumberMode.AUTO: 'auto'>,
       <NumberEntityCapabilityAttribute.STEP: 'step'>: 1,
@@ -175,7 +175,7 @@
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'duration',
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Externe Wärmequelle 2 Mindestlaufzeit (PV-Überschuss)',
-      <NumberEntityCapabilityAttribute.MAX: 'max'>: 10800.0,
+      <NumberEntityCapabilityAttribute.MAX: 'max'>: 180.0,
       <NumberEntityCapabilityAttribute.MIN: 'min'>: 0.0,
       <NumberEntityCapabilityAttribute.MODE: 'mode'>: <NumberMode.AUTO: 'auto'>,
       <NumberEntityCapabilityAttribute.STEP: 'step'>: 1,
@@ -1032,7 +1032,7 @@
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'duration',
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'External heat source 1 Minimum runtime (PV surplus)',
-      <NumberEntityCapabilityAttribute.MAX: 'max'>: 10800.0,
+      <NumberEntityCapabilityAttribute.MAX: 'max'>: 180.0,
       <NumberEntityCapabilityAttribute.MIN: 'min'>: 0.0,
       <NumberEntityCapabilityAttribute.MODE: 'mode'>: <NumberMode.AUTO: 'auto'>,
       <NumberEntityCapabilityAttribute.STEP: 'step'>: 1,
@@ -1051,7 +1051,7 @@
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'duration',
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'External heat source 2 Minimum runtime (PV surplus)',
-      <NumberEntityCapabilityAttribute.MAX: 'max'>: 10800.0,
+      <NumberEntityCapabilityAttribute.MAX: 'max'>: 180.0,
       <NumberEntityCapabilityAttribute.MIN: 'min'>: 0.0,
       <NumberEntityCapabilityAttribute.MODE: 'mode'>: <NumberMode.AUTO: 'auto'>,
       <NumberEntityCapabilityAttribute.STEP: 'step'>: 1,

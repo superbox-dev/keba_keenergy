@@ -44,7 +44,7 @@ class KebaKeEnergyNumberEntityDescription(
 ):
     """Class describing KEBA KeEnergy number entities."""
 
-    scale: int
+    scale: float
 
 
 class KebaKeEnergyNumberEntity(KebaKeEnergyEntity, NumberEntity):
@@ -511,7 +511,7 @@ NUMBER_TYPES: Final[dict[str, tuple[KebaKeEnergyNumberEntityDescription, ...]]] 
             native_unit_of_measurement=UnitOfTime.MINUTES,
             native_step=1,
             translation_key="min_runtime_excess_energy",
-            scale=1,
+            scale=1 / 60,
         ),
     ),
 }

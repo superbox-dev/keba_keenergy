@@ -331,14 +331,14 @@
               'lower_limit': '0',
               'upper_limit': '10800',
             }),
-            'value': 5,
+            'value': 300,
           }),
           dict({
             'attributes': dict({
               'lower_limit': '0',
               'upper_limit': '10800',
             }),
-            'value': 5,
+            'value': 300,
           }),
         ]),
         'operating_mode': list([

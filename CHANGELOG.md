@@ -102,6 +102,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   and `inflow_off` were swapped. The sensors of the operating modes have the texts of the selects, e.g. `Schedule`
   instead of `Auto` for the hot water tank. Entity IDs, unique IDs and states are unchanged.
   ([Issue #72][issue-72])
+- Fixed the number `min_runtime_excess_energy` of the external heat source, which showed and wrote the seconds of
+  the control unit as minutes. It now converts them to minutes (0 to 180 min). Values set via Home Assistant before
+  were 60 times too small and have to be set again. ([Issue #80][issue-80])
 
 ### Security
 
@@ -110,6 +113,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [issue-67]: https://github.com/superbox-dev/keba_keenergy/issues/67
 [issue-71]: https://github.com/superbox-dev/keba_keenergy/issues/71
 [issue-72]: https://github.com/superbox-dev/keba_keenergy/issues/72
+[issue-80]: https://github.com/superbox-dev/keba_keenergy/issues/80
 
 ## [1.10.4] - 2026-09-30
 
