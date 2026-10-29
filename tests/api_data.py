@@ -9,6 +9,9 @@ from copy import deepcopy
 from typing import Any
 from typing import Final
 
+# Suffix of the message ids (`state.msgId`) of the components, read with the values.
+MESSAGE_ID_SUFFIX: Final[str] = ".state.msgId"
+
 
 def replace_values(response: list[dict[str, Any]], /, *values: tuple[str, ...]) -> list[dict[str, Any]]:
     """Return a copy of the response with other values, given as `(template, *parameters)` like in the responses.
@@ -357,7 +360,7 @@ HEAT_CIRCUIT_PUMP_STATE: Final[str] = """
 
 HEAT_CIRCUIT_RETURN_FLOW_TEMPERATURE: Final[str] = """
     {
-        "name": "APPL.CtrlAppl.sParam.heatpump[%s].TempHeatReflux.values.actValue",
+        "name": "APPL.CtrlAppl.sParam.heatCircuit[%s].tempReflux.values.actValue",
         "attributes": {
             "formatId": "fmtTemp",
             "longText": "Reflux temp.",
@@ -411,7 +414,7 @@ HEAT_CIRCUIT_HEATING_LIMIT_DAY: Final[str] = """
 
 HEAT_CIRCUIT_COOLING_LIMIT_DAY: Final[str] = """
     {
-        "name": "APPL.CtrlAppl.sParam.heatCircuit[%s].param.thresholdDayTemp.value",
+        "name": "APPL.CtrlAppl.sParam.heatCircuit[%s].param.thresholdDayCoolTemp.value",
         "attributes": {
             "formatId": "fmtTemp",
             "longText": "Heating limit Day",
@@ -630,7 +633,7 @@ HEAT_CIRCUIT_TARGET_TEMPERATURE_OFFSET: Final[str] = """
 
 HEAT_CIRCUIT_USE_EXCESS_ENERGY: Final[str] = """
     {
-        "name": "APPL.CtrlAppl.sParam.heatCircuit[%s].param.useExcessEnergy",
+        "name": "APPL.CtrlAppl.sParam.heatCircuit[%s].param.excessEnergy.useExcessEnergy",
         "attributes": {
             "longText": "Use excess en."
         },
@@ -818,7 +821,7 @@ HEAT_CIRCUIT_COOLING_CURVE: Final[str] = """
 
 HEAT_CIRCUIT_PUMP_SPEED: Final[str] = """
     {
-        "name": "APPL.CtrlAppl.sParam.heatCircuit[%s]pumpAO.values.setValueScaled",
+        "name": "APPL.CtrlAppl.sParam.heatCircuit[%s].pumpAO.values.setValueScaled",
         "attributes": {
             "formatId": "fmt3p0",
             "longText": "Pump speed",
@@ -2391,8 +2394,8 @@ DEFAULT_POSITION_FIXED_DATA_RESPONSE: Final[list[dict[str, Any]]] = [
     json.loads(HOT_WATER_TANK_HAS_FRESH_WATER_MODULE % ("0", "true")),
     json.loads(HEAT_PUMP_HAS_ACTIVE_COOLING % "false"),
     json.loads(HEAT_PUMP_HAS_PASSIVE_COOLING % "true"),
-    json.loads(HEAT_PUMP_ELECTRIC_ENERGY_METER_TYPE % "1"),
-    json.loads(HEAT_PUMP_HEAT_METER_TYPE % "1"),
+    json.loads(HEAT_PUMP_ELECTRIC_ENERGY_METER_TYPE % "2"),
+    json.loads(HEAT_PUMP_HEAT_METER_TYPE % "2"),
     json.loads(EXTERNAL_HEAT_SOURCE_HAS_EMISSIONS % ("0", "false")),
 ]
 
@@ -2425,8 +2428,8 @@ def get_multiple_position_fixed_data_response(
         json.loads(HOT_WATER_TANK_HAS_FRESH_WATER_MODULE % ("1", "false")),
         json.loads(HEAT_PUMP_HAS_ACTIVE_COOLING % "false"),
         json.loads(HEAT_PUMP_HAS_PASSIVE_COOLING % f"{has_passive_cooling}"),
-        json.loads(HEAT_PUMP_ELECTRIC_ENERGY_METER_TYPE % "1"),
-        json.loads(HEAT_PUMP_HEAT_METER_TYPE % "1"),
+        json.loads(HEAT_PUMP_ELECTRIC_ENERGY_METER_TYPE % "2"),
+        json.loads(HEAT_PUMP_HEAT_METER_TYPE % "2"),
         json.loads(EXTERNAL_HEAT_SOURCE_HAS_EMISSIONS % ("0", "true")),
         json.loads(EXTERNAL_HEAT_SOURCE_HAS_EMISSIONS % ("1", "false")),
     ]
@@ -2982,8 +2985,8 @@ HEATING_CURVES_RESPONSE: Final[list[list[dict[str, Any]]]] = [
     get_heating_curve_points_response(),
 ]
 
-# The heating curve HC1 has another name in the points than in the names.
-HEATING_CURVES_RENAMED_POINTS_RESPONSE: Final[list[list[dict[str, Any]]]] = [
-    HEATING_CURVE_NAMES_RESPONSE,
+# The heating curve HC1 was renamed on the control unit after the setup.
+HEATING_CURVES_RENAMED_RESPONSE: Final[list[list[dict[str, Any]]]] = [
+    [{**value, "value": "INVALID"} if value["value"] == "HC1" else value for value in HEATING_CURVE_NAMES_RESPONSE],
     get_heating_curve_points_response(renamed={"HC1": "INVALID"}),
 ]

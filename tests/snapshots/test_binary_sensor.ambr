@@ -138,7 +138,6 @@
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'problem',
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Wärmepumpe Kompressor',
-      'message_id': 0,
     }),
     'context': <ANY>,
     'entity_id': 'binary_sensor.keba_keenergy_12345678_heat_pump_has_compressor_failure',
@@ -153,7 +152,6 @@
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'problem',
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Wärmepumpe Quellenaktor',
-      'message_id': 0,
     }),
     'context': <ANY>,
     'entity_id': 'binary_sensor.keba_keenergy_12345678_heat_pump_has_source_actuator_failure',
@@ -168,7 +166,6 @@
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'problem',
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Wärmepumpe Quelle',
-      'message_id': 0,
     }),
     'context': <ANY>,
     'entity_id': 'binary_sensor.keba_keenergy_12345678_heat_pump_has_source_failure',
@@ -183,7 +180,6 @@
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'problem',
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Wärmepumpe Quellendruck',
-      'message_id': 0,
     }),
     'context': <ANY>,
     'entity_id': 'binary_sensor.keba_keenergy_12345678_heat_pump_has_source_pressure_failure',
@@ -198,7 +194,6 @@
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'problem',
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Wärmepumpe 3-Phasen',
-      'message_id': 0,
     }),
     'context': <ANY>,
     'entity_id': 'binary_sensor.keba_keenergy_12345678_heat_pump_has_three_phase_failure',
@@ -213,7 +208,6 @@
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'problem',
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Wärmepumpe Frequenzumrichter',
-      'message_id': 0,
     }),
     'context': <ANY>,
     'entity_id': 'binary_sensor.keba_keenergy_12345678_heat_pump_has_vfd_failure',
@@ -294,7 +288,6 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Warmwasserspeicher 1 Warmwasser läuft',
-      'message_id': 0,
     }),
     'context': <ANY>,
     'entity_id': 'binary_sensor.keba_keenergy_12345678_hot_water_tank_hot_water_flow_1',
@@ -508,7 +501,6 @@
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'problem',
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Heat pump Compressor',
-      'message_id': 0,
     }),
     'context': <ANY>,
     'entity_id': 'binary_sensor.keba_keenergy_12345678_heat_pump_has_compressor_failure',
@@ -523,7 +515,6 @@
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'problem',
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Heat pump Source actuator',
-      'message_id': 0,
     }),
     'context': <ANY>,
     'entity_id': 'binary_sensor.keba_keenergy_12345678_heat_pump_has_source_actuator_failure',
@@ -538,7 +529,6 @@
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'problem',
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Heat pump Source',
-      'message_id': 0,
     }),
     'context': <ANY>,
     'entity_id': 'binary_sensor.keba_keenergy_12345678_heat_pump_has_source_failure',
@@ -553,7 +543,6 @@
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'problem',
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Heat pump Source pressure',
-      'message_id': 0,
     }),
     'context': <ANY>,
     'entity_id': 'binary_sensor.keba_keenergy_12345678_heat_pump_has_source_pressure_failure',
@@ -568,7 +557,6 @@
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'problem',
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Heat pump Three-phase',
-      'message_id': 0,
     }),
     'context': <ANY>,
     'entity_id': 'binary_sensor.keba_keenergy_12345678_heat_pump_has_three_phase_failure',
@@ -583,7 +571,6 @@
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'problem',
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Heat pump Frequency inverter',
-      'message_id': 0,
     }),
     'context': <ANY>,
     'entity_id': 'binary_sensor.keba_keenergy_12345678_heat_pump_has_vfd_failure',
@@ -664,7 +651,6 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Hot water tank 1 Hot water flow',
-      'message_id': 0,
     }),
     'context': <ANY>,
     'entity_id': 'binary_sensor.keba_keenergy_12345678_hot_water_tank_hot_water_flow_1',

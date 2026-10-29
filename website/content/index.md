@@ -293,9 +293,9 @@ The devices and entities are detected when the integration is set up. After you 
 reload the integration. Devices that the control unit no longer provides, e.g. a removed buffer tank, are removed
 with their entities.
 
-With every update, the integration also reads whether the control unit uses the sensors (the message ID of a sensor).
-The sensors and binary sensors have the message ID as attribute `message_id`, `0` means the sensor is in use. Like
-the Web HMI, the integration distinguishes two cases of sensors that are not in use:
+With every update, the integration also reads whether the control unit uses the sensors (the message ID of a sensor,
+`0` means the sensor is in use). Like the Web HMI, the integration distinguishes two cases of sensors that are not in
+use:
 
 - **Not configured** (message ID `10`): the Web HMI hides the sensor. Its entity is not created, an existing entity is
   removed when the integration is set up. After you configure the sensor, reload the integration.
@@ -340,8 +340,8 @@ The climate and water heater entities are still created, but leave out the curre
   password.
 - **Missing entities**: entities are only created for values that your control unit provides. Reload the integration
   after a change of your heat pump setup.
-- **Unknown sensors**: if the attribute `message_id` is not `0`, the control unit reports the value of the sensor as
-  not valid, e.g. it is not connected. The Web HMI shows `-` instead of a value.
+- **Unknown sensors**: the control unit reports the value of the sensor as not valid, e.g. it is not connected. The
+  Web HMI shows `-` instead of a value. The message IDs of the sensors are in the [diagnostics][debug-logs].
 - **Missing sensors**: sensors that are not configured on the control unit (message ID `10`) are not created, the
   Web HMI hides them as well.
 

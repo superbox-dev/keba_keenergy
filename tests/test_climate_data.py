@@ -6,10 +6,9 @@
 from typing import Any
 from typing import Final
 
-from keba_keenergy_api.constants import HeatCircuitCoolRequest
-from keba_keenergy_api.constants import HeatCircuitHeatRequest
-from keba_keenergy_api.constants import HeatCircuitOperatingMode
-from keba_keenergy_api.constants import HeatPumpState
+from keba_keenergy_api.enums import HeatingCircuitOperatingMode
+from keba_keenergy_api.enums import HeatingCircuitRequest
+from keba_keenergy_api.enums import HeatPumpState
 
 from tests.api_data import DEFAULT_POSITION_DATA_RESPONSE
 from tests.api_data import HEAT_CIRCUIT_COOL_REQUEST
@@ -26,9 +25,9 @@ ENTITY_ID_2: Final[str] = "climate.keba_keenergy_12345678_2"
 def get_hvac_action_data_response(
     *,
     heat_pump_state: HeatPumpState,
-    heat_request: HeatCircuitHeatRequest = HeatCircuitHeatRequest.ON,
-    cool_request: HeatCircuitCoolRequest = HeatCircuitCoolRequest.OFF,
-    operating_mode: HeatCircuitOperatingMode = HeatCircuitOperatingMode.NIGHT,
+    heat_request: HeatingCircuitRequest = HeatingCircuitRequest.ACTIVE,
+    cool_request: HeatingCircuitRequest = HeatingCircuitRequest.OFF,
+    operating_mode: HeatingCircuitOperatingMode = HeatingCircuitOperatingMode.REDUCED,
 ) -> list[dict[str, Any]]:
     """Return the values of a setup with one device of each type, with the requests and the heat pump state."""
     return update_response(

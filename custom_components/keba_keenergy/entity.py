@@ -10,8 +10,7 @@ from functools import cached_property
 from typing import TYPE_CHECKING
 from typing import Any
 from typing import Final
-from typing import TypeVar
-from typing import overload
+from typing import Literal
 
 from homeassistant.core import HassJob
 from homeassistant.core import callback
@@ -20,22 +19,17 @@ from homeassistant.helpers import entity_registry as er
 from homeassistant.helpers.device_registry import DeviceInfo
 from homeassistant.helpers.event import async_call_later
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
-from keba_keenergy_api.constants import Section
-from keba_keenergy_api.constants import SectionPrefix
 
-from .const import ATTR_MESSAGE_ID
 from .const import DEVICE_TRANSLATION_KEYS
 from .const import DOMAIN
 from .const import FLASH_WRITE_DELAY
 from .const import MANUFACTURER
 from .const import MANUFACTURER_INO
 from .const import MANUFACTURER_MTEC
-from .const import SECTIONS
+from .const import SectionPrefix
 from .coordinator import KebaKeEnergyConfigEntry
 from .coordinator import KebaKeEnergyDataUpdateCoordinator
-from .coordinator import Values
 from .coordinator import get_device_identifier
-from .coordinator import get_value_by_index
 
 if TYPE_CHECKING:
     from collections.abc import Callable
@@ -44,13 +38,11 @@ if TYPE_CHECKING:
 
     from homeassistant.core import CALLBACK_TYPE
     from homeassistant.helpers.entity_platform import AddEntitiesCallback
-    from homeassistant.helpers.typing import StateType
-    from keba_keenergy_api.endpoints import Value
+    from keba_keenergy_api.models import Reading
+    from keba_keenergy_api.models import Value
+    from keba_keenergy_api.models import WriteValue
 
 _LOGGER: Final = logging.getLogger(__name__)
-
-
-T = TypeVar("T", str, int, float)
 
 
 @dataclass(frozen=True, kw_only=True)
@@ -91,7 +83,6 @@ class KebaKeEnergyBaseEntity(
         self._async_call_later: CALLBACK_TYPE | None = None
         self._pending_value: float | None = None
         self._pending_key: str = ""
-        self._pending_section: Section | None = None
 
     def _build_unique_id(self, *parts: str) -> str:
         """Return `<entry unique_id>[_<part>...][_<key_index + 1>][_<index + 1>]`."""
@@ -157,8 +148,7 @@ class KebaKeEnergyBaseEntity(
         if self.is_system_device:
             _device_model = self.coordinator.device_model
         elif self.is_heat_pump:
-            heat_pump_data: Value = self.coordinator.heat_pump_names[self.index or 0]
-            _device_model = heat_pump_data["value"]
+            _device_model = self.coordinator.heat_pump_names[self.index or 0]
 
         return _device_model
 
@@ -198,80 +188,66 @@ class KebaKeEnergyBaseEntity(
 
         await super().async_will_remove_from_hass()
 
-    def get_entity_data(self, key: str, /) -> Value | None:
-        """Get the real entity data from the coordinator data, or None if the sensor is not in use."""
+    def get_reading(self, key: str, /) -> Reading | None:
+        """Get the reading of the entity from the coordinator data, or None if the sensor is not in use."""
         if not self.coordinator.is_sensor_in_use(self.section_id, key, index=self.index, key_index=self.key_index):
             return None
 
-        values: Values | None = self.coordinator.data[self.section_id].get(key)
-        return None if values is None else get_value_by_index(values, index=self.index, key_index=self.key_index)
+        return self.coordinator.get_reading(self.section_id, key, index=self.index, key_index=self.key_index)
 
-    def get_attribute(self, key: str, /, *, attr: str) -> str:
-        """Get extra attribute from the API by key."""
-        entity_data: Value | None = self.get_entity_data(key)
-        attributes: dict[str, Any] = entity_data.get("attributes", {}) if entity_data else {}
-        return str(attributes.get(attr, ""))
+    def get_limit(self, key: str, /, *, attr: Literal["lower_limit", "upper_limit"]) -> float | None:
+        """Get a limit of the value from the API by key, or None if the value has no limit."""
+        reading: Reading | None = self.get_reading(key)
+        return None if reading is None else getattr(reading, attr)
 
-    def get_limit(self, key: str, /, *, attr: str) -> float | None:
-        """Get a limit (e.g. `lower_limit`) from the API by key, or None if the value has no valid limit."""
-        try:
-            return float(self.get_attribute(key, attr=attr))
-        except ValueError:
-            return None
-
-    @overload
-    def get_value(self, key: str, /, *, expected_type: type[T]) -> T | None: ...
-
-    @overload
-    def get_value(self, key: str, /) -> StateType: ...
-
-    def get_value(self, key: str, /, *, expected_type: type[T] | None = None) -> StateType:
+    def get_value(self, key: str, /) -> Value | None:
         """Get value from the API by key."""
-        entity_data: Value | None = self.get_entity_data(key)
-        value: StateType = entity_data.get("value") if entity_data else None
+        reading: Reading | None = self.get_reading(key)
+        return None if reading is None else reading.value
 
-        if expected_type and value is not None:
-            return expected_type(value)
+    def get_typed_value[T](self, key: str, value_type: type[T], /) -> T | None:
+        """Get value from the API by key, or None if it is not of the type."""
+        value: Value | None = self.get_value(key)
+        return value if isinstance(value, value_type) else None
 
-        return value
+    def get_float(self, key: str, /) -> float | None:
+        """Get a numeric value from the API by key as float."""
+        value: Value | None = self.get_value(key)
+        return float(value) if isinstance(value, float | int) and not isinstance(value, bool) else None
 
     async def _async_write_data(
         self,
-        value: object,
+        value: WriteValue,
         /,
         *,
-        section: Section,
+        key: str,
         device_numbers: int | None = None,
         ignore_weekly_write_count: bool = False,
     ) -> None:
         """Write data to the KEBA KeEnergy API."""
         current_index: int = self.index or 0
-        _range: int | None = device_numbers
+        _range: int = device_numbers or 1
 
-        if _range and self.key_index is not None:
-            quantity: int = section.value.quantity
+        if self.key_index is not None:
+            quantity: int = self.coordinator.get_section(self.section_id, key).value.quantity
             current_index = current_index * quantity + self.key_index
             _range = _range * quantity
 
-        request: dict[Section, Any] = {
-            section: (
-                [value if index == current_index else None for index in range(_range)]
-                if isinstance(_range, int)
-                else value
-            ),
-        }
+        values: list[WriteValue | None] = [value if index == current_index else None for index in range(_range)]
 
-        previous_value: object = self.coordinator.async_update_value(
+        previous_value: Value = self.coordinator.async_set_value(
             value,
             section_id=self.section_id,
-            section=section,
-            index=self.index or 0,
+            key=key,
+            index=self.index,
             key_index=self.key_index,
         )
 
         try:
             await self.coordinator.async_write_data(
-                request=request, ignore_weekly_write_count=ignore_weekly_write_count
+                self.section_id,
+                {key: values},
+                ignore_weekly_write_count=ignore_weekly_write_count,
             )
         except HomeAssistantError:
             # The control unit still has the previous value, so the entity shows it again. Only this value is reset,
@@ -279,8 +255,8 @@ class KebaKeEnergyBaseEntity(
             self.coordinator.async_set_value(
                 previous_value,
                 section_id=self.section_id,
-                key=section.name.lower(),
-                index=self.index or 0,
+                key=key,
+                index=self.index,
                 key_index=self.key_index,
             )
             raise
@@ -311,13 +287,17 @@ class KebaKeEnergyBaseEntity(
         """Write data (debounced) to the KEBA KeEnergy API."""
         self._async_call_later = None
 
-        current_value: float | None = self.get_value(self._pending_key, expected_type=float)
+        current_value: float | None = self.get_float(self._pending_key)
 
-        if self._pending_section and self._pending_value is not None and self._pending_value != current_value:
+        if self._pending_key and self._pending_value is not None and self._pending_value != current_value:
+            # The API only writes integers to integer values, e.g. a runtime in seconds.
+            value_type: type = self.coordinator.get_section(self.section_id, self._pending_key).value.value_type
+            value: float | int = round(self._pending_value) if value_type is int else self._pending_value
+
             try:
                 await self._async_write_data(
-                    self._pending_value,
-                    section=self._pending_section,
+                    value,
+                    key=self._pending_key,
                     device_numbers=self.device_numbers,
                 )
             except HomeAssistantError as error:
@@ -329,7 +309,7 @@ class KebaKeEnergyBaseEntity(
         if self._pending_value is not None and self._async_call_later:
             return self._pending_value
 
-        return self.get_value(self._pending_key, expected_type=float)
+        return self.get_float(self._pending_key)
 
 
 class KebaKeEnergyEntity(KebaKeEnergyBaseEntity):
@@ -348,24 +328,9 @@ class KebaKeEnergyEntity(KebaKeEnergyBaseEntity):
 
         self._attr_unique_id: str | None = self.get_unique_id(self.entity_description.key)
 
-    @property
-    def section(self) -> Section:
-        """Get the section of the entity description key."""
-        return SECTIONS[self.section_id][self.entity_description.key.upper()]
-
     def get_unique_id(self, key: str, /) -> str | None:
         """Generate unique id."""
         return self._build_unique_id(key) if self.is_system_device else self._build_unique_id(self.section_id, key)
-
-    def _message_id_attributes(self, key: str, /) -> dict[str, int]:
-        """Return the message id of the sensor as attribute (0 means the sensor is in use), if the sensor has one."""
-        message_id: int | None = self.coordinator.get_message_id(
-            self.section_id,
-            key,
-            index=self.index,
-            key_index=self.key_index,
-        )
-        return {} if message_id is None else {ATTR_MESSAGE_ID: message_id}
 
 
 @callback
@@ -384,12 +349,13 @@ def _async_setup_entities(
     for section_id, section_data in coordinator.data.items():
         for description in entity_types.get(section_id, ()):
             for key in (description.key, description.new_key):
-                values: Values | None = section_data.get(key) if key else None
+                readings: list[Reading] | None = section_data.get(key) if key else None
 
-                if values is None:
+                if key is None or not readings:
                     continue
 
-                device_numbers: int = len(values) if isinstance(values, list) else 1
+                quantity: int = coordinator.get_section(section_id, key).value.quantity
+                device_numbers: int = len(readings) // quantity
 
                 for index in range(device_numbers):
                     if description.condition is not None and not description.condition(coordinator, index):

@@ -16,17 +16,13 @@ from homeassistant.components.water_heater.const import DOMAIN as WATER_HEATER_D
 from homeassistant.const import ATTR_TEMPERATURE
 from homeassistant.const import STATE_OFF
 from homeassistant.const import UnitOfTemperature
-from keba_keenergy_api.constants import BufferTank
-from keba_keenergy_api.constants import BufferTankOperatingMode
-from keba_keenergy_api.constants import HotWaterTank
-from keba_keenergy_api.constants import HotWaterTankOperatingMode
-from keba_keenergy_api.constants import SectionPrefix
+from keba_keenergy_api.enums import BufferTankOperatingMode
+from keba_keenergy_api.enums import DHWTankOperatingMode
 
-from .const import BUFFER_TANK_OPERATING_MODE_TO_HA
 from .const import BUFFER_TANK_STATE_TO_HA
 from .const import DOMAIN
-from .const import HOT_WATER_TANK_OPERATING_MODE_TO_HA
 from .const import HOT_WATER_TANK_STATE_TO_HA
+from .const import SectionPrefix
 from .entity import KebaKeEnergyBaseEntity
 
 if TYPE_CHECKING:
@@ -60,12 +56,12 @@ class KebaKeEnergyWaterHeaterTankEntity(KebaKeEnergyBaseEntity, WaterHeaterEntit
     @property
     def target_temperature_low(self) -> float | None:
         """Return the low bound target temperature we try to reach."""
-        return self.get_value("standby_temperature", expected_type=float)
+        return self.get_float("standby_temperature")
 
     @property
     def target_temperature_high(self) -> float | None:
         """Return the high bound target temperature we try to reach."""
-        return self.get_value("target_temperature", expected_type=float)
+        return self.get_float("target_temperature")
 
 
 class KebaKeEnergyHotWaterTankEntity(KebaKeEnergyWaterHeaterTankEntity, WaterHeaterEntity):
@@ -92,12 +88,11 @@ class KebaKeEnergyHotWaterTankEntity(KebaKeEnergyWaterHeaterTankEntity, WaterHea
         self.entity_id: str = f"{WATER_HEATER_DOMAIN}.{DOMAIN}_{self._attr_unique_id}"
 
         self._pending_key = "target_temperature"
-        self._pending_section = HotWaterTank.TARGET_TEMPERATURE
 
     @property
     def current_temperature(self) -> float | None:
         """Return the current temperature."""
-        return self.get_value("current_temperature", expected_type=float)
+        return self.get_float("current_temperature")
 
     @property
     def target_temperature(self) -> float | None:
@@ -119,15 +114,15 @@ class KebaKeEnergyHotWaterTankEntity(KebaKeEnergyWaterHeaterTankEntity, WaterHea
     @property
     def current_operation(self) -> str | None:
         """Return current operation mode."""
-        operating_mode: str | None = self.get_value("operating_mode", expected_type=str)
-        return HOT_WATER_TANK_OPERATING_MODE_TO_HA.get(operating_mode, STATE_OFF) if operating_mode else None
+        operating_mode: DHWTankOperatingMode | None = self.get_typed_value("operating_mode", DHWTankOperatingMode)
+        return None if operating_mode is None else HOT_WATER_TANK_STATE_TO_HA.get(operating_mode, STATE_OFF)
 
     async def async_turn_off(self, **kwargs: object) -> None:  # noqa: ARG002
         """Turn the hot water tank off."""
         if self.current_operation != STATE_OFF:
             await self._async_write_data(
-                HotWaterTankOperatingMode.OFF.value,
-                section=HotWaterTank.OPERATING_MODE,
+                DHWTankOperatingMode.OFF,
+                key="operating_mode",
                 device_numbers=self.device_numbers,
             )
 
@@ -135,18 +130,18 @@ class KebaKeEnergyHotWaterTankEntity(KebaKeEnergyWaterHeaterTankEntity, WaterHea
         """Turn the hot water tank on."""
         if self.current_operation != STATE_HEAT_PUMP:
             await self._async_write_data(
-                HotWaterTankOperatingMode.ON.value,
-                section=HotWaterTank.OPERATING_MODE,
+                DHWTankOperatingMode.ON,
+                key="operating_mode",
                 device_numbers=self.device_numbers,
             )
 
     async def async_set_operation_mode(self, operation_mode: str) -> None:
         """Set operation mode for hot water tank."""
-        for key, value in HOT_WATER_TANK_STATE_TO_HA.items():
-            if value == operation_mode and operation_mode != self.current_operation:
+        for operating_mode, state in HOT_WATER_TANK_STATE_TO_HA.items():
+            if state == operation_mode and operation_mode != self.current_operation:
                 await self._async_write_data(
-                    key,
-                    section=HotWaterTank.OPERATING_MODE,
+                    operating_mode,
+                    key="operating_mode",
                     device_numbers=self.device_numbers,
                     ignore_weekly_write_count=operation_mode == STATE_PERFORMANCE,
                 )
@@ -186,8 +181,8 @@ class KebaKeEnergyBufferTankEntity(KebaKeEnergyWaterHeaterTankEntity, WaterHeate
         values: list[float] = [
             value
             for value in (
-                self.get_value("current_top_temperature", expected_type=float),
-                self.get_value("current_bottom_temperature", expected_type=float),
+                self.get_float("current_top_temperature"),
+                self.get_float("current_bottom_temperature"),
             )
             if value is not None
         ]
@@ -197,20 +192,20 @@ class KebaKeEnergyBufferTankEntity(KebaKeEnergyWaterHeaterTankEntity, WaterHeate
     @property
     def target_temperature(self) -> float | None:
         """Return the temperature we try to reach."""
-        return self.get_value("target_temperature", expected_type=float)
+        return self.get_float("target_temperature")
 
     @property
     def current_operation(self) -> str | None:
         """Return current operation mode."""
-        operating_mode: str | None = self.get_value("operating_mode", expected_type=str)
-        return BUFFER_TANK_OPERATING_MODE_TO_HA.get(operating_mode, STATE_OFF) if operating_mode else None
+        operating_mode: BufferTankOperatingMode | None = self.get_typed_value("operating_mode", BufferTankOperatingMode)
+        return None if operating_mode is None else BUFFER_TANK_STATE_TO_HA.get(operating_mode, STATE_OFF)
 
     async def async_turn_off(self, **kwargs: object) -> None:  # noqa: ARG002
         """Turn the buffer tank off."""
         if self.current_operation != STATE_OFF:
             await self._async_write_data(
-                BufferTankOperatingMode.OFF.value,
-                section=BufferTank.OPERATING_MODE,
+                BufferTankOperatingMode.OFF,
+                key="operating_mode",
                 device_numbers=self.device_numbers,
             )
 
@@ -218,18 +213,18 @@ class KebaKeEnergyBufferTankEntity(KebaKeEnergyWaterHeaterTankEntity, WaterHeate
         """Turn the buffer tank on."""
         if self.current_operation != STATE_HEAT_PUMP:
             await self._async_write_data(
-                BufferTankOperatingMode.ON.value,
-                section=BufferTank.OPERATING_MODE,
+                BufferTankOperatingMode.ON,
+                key="operating_mode",
                 device_numbers=self.device_numbers,
             )
 
     async def async_set_operation_mode(self, operation_mode: str) -> None:
         """Set operation mode for buffer tank."""
-        for key, value in BUFFER_TANK_STATE_TO_HA.items():
-            if value == operation_mode and operation_mode != self.current_operation:
+        for operating_mode, state in BUFFER_TANK_STATE_TO_HA.items():
+            if state == operation_mode and operation_mode != self.current_operation:
                 await self._async_write_data(
-                    key,
-                    section=BufferTank.OPERATING_MODE,
+                    operating_mode,
+                    key="operating_mode",
                     device_numbers=self.device_numbers,
                 )
 

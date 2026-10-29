@@ -31,9 +31,8 @@ from homeassistant.helpers.selector import NumberSelector
 from homeassistant.helpers.selector import NumberSelectorConfig
 from homeassistant.helpers.selector import NumberSelectorMode
 from homeassistant.util.network import is_ip_address
-from keba_keenergy_api.api import KebaKeEnergyAPI
-from keba_keenergy_api.constants import SectionPrefix
-from keba_keenergy_api.error import APIError
+from keba_keenergy_api.client import KebaKeEnergyAPI
+from keba_keenergy_api.exceptions import APIError
 
 from .const import CONF_BUFFER_TANK_TICK
 from .const import CONF_EXTERNAL_HEAT_SOURCE_TICK
@@ -51,12 +50,14 @@ from .const import MANUFACTURER
 from .const import MIN_SCAN_INTERVAL
 from .const import NAME
 from .const import STEP_AUTH_DATA_SCHEMA
+from .const import SectionPrefix
 
 if TYPE_CHECKING:
     from collections.abc import Mapping
 
     from aiohttp import ClientSession
     from homeassistant.helpers.service_info.zeroconf import ZeroconfServiceInfo
+    from keba_keenergy_api.models import DeviceInfo
 
     from .coordinator import KebaKeEnergyConfigEntry
     from .coordinator import KebaKeEnergyDataUpdateCoordinator
@@ -76,11 +77,11 @@ async def validate_input(hass: HomeAssistant, /, *, data: dict[str, Any]) -> str
         username=data.get(CONF_USERNAME),
         password=data.get(CONF_PASSWORD),
         ssl=data[CONF_SSL],
-        skip_ssl_verification=True,
+        verify_ssl=False,
     )
 
     try:
-        response: dict[str, Any] = await client.system.get_device_info()
+        response: DeviceInfo = await client.get_device_info()
     except APIError as error:
         _LOGGER.debug("API error %s", error)
         if error.status == HTTPStatus.UNAUTHORIZED:

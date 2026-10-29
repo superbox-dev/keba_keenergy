@@ -124,7 +124,7 @@ async def test_numbers(
         (
             "number.keba_keenergy_12345678_external_heat_source_min_runtime_excess_energy_1",
             30,
-            '[{"name": "APPL.CtrlAppl.sParam.extHeatSource[0].param.minRunTimeExcessEnergy", "value": "1800.0"}]',
+            '[{"name": "APPL.CtrlAppl.sParam.extHeatSource[0].param.minRunTimeExcessEnergy", "value": "1800"}]',
         ),
     ],
     ids=[

@@ -66,7 +66,7 @@ async def test_failure_input_not_in_use(
 
     state: State | None = hass.states.get(COMPRESSOR_FAILURE_ENTITY_ID)
     assert isinstance(state, State)
-    assert (state.state, state.attributes["message_id"]) == (expected, message_id)
+    assert state.state == expected
 
 
 async def test_failure_input_in_use_again(
@@ -90,4 +90,4 @@ async def test_failure_input_in_use_again(
 
     state: State | None = hass.states.get(COMPRESSOR_FAILURE_ENTITY_ID)
     assert isinstance(state, State)
-    assert (state.state, state.attributes["message_id"]) == (STATE_OFF, 0)
+    assert state.state == STATE_OFF

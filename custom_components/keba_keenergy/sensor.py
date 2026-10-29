@@ -6,6 +6,7 @@ from __future__ import annotations
 
 import logging
 from dataclasses import dataclass
+from enum import Enum
 from typing import TYPE_CHECKING
 from typing import Any
 from typing import Final
@@ -23,24 +24,24 @@ from homeassistant.const import UnitOfPower
 from homeassistant.const import UnitOfPressure
 from homeassistant.const import UnitOfTemperature
 from homeassistant.const import UnitOfTime
-from keba_keenergy_api.constants import BufferTankExcessEnergyMode
-from keba_keenergy_api.constants import BufferTankOperatingMode
-from keba_keenergy_api.constants import ExternalHeatSourceOperatingMode
-from keba_keenergy_api.constants import HeatCircuitCoolRequest
-from keba_keenergy_api.constants import HeatCircuitExcessEnergyMode
-from keba_keenergy_api.constants import HeatCircuitHeatRequest
-from keba_keenergy_api.constants import HeatCircuitOperatingMode
-from keba_keenergy_api.constants import HeatPumpState
-from keba_keenergy_api.constants import HeatPumpSubState
-from keba_keenergy_api.constants import HotWaterTankExcessEnergyMode
-from keba_keenergy_api.constants import HotWaterTankOperatingMode
-from keba_keenergy_api.constants import MixerSwitchValvePosition
-from keba_keenergy_api.constants import SectionPrefix
-from keba_keenergy_api.constants import SwitchValvePosition
-from keba_keenergy_api.constants import SystemOperatingMode
+from keba_keenergy_api.enums import BufferTankOperatingMode
+from keba_keenergy_api.enums import DHWTankOperatingMode
+from keba_keenergy_api.enums import ExcessEnergyState
+from keba_keenergy_api.enums import ExternalHeatSourceOperatingMode
+from keba_keenergy_api.enums import HeatingCircuitOperatingMode
+from keba_keenergy_api.enums import HeatingCircuitRequest
+from keba_keenergy_api.enums import HeatPumpState
+from keba_keenergy_api.enums import HeatPumpSubState
+from keba_keenergy_api.enums import SwitchValvePosition
+from keba_keenergy_api.enums import SystemOperatingMode
 
 from .const import ATTR_WRITES
 from .const import DOMAIN
+from .const import HEATING_CURVE_KEY
+from .const import MixerPosition
+from .const import SectionPrefix
+from .coordinator import get_state
+from .coordinator import get_states
 from .entity import KebaKeEnergyBaseEntity
 from .entity import KebaKeEnergyEntity
 from .entity import KebaKeEnergyEntityDescription
@@ -53,7 +54,9 @@ if TYPE_CHECKING:
     from homeassistant.core import HomeAssistant
     from homeassistant.helpers.entity_platform import AddEntitiesCallback
     from homeassistant.helpers.typing import StateType
-    from keba_keenergy_api.endpoints import Value
+    from keba_keenergy_api.models import CurveTable
+    from keba_keenergy_api.models import Reading
+    from keba_keenergy_api.models import Value
 
     from .coordinator import KebaKeEnergyConfigEntry
     from .coordinator import KebaKeEnergyDataUpdateCoordinator
@@ -103,8 +106,12 @@ class KebaKeEnergySensorEntity(KebaKeEnergyEntity, SensorEntity):
     @property
     def native_value(self) -> StateType:
         """Return the state of the sensor."""
-        value: StateType = self.get_value(self._data_key)
-        return None if value is None else self.entity_description.value(value)
+        value: Value | None = self.get_value(self._data_key)
+
+        if isinstance(value, Enum):
+            return get_state(value)
+
+        return None if value is None or isinstance(value, bool) else self.entity_description.value(value)
 
     @property
     def _data_key(self) -> str:
@@ -114,9 +121,30 @@ class KebaKeEnergySensorEntity(KebaKeEnergyEntity, SensorEntity):
     @property
     def extra_state_attributes(self) -> Mapping[str, Any] | None:
         """Return extra state attributes."""
-        entity_data: Value | None = self.get_entity_data(self._data_key)
-        attributes: Mapping[str, Any] = entity_data.get("attributes", {}) if entity_data else {}
-        return {**self.entity_description.attributes(attributes), **self._message_id_attributes(self._data_key)}
+        return self.entity_description.attributes(self._get_attributes(self.get_reading(self._data_key)))
+
+    def _get_attributes(self, reading: Reading | None, /) -> dict[str, Any]:
+        """Return the limits of the value, the raw value of an enum and the points of the heating curve, if any."""
+        if reading is None:
+            return {}
+
+        attributes: dict[str, Any] = {
+            attr: limit
+            for attr, limit in (("lower_limit", reading.lower_limit), ("upper_limit", reading.upper_limit))
+            if limit is not None
+        }
+
+        if reading.raw_value is not None:
+            attributes["raw_value"] = reading.raw_value
+
+        if self._data_key == HEATING_CURVE_KEY and isinstance(reading.value, str):
+            curve_table: CurveTable | None = self.coordinator.curve_tables.get(reading.value)
+            attributes["points"] = [
+                {"outdoor": point.outdoor, "flow": round(point.flow, 2)}
+                for point in (curve_table.points if curve_table else ())
+            ]
+
+        return attributes
 
 
 class KebaKeEnergyWriteCountSensorEntity(KebaKeEnergyBaseEntity, SensorEntity):
@@ -170,7 +198,7 @@ SENSOR_TYPES: Final[dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ..
         KebaKeEnergySensorEntityDescription[str](
             device_class=SensorDeviceClass.ENUM,
             key="operating_mode",
-            options=[_.name.lower() for _ in SystemOperatingMode],
+            options=get_states(SystemOperatingMode),
             translation_key="system_operating_mode",
             value=lambda data: data,
         ),
@@ -301,7 +329,7 @@ SENSOR_TYPES: Final[dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ..
             device_class=SensorDeviceClass.ENUM,
             entity_registry_enabled_default=False,
             key="mixer_position",
-            options=[_.name.lower() for _ in MixerSwitchValvePosition],
+            options=get_states(MixerPosition),
             translation_key="mixer_position",
             attributes=lambda attributes: {**attributes, "position_percent": attributes["raw_value"] * 100},
         ),
@@ -491,20 +519,20 @@ SENSOR_TYPES: Final[dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ..
             condition=lambda coordinator, _: coordinator.has_photovoltaics(),
             device_class=SensorDeviceClass.ENUM,
             key="excess_energy_mode",
-            options=[_.name.lower() for _ in HeatCircuitExcessEnergyMode],
+            options=get_states(ExcessEnergyState),
             translation_key="excess_energy_mode",
         ),
         KebaKeEnergySensorEntityDescription[str](
             device_class=SensorDeviceClass.ENUM,
             key="operating_mode",
-            options=[_.name.lower() for _ in HeatCircuitOperatingMode],
+            options=get_states(HeatingCircuitOperatingMode),
             translation_key="heat_circuit_operating_mode",
         ),
         KebaKeEnergySensorEntityDescription[str](
             condition=lambda coordinator, index: coordinator.is_heating_circuit(index=index),
             device_class=SensorDeviceClass.ENUM,
             key="heat_request",
-            options=[_.name.lower() for _ in HeatCircuitHeatRequest],
+            options=get_states(HeatingCircuitRequest),
             translation_key="heat_request",
         ),
         KebaKeEnergySensorEntityDescription[str](
@@ -512,7 +540,7 @@ SENSOR_TYPES: Final[dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ..
             device_class=SensorDeviceClass.ENUM,
             entity_registry_enabled_default=False,
             key="cool_request",
-            options=[_.name.lower() for _ in HeatCircuitCoolRequest],
+            options=get_states(HeatingCircuitRequest),
             translation_key="cool_request",
         ),
         KebaKeEnergySensorEntityDescription[str](
@@ -636,13 +664,13 @@ SENSOR_TYPES: Final[dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ..
         KebaKeEnergySensorEntityDescription[str](
             device_class=SensorDeviceClass.ENUM,
             key="state",
-            options=[_.name.lower() for _ in HeatPumpState],
+            options=get_states(HeatPumpState),
             translation_key="state",
         ),
         KebaKeEnergySensorEntityDescription[str](
             device_class=SensorDeviceClass.ENUM,
             key="substate",
-            options=[_.name.lower() for _ in HeatPumpSubState],
+            options=get_states(HeatPumpSubState),
             translation_key="substate",
         ),
         KebaKeEnergySensorEntityDescription[float](
@@ -1038,7 +1066,7 @@ SENSOR_TYPES: Final[dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ..
             condition=lambda coordinator, index: coordinator.has_passive_cooling(index=index),
             device_class=SensorDeviceClass.ENUM,
             key="switch_valve_position",
-            options=[_.name.lower() for _ in SwitchValvePosition],
+            options=get_states(SwitchValvePosition),
             translation_key="passive_cooling_valve_position",
         ),
         KebaKeEnergySensorEntityDescription[float](
@@ -1069,7 +1097,7 @@ SENSOR_TYPES: Final[dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ..
             condition=lambda coordinator, index: coordinator.has_passive_cooling(index=index),
             device_class=SensorDeviceClass.ENUM,
             key="mixer_position",
-            options=[_.name.lower() for _ in MixerSwitchValvePosition],
+            options=get_states(MixerPosition),
             translation_key="mixer_position",
             attributes=lambda attributes: {**attributes, "position_percent": attributes["raw_value"] * 100},
         ),
@@ -1107,13 +1135,13 @@ SENSOR_TYPES: Final[dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ..
             condition=lambda coordinator, _: coordinator.has_photovoltaics(),
             device_class=SensorDeviceClass.ENUM,
             key="excess_energy_mode",
-            options=[_.name.lower() for _ in BufferTankExcessEnergyMode],
+            options=get_states(ExcessEnergyState),
             translation_key="excess_energy_mode",
         ),
         KebaKeEnergySensorEntityDescription[str](
             device_class=SensorDeviceClass.ENUM,
             key="operating_mode",
-            options=[_.name.lower() for _ in BufferTankOperatingMode],
+            options=get_states(BufferTankOperatingMode),
             translation_key="buffer_tank_operating_mode",
         ),
         KebaKeEnergySensorEntityDescription[float](
@@ -1149,7 +1177,7 @@ SENSOR_TYPES: Final[dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ..
         KebaKeEnergySensorEntityDescription[str](
             device_class=SensorDeviceClass.ENUM,
             key="operating_mode",
-            options=[_.name.lower() for _ in HotWaterTankOperatingMode],
+            options=get_states(DHWTankOperatingMode),
             translation_key="hot_water_tank_operating_mode",
         ),
         KebaKeEnergySensorEntityDescription[float](
@@ -1191,7 +1219,7 @@ SENSOR_TYPES: Final[dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ..
             condition=lambda coordinator, _: coordinator.has_photovoltaics(),
             device_class=SensorDeviceClass.ENUM,
             key="excess_energy_mode",
-            options=[_.name.lower() for _ in HotWaterTankExcessEnergyMode],
+            options=get_states(ExcessEnergyState),
             translation_key="excess_energy_mode",
         ),
         KebaKeEnergySensorEntityDescription[float](
@@ -1207,7 +1235,7 @@ SENSOR_TYPES: Final[dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ..
         KebaKeEnergySensorEntityDescription[str](
             device_class=SensorDeviceClass.ENUM,
             key="operating_mode",
-            options=[_.name.lower() for _ in ExternalHeatSourceOperatingMode],
+            options=get_states(ExternalHeatSourceOperatingMode),
             translation_key="external_heat_source_operating_mode",
         ),
         KebaKeEnergySensorEntityDescription[float](
@@ -1287,7 +1315,7 @@ SENSOR_TYPES: Final[dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ..
         KebaKeEnergySensorEntityDescription[str](
             device_class=SensorDeviceClass.ENUM,
             key="position",
-            options=[_.name.lower() for _ in SwitchValvePosition],
+            options=get_states(SwitchValvePosition),
             translation_key="switch_valve_position",
         ),
     ),

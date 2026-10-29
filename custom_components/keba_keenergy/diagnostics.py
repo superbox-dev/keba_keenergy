@@ -5,6 +5,7 @@
 from __future__ import annotations
 
 from dataclasses import asdict
+from enum import Enum
 from typing import TYPE_CHECKING
 from typing import Any
 
@@ -15,6 +16,7 @@ from .const import TO_REDACT
 if TYPE_CHECKING:
     from homeassistant.core import HomeAssistant
 
+    from .coordinator import CoordinatorData
     from .coordinator import KebaKeEnergyConfigEntry
     from .coordinator import KebaKeEnergyDataUpdateCoordinator
 
@@ -40,13 +42,31 @@ async def async_get_config_entry_diagnostics(
                 "hmi_sw_version": coordinator.device_hmi_sw_version,
                 "serial_number": coordinator.device_serial_number,
             },
-            "position": asdict(coordinator.position) if coordinator.position else None,
+            "device_counts": asdict(coordinator.device_counts) if coordinator.device_counts else None,
             "available_heating_curves": coordinator.available_heating_curves,
             "weekly_write_count": coordinator.weekly_write_count,
             "weekly_writes": coordinator.weekly_writes,
-            "fixed_data": coordinator.fixed_data,
-            "data": coordinator.data,
+            "options": _dump(coordinator.options),
+            "data": _dump(coordinator.data),
             "message_ids": coordinator.message_ids,
         },
         TO_REDACT,
     )
+
+
+def _dump(data: CoordinatorData, /) -> dict[str, dict[str, list[dict[str, Any]]]]:
+    """Return the readings as JSON data, enum members by their name."""
+    return {
+        section_id: {
+            key: [
+                {
+                    **asdict(reading),
+                    "value": reading.value.name if isinstance(reading.value, Enum) else reading.value,
+                    "message_id": None if reading.message_id is None else reading.message_id.value,
+                }
+                for reading in readings
+            ]
+            for key, readings in section_data.items()
+        }
+        for section_id, section_data in data.items()
+    }

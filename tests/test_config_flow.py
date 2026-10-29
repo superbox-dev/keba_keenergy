@@ -18,7 +18,7 @@ from homeassistant.const import CONF_HOST
 from homeassistant.const import CONF_SSL
 from homeassistant.data_entry_flow import FlowResultType
 from homeassistant.helpers.service_info.zeroconf import ZeroconfServiceInfo
-from keba_keenergy_api.error import APIError
+from keba_keenergy_api.exceptions import APIError
 
 from custom_components.keba_keenergy.const import DOMAIN
 from tests.api_data import MULTIPLE_POSITION_DATA_RESPONSE

@@ -82,21 +82,21 @@ async def test_converted_sensor_display_precision(
     [
         (
             "APPL.CtrlAppl.sParam.outdoorTemp.state.msgId",
-            {"sensor.keba_keenergy_12345678_outdoor_temperature": (STATE_UNKNOWN, 50)},
+            {"sensor.keba_keenergy_12345678_outdoor_temperature": STATE_UNKNOWN},
         ),
         (
             # The mixer flow temperature has a new key in the API, but keeps the entity of the old key.
             "APPL.CtrlAppl.sParam.heatCircuit[0].heatCircuitMixer.flowTemp.state.msgId",
-            {"sensor.keba_keenergy_12345678_heat_circuit_flow_temperature_1": (STATE_UNKNOWN, 50)},
+            {"sensor.keba_keenergy_12345678_heat_circuit_flow_temperature_1": STATE_UNKNOWN},
         ),
         (
             # Each solar circuit has two temperatures, the first of the second solar circuit is not in use.
             "APPL.CtrlAppl.sParam.genericHeat[2].referenceTemp.state.msgId",
             {
-                "sensor.keba_keenergy_12345678_solar_circuit_current_temperature_1_1": ("36.76", 0),
-                "sensor.keba_keenergy_12345678_solar_circuit_current_temperature_2_1": ("26.76", 0),
-                "sensor.keba_keenergy_12345678_solar_circuit_current_temperature_1_2": (STATE_UNKNOWN, 50),
-                "sensor.keba_keenergy_12345678_solar_circuit_current_temperature_2_2": ("56.76", 0),
+                "sensor.keba_keenergy_12345678_solar_circuit_current_temperature_1_1": "36.76",
+                "sensor.keba_keenergy_12345678_solar_circuit_current_temperature_2_1": "26.76",
+                "sensor.keba_keenergy_12345678_solar_circuit_current_temperature_1_2": STATE_UNKNOWN,
+                "sensor.keba_keenergy_12345678_solar_circuit_current_temperature_2_2": "56.76",
             },
         ),
     ],
@@ -107,9 +107,9 @@ async def test_sensor_not_in_use(
     hass: HomeAssistant,
     fake_api: FakeKebaKeEnergyAPI,
     message_id: str,
-    expected: dict[str, tuple[str, int]],
+    expected: dict[str, str],
 ) -> None:
-    """Test that a sensor is unknown and has the message id if the control unit reports it as not in use."""
+    """Test that a sensor is unknown if the control unit reports it as not in use."""
     fake_api.message_ids = {message_id: 50}
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
@@ -118,12 +118,12 @@ async def test_sensor_not_in_use(
     ]
     await fake_api.setup_integration()
 
-    states: dict[str, tuple[str, int]] = {}
+    states: dict[str, str] = {}
 
     for entity_id in expected:
         state: State | None = hass.states.get(entity_id)
         assert isinstance(state, State)
-        states[entity_id] = (state.state, state.attributes["message_id"])
+        states[entity_id] = state.state
 
     assert states == expected
 
@@ -206,3 +206,41 @@ async def test_sensor_enum_state(
     assert isinstance(state, State)
     assert state.state == expected
     assert expected in state.attributes[ATTR_OPTIONS]
+
+
+@pytest.mark.parametrize(
+    ("value", "entity_id", "expected"),
+    [
+        (
+            ("APPL.CtrlAppl.sParam.heatpump[0].values.heatpumpSubState", "25"),
+            "sensor.keba_keenergy_12345678_heat_pump_substate",
+            {"state": "drip", "raw_value": 25},
+        ),
+        (
+            ("APPL.CtrlAppl.sParam.heatCircuit[0].heatCircuitMixer.mixer.values.setValueScaled", "0.37"),
+            "sensor.keba_keenergy_12345678_heat_circuit_mixer_position_1",
+            {"state": "off", "raw_value": 0.37, "position_percent": 37},
+        ),
+    ],
+    ids=["heat_pump_substate_second_value", "heat_circuit_mixer_partly_open"],
+)
+@pytest.mark.usefixtures("entity_registry_enabled_by_default")
+async def test_sensor_raw_value(
+    hass: HomeAssistant,
+    fake_api: FakeKebaKeEnergyAPI,
+    value: tuple[str, str],
+    entity_id: str,
+    expected: dict[str, Any],
+) -> None:
+    """Test that `raw_value` is the value read, also for enum members with several values and mixer positions."""
+    name, raw_value = value
+    fake_api.responses = [
+        MULTIPLE_POSITIONS_RESPONSE,
+        get_multiple_position_fixed_data_response(),
+        update_response(MULTIPLE_POSITION_DATA_RESPONSE, name, value=raw_value),
+    ]
+    await fake_api.setup_integration()
+
+    state: State | None = hass.states.get(entity_id)
+    assert isinstance(state, State)
+    assert {"state": state.state} | {key: state.attributes.get(key) for key in expected if key != "state"} == expected

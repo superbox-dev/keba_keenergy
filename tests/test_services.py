@@ -25,7 +25,7 @@ from custom_components.keba_keenergy.const import SERVICE_SET_HEATING_CURVE_POIN
 from custom_components.keba_keenergy.services import AWAY_DATE_RANGE_SCHEMA
 from tests import init_translations
 from tests.api_data import HEATING_CURVE_NAMES_RESPONSE
-from tests.api_data import HEATING_CURVES_RENAMED_POINTS_RESPONSE
+from tests.api_data import HEATING_CURVES_RENAMED_RESPONSE
 from tests.api_data import MULTIPLE_POSITION_DATA_RESPONSE
 from tests.api_data import MULTIPLE_POSITIONS_RESPONSE
 from tests.api_data import get_heating_curve_points_response
@@ -296,8 +296,8 @@ async def test_set_heating_curve_points_with_invalid_heating_curve(
         MULTIPLE_POSITION_DATA_RESPONSE,
     ]
     await fake_api.setup_integration()
-    # The points of the heating curve HC1 have another name on the control unit.
-    fake_api.heating_curves = HEATING_CURVES_RENAMED_POINTS_RESPONSE
+    # The heating curve HC1 was renamed on the control unit after the setup.
+    fake_api.heating_curves = HEATING_CURVES_RENAMED_RESPONSE
     translations: dict[str, str] = await init_translations(hass, category="exceptions")
 
     with pytest.raises(

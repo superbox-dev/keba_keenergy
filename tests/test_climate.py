@@ -35,10 +35,9 @@ from homeassistant.core import HomeAssistant
 from homeassistant.core import State
 from homeassistant.helpers.entity_component import async_update_entity
 from homeassistant.util import dt as dt_util
-from keba_keenergy_api.constants import HeatCircuitCoolRequest
-from keba_keenergy_api.constants import HeatCircuitHeatRequest
-from keba_keenergy_api.constants import HeatCircuitOperatingMode
-from keba_keenergy_api.constants import HeatPumpState
+from keba_keenergy_api.enums import HeatingCircuitOperatingMode
+from keba_keenergy_api.enums import HeatingCircuitRequest
+from keba_keenergy_api.enums import HeatPumpState
 from pytest_homeassistant_custom_component.common import async_fire_time_changed
 
 from custom_components.keba_keenergy.const import FLASH_WRITE_DELAY
@@ -247,7 +246,7 @@ async def test_turn_off(
 
     fake_api.assert_called_write_with(
         f'[{{"name": "APPL.CtrlAppl.sParam.heatCircuit[0].param.operatingMode", '
-        f'"value": "{HeatCircuitOperatingMode.OFF.value}"}}]',
+        f'"value": "{HeatingCircuitOperatingMode.OFF.value}"}}]',
     )
 
 
@@ -276,7 +275,7 @@ async def test_turn_on(
 
     fake_api.assert_called_write_with(
         f'[{{"name": "APPL.CtrlAppl.sParam.heatCircuit[0].param.operatingMode", '
-        f'"value": "{HeatCircuitOperatingMode.AUTO.value}"}}]',
+        f'"value": "{HeatingCircuitOperatingMode.AUTO.value}"}}]',
     )
 
 
@@ -348,10 +347,10 @@ async def test_set_unchanged_hvac_mode(
 @pytest.mark.parametrize(
     ("preset_mode", "response", "expected_preset_mode"),
     [
-        (PRESET_HOME, MULTIPLE_POSITION_DATA_RESPONSE, HeatCircuitOperatingMode.AUTO.value),
-        (PRESET_COMFORT, MULTIPLE_POSITION_OTHER_MODES_DATA_RESPONSE, HeatCircuitOperatingMode.DAY.value),
-        (PRESET_SLEEP, MULTIPLE_POSITION_DATA_RESPONSE, HeatCircuitOperatingMode.NIGHT.value),
-        (PRESET_BOOST, MULTIPLE_POSITION_DATA_RESPONSE, HeatCircuitOperatingMode.PARTY.value),
+        (PRESET_HOME, MULTIPLE_POSITION_DATA_RESPONSE, HeatingCircuitOperatingMode.AUTO.value),
+        (PRESET_COMFORT, MULTIPLE_POSITION_OTHER_MODES_DATA_RESPONSE, HeatingCircuitOperatingMode.NORMAL.value),
+        (PRESET_SLEEP, MULTIPLE_POSITION_DATA_RESPONSE, HeatingCircuitOperatingMode.REDUCED.value),
+        (PRESET_BOOST, MULTIPLE_POSITION_DATA_RESPONSE, HeatingCircuitOperatingMode.PARTY.value),
     ],
     ids=["home", "comfort", "sleep", "boost"],
 )
@@ -489,13 +488,13 @@ async def test_set_temperature(
 
 @pytest.mark.parametrize(
     "operating_mode",
-    [HeatCircuitOperatingMode.EXTERNAL, HeatCircuitOperatingMode.ROOM_CONTROL],
+    [HeatingCircuitOperatingMode.EXTERNAL, HeatingCircuitOperatingMode.ROOM_CONTROL],
     ids=["external", "room_control"],
 )
 async def test_operating_mode_without_preset(
     hass: HomeAssistant,
     fake_api: FakeKebaKeEnergyAPI,
-    operating_mode: HeatCircuitOperatingMode,
+    operating_mode: HeatingCircuitOperatingMode,
 ) -> None:
     """Test that a heating circuit in an operating mode without a preset has the home preset."""
     fake_api.responses = [
@@ -574,11 +573,11 @@ async def test_room_sensor_not_in_use(
     ("response", "expected_hvac_action"),
     [
         (get_hvac_action_data_response(heat_pump_state=HeatPumpState.STANDBY), HVACAction.IDLE),
-        (get_hvac_action_data_response(heat_pump_state=HeatPumpState.FLOW), HVACAction.PREHEATING),
-        (get_hvac_action_data_response(heat_pump_state=HeatPumpState.AUTO_HEAT), HVACAction.HEATING),
+        (get_hvac_action_data_response(heat_pump_state=HeatPumpState.PRE_RUN), HVACAction.PREHEATING),
+        (get_hvac_action_data_response(heat_pump_state=HeatPumpState.AUTOMATIC), HVACAction.HEATING),
         (get_hvac_action_data_response(heat_pump_state=HeatPumpState.DEFROST), HVACAction.DEFROSTING),
-        (get_hvac_action_data_response(heat_pump_state=HeatPumpState.AUTO_COOL), HVACAction.IDLE),
-        (get_hvac_action_data_response(heat_pump_state=HeatPumpState.INFLOW), HVACAction.HEATING),
+        (get_hvac_action_data_response(heat_pump_state=HeatPumpState.COOLING), HVACAction.IDLE),
+        (get_hvac_action_data_response(heat_pump_state=HeatPumpState.POST_RUN), HVACAction.HEATING),
         (get_hvac_action_data_response(heat_pump_state=HeatPumpState.PUMP_DOWN), HVACAction.IDLE),
         (get_hvac_action_data_response(heat_pump_state=HeatPumpState.SHUTDOWN), HVACAction.IDLE),
         (get_hvac_action_data_response(heat_pump_state=HeatPumpState.ERROR), HVACAction.IDLE),
@@ -586,8 +585,8 @@ async def test_room_sensor_not_in_use(
         # The heat request of the heating circuit is temporarily off while the heat pump heats the hot water.
         (
             get_hvac_action_data_response(
-                heat_pump_state=HeatPumpState.AUTO_HEAT,
-                heat_request=HeatCircuitHeatRequest.TEMPORARY_OFF,
+                heat_pump_state=HeatPumpState.AUTOMATIC,
+                heat_request=HeatingCircuitRequest.TEMPERATURE_PRIORITY_OFF,
             ),
             HVACAction.IDLE,
         ),
@@ -595,23 +594,23 @@ async def test_room_sensor_not_in_use(
         (
             get_hvac_action_data_response(
                 heat_pump_state=HeatPumpState.STANDBY,
-                heat_request=HeatCircuitHeatRequest.OFF,
-                cool_request=HeatCircuitCoolRequest.ON,
+                heat_request=HeatingCircuitRequest.OFF,
+                cool_request=HeatingCircuitRequest.ACTIVE,
             ),
             HVACAction.COOLING,
         ),
         (
             get_hvac_action_data_response(
                 heat_pump_state=HeatPumpState.STANDBY,
-                heat_request=HeatCircuitHeatRequest.OFF,
-                cool_request=HeatCircuitCoolRequest.OUTDOOR_OFF,
+                heat_request=HeatingCircuitRequest.OFF,
+                cool_request=HeatingCircuitRequest.OUTDOOR_OFF,
             ),
             HVACAction.IDLE,
         ),
         (
             get_hvac_action_data_response(
-                heat_pump_state=HeatPumpState.AUTO_HEAT,
-                operating_mode=HeatCircuitOperatingMode.OFF,
+                heat_pump_state=HeatPumpState.AUTOMATIC,
+                operating_mode=HeatingCircuitOperatingMode.OFF,
             ),
             HVACAction.OFF,
         ),

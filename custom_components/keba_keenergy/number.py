@@ -17,9 +17,9 @@ from homeassistant.const import PERCENTAGE
 from homeassistant.const import EntityCategory
 from homeassistant.const import UnitOfTemperature
 from homeassistant.const import UnitOfTime
-from keba_keenergy_api.constants import SectionPrefix
 
 from .const import DOMAIN
+from .const import SectionPrefix
 from .entity import KebaKeEnergyEntity
 from .entity import KebaKeEnergyEntityDescription
 from .entity import _async_setup_entities
@@ -74,7 +74,6 @@ class KebaKeEnergyNumberEntity(KebaKeEnergyEntity, NumberEntity):
         self.entity_id: str = f"{NUMBER_DOMAIN}.{DOMAIN}_{self._attr_unique_id}"
 
         self._pending_key = self.entity_description.key
-        self._pending_section = self.section
 
     @property
     def native_min_value(self) -> float:

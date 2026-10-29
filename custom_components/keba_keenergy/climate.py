@@ -24,24 +24,23 @@ from homeassistant.components.climate.const import HVACMode
 from homeassistant.const import ATTR_TEMPERATURE
 from homeassistant.const import UnitOfTemperature
 from homeassistant.util import dt as dt_util
-from keba_keenergy_api.constants import HeatCircuit
-from keba_keenergy_api.constants import HeatCircuitCoolRequest
-from keba_keenergy_api.constants import HeatCircuitHeatRequest
-from keba_keenergy_api.constants import HeatCircuitOperatingMode
-from keba_keenergy_api.constants import HeatPumpState
-from keba_keenergy_api.constants import SectionPrefix
+from keba_keenergy_api.enums import HeatingCircuitOperatingMode
+from keba_keenergy_api.enums import HeatingCircuitRequest
 
 from .const import COOLING_CIRCUIT_PRESET_TO_HA
 from .const import DOMAIN
 from .const import HEAT_PUMP_STATE_TO_HVAC_ACTION
 from .const import HEATING_CIRCUIT_PRESET_TO_HA
+from .const import SectionPrefix
 from .entity import KebaKeEnergyBaseEntity
 
 if TYPE_CHECKING:
+    from collections.abc import Mapping
     from zoneinfo import ZoneInfo
 
     from homeassistant.core import HomeAssistant
     from homeassistant.helpers.entity_platform import AddEntitiesCallback
+    from keba_keenergy_api.enums import HeatPumpState
 
     from .coordinator import KebaKeEnergyConfigEntry
     from .coordinator import KebaKeEnergyDataUpdateCoordinator
@@ -81,7 +80,6 @@ class KebaKeEnergyClimateEntity(KebaKeEnergyBaseEntity, ClimateEntity):
         self.entity_id = f"{CLIMATE_DOMAIN}.{DOMAIN}_{self._attr_unique_id}"
 
         self._pending_key = "target_temperature_offset"
-        self._pending_section = HeatCircuit.TARGET_TEMPERATURE_OFFSET
 
     @cached_property
     def hvac_modes(self) -> list[HVACMode]:
@@ -108,7 +106,7 @@ class KebaKeEnergyClimateEntity(KebaKeEnergyBaseEntity, ClimateEntity):
     @cached_property
     def preset_modes(self) -> list[str] | None:
         """Return available preset modes."""
-        preset_to_ha: dict[int, str] = HEATING_CIRCUIT_PRESET_TO_HA
+        preset_to_ha: Mapping[HeatingCircuitOperatingMode, str] = HEATING_CIRCUIT_PRESET_TO_HA
 
         if self._is_cooling:
             preset_to_ha = COOLING_CIRCUIT_PRESET_TO_HA
@@ -118,16 +116,12 @@ class KebaKeEnergyClimateEntity(KebaKeEnergyBaseEntity, ClimateEntity):
     @property
     def current_temperature(self) -> float | None:
         """Return the current temperature."""
-        return (
-            self.get_value("room_temperature", expected_type=float)
-            if self.coordinator.has_room_temperature(index=self.index)
-            else None
-        )
+        return self.get_float("room_temperature") if self.coordinator.has_room_temperature(index=self.index) else None
 
     @property
     def target_temperature(self) -> float | None:
         """Return the temperature we try to reach."""
-        selected_target_temperature: float | None = self.get_value("selected_target_temperature", expected_type=float)
+        selected_target_temperature: float | None = self.get_float("selected_target_temperature")
         target_temperature_offset: float | None = self._get_debounced_value()
 
         return (
@@ -139,7 +133,7 @@ class KebaKeEnergyClimateEntity(KebaKeEnergyBaseEntity, ClimateEntity):
     @property
     def min_temp(self) -> float:
         """Return the minimum temperature."""
-        selected_target_temperature: float | None = self.get_value("selected_target_temperature", expected_type=float)
+        selected_target_temperature: float | None = self.get_float("selected_target_temperature")
         lower_limit: float | None = self.get_limit("target_temperature_offset", attr="lower_limit")
 
         return (
@@ -151,7 +145,7 @@ class KebaKeEnergyClimateEntity(KebaKeEnergyBaseEntity, ClimateEntity):
     @property
     def max_temp(self) -> float:
         """Return the maximum temperature."""
-        selected_target_temperature: float | None = self.get_value("selected_target_temperature", expected_type=float)
+        selected_target_temperature: float | None = self.get_float("selected_target_temperature")
         upper_limit: float | None = self.get_limit("target_temperature_offset", attr="upper_limit")
 
         return (
@@ -163,25 +157,23 @@ class KebaKeEnergyClimateEntity(KebaKeEnergyBaseEntity, ClimateEntity):
     @property
     def current_humidity(self) -> float | None:
         """Return the current humidity."""
-        return (
-            self.get_value("room_humidity", expected_type=float)
-            if self.coordinator.has_room_humidity(index=self.index)
-            else None
-        )
+        return self.get_float("room_humidity") if self.coordinator.has_room_humidity(index=self.index) else None
 
     @property
     def hvac_mode(self) -> HVACMode | None:
         """Return hvac operation."""
-        operating_mode: str | None = self.get_value("operating_mode", expected_type=str)
+        operating_mode: HeatingCircuitOperatingMode | None = self._operating_mode
         return None if operating_mode is None else self._operating_mode_to_hvac_mode(operating_mode)
 
-    def _operating_mode_to_hvac_mode(self, operating_mode: str, /) -> HVACMode:
-        mode: int = HeatCircuitOperatingMode[operating_mode.upper()].value
+    @property
+    def _operating_mode(self) -> HeatingCircuitOperatingMode | None:
+        return self.get_typed_value("operating_mode", HeatingCircuitOperatingMode)
 
-        if mode == HeatCircuitOperatingMode.AUTO.value:
+    def _operating_mode_to_hvac_mode(self, operating_mode: HeatingCircuitOperatingMode, /) -> HVACMode:
+        if operating_mode is HeatingCircuitOperatingMode.AUTO:
             return HVACMode.AUTO
 
-        if mode in HEATING_CIRCUIT_PRESET_TO_HA:
+        if operating_mode in HEATING_CIRCUIT_PRESET_TO_HA:
             return self._hvac_mode_on
 
         return HVACMode.OFF
@@ -189,14 +181,8 @@ class KebaKeEnergyClimateEntity(KebaKeEnergyBaseEntity, ClimateEntity):
     @property
     def hvac_action(self) -> HVACAction | None:
         """Return the current running hvac operation if supported."""
-        has_heat_request: bool = HeatCircuitHeatRequest.ON.name.lower() == self.get_value(
-            "heat_request",
-            expected_type=str,
-        )
-        has_cool_request: bool = HeatCircuitCoolRequest.ON.name.lower() == self.get_value(
-            "cool_request",
-            expected_type=str,
-        )
+        has_heat_request: bool = self.get_value("heat_request") is HeatingCircuitRequest.ACTIVE
+        has_cool_request: bool = self.get_value("cool_request") is HeatingCircuitRequest.ACTIVE
 
         # Cooling only uses the cool request, the heat pump stays in standby with passive cooling.
         return (
@@ -229,14 +215,10 @@ class KebaKeEnergyClimateEntity(KebaKeEnergyBaseEntity, ClimateEntity):
     @property
     def preset_mode(self) -> str:
         """Return the current preset mode."""
-        operating_mode: str | None = self.get_value("operating_mode", expected_type=str)
+        operating_mode: HeatingCircuitOperatingMode | None = self._operating_mode
 
         # Off and the modes without a preset (e.g. external or room control) return the home preset.
-        return (
-            HEATING_CIRCUIT_PRESET_TO_HA.get(HeatCircuitOperatingMode[operating_mode.upper()].value, PRESET_HOME)
-            if operating_mode
-            else PRESET_HOME
-        )
+        return PRESET_HOME if operating_mode is None else HEATING_CIRCUIT_PRESET_TO_HA.get(operating_mode, PRESET_HOME)
 
     async def async_turn_off(self) -> None:
         """Turn off the heat circuit."""
@@ -248,23 +230,21 @@ class KebaKeEnergyClimateEntity(KebaKeEnergyBaseEntity, ClimateEntity):
 
     async def async_set_hvac_mode(self, hvac_mode: HVACMode) -> None:
         """Set hvac mode for heat circuit."""
-        operating_mode_status: int = (
-            HeatCircuitOperatingMode.AUTO.value
+        operating_mode_status: HeatingCircuitOperatingMode = (
+            HeatingCircuitOperatingMode.AUTO
             if hvac_mode == HVACMode.AUTO
-            else HeatCircuitOperatingMode.OFF.value
+            else HeatingCircuitOperatingMode.OFF
             if hvac_mode == HVACMode.OFF
-            else HeatCircuitOperatingMode.DAY.value
+            else HeatingCircuitOperatingMode.NORMAL
         )
 
         if hvac_mode == HVACMode.AUTO:
             await self._async_set_away_date_range(PRESET_HOME)
 
-        operating_mode: str | None = self.get_value("operating_mode", expected_type=str)
-
-        if operating_mode is None or HeatCircuitOperatingMode[operating_mode.upper()].value != operating_mode_status:
+        if self._operating_mode is not operating_mode_status:
             await self._async_write_data(
                 operating_mode_status,
-                section=HeatCircuit.OPERATING_MODE,
+                key="operating_mode",
                 device_numbers=self.device_numbers,
             )
 
@@ -295,18 +275,18 @@ class KebaKeEnergyClimateEntity(KebaKeEnergyBaseEntity, ClimateEntity):
         """Set preset mode for heat circuit."""
         await self._async_set_away_date_range(preset_mode)
 
-        for key, value in HEATING_CIRCUIT_PRESET_TO_HA.items():
-            if value == preset_mode and preset_mode not in (self.preset_mode, PRESET_AWAY):
+        for operating_mode, preset in HEATING_CIRCUIT_PRESET_TO_HA.items():
+            if preset == preset_mode and preset_mode not in (self.preset_mode, PRESET_AWAY):
                 await self._async_write_data(
-                    key,
-                    section=HeatCircuit.OPERATING_MODE,
+                    operating_mode,
+                    key="operating_mode",
                     device_numbers=self.device_numbers,
                 )
 
     async def async_set_temperature(self, **kwargs: object) -> None:
         """Set new target temperature."""
         temperature: object = kwargs.get(ATTR_TEMPERATURE)
-        selected_target_temperature: float | None = self.get_value("selected_target_temperature", expected_type=float)
+        selected_target_temperature: float | None = self.get_float("selected_target_temperature")
 
         self._schedule_debounced_write(
             temperature - selected_target_temperature

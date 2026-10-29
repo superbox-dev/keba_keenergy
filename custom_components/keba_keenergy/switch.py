@@ -14,10 +14,9 @@ from homeassistant.components.switch import SwitchEntity
 from homeassistant.components.switch import SwitchEntityDescription
 from homeassistant.components.switch.const import DOMAIN as SWITCH_DOMAIN
 from homeassistant.const import EntityCategory
-from keba_keenergy_api.constants import BoolEnum
-from keba_keenergy_api.constants import SectionPrefix
 
 from .const import DOMAIN
+from .const import SectionPrefix
 from .entity import KebaKeEnergyEntity
 from .entity import KebaKeEnergyEntityDescription
 from .entity import _async_setup_entities
@@ -65,24 +64,25 @@ class KebaKeEnergySwitchEntity(KebaKeEnergyEntity, SwitchEntity):
     @property
     def is_on(self) -> bool | None:
         """Return true if the switch is on."""
-        value: str | None = self.get_value(self.entity_description.key, expected_type=str)
-        return None if value is None else value == BoolEnum.ON.name.lower()
+        return self.get_typed_value(self.entity_description.key, bool)
 
     async def async_turn_off(self, **kwargs: object) -> None:  # noqa: ARG002
         """Turn the switch off."""
         if self.is_on:
+            value: bool = False
             await self._async_write_data(
-                0,
-                section=self.section,
+                value,
+                key=self.entity_description.key,
                 device_numbers=self.device_numbers,
             )
 
     async def async_turn_on(self, **kwargs: object) -> None:  # noqa: ARG002
         """Turn the switch on."""
         if not self.is_on:
+            value: bool = True
             await self._async_write_data(
-                1,
-                section=self.section,
+                value,
+                key=self.entity_description.key,
                 device_numbers=self.device_numbers,
             )
 

@@ -17,9 +17,7 @@ from homeassistant.core import callback
 from homeassistant.exceptions import ServiceValidationError
 from homeassistant.helpers import config_validation as cv
 from homeassistant.helpers import selector
-from keba_keenergy_api.endpoints import HeatingCurvePoint
-from keba_keenergy_api.endpoints import HeatingCurvePoints
-from keba_keenergy_api.endpoints import HeatingCurves
+from keba_keenergy_api.models import CurvePoint
 
 from .const import ATTR_CONFIG_ENTRY
 from .const import ATTR_END_DATE
@@ -38,6 +36,7 @@ if TYPE_CHECKING:
 
     from homeassistant.core import HomeAssistant
     from homeassistant.core import ServiceCall
+    from keba_keenergy_api.models import CurveTable
 
     from .coordinator import KebaKeEnergyConfigEntry
     from .coordinator import KebaKeEnergyDataUpdateCoordinator
@@ -121,7 +120,7 @@ async def _async_set_heating_curve_points(call: ServiceCall) -> None:
     coordinator: KebaKeEnergyDataUpdateCoordinator = _get_coordinator(call)
 
     heating_curve: str = call.data[ATTR_HEATING_CURVE]
-    heating_curves: HeatingCurves = await coordinator.get_heating_curve_points()
+    heating_curves: dict[str, CurveTable] = await coordinator.get_curve_tables()
 
     if heating_curve not in heating_curves:
         raise ServiceValidationError(
@@ -132,8 +131,8 @@ async def _async_set_heating_curve_points(call: ServiceCall) -> None:
             },
         )
 
-    points: HeatingCurvePoints = tuple(
-        HeatingCurvePoint(
+    points: tuple[CurvePoint, ...] = tuple(
+        CurvePoint(
             outdoor=round(d[ATTR_OUTDOOR], 2),
             flow=round(d[ATTR_FLOW], 2),
         )
@@ -148,18 +147,15 @@ async def _async_set_heating_curve_points(call: ServiceCall) -> None:
         )
 
     # Only write changed points, the control unit stores them in its flash memory.
-    current_points: HeatingCurvePoints = tuple(
-        HeatingCurvePoint(outdoor=round(p.outdoor, 2), flow=round(p.flow, 2)) for p in heating_curves[heating_curve]
+    current_points: tuple[CurvePoint, ...] = tuple(
+        CurvePoint(outdoor=round(p.outdoor, 2), flow=round(p.flow, 2)) for p in heating_curves[heating_curve].points
     )
 
     if current_points == points:
         return
 
     await coordinator.async_execute_write(
-        write_fn=lambda: coordinator.api.heat_circuit.set_heating_curve_points(
-            heating_curve=heating_curve,
-            points=points,
-        ),
+        write_fn=lambda: coordinator.api.set_curve_table_points(heating_curve, points),
         names=(f"heating_curve_points.{heating_curve}",),
     )
 

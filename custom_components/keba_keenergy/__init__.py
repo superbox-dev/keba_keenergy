@@ -12,11 +12,11 @@ from typing import Final
 from homeassistant.helpers import config_validation as cv
 from homeassistant.helpers import device_registry as dr
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
-from keba_keenergy_api.constants import SectionPrefix
 
 from .const import DOMAIN
 from .const import MANUFACTURER
 from .const import PLATFORMS
+from .const import SectionPrefix
 from .coordinator import KebaKeEnergyConfigEntry
 from .coordinator import KebaKeEnergyDataUpdateCoordinator
 from .coordinator import get_device_identifier

@@ -16,7 +16,7 @@ from homeassistant.const import Platform
 from homeassistant.core import HomeAssistant
 from homeassistant.core import State
 from homeassistant.helpers import entity_registry as er
-from keba_keenergy_api.constants import HeatCircuitMode
+from keba_keenergy_api.enums import HeatingCircuitType
 
 from tests import get_platform_states
 from tests.api_data import ENTITY_UPDATED_DATA_RESPONSE
@@ -215,7 +215,7 @@ async def test_heating_and_cooling_circuit_has_one_curve_switch(
         update_response(
             get_multiple_position_fixed_data_response(),
             "APPL.CtrlAppl.sParam.options.heatCircuit[1].type",
-            value=str(HeatCircuitMode.HEATING_AND_COOLING.value),
+            value=str(HeatingCircuitType.HEATING_AND_COOLING.value),
         ),
         MULTIPLE_POSITION_DATA_RESPONSE,
     ]

@@ -14,12 +14,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added the HVAC actions `defrosting` and `preheating` to the climate entities of the heating circuits, shown while
   a heat pump defrosts or is in the pre-run of a heating cycle. ([Issue #84][issue-84])
 
+### Changed
+
+- Changed the requirement to `keba_keenergy_api` 3.0, all values of an update are read with one request.
+  ([Issue #77][issue-77])
+- Changed the attributes `lower_limit` and `upper_limit` to numbers, only writable values have them.
+  ([Issue #77][issue-77])
+- Changed more sensors and binary sensors to use the message ID of the control unit (e.g. the heat pump temperatures
+  and powers, the meters of the solar circuits and photovoltaics), they are unknown or not created if the control
+  unit does not use them. ([Issue #77][issue-77])
+
+### Removed
+
+- Removed the attribute `message_id` of the sensors and binary sensors, the message IDs are in the diagnostics.
+  ([Issue #77][issue-77])
+
 ### Fixed
 
 - Showed the HVAC action `heating` of a heating circuit only while a heat pump heats. The heat request of the
   heating circuit stays on during the whole heating period on newer software versions, so `heating` was also shown
   while the heat pump was in standby. ([Issue #84][issue-84])
 
+[issue-77]: https://github.com/superbox-dev/keba_keenergy/issues/77
 [issue-84]: https://github.com/superbox-dev/keba_keenergy/issues/84
 
 ## [1.11.0] - 2026-10-28
