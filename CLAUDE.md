@@ -48,6 +48,30 @@ Before finishing a change, run `ruff format`, `lint.sh` and `pytest`, in this or
 - Credentials, tokens and serial numbers never in log or exception messages, dumps of device or portal data only
   redacted (`async_redact_data(data, TO_REDACT)`)
 - New texts in `strings.json`, `translations/en.json` and `translations/de.json`, keys sorted
+- Entity names (EN / DE), Home Assistant adds the device name
+  - readable form of the `keba_keenergy_api` 3.0 endpoint name, no device name, unit or state
+    (`RETURN_TEMPERATURE`: `Return temperature` / `Rücklauftemperatur`)
+  - mode before the quantity in EN, after it in DE (`Heating power` / `Leistung Heizen`), sum of all modes
+    `Total …` / `… gesamt`
+  - qualifiers in parentheses at the end, comma-separated: `(PV surplus)` / `(PV-Überschuss)`, `(normal)` /
+    `(Normal)`, `(reduced)` / `(Abgesenkt)`, `(away)` / `(Urlaub)` (like the climate preset), `(mixer)` /
+    `(Mischer)`, daily meter values `(today)` / `(heute)`
+  - `Target …` / `Soll-…`, actual values without `Current` / `Ist-`
+  - thermal energy `… energy` / `Wärmemenge …` (`Kältemenge` for cooling), electrical `… electrical energy` /
+    `Elektrische Energie …`
+  - `sStatisticalData` operating times `… operating time` / `Laufzeit …`, `operationalData` `Operating hours` /
+    `Betriebsstunden`
+  - binary sensors only the component or condition, the device class shows the state (`Compressor` / `Kompressor`,
+    `PV surplus` / `PV-Überschuss`)
+  - DHW as `Hot water` / `Warmwasser`, abbreviations only when common (`COP`, `SPF` / `JAZ`, `PF` / `AZ`, `PV`),
+    never those of the Web HMI
+  - DE compounds of at most two parts, longer ones as `<quantity> <component>` (`Drehzahl Umwälzpumpe`,
+    `Eintrittstemperatur Kompressor`), established terms stay one word (`Vorlauftemperatur`, `Hochdruckschalter`)
+- Energy entities like the energy monitor of the Web HMI: accumulated energies from `sStatisticalData`, meters
+  (`*_METER_*`) only for power, daily energy and mass flow
+  - exception: meters without a usable statistic (`HeatPump` source, `SolarCircuit`, `Photovoltaics`)
+  - thermal statistics (`*_THERMAL_ENERGY`, `*_SPF`, `*_PF`) only when the meter of the mode is not deactivated,
+    otherwise they are always `0`
 - Log messages start with a capital letter, no trailing period, values as `%s` arguments
 - Every file follows `.editorconfig`, whether a linter checks it or not
 - Style rules apply to new and changed code, existing code only adapted when asked
@@ -104,7 +128,7 @@ Before finishing a change, run `ruff format`, `lint.sh` and `pytest`, in this or
 
 ## Documentation
 
-- Update `website/content/index.md` when entities, options, actions or behaviour change
+- Update `website/content/index.md` when entities, options, actions or behavior change
 - Keep the `<!--start-…-->` / `<!--end-…-->` markers in `README.md`, `CONTRIBUTING.md` and `CHANGELOG.md`
 - Keep `README.md` short (install, links to the sections), details go to `website/content/index.md`
 - Images are in `assets/` (also used by `README.md`)

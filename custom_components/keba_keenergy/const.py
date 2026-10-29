@@ -12,6 +12,7 @@ from homeassistant.components.climate.const import PRESET_BOOST
 from homeassistant.components.climate.const import PRESET_COMFORT
 from homeassistant.components.climate.const import PRESET_HOME
 from homeassistant.components.climate.const import PRESET_SLEEP
+from homeassistant.components.climate.const import HVACAction
 from homeassistant.components.water_heater import STATE_ECO
 from homeassistant.components.water_heater import STATE_HEAT_PUMP
 from homeassistant.components.water_heater import STATE_PERFORMANCE
@@ -30,6 +31,7 @@ from keba_keenergy_api.constants import ExternalHeatSource
 from keba_keenergy_api.constants import HeatCircuit
 from keba_keenergy_api.constants import HeatCircuitOperatingMode
 from keba_keenergy_api.constants import HeatPump
+from keba_keenergy_api.constants import HeatPumpState
 from keba_keenergy_api.constants import HotWaterTank
 from keba_keenergy_api.constants import HotWaterTankOperatingMode
 from keba_keenergy_api.constants import PassiveCooling
@@ -94,6 +96,17 @@ COOLING_CIRCUIT_PRESET_TO_HA: Final[dict[int, str]] = {
     HeatCircuitOperatingMode.DAY.value: PRESET_COMFORT,
     HeatCircuitOperatingMode.NIGHT.value: PRESET_SLEEP,
     HeatCircuitOperatingMode.PARTY.value: PRESET_BOOST,
+}
+
+# The order is the priority with several heat pumps, e.g. one heat pump heats while another one defrosts.
+# All other heat pump states are idle.
+HEAT_PUMP_STATE_TO_HVAC_ACTION: Final[dict[HeatPumpState, HVACAction]] = {
+    HeatPumpState.AUTO_HEAT: HVACAction.HEATING,
+    # The post-run still delivers heat while the compressor stops.
+    HeatPumpState.INFLOW: HVACAction.HEATING,
+    HeatPumpState.DEFROST: HVACAction.DEFROSTING,
+    # The pre-run starts the pumps, the compressor does not run yet.
+    HeatPumpState.FLOW: HVACAction.PREHEATING,
 }
 
 TEMPERATURE_OFFSET_SCHEMA: Final = {

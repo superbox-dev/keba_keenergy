@@ -12,6 +12,7 @@ from typing import Any
 from unittest.mock import patch
 
 import pytest
+from homeassistant.components.climate.const import ATTR_HVAC_ACTION
 from homeassistant.components.climate.const import ATTR_HVAC_MODE
 from homeassistant.components.climate.const import ATTR_PRESET_MODE
 from homeassistant.components.climate.const import DOMAIN as CLIMATE_DOMAIN
@@ -23,6 +24,7 @@ from homeassistant.components.climate.const import PRESET_SLEEP
 from homeassistant.components.climate.const import SERVICE_SET_HVAC_MODE
 from homeassistant.components.climate.const import SERVICE_SET_PRESET_MODE
 from homeassistant.components.climate.const import SERVICE_SET_TEMPERATURE
+from homeassistant.components.climate.const import HVACAction
 from homeassistant.components.climate.const import HVACMode
 from homeassistant.const import ATTR_ENTITY_ID
 from homeassistant.const import ATTR_TEMPERATURE
@@ -33,7 +35,10 @@ from homeassistant.core import HomeAssistant
 from homeassistant.core import State
 from homeassistant.helpers.entity_component import async_update_entity
 from homeassistant.util import dt as dt_util
+from keba_keenergy_api.constants import HeatCircuitCoolRequest
+from keba_keenergy_api.constants import HeatCircuitHeatRequest
 from keba_keenergy_api.constants import HeatCircuitOperatingMode
+from keba_keenergy_api.constants import HeatPumpState
 from pytest_homeassistant_custom_component.common import async_fire_time_changed
 
 from custom_components.keba_keenergy.const import FLASH_WRITE_DELAY
@@ -50,6 +55,7 @@ from tests.api_data import update_response
 from tests.test_climate_data import ENTITY_ID
 from tests.test_climate_data import ENTITY_ID_1
 from tests.test_climate_data import ENTITY_ID_2
+from tests.test_climate_data import get_hvac_action_data_response
 
 if TYPE_CHECKING:
     from syrupy.assertion import SnapshotAssertion
@@ -562,3 +568,85 @@ async def test_room_sensor_not_in_use(
         None,
         53.0,
     )
+
+
+@pytest.mark.parametrize(
+    ("response", "expected_hvac_action"),
+    [
+        (get_hvac_action_data_response(heat_pump_state=HeatPumpState.STANDBY), HVACAction.IDLE),
+        (get_hvac_action_data_response(heat_pump_state=HeatPumpState.FLOW), HVACAction.PREHEATING),
+        (get_hvac_action_data_response(heat_pump_state=HeatPumpState.AUTO_HEAT), HVACAction.HEATING),
+        (get_hvac_action_data_response(heat_pump_state=HeatPumpState.DEFROST), HVACAction.DEFROSTING),
+        (get_hvac_action_data_response(heat_pump_state=HeatPumpState.AUTO_COOL), HVACAction.IDLE),
+        (get_hvac_action_data_response(heat_pump_state=HeatPumpState.INFLOW), HVACAction.HEATING),
+        (get_hvac_action_data_response(heat_pump_state=HeatPumpState.PUMP_DOWN), HVACAction.IDLE),
+        (get_hvac_action_data_response(heat_pump_state=HeatPumpState.SHUTDOWN), HVACAction.IDLE),
+        (get_hvac_action_data_response(heat_pump_state=HeatPumpState.ERROR), HVACAction.IDLE),
+        (get_hvac_action_data_response(heat_pump_state=HeatPumpState.SOURCE_FLUSH), HVACAction.IDLE),
+        # The heat request of the heating circuit is temporarily off while the heat pump heats the hot water.
+        (
+            get_hvac_action_data_response(
+                heat_pump_state=HeatPumpState.AUTO_HEAT,
+                heat_request=HeatCircuitHeatRequest.TEMPORARY_OFF,
+            ),
+            HVACAction.IDLE,
+        ),
+        # The heat pump stays in standby with passive cooling.
+        (
+            get_hvac_action_data_response(
+                heat_pump_state=HeatPumpState.STANDBY,
+                heat_request=HeatCircuitHeatRequest.OFF,
+                cool_request=HeatCircuitCoolRequest.ON,
+            ),
+            HVACAction.COOLING,
+        ),
+        (
+            get_hvac_action_data_response(
+                heat_pump_state=HeatPumpState.STANDBY,
+                heat_request=HeatCircuitHeatRequest.OFF,
+                cool_request=HeatCircuitCoolRequest.OUTDOOR_OFF,
+            ),
+            HVACAction.IDLE,
+        ),
+        (
+            get_hvac_action_data_response(
+                heat_pump_state=HeatPumpState.AUTO_HEAT,
+                operating_mode=HeatCircuitOperatingMode.OFF,
+            ),
+            HVACAction.OFF,
+        ),
+    ],
+    ids=[
+        "standby",
+        "flow",
+        "auto_heat",
+        "defrost",
+        "auto_cool",
+        "inflow",
+        "pump_down",
+        "shutdown",
+        "error",
+        "source_flush",
+        "hot_water",
+        "cool_request",
+        "no_request",
+        "hvac_mode_off",
+    ],
+)
+async def test_hvac_action(
+    hass: HomeAssistant,
+    fake_api: FakeKebaKeEnergyAPI,
+    response: list[dict[str, Any]],
+    expected_hvac_action: HVACAction,
+) -> None:
+    """Test the action of a heating circuit with the requests of the heating circuit and the heat pump state."""
+    fake_api.responses = [
+        DEFAULT_POSITION_RESPONSE,
+        DEFAULT_POSITION_FIXED_DATA_RESPONSE,
+        response,
+    ]
+    await fake_api.setup_integration()
+
+    state: State | None = hass.states.get(ENTITY_ID)
+    assert isinstance(state, State)
+    assert state.attributes[ATTR_HVAC_ACTION] == expected_hvac_action

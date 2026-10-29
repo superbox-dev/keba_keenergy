@@ -35,6 +35,7 @@ from keba_keenergy_api.constants import ExternalHeatSource
 from keba_keenergy_api.constants import HeatCircuit
 from keba_keenergy_api.constants import HeatCircuitMode
 from keba_keenergy_api.constants import HeatPump
+from keba_keenergy_api.constants import HeatPumpState
 from keba_keenergy_api.constants import HotWaterTank
 from keba_keenergy_api.constants import MessageIdKind
 from keba_keenergy_api.constants import Section
@@ -226,6 +227,20 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
         """Return heat pump names."""
         names: Values = self.data[SectionPrefix.HEAT_PUMP]["name"]
         return [name for name in names if isinstance(name, dict)] if isinstance(names, list) else []
+
+    @property
+    def heat_pump_states(self) -> set[HeatPumpState]:
+        """Return the states of all heat pumps."""
+        return {
+            HeatPumpState[
+                str(
+                    get_value_by_index(self.data[SectionPrefix.HEAT_PUMP]["state"], index=index, key_index=None).get(
+                        "value",
+                    ),
+                ).upper()
+            ]
+            for index in range(self.device_count(SectionPrefix.HEAT_PUMP))
+        }
 
     async def _async_setup(self) -> None:
         """Set up the coordinator."""
