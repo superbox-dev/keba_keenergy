@@ -5,7 +5,7 @@
       <ClimateEntityStateAttribute.CURRENT_HUMIDITY: 'current_humidity'>: 53.0,
       <ClimateEntityStateAttribute.CURRENT_TEMPERATURE: 'current_temperature'>: 22.4,
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Heizkreis 1',
-      <ClimateEntityStateAttribute.HVAC_ACTION: 'hvac_action'>: <HVACAction.HEATING: 'heating'>,
+      <ClimateEntityStateAttribute.HVAC_ACTION: 'hvac_action'>: <HVACAction.IDLE: 'idle'>,
       <ClimateEntityCapabilityAttribute.HVAC_MODES: 'hvac_modes'>: list([
         <HVACMode.AUTO: 'auto'>,
         <HVACMode.HEAT: 'heat'>,
@@ -71,7 +71,7 @@
       <ClimateEntityStateAttribute.CURRENT_HUMIDITY: 'current_humidity'>: 53.0,
       <ClimateEntityStateAttribute.CURRENT_TEMPERATURE: 'current_temperature'>: 22.4,
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Heating circuit 1',
-      <ClimateEntityStateAttribute.HVAC_ACTION: 'hvac_action'>: <HVACAction.HEATING: 'heating'>,
+      <ClimateEntityStateAttribute.HVAC_ACTION: 'hvac_action'>: <HVACAction.IDLE: 'idle'>,
       <ClimateEntityCapabilityAttribute.HVAC_MODES: 'hvac_modes'>: list([
         <HVACMode.AUTO: 'auto'>,
         <HVACMode.HEAT: 'heat'>,

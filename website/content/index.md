@@ -128,7 +128,9 @@ provide are not created. Changes are written to the control unit, see [Known lim
 ### Heating circuit
 
 - **Climate**: HVAC mode (auto, heat or cool, off), target room temperature (changes the offset) and the presets
-  auto, day, night, party and, for heating circuits, away
+  auto, day, night, party and, for heating circuits, away. The HVAC action shows heating, defrosting or preheating
+  (pre-run of the heat pump) while the heating circuit requests heat and a heat pump is in this state, cooling while
+  it requests cooling and idle otherwise.
 - **Numbers**: target room temperatures (day, night, away, offset, PV surplus), heating and cooling limits,
   heating and cooling curve offset and slope
 - **Selects**: operating mode, heating curve, cooling curve
@@ -319,6 +321,13 @@ The climate and water heater entities are still created, but leave out the curre
   block and rises slowly, not with every write operation.
 - Changes of numbers, target temperatures and the climate entity are written after a short delay, so several quick
   changes result in one write operation.
+- The control unit does not provide which heat pump supplies which heating circuit. With several heat pumps, the
+  HVAC action of a heating circuit with a heat request follows any heat pump, e.g. it shows heating while one heat
+  pump heats hot water.
+- The HVAC action of a heating circuit only shows heating while a heat pump heats. A heating circuit that is supplied
+  by a buffer tank while the heat pumps are in standby shows idle. If your setup has a buffer tank, please open an
+  [issue](https://github.com/superbox-dev/keba_keenergy/issues/new/choose) with the history of the heat request of the
+  heating circuit and the heat pump state, so that this case can be supported.
 - Only values that the Web HMI provides are supported. Missing values have to be added to the
   [KEBA KeEnergy API](https://github.com/superbox-dev/keba_keenergy_api) first.
 

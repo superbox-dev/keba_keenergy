@@ -28,10 +28,12 @@ from keba_keenergy_api.constants import HeatCircuit
 from keba_keenergy_api.constants import HeatCircuitCoolRequest
 from keba_keenergy_api.constants import HeatCircuitHeatRequest
 from keba_keenergy_api.constants import HeatCircuitOperatingMode
+from keba_keenergy_api.constants import HeatPumpState
 from keba_keenergy_api.constants import SectionPrefix
 
 from .const import COOLING_CIRCUIT_PRESET_TO_HA
 from .const import DOMAIN
+from .const import HEAT_PUMP_STATE_TO_HVAC_ACTION
 from .const import HEATING_CIRCUIT_PRESET_TO_HA
 from .entity import KebaKeEnergyBaseEntity
 
@@ -196,14 +198,32 @@ class KebaKeEnergyClimateEntity(KebaKeEnergyBaseEntity, ClimateEntity):
             expected_type=str,
         )
 
+        # Cooling only uses the cool request, the heat pump stays in standby with passive cooling.
         return (
             HVACAction.OFF
             if self.hvac_mode == HVACMode.OFF
-            else HVACAction.HEATING
+            else self._heating_action
             if has_heat_request
             else HVACAction.COOLING
             if has_cool_request
             else HVACAction.IDLE
+        )
+
+    @property
+    def _heating_action(self) -> HVACAction:
+        # The heat request of the heating circuit is only its demand, the heat pump state shows if it is heated.
+        # Newer software versions keep the heat request on during the whole heating period, also in standby.
+        # The API has no mapping of the heating circuits to the heat pumps, so the state of any heat pump counts.
+        # A heating circuit that is supplied by a buffer tank while the heat pumps are in standby is idle.
+        heat_pump_states: set[HeatPumpState] = self.coordinator.heat_pump_states
+
+        return next(
+            (
+                hvac_action
+                for heat_pump_state, hvac_action in HEAT_PUMP_STATE_TO_HVAC_ACTION.items()
+                if heat_pump_state in heat_pump_states
+            ),
+            HVACAction.IDLE,
         )
 
     @property
