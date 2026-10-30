@@ -45,12 +45,15 @@ from tests import fire_debounced_writes
 from tests import get_platform_states
 from tests import get_state
 from tests import set_target_temperature
+from tests.api_data import HEAT_CIRCUIT_AWAY_END_DATE
+from tests.api_data import HEAT_CIRCUIT_AWAY_START_DATE
 from tests.api_data import MULTIPLE_DEVICES_DATA_RESPONSE
 from tests.api_data import MULTIPLE_DEVICES_OTHER_MODES_DATA_RESPONSE
 from tests.api_data import Response
 from tests.api_data import get_multiple_devices_responses
 from tests.api_data import get_single_device_data_response
 from tests.api_data import get_single_device_responses
+from tests.api_data import replace_values
 from tests.api_data import update_response
 from tests.test_climate_data import AWAY_DATE_RANGE_RESET_WRITE
 from tests.test_climate_data import AWAY_PRESET_WRITE
@@ -416,10 +419,9 @@ async def test_set_preset_mode(
 @pytest.mark.parametrize(
     ("preset_mode", "responses", "expected_preset_mode"),
     [
-        (PRESET_AWAY, (MULTIPLE_DEVICES_DATA_RESPONSE, MULTIPLE_DEVICES_OTHER_MODES_DATA_RESPONSE), PRESET_AWAY),
         (PRESET_HOME, (MULTIPLE_DEVICES_OTHER_MODES_DATA_RESPONSE, MULTIPLE_DEVICES_DATA_RESPONSE), PRESET_COMFORT),
     ],
-    ids=["away", "home_while_away"],
+    ids=["home_while_away"],
 )
 @pytest.mark.freeze_time(NOW)
 async def test_set_preset_mode_refreshes_target_temperature(
@@ -447,6 +449,34 @@ async def test_set_preset_mode_refreshes_target_temperature(
 
     assert len(fake_api.read_requests()) == read_count + 1
     assert get_state(hass, HEAT_CIRCUIT_1_ENTITY_ID).attributes[ATTR_PRESET_MODE] == expected_preset_mode
+
+
+@pytest.mark.freeze_time(NOW)
+async def test_set_preset_mode_away_keeps_preset_until_operating_mode_changes(
+    hass: HomeAssistant,
+    fake_api: FakeKebaKeEnergyAPI,
+) -> None:
+    """Test that the away preset stays while the control unit still reports the old operating mode."""
+    away_data_response: Response = replace_values(
+        MULTIPLE_DEVICES_DATA_RESPONSE,
+        *HEAT_CIRCUIT_AWAY_START_DATE.read_all("1769209200", "1769209200"),
+        *HEAT_CIRCUIT_AWAY_END_DATE.read_all("1800831599", "1800831599"),
+    )
+    fake_api.responses = get_multiple_devices_responses(MULTIPLE_DEVICES_DATA_RESPONSE, away_data_response)
+    await fake_api.setup_integration()
+
+    await hass.services.async_call(
+        domain=CLIMATE_DOMAIN,
+        service=SERVICE_SET_PRESET_MODE,
+        service_data={ATTR_ENTITY_ID: HEAT_CIRCUIT_1_ENTITY_ID, ATTR_PRESET_MODE: PRESET_AWAY},
+        blocking=True,
+    )
+    assert get_state(hass, HEAT_CIRCUIT_1_ENTITY_ID).attributes[ATTR_PRESET_MODE] == PRESET_AWAY
+
+    await async_update_entity(hass, HEAT_CIRCUIT_1_ENTITY_ID)
+
+    state: State = get_state(hass, HEAT_CIRCUIT_1_ENTITY_ID)
+    assert (state.state, state.attributes[ATTR_PRESET_MODE]) == (HVACMode.HEAT, PRESET_AWAY)
 
 
 async def test_set_preset_mode_away_with_invalid_time_zone(

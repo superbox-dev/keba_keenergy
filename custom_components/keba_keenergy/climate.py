@@ -169,7 +169,23 @@ class KebaKeEnergyClimateEntity(KebaKeEnergyDebouncedEntity, ClimateEntity):
 
     @property
     def _operating_mode(self) -> HeatingCircuitOperatingMode | None:
+        # The control unit takes over the vacation mode from the away date range only some time after the write.
+        if self._is_away_date_range_active:
+            return HeatingCircuitOperatingMode.VACATION
+
         return self.get_typed_value("operating_mode", HeatingCircuitOperatingMode)
+
+    @property
+    def _is_away_date_range_active(self) -> bool:
+        start: int | None = self.get_typed_value("away_start_date", int)
+        end: int | None = self.get_typed_value("away_end_date", int)
+
+        return (
+            not self._is_cooling_only
+            and start is not None
+            and end is not None
+            and start <= dt_util.utcnow().timestamp() <= end
+        )
 
     def _operating_mode_to_hvac_mode(self, operating_mode: HeatingCircuitOperatingMode, /) -> HVACMode:
         if operating_mode is HeatingCircuitOperatingMode.AUTO:
@@ -284,16 +300,6 @@ class KebaKeEnergyClimateEntity(KebaKeEnergyDebouncedEntity, ClimateEntity):
         """Set the preset mode of the heating circuit, the away preset sets an away date range of one year."""
         await self._async_set_away_date_range(preset_mode)
 
-        if preset_mode == PRESET_AWAY:
-            # The control unit derives the vacation mode from the date range, so it is shown before the next update.
-            self.coordinator.async_set_local_value(
-                HeatingCircuitOperatingMode.VACATION,
-                device_type=self.device_type,
-                key="operating_mode",
-                index=self.index,
-                value_index=self.value_index,
-            )
-
         for operating_mode, preset in HEATING_CIRCUIT_PRESET_TO_HA.items():
             if preset == preset_mode and preset_mode not in (self.preset_mode, PRESET_AWAY):
                 await self._async_write_value(
@@ -301,7 +307,9 @@ class KebaKeEnergyClimateEntity(KebaKeEnergyDebouncedEntity, ClimateEntity):
                     key="operating_mode",
                 )
 
-        await self._async_refresh_target_temperature()
+        # The control unit applies the away date range later, an immediate read would still return the old mode.
+        if preset_mode != PRESET_AWAY:
+            await self._async_refresh_target_temperature()
 
     async def async_set_temperature(self, **kwargs: object) -> None:
         """Set the target temperature, written debounced as offset to the target temperature of the mode."""
