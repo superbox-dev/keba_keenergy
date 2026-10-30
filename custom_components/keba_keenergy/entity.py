@@ -5,6 +5,7 @@
 from __future__ import annotations
 
 import logging
+from abc import abstractmethod
 from dataclasses import dataclass
 from functools import cached_property
 from typing import TYPE_CHECKING
@@ -249,10 +250,13 @@ class KebaKeEnergyBaseEntity(
 class KebaKeEnergyDebouncedEntity(KebaKeEnergyBaseEntity):
     """KEBA KeEnergy entity that writes a fast-changing value debounced, to limit the writes to the flash."""
 
-    # Key of the value that is written debounced.
-    _debounced_key: str
     _async_call_later: CALLBACK_TYPE | None = None
     _pending_value: float | None = None
+
+    @property
+    @abstractmethod
+    def _debounced_key(self) -> str:
+        """Return the key of the value that is written debounced."""
 
     async def async_will_remove_from_hass(self) -> None:
         """Cancel a pending debounced write when the entity is removed."""

@@ -63,7 +63,6 @@ class KebaKeEnergyClimateEntity(KebaKeEnergyDebouncedEntity, ClimateEntity):
     _attr_target_temperature_step: float = 0.5
     _attr_temperature_unit: str = UnitOfTemperature.CELSIUS
     _attr_name = None
-    _debounced_key: str = "target_temperature_offset"
 
     def __init__(
         self,
@@ -78,6 +77,10 @@ class KebaKeEnergyClimateEntity(KebaKeEnergyDebouncedEntity, ClimateEntity):
         super().__init__(coordinator, device_type, index)
 
         self.entity_id = f"{CLIMATE_DOMAIN}.{DOMAIN}_{self._attr_unique_id}"
+
+    @property
+    def _debounced_key(self) -> str:
+        return "target_temperature_offset"
 
     @cached_property
     def hvac_modes(self) -> list[HVACMode]:

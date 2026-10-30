@@ -72,7 +72,6 @@ class KebaKeEnergyHotWaterTankEntity(KebaKeEnergyDebouncedEntity, KebaKeEnergyWa
         | WaterHeaterEntityFeature.OPERATION_MODE
         | WaterHeaterEntityFeature.TARGET_TEMPERATURE
     )
-    _debounced_key: str = "target_temperature"
 
     def __init__(
         self,
@@ -86,6 +85,10 @@ class KebaKeEnergyHotWaterTankEntity(KebaKeEnergyDebouncedEntity, KebaKeEnergyWa
         self._attr_operation_list = list(HOT_WATER_TANK_STATE_TO_HA.values())
 
         self.entity_id: str = f"{WATER_HEATER_DOMAIN}.{DOMAIN}_{self._attr_unique_id}"
+
+    @property
+    def _debounced_key(self) -> str:
+        return "target_temperature"
 
     @property
     def current_temperature(self) -> float | None:
