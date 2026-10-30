@@ -85,7 +85,7 @@ ENDPOINTS: Final[Mapping[SectionPrefix, Mapping[str, Endpoint]]] = {
         "excess_energy_max_runtime": ExternalHeatSource.EXCESS_ENERGY_MAX_RUNTIME,
         "excess_energy_activation_counter": ExternalHeatSource.EXCESS_ENERGY_ACTIVATION_COUNTER,
     },
-    SectionPrefix.HEAT_CIRCUIT: {
+    SectionPrefix.HEATING_CIRCUIT: {
         "room_temperature": HeatingCircuit.ROOM_TEMPERATURE,
         "room_humidity": HeatingCircuit.ROOM_HUMIDITY,
         "dew_point": HeatingCircuit.DEW_POINT,
@@ -225,7 +225,7 @@ ENDPOINTS: Final[Mapping[SectionPrefix, Mapping[str, Endpoint]]] = {
         "use_excess_energy": BufferTank.USE_EXCESS_ENERGY,
         "outdoor_temperature_excess_energy_limit": BufferTank.EXCESS_ENERGY_OUTDOOR_TEMPERATURE_LIMIT,
     },
-    SectionPrefix.HOT_WATER_TANK: {
+    SectionPrefix.DHW_TANK: {
         "use_excess_energy": DHWTank.USE_EXCESS_ENERGY,
         "excess_energy_target_temperature": DHWTank.EXCESS_ENERGY_TARGET_TEMPERATURE,
         "excess_energy_target_temperature_hysteresis": DHWTank.EXCESS_ENERGY_TARGET_TEMPERATURE_HYSTERESIS,

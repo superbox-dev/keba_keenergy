@@ -66,7 +66,7 @@ AWAY_DATE_RANGE_SCHEMA: Final[probatio.Schema] = probatio.Schema(
 
 
 def _get_coordinator(call: ServiceCall) -> KebaKeEnergyDataUpdateCoordinator:
-    """Get the coordinator from the entry."""
+    """Return the coordinator of the config entry of the action, which must be loaded."""
     entry_id: str = call.data[ATTR_CONFIG_ENTRY]
     entry: KebaKeEnergyConfigEntry | None = call.hass.config_entries.async_get_entry(entry_id)
 
@@ -93,7 +93,7 @@ def _get_coordinator(call: ServiceCall) -> KebaKeEnergyDataUpdateCoordinator:
     return coordinator
 
 
-async def _async_set_away_range(call: ServiceCall) -> None:
+async def _async_set_away_date_range(call: ServiceCall) -> None:
     coordinator: KebaKeEnergyDataUpdateCoordinator = _get_coordinator(call)
 
     start_date: date = call.data[ATTR_START_DATE]
@@ -133,12 +133,12 @@ async def _async_set_heating_curve_points(call: ServiceCall) -> None:
 
     points: tuple[CurvePoint, ...] = tuple(
         CurvePoint(
-            outdoor=round(d[ATTR_OUTDOOR], 2),
-            flow=round(d[ATTR_FLOW], 2),
+            outdoor=round(point[ATTR_OUTDOOR], 2),
+            flow=round(point[ATTR_FLOW], 2),
         )
-        for d in sorted(call.data[ATTR_POINTS], key=lambda p: p[ATTR_OUTDOOR])
+        for point in sorted(call.data[ATTR_POINTS], key=lambda point: point[ATTR_OUTDOOR])
     )
-    outdoors: list[float] = [p.outdoor for p in points]
+    outdoors: list[float] = [point.outdoor for point in points]
 
     if len(outdoors) != len(set(outdoors)):
         raise ServiceValidationError(
@@ -148,7 +148,7 @@ async def _async_set_heating_curve_points(call: ServiceCall) -> None:
 
     # Only write changed points, the control unit stores them in its flash memory.
     current_points: tuple[CurvePoint, ...] = tuple(
-        CurvePoint(outdoor=round(p.outdoor, 2), flow=round(p.flow, 2)) for p in curve_table.points
+        CurvePoint(outdoor=round(point.outdoor, 2), flow=round(point.flow, 2)) for point in curve_table.points
     )
 
     if current_points == points:
@@ -159,11 +159,11 @@ async def _async_set_heating_curve_points(call: ServiceCall) -> None:
 
 @callback
 def async_setup_services(hass: HomeAssistant) -> None:
-    """KEBA KeEnergy services setup."""
+    """Register the actions of the integration."""
     hass.services.async_register(
         DOMAIN,
         service=SERVICE_SET_AWAY_DATE_RANGE,
-        service_func=_async_set_away_range,
+        service_func=_async_set_away_date_range,
         schema=AWAY_DATE_RANGE_SCHEMA,
     )
 

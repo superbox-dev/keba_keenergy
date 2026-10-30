@@ -127,8 +127,18 @@ async def test_converted_sensor_keeps_registered_unit(
                 "sensor.keba_keenergy_12345678_solar_circuit_current_temperature_2_2": "56.799999",
             },
         ),
+        (
+            # The mixer position has no setpoint for its attributes.
+            "APPL.CtrlAppl.sParam.heatCircuit[0].heatCircuitMixer.mixer.state.msgId",
+            {"sensor.keba_keenergy_12345678_heat_circuit_mixer_position_1": STATE_UNKNOWN},
+        ),
     ],
-    ids=["outdoor_temperature", "heat_circuit_flow_temperature", "solar_circuit_current_temperature"],
+    ids=[
+        "outdoor_temperature",
+        "heating_circuit_flow_temperature",
+        "solar_circuit_current_temperature",
+        "heating_circuit_mixer_position",
+    ],
 )
 @pytest.mark.usefixtures("entity_registry_enabled_by_default")
 async def test_sensor_not_in_use(

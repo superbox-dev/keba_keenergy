@@ -35,13 +35,13 @@ _LOGGER: Final = logging.getLogger(__name__)
 
 
 async def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:  # noqa: ARG001
-    """Set up the  KEBA KeEnergy component."""
+    """Set up the KEBA KeEnergy integration and register its actions."""
     async_setup_services(hass)
     return True
 
 
 async def async_setup_entry(hass: HomeAssistant, entry: KebaKeEnergyConfigEntry) -> bool:
-    """Set up the KEBA KeEnergy platform."""
+    """Set up a KEBA KeEnergy config entry, its control unit device and its platforms."""
     # Newer software versions of the Web HMI comes with self-signed SSL certificates.
     session: ClientSession = async_get_clientsession(hass, verify_ssl=False, family=socket.AF_INET)
 

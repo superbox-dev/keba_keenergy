@@ -37,7 +37,6 @@ from keba_keenergy_api.enums import SystemOperatingMode
 
 from .const import ATTR_WRITES
 from .const import CURVE_KEYS
-from .const import DOMAIN
 from .const import MixerPosition
 from .const import SectionPrefix
 from .entity import KebaKeEnergyBaseEntity
@@ -74,6 +73,9 @@ if TYPE_CHECKING:
 PARALLEL_UPDATES: Final[int] = 0
 _LOGGER: Final = logging.getLogger(__name__)
 
+# The extra state attributes of a sensor.
+type Attributes = Mapping[str, Any]
+
 
 @dataclass(frozen=True, kw_only=True)
 class KebaKeEnergySensorEntityDescription[T: StateType](
@@ -82,8 +84,10 @@ class KebaKeEnergySensorEntityDescription[T: StateType](
 ):
     """Class describing KEBA KeEnergy sensor entities."""
 
-    value: Callable[[T], StateType] = lambda data: data
-    attributes: Callable[[Mapping[str, Any]], Mapping[str, Any]] = lambda data: data
+    # Converts the value of the API to the state, enum members are always shown by their state.
+    value_fn: Callable[[T], StateType] = lambda data: data
+    # Adds or changes the attributes, which are empty if the sensor is not in use.
+    attributes_fn: Callable[[Attributes], Attributes] = lambda data: data
 
 
 class KebaKeEnergySensorEntity(KebaKeEnergyEntity, SensorEntity):
@@ -94,18 +98,18 @@ class KebaKeEnergySensorEntity(KebaKeEnergyEntity, SensorEntity):
 
     @property
     def native_value(self) -> StateType:
-        """Return the state of the sensor."""
+        """Return the state of the sensor, None if the value is missing or the sensor is not in use."""
         value: Value | None = self.get_value(self._data_key)
 
         if isinstance(value, Enum):
             return get_state(value)
 
-        return None if value is None or isinstance(value, bool) else self.entity_description.value(value)
+        return None if value is None or isinstance(value, bool) else self.entity_description.value_fn(value)
 
     @property
-    def extra_state_attributes(self) -> Mapping[str, Any] | None:
-        """Return extra state attributes."""
-        return self.entity_description.attributes(self._get_attributes(self.get_reading(self._data_key)))
+    def extra_state_attributes(self) -> Attributes:
+        """Return the limits of the value, the raw value of an enum and the points of a curve."""
+        return self.entity_description.attributes_fn(self._get_attributes(self.get_reading(self._data_key)))
 
     def _get_attributes(self, reading: Reading | None, /) -> dict[str, Any]:
         """Return the limits of the value, the raw value of an enum and the points of the curve, if any."""
@@ -148,19 +152,23 @@ class KebaKeEnergyWriteCountSensorEntity(KebaKeEnergyBaseEntity, SensorEntity):
 
     # The writes per value change with every write, they are not needed in the history.
     _unrecorded_attributes: frozenset[str] = frozenset({ATTR_WRITES})
+    _platform_domain: str = SENSOR_DOMAIN
 
     def __init__(
         self,
         coordinator: KebaKeEnergyDataUpdateCoordinator,
         description: SensorEntityDescription,
+        /,
     ) -> None:
-        """Initialize the entity."""
-        self.entity_description = description
+        """Initialize the write count sensor of the control unit."""
+        self.entity_description: SensorEntityDescription = description
 
         super().__init__(coordinator, device_type=SectionPrefix.SYSTEM, index=None)
 
-        self._attr_unique_id = self._build_unique_id(description.key)
-        self.entity_id: str = f"{SENSOR_DOMAIN}.{DOMAIN}_{self._attr_unique_id}"
+    @property
+    def _unique_id_parts(self) -> tuple[str, ...]:
+        """Return the key of the entity description."""
+        return (self.entity_description.key,)
 
     @property
     def native_value(self) -> int:
@@ -168,7 +176,7 @@ class KebaKeEnergyWriteCountSensorEntity(KebaKeEnergyBaseEntity, SensorEntity):
         return self.coordinator.write_counter.weekly_count
 
     @property
-    def extra_state_attributes(self) -> Mapping[str, Any]:
+    def extra_state_attributes(self) -> Attributes:
         """Return how often each value was written in the current week."""
         return {ATTR_WRITES: self.coordinator.write_counter.weekly_writes}
 
@@ -178,8 +186,11 @@ def get_mixer_position(setpoint: float, /) -> str:
     return get_state(MixerPosition((setpoint >= 1) - (setpoint <= -1)))
 
 
-def get_mixer_attributes(attributes: Mapping[str, Any], /) -> Mapping[str, Any]:
-    """Return the attributes of a mixer position with the setpoint as percentage."""
+def get_mixer_attributes(attributes: Attributes, /) -> Attributes:
+    """Return the attributes of a mixer position with the setpoint as percentage, unchanged without a setpoint."""
+    if "raw_value" not in attributes:
+        return attributes
+
     return {**attributes, "position_percent": round(attributes["raw_value"] * 100, 2)}
 
 
@@ -198,14 +209,14 @@ SENSOR_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergySensorEntityDescriptio
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             state_class=SensorStateClass.MEASUREMENT,
             translation_key="outdoor_temperature",
-            value=lambda data: data,
+            value_fn=lambda data: data,
         ),
         KebaKeEnergySensorEntityDescription[str](
             device_class=SensorDeviceClass.ENUM,
             key="operating_mode",
             options=get_states(SystemOperatingMode),
             translation_key="system_operating_mode",
-            value=lambda data: data,
+            value_fn=lambda data: data,
         ),
         KebaKeEnergySensorEntityDescription[float](
             entity_category=EntityCategory.DIAGNOSTIC,
@@ -215,7 +226,7 @@ SENSOR_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergySensorEntityDescriptio
             state_class=SensorStateClass.MEASUREMENT,
             suggested_display_precision=1,
             translation_key="cpu_usage",
-            value=lambda data: data / 10,
+            value_fn=lambda data: data / 10,
         ),
         KebaKeEnergySensorEntityDescription[float](
             entity_category=EntityCategory.DIAGNOSTIC,
@@ -225,7 +236,7 @@ SENSOR_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergySensorEntityDescriptio
             state_class=SensorStateClass.MEASUREMENT,
             suggested_display_precision=1,
             translation_key="webview_cpu_usage",
-            value=lambda data: data / 10,
+            value_fn=lambda data: data / 10,
         ),
         KebaKeEnergySensorEntityDescription[float](
             entity_category=EntityCategory.DIAGNOSTIC,
@@ -235,7 +246,7 @@ SENSOR_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergySensorEntityDescriptio
             state_class=SensorStateClass.MEASUREMENT,
             suggested_display_precision=1,
             translation_key="webserver_cpu_usage",
-            value=lambda data: data / 10,
+            value_fn=lambda data: data / 10,
         ),
         KebaKeEnergySensorEntityDescription[float](
             entity_category=EntityCategory.DIAGNOSTIC,
@@ -245,7 +256,7 @@ SENSOR_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergySensorEntityDescriptio
             state_class=SensorStateClass.MEASUREMENT,
             suggested_display_precision=1,
             translation_key="control_cpu_usage",
-            value=lambda data: data / 10,
+            value_fn=lambda data: data / 10,
         ),
         KebaKeEnergySensorEntityDescription[int](
             entity_category=EntityCategory.DIAGNOSTIC,
@@ -255,7 +266,7 @@ SENSOR_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergySensorEntityDescriptio
             state_class=SensorStateClass.MEASUREMENT,
             suggested_display_precision=0,
             translation_key="ram_usage",
-            value=lambda data: data,
+            value_fn=lambda data: data,
         ),
         KebaKeEnergySensorEntityDescription[int](
             entity_category=EntityCategory.DIAGNOSTIC,
@@ -265,7 +276,7 @@ SENSOR_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergySensorEntityDescriptio
             state_class=SensorStateClass.MEASUREMENT,
             suggested_display_precision=0,
             translation_key="free_ram",
-            value=lambda data: data,
+            value_fn=lambda data: data,
         ),
         KebaKeEnergySensorEntityDescription[int](
             entity_category=EntityCategory.DIAGNOSTIC,
@@ -274,10 +285,10 @@ SENSOR_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergySensorEntityDescriptio
             state_class=SensorStateClass.TOTAL_INCREASING,
             suggested_display_precision=0,
             translation_key="flash_erase_counter",
-            value=lambda data: data,
+            value_fn=lambda data: data,
         ),
     ),
-    SectionPrefix.HEAT_CIRCUIT: (
+    SectionPrefix.HEATING_CIRCUIT: (
         KebaKeEnergySensorEntityDescription[float](
             device_class=SensorDeviceClass.TEMPERATURE,
             entity_registry_enabled_default=False,
@@ -334,8 +345,8 @@ SENSOR_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergySensorEntityDescriptio
             key="mixer_position",
             options=get_states(MixerPosition),
             translation_key="mixer_position",
-            value=get_mixer_position,
-            attributes=get_mixer_attributes,
+            value_fn=get_mixer_position,
+            attributes_fn=get_mixer_attributes,
         ),
         KebaKeEnergySensorEntityDescription[float](
             device_class=SensorDeviceClass.TEMPERATURE,
@@ -505,7 +516,7 @@ SENSOR_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergySensorEntityDescriptio
             device_class=SensorDeviceClass.ENUM,
             key="operating_mode",
             options=get_states(HeatingCircuitOperatingMode),
-            translation_key="heat_circuit_operating_mode",
+            translation_key="heating_circuit_operating_mode",
         ),
         KebaKeEnergySensorEntityDescription[str](
             condition=is_heating_circuit,
@@ -539,7 +550,7 @@ SENSOR_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergySensorEntityDescriptio
             state_class=SensorStateClass.MEASUREMENT,
             suggested_display_precision=2,
             translation_key="pump_speed",
-            value=lambda data: data * 100,
+            value_fn=lambda data: data * 100,
         ),
     ),
     SectionPrefix.SOLAR_CIRCUIT: (
@@ -556,7 +567,7 @@ SENSOR_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergySensorEntityDescriptio
             state_class=SensorStateClass.MEASUREMENT,
             suggested_display_precision=2,
             translation_key="solar_circuit_pump_1",
-            value=lambda data: data * 100,
+            value_fn=lambda data: data * 100,
         ),
         KebaKeEnergySensorEntityDescription[float](
             key="pump_2",
@@ -564,7 +575,7 @@ SENSOR_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergySensorEntityDescriptio
             state_class=SensorStateClass.MEASUREMENT,
             suggested_display_precision=2,
             translation_key="solar_circuit_pump_2",
-            value=lambda data: data * 100,
+            value_fn=lambda data: data * 100,
         ),
         KebaKeEnergySensorEntityDescription[float](
             device_class=SensorDeviceClass.TEMPERATURE,
@@ -659,7 +670,7 @@ SENSOR_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergySensorEntityDescriptio
             state_class=SensorStateClass.MEASUREMENT,
             suggested_display_precision=2,
             translation_key="circulation_pump_speed",
-            value=lambda data: data * 100,
+            value_fn=lambda data: data * 100,
         ),
         KebaKeEnergySensorEntityDescription[float](
             key="source_pump_speed",
@@ -667,7 +678,7 @@ SENSOR_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergySensorEntityDescriptio
             state_class=SensorStateClass.MEASUREMENT,
             suggested_display_precision=2,
             translation_key="source_pump_speed",
-            value=lambda data: data * 100,
+            value_fn=lambda data: data * 100,
         ),
         KebaKeEnergySensorEntityDescription[float](
             device_class=SensorDeviceClass.TEMPERATURE,
@@ -750,7 +761,7 @@ SENSOR_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergySensorEntityDescriptio
             state_class=SensorStateClass.MEASUREMENT,
             suggested_display_precision=2,
             translation_key="compressor",
-            value=lambda data: data * 100,
+            value_fn=lambda data: data * 100,
         ),
         KebaKeEnergySensorEntityDescription[float](
             device_class=SensorDeviceClass.PRESSURE,
@@ -1025,7 +1036,7 @@ SENSOR_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergySensorEntityDescriptio
             state_class=SensorStateClass.MEASUREMENT,
             suggested_display_precision=2,
             translation_key="circulation_pump_speed",
-            value=lambda data: data * 100,
+            value_fn=lambda data: data * 100,
         ),
         KebaKeEnergySensorEntityDescription[float](
             device_class=SensorDeviceClass.TEMPERATURE,
@@ -1046,8 +1057,8 @@ SENSOR_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergySensorEntityDescriptio
             key="mixer_position",
             options=get_states(MixerPosition),
             translation_key="mixer_position",
-            value=get_mixer_position,
-            attributes=get_mixer_attributes,
+            value_fn=get_mixer_position,
+            attributes_fn=get_mixer_attributes,
         ),
     ),
     SectionPrefix.BUFFER_TANK: (
@@ -1111,7 +1122,7 @@ SENSOR_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergySensorEntityDescriptio
             icon="mdi:thermometer-chevron-up",
         ),
     ),
-    SectionPrefix.HOT_WATER_TANK: (
+    SectionPrefix.DHW_TANK: (
         KebaKeEnergySensorEntityDescription[float](
             device_class=SensorDeviceClass.TEMPERATURE,
             key="current_temperature",
@@ -1126,7 +1137,7 @@ SENSOR_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergySensorEntityDescriptio
             device_class=SensorDeviceClass.ENUM,
             key="operating_mode",
             options=get_states(DHWTankOperatingMode),
-            translation_key="hot_water_tank_operating_mode",
+            translation_key="dhw_tank_operating_mode",
         ),
         KebaKeEnergySensorEntityDescription[float](
             device_class=SensorDeviceClass.TEMPERATURE,

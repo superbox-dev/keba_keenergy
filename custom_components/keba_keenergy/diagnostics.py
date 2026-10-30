@@ -20,6 +20,9 @@ if TYPE_CHECKING:
     from .coordinator import KebaKeEnergyConfigEntry
     from .coordinator import KebaKeEnergyDataUpdateCoordinator
 
+# The readings per device type and key as JSON data.
+type ReadingsDump = dict[str, dict[str, list[dict[str, Any]]]]
+
 
 async def async_get_config_entry_diagnostics(
     hass: HomeAssistant,  # noqa: ARG001
@@ -53,7 +56,7 @@ async def async_get_config_entry_diagnostics(
     )
 
 
-def _dump(data: CoordinatorData, /) -> dict[str, dict[str, list[dict[str, Any]]]]:
+def _dump(data: CoordinatorData, /) -> ReadingsDump:
     """Return the readings as JSON data, enum members by their name."""
     return {
         device_type: {

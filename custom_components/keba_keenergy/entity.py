@@ -41,11 +41,15 @@ if TYPE_CHECKING:
 
     from homeassistant.core import CALLBACK_TYPE
     from homeassistant.helpers.entity_platform import AddEntitiesCallback
+    from keba_keenergy_api.endpoints import EndpointType
     from keba_keenergy_api.models import Reading
     from keba_keenergy_api.models import Value
     from keba_keenergy_api.models import WriteValue
 
 _LOGGER: Final = logging.getLogger(__name__)
+
+# Condition of an entity description, called with the coordinator and the index of the device.
+type EntityCondition = Callable[[KebaKeEnergyDataUpdateCoordinator, int], bool]
 
 
 @dataclass(frozen=True, kw_only=True)
@@ -55,7 +59,7 @@ class KebaKeEnergyEntityDescription(EntityDescription):
     value_index: int | None = None
     new_key: str | None = None  # New key name, required for a future migration of the entity ID.
     ref_key: str | None = None  # Name in the unique ID instead of the key, for a second entity on the same value.
-    condition: Callable[[KebaKeEnergyDataUpdateCoordinator, int], bool] | None = None
+    condition: EntityCondition | None = None
     entity_class: type[KebaKeEnergyEntity] | None = None  # Entity class instead of the default class of the platform.
 
 
@@ -65,23 +69,33 @@ class KebaKeEnergyBaseEntity(
     """KEBA KeEnergy base entity."""
 
     _attr_has_entity_name: bool = True
+    # Domain of the platform, the entity ID is `<platform domain>.<domain>_<unique ID>`.
+    _platform_domain: str
 
     def __init__(
         self,
         coordinator: KebaKeEnergyDataUpdateCoordinator,
+        /,
+        *,
         device_type: SectionPrefix,
         index: int | None,
         value_index: int | None = None,
     ) -> None:
-        """Initialize the KEBA KeEnergy entity."""
+        """Initialize the KEBA KeEnergy entity of the device with the index (None if it is the only one)."""
         super().__init__(coordinator)
         self.device_type: SectionPrefix = device_type
         self.index: int | None = index
         self.value_index: int | None = value_index
 
-        # TODO: Remove this default when the unique IDs of the climate and hot water tank entities are migrated to
-        # `<serial>_<device type>[_<n>]`, every entity then builds its unique ID itself.
-        self._attr_unique_id: str | None = self._build_unique_id()
+        self._attr_unique_id: str | None = self._build_unique_id(*self._unique_id_parts)
+        self.entity_id: str = f"{self._platform_domain}.{DOMAIN}_{self._attr_unique_id}"
+
+    @property
+    def _unique_id_parts(self) -> tuple[str, ...]:
+        """Return the parts of the unique ID between the entry unique ID and the indexes."""
+        # TODO: Remove this default when the unique IDs of the climate and DHW tank entities are migrated to
+        #  `<serial>_<device type>[_<n>]`, every entity then returns its parts itself.
+        return ()
 
     def _build_unique_id(self, *parts: str) -> str:
         """Return `<entry unique_id>[_<part>...][_<value_index + 1>][_<index + 1>]`."""
@@ -144,7 +158,7 @@ class KebaKeEnergyBaseEntity(
 
     @property
     def device_info(self) -> DeviceInfo:
-        """Return updated device specific attributes."""
+        """Return the device of the entity, the control unit is the parent of all other devices."""
         device_info: DeviceInfo = DeviceInfo(
             configuration_url=self.coordinator.configuration_url,
             identifiers={(DOMAIN, self.device_identifier)},
@@ -165,7 +179,7 @@ class KebaKeEnergyBaseEntity(
         return DEVICE_TRANSLATION_KEYS.get(self.device_type)
 
     @property
-    def _translation_placeholders(self) -> Mapping[str, str] | None:
+    def _translation_placeholders(self) -> Mapping[str, str]:
         return {
             "device_number": f" {self.device_number}" if self.device_number else "",
         }
@@ -178,26 +192,26 @@ class KebaKeEnergyBaseEntity(
         return self.coordinator.get_reading(self.device_type, key, index=self.index, value_index=self.value_index)
 
     def get_limit(self, key: str, /, *, attr: Literal["lower_limit", "upper_limit"]) -> float | None:
-        """Get a limit of the value from the API by key, or None if the value has no limit."""
+        """Return a limit of the value of the key, None if the value has no limit or the sensor is not in use."""
         reading: Reading | None = self.get_reading(key)
         return None if reading is None else getattr(reading, attr)
 
     def get_value(self, key: str, /) -> Value | None:
-        """Get value from the API by key."""
+        """Return the value of the key, None if it is missing or the sensor is not in use."""
         reading: Reading | None = self.get_reading(key)
         return None if reading is None else reading.value
 
     def get_typed_value[T](self, key: str, value_type: type[T], /) -> T | None:
-        """Get value from the API by key, or None if it is not of the type."""
+        """Return the value of the key, None if it is not of the type, missing or the sensor is not in use."""
         value: Value | None = self.get_value(key)
         return value if isinstance(value, value_type) else None
 
     def get_float(self, key: str, /) -> float | None:
-        """Get a numeric value from the API by key as float."""
+        """Return the numeric value of the key as float, None if it is not a number (also a bool) or missing."""
         value: Value | None = self.get_value(key)
         return float(value) if isinstance(value, float | int) and not isinstance(value, bool) else None
 
-    async def _async_write_data(
+    async def _async_write_value(
         self,
         value: WriteValue,
         /,
@@ -205,7 +219,10 @@ class KebaKeEnergyBaseEntity(
         key: str,
         ignore_weekly_write_count: bool = False,
     ) -> None:
-        """Write data to the KEBA KeEnergy API."""
+        """Write the value of the key of this entity to the control unit.
+
+        The entity shows the value at once, if the write fails it shows the previous value again.
+        """
         reading_index: int = self.coordinator.reading_index(
             self.device_type,
             key,
@@ -252,7 +269,7 @@ class KebaKeEnergyBaseEntity(
 class KebaKeEnergyDebouncedEntity(KebaKeEnergyBaseEntity):
     """KEBA KeEnergy entity that writes a fast-changing value debounced, to limit the writes to the flash."""
 
-    _async_call_later: CALLBACK_TYPE | None = None
+    _cancel_debounced_write: CALLBACK_TYPE | None = None
     _pending_value: float | None = None
 
     @property
@@ -262,9 +279,9 @@ class KebaKeEnergyDebouncedEntity(KebaKeEnergyBaseEntity):
 
     async def async_will_remove_from_hass(self) -> None:
         """Cancel a pending debounced write when the entity is removed."""
-        if self._async_call_later:
-            self._async_call_later()
-            self._async_call_later = None
+        if self._cancel_debounced_write:
+            self._cancel_debounced_write()
+            self._cancel_debounced_write = None
 
         await super().async_will_remove_from_hass()
 
@@ -277,13 +294,13 @@ class KebaKeEnergyDebouncedEntity(KebaKeEnergyBaseEntity):
             return
 
         # The API only writes integers to integer values, e.g. a runtime in seconds.
-        value_type: type = self.coordinator.get_endpoint(self.device_type, self._debounced_key).value.value_type
+        value_type: EndpointType = self.coordinator.get_endpoint(self.device_type, self._debounced_key).value.value_type
         self._pending_value = round(value) if value_type is int else self._round_float32(value)
 
-        if self._async_call_later:
-            self._async_call_later()
+        if self._cancel_debounced_write:
+            self._cancel_debounced_write()
 
-        self._async_call_later = async_call_later(
+        self._cancel_debounced_write = async_call_later(
             hass=self.hass,
             delay=FLASH_WRITE_DELAY,
             action=HassJob(
@@ -292,13 +309,13 @@ class KebaKeEnergyDebouncedEntity(KebaKeEnergyBaseEntity):
             ),
         )
 
-    async def _async_debounced_write_data(self, _: datetime) -> None:
-        """Write data (debounced) to the KEBA KeEnergy API."""
-        self._async_call_later = None
+    async def _async_debounced_write_data(self, _now: datetime, /) -> None:
+        """Write the pending value if it differs from the current value, `_now` is the time of the timer."""
+        self._cancel_debounced_write = None
 
         if self._pending_value is not None and self._pending_value != self._get_current_value():
             try:
-                await self._async_write_data(self._pending_value, key=self._debounced_key)
+                await self._async_write_value(self._pending_value, key=self._debounced_key)
             except HomeAssistantError as error:
                 # No caller gets the error of a debounced write, the entity already shows the previous value again.
                 _LOGGER.warning("Failed to write the value of %s: %s", self.entity_id, error)
@@ -310,7 +327,7 @@ class KebaKeEnergyDebouncedEntity(KebaKeEnergyBaseEntity):
 
     def _get_debounced_value(self) -> float | None:
         """Return the value that waits for the debounced write, otherwise the current value."""
-        if self._pending_value is not None and self._async_call_later:
+        if self._pending_value is not None and self._cancel_debounced_write:
             return self._pending_value
 
         return self._get_current_value()
@@ -320,27 +337,26 @@ class KebaKeEnergyEntity(KebaKeEnergyBaseEntity):
     """KEBA KeEnergy entity with an entity description."""
 
     entity_description: KebaKeEnergyEntityDescription
-    # Domain of the platform, the entity ID is `<platform domain>.<domain>_<unique ID>`.
-    _platform_domain: str
 
     def __init__(
         self,
         coordinator: KebaKeEnergyDataUpdateCoordinator,
         description: KebaKeEnergyEntityDescription,
+        /,
+        *,
         device_type: SectionPrefix,
         index: int | None,
     ) -> None:
-        """Initialize the KEBA KeEnergy entity."""
+        """Initialize the KEBA KeEnergy entity of the device with the index (None if it is the only one)."""
         self.entity_description = description
 
         super().__init__(coordinator, device_type=device_type, index=index, value_index=description.value_index)
 
-        self._attr_unique_id: str | None = self._build_key_unique_id(description.ref_key or description.key)
-        self.entity_id: str = f"{self._platform_domain}.{DOMAIN}_{self._attr_unique_id}"
-
-    def _build_key_unique_id(self, key: str, /) -> str:
-        """Return the unique ID of the key, with the device type except for the control unit."""
-        return self._build_unique_id(key) if self.is_system_device else self._build_unique_id(self.device_type, key)
+    @property
+    def _unique_id_parts(self) -> tuple[str, ...]:
+        """Return the key (or `ref_key`), with the device type except for the control unit."""
+        key: str = self.entity_description.ref_key or self.entity_description.key
+        return (key,) if self.is_system_device else (self.device_type, key)
 
     @property
     def _data_key(self) -> str:
@@ -353,10 +369,10 @@ def async_setup_entities(
     entry: KebaKeEnergyConfigEntry,
     async_add_entities: AddEntitiesCallback,
     entity_types: Mapping[SectionPrefix, tuple[KebaKeEnergyEntityDescription, ...]],
-    entity_cls: type[KebaKeEnergyEntity],
-    entity_name: str,
+    default_entity_class: type[KebaKeEnergyEntity],
+    platform_name: str,
 ) -> None:
-    """Set up KEBA KeEnergy entities."""
+    """Set up the entities of a platform, `platform_name` is only used in the logs."""
     coordinator: KebaKeEnergyDataUpdateCoordinator = entry.runtime_data
     entities: list[KebaKeEnergyEntity] = []
     deactivated_unique_ids: set[str | None] = set()
@@ -376,16 +392,16 @@ def async_setup_entities(
                     if description.condition is not None and not description.condition(coordinator, index):
                         _LOGGER.debug(
                             'Skip %s with key "%s" (index: %s)',
-                            entity_name,
+                            platform_name,
                             description.ref_key or description.key,
                             index,
                         )
                         continue
 
-                    cls: type[KebaKeEnergyEntity] = description.entity_class or entity_cls
-                    entity: KebaKeEnergyEntity = cls(
-                        coordinator=coordinator,
-                        description=description,
+                    entity_class: type[KebaKeEnergyEntity] = description.entity_class or default_entity_class
+                    entity: KebaKeEnergyEntity = entity_class(
+                        coordinator,
+                        description,
                         device_type=device_type,
                         index=index if device_count > 1 else None,
                     )
@@ -399,7 +415,7 @@ def async_setup_entities(
                     ):
                         _LOGGER.debug(
                             'Skip deactivated %s with key "%s" (index: %s)',
-                            entity_name,
+                            platform_name,
                             description.ref_key or description.key,
                             index,
                         )
@@ -445,9 +461,7 @@ def has_both_meters(coordinator: KebaKeEnergyDataUpdateCoordinator, index: int) 
 
 def has_electrical_energy_meter_and_cooling(coordinator: KebaKeEnergyDataUpdateCoordinator, index: int) -> bool:
     """Return True if the heat pump has an electrical energy meter and cools, condition of an entity description."""
-    return coordinator.has_electrical_energy_meter(index=index) and (
-        coordinator.has_active_cooling(index=index) or coordinator.has_passive_cooling(index=index)
-    )
+    return coordinator.has_electrical_energy_meter(index=index) and coordinator.has_cooling(index=index)
 
 
 def is_heating_circuit(coordinator: KebaKeEnergyDataUpdateCoordinator, index: int) -> bool:

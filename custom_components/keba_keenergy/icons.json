@@ -63,7 +63,7 @@
       }
     },
     "climate": {
-      "heat_circuit": {
+      "heating_circuit": {
         "default": "mdi:hvac",
         "state": {
           "off": "mdi:hvac-off"
@@ -109,17 +109,17 @@
       "cooling_curve": {
         "default": "mdi:chart-bell-curve-cumulative"
       },
+      "dhw_tank_operating_mode": {
+        "default": "mdi:cog"
+      },
       "external_heat_source_operating_mode": {
         "default": "mdi:cog"
       },
-      "heat_circuit_operating_mode": {
+      "heating_circuit_operating_mode": {
         "default": "mdi:cog"
       },
       "heating_curve": {
         "default": "mdi:chart-bell-curve-cumulative"
-      },
-      "hot_water_tank_operating_mode": {
-        "default": "mdi:cog"
       },
       "solar_circuit_operating_mode": {
         "default": "mdi:cog"
@@ -177,6 +177,14 @@
       "dew_point": {
         "default": "mdi:home-thermometer"
       },
+      "dhw_tank_operating_mode": {
+        "state": {
+          "auto": "mdi:thermometer-auto",
+          "heat_up": "mdi:fire",
+          "off": "mdi:power-off",
+          "on": "mdi:power"
+        }
+      },
       "excess_energy_mode": {
         "default": "mdi:lightning-bolt",
         "state": {
@@ -207,7 +215,14 @@
       "fresh_water_module_temperature": {
         "default": "mdi:thermometer-water"
       },
-      "heat_circuit_operating_mode": {
+      "heat_request": {
+        "default": "mdi:fire",
+        "state": {
+          "off": "mdi:fire-off",
+          "on": "mdi:fire"
+        }
+      },
+      "heating_circuit_operating_mode": {
         "state": {
           "auto": "mdi:clock-outline",
           "day": "mdi:weather-sunny",
@@ -217,23 +232,8 @@
           "party": "mdi:glass-cocktail"
         }
       },
-      "heat_request": {
-        "default": "mdi:fire",
-        "state": {
-          "off": "mdi:fire-off",
-          "on": "mdi:fire"
-        }
-      },
       "heating_curve": {
         "default": "mdi:chart-bell-curve-cumulative"
-      },
-      "hot_water_tank_operating_mode": {
-        "state": {
-          "auto": "mdi:thermometer-auto",
-          "heat_up": "mdi:fire",
-          "off": "mdi:power-off",
-          "on": "mdi:power"
-        }
       },
       "outdoor_temperature": {
         "default": "mdi:sun-thermometer",

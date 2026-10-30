@@ -40,6 +40,7 @@ from .const import DEVICE_TYPES
 from .const import DOMAIN
 from .const import REQUEST_REFRESH_COOLDOWN
 from .const import SCAN_INTERVAL_DEVICE_TYPES
+from .const import SCAN_INTERVAL_TICK_OPTIONS
 from .const import SectionPrefix
 from .legacy import ENDPOINTS
 from .write_counter import FlashWriteCounter
@@ -69,6 +70,10 @@ _LOGGER: Final = logging.getLogger(__name__)
 type KebaKeEnergyConfigEntry = ConfigEntry[KebaKeEnergyDataUpdateCoordinator]
 # The readings per device type and key, one reading per device (and consumer).
 type CoordinatorData = dict[SectionPrefix, dict[str, list[Reading]]]
+# The endpoints of a read with the device type and the key of their readings.
+type ReadRequest = dict[Endpoint, tuple[SectionPrefix, str]]
+# The values of a write per key, one value per device (and consumer), None skips it.
+type WriteValues = Mapping[str, Sequence[WriteValue | None]]
 
 
 class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[CoordinatorData]):
@@ -82,18 +87,7 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[CoordinatorData]):
         *,
         session: ClientSession,
     ) -> None:
-        """Initialize the coordinator.
-
-        Parameters
-        ----------
-        hass
-            The Home Assistant instance.
-        entry
-            The config entry with the host, the SSL setting and the optional credentials.
-        session
-            The HTTP session for the requests to the Web HMI.
-
-        """
+        """Initialize the coordinator of the config entry, `session` is the HTTP session for the Web HMI."""
         self.config_entry: KebaKeEnergyConfigEntry = entry
         self.control_unit_device_id: str = ""
 
@@ -119,6 +113,8 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[CoordinatorData]):
 
         # The configuration of the control unit, read once on setup.
         self.configuration: CoordinatorData = {}
+
+        # The number of updates, for the scan interval multipliers of the device types.
         self._tick_counter: int = 0
 
         # The polled endpoints of the installed devices that the Web HMI supports, per device type and key.
@@ -146,7 +142,7 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[CoordinatorData]):
 
     @property
     def heat_pump_names(self) -> list[str]:
-        """Return heat pump names."""
+        """Return the names of all heat pumps."""
         return [str(reading.value) for reading in self.data[SectionPrefix.HEAT_PUMP].get("name", [])]
 
     @property
@@ -203,11 +199,9 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[CoordinatorData]):
             ),
         )
 
-        configuration_endpoints: dict[Endpoint, tuple[SectionPrefix, str]] = self._get_request(
-            CONFIGURATION_ENDPOINTS, supported
-        )
-        readings: Readings = await self._api.read(configuration_endpoints, counts=self.device_counts, limits="none")
-        self.configuration = self._group_readings(readings, configuration_endpoints)
+        configuration_request: ReadRequest = self._get_request(CONFIGURATION_ENDPOINTS, supported)
+        readings: Readings = await self._api.read(configuration_request, counts=self.device_counts, limits="none")
+        self.configuration = self._group_readings(readings, configuration_request)
 
         # Group the polled values by device but only add the values that are available for the heat pump setup.
         self._polled_endpoints = {
@@ -221,7 +215,7 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[CoordinatorData]):
         endpoints: Mapping[SectionPrefix, Mapping[str, Endpoint]],
         supported: set[Endpoint],
         /,
-    ) -> dict[Endpoint, tuple[SectionPrefix, str]]:
+    ) -> ReadRequest:
         """Return the supported endpoints with their device type and key."""
         return {
             endpoint: (device_type, key)
@@ -231,9 +225,7 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[CoordinatorData]):
         }
 
     @staticmethod
-    def _group_readings(
-        readings: Readings, request: Mapping[Endpoint, tuple[SectionPrefix, str]], /
-    ) -> CoordinatorData:
+    def _group_readings(readings: Readings, request: ReadRequest, /) -> CoordinatorData:
         """Return the readings per device type and key."""
         data: CoordinatorData = {}
 
@@ -244,15 +236,15 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[CoordinatorData]):
         return data
 
     async def _async_update_data(self) -> CoordinatorData:
-        """Read all values from API to update coordinator data."""
+        """Read the values of the device types that are due in this update."""
         first_run: bool = self._tick_counter == 0
         self._tick_counter = (self._tick_counter + 1) % 1_000_000
 
-        request: dict[Endpoint, tuple[SectionPrefix, str]] = {}
+        request: ReadRequest = {}
 
         for device_type, endpoints in self._polled_endpoints.items():
             tick_device_type: SectionPrefix = SCAN_INTERVAL_DEVICE_TYPES.get(device_type, device_type)
-            multiplier: int = self.config_entry.options.get(f"scan_interval_tick_{tick_device_type}", 1)
+            multiplier: int = self.config_entry.options.get(SCAN_INTERVAL_TICK_OPTIONS[tick_device_type], 1)
 
             if first_run or self._tick_counter % multiplier == 0:
                 request.update({endpoint: (device_type, key) for key, endpoint in endpoints.items()})
@@ -360,7 +352,7 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[CoordinatorData]):
     async def async_write_data(
         self,
         device_type: SectionPrefix,
-        values: Mapping[str, Sequence[WriteValue | None]],
+        values: WriteValues,
         /,
         *,
         ignore_weekly_write_count: bool = False,
@@ -411,7 +403,7 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[CoordinatorData]):
     def _write_names(
         device_type: SectionPrefix,
         request: Mapping[Endpoint, Sequence[WriteValue | None]],
-        values: Mapping[str, Sequence[WriteValue | None]],
+        values: WriteValues,
         /,
     ) -> tuple[str, ...]:
         """Return the names of the written values, `<device type>[_<device number>].<key>[_<counter>]`.
@@ -451,26 +443,26 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[CoordinatorData]):
 
     async def async_set_away_date_range(self, *, start_timestamp: float, end_timestamp: float) -> None:
         """Set the away date range of all heating circuits, if it changed."""
-        away_start_date: list[int] = [int(start_timestamp)] * self.device_count(SectionPrefix.HEAT_CIRCUIT)
-        away_end_date: list[int] = [int(end_timestamp)] * self.device_count(SectionPrefix.HEAT_CIRCUIT)
+        away_start_date: list[int] = [int(start_timestamp)] * self.device_count(SectionPrefix.HEATING_CIRCUIT)
+        away_end_date: list[int] = [int(end_timestamp)] * self.device_count(SectionPrefix.HEATING_CIRCUIT)
 
-        if self._heat_circuit_values("away_start_date") != away_start_date or (
-            self._heat_circuit_values("away_end_date") != away_end_date
+        if self._heating_circuit_values("away_start_date") != away_start_date or (
+            self._heating_circuit_values("away_end_date") != away_end_date
         ):
             await self.async_write_data(
-                SectionPrefix.HEAT_CIRCUIT,
+                SectionPrefix.HEATING_CIRCUIT,
                 {
                     "away_start_date": away_start_date,
                     "away_end_date": away_end_date,
                 },
             )
 
-    def _heat_circuit_values(self, key: str, /) -> list[Value]:
+    def _heating_circuit_values(self, key: str, /) -> list[Value]:
         """Return the values of all heating circuits."""
-        return [reading.value for reading in self.data[SectionPrefix.HEAT_CIRCUIT].get(key, [])]
+        return [reading.value for reading in self.data[SectionPrefix.HEATING_CIRCUIT].get(key, [])]
 
     async def async_get_timezone(self) -> ZoneInfo:
-        """Get the timezone from the Web HMI."""
+        """Read the time zone from the Web HMI."""
         timezone: str = await self._api_call_for_user(self._api.get_timezone())
         return ZoneInfo(timezone)
 
@@ -521,7 +513,7 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[CoordinatorData]):
         )
 
     def has_device(self, device_type: SectionPrefix, /) -> bool:
-        """Return True if the device group is available in this setup."""
+        """Return True if the control unit has at least one device of the device type."""
         if device_type == SectionPrefix.SYSTEM:
             return True
 
@@ -531,7 +523,7 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[CoordinatorData]):
         return self.device_count(device_type) > 0
 
     def has_photovoltaics(self) -> bool:
-        """Check if photovoltaics is available."""
+        """Return True if the control unit has photovoltaics."""
         return self._get_configuration(SectionPrefix.SYSTEM, "has_photovoltaics") is True
 
     def _get_configuration(self, device_type: SectionPrefix, key: str, /, *, index: int | None = None) -> Value | None:
@@ -540,55 +532,56 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[CoordinatorData]):
         return readings[index or 0].value if len(readings) > (index or 0) else None
 
     def has_electrical_energy_meter(self, *, index: int | None = None) -> bool:
-        """Check if electrical energy meter is available."""
+        """Return True if the heat pump has an electrical energy meter."""
         value: Value | None = self._get_configuration(
-            SectionPrefix.HEAT_PUMP, "electric_energy_meter_type", index=index
+            SectionPrefix.HEAT_PUMP, "electrical_energy_meter_type", index=index
         )
         return isinstance(value, ElectricalEnergyMeterType) and value is not ElectricalEnergyMeterType.NONE
 
     def has_heat_meter(self, *, index: int | None = None) -> bool:
-        """Check if heat meter is available."""
+        """Return True if the heat pump has a heat meter."""
         value: Value | None = self._get_configuration(SectionPrefix.HEAT_PUMP, "heat_meter_type", index=index)
         return isinstance(value, HeatMeterType) and value is not HeatMeterType.NONE
 
     def has_active_cooling(self, *, index: int | None = None) -> bool:
-        """Check if active cooling is available."""
+        """Return True if the heat pump supports active cooling."""
         return self._get_configuration(SectionPrefix.HEAT_PUMP, "has_active_cooling", index=index) is True
 
     def has_passive_cooling(self, *, index: int | None = None) -> bool:
-        """Check if passive cooling is available."""
+        """Return True if the heat pump supports passive cooling."""
         return self._get_configuration(SectionPrefix.HEAT_PUMP, "has_passive_cooling", index=index) is True
 
+    def has_cooling(self, *, index: int | None = None) -> bool:
+        """Return True if the heat pump supports active or passive cooling."""
+        return self.has_active_cooling(index=index) or self.has_passive_cooling(index=index)
+
     def has_emissions(self, *, index: int | None = None) -> bool:
-        """Check if the external heat source has emissions."""
+        """Return True if the external heat source has emissions."""
         return self._get_configuration(SectionPrefix.EXTERNAL_HEAT_SOURCE, "has_emissions", index=index) is True
 
-    def has_cooling_heat_pumps(self) -> bool:
-        """Check if one heat pump supports active or passive cooling."""
-        return any(
-            self.has_active_cooling(index=index) or self.has_passive_cooling(index=index)
-            for index in range(self.device_count(SectionPrefix.HEAT_PUMP))
-        )
+    def has_cooling_heat_pump(self) -> bool:
+        """Return True if any heat pump supports active or passive cooling."""
+        return any(self.has_cooling(index=index) for index in range(self.device_count(SectionPrefix.HEAT_PUMP)))
 
-    def has_cooling_circuits(self) -> bool:
-        """Check if one heating circuit supports cooling."""
+    def has_cooling_circuit(self) -> bool:
+        """Return True if any heating circuit cools."""
         # Some KEBA KeEnergy software versions do not have the configuration for active and passive cooling.
         # Cooling support can only be detected with the heating circuit mode.
         return any(
-            self.is_cooling_circuit(index=index) for index in range(self.device_count(SectionPrefix.HEAT_CIRCUIT))
+            self.is_cooling_circuit(index=index) for index in range(self.device_count(SectionPrefix.HEATING_CIRCUIT))
         )
 
     def is_cooling_circuit(self, *, index: int | None = None) -> bool:
-        """Check if heating circuit mode is cooling."""
-        return self._get_configuration(SectionPrefix.HEAT_CIRCUIT, "mode", index=index) in (
+        """Return True if the heating circuit cools, also if it heats as well."""
+        return self._get_configuration(SectionPrefix.HEATING_CIRCUIT, "mode", index=index) in (
             HeatingCircuitType.COOLING,
             HeatingCircuitType.HEATING_AND_COOLING,
             HeatingCircuitType.HEATING_AND_ACTIVE_COOLING,
         )
 
     def is_heating_circuit(self, *, index: int | None = None) -> bool:
-        """Check if heating circuit mode is heating."""
-        return self._get_configuration(SectionPrefix.HEAT_CIRCUIT, "mode", index=index) in (
+        """Return True if the heating circuit heats, also if it cools as well."""
+        return self._get_configuration(SectionPrefix.HEATING_CIRCUIT, "mode", index=index) in (
             HeatingCircuitType.HEATING,
             HeatingCircuitType.HEATING_AND_COOLING,
             HeatingCircuitType.HEATING_AND_ACTIVE_COOLING,
@@ -597,7 +590,7 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[CoordinatorData]):
     def is_sensor_in_use(
         self, device_type: SectionPrefix, key: str, /, *, index: int | None, value_index: int | None
     ) -> bool:
-        """Check if the control unit reports the sensor as in use (message id 0) or has no message id for it."""
+        """Return True if the control unit reports the sensor as in use (message ID 0) or has no message ID for it."""
         return self._get_message_id_kind(device_type, key, index=index, value_index=value_index) in (
             MessageIdKind.OK,
             None,
@@ -612,14 +605,14 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[CoordinatorData]):
         index: int | None,
         value_index: int | None,
     ) -> MessageIdKind | None:
-        """Return the kind of the message id of a sensor, or None if the sensor has none."""
+        """Return the kind of the message ID of a sensor, or None if the sensor has none."""
         reading: Reading | None = self.get_reading(device_type, key, index=index, value_index=value_index)
         return None if reading is None or reading.message_id is None else reading.message_id.kind
 
     def is_sensor_deactivated(
         self, device_type: SectionPrefix, key: str, /, *, index: int | None, value_index: int | None
     ) -> bool:
-        """Check if the control unit reports the sensor as deactivated (message id 10), i.e. not configured."""
+        """Return True if the control unit reports the sensor as deactivated (message ID 10), i.e. not configured."""
         return (
             self._get_message_id_kind(device_type, key, index=index, value_index=value_index)
             is MessageIdKind.DEACTIVATED

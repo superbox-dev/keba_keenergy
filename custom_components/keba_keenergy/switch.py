@@ -50,24 +50,24 @@ class KebaKeEnergySwitchEntity(KebaKeEnergyEntity, SwitchEntity):
 
     @property
     def is_on(self) -> bool | None:
-        """Return true if the switch is on."""
+        """Return True if the switch is on, None if the value is missing."""
         return self.get_typed_value(self._data_key, bool)
 
     async def async_turn_off(self, **kwargs: object) -> None:  # noqa: ARG002
-        """Turn the switch off."""
+        """Turn the switch off, written only if it is on."""
         if self.is_on:
             value: bool = False
-            await self._async_write_data(value, key=self._data_key)
+            await self._async_write_value(value, key=self._data_key)
 
     async def async_turn_on(self, **kwargs: object) -> None:  # noqa: ARG002
-        """Turn the switch on."""
+        """Turn the switch on, written only if it is not on."""
         if not self.is_on:
             value: bool = True
-            await self._async_write_data(value, key=self._data_key)
+            await self._async_write_value(value, key=self._data_key)
 
 
 SWITCH_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergySwitchEntityDescription, ...]]] = {
-    SectionPrefix.HEAT_CIRCUIT: (
+    SectionPrefix.HEATING_CIRCUIT: (
         KebaKeEnergySwitchEntityDescription(
             condition=has_photovoltaics,
             device_class=SwitchDeviceClass.SWITCH,
@@ -124,7 +124,7 @@ SWITCH_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergySwitchEntityDescriptio
             translation_key="use_excess_energy",
         ),
     ),
-    SectionPrefix.HOT_WATER_TANK: (
+    SectionPrefix.DHW_TANK: (
         KebaKeEnergySwitchEntityDescription(
             condition=has_photovoltaics,
             device_class=SwitchDeviceClass.SWITCH,

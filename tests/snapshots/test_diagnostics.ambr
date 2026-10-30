@@ -47,7 +47,7 @@
         ]),
       }),
       'heat_pump': dict({
-        'electric_energy_meter_type': list([
+        'electrical_energy_meter_type': list([
           dict({
             'consumer_number': None,
             'device_number': 1,

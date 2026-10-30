@@ -41,6 +41,18 @@ class KebaKeEnergyBinarySensorEntityDescription(
     """Class describing KEBA KeEnergy binary sensor entities."""
 
 
+class KebaKeEnergyBinarySensorEntity(KebaKeEnergyEntity, BinarySensorEntity):
+    """KEBA KeEnergy binary sensor entity."""
+
+    entity_description: KebaKeEnergyBinarySensorEntityDescription
+    _platform_domain: str = BINARY_SENSOR_DOMAIN
+
+    @property
+    def is_on(self) -> bool | None:
+        """Return True if the binary sensor is on, None if the value is missing."""
+        return self.get_typed_value(self._data_key, bool)
+
+
 BINARY_SENSOR_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergyBinarySensorEntityDescription, ...]]] = {
     SectionPrefix.SOLAR_CIRCUIT: (
         KebaKeEnergyBinarySensorEntityDescription(
@@ -60,7 +72,7 @@ BINARY_SENSOR_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergyBinarySensorEnt
             },
         ),
     ),
-    SectionPrefix.HEAT_CIRCUIT: (
+    SectionPrefix.HEATING_CIRCUIT: (
         KebaKeEnergyBinarySensorEntityDescription(
             device_class=BinarySensorDeviceClass.RUNNING,
             entity_registry_enabled_default=False,
@@ -136,7 +148,7 @@ BINARY_SENSOR_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergyBinarySensorEnt
             },
         ),
     ),
-    SectionPrefix.HOT_WATER_TANK: (
+    SectionPrefix.DHW_TANK: (
         KebaKeEnergyBinarySensorEntityDescription(
             key="heat_request",
             translation_key="heat_request",
@@ -179,18 +191,6 @@ BINARY_SENSOR_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergyBinarySensorEnt
         ),
     ),
 }
-
-
-class KebaKeEnergyBinarySensorEntity(KebaKeEnergyEntity, BinarySensorEntity):
-    """KEBA KeEnergy binary sensor entity."""
-
-    entity_description: KebaKeEnergyBinarySensorEntityDescription
-    _platform_domain: str = BINARY_SENSOR_DOMAIN
-
-    @property
-    def is_on(self) -> bool | None:
-        """Return true if the binary sensor is on."""
-        return self.get_typed_value(self._data_key, bool)
 
 
 async def async_setup_entry(

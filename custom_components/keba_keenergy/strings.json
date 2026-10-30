@@ -59,17 +59,17 @@
     "control_unit": {
       "name": "Control unit"
     },
+    "dhw_tank": {
+      "name": "Hot water tank{device_number}"
+    },
     "external_heat_source": {
       "name": "External heat source{device_number}"
-    },
-    "heat_circuit": {
-      "name": "Heating circuit{device_number}"
     },
     "heat_pump": {
       "name": "Heat pump{device_number}"
     },
-    "hot_water_tank": {
-      "name": "Hot water tank{device_number}"
+    "heating_circuit": {
+      "name": "Heating circuit{device_number}"
     },
     "passive_cooling": {
       "name": "Passive cooling{device_number}"
@@ -127,7 +127,7 @@
       }
     },
     "climate": {
-      "heat_circuit": {
+      "heating_circuit": {
         "state": {
           "heat": "On"
         },
@@ -248,6 +248,15 @@
       "cooling_curve": {
         "name": "Cooling curve"
       },
+      "dhw_tank_operating_mode": {
+        "name": "Operating mode",
+        "state": {
+          "auto": "Schedule",
+          "heat_up": "Heat up",
+          "off": "Off",
+          "on": "On"
+        }
+      },
       "external_heat_source_operating_mode": {
         "name": "Operating mode",
         "state": {
@@ -256,7 +265,7 @@
           "on": "On"
         }
       },
-      "heat_circuit_operating_mode": {
+      "heating_circuit_operating_mode": {
         "name": "Operating mode",
         "state": {
           "auto": "Auto",
@@ -269,15 +278,6 @@
       },
       "heating_curve": {
         "name": "Heating curve"
-      },
-      "hot_water_tank_operating_mode": {
-        "name": "Operating mode",
-        "state": {
-          "auto": "Schedule",
-          "heat_up": "Heat up",
-          "off": "Off",
-          "on": "On"
-        }
       },
       "solar_circuit_operating_mode": {
         "name": "Operating mode",
@@ -397,6 +397,15 @@
       "dew_point": {
         "name": "Dew point"
       },
+      "dhw_tank_operating_mode": {
+        "name": "Operating mode",
+        "state": {
+          "auto": "Schedule",
+          "heat_up": "Heat up",
+          "off": "Off",
+          "on": "On"
+        }
+      },
       "excess_energy_activation_counter": {
         "name": "Activation counter (PV surplus)"
       },
@@ -467,19 +476,6 @@
       "fresh_water_module_temperature": {
         "name": "Fresh water module temperature"
       },
-      "heat_circuit_operating_mode": {
-        "name": "Operating mode",
-        "state": {
-          "auto": "Auto",
-          "day": "Day",
-          "external": "External",
-          "holiday": "Away",
-          "night": "Night",
-          "off": "Off",
-          "party": "Party",
-          "room_control": "Room control"
-        }
-      },
       "heat_request": {
         "name": "Heat request",
         "state": {
@@ -490,6 +486,19 @@
           "outdoor_off": "Off (outdoor temperature)",
           "room_off": "Off (room temperature)",
           "temporary_off": "Off (priority)"
+        }
+      },
+      "heating_circuit_operating_mode": {
+        "name": "Operating mode",
+        "state": {
+          "auto": "Auto",
+          "day": "Day",
+          "external": "External",
+          "holiday": "Away",
+          "night": "Night",
+          "off": "Off",
+          "party": "Party",
+          "room_control": "Room control"
         }
       },
       "heating_curve": {
@@ -533,15 +542,6 @@
       },
       "hot_water_spf": {
         "name": "Hot water SPF"
-      },
-      "hot_water_tank_operating_mode": {
-        "name": "Operating mode",
-        "state": {
-          "auto": "Schedule",
-          "heat_up": "Heat up",
-          "off": "Off",
-          "on": "On"
-        }
       },
       "low_pressure": {
         "name": "Low pressure"
@@ -781,7 +781,7 @@
           "performance": "Heat up"
         }
       },
-      "hot_water_tank": {
+      "dhw_tank": {
         "state": {
           "eco": "Schedule",
           "heat_pump": "On",
