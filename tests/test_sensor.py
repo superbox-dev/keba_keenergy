@@ -22,8 +22,10 @@ from homeassistant.helpers import entity_registry as er
 from custom_components.keba_keenergy.const import DOMAIN
 from tests import get_option_translations
 from tests import get_platform_states
+from tests.api_data import CURVE_NAMES_RESPONSE
 from tests.api_data import MULTIPLE_DEVICES_DATA_RESPONSE
 from tests.api_data import MULTIPLE_DEVICES_RESPONSE
+from tests.api_data import get_curve_points_response
 from tests.api_data import get_multiple_devices_fixed_data_response
 from tests.api_data import update_response
 
@@ -270,3 +272,24 @@ async def test_sensor_raw_value(
     state: State | None = hass.states.get(entity_id)
     assert isinstance(state, State)
     assert {"state": state.state} | {key: state.attributes.get(key) for key in expected if key != "state"} == expected
+
+
+async def test_curve_sensor_without_curve(
+    hass: HomeAssistant,
+    fake_api: FakeKebaKeEnergyAPI,
+) -> None:
+    """Test that a curve sensor has no points if its curve is no longer on the control unit."""
+    fake_api.responses = [
+        MULTIPLE_DEVICES_RESPONSE,
+        get_multiple_devices_fixed_data_response(),
+        MULTIPLE_DEVICES_DATA_RESPONSE,
+    ]
+    # The control unit has no curves, so the curves in use (e.g. `HC6`) do not exist.
+    fake_api.curves = [[{**value, "value": ""} for value in CURVE_NAMES_RESPONSE], get_curve_points_response()]
+    await fake_api.setup_integration()
+
+    state: State | None = hass.states.get("sensor.keba_keenergy_12345678_heat_circuit_heating_curve_1")
+
+    assert isinstance(state, State)
+    assert state.state == "HC6"
+    assert state.attributes["points"] == []

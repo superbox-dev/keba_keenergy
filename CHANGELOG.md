@@ -16,22 +16,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Changed the requirement to `keba_keenergy_api` 3.0, all values of an update are read with one request.
-  ([Issue #77][issue-77])
+- Changed the requirement to `keba_keenergy_api` 3.0, all values of an update are read with one request, the curves
+  of the heating circuits separately. ([Issue #77][issue-77])
 - Changed the attributes `lower_limit` and `upper_limit` to numbers, only writable values have them.
   ([Issue #77][issue-77])
 - Changed more sensors and binary sensors to use the message ID of the control unit (e.g. the heat pump temperatures
   and powers, the meters of the solar circuits and photovoltaics), they are unknown or not created if the control
-  unit does not use them. ([Issue #77][issue-77])
+  unit does not use them. The sensors of optional components (e.g. room temperature and humidity, mixer, pump, fresh
+  water module) are created by their message ID instead of the options of the control unit. ([Issue #77][issue-77])
 - Changed the states of the sensors to the values of the control unit without rounding, Home Assistant rounds them
   for the display (e.g. temperatures to one decimal). ([Issue #77][issue-77])
-- Changed the sensors to the units of the control unit, Home Assistant converts the values to the units of the Web
-  HMI (e.g. energy in `kWh`, operating times in `h`) and the unit can be changed in the entity settings. Existing
-  sensors keep their unit. ([Issue #77][issue-77])
-- Changed the display precision of the sensors to the default of Home Assistant, or to a finer one where the control
-  unit provides it (e.g. the fresh water module temperature with two decimals). ([Issue #77][issue-77])
+- Changed the energies of the solar circuits and photovoltaics to `J` and the operating times and maximum runtimes of
+  the heat pumps and external heat sources to `s`, the units of the control unit. Home Assistant shows them in `kWh`
+  and `h` with its default display precision, the unit can be changed in the entity settings. Existing sensors keep
+  their unit. ([Issue #77][issue-77])
+- Changed the display precision of the pump speeds, the room humidity and the fresh water module temperature to two
+  decimals, of the CPU usage to one and of the RAM usage and the flash erase counter to none. ([Issue #77][issue-77])
 - Changed the options of the heating and cooling curve selects to the curves of the control unit after every update,
   a new or renamed curve is shown without reloading the integration.
+- Changed the update of the heating circuits to read only the points of the curves in use, not of all curves.
 - Changed the name and the texts of the action `set_heating_curve_points` to `Set curve points`, it also sets the
   points of cooling curves. ([Issue #85][issue-85])
 - Changed the sensor `weekly_write_count` to reset at midnight of a new week, also without an update or a write.

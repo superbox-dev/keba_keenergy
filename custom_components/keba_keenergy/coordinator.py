@@ -125,7 +125,9 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[CoordinatorData]):
         self._polled_sections: dict[SectionPrefix, dict[str, Section]] = {}
 
         self.device_counts: DeviceCounts | None = None
-        # The curve tables with their points, read with the curves in use.
+        # The names of all heating and cooling curves and the points of the curves in use, read with every update of
+        # the heating circuits.
+        self.curve_names: tuple[str, ...] = ()
         self.curve_tables: dict[str, CurveTable] = {}
 
         super().__init__(
@@ -141,11 +143,6 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[CoordinatorData]):
                 immediate=True,
             ),
         )
-
-    @property
-    def curve_names(self) -> tuple[str, ...]:
-        """Return the names of the heating and cooling curves."""
-        return tuple(self.curve_tables)
 
     @property
     def heat_pump_names(self) -> list[str]:
@@ -193,7 +190,6 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[CoordinatorData]):
         self.device_name = system_info["name"]
         self.device_hmi_sw_version = hmi_info["name"].replace("KeEnergy.WebHmi_", "")
         self.device_counts = await self._api.get_device_counts()
-        self.curve_tables = await self._api.get_curve_tables()
 
         # One check for the polled values and the options, each unknown value costs one more request.
         supported: set[Section] = set(
@@ -268,10 +264,6 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[CoordinatorData]):
             _LOGGER.debug("Reading the values again, a value was set during the update")
             readings = await self._async_read(request)
 
-        # The sensors of the curves in use show their points.
-        if any(key in CURVE_KEYS for _, key in request.values()):
-            self.curve_tables = await self._api_call_for_update(self._api.get_curve_tables())
-
         # Skipped sections keep their previous values.
         data: CoordinatorData = {
             section_id: dict(section_data) for section_id, section_data in (self.data or {}).items()
@@ -280,7 +272,23 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[CoordinatorData]):
         for section_id, section_data in self._group_readings(readings, request).items():
             data.setdefault(section_id, {}).update(section_data)
 
+        if any(key in CURVE_KEYS for _, key in request.values()):
+            await self._async_read_curves(data)
+
         return data
+
+    async def _async_read_curves(self, data: CoordinatorData, /) -> None:
+        # The selects show the names of all curves, the sensors the points of the curves in use.
+        self.curve_names = await self._api_call_for_update(self._api.get_curve_table_names())
+        in_use: list[str] = [
+            reading.value
+            for section_data in data.values()
+            for key, readings in section_data.items()
+            if key in CURVE_KEYS
+            for reading in readings
+            if isinstance(reading.value, str) and reading.value in self.curve_names
+        ]
+        self.curve_tables = await self._api_call_for_update(self._api.get_curve_tables(in_use)) if in_use else {}
 
     async def _async_read(self, request: Iterable[Section], /) -> Readings:
         # The read waits for a running write, so it gets the written value.
@@ -456,9 +464,13 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[CoordinatorData]):
         timezone: str = await self._api_call_for_user(self._api.get_timezone())
         return ZoneInfo(timezone)
 
-    async def async_read_curve_tables(self) -> dict[str, CurveTable]:
-        """Read the heating and cooling curves from the Web HMI, by name."""
-        return await self._api_call_for_user(self._api.get_curve_tables())
+    async def async_read_curve_table(self, name: str, /) -> CurveTable | None:
+        """Read a heating or cooling curve from the Web HMI, None if there is no curve with the name."""
+        if name not in await self._api_call_for_user(self._api.get_curve_table_names()):
+            return None
+
+        curve_tables: dict[str, CurveTable] = await self._api_call_for_user(self._api.get_curve_tables([name]))
+        return curve_tables[name]
 
     def device_identifier(self, section_id: str, device_number: int | None, /) -> str:
         """Return the device identifier `<entry unique_id>_<section or domain for the control unit>[_<device number>]`.
