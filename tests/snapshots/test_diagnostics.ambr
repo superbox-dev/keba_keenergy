@@ -1,6 +1,111 @@
 # serializer version: 1
 # name: test_diagnostics[with_credentials]
   dict({
+    'configuration': dict({
+      'external_heat_source': dict({
+        'has_emissions': list([
+          dict({
+            'consumer_number': None,
+            'device_number': 1,
+            'lower_limit': None,
+            'message_id': None,
+            'raw_value': 'true',
+            'upper_limit': None,
+            'value': True,
+          }),
+          dict({
+            'consumer_number': None,
+            'device_number': 2,
+            'lower_limit': None,
+            'message_id': None,
+            'raw_value': 'false',
+            'upper_limit': None,
+            'value': False,
+          }),
+        ]),
+      }),
+      'heat_circuit': dict({
+        'mode': list([
+          dict({
+            'consumer_number': None,
+            'device_number': 1,
+            'lower_limit': None,
+            'message_id': None,
+            'raw_value': '0',
+            'upper_limit': None,
+            'value': 'HEATING',
+          }),
+          dict({
+            'consumer_number': None,
+            'device_number': 2,
+            'lower_limit': None,
+            'message_id': None,
+            'raw_value': '1',
+            'upper_limit': None,
+            'value': 'COOLING',
+          }),
+        ]),
+      }),
+      'heat_pump': dict({
+        'electric_energy_meter_type': list([
+          dict({
+            'consumer_number': None,
+            'device_number': 1,
+            'lower_limit': None,
+            'message_id': None,
+            'raw_value': '2',
+            'upper_limit': None,
+            'value': 'S0',
+          }),
+        ]),
+        'has_active_cooling': list([
+          dict({
+            'consumer_number': None,
+            'device_number': 1,
+            'lower_limit': None,
+            'message_id': None,
+            'raw_value': 'false',
+            'upper_limit': None,
+            'value': False,
+          }),
+        ]),
+        'has_passive_cooling': list([
+          dict({
+            'consumer_number': None,
+            'device_number': 1,
+            'lower_limit': None,
+            'message_id': None,
+            'raw_value': 'false',
+            'upper_limit': None,
+            'value': False,
+          }),
+        ]),
+        'heat_meter_type': list([
+          dict({
+            'consumer_number': None,
+            'device_number': 1,
+            'lower_limit': None,
+            'message_id': None,
+            'raw_value': '2',
+            'upper_limit': None,
+            'value': 'S0',
+          }),
+        ]),
+      }),
+      'system': dict({
+        'has_photovoltaics': list([
+          dict({
+            'consumer_number': None,
+            'device_number': 1,
+            'lower_limit': None,
+            'message_id': None,
+            'raw_value': 'true',
+            'upper_limit': None,
+            'value': True,
+          }),
+        ]),
+      }),
+    }),
     'curve_names': list([
       'HC1',
       'HC2',
@@ -2800,111 +2905,6 @@
       }),
       'title': '**REDACTED**',
       'unique_id': '**REDACTED**',
-    }),
-    'options': dict({
-      'external_heat_source': dict({
-        'has_emissions': list([
-          dict({
-            'consumer_number': None,
-            'device_number': 1,
-            'lower_limit': None,
-            'message_id': None,
-            'raw_value': 'true',
-            'upper_limit': None,
-            'value': True,
-          }),
-          dict({
-            'consumer_number': None,
-            'device_number': 2,
-            'lower_limit': None,
-            'message_id': None,
-            'raw_value': 'false',
-            'upper_limit': None,
-            'value': False,
-          }),
-        ]),
-      }),
-      'heat_circuit': dict({
-        'mode': list([
-          dict({
-            'consumer_number': None,
-            'device_number': 1,
-            'lower_limit': None,
-            'message_id': None,
-            'raw_value': '0',
-            'upper_limit': None,
-            'value': 'HEATING',
-          }),
-          dict({
-            'consumer_number': None,
-            'device_number': 2,
-            'lower_limit': None,
-            'message_id': None,
-            'raw_value': '1',
-            'upper_limit': None,
-            'value': 'COOLING',
-          }),
-        ]),
-      }),
-      'heat_pump': dict({
-        'electric_energy_meter_type': list([
-          dict({
-            'consumer_number': None,
-            'device_number': 1,
-            'lower_limit': None,
-            'message_id': None,
-            'raw_value': '2',
-            'upper_limit': None,
-            'value': 'S0',
-          }),
-        ]),
-        'has_active_cooling': list([
-          dict({
-            'consumer_number': None,
-            'device_number': 1,
-            'lower_limit': None,
-            'message_id': None,
-            'raw_value': 'false',
-            'upper_limit': None,
-            'value': False,
-          }),
-        ]),
-        'has_passive_cooling': list([
-          dict({
-            'consumer_number': None,
-            'device_number': 1,
-            'lower_limit': None,
-            'message_id': None,
-            'raw_value': 'false',
-            'upper_limit': None,
-            'value': False,
-          }),
-        ]),
-        'heat_meter_type': list([
-          dict({
-            'consumer_number': None,
-            'device_number': 1,
-            'lower_limit': None,
-            'message_id': None,
-            'raw_value': '2',
-            'upper_limit': None,
-            'value': 'S0',
-          }),
-        ]),
-      }),
-      'system': dict({
-        'has_photovoltaics': list([
-          dict({
-            'consumer_number': None,
-            'device_number': 1,
-            'lower_limit': None,
-            'message_id': None,
-            'raw_value': 'true',
-            'upper_limit': None,
-            'value': True,
-          }),
-        ]),
-      }),
     }),
     'weekly_write_count': 0,
     'weekly_writes': dict({

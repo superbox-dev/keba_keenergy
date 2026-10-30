@@ -150,8 +150,8 @@ STEP_AUTH_DATA_SCHEMA: Final[probatio.Schema] = probatio.Schema(
     },
 )
 
-# The options of the control unit per device type, read once on setup.
-OPTION_SECTIONS: Final[Mapping[SectionPrefix, Mapping[str, Section]]] = {
+# The configuration of the control unit per device type (e.g. the installed meters), read once on setup.
+CONFIGURATION_SECTIONS: Final[Mapping[SectionPrefix, Mapping[str, Section]]] = {
     SectionPrefix.SYSTEM: {
         "has_photovoltaics": System.HAS_PHOTOVOLTAICS,
     },

@@ -160,7 +160,7 @@ class FakeKebaKeEnergyAPI:
         """Register all requests of the setup and the updates.
 
         The Web HMI keeps the values of the `responses`, a read of only the names of the next response takes it (the
-        device counts, the options and the values of each update), the other reads (e.g. of `filter_supported()`)
+        device counts, the configuration and the values of each update), the other reads (e.g. of `filter_supported()`)
         return the values it already has. An `HTTPStatus` returns an empty response with this status and an exception
         (e.g. `TimeoutError`) is raised by the next read.
         The message ids of the sensors come from `message_ids` (variable name to id), otherwise from

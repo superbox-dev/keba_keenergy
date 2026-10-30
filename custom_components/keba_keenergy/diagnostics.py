@@ -46,7 +46,7 @@ async def async_get_config_entry_diagnostics(
             "curve_names": coordinator.curve_names,
             "weekly_write_count": coordinator.write_counter.weekly_count,
             "weekly_writes": coordinator.write_counter.weekly_writes,
-            "options": _dump(coordinator.options),
+            "configuration": _dump(coordinator.configuration),
             "data": _dump(coordinator.data),
         },
         TO_REDACT,

@@ -33,11 +33,11 @@ from keba_keenergy_api.exceptions import APIError
 from keba_keenergy_api.exceptions import AuthenticationError
 from keba_keenergy_api.models import CurveTable
 
+from .const import CONFIGURATION_SECTIONS
 from .const import CURVE_KEYS
 from .const import DEFAULT_SCAN_INTERVAL
 from .const import DEVICE_TYPES
 from .const import DOMAIN
-from .const import OPTION_SECTIONS
 from .const import REQUEST_REFRESH_COOLDOWN
 from .const import SCAN_INTERVAL_PREFIXES
 from .const import SectionPrefix
@@ -117,8 +117,8 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[CoordinatorData]):
         self.device_hmi_sw_version: str = ""
         self.device_serial_number: str = ""
 
-        # The options of the control unit, read once on setup.
-        self.options: CoordinatorData = {}
+        # The configuration of the control unit, read once on setup.
+        self.configuration: CoordinatorData = {}
         self._tick_counter: int = 0
 
         # The polled sections of the installed devices that the Web HMI supports, per device type and key.
@@ -191,21 +191,21 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[CoordinatorData]):
         self.device_hmi_sw_version = hmi_info["name"].replace("KeEnergy.WebHmi_", "")
         self.device_counts = await self._api.get_device_counts()
 
-        # One check for the polled values and the options, each unknown value costs one more request.
+        # One check for the polled values and the configuration, each unknown value costs one more request.
         supported: set[Section] = set(
             await self._api.filter_supported(
                 [
                     section
-                    for sections in (*SECTIONS.values(), *OPTION_SECTIONS.values())
+                    for sections in (*SECTIONS.values(), *CONFIGURATION_SECTIONS.values())
                     for section in sections.values()
                 ],
                 counts=self.device_counts,
             ),
         )
 
-        option_sections: dict[Section, tuple[str, str]] = self._get_request(OPTION_SECTIONS, supported)
-        readings: Readings = await self._api.read(option_sections, counts=self.device_counts, limits="none")
-        self.options = self._group_readings(readings, option_sections)
+        configuration_sections: dict[Section, tuple[str, str]] = self._get_request(CONFIGURATION_SECTIONS, supported)
+        readings: Readings = await self._api.read(configuration_sections, counts=self.device_counts, limits="none")
+        self.configuration = self._group_readings(readings, configuration_sections)
 
         # Group the polled values by device but only add the values that are available for the heat pump setup.
         self._polled_sections = {
@@ -485,7 +485,7 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[CoordinatorData]):
     def device_identifiers(self) -> set[str]:
         """Return the identifiers of all devices that the control unit is configured with.
 
-        The devices come from the device counts and options that are read on setup, not from the polled data,
+        The devices come from the device counts and the configuration that are read on setup, not from the polled data,
         so a section that is missing in a response never removes a device.
         """
         identifiers: set[str] = set()
@@ -519,38 +519,40 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[CoordinatorData]):
 
     def has_photovoltaics(self) -> bool:
         """Check if photovoltaics is available."""
-        return self._get_option(SectionPrefix.SYSTEM, "has_photovoltaics") is True
+        return self._get_configuration(SectionPrefix.SYSTEM, "has_photovoltaics") is True
 
-    def _get_option(self, prefix: SectionPrefix, key: str, /, *, index: int | None = None) -> Value | None:
-        """Return an option that is read once on setup, of the device with the index."""
-        readings: list[Reading] = self.options.get(prefix, {}).get(key, [])
+    def _get_configuration(self, prefix: SectionPrefix, key: str, /, *, index: int | None = None) -> Value | None:
+        """Return a value of the configuration that is read once on setup, of the device with the index."""
+        readings: list[Reading] = self.configuration.get(prefix, {}).get(key, [])
         return readings[index or 0].value if len(readings) > (index or 0) else None
 
     def has_electrical_energy_meter(self, *, index: int | None = None) -> bool:
         """Check if electrical energy meter is available."""
-        value: Value | None = self._get_option(SectionPrefix.HEAT_PUMP, "electric_energy_meter_type", index=index)
+        value: Value | None = self._get_configuration(
+            SectionPrefix.HEAT_PUMP, "electric_energy_meter_type", index=index
+        )
         return isinstance(value, ElectricalEnergyMeterType) and value is not ElectricalEnergyMeterType.NONE
 
     def has_heat_meter(self, *, index: int | None = None) -> bool:
         """Check if heat meter is available."""
-        value: Value | None = self._get_option(SectionPrefix.HEAT_PUMP, "heat_meter_type", index=index)
+        value: Value | None = self._get_configuration(SectionPrefix.HEAT_PUMP, "heat_meter_type", index=index)
         return isinstance(value, HeatMeterType) and value is not HeatMeterType.NONE
 
     def has_active_cooling(self, *, index: int | None = None) -> bool:
         """Check if active cooling is available."""
-        return self._get_option(SectionPrefix.HEAT_PUMP, "has_active_cooling", index=index) is True
+        return self._get_configuration(SectionPrefix.HEAT_PUMP, "has_active_cooling", index=index) is True
 
     def has_passive_cooling(self, *, index: int | None = None) -> bool:
         """Check if passive cooling is available."""
-        return self._get_option(SectionPrefix.HEAT_PUMP, "has_passive_cooling", index=index) is True
+        return self._get_configuration(SectionPrefix.HEAT_PUMP, "has_passive_cooling", index=index) is True
 
     def has_emissions(self, *, index: int | None = None) -> bool:
         """Check if the external heat source has emissions."""
-        return self._get_option(SectionPrefix.EXTERNAL_HEAT_SOURCE, "has_emissions", index=index) is True
+        return self._get_configuration(SectionPrefix.EXTERNAL_HEAT_SOURCE, "has_emissions", index=index) is True
 
     def has_cooling_circuits(self) -> bool:
         """Check if one heating circuit supports cooling."""
-        # Some KEBA KeEnergy software versions do not have the options for active and passive cooling.
+        # Some KEBA KeEnergy software versions do not have the configuration for active and passive cooling.
         # Cooling support can only be detected with the heating circuit mode.
         return any(
             self.is_cooling_circuit(index=index) for index in range(self.device_count(SectionPrefix.HEAT_CIRCUIT))
@@ -558,7 +560,7 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[CoordinatorData]):
 
     def is_cooling_circuit(self, *, index: int | None = None) -> bool:
         """Check if heating circuit mode is cooling."""
-        return self._get_option(SectionPrefix.HEAT_CIRCUIT, "mode", index=index) in (
+        return self._get_configuration(SectionPrefix.HEAT_CIRCUIT, "mode", index=index) in (
             HeatingCircuitType.COOLING,
             HeatingCircuitType.HEATING_AND_COOLING,
             HeatingCircuitType.HEATING_AND_ACTIVE_COOLING,
@@ -566,7 +568,7 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[CoordinatorData]):
 
     def is_heating_circuit(self, *, index: int | None = None) -> bool:
         """Check if heating circuit mode is heating."""
-        return self._get_option(SectionPrefix.HEAT_CIRCUIT, "mode", index=index) in (
+        return self._get_configuration(SectionPrefix.HEAT_CIRCUIT, "mode", index=index) in (
             HeatingCircuitType.HEATING,
             HeatingCircuitType.HEATING_AND_COOLING,
             HeatingCircuitType.HEATING_AND_ACTIVE_COOLING,
