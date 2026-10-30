@@ -37,7 +37,6 @@ if TYPE_CHECKING:
 @pytest.mark.usefixtures("entity_registry_enabled_by_default", "language")
 async def test_sensors(
     hass: HomeAssistant,
-    config_entry: MockConfigEntry,
     fake_api: FakeKebaKeEnergyAPI,
     snapshot: SnapshotAssertion,
 ) -> None:
@@ -45,7 +44,7 @@ async def test_sensors(
     fake_api.responses = get_multiple_devices_responses(MULTIPLE_DEVICES_DATA_RESPONSE, has_passive_cooling="true")
     await fake_api.setup_integration()
 
-    states: list[State] = get_platform_states(hass, config_entry, Platform.SENSOR)
+    states: list[State] = get_platform_states(hass, fake_api.config_entry, Platform.SENSOR)
     enum_states: list[State] = [state for state in states if ATTR_OPTIONS in state.attributes]
     value_states: list[State] = [state for state in states if ATTR_OPTIONS not in state.attributes]
 

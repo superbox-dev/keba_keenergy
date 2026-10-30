@@ -42,7 +42,6 @@ if TYPE_CHECKING:
 @pytest.mark.usefixtures("entity_registry_enabled_by_default", "language")
 async def test_selects(
     hass: HomeAssistant,
-    config_entry: MockConfigEntry,
     fake_api: FakeKebaKeEnergyAPI,
     snapshot: SnapshotAssertion,
 ) -> None:
@@ -50,7 +49,7 @@ async def test_selects(
     fake_api.responses = get_multiple_devices_responses(MULTIPLE_DEVICES_DATA_RESPONSE, has_passive_cooling="true")
     await fake_api.setup_integration()
 
-    states: list[State] = get_platform_states(hass, config_entry, Platform.SELECT)
+    states: list[State] = get_platform_states(hass, fake_api.config_entry, Platform.SELECT)
     translated_states: list[State] = [state for state in states if state.entity_id not in CURVE_SELECTS]
 
     for state in states:

@@ -67,7 +67,6 @@ from tests.test_climate_data import get_operating_mode_write
 if TYPE_CHECKING:
     from homeassistant.core import HomeAssistant
     from homeassistant.core import State
-    from pytest_homeassistant_custom_component.common import MockConfigEntry
     from syrupy.assertion import SnapshotAssertion
 
     from tests.conftest import FakeKebaKeEnergyAPI
@@ -76,7 +75,6 @@ if TYPE_CHECKING:
 @pytest.mark.usefixtures("entity_registry_enabled_by_default", "language")
 async def test_climate(
     hass: HomeAssistant,
-    config_entry: MockConfigEntry,
     fake_api: FakeKebaKeEnergyAPI,
     snapshot: SnapshotAssertion,
 ) -> None:
@@ -84,7 +82,7 @@ async def test_climate(
     fake_api.responses = get_multiple_devices_responses(MULTIPLE_DEVICES_DATA_RESPONSE)
     await fake_api.setup_integration()
 
-    for state in get_platform_states(hass, config_entry, Platform.CLIMATE):
+    for state in get_platform_states(hass, fake_api.config_entry, Platform.CLIMATE):
         assert state == snapshot(name=state.entity_id)
 
 

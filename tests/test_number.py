@@ -47,7 +47,6 @@ if TYPE_CHECKING:
 @pytest.mark.usefixtures("entity_registry_enabled_by_default", "language")
 async def test_numbers(
     hass: HomeAssistant,
-    config_entry: MockConfigEntry,
     fake_api: FakeKebaKeEnergyAPI,
     snapshot: SnapshotAssertion,
 ) -> None:
@@ -55,7 +54,7 @@ async def test_numbers(
     fake_api.responses = get_multiple_devices_responses(MULTIPLE_DEVICES_DATA_RESPONSE, has_passive_cooling="true")
     await fake_api.setup_integration()
 
-    for state in get_platform_states(hass, config_entry, Platform.NUMBER):
+    for state in get_platform_states(hass, fake_api.config_entry, Platform.NUMBER):
         assert state == snapshot(name=state.entity_id)
 
 
