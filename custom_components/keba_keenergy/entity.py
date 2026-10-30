@@ -5,7 +5,6 @@
 from __future__ import annotations
 
 import logging
-import math
 from dataclasses import dataclass
 from functools import cached_property
 from typing import TYPE_CHECKING
@@ -24,7 +23,7 @@ from homeassistant.helpers.update_coordinator import CoordinatorEntity
 from .const import DEVICE_TRANSLATION_KEYS
 from .const import DOMAIN
 from .const import FLASH_WRITE_DELAY
-from .const import FLASH_WRITE_TOLERANCE
+from .const import FLOAT32_SIGNIFICANT_DIGITS
 from .const import MANUFACTURER
 from .const import MANUFACTURER_INO
 from .const import MANUFACTURER_MTEC
@@ -272,7 +271,9 @@ class KebaKeEnergyBaseEntity(
         if value is None:
             return
 
-        self._pending_value = value
+        # The API only writes integers to integer values, e.g. a runtime in seconds.
+        value_type: type = self.coordinator.get_section(self.section_id, self._pending_key).value.value_type
+        self._pending_value = round(value) if value_type is int else self._round_float32(value)
 
         if self._async_call_later:
             self._async_call_later()
@@ -286,33 +287,19 @@ class KebaKeEnergyBaseEntity(
             ),
         )
 
+    @staticmethod
+    def _round_float32(value: float, /) -> float:
+        """Round a value to the significant digits of a Float32, the Web HMI returns `0.8` as `0.80000001`."""
+        return float(f"{value:.{FLOAT32_SIGNIFICANT_DIGITS}g}")
+
     async def _async_debounced_write_data(self, _: datetime) -> None:
         """Write data (debounced) to the KEBA KeEnergy API."""
         self._async_call_later = None
 
-        current_value: float | None = self.get_float(self._pending_key)
-
-        # The Web HMI returns a Float32 with 8 digits (`0.8` as `0.80000001`), which is the same value for the NAND.
-        if (
-            self._pending_key
-            and self._pending_value is not None
-            and (
-                current_value is None
-                or not math.isclose(
-                    self._pending_value,
-                    current_value,
-                    rel_tol=FLASH_WRITE_TOLERANCE,
-                    abs_tol=FLASH_WRITE_TOLERANCE,
-                )
-            )
-        ):
-            # The API only writes integers to integer values, e.g. a runtime in seconds.
-            value_type: type = self.coordinator.get_section(self.section_id, self._pending_key).value.value_type
-            value: float | int = round(self._pending_value) if value_type is int else self._pending_value
-
+        if self._pending_key and self._pending_value is not None and self._pending_value != self._get_current_value():
             try:
                 await self._async_write_data(
-                    value,
+                    self._pending_value,
                     key=self._pending_key,
                     device_numbers=self.device_numbers,
                 )
@@ -320,12 +307,17 @@ class KebaKeEnergyBaseEntity(
                 # No caller gets the error of a debounced write, the entity already shows the previous value again.
                 _LOGGER.warning("Failed to write the value of %s: %s", self.entity_id, error)
 
+    def _get_current_value(self) -> float | None:
+        """Return the current value of the pending key, a float rounded to the significant digits of a Float32."""
+        value: float | None = self.get_typed_value(self._pending_key, float)
+        return self.get_float(self._pending_key) if value is None else self._round_float32(value)
+
     def _get_debounced_value(self) -> float | None:
         """Return the value that waits for the debounced write, otherwise the current value."""
         if self._pending_value is not None and self._async_call_later:
             return self._pending_value
 
-        return self.get_float(self._pending_key)
+        return self._get_current_value()
 
 
 class KebaKeEnergyEntity(KebaKeEnergyBaseEntity):

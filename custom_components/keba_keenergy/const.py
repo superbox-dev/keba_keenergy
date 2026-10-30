@@ -87,7 +87,8 @@ DOMAIN: Final[str] = "keba_keenergy"
 FLASH_WRITE_ISSUE_ID: Final[str] = "frequent_flash_writes"
 FLASH_WRITE_LIMIT_PER_WEEK: Final[int] = 30
 FLASH_WRITE_DELAY: Final[float] = 1
-FLASH_WRITE_TOLERANCE: Final[float] = 1e-6
+# Significant digits of a Float32, the Web HMI returns 8 digits (`0.8` as `0.80000001`).
+FLOAT32_SIGNIFICANT_DIGITS: Final[int] = 7
 MANUFACTURER: Final[str] = "KEBA"
 MANUFACTURER_MTEC: Final[str] = "M-TEC"
 MANUFACTURER_INO: Final[str] = "ino"

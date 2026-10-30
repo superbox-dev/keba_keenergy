@@ -92,7 +92,7 @@ class KebaKeEnergyNumberEntity(KebaKeEnergyEntity, NumberEntity):
         """Return the state of the number."""
         native_value: float | None = self._get_debounced_value()
 
-        return None if native_value is None else native_value * self.entity_description.scale
+        return None if native_value is None else self._round_float32(native_value * self.entity_description.scale)
 
     async def async_set_native_value(self, value: float) -> None:
         """Set new value."""

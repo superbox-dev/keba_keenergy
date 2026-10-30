@@ -222,7 +222,7 @@
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': '0.60000002',
+    'state': '0.6',
   })
 # ---
 # name: test_numbers[de][number.keba_keenergy_12345678_heat_circuit_cooling_limit_day_2]
@@ -374,7 +374,7 @@
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': '0.69999999',
+    'state': '0.7',
   })
 # ---
 # name: test_numbers[de][number.keba_keenergy_12345678_heat_circuit_excess_energy_target_temperature_1]
@@ -412,7 +412,7 @@
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': '0.69999999',
+    'state': '0.7',
   })
 # ---
 # name: test_numbers[de][number.keba_keenergy_12345678_heat_circuit_heating_curve_offset_1]
@@ -1098,7 +1098,7 @@
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': '0.60000002',
+    'state': '0.6',
   })
 # ---
 # name: test_numbers[en][number.keba_keenergy_12345678_heat_circuit_cooling_limit_day_2]
@@ -1250,7 +1250,7 @@
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': '0.69999999',
+    'state': '0.7',
   })
 # ---
 # name: test_numbers[en][number.keba_keenergy_12345678_heat_circuit_excess_energy_target_temperature_1]
@@ -1288,7 +1288,7 @@
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': '0.69999999',
+    'state': '0.7',
   })
 # ---
 # name: test_numbers[en][number.keba_keenergy_12345678_heat_circuit_heating_curve_offset_1]
