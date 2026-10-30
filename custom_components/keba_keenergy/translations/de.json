@@ -795,8 +795,8 @@
     "authentication_error": {
       "message": "Authentifizierung fehlgeschlagen. Bitte überprüfe deine Anmeldedaten."
     },
-    "cannot_find_heating_curve": {
-      "message": "Heizkurve \"{heating_curve}\" nicht gefunden."
+    "cannot_find_curve": {
+      "message": "Kurve \"{curve}\" nicht gefunden."
     },
     "communication_error": {
       "message": "Bei der Kommunikation mit der API ist ein Fehler aufgetreten: {error}"
@@ -873,7 +873,7 @@
       "name": "Datumsbereich für Abwesenheit festlegen"
     },
     "set_heating_curve_points": {
-      "description": "Setzt die Punkte einer Heizkurve.",
+      "description": "Setzt die Punkte einer Heiz- oder Kühlkurve.",
       "fields": {
         "config_entry": {
           "description": "Die für diese Aktion zu verwendende Integration.",
@@ -881,14 +881,14 @@
         },
         "heating_curve": {
           "description": "z.B. HC 1, HC 2, HC FBH, HC HK",
-          "name": "Heizkurve"
+          "name": "Kurve"
         },
         "points": {
-          "description": "Liste der Heizkurvenpunkte mit Außentemperatur und zugehöriger Vorlauftemperatur.",
+          "description": "Liste der Kurvenpunkte mit Außentemperatur und zugehöriger Vorlauftemperatur.",
           "name": "Punkte"
         }
       },
-      "name": "Heizkurvenpunkte setzen"
+      "name": "Kurvenpunkte setzen"
     }
   }
 }

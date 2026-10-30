@@ -119,15 +119,15 @@ async def _async_set_away_range(call: ServiceCall) -> None:
 async def _async_set_heating_curve_points(call: ServiceCall) -> None:
     coordinator: KebaKeEnergyDataUpdateCoordinator = _get_coordinator(call)
 
-    heating_curve: str = call.data[ATTR_HEATING_CURVE]
-    heating_curves: dict[str, CurveTable] = await coordinator.async_read_curve_tables()
+    curve: str = call.data[ATTR_HEATING_CURVE]
+    curves: dict[str, CurveTable] = await coordinator.async_read_curve_tables()
 
-    if heating_curve not in heating_curves:
+    if curve not in curves:
         raise ServiceValidationError(
             translation_domain=DOMAIN,
-            translation_key="cannot_find_heating_curve",
+            translation_key="cannot_find_curve",
             translation_placeholders={
-                "heating_curve": heating_curve,
+                "curve": curve,
             },
         )
 
@@ -148,13 +148,13 @@ async def _async_set_heating_curve_points(call: ServiceCall) -> None:
 
     # Only write changed points, the control unit stores them in its flash memory.
     current_points: tuple[CurvePoint, ...] = tuple(
-        CurvePoint(outdoor=round(p.outdoor, 2), flow=round(p.flow, 2)) for p in heating_curves[heating_curve].points
+        CurvePoint(outdoor=round(p.outdoor, 2), flow=round(p.flow, 2)) for p in curves[curve].points
     )
 
     if current_points == points:
         return
 
-    await coordinator.async_set_curve_table_points(heating_curve, points)
+    await coordinator.async_set_curve_table_points(curve, points)
 
 
 @callback

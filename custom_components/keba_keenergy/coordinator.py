@@ -81,7 +81,7 @@ def get_device_identifier(entry_unique_id: str | None, section_id: str, device_n
 
 
 class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[CoordinatorData]):
-    """Class to manage fetching KEBA KeEnergy data API."""
+    """Read the values of a KEBA KeEnergy control unit and write changed values to it."""
 
     def __init__(
         self,
@@ -152,18 +152,7 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[CoordinatorData]):
         )
 
     @property
-    def message_ids(self) -> dict[str, dict[str, list[int | None]]]:
-        """Return the message ids of the values per device type and key, None if a value has none."""
-        return {
-            section_id: {
-                key: [None if reading.message_id is None else reading.message_id.value for reading in readings]
-                for key, readings in section_data.items()
-            }
-            for section_id, section_data in (self.data or {}).items()
-        }
-
-    @property
-    def available_heating_curves(self) -> tuple[str, ...]:
+    def curve_names(self) -> tuple[str, ...]:
         """Return the names of the heating and cooling curves."""
         return tuple(self.curve_tables)
 
@@ -184,7 +173,7 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[CoordinatorData]):
     async def _async_setup(self) -> None:
         """Set up the coordinator."""
         await self.write_counter.async_setup()
-        await self._api_call_for_update(self._async_fixed_data())
+        await self._api_call_for_update(self._async_read_setup_data())
 
     @staticmethod
     async def _api_call_for_update[R](coro: Awaitable[R]) -> R:
@@ -204,7 +193,7 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[CoordinatorData]):
                 },
             ) from error
 
-    async def _async_fixed_data(self) -> None:
+    async def _async_read_setup_data(self) -> None:
         device_info: DeviceInfo = await self._api.get_device_info()
         system_info: SystemInfo = await self._api.get_system_info()
         hmi_info: HmiInfo = await self._api.get_hmi_info()
@@ -510,7 +499,7 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[CoordinatorData]):
         device_type: str | None = DEVICE_TYPES.get(SectionPrefix(prefix))
         return 0 if self.device_counts is None or device_type is None else getattr(self.device_counts, device_type)
 
-    def has_device(self, prefix: SectionPrefix) -> bool:
+    def has_device(self, prefix: str, /) -> bool:
         """Return True if the device group is available in this setup."""
         if prefix == SectionPrefix.SYSTEM:
             return True
@@ -580,8 +569,8 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[CoordinatorData]):
         return self._get_option(SectionPrefix.EXTERNAL_HEAT_SOURCE, "has_emissions", index=index) is True
 
     def has_cooling_circuits(self) -> bool:
-        """Check if one heating circuit support cooling."""
-        # Some KEBA KeEnergy software versions did not have an active or passive cooling options.
+        """Check if one heating circuit supports cooling."""
+        # Some KEBA KeEnergy software versions do not have the options for active and passive cooling.
         # Cooling support can only be detected with the heating circuit mode.
         return any(
             self.is_cooling_circuit(index=index) for index in range(self.device_count(SectionPrefix.HEAT_CIRCUIT))

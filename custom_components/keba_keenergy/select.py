@@ -54,7 +54,7 @@ class KebaKeEnergySelectEntityDescription(
     """Class describing KEBA KeEnergy select entities."""
 
     entity_class: type[KebaKeEnergySelectEntity]
-    # The enum of the options, None for options that are written as they are (e.g. the names of the heating curves).
+    # The enum of the options, None for options that are written as they are (e.g. the names of the curves).
     enum: type[Enum] | None = None
 
 
@@ -160,13 +160,13 @@ class KebaKeEnergyExternalHeatSourceOperatingModeSelectEntity(KebaKeEnergySelect
         return options
 
 
-class KebaKeEnergyHeatingCircuitHeatingCurveSelectEntity(KebaKeEnergySelectEntity):
-    """KEBA KeEnergy heating curve select entity."""
+class KebaKeEnergyCurveSelectEntity(KebaKeEnergySelectEntity):
+    """KEBA KeEnergy select entity of the heating or cooling curve of a heating circuit."""
 
     @property
     def options(self) -> list[str]:
-        """Return the names of the heating curves, read with every update of the heating circuits."""
-        return list(self.coordinator.available_heating_curves)
+        """Return the names of the curves, read with every update of the heating circuits."""
+        return list(self.coordinator.curve_names)
 
 
 SELECT_TYPES: Final[dict[str, tuple[KebaKeEnergySelectEntityDescription, ...]]] = {
@@ -201,7 +201,7 @@ SELECT_TYPES: Final[dict[str, tuple[KebaKeEnergySelectEntityDescription, ...]]] 
         ),
         KebaKeEnergySelectEntityDescription(
             condition=lambda coordinator, index: coordinator.is_heating_circuit(index=index),
-            entity_class=KebaKeEnergyHeatingCircuitHeatingCurveSelectEntity,
+            entity_class=KebaKeEnergyCurveSelectEntity,
             entity_category=EntityCategory.CONFIG,
             entity_registry_enabled_default=False,
             key="heating_curve",
@@ -209,7 +209,7 @@ SELECT_TYPES: Final[dict[str, tuple[KebaKeEnergySelectEntityDescription, ...]]] 
         ),
         KebaKeEnergySelectEntityDescription(
             condition=lambda coordinator, index: coordinator.is_cooling_circuit(index=index),
-            entity_class=KebaKeEnergyHeatingCircuitHeatingCurveSelectEntity,
+            entity_class=KebaKeEnergyCurveSelectEntity,
             entity_category=EntityCategory.CONFIG,
             entity_registry_enabled_default=False,
             key="cooling_curve",

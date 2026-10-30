@@ -795,8 +795,8 @@
     "authentication_error": {
       "message": "Authentication failed. Please check your credentials."
     },
-    "cannot_find_heating_curve": {
-      "message": "Cannot find heating curve \"{heating_curve}\"."
+    "cannot_find_curve": {
+      "message": "Cannot find curve \"{curve}\"."
     },
     "communication_error": {
       "message": "An error occurred while communicating with the API: {error}"
@@ -873,7 +873,7 @@
       "name": "Set away date range"
     },
     "set_heating_curve_points": {
-      "description": "Sets the points of a heating curve.",
+      "description": "Sets the points of a heating or cooling curve.",
       "fields": {
         "config_entry": {
           "description": "The integration to use for this action.",
@@ -881,14 +881,14 @@
         },
         "heating_curve": {
           "description": "e.g. HC 1, HC 2, HC FBH, HC HK",
-          "name": "Heating curve"
+          "name": "Curve"
         },
         "points": {
-          "description": "List of heating curve points, each with an outdoor temperature and a corresponding flow temperature.",
+          "description": "List of curve points, each with an outdoor temperature and a corresponding flow temperature.",
           "name": "Points"
         }
       },
-      "name": "Set heating curve points"
+      "name": "Set curve points"
     }
   }
 }

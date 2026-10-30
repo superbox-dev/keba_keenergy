@@ -25,11 +25,11 @@ from custom_components.keba_keenergy.const import SERVICE_SET_AWAY_DATE_RANGE
 from custom_components.keba_keenergy.const import SERVICE_SET_HEATING_CURVE_POINTS
 from custom_components.keba_keenergy.services import AWAY_DATE_RANGE_SCHEMA
 from tests import init_translations
-from tests.api_data import HEATING_CURVE_NAMES_RESPONSE
-from tests.api_data import HEATING_CURVES_RENAMED_RESPONSE
+from tests.api_data import CURVE_NAMES_RESPONSE
+from tests.api_data import CURVES_RENAMED_RESPONSE
 from tests.api_data import MULTIPLE_DEVICES_DATA_RESPONSE
 from tests.api_data import MULTIPLE_DEVICES_RESPONSE
-from tests.api_data import get_heating_curve_points_response
+from tests.api_data import get_curve_points_response
 from tests.api_data import get_multiple_devices_fixed_data_response
 
 if TYPE_CHECKING:
@@ -298,12 +298,12 @@ async def test_set_heating_curve_points_with_invalid_heating_curve(
     ]
     await fake_api.setup_integration()
     # The heating curve HC1 was renamed on the control unit after the setup.
-    fake_api.heating_curves = HEATING_CURVES_RENAMED_RESPONSE
+    fake_api.curves = CURVES_RENAMED_RESPONSE
     translations: dict[str, str] = await init_translations(hass, category="exceptions")
 
     with pytest.raises(
         ServiceValidationError,
-        match='Cannot find heating curve "HC1"',
+        match='Cannot find curve "HC1"',
     ):
         await hass.services.async_call(
             domain=DOMAIN,
@@ -326,7 +326,7 @@ async def test_set_heating_curve_points_with_invalid_heating_curve(
             blocking=True,
         )
 
-    assert translations["component.keba_keenergy.exceptions.cannot_find_heating_curve.message"] == snapshot
+    assert translations["component.keba_keenergy.exceptions.cannot_find_curve.message"] == snapshot
 
 
 @pytest.mark.parametrize("language", ["en", "de"], indirect=True, ids=["en", "de"])
@@ -504,7 +504,7 @@ async def test_set_heating_curve_points_with_communication_error(
         MULTIPLE_DEVICES_DATA_RESPONSE,
     ]
     await fake_api.setup_integration()
-    fake_api.heating_curves = HTTPStatus.BAD_REQUEST
+    fake_api.curves = HTTPStatus.BAD_REQUEST
 
     with pytest.raises(HomeAssistantError) as error:
         await hass.services.async_call(
@@ -534,9 +534,9 @@ async def test_set_unchanged_heating_curve_points(
         MULTIPLE_DEVICES_DATA_RESPONSE,
     ]
     await fake_api.setup_integration()
-    fake_api.heating_curves = [
-        HEATING_CURVE_NAMES_RESPONSE,
-        get_heating_curve_points_response(points=(("-20", "35.299999"), ("0", "29.5"), ("20", "23.9"))),
+    fake_api.curves = [
+        CURVE_NAMES_RESPONSE,
+        get_curve_points_response(points=(("-20", "35.299999"), ("0", "29.5"), ("20", "23.9"))),
     ]
 
     await hass.services.async_call(

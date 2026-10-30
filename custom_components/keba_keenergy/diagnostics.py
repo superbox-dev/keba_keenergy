@@ -43,12 +43,11 @@ async def async_get_config_entry_diagnostics(
                 "serial_number": coordinator.device_serial_number,
             },
             "device_counts": asdict(coordinator.device_counts) if coordinator.device_counts else None,
-            "available_heating_curves": coordinator.available_heating_curves,
+            "curve_names": coordinator.curve_names,
             "weekly_write_count": coordinator.write_counter.weekly_count,
             "weekly_writes": coordinator.write_counter.weekly_writes,
             "options": _dump(coordinator.options),
             "data": _dump(coordinator.data),
-            "message_ids": coordinator.message_ids,
         },
         TO_REDACT,
     )

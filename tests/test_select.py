@@ -18,12 +18,12 @@ from homeassistant.exceptions import ServiceValidationError
 
 from tests import get_option_translations
 from tests import get_platform_states
-from tests.api_data import HEATING_CURVES_RENAMED_RESPONSE
+from tests.api_data import CURVES_RENAMED_RESPONSE
 from tests.api_data import MULTIPLE_DEVICES_DATA_RESPONSE
 from tests.api_data import MULTIPLE_DEVICES_RESPONSE
 from tests.api_data import get_multiple_devices_fixed_data_response
+from tests.test_select_data import CURVE_SELECTS
 from tests.test_select_data import HEATING_CURVE_ENTITY_ID
-from tests.test_select_data import HEATING_CURVE_SELECTS
 
 if TYPE_CHECKING:
     from syrupy.assertion import SnapshotAssertion
@@ -49,7 +49,7 @@ async def test_selects(
     for state in get_platform_states(hass, fake_api.config_entry, Platform.SELECT):
         assert state == snapshot(name=state.entity_id)
 
-        if state.entity_id not in HEATING_CURVE_SELECTS:
+        if state.entity_id not in CURVE_SELECTS:
             assert await get_option_translations(hass, state) == snapshot(name=f"{state.entity_id}_options")
 
 
@@ -251,7 +251,7 @@ async def test_heating_curve_options_after_update(
     assert isinstance(state, State)
     assert "HC1" in state.attributes["options"]
 
-    fake_api.heating_curves = HEATING_CURVES_RENAMED_RESPONSE
+    fake_api.curves = CURVES_RENAMED_RESPONSE
     await fake_api.config_entry.runtime_data.async_refresh()
 
     state = hass.states.get(HEATING_CURVE_ENTITY_ID)

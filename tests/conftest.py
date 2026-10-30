@@ -23,8 +23,8 @@ from yarl import URL
 
 from custom_components.keba_keenergy.const import DOMAIN
 from custom_components.keba_keenergy.const import PLATFORMS
+from tests.api_data import CURVES_RESPONSE
 from tests.api_data import DEVICE_INFO_RESPONSE
-from tests.api_data import HEATING_CURVES_RESPONSE
 from tests.api_data import HMI_RESPONSE
 from tests.api_data import MESSAGE_ID_SUFFIX
 from tests.api_data import SYSTEM_RESPONSE
@@ -122,7 +122,7 @@ class FakeKebaKeEnergyAPI:
         self.aioclient_mock: AiohttpClientMocker = aioclient_mock
         self.config_entry: MockConfigEntry = config_entry
         self.responses: list[Exception | HTTPStatus | list[dict[str, Any]]] = []
-        self.heating_curves: HTTPStatus | list[list[dict[str, Any]]] = HEATING_CURVES_RESPONSE
+        self.curves: HTTPStatus | list[list[dict[str, Any]]] = CURVES_RESPONSE
         self.system_name: str = SYSTEM_RESPONSE["name"]
         self.write_status: HTTPStatus = HTTPStatus.OK
         self.unsupported_variables: set[str] = set()
@@ -166,7 +166,7 @@ class FakeKebaKeEnergyAPI:
         The next read of the `responses` awaits `during_read` once before it responds, e.g. to set a value during an
         update.
         A read of an unknown value or of one of the `unsupported_variables` fails like the Web HMI rejects it. The
-        values of the heating curves come from `heating_curves` (an `HTTPStatus` fails them). The system name and the
+        values of the curves come from `curves` (an `HTTPStatus` fails them). The system name and the
         status of the write requests can be changed with `system_name` and `write_status`.
         """
         schema: str = "https" if ssl else "http"
@@ -220,7 +220,7 @@ class FakeKebaKeEnergyAPI:
         response: Exception | HTTPStatus | list[dict[str, Any]]
 
         if all(".linTabPool[" in name for name in names):
-            response = self._heating_curve_response(payload)
+            response = self._curve_response(payload)
         else:
             if self._takes_next_response(names):
                 self._read_requests.append(str(data))
@@ -312,16 +312,16 @@ class FakeKebaKeEnergyAPI:
 
         return AiohttpClientMockResponse(method, url=url, status=error)
 
-    def _heating_curve_response(self, payload: list[dict[str, str]], /) -> HTTPStatus | list[dict[str, Any]]:
-        """Return the requested values of the heating curves.
+    def _curve_response(self, payload: list[dict[str, str]], /) -> HTTPStatus | list[dict[str, Any]]:
+        """Return the requested values of the curves.
 
-        The names are read alone (`get_available_heating_curves()`), the points with the name of their heating curve,
-        so `heating_curves` holds the names and the points separately, like the Web HMI may return different names.
+        `get_curve_tables()` reads the names alone, then the points with the name of their curve,
+        so `curves` holds the names and the points separately, like the Web HMI may return different names.
         """
-        if isinstance(self.heating_curves, HTTPStatus):
-            return self.heating_curves
+        if isinstance(self.curves, HTTPStatus):
+            return self.curves
 
-        names, points = self.heating_curves
+        names, points = self.curves
         is_names_request: bool = all(item["name"].endswith(".name") for item in payload)
         values: dict[str, dict[str, Any]] = {value["name"]: value for value in (names if is_names_request else points)}
         return [values[item["name"]] for item in payload]

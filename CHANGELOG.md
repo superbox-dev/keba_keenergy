@@ -30,8 +30,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   sensors keep their unit. ([Issue #77][issue-77])
 - Changed the display precision of the sensors to the default of Home Assistant, or to a finer one where the control
   unit provides it (e.g. the fresh water module temperature with two decimals). ([Issue #77][issue-77])
-- Changed the options of the heating curve selects to the heating curves of the control unit after every update, a
-  new or renamed heating curve is shown without reloading the integration.
+- Changed the options of the heating and cooling curve selects to the curves of the control unit after every update,
+  a new or renamed curve is shown without reloading the integration.
+- Changed the name and the texts of the action `set_heating_curve_points` to `Set curve points`, it also sets the
+  points of cooling curves. ([Issue #85][issue-85])
 - Changed the sensor `weekly_write_count` to reset at midnight of a new week, also without an update or a write.
 
 ### Removed
@@ -51,6 +53,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 [issue-77]: https://github.com/superbox-dev/keba_keenergy/issues/77
 [issue-84]: https://github.com/superbox-dev/keba_keenergy/issues/84
+[issue-85]: https://github.com/superbox-dev/keba_keenergy/issues/85
 
 ## [1.11.0] - 2026-10-28
 

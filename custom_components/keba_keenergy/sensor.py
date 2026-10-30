@@ -125,7 +125,7 @@ class KebaKeEnergySensorEntity(KebaKeEnergyEntity, SensorEntity):
         return self.entity_description.attributes(self._get_attributes(self.get_reading(self._data_key)))
 
     def _get_attributes(self, reading: Reading | None, /) -> dict[str, Any]:
-        """Return the limits of the value, the raw value of an enum and the points of the heating curve, if any."""
+        """Return the limits of the value, the raw value of an enum and the points of the curve, if any."""
         if reading is None:
             return {}
 

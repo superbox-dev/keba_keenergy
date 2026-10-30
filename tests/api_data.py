@@ -2496,7 +2496,7 @@ MULTIPLE_DEVICES_WITHOUT_SOLAR_AND_HEATING_CIRCUITS_DATA_RESPONSE: Final[list[di
 )
 
 
-HEATING_CURVE_POOL: Final[tuple[str, ...]] = (
+CURVE_POOL: Final[tuple[str, ...]] = (
     "HC1",
     "HC2",
     "HC3",
@@ -2516,31 +2516,31 @@ HEATING_CURVE_POOL: Final[tuple[str, ...]] = (
     *("",) * 14,
 )
 
-HEATING_CURVE_NAMES_RESPONSE: Final[list[dict[str, Any]]] = [
+CURVE_NAMES_RESPONSE: Final[list[dict[str, Any]]] = [
     {
         "name": f"APPL.CtrlAppl.sParam.linTabPool[{index}].name",
         "value": name,
     }
-    for index, name in enumerate(HEATING_CURVE_POOL)
+    for index, name in enumerate(CURVE_POOL)
 ]
 
 
-def get_heating_curve_points_response(
+def get_curve_points_response(
     *,
     renamed: dict[str, str] | None = None,
     points: tuple[tuple[str, str], ...] | None = None,
 ) -> list[dict[str, Any]]:
-    """Return the name, the number of points and the 16 points of each heating curve (`HC...`) of the pool.
+    """Return the name, the number of points and the 16 points of each curve (`HC...`) of the pool.
 
-    Every heating curve has 7 points from -15 °C outdoor to 20 °C flow temperature. `renamed` changes the name of a
-    heating curve in the points, e.g. to a name that does not match the names of `HEATING_CURVE_NAMES_RESPONSE`.
-    `points` replaces the (outdoor, flow) points and their number of every heating curve.
+    Every curve has 7 points from -15 °C outdoor to 20 °C flow temperature. `renamed` changes the name of a curve
+    in the points, e.g. to a name that does not match the names of `CURVE_NAMES_RESPONSE`.
+    `points` replaces the (outdoor, flow) points and their number of every curve.
     """
     curve_points: tuple[tuple[str, str], ...] = points or (("-15", "20"),) * 7
     point_attributes: dict[str, str] = {"formatId": "fmtCurrent", "upperLimit": "90000", "lowerLimit": "-90000"}
     response: list[dict[str, Any]] = []
 
-    for index, name in enumerate(HEATING_CURVE_POOL):
+    for index, name in enumerate(CURVE_POOL):
         if not name.startswith("HC"):
             continue
 
@@ -2575,13 +2575,13 @@ def get_heating_curve_points_response(
     return response
 
 
-HEATING_CURVES_RESPONSE: Final[list[list[dict[str, Any]]]] = [
-    HEATING_CURVE_NAMES_RESPONSE,
-    get_heating_curve_points_response(),
+CURVES_RESPONSE: Final[list[list[dict[str, Any]]]] = [
+    CURVE_NAMES_RESPONSE,
+    get_curve_points_response(),
 ]
 
-# The heating curve HC1 was renamed on the control unit after the setup.
-HEATING_CURVES_RENAMED_RESPONSE: Final[list[list[dict[str, Any]]]] = [
-    [{**value, "value": "INVALID"} if value["value"] == "HC1" else value for value in HEATING_CURVE_NAMES_RESPONSE],
-    get_heating_curve_points_response(renamed={"HC1": "INVALID"}),
+# The curve HC1 was renamed on the control unit after the setup.
+CURVES_RENAMED_RESPONSE: Final[list[list[dict[str, Any]]]] = [
+    [{**value, "value": "INVALID"} if value["value"] == "HC1" else value for value in CURVE_NAMES_RESPONSE],
+    get_curve_points_response(renamed={"HC1": "INVALID"}),
 ]
