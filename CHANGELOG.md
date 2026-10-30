@@ -69,6 +69,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Counted only successful writes in the sensor `weekly_write_count`, a failed write was counted as well.
 - Raised a translated error if the control unit has an invalid time zone, instead of an unexpected error of the away
   preset and the action `set_away_date_range`.
+- Showed the preset `away` of a heating circuit right away and read the target temperature again after a change of
+  the preset or the HVAC mode, the climate entity showed the previous preset or target temperature until the next
+  update.
 
 [issue-77]: https://github.com/superbox-dev/keba_keenergy/issues/77
 [issue-84]: https://github.com/superbox-dev/keba_keenergy/issues/84

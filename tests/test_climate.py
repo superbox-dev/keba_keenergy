@@ -413,6 +413,42 @@ async def test_set_preset_mode(
     assert (fake_api.write_requests(), fake_api.time_zone_request_count()) == expected
 
 
+@pytest.mark.parametrize(
+    ("preset_mode", "responses", "expected_preset_mode"),
+    [
+        (PRESET_AWAY, (MULTIPLE_DEVICES_DATA_RESPONSE, MULTIPLE_DEVICES_OTHER_MODES_DATA_RESPONSE), PRESET_AWAY),
+        (PRESET_HOME, (MULTIPLE_DEVICES_OTHER_MODES_DATA_RESPONSE, MULTIPLE_DEVICES_DATA_RESPONSE), PRESET_COMFORT),
+    ],
+    ids=["away", "home_while_away"],
+)
+@pytest.mark.freeze_time(NOW)
+async def test_set_preset_mode_refreshes_target_temperature(
+    hass: HomeAssistant,
+    fake_api: FakeKebaKeEnergyAPI,
+    preset_mode: str,
+    responses: tuple[Response, Response],
+    expected_preset_mode: str,
+) -> None:
+    """Test that a preset change reads the values again, the control unit knows the target temperature of the mode."""
+    fake_api.responses = get_multiple_devices_responses(*responses)
+    await fake_api.setup_integration()
+    read_count: int = len(fake_api.read_requests())
+
+    await hass.services.async_call(
+        domain=CLIMATE_DOMAIN,
+        service=SERVICE_SET_PRESET_MODE,
+        service_data={
+            ATTR_ENTITY_ID: HEAT_CIRCUIT_1_ENTITY_ID,
+            ATTR_PRESET_MODE: preset_mode,
+        },
+        blocking=True,
+    )
+    await hass.async_block_till_done()
+
+    assert len(fake_api.read_requests()) == read_count + 1
+    assert get_state(hass, HEAT_CIRCUIT_1_ENTITY_ID).attributes[ATTR_PRESET_MODE] == expected_preset_mode
+
+
 async def test_set_preset_mode_away_with_invalid_time_zone(
     hass: HomeAssistant,
     fake_api: FakeKebaKeEnergyAPI,
