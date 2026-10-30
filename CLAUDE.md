@@ -92,11 +92,12 @@ Before finishing a change, run `ruff format`, `lint.sh` and `pytest`, in this or
 - No real credentials, serial numbers or IP addresses, use the fake data in `tests/api_data.py`
 - Missing device endpoints or values belong in `keba_keenergy_api`, stop and ask how to proceed
   - values calculated from existing ones are fine in the integration
-- Limited flash writes: write only changed values, only via the coordinator write methods, debounce fast-changing
-  values (e.g. temperatures set with a slider)
+- Limited flash writes: write only changed values, only via `coordinator.async_write_data()`, debounce
+  fast-changing values (e.g. temperatures set with a slider) with `KebaKeEnergyDebouncedEntity`
 - No new dependencies (`pyproject.toml`, `manifest.json`, also dev dependencies) without asking first
 - `git add` new files, the pre-commit hooks only check tracked files
-- Never edit generated files (`coverage-badge.svg`) or `config/` (except `config/configuration.yaml`)
+- Never edit generated files (`coverage-badge.svg`, `website/docs/`) or `config/` (except
+  `config/configuration.yaml`)
 - **Never edit `CLAUDE.md` files or `.claude/skills/` on your own**, only when asked
   - if a change conflicts with them, stop and ask
 
@@ -107,6 +108,7 @@ Before finishing a change, run `ruff format`, `lint.sh` and `pytest`, in this or
   - module-level functions only when shared across classes or modules, for Home Assistant callbacks (action
     handlers, validators), as helpers of module-level Home Assistant functions (`async_setup_entry`) or to build
     the entity descriptions of a platform
+- `condition` of entity descriptions as named predicates in `entity.py` (`has_…`, `is_…`), no lambdas
 - Constants always in `const.py`
   - except what Home Assistant reads from the module itself (`_LOGGER`, `PARALLEL_UPDATES`, `CONFIG_SCHEMA`) and
     the entity descriptions of a platform (`SENSOR_TYPES`, ...)
