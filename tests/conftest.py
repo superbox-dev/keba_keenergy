@@ -387,6 +387,7 @@ def config_entry(request: SubRequest) -> MockConfigEntry:
             CONF_HOST: "10.0.0.100",
             CONF_SSL: False,
         },
+        "entry_id": "01KEBAKEENERGY0000000000000",
         "unique_id": "12345678",
         "options": {
             "scan_interval": 20,

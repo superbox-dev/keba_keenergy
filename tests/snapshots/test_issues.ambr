@@ -1,0 +1,61 @@
+# serializer version: 1
+# name: test_flash_write_issue[de][issue]
+  IssueRegistryItemSnapshot({
+    'active': True,
+    'breaks_in_ha_version': None,
+    'created': <ANY>,
+    'data': None,
+    'dismissed_version': None,
+    'domain': 'keba_keenergy',
+    'is_fixable': False,
+    'is_persistent': False,
+    'issue_domain': None,
+    'issue_id': 'frequent_flash_writes_01KEBAKEENERGY0000000000000',
+    'learn_more_url': None,
+    'severity': <IssueSeverity.WARNING: 'warning'>,
+    'translation_key': 'frequent_flash_writes',
+    'translation_placeholders': dict({
+      'limit': '30',
+      'name': 'KEBA KeEnergy (ap4400.local)',
+    }),
+  })
+# ---
+# name: test_flash_write_issue[de][translations]
+  dict({
+    'description': list([
+      'In dieser Woche wurden mehr als 30 Schreibzugriffe auf KEBA KeEnergy (ap4400.local) durchgeführt.',
+      'Sehr häufige Schreibzugriffe (zum Beispiel durch Automationen) können die Lebensdauer des Flash-Speichers des Geräts reduzieren. Der Sensor „Schreibzugriffe diese Woche“ zeigt, welche Werte wie oft geschrieben wurden.',
+    ]),
+    'title': 'Viele Schreibzugriffe erkannt',
+  })
+# ---
+# name: test_flash_write_issue[en][issue]
+  IssueRegistryItemSnapshot({
+    'active': True,
+    'breaks_in_ha_version': None,
+    'created': <ANY>,
+    'data': None,
+    'dismissed_version': None,
+    'domain': 'keba_keenergy',
+    'is_fixable': False,
+    'is_persistent': False,
+    'issue_domain': None,
+    'issue_id': 'frequent_flash_writes_01KEBAKEENERGY0000000000000',
+    'learn_more_url': None,
+    'severity': <IssueSeverity.WARNING: 'warning'>,
+    'translation_key': 'frequent_flash_writes',
+    'translation_placeholders': dict({
+      'limit': '30',
+      'name': 'KEBA KeEnergy (ap4400.local)',
+    }),
+  })
+# ---
+# name: test_flash_write_issue[en][translations]
+  dict({
+    'description': list([
+      'More than 30 write operations were performed on KEBA KeEnergy (ap4400.local) this week.',
+      'Very frequent write operations (for example caused by automations) may reduce the lifetime of the device\'s flash memory. The sensor "Write operations this week" shows which values were written how often.',
+    ]),
+    'title': 'Frequent write operations detected',
+  })
+# ---

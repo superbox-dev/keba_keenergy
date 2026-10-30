@@ -69,7 +69,7 @@ async def test_unload_entry(
     ],
     ids=["multiple_devices", "single_device"],
 )
-@pytest.mark.usefixtures("entity_registry_enabled_by_default")
+@pytest.mark.usefixtures("entity_registry_enabled_by_default", "language")
 async def test_devices(
     hass: HomeAssistant,
     config_entry: MockConfigEntry,
@@ -77,18 +77,27 @@ async def test_devices(
     responses: list[ReadResponse],
     snapshot: SnapshotAssertion,
 ) -> None:
-    """Test the devices that the integration creates."""
+    """Test the devices that the integration creates, with their translated names and the device they belong to."""
     fake_api.responses = list(responses)
     await fake_api.setup_integration()
 
-    assert (
-        sorted(
-            identifier
-            for device in dr.async_entries_for_config_entry(dr.async_get(hass), config_entry.entry_id)
-            for _, identifier in device.identifiers
-        )
-        == snapshot
-    )
+    device_registry: dr.DeviceRegistry = dr.async_get(hass)
+    devices: dict[str, dr.DeviceEntry] = {
+        identifier: device
+        for device in dr.async_entries_for_config_entry(device_registry, config_entry.entry_id)
+        for _, identifier in device.identifiers
+    }
+    # The snapshot of a device replaces the ID of the device it belongs to, so its identifier is compared as well.
+    identifiers: dict[str, str] = {device.id: identifier for identifier, device in devices.items()}
+    via_devices: dict[str, str | None] = {
+        identifier: identifiers.get(device.via_device_id or "") for identifier, device in sorted(devices.items())
+    }
+
+    assert sorted(devices) == snapshot(name="identifiers")
+    assert via_devices == snapshot(name="via_devices")
+
+    for identifier, device in sorted(devices.items()):
+        assert device == snapshot(name=identifier)
 
 
 @pytest.mark.usefixtures("entity_registry_enabled_by_default")

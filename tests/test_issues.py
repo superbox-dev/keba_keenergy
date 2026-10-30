@@ -38,8 +38,6 @@ from tests import set_number_value
 from tests.api_data import MULTIPLE_DEVICES_DATA_RESPONSE
 from tests.api_data import MULTIPLE_DEVICES_OTHER_MODES_DATA_RESPONSE
 from tests.api_data import get_multiple_devices_responses
-from tests.test_issues_data import ISSUE_DESCRIPTION_DE
-from tests.test_issues_data import ISSUE_DESCRIPTION_EN
 from tests.test_issues_data import STORED_WRITES
 from tests.test_issues_data import WRITE_COUNT_ENTITY_ID
 from tests.test_issues_data import WRITES_PER_VALUE
@@ -55,28 +53,20 @@ if TYPE_CHECKING:
     from homeassistant.core import HomeAssistant
     from homeassistant.core import State
     from pytest_homeassistant_custom_component.common import MockConfigEntry
+    from syrupy.assertion import SnapshotAssertion
 
     from tests.conftest import FakeKebaKeEnergyAPI
 
 
-@pytest.mark.parametrize(
-    ("language", "expected"),
-    [
-        ("en", ("Frequent write operations detected", ISSUE_DESCRIPTION_EN)),
-        ("de", ("Viele Schreibzugriffe erkannt", ISSUE_DESCRIPTION_DE)),
-    ],
-    indirect=["language"],
-    ids=["en", "de"],
-)
 @pytest.mark.usefixtures("language")
 async def test_flash_write_issue(
     hass: HomeAssistant,
     config_entry: MockConfigEntry,
     fake_api: FakeKebaKeEnergyAPI,
     hass_storage: dict[str, Any],
-    expected: tuple[str, str],
+    snapshot: SnapshotAssertion,
 ) -> None:
-    """Test the repair issue for frequent write operations of a control unit."""
+    """Test the repair issue for frequent write operations of a control unit, with its translated texts."""
     fake_api.responses = get_multiple_devices_responses(MULTIPLE_DEVICES_DATA_RESPONSE)
     key: str = get_store_key(config_entry.entry_id)
     hass_storage[key] = get_store(key, {"week": get_week(dt_util.now().date()), "count": FLASH_WRITE_LIMIT_PER_WEEK})
@@ -87,16 +77,17 @@ async def test_flash_write_issue(
     await select_option(hass, "select.keba_keenergy_12345678_buffer_tank_operating_mode_1", "off")
 
     issue: ir.IssueEntry | None = ir.async_get(hass).async_get_issue(DOMAIN, get_issue_id(config_entry.entry_id))
-
     assert issue is not None
-    assert issue.severity == ir.IssueSeverity.WARNING
 
-    title: str = translations[f"component.keba_keenergy.issues.{issue.translation_key}.title"]
-    description: str = translations[f"component.keba_keenergy.issues.{issue.translation_key}.description"].format(
-        **(issue.translation_placeholders or {}),
-    )
+    translation_key: str = f"component.keba_keenergy.issues.{issue.translation_key}"
+    placeholders: dict[str, str] = issue.translation_placeholders or {}
 
-    assert (title, description) == expected
+    assert issue == snapshot(name="issue")
+    assert {
+        "title": translations[f"{translation_key}.title"],
+        # The paragraphs of the description, a snapshot of the text would indent its empty lines.
+        "description": translations[f"{translation_key}.description"].format(**placeholders).split("\n\n"),
+    } == snapshot(name="translations")
 
 
 async def test_issue_after_restart(

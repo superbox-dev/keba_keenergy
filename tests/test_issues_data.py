@@ -14,16 +14,6 @@ from custom_components.keba_keenergy.const import FLASH_WRITE_ISSUE_ID
 if TYPE_CHECKING:
     from datetime import date
 
-ISSUE_DESCRIPTION_DE: Final[str] = (
-    "In dieser Woche wurden mehr als 30 Schreibzugriffe auf KEBA KeEnergy (ap4400.local) durchgeführt.\n\n"
-    "Sehr häufige Schreibzugriffe (zum Beispiel durch Automationen) können die Lebensdauer des Flash-Speichers des "
-    "Geräts reduzieren. Der Sensor „Schreibzugriffe diese Woche“ zeigt, welche Werte wie oft geschrieben wurden."
-)
-ISSUE_DESCRIPTION_EN: Final[str] = (
-    "More than 30 write operations were performed on KEBA KeEnergy (ap4400.local) this week.\n\n"
-    "Very frequent write operations (for example caused by automations) may reduce the lifetime of the device's "
-    'flash memory. The sensor "Write operations this week" shows which values were written how often.'
-)
 # The writes of a stored write counter.
 STORED_WRITES: Final[dict[str, int]] = {"system.operating_mode": 5}
 WRITE_COUNT_ENTITY_ID: Final[str] = "sensor.keba_keenergy_12345678_weekly_write_count"
