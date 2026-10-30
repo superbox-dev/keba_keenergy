@@ -6,7 +6,8 @@
 - New entity:
   - add the values to the responses in `tests/api_data.py`
   - regenerate the snapshots and review the new entities
-- Use `hass_storage` for stored data, patch `dt_util.now` for date-dependent values
+- Use `hass_storage` for stored data, set the time with the `freezer` fixture (`freezer.move_to()`), never patch
+  `dt_util.now`
 - Test only through Home Assistant:
   - exception: static checks of files (e.g. `test_translations.py`), with `_`-prefixed helpers in the test module
   - never call, patch or inspect `_`-prefixed methods or attributes of the integration
@@ -26,7 +27,7 @@
 - Error cases next to the tests of the code they check, named `test_<function>_<condition>`
 - Every bug fix gets a regression test that fails without the fix
 - Exceptions: assert the type and the message (`pytest.raises(..., match=...)` or `error.value`)
-- Never wait in real time, advance the time (`async_fire_time_changed()`, patched `dt_util.now`), no `sleep()`
+- Never wait in real time, advance the time (`freezer`, `async_fire_time_changed()`), no `sleep()`
 - Fixtures only in `tests/conftest.py`
 - Tests are independent of each other, they run in parallel (`pytest-xdist`) and in any order
 - No logic in tests (`if`, loops over cases), use `parametrize` instead

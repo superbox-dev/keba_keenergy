@@ -9,7 +9,6 @@ from datetime import datetime
 from datetime import timedelta
 from typing import TYPE_CHECKING
 from typing import Any
-from unittest.mock import patch
 
 import pytest
 from homeassistant.components.climate.const import ATTR_HVAC_ACTION
@@ -57,6 +56,7 @@ from tests.test_climate_data import ENTITY_ID_2
 from tests.test_climate_data import get_hvac_action_data_response
 
 if TYPE_CHECKING:
+    from freezegun.api import FrozenDateTimeFactory
     from syrupy.assertion import SnapshotAssertion
 
     from tests.conftest import FakeKebaKeEnergyAPI
@@ -389,6 +389,7 @@ async def test_set_preset_mode(
 async def test_set_preset_mode_away(
     hass: HomeAssistant,
     fake_api: FakeKebaKeEnergyAPI,
+    freezer: FrozenDateTimeFactory,
 ) -> None:
     """Test that the preset mode away sets the away date range."""
     fake_api.responses = [
@@ -398,16 +399,16 @@ async def test_set_preset_mode_away(
     ]
     await fake_api.setup_integration()
 
-    with patch.object(dt_util, "now", return_value=datetime(2026, 1, 24, 12, 0, tzinfo=UTC)):
-        await hass.services.async_call(
-            domain=CLIMATE_DOMAIN,
-            service=SERVICE_SET_PRESET_MODE,
-            service_data={
-                ATTR_ENTITY_ID: ENTITY_ID_1,
-                ATTR_PRESET_MODE: PRESET_AWAY,
-            },
-            blocking=True,
-        )
+    freezer.move_to(datetime(2026, 1, 24, 12, 0, tzinfo=UTC))
+    await hass.services.async_call(
+        domain=CLIMATE_DOMAIN,
+        service=SERVICE_SET_PRESET_MODE,
+        service_data={
+            ATTR_ENTITY_ID: ENTITY_ID_1,
+            ATTR_PRESET_MODE: PRESET_AWAY,
+        },
+        blocking=True,
+    )
 
     fake_api.assert_called_write_with(
         '[{"name": "APPL.CtrlAppl.sParam.heatCircuit[0].param.holiday.start", "value": "1769209200"}, '
@@ -420,6 +421,7 @@ async def test_set_preset_mode_away(
 async def test_unset_preset_mode_away(
     hass: HomeAssistant,
     fake_api: FakeKebaKeEnergyAPI,
+    freezer: FrozenDateTimeFactory,
 ) -> None:
     """Test that leaving the preset mode away resets the away date range."""
     fake_api.responses = [
@@ -431,16 +433,16 @@ async def test_unset_preset_mode_away(
     ]
     await fake_api.setup_integration()
 
-    with patch.object(dt_util, "now", return_value=datetime(2026, 1, 24, 12, 0, tzinfo=UTC)):
-        await hass.services.async_call(
-            domain=CLIMATE_DOMAIN,
-            service=SERVICE_SET_PRESET_MODE,
-            service_data={
-                ATTR_ENTITY_ID: ENTITY_ID_1,
-                ATTR_PRESET_MODE: PRESET_COMFORT,
-            },
-            blocking=True,
-        )
+    freezer.move_to(datetime(2026, 1, 24, 12, 0, tzinfo=UTC))
+    await hass.services.async_call(
+        domain=CLIMATE_DOMAIN,
+        service=SERVICE_SET_PRESET_MODE,
+        service_data={
+            ATTR_ENTITY_ID: ENTITY_ID_1,
+            ATTR_PRESET_MODE: PRESET_COMFORT,
+        },
+        blocking=True,
+    )
 
     fake_api.assert_called_write_with(
         '[{"name": "APPL.CtrlAppl.sParam.heatCircuit[0].param.operatingMode", "value": "2"}]',
