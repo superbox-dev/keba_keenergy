@@ -121,9 +121,19 @@ class KebaKeEnergyClimateEntity(KebaKeEnergyDebouncedEntity, ClimateEntity):
         return self.get_float("room_temperature")
 
     @property
+    def _selected_target_temperature(self) -> float | None:
+        # The control unit selects the away temperature only some time after the write, like the operating mode.
+        away_temperature: float | None = self.get_float("target_temperature_away")
+
+        if self._is_away_date_range_active and away_temperature is not None:
+            return away_temperature
+
+        return self.get_float("selected_target_temperature")
+
+    @property
     def target_temperature(self) -> float | None:
         """Return the target room temperature of the current mode including the offset."""
-        selected_target_temperature: float | None = self.get_float("selected_target_temperature")
+        selected_target_temperature: float | None = self._selected_target_temperature
         target_temperature_offset: float | None = self._get_debounced_value()
 
         return (
@@ -135,7 +145,7 @@ class KebaKeEnergyClimateEntity(KebaKeEnergyDebouncedEntity, ClimateEntity):
     @property
     def min_temp(self) -> float:
         """Return the minimum target temperature, from the lower limit of the offset."""
-        selected_target_temperature: float | None = self.get_float("selected_target_temperature")
+        selected_target_temperature: float | None = self._selected_target_temperature
         lower_limit: float | None = self.get_limit("target_temperature_offset", attr="lower_limit")
 
         return (
@@ -147,7 +157,7 @@ class KebaKeEnergyClimateEntity(KebaKeEnergyDebouncedEntity, ClimateEntity):
     @property
     def max_temp(self) -> float:
         """Return the maximum target temperature, from the upper limit of the offset."""
-        selected_target_temperature: float | None = self.get_float("selected_target_temperature")
+        selected_target_temperature: float | None = self._selected_target_temperature
         upper_limit: float | None = self.get_limit("target_temperature_offset", attr="upper_limit")
 
         return (
@@ -314,7 +324,7 @@ class KebaKeEnergyClimateEntity(KebaKeEnergyDebouncedEntity, ClimateEntity):
     async def async_set_temperature(self, **kwargs: object) -> None:
         """Set the target temperature, written debounced as offset to the target temperature of the mode."""
         temperature: object = kwargs.get(ATTR_TEMPERATURE)
-        selected_target_temperature: float | None = self.get_float("selected_target_temperature")
+        selected_target_temperature: float | None = self._selected_target_temperature
 
         self._schedule_debounced_write(
             temperature - selected_target_temperature

@@ -471,12 +471,17 @@ async def test_set_preset_mode_away_keeps_preset_until_operating_mode_changes(
         service_data={ATTR_ENTITY_ID: HEAT_CIRCUIT_1_ENTITY_ID, ATTR_PRESET_MODE: PRESET_AWAY},
         blocking=True,
     )
-    assert get_state(hass, HEAT_CIRCUIT_1_ENTITY_ID).attributes[ATTR_PRESET_MODE] == PRESET_AWAY
+    state: State = get_state(hass, HEAT_CIRCUIT_1_ENTITY_ID)
+    assert (state.attributes[ATTR_PRESET_MODE], state.attributes[ATTR_TEMPERATURE]) == (PRESET_AWAY, 19.5)
 
     await async_update_entity(hass, HEAT_CIRCUIT_1_ENTITY_ID)
 
-    state: State = get_state(hass, HEAT_CIRCUIT_1_ENTITY_ID)
-    assert (state.state, state.attributes[ATTR_PRESET_MODE]) == (HVACMode.HEAT, PRESET_AWAY)
+    state = get_state(hass, HEAT_CIRCUIT_1_ENTITY_ID)
+    assert (state.state, state.attributes[ATTR_PRESET_MODE], state.attributes[ATTR_TEMPERATURE]) == (
+        HVACMode.HEAT,
+        PRESET_AWAY,
+        19.5,
+    )
 
 
 async def test_set_preset_mode_away_with_invalid_time_zone(
