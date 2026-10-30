@@ -535,7 +535,7 @@ async def test_set_unchanged_heating_curve_points(
     await fake_api.setup_integration()
     fake_api.heating_curves = [
         HEATING_CURVE_NAMES_RESPONSE,
-        get_heating_curve_points_response(points=(("-20", "35.3"), ("0", "29.5"), ("20", "23.899999"))),
+        get_heating_curve_points_response(points=(("-20", "35.299999"), ("0", "29.5"), ("20", "23.9"))),
     ]
 
     await hass.services.async_call(

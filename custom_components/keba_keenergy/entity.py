@@ -5,6 +5,7 @@
 from __future__ import annotations
 
 import logging
+import math
 from dataclasses import dataclass
 from functools import cached_property
 from typing import TYPE_CHECKING
@@ -23,6 +24,7 @@ from homeassistant.helpers.update_coordinator import CoordinatorEntity
 from .const import DEVICE_TRANSLATION_KEYS
 from .const import DOMAIN
 from .const import FLASH_WRITE_DELAY
+from .const import FLASH_WRITE_TOLERANCE
 from .const import MANUFACTURER
 from .const import MANUFACTURER_INO
 from .const import MANUFACTURER_MTEC
@@ -30,6 +32,7 @@ from .const import SectionPrefix
 from .coordinator import KebaKeEnergyConfigEntry
 from .coordinator import KebaKeEnergyDataUpdateCoordinator
 from .coordinator import get_device_identifier
+from .legacy import get_data_keys
 
 if TYPE_CHECKING:
     from collections.abc import Callable
@@ -289,7 +292,20 @@ class KebaKeEnergyBaseEntity(
 
         current_value: float | None = self.get_float(self._pending_key)
 
-        if self._pending_key and self._pending_value is not None and self._pending_value != current_value:
+        # The Web HMI returns a Float32 with 8 digits (`0.8` as `0.80000001`), which is the same value for the NAND.
+        if (
+            self._pending_key
+            and self._pending_value is not None
+            and (
+                current_value is None
+                or not math.isclose(
+                    self._pending_value,
+                    current_value,
+                    rel_tol=FLASH_WRITE_TOLERANCE,
+                    abs_tol=FLASH_WRITE_TOLERANCE,
+                )
+            )
+        ):
             # The API only writes integers to integer values, e.g. a runtime in seconds.
             value_type: type = self.coordinator.get_section(self.section_id, self._pending_key).value.value_type
             value: float | int = round(self._pending_value) if value_type is int else self._pending_value
@@ -348,10 +364,10 @@ def _async_setup_entities(
 
     for section_id, section_data in coordinator.data.items():
         for description in entity_types.get(section_id, ()):
-            for key in (description.key, description.new_key):
-                readings: list[Reading] | None = section_data.get(key) if key else None
+            for key in get_data_keys(description):
+                readings: list[Reading] | None = section_data.get(key)
 
-                if key is None or not readings:
+                if not readings:
                     continue
 
                 quantity: int = coordinator.get_section(section_id, key).value.quantity

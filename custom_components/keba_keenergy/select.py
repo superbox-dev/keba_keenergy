@@ -24,12 +24,12 @@ from keba_keenergy_api.enums import SystemOperatingMode
 
 from .const import DOMAIN
 from .const import SectionPrefix
-from .coordinator import get_member
-from .coordinator import get_state
-from .coordinator import get_states
 from .entity import KebaKeEnergyEntity
 from .entity import KebaKeEnergyEntityDescription
 from .entity import _async_setup_entities
+from .legacy import get_member
+from .legacy import get_state
+from .legacy import get_states
 
 if TYPE_CHECKING:
     from homeassistant.core import HomeAssistant

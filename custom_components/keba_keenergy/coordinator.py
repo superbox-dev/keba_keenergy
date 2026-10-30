@@ -39,23 +39,17 @@ from keba_keenergy_api.exceptions import APIError
 from keba_keenergy_api.exceptions import AuthenticationError
 from keba_keenergy_api.sections import System
 
-from .const import DEFAULT_DECIMALS
 from .const import DEFAULT_SCAN_INTERVAL
 from .const import DEVICE_TYPES
 from .const import DOMAIN
 from .const import FLASH_WRITE_ISSUE_ID
 from .const import FLASH_WRITE_LIMIT_PER_WEEK
 from .const import HEATING_CURVE_KEY
-from .const import LEGACY_STATES
-from .const import MIXER_SECTIONS
 from .const import OPTION_SECTIONS
-from .const import RATIO_DECIMALS
-from .const import RATIO_SECTIONS
 from .const import REQUEST_REFRESH_COOLDOWN
 from .const import SCAN_INTERVAL_PREFIXES
-from .const import SECTIONS
-from .const import MixerPosition
 from .const import SectionPrefix
+from .legacy import SECTIONS
 
 if TYPE_CHECKING:
     from collections.abc import Awaitable
@@ -63,7 +57,6 @@ if TYPE_CHECKING:
     from collections.abc import Iterable
     from collections.abc import Mapping
     from collections.abc import Sequence
-    from enum import Enum
 
     from aiohttp import ClientSession
     from homeassistant.core import HomeAssistant
@@ -100,21 +93,6 @@ def get_write_counter_store(hass: HomeAssistant, *, entry_id: str | None = None)
     The shared store was used by older versions and is only removed.
     """
     return Store(hass, version=1, key=DOMAIN if entry_id is None else f"{DOMAIN}.{entry_id}")
-
-
-def get_state(member: Enum, /) -> str:
-    """Return the state of an enum member, as the entities show it."""
-    return LEGACY_STATES.get(member, member.name.lower())
-
-
-def get_states(enum: type[Enum], /) -> list[str]:
-    """Return the states of all members of an enum, as the entities show them."""
-    return [get_state(member) for member in enum]
-
-
-def get_member[E: Enum](enum: type[E], state: str, /) -> E:
-    """Return the enum member of a state, as the entities show it."""
-    return next(member for member in enum if get_state(member) == state)
 
 
 class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[CoordinatorData]):
@@ -270,6 +248,7 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[CoordinatorData]):
             self._weekly_writes = counter.get("writes", {})
 
         # Older versions stored one counter and created one repair issue for all config entries.
+        # TODO: Remove this cleanup and the shared store once hardly any installation updates from those versions.
         await get_write_counter_store(self.hass).async_remove()
         ir.async_delete_issue(self.hass, domain=DOMAIN, issue_id=FLASH_WRITE_ISSUE_ID)
 
@@ -418,35 +397,16 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[CoordinatorData]):
                 self.api.read(request, counts=self.device_counts, limits="writable", message_ids=True),
             )
 
-    @classmethod
-    def _group_readings(cls, readings: Readings, request: Mapping[Section, tuple[str, str]], /) -> CoordinatorData:
-        """Return the readings per device type and key, with the values as the entities show them."""
+    @staticmethod
+    def _group_readings(readings: Readings, request: Mapping[Section, tuple[str, str]], /) -> CoordinatorData:
+        """Return the readings per device type and key."""
         data: CoordinatorData = {}
 
         for section, section_readings in readings.items():
             section_id, key = request[section]
-            data.setdefault(section_id, {})[key] = [cls._normalize(section, reading) for reading in section_readings]
+            data.setdefault(section_id, {})[key] = section_readings
 
         return data
-
-    @staticmethod
-    def _normalize(section: Section, reading: Reading, /) -> Reading:
-        """Return the reading with the value as `keba_keenergy_api` 2.x returned it, e.g. rounded."""
-        if not isinstance(reading.value, float):
-            return reading
-
-        if section in MIXER_SECTIONS:
-            # The setpoint stays the raw value, it is shown as `position_percent`.
-            return replace(
-                reading,
-                value=MixerPosition((reading.value >= 1) - (reading.value <= -1)),
-                raw_value=reading.value,
-            )
-
-        return replace(
-            reading,
-            value=round(reading.value, RATIO_DECIMALS if section in RATIO_SECTIONS else DEFAULT_DECIMALS),
-        )
 
     async def _async_save_write_counter(self) -> None:
         await self._store.async_save(

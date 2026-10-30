@@ -65,9 +65,6 @@ EXTERNAL_HEAT_SOURCE_TARGET_TEMPERATURE: Final[str] = """
 EXTERNAL_HEAT_SOURCE_HEAT_REQUEST: Final[str] = """
     {
         "name": "APPL.CtrlAppl.sParam.extHeatSource[%s].DO.values.setValueB",
-        "attributes": {
-            "longText": "Dig. request"
-        },
         "value": "%s"
     }
 """
@@ -75,11 +72,6 @@ EXTERNAL_HEAT_SOURCE_HEAT_REQUEST: Final[str] = """
 EXTERNAL_HEAT_SOURCE_OPERATING_TIME: Final[str] = """
     {
         "name": "APPL.CtrlAppl.sParam.extHeatSource[%s].DO.operationalData.operationalTimeS",
-        "attributes": {
-            "formatId": "fmt6p0",
-            "longText": "Operational hrs.",
-            "unitId": "TimeHour"
-        },
         "value": "%s"
     }
 """
@@ -87,11 +79,6 @@ EXTERNAL_HEAT_SOURCE_OPERATING_TIME: Final[str] = """
 EXTERNAL_HEAT_SOURCE_MAX_RUNTIME: Final[str] = """
     {
         "name": "APPL.CtrlAppl.sParam.extHeatSource[%s].DO.operationalData.maxRunTimeS",
-        "attributes": {
-            "formatId": "fmt6p1",
-            "longText": "Max run-time",
-            "unitId": "TimeHour"
-        },
         "value": "%s"
     }
 """
@@ -99,10 +86,6 @@ EXTERNAL_HEAT_SOURCE_MAX_RUNTIME: Final[str] = """
 EXTERNAL_HEAT_SOURCE_ACTIVATION_COUNTER: Final[str] = """
     {
         "name": "APPL.CtrlAppl.sParam.extHeatSource[%s].DO.operationalData.activationCounter",
-        "attributes": {
-            "formatId": "fmt6p0",
-            "longText": "Turn-on cycles"
-        },
         "value": "%s"
     }
 """
@@ -110,9 +93,6 @@ EXTERNAL_HEAT_SOURCE_ACTIVATION_COUNTER: Final[str] = """
 EXTERNAL_HEAT_SOURCE_USE_EXCESS_ENERGY: Final[str] = """
     {
         "name": "APPL.CtrlAppl.sParam.extHeatSource[%s].param.supportExcessEnergy",
-        "attributes": {
-            "longText": "Support excess energy"
-        },
         "value": "%s"
     }
 """
@@ -134,9 +114,6 @@ EXTERNAL_HEAT_SOURCE_MIN_RUNTIME_EXCESS_ENERGY: Final[str] = """
 EXTERNAL_HEAT_SOURCE_CONSUMING_EXCESS_ENERGY: Final[str] = """
     {
         "name": "APPL.CtrlAppl.sParam.extHeatSource[%s].values.consumingExcessEnergy",
-        "attributes": {
-            "longText": "Ext. HS with excess en."
-        },
         "value": "%s"
     }
 """
@@ -144,11 +121,6 @@ EXTERNAL_HEAT_SOURCE_CONSUMING_EXCESS_ENERGY: Final[str] = """
 EXTERNAL_HEAT_SOURCE_EXCESS_ENERGY_OPERATING_TIME: Final[str] = """
     {
         "name": "APPL.CtrlAppl.sParam.extHeatSource[%s].operationalDataExcessEnergy.operationalTimeS",
-        "attributes": {
-            "formatId": "fmt6p0",
-            "longText": "Ext. HS with excess en.",
-            "unitId": "TimeHour"
-        },
         "value": "%s"
     }
 """
@@ -156,11 +128,6 @@ EXTERNAL_HEAT_SOURCE_EXCESS_ENERGY_OPERATING_TIME: Final[str] = """
 EXTERNAL_HEAT_SOURCE_EXCESS_ENERGY_MAX_RUNTIME: Final[str] = """
     {
         "name": "APPL.CtrlAppl.sParam.extHeatSource[%s].operationalDataExcessEnergy.maxRunTimeS",
-        "attributes": {
-            "formatId": "fmt6p1",
-            "longText": "Max run-time",
-            "unitId": "TimeHour"
-        },
         "value": "%s"
     }
 """
@@ -168,10 +135,6 @@ EXTERNAL_HEAT_SOURCE_EXCESS_ENERGY_MAX_RUNTIME: Final[str] = """
 EXTERNAL_HEAT_SOURCE_EXCESS_ENERGY_ACTIVATION_COUNTER: Final[str] = """
     {
         "name": "APPL.CtrlAppl.sParam.extHeatSource[%s].operationalDataExcessEnergy.activationCounter",
-        "attributes": {
-            "formatId": "fmt6p0",
-            "longText": "Turn-on cycles"
-        },
         "value": "%s"
     }
 """
@@ -179,9 +142,6 @@ EXTERNAL_HEAT_SOURCE_EXCESS_ENERGY_ACTIVATION_COUNTER: Final[str] = """
 HEAT_CIRCUIT_HAS_ROOM_TEMPERATURE: Final[str] = """
     {
         "name": "APPL.CtrlAppl.sParam.options.heatCircuit[%s].hasRoomTemp",
-        "attributes": {
-            "longText": "With room temp. sensor"
-        },
         "value": "%s"
     }
 """
@@ -189,9 +149,6 @@ HEAT_CIRCUIT_HAS_ROOM_TEMPERATURE: Final[str] = """
 HEAT_CIRCUIT_HAS_ROOM_HUMIDITY: Final[str] = """
     {
         "name": "APPL.CtrlAppl.sParam.options.heatCircuit[%s].hasRoomHumidity",
-        "attributes": {
-            "longText": "With room humidity sensor"
-        },
         "value": "%s"
     }
 """
@@ -199,9 +156,6 @@ HEAT_CIRCUIT_HAS_ROOM_HUMIDITY: Final[str] = """
 HEAT_CIRCUIT_HAS_MIXER: Final[str] = """
     {
         "name": "APPL.CtrlAppl.sParam.options.heatCircuit[%s].hasMixer",
-        "attributes": {
-            "longText": "HC mixer"
-        },
         "value": "%s"
     }
 """
@@ -209,9 +163,6 @@ HEAT_CIRCUIT_HAS_MIXER: Final[str] = """
 HEAT_CIRCUIT_HAS_RETURN_FLOW_TEMPERATURE: Final[str] = """
     {
         "name": "APPL.CtrlAppl.sParam.options.heatCircuit[%s].hasRefluxTemp",
-        "attributes": {
-            "longText": "With reflux sensor"
-        },
         "value": "%s"
     }
 """
@@ -219,9 +170,6 @@ HEAT_CIRCUIT_HAS_RETURN_FLOW_TEMPERATURE: Final[str] = """
 HEAT_CIRCUIT_HAS_PUMP: Final[str] = """
     {
         "name": "APPL.CtrlAppl.sParam.options.heatCircuit[%s].hasPump",
-        "attributes": {
-          "longText": "HC pump"
-        },
         "value": "%s"
     }
 """
@@ -229,9 +177,6 @@ HEAT_CIRCUIT_HAS_PUMP: Final[str] = """
 HEAT_CIRCUIT_HAS_VAR_SPEED_PUMP: Final[str] = """
     {
         "name": "APPL.CtrlAppl.sParam.options.heatCircuit[%s].hasVarSpeedPump",
-        "attributes": {
-            "longText": "Var.speed pump"
-        },
         "value": "%s"
     }
 """
@@ -351,9 +296,6 @@ HEAT_CIRCUIT_MIXER_POSITION: Final[str] = """
 HEAT_CIRCUIT_PUMP_STATE: Final[str] = """
     {
         "name": "APPL.CtrlAppl.sParam.heatCircuit[%s].pump.values.setValueB",
-        "attributes": {
-            "longText": "Pump nom.value"
-        },
         "value": "%s"
     }
 """
@@ -361,11 +303,6 @@ HEAT_CIRCUIT_PUMP_STATE: Final[str] = """
 HEAT_CIRCUIT_RETURN_FLOW_TEMPERATURE: Final[str] = """
     {
         "name": "APPL.CtrlAppl.sParam.heatCircuit[%s].tempReflux.values.actValue",
-        "attributes": {
-            "formatId": "fmtTemp",
-            "longText": "Reflux temp.",
-            "unitId": "Temp"
-        },
         "value": "%s"
     }
 """
@@ -597,8 +534,6 @@ HEAT_CIRCUIT_OPERATION_MODE: Final[str] = """
 HEAT_CIRCUIT_SELECTED_TARGET_TEMPERATURE: Final[str] = """
     {
         "name": "APPL.CtrlAppl.sParam.heatCircuit[%s].values.selectedSetTemp",
-        "attributes": {
-        },
         "value": "%s"
     }
 """
@@ -634,9 +569,6 @@ HEAT_CIRCUIT_TARGET_TEMPERATURE_OFFSET: Final[str] = """
 HEAT_CIRCUIT_USE_EXCESS_ENERGY: Final[str] = """
     {
         "name": "APPL.CtrlAppl.sParam.heatCircuit[%s].param.excessEnergy.useExcessEnergy",
-        "attributes": {
-            "longText": "Use excess en."
-        },
         "value": "%s"
     }
 """
@@ -794,7 +726,6 @@ HEAT_CIRCUIT_COOLING_CURVE_SLOPE: Final[str] = """
 HEAT_CIRCUIT_USE_HEATING_CURVE: Final[str] = """
     {
         "name": "APPL.CtrlAppl.sParam.heatCircuit[%s].param.enableHeatCurveLinTab",
-        "attributes": {},
         "value": "%s"
     }
 """
@@ -802,9 +733,6 @@ HEAT_CIRCUIT_USE_HEATING_CURVE: Final[str] = """
 HEAT_CIRCUIT_HEATING_CURVE: Final[str] = """
     {
         "name": "APPL.CtrlAppl.sParam.heatCircuit[%s].param.linTab.fileName",
-        "attributes": {
-            "longText": "Heat curve"
-        },
         "value": "%s"
     }
 """
@@ -812,9 +740,6 @@ HEAT_CIRCUIT_HEATING_CURVE: Final[str] = """
 HEAT_CIRCUIT_COOLING_CURVE: Final[str] = """
     {
         "name": "APPL.CtrlAppl.sParam.heatCircuit[%s].param.coollinTab.fileName",
-        "attributes": {
-            "longText": "Name of linTab"
-        },
         "value": "%s"
     }
 """
@@ -892,11 +817,6 @@ SOLAR_CIRCUIT_PUMP_2: Final[str] = """
 SOLAR_CIRCUIT_CURRENT_TEMPERATURE_1: Final[str] = """
     {
         "name": "APPL.CtrlAppl.sParam.genericHeat[%s].referenceTemp.values.actValue",
-        "attributes": {
-            "formatId": "fmtTemp",
-            "longText": "Temp. act.1",
-            "unitId": "Temp"
-        },
         "value": "%s"
     }
 """
@@ -904,11 +824,6 @@ SOLAR_CIRCUIT_CURRENT_TEMPERATURE_1: Final[str] = """
 SOLAR_CIRCUIT_CURRENT_TEMPERATURE_2: Final[str] = """
     {
         "name": "APPL.CtrlAppl.sParam.genericHeat[%s].referenceTemp.values.actValue",
-        "attributes": {
-            "formatId": "fmtTemp",
-            "longText": "Temp. act.2",
-            "unitId": "Temp"
-        },
         "value": "%s"
     }
 """
@@ -970,11 +885,6 @@ SOLAR_CIRCUIT_HEATING_ENERGY: Final[str] = """
 SOLAR_CIRCUIT_DAILY_ENERGY: Final[str] = """
     {
         "name": "APPL.CtrlAppl.sParam.solarCircuit[%s].heatMeter.values.heatDay",
-        "attributes": {
-            "formatId": "fmt6p1",
-            "longText": "Energy per day",
-            "unitId": "kWh"
-        },
         "value": "%s"
     }
 """
@@ -982,11 +892,6 @@ SOLAR_CIRCUIT_DAILY_ENERGY: Final[str] = """
 SOLAR_CIRCUIT_ACTUAL_POWER: Final[str] = """
     {
         "name": "APPL.CtrlAppl.sParam.solarCircuit[%s].heatMeter.values.power",
-        "attributes": {
-            "formatId": "fmt6p0",
-            "longText": "Act. power",
-            "unitId": "Pwr"
-        },
         "value": "%s"
     }
 """
@@ -994,47 +899,27 @@ SOLAR_CIRCUIT_ACTUAL_POWER: Final[str] = """
 SOLAR_CIRCUIT_PRIORITY_1_BEFORE_2: Final[str] = """
     {
        "name": "APPL.CtrlAppl.sParam.hmiRetainData.consumer1PrioritySolar[%s]",
-        "attributes": {
-            "longText": "Priority 1 bef. 2"
-        },
         "value": "%s"
     }
 """
 
 HEAT_PUMP_CONSUMING_EXCESS_ENERGY: Final[dict[str, Any]] = {
     "name": "APPL.CtrlAppl.sParam.heatpump[0].values.consumingExcessEnergy",
-    "attributes": {
-        "longText": "HP 1 with excess energy",
-    },
     "value": "true",
 }
 
 HEAT_PUMP_EXCESS_ENERGY_OPERATING_TIME: Final[dict[str, Any]] = {
     "name": "APPL.CtrlAppl.sParam.heatpump[0].operationalDataExcessEnergy.operationalTimeS",
-    "attributes": {
-        "formatId": "fmt6p0",
-        "longText": "HP 1 with excess energy",
-        "unitId": "TimeHour",
-    },
     "value": "3600",
 }
 
 HEAT_PUMP_EXCESS_ENERGY_MAX_RUNTIME: Final[dict[str, Any]] = {
     "name": "APPL.CtrlAppl.sParam.heatpump[0].operationalDataExcessEnergy.maxRunTimeS",
-    "attributes": {
-        "formatId": "fmt6p1",
-        "longText": "Max run-time",
-        "unitId": "TimeHour",
-    },
     "value": "3600",
 }
 
 HEAT_PUMP_EXCESS_ENERGY_ACTIVATION_COUNTER: Final[dict[str, Any]] = {
     "name": "APPL.CtrlAppl.sParam.heatpump[0].operationalDataExcessEnergy.activationCounter",
-    "attributes": {
-        "formatId": "fmt6p0",
-        "longText": "Turn-on cycles",
-    },
     "value": "3600",
 }
 
@@ -1088,21 +973,11 @@ HEAT_PUMP_COMPRESSOR_NIGHT_SPEED: Final[dict[str, Any]] = {
 
 HEAT_PUMP_COMPRESSOR_INPUT_TEMPERATURE: Final[dict[str, Any]] = {
     "name": "APPL.CtrlAppl.sParam.heatpump[0].TempCompressorIn.values.actValue",
-    "attributes": {
-        "formatId": "fmtTemp",
-        "longText": "Comp. in temp.",
-        "unitId": "Temp",
-    },
     "value": "27.200001",
 }
 
 HEAT_PUMP_COMPRESSOR_OUTPUT_TEMPERATURE: Final[dict[str, Any]] = {
     "name": "APPL.CtrlAppl.sParam.heatpump[0].TempCompressorOut.values.actValue",
-    "attributes": {
-        "formatId": "fmtTemp",
-        "longText": "Comp. out temp.",
-        "unitId": "Temp",
-    },
     "value": "27.200001",
 }
 
@@ -1110,9 +985,6 @@ HEAT_PUMP_COMPRESSOR_OUTPUT_TEMPERATURE: Final[dict[str, Any]] = {
 HEAT_PUMP_COMPRESSOR_USE_NIGHT_SPEED: Final[str] = """
     {
         "name": "APPL.CtrlAppl.sParam.heatpump[0].HeatPumpPowerCtrl.param.useDayNightSpeed",
-        "attributes": {
-            "longText": "Day/Night switch"
-        },
         "value": "%s"
     }
 """
@@ -1131,115 +1003,62 @@ HEAT_PUMP_CONDENSER_TEMPERATURE: Final[dict[str, Any]] = {
 
 HEAT_PUMP_VAPORIZER_TEMPERATURE: Final[dict[str, Any]] = {
     "name": "APPL.CtrlAppl.sParam.heatpump[0].OverHeatCtrl.values.tempVap",
-    "attributes": {
-        "formatId": "fmtTemp",
-        "longText": "Evap. temp.",
-        "unitId": "Temp",
-    },
     "value": "-4.5617409",
 }
 
 HEAT_PUMP_TARGET_OVERHEATING: Final[dict[str, Any]] = {
     "name": "APPL.CtrlAppl.sParam.heatpump[0].OverHeatCtrl.values.setOH",
-    "attributes": {
-        "formatId": "fmtTemp",
-        "longText": "Set suction SH",
-        "unitId": "TempRel",
-    },
     "value": "5.4999752",
 }
 
 HEAT_PUMP_CURRENT_OVERHEATING: Final[dict[str, Any]] = {
     "name": "APPL.CtrlAppl.sParam.heatpump[0].OverHeatCtrl.values.actOH",
-    "attributes": {
-        "formatId": "fmtTemp",
-        "longText": "Act. suction SH",
-        "unitId": "TempRel",
-    },
     "value": "18.676249",
 }
 
 HEAT_PUMP_EXPANSION_VALVE_POSITION: Final[dict[str, Any]] = {
     "name": "APPL.CtrlAppl.sParam.heatpump[0].OverHeatCtrl.values.stepperPos",
-    "attributes": {
-        "formatId": "fmt4p0",
-        "longText": "Stepper position",
-    },
     "value": "20",
 }
 
 HEAT_PUMP_HEAT_REQUEST: Final[dict[str, Any]] = {
     "name": "APPL.CtrlAppl.sParam.heatpump[0].values.request",
-    "attributes": {
-        "longText": "Heat pump request",
-    },
     "value": "false",
 }
 
 HEAT_PUMP_HIGH_PRESSURE: Final[dict[str, Any]] = {
     "name": "APPL.CtrlAppl.sParam.heatpump[0].HighPressure.values.actValue",
-    "attributes": {
-        "formatId": "fmt3p2",
-        "longText": "High pressure",
-        "unitId": "PressBar",
-    },
     "value": "15.61875",
 }
 
 HEAT_PUMP_LOW_PRESSURE: Final[dict[str, Any]] = {
     "name": "APPL.CtrlAppl.sParam.heatpump[0].LowPressure.values.actValue",
-    "attributes": {
-        "formatId": "fmt3p2",
-        "longText": "Low pressure",
-        "unitId": "PressBar",
-    },
     "value": "15.354687",
 }
 
 HEAT_PUMP_FLOW_TEMPERATURE: Final[dict[str, Any]] = {
     "name": "APPL.CtrlAppl.sParam.heatpump[0].TempHeatFlow.values.actValue",
-    "attributes": {
-        "formatId": "fmtTemp",
-        "longText": "Inflow temp.",
-        "unitId": "Temp",
-    },
-    "value": "24.800001",
+    "value": "24.803127",
 }
 
 HEAT_PUMP_RETURN_FLOW_TEMPERATURE: Final[dict[str, Any]] = {
     "name": "APPL.CtrlAppl.sParam.heatpump[0].TempHeatReflux.values.actValue",
-    "attributes": {
-        "formatId": "fmtTemp",
-        "longText": "Reflux temp.",
-        "unitId": "Temp",
-    },
-    "value": "23.9",
+    "value": "23.904211",
 }
 
 HEAT_PUMP_NAME: Final[dict[str, Any]] = {
     "name": "APPL.CtrlAppl.sParam.heatpump[0].param.name",
-    "attributes": {"longText": "Name"},
     "value": "WPS26",
 }
 
 HEAT_PUMP_SOURCE_INPUT_TEMPERATURE: Final[dict[str, Any]] = {
     "name": "APPL.CtrlAppl.sParam.heatpump[0].TempSourceIn.values.actValue",
-    "attributes": {
-        "formatId": "fmtTemp",
-        "longText": "Source in temp.",
-        "unitId": "Temp",
-    },
     "value": "25.700001",
 }
 
 HEAT_PUMP_SOURCE_OUTPUT_TEMPERATURE: Final[dict[str, Any]] = {
     "name": "APPL.CtrlAppl.sParam.heatpump[0].TempSourceOut.values.actValue",
-    "attributes": {
-        "formatId": "fmtTemp",
-        "longText": "Source out temp.",
-        "unitId": "Temp",
-    },
-    "value": "24.9",
+    "value": "24.896341",
 }
 
 HEAT_PUMP_STATE: Final[dict[str, Any]] = {
@@ -1268,282 +1087,154 @@ HEAT_PUMP_SUBSTATE: Final[dict[str, Any]] = {
 
 HEAT_PUMP_COMPRESSOR_POWER: Final[dict[str, Any]] = {
     "name": "APPL.CtrlAppl.sParam.heatpump[0].ElectricEnergyMeter.values.power",
-    "attributes": {
-        "formatId": "fmt3p2",
-        "longText": "Power input",
-        "unitId": "Pwr",
-    },
-    "value": "5.52",
+    "value": "5.5196772",
 }
 
 HEAT_PUMP_HEATING_POWER: Final[dict[str, Any]] = {
     "name": "APPL.CtrlAppl.sParam.heatpump[0].HeatMeter.values.power",
-    "attributes": {
-        "formatId": "fmt3p2",
-        "longText": "Heating power",
-        "unitId": "Pwr",
-    },
-    "value": "3.22",
+    "value": "3.2187521",
 }
 
 HEAT_PUMP_HOT_WATER_POWER: Final[dict[str, Any]] = {
     "name": "APPL.CtrlAppl.sParam.heatpump[0].HotWaterMeter.values.power",
-    "attributes": {
-        "formatId": "fmt3p2",
-        "longText": "Hot water power",
-        "unitId": "Pwr",
-    },
-    "value": "2.77",
+    "value": "2.7713845",
 }
 
 HEAT_PUMP_COP: Final[dict[str, Any]] = {
     "name": "APPL.CtrlAppl.sParam.heatpump[0].values.COP",
-    "attributes": {
-        "formatId": "fmt3p2",
-        "longText": "COP",
-    },
-    "value": "2.55",
+    "value": "2.5501628",
 }
 
 HEAT_PUMP_HEATING_ENERGY: Final[dict[str, Any]] = {
     "name": "APPL.CtrlAppl.sStatisticalData.heatpump[0].consumption.heating.energy",
-    "attributes": {
-        "formatId": "fmt4p0",
-        "longText": "Heating energy",
-        "unitId": "kWhwithoutConv",
-    },
-    "value": "8.43",
+    "value": "8.4317026",
 }
 
 HEAT_PUMP_HEATING_ENERGY_CONSUMPTION: Final[dict[str, Any]] = {
     "name": "APPL.CtrlAppl.sStatisticalData.heatpump[0].consumption.heating.electricalenergy",
-    "attributes": {
-        "formatId": "fmt4p0",
-        "longText": "Heat el. energy",
-        "unitId": "kWhwithoutConv",
-    },
-    "value": "7.33",
+    "value": "7.3290005",
 }
 
 HEAT_PUMP_HEATING_SPF: Final[dict[str, Any]] = {
     "name": "APPL.CtrlAppl.sStatisticalData.heatpump[0].EnergyEfficiencyRatioHeat",
-    "attributes": {
-        "longText": "SPF heating",
-    },
-    "value": "3.32",
+    "value": "3.3184626",
 }
 
 HEAT_PUMP_COOLING_ENERGY: Final[dict[str, Any]] = {
     "name": "APPL.CtrlAppl.sStatisticalData.heatpump[0].consumption.cooling.energy",
-    "attributes": {
-        "formatId": "fmt4p0",
-        "longText": "Cooling energy",
-        "unitId": "kWhwithoutConv",
-    },
-    "value": "7.21",
+    "value": "7.2140002",
 }
 
 HEAT_PUMP_COOLING_ENERGY_CONSUMPTION: Final[dict[str, Any]] = {
     "name": "APPL.CtrlAppl.sStatisticalData.heatpump[0].consumption.cooling.electricalenergy",
-    "attributes": {
-        "formatId": "fmt4p0",
-        "longText": "Cool el. energy",
-        "unitId": "kWhwithoutConv",
-    },
-    "value": "8.72",
+    "value": "8.7180004",
 }
 
 HEAT_PUMP_COOLING_SPF: Final[dict[str, Any]] = {
     "name": "APPL.CtrlAppl.sStatisticalData.heatpump[0].EnergyEfficiencyRatioCool",
-    "attributes": {
-        "formatId": "fmt3p2",
-        "longText": "SPF cooling",
-    },
-    "value": "4.22",
+    "value": "4.2206435",
 }
 
 HEAT_PUMP_HOT_WATER_ENERGY: Final[dict[str, Any]] = {
     "name": "APPL.CtrlAppl.sStatisticalData.heatpump[0].consumption.domHotWater.energy",
-    "attributes": {
-        "formatId": "fmt4p0",
-        "longText": "Dom. HW energy",
-        "unitId": "kWhwithoutConv",
-    },
-    "value": "7.86",
+    "value": "7.8570004",
 }
 
 HEAT_PUMP_HOT_WATER_ENERGY_CONSUMPTION: Final[dict[str, Any]] = {
     "name": "APPL.CtrlAppl.sStatisticalData.heatpump[0].consumption.domHotWater.electricalenergy",
-    "attributes": {
-        "formatId": "fmt4p0",
-        "longText": "Dom.HW el. energy",
-        "unitId": "kWhwithoutConv",
-    },
-    "value": "2.77",
+    "value": "2.7710001",
 }
 
 HEAT_PUMP_HOT_WATER_SPF: Final[dict[str, Any]] = {
     "name": "APPL.CtrlAppl.sStatisticalData.heatpump[0].EnergyEfficiencyRatioDomHotWater",
-    "attributes": {
-        "longText": "SPF DHW",
-    },
-    "value": "2.50",
+    "value": "2.5034916",
 }
 
 HEAT_PUMP_TOTAL_THERMAL_ENERGY: Final[dict[str, Any]] = {
     "name": "APPL.CtrlAppl.sStatisticalData.heatpump[0].consumption.energy",
-    "attributes": {
-        "formatId": "fmt4p0",
-        "longText": "Energy",
-        "unitId": "kWhwithoutConv",
-    },
-    "value": "8.22",
+    "value": "8.2230005",
 }
 
 HEAT_PUMP_TOTAL_ENERGY_CONSUMPTION: Final[dict[str, Any]] = {
     "name": "APPL.CtrlAppl.sStatisticalData.heatpump[0].consumption.electricalenergy",
-    "attributes": {
-        "formatId": "fmt4p0",
-        "longText": "El. energy",
-        "unitId": "kWhwithoutConv",
-    },
-    "value": "5.21",
+    "value": "5.2120004",
 }
 
 HEAT_PUMP_TOTAL_SPF: Final[dict[str, Any]] = {
     "name": "APPL.CtrlAppl.sStatisticalData.heatpump[0].EnergyEfficiencyRatio",
-    "attributes": {
-        "formatId": "fmt3p2",
-        "longText": "SPF general",
-    },
-    "value": "2.43",
+    "value": "2.4277346",
 }
 
 HEAT_PUMP_EXCESS_ENERGY_CONSUMPTION: Final[dict[str, Any]] = {
     "name": "APPL.CtrlAppl.sStatisticalData.heatpump[0].consumption.consumedExcessEnergy",
-    "attributes": {
-        "formatId": "fmt4p0",
-        "longText": "Consumed ex. energy",
-        "unitId": "kWhwithoutConv",
-    },
-    "value": "10.00",
+    "value": "10.003001",
 }
 
 HEAT_PUMP_HEATING_EXCESS_ENERGY_CONSUMPTION: Final[dict[str, Any]] = {
     "name": "APPL.CtrlAppl.sStatisticalData.heatpump[0].consumption.heating.consumedExcessEnergy",
-    "attributes": {
-        "formatId": "fmt4p0",
-        "longText": "Heat excess energy",
-        "unitId": "kWhwithoutConv",
-    },
-    "value": "10.00",
+    "value": "10.003001",
 }
 
 HEAT_PUMP_COOLING_EXCESS_ENERGY_CONSUMPTION: Final[dict[str, Any]] = {
     "name": "APPL.CtrlAppl.sStatisticalData.heatpump[0].consumption.cooling.consumedExcessEnergy",
-    "attributes": {
-        "formatId": "fmt4p0",
-        "longText": "Cool excess energy",
-        "unitId": "kWhwithoutConv",
-    },
-    "value": "10.00",
+    "value": "10.003001",
 }
 
 HEAT_PUMP_HOT_WATER_EXCESS_ENERGY_CONSUMPTION: Final[dict[str, Any]] = {
     "name": "APPL.CtrlAppl.sStatisticalData.heatpump[0].consumption.domHotWater.consumedExcessEnergy",
-    "attributes": {
-        "formatId": "fmt4p0",
-        "longText": "Dom. HW excess en.",
-        "unitId": "kWhwithoutConv",
-    },
-    "value": "10.00",
+    "value": "10.003001",
 }
 
 HEAT_PUMP_OPERATING_TIME: Final[dict[str, Any]] = {
     "name": "APPL.CtrlAppl.sParam.heatpump[0].operationalData.operationalTimeS",
-    "attributes": {
-        "formatId": "fmt6p0",
-        "longText": "Operational hrs.",
-        "unitId": "TimeHour",
-    },
     "value": "3809028",
 }
 
 
 HEAT_PUMP_MAX_RUNTIME: Final[dict[str, Any]] = {
     "name": "APPL.CtrlAppl.sParam.heatpump[0].operationalData.maxRunTimeS",
-    "attributes": {
-        "formatId": "fmt6p1",
-        "longText": "Max run-time",
-        "unitId": "TimeHour",
-    },
     "value": "602403",
 }
 
 
 HEAT_PUMP_ACTIVATION_COUNTER: Final[dict[str, Any]] = {
     "name": "APPL.CtrlAppl.sParam.heatpump[0].operationalData.activationCounter",
-    "attributes": {
-        "formatId": "fmt6p0",
-        "longText": "Turn-on cycles",
-    },
     "value": "477",
 }
 
 HEAT_PUMP_HAS_COMPRESSOR_FAILURE: Final[dict[str, Any]] = {
     "name": "APPL.CtrlAppl.sParam.heatpump[0].FailureCompressor.values.actValue",
-    "attributes": {
-        "longText": "Failure compressor",
-    },
     "value": "false",
 }
 
 HEAT_PUMP_HAS_SOURCE_FAILURE: Final[dict[str, Any]] = {
     "name": "APPL.CtrlAppl.sParam.heatpump[0].FailureSource.values.actValue",
-    "attributes": {
-        "longText": "Failure Source",
-    },
     "value": "false",
 }
 
 HEAT_PUMP_HAS_SOURCE_ACTUATOR_FAILURE: Final[dict[str, Any]] = {
     "name": "APPL.CtrlAppl.sParam.heatpump[0].FailureActuatorSource.values.actValue",
-    "attributes": {
-        "longText": "Failure actuator src",
-    },
     "value": "false",
 }
 
 HEAT_PUMP_HAS_THREE_PHASE_FAILURE: Final[dict[str, Any]] = {
     "name": "APPL.CtrlAppl.sParam.heatpump[0].FailureThreePhase.values.actValue",
-    "attributes": {
-        "longText": "Failure 3-Phase",
-    },
     "value": "false",
 }
 
 HEAT_PUMP_HAS_SOURCE_PRESSURE_FAILURE: Final[dict[str, Any]] = {
     "name": "APPL.CtrlAppl.sParam.heatpump[0].FailureSrcPressure.values.actValue",
-    "attributes": {
-        "longText": "Failure src pressure",
-    },
     "value": "false",
 }
 
 HEAT_PUMP_HAS_VFD_FAILURE: Final[dict[str, Any]] = {
     "name": "APPL.CtrlAppl.sParam.heatpump[0].FailureVFD.values.actValue",
-    "attributes": {
-        "longText": "Failure VFD",
-    },
     "value": "false",
 }
 
 HEAT_PUMP_HAS_ACTIVE_COOLING: Final[str] = """
     {
         "name": "APPL.CtrlAppl.sParam.options.heatpump[0].hasActiveCooling",
-        "attributes": {
-            "longText": "With active Cooling"
-        },
         "value": "%s"
     }
 """
@@ -1551,9 +1242,6 @@ HEAT_PUMP_HAS_ACTIVE_COOLING: Final[str] = """
 HEAT_PUMP_HAS_PASSIVE_COOLING: Final[str] = """
     {
         "name": "APPL.CtrlAppl.sParam.options.heatpump[0].hasPassiveCooling",
-        "attributes": {
-            "longText": "With passive cooling"
-        },
         "value": "%s"
     }
 """
@@ -1561,9 +1249,6 @@ HEAT_PUMP_HAS_PASSIVE_COOLING: Final[str] = """
 EXTERNAL_HEAT_SOURCE_HAS_EMISSIONS: Final[str] = """
     {
         "name": "APPL.CtrlAppl.sParam.extHeatSource[%s].param.hasEmmission",
-        "attributes": {
-            "longText": "Has emission"
-        },
         "value": "%s"
     }
 """
@@ -1711,7 +1396,6 @@ BUFFER_TANK_TARGET_TEMPERATURE: Final[str] = """
 BUFFER_TANK_HEAT_REQUEST: Final[str] = """
     {
         "name": "APPL.CtrlAppl.sParam.bufferTank[%s].values.heatRequestTop",
-        "attributes": {},
         "value": "%s"
     }
 """
@@ -1719,7 +1403,6 @@ BUFFER_TANK_HEAT_REQUEST: Final[str] = """
 BUFFER_TANK_COOL_REQUEST: Final[str] = """
     {
         "name": "APPL.CtrlAppl.sParam.bufferTank[%s].values.coolRequestBot",
-        "attributes": {},
         "value": "%s"
     }
 """
@@ -1727,9 +1410,6 @@ BUFFER_TANK_COOL_REQUEST: Final[str] = """
 BUFFER_TANK_USE_EXCESS_ENERGY: Final[str] = """
     {
         "name": "APPL.CtrlAppl.sParam.bufferTank[%s].param.useExcessEnergy",
-        "attributes": {
-            "longText": "Use excess en."
-        },
         "value": "%s"
     }
 """
@@ -1751,9 +1431,6 @@ BUFFER_TANK_OUTDOOR_TEMPERATURE_EXCESS_ENERGY_LIMIT: Final[str] = """
 HOT_WATER_TANK_USE_EXCESS_ENERGY: Final[str] = """
     {
         "name": "APPL.CtrlAppl.sParam.hotWaterTank[%s].param.useExcessEnergy",
-        "attributes": {
-            "longText": "Use excess en."
-        },
         "value": "%s"
     }
 """
@@ -1804,9 +1481,6 @@ HOT_WATER_TANK_EXCESS_ENERGY_MODE: Final[str] = """
 HOT_WATER_TANK_HEAT_REQUEST: Final[str] = """
     {
         "name": "APPL.CtrlAppl.sParam.hotWaterTank[%s].values.heatRequestTop",
-        "attributes": {
-            "longText": "Heat requirement"
-        },
         "value": "%s"
     }
 """
@@ -1814,9 +1488,6 @@ HOT_WATER_TANK_HEAT_REQUEST: Final[str] = """
 HOT_WATER_TANK_FRESH_WATER_FLOW: Final[str] = """
     {
         "name": "APPL.CtrlAppl.sParam.hotWaterTank[%s].FreshWater.freshWaterFlow.values.actValue",
-        "attributes": {
-            "longText": "FWM flow switch"
-        },
         "value": "%s"
     }
 """
@@ -1910,9 +1581,6 @@ HOT_WATER_TANK_CIRCULATION_RETURN_TEMPERATURE: Final[str] = """
 HOT_WATER_TANK_CIRCULATION_PUMP_STATE: Final[str] = """
     {
         "name": "APPL.CtrlAppl.sParam.hotWaterTank[%s].circPump.pump.values.setValueB",
-        "attributes": {
-            "longText": "Pumps nom. value Circ."
-        },
         "value": "%s"
     }
 """
@@ -1920,9 +1588,6 @@ HOT_WATER_TANK_CIRCULATION_PUMP_STATE: Final[str] = """
 HOT_WATER_TANK_HAS_FRESH_WATER_MODULE: Final[str] = """
     {
         "name": "APPL.CtrlAppl.sParam.options.hotWaterTank[%s].hasFreshWaterModule",
-        "attributes": {
-            "longText": "Fresh water module"
-        },
         "value": "%s"
     }
 """
@@ -1936,7 +1601,7 @@ PASSIVE_COOLING_TEMPERATURE: Final[dict[str, Any]] = {
         "upperLimit": "100",
         "lowerLimit": "-100",
     },
-    "value": "22.34",
+    "value": "22.299999",
 }
 
 PASSIVE_COOLING_SWITCH_VALVE_POSITION: Final[dict[str, Any]] = {
@@ -1960,15 +1625,12 @@ PASSIVE_COOLING_CIRCULATION_PUMP_SPEED: Final[dict[str, Any]] = {
         "upperLimit": "1",
         "lowerLimit": "0.0",
     },
-    "value": "0.23",
+    "value": "0.2314783",
 }
 
 PASSIVE_COOLING_MIXER_TARGET_TEMPERATURE: Final[dict[str, Any]] = {
     "name": "APPL.CtrlAppl.sParam.passivecooling[0].Mixer.values.setValue",
-    "attributes": {
-        "longText": "Set temp",
-    },
-    "value": "19.22",
+    "value": "19.218407",
 }
 
 PASSIVE_COOLING_MIXER_POSITION: Final[dict[str, Any]] = {
@@ -1992,15 +1654,12 @@ PASSIVE_COOLING_MIXER_FLOW_TEMPERATURE: Final[dict[str, Any]] = {
         "upperLimit": "100",
         "lowerLimit": "0",
     },
-    "value": "24.26",
+    "value": "24.299999",
 }
 
 PHOTOVOLTAIC_EXCESS_ENERGY_ACTIVE: Final[str] = """
     {
         "name": "APPL.CtrlAppl.sParam.photovoltaics.values.excessEnergyActive",
-        "attributes": {
-            "longText": "Excess energy PV"
-        },
         "value": "%s"
     }
 """
@@ -2008,11 +1667,6 @@ PHOTOVOLTAIC_EXCESS_ENERGY_ACTIVE: Final[str] = """
 PHOTOVOLTAIC_EXCESS_POWER: Final[str] = """
     {
         "name": "APPL.CtrlAppl.sParam.photovoltaics.ElectricEnergyMeter.values.power",
-        "attributes": {
-            "formatId": "fmt3p2",
-            "longText": "Actual excess power",
-            "unitId": "Pwr"
-        },
         "value": "%s"
     }
 """
@@ -2020,11 +1674,6 @@ PHOTOVOLTAIC_EXCESS_POWER: Final[str] = """
 PHOTOVOLTAIC_DAILY_ENERGY: Final[str] = """
     {
         "name": "APPL.CtrlAppl.sParam.photovoltaics.ElectricEnergyMeter.values.heatDay",
-        "attributes": {
-            "formatId": "fmt6p1",
-            "longText": "Energy per day",
-            "unitId": "kWh"
-        },
         "value": "%s"
     }
 """
@@ -2032,11 +1681,6 @@ PHOTOVOLTAIC_DAILY_ENERGY: Final[str] = """
 PHOTOVOLTAIC_TOTAL_ENERGY: Final[str] = """
     {
         "name": "APPL.CtrlAppl.sParam.photovoltaics.ElectricEnergyMeter.values.accumulatedHeat",
-        "attributes": {
-            "formatId": "fmt6p0",
-            "longText": "Acc. energy",
-            "unitId": "kWh"
-        },
         "value": "%s"
     }
 """
@@ -2044,9 +1688,6 @@ PHOTOVOLTAIC_TOTAL_ENERGY: Final[str] = """
 SYSTEM_HAS_OUTDOOR_TEMPERATURE: Final[str] = """
     {
         "name": "APPL.CtrlAppl.sParam.options.hasOutdoorTemp",
-        "attributes": {
-            "longText": "With exterior sensor"
-        },
         "value": "%s"
     }
 """
@@ -2181,7 +1822,6 @@ SYSTEM_OPERATING_MODE: Final[dict[str, Any]] = {
 SYSTEM_HAS_PHOTOVOLTAICS: Final[str] = """
     {
         "name": "APPL.CtrlAppl.sParam.options.hasPhotovoltaics",
-        "attributes": {"longText": "With photovoltaics"},
         "value": "%s"
     }
 """
@@ -2226,70 +1866,36 @@ TIMEZONE_RESPONSE: Final[dict[str, str]] = {
 
 SYSTEM_CPU_USAGE: Final[dict[str, Any]] = {
     "name": "APPL.CtrlAppl.sProcData.globalCpuTimePercent",
-    "attributes": {
-        "formatId": "fmt3p1",
-        "longText": "CPU usage",
-        "unitId": "Pct10",
-    },
     "value": "27",
 }
 
 SYSTEM_WEBVIEW_CPU_USAGE: Final[dict[str, Any]] = {
     "name": "APPL.CtrlAppl.sProcData.processStatus[0].cpuTimePercent",
-    "attributes": {
-        "formatId": "fmt3p1",
-        "longText": "WebView CPU",
-        "unitId": "Pct10",
-    },
     "value": "34",
 }
 
 SYSTEM_WEBSERVER_CPU_USAGE: Final[dict[str, Any]] = {
     "name": "APPL.CtrlAppl.sProcData.processStatus[1].cpuTimePercent",
-    "attributes": {
-        "formatId": "fmt3p1",
-        "longText": "WebServer CPU",
-        "unitId": "Pct10",
-    },
     "value": "67",
 }
 
 SYSTEM_CONTROL_CPU_USAGE: Final[dict[str, Any]] = {
     "name": "APPL.CtrlAppl.sProcData.processStatus[2].cpuTimePercent",
-    "attributes": {
-        "formatId": "fmt3p1",
-        "longText": "Ctrl CPU",
-        "unitId": "Pct10",
-    },
     "value": "7",
 }
 
 SYSTEM_RAM_USAGE: Final[dict[str, Any]] = {
     "name": "APPL.CtrlAppl.sProcData.RAMstatus.tmpfs",
-    "attributes": {
-        "formatId": "fmt6p0",
-        "longText": "Used Temporary Memory",
-        "unitId": "kB",
-    },
     "value": "6432",
 }
 
 SYSTEM_FREE_RAM: Final[dict[str, Any]] = {
     "name": "APPL.CtrlAppl.sProcData.totFreeRAM",
-    "attributes": {
-        "formatId": "fmt6p0",
-        "longText": "Free RAM",
-        "unitId": "kB",
-    },
     "value": "100060",
 }
 
 SYSTEM_FLASH_ERASE_COUNTER: Final[dict[str, Any]] = {
     "name": "APPL.CtrlAppl.sParam.values.UBIMaxEraseCounter",
-    "attributes": {
-        "formatId": "fmt6p0",
-        "longText": "Erase counter partition 2",
-    },
     "value": "341",
 }
 
@@ -2453,15 +2059,15 @@ def get_single_position_data_response(
         json.loads(EXTERNAL_HEAT_SOURCE_EXCESS_ENERGY_OPERATING_TIME % ("0", "3600")),
         json.loads(EXTERNAL_HEAT_SOURCE_EXCESS_ENERGY_MAX_RUNTIME % ("0", "3600")),
         json.loads(EXTERNAL_HEAT_SOURCE_EXCESS_ENERGY_ACTIVATION_COUNTER % ("0", "23")),
-        json.loads(HEAT_CIRCUIT_ROOM_TEMPERATURE % ("0", "22.42")),
+        json.loads(HEAT_CIRCUIT_ROOM_TEMPERATURE % ("0", "22.418831")),
         json.loads(HEAT_CIRCUIT_ROOM_HUMIDITY % ("0", "53")),
-        json.loads(HEAT_CIRCUIT_DEW_POINT % ("0", "13.1")),
-        json.loads(HEAT_CIRCUIT_FLOW_TEMPERATURE_SETPOINT % ("0", "26.5543")),
-        json.loads(HEAT_CIRCUIT_MIXER_FLOW_TEMPERATURE % ("0", "22.2143")),
-        json.loads(HEAT_CIRCUIT_MIXER_RETURN_FLOW_TEMPERATURE % ("0", "20.2143")),
+        json.loads(HEAT_CIRCUIT_DEW_POINT % ("0", "13.104257")),
+        json.loads(HEAT_CIRCUIT_FLOW_TEMPERATURE_SETPOINT % ("0", "26.553419")),
+        json.loads(HEAT_CIRCUIT_MIXER_FLOW_TEMPERATURE % ("0", "22.200001")),
+        json.loads(HEAT_CIRCUIT_MIXER_RETURN_FLOW_TEMPERATURE % ("0", "20.200001")),
         json.loads(HEAT_CIRCUIT_MIXER_POSITION % ("0", "-1")),
         json.loads(HEAT_CIRCUIT_PUMP_STATE % ("0", "true")),
-        json.loads(HEAT_CIRCUIT_RETURN_FLOW_TEMPERATURE % ("0", "21.2143")),
+        json.loads(HEAT_CIRCUIT_RETURN_FLOW_TEMPERATURE % ("0", "21.200001")),
         json.loads(HEAT_CIRCUIT_TARGET_TEMPERATURE_DAY % ("0", "20.5")),
         json.loads(HEAT_CIRCUIT_TARGET_COOLING_TEMPERATURE_DAY % ("0", "20.5")),
         json.loads(HEAT_CIRCUIT_HEATING_LIMIT_DAY % ("0", "20")),
@@ -2483,50 +2089,50 @@ def get_single_position_data_response(
         json.loads(HEAT_CIRCUIT_TARGET_TEMPERATURE_OFFSET % ("0", heat_circuit_target_temperature_offset)),
         json.loads(HEAT_CIRCUIT_USE_EXCESS_ENERGY % ("0", "true")),
         json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_TARGET_TEMPERATURE % ("0", "30")),
-        json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_TARGET_TEMPERATURE_HYSTERESIS % ("0", "0.7")),
+        json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_TARGET_TEMPERATURE_HYSTERESIS % ("0", "0.69999999")),
         json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_TARGET_COOLING_TEMPERATURE % ("0", "10")),
-        json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_TARGET_COOLING_TEMPERATURE_HYSTERESIS % ("0", "0.7")),
+        json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_TARGET_COOLING_TEMPERATURE_HYSTERESIS % ("0", "0.69999999")),
         json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_MODE % ("0", "1")),
         json.loads(HEAT_CIRCUIT_AWAY_START_DATE % ("0", "1769036400")),
         json.loads(HEAT_CIRCUIT_AWAY_END_DATE % ("0", "1769122799")),
         json.loads(HEAT_CIRCUIT_HEATING_CURVE_OFFSET % ("0", "0.5")),
         json.loads(HEAT_CIRCUIT_COOLING_CURVE_OFFSET % ("0", "0.5")),
-        json.loads(HEAT_CIRCUIT_HEATING_CURVE_SLOPE % ("0", "0.4")),
-        json.loads(HEAT_CIRCUIT_COOLING_CURVE_SLOPE % ("0", "0.4")),
+        json.loads(HEAT_CIRCUIT_HEATING_CURVE_SLOPE % ("0", "0.40000001")),
+        json.loads(HEAT_CIRCUIT_COOLING_CURVE_SLOPE % ("0", "0.40000001")),
         json.loads(HEAT_CIRCUIT_USE_HEATING_CURVE % ("0", "false")),
         json.loads(HEAT_CIRCUIT_HEATING_CURVE % ("0", "HC4")),
         json.loads(HEAT_CIRCUIT_COOLING_CURVE % ("0", "HC2")),
         json.loads(HEAT_CIRCUIT_PUMP_SPEED % ("0", "0.5")),
         json.loads(SOLAR_CIRCUIT_OPERATION_MODE % ("0", "0")),
-        json.loads(SOLAR_CIRCUIT_SOURCE_TEMPERATURE % ("0", "44.43")),
-        json.loads(SOLAR_CIRCUIT_PUMP_1 % ("0", "0.63")),
-        json.loads(SOLAR_CIRCUIT_PUMP_2 % ("0", "0.43")),
-        json.loads(SOLAR_CIRCUIT_CURRENT_TEMPERATURE_1 % ("0", "36.76")),
-        json.loads(SOLAR_CIRCUIT_CURRENT_TEMPERATURE_2 % ("1", "26.76")),
+        json.loads(SOLAR_CIRCUIT_SOURCE_TEMPERATURE % ("0", "44.400002")),
+        json.loads(SOLAR_CIRCUIT_PUMP_1 % ("0", "0.62941831")),
+        json.loads(SOLAR_CIRCUIT_PUMP_2 % ("0", "0.43000001")),
+        json.loads(SOLAR_CIRCUIT_CURRENT_TEMPERATURE_1 % ("0", "36.799999")),
+        json.loads(SOLAR_CIRCUIT_CURRENT_TEMPERATURE_2 % ("1", "26.799999")),
         json.loads(SOLAR_CIRCUIT_TARGET_TEMPERATURE_1 % ("0", "55")),
         json.loads(SOLAR_CIRCUIT_TARGET_TEMPERATURE_2 % ("1", "55")),
         json.loads(SOLAR_CIRCUIT_HEAT_REQUEST % ("0", "true")),
         json.loads(SOLAR_CIRCUIT_HEAT_REQUEST % ("1", "false")),
-        json.loads(SOLAR_CIRCUIT_HEATING_ENERGY % ("0", "1098456400")),
+        json.loads(SOLAR_CIRCUIT_HEATING_ENERGY % ("0", "1.0984564e+09")),
         json.loads(SOLAR_CIRCUIT_DAILY_ENERGY % ("0", "298018")),
         json.loads(SOLAR_CIRCUIT_ACTUAL_POWER % ("0", "3452")),
         json.loads(SOLAR_CIRCUIT_PRIORITY_1_BEFORE_2 % ("0", "true")),
         *get_heat_pump_data(compressor_night_speed="true"),
-        json.loads(BUFFER_TANK_CURRENT_TOP_TEMPERATURE % ("0", "45.67")),
-        json.loads(BUFFER_TANK_CURRENT_BOTTOM_TEMPERATURE % ("0", "25.67")),
-        json.loads(BUFFER_TANK_EXCESS_ENERGY_TARGET_TEMPERATURE % ("0", "75.0")),
-        json.loads(BUFFER_TANK_EXCESS_ENERGY_TARGET_TEMPERATURE_HYSTERESIS % ("0", "2.00")),
+        json.loads(BUFFER_TANK_CURRENT_TOP_TEMPERATURE % ("0", "45.700001")),
+        json.loads(BUFFER_TANK_CURRENT_BOTTOM_TEMPERATURE % ("0", "25.700001")),
+        json.loads(BUFFER_TANK_EXCESS_ENERGY_TARGET_TEMPERATURE % ("0", "75")),
+        json.loads(BUFFER_TANK_EXCESS_ENERGY_TARGET_TEMPERATURE_HYSTERESIS % ("0", "2")),
         json.loads(BUFFER_TANK_EXCESS_ENERGY_MODE % ("0", "1")),
         json.loads(BUFFER_TANK_OPERATING_MODE % ("0", "0")),
-        json.loads(BUFFER_TANK_STANDBY_TEMPERATURE % ("0", "10.00")),
-        json.loads(BUFFER_TANK_TARGET_TEMPERATURE % ("0", "44.00")),
+        json.loads(BUFFER_TANK_STANDBY_TEMPERATURE % ("0", "10")),
+        json.loads(BUFFER_TANK_TARGET_TEMPERATURE % ("0", "44")),
         json.loads(BUFFER_TANK_HEAT_REQUEST % ("0", "false")),
         json.loads(BUFFER_TANK_COOL_REQUEST % ("0", "true")),
         json.loads(BUFFER_TANK_USE_EXCESS_ENERGY % ("0", "true")),
-        json.loads(BUFFER_TANK_OUTDOOR_TEMPERATURE_EXCESS_ENERGY_LIMIT % ("0", "25.00")),
+        json.loads(BUFFER_TANK_OUTDOOR_TEMPERATURE_EXCESS_ENERGY_LIMIT % ("0", "25")),
         json.loads(HOT_WATER_TANK_USE_EXCESS_ENERGY % ("0", "true")),
-        json.loads(HOT_WATER_TANK_EXCESS_ENERGY_TARGET_TEMPERATURE % ("0", "75.00")),
-        json.loads(HOT_WATER_TANK_EXCESS_ENERGY_TARGET_TEMPERATURE_HYSTERESIS % ("0", "4.00")),
+        json.loads(HOT_WATER_TANK_EXCESS_ENERGY_TARGET_TEMPERATURE % ("0", "75")),
+        json.loads(HOT_WATER_TANK_EXCESS_ENERGY_TARGET_TEMPERATURE_HYSTERESIS % ("0", "4")),
         json.loads(HOT_WATER_TANK_EXCESS_ENERGY_MODE % ("0", "1")),
         json.loads(HOT_WATER_TANK_HEAT_REQUEST % ("0", "false")),
         json.loads(HOT_WATER_TANK_FRESH_WATER_FLOW % ("0", "true")),
@@ -2535,13 +2141,13 @@ def get_single_position_data_response(
         json.loads(HOT_WATER_TANK_STANDBY_TEMPERATURE % ("0", "32.5")),
         json.loads(HOT_WATER_TANK_OPERATION_MODE % ("0", "3")),
         json.loads(HOT_WATER_TANK_CURRENT_TEMPERATURE % ("0", "47.700001")),
-        json.loads(HOT_WATER_TANK_CIRCULATION_RETURN_TEMPERATURE % ("0", "34.45")),
+        json.loads(HOT_WATER_TANK_CIRCULATION_RETURN_TEMPERATURE % ("0", "34.5")),
         json.loads(HOT_WATER_TANK_CIRCULATION_PUMP_STATE % ("0", "false")),
         json.loads(SWITCH_VALVE_POSITION % ("0", "1")),
         json.loads(PHOTOVOLTAIC_EXCESS_ENERGY_ACTIVE % "true"),
-        json.loads(PHOTOVOLTAIC_EXCESS_POWER % "437.700001"),
-        json.loads(PHOTOVOLTAIC_DAILY_ENERGY % "1575720000"),
-        json.loads(PHOTOVOLTAIC_TOTAL_ENERGY % "1575720000"),
+        json.loads(PHOTOVOLTAIC_EXCESS_POWER % "437.70001"),
+        json.loads(PHOTOVOLTAIC_DAILY_ENERGY % "1.5757199e+09"),
+        json.loads(PHOTOVOLTAIC_TOTAL_ENERGY % "1.5757199e+09"),
         SYSTEM_OUTDOOR_TEMPERATURE,
         SYSTEM_OPERATING_MODE,
         SYSTEM_CPU_USAGE,
@@ -2564,15 +2170,15 @@ DEFAULT_POSITION_DATA_RESPONSE: Final[list[dict[str, Any]]] = replace_values(
     (HEAT_CIRCUIT_USE_HEATING_CURVE, "0", "true"),
     (HEAT_CIRCUIT_HEATING_CURVE, "0", "HC1"),
     (HOT_WATER_TANK_FRESH_WATER_FLOW, "0", "false"),
-    (HOT_WATER_TANK_CIRCULATION_RETURN_TEMPERATURE, "0", "30.45"),
+    (HOT_WATER_TANK_CIRCULATION_RETURN_TEMPERATURE, "0", "30.5"),
 )
 
 # The values of `MULTIPLE_POSITION_DATA_RESPONSE` are split by section.
 MULTIPLE_POSITION_EXTERNAL_HEAT_SOURCE_DATA: Final[list[dict[str, Any]]] = [
     json.loads(EXTERNAL_HEAT_SOURCE_OPERATING_MODE % ("0", "0")),
     json.loads(EXTERNAL_HEAT_SOURCE_OPERATING_MODE % ("1", "1")),
-    json.loads(EXTERNAL_HEAT_SOURCE_TARGET_TEMPERATURE % ("0", "17.23")),
-    json.loads(EXTERNAL_HEAT_SOURCE_TARGET_TEMPERATURE % ("1", "17.23")),
+    json.loads(EXTERNAL_HEAT_SOURCE_TARGET_TEMPERATURE % ("0", "17.227032")),
+    json.loads(EXTERNAL_HEAT_SOURCE_TARGET_TEMPERATURE % ("1", "17.227032")),
     json.loads(EXTERNAL_HEAT_SOURCE_HEAT_REQUEST % ("0", "true")),
     json.loads(EXTERNAL_HEAT_SOURCE_HEAT_REQUEST % ("1", "true")),
     json.loads(EXTERNAL_HEAT_SOURCE_OPERATING_TIME % ("0", "812999")),
@@ -2596,24 +2202,24 @@ MULTIPLE_POSITION_EXTERNAL_HEAT_SOURCE_DATA: Final[list[dict[str, Any]]] = [
 ]
 
 MULTIPLE_POSITION_HEAT_CIRCUIT_DATA: Final[list[dict[str, Any]]] = [
-    json.loads(HEAT_CIRCUIT_ROOM_TEMPERATURE % ("0", "22.42")),
-    json.loads(HEAT_CIRCUIT_ROOM_TEMPERATURE % ("1", "22.42")),
+    json.loads(HEAT_CIRCUIT_ROOM_TEMPERATURE % ("0", "22.418831")),
+    json.loads(HEAT_CIRCUIT_ROOM_TEMPERATURE % ("1", "22.418831")),
     json.loads(HEAT_CIRCUIT_ROOM_HUMIDITY % ("0", "53")),
     json.loads(HEAT_CIRCUIT_ROOM_HUMIDITY % ("1", "53")),
-    json.loads(HEAT_CIRCUIT_DEW_POINT % ("0", "13.1")),
-    json.loads(HEAT_CIRCUIT_DEW_POINT % ("1", "13.1")),
-    json.loads(HEAT_CIRCUIT_FLOW_TEMPERATURE_SETPOINT % ("0", "26.5543")),
-    json.loads(HEAT_CIRCUIT_FLOW_TEMPERATURE_SETPOINT % ("1", "26.5543")),
-    json.loads(HEAT_CIRCUIT_MIXER_FLOW_TEMPERATURE % ("0", "22.2143")),
-    json.loads(HEAT_CIRCUIT_MIXER_FLOW_TEMPERATURE % ("1", "22.2143")),
-    json.loads(HEAT_CIRCUIT_MIXER_RETURN_FLOW_TEMPERATURE % ("0", "20.2143")),
-    json.loads(HEAT_CIRCUIT_MIXER_RETURN_FLOW_TEMPERATURE % ("1", "20.2143")),
+    json.loads(HEAT_CIRCUIT_DEW_POINT % ("0", "13.104257")),
+    json.loads(HEAT_CIRCUIT_DEW_POINT % ("1", "13.104257")),
+    json.loads(HEAT_CIRCUIT_FLOW_TEMPERATURE_SETPOINT % ("0", "26.553419")),
+    json.loads(HEAT_CIRCUIT_FLOW_TEMPERATURE_SETPOINT % ("1", "26.553419")),
+    json.loads(HEAT_CIRCUIT_MIXER_FLOW_TEMPERATURE % ("0", "22.200001")),
+    json.loads(HEAT_CIRCUIT_MIXER_FLOW_TEMPERATURE % ("1", "22.200001")),
+    json.loads(HEAT_CIRCUIT_MIXER_RETURN_FLOW_TEMPERATURE % ("0", "20.200001")),
+    json.loads(HEAT_CIRCUIT_MIXER_RETURN_FLOW_TEMPERATURE % ("1", "20.200001")),
     json.loads(HEAT_CIRCUIT_MIXER_POSITION % ("0", "-1")),
     json.loads(HEAT_CIRCUIT_MIXER_POSITION % ("1", "-1")),
     json.loads(HEAT_CIRCUIT_PUMP_STATE % ("0", "true")),
     json.loads(HEAT_CIRCUIT_PUMP_STATE % ("1", "true")),
-    json.loads(HEAT_CIRCUIT_RETURN_FLOW_TEMPERATURE % ("0", "21.2143")),
-    json.loads(HEAT_CIRCUIT_RETURN_FLOW_TEMPERATURE % ("1", "21.2143")),
+    json.loads(HEAT_CIRCUIT_RETURN_FLOW_TEMPERATURE % ("0", "21.200001")),
+    json.loads(HEAT_CIRCUIT_RETURN_FLOW_TEMPERATURE % ("1", "21.200001")),
     json.loads(HEAT_CIRCUIT_TARGET_TEMPERATURE_DAY % ("0", "20.5")),
     json.loads(HEAT_CIRCUIT_TARGET_TEMPERATURE_DAY % ("1", "20.5")),
     json.loads(HEAT_CIRCUIT_TARGET_COOLING_TEMPERATURE_DAY % ("0", "20.5")),
@@ -2656,12 +2262,12 @@ MULTIPLE_POSITION_HEAT_CIRCUIT_DATA: Final[list[dict[str, Any]]] = [
     json.loads(HEAT_CIRCUIT_USE_EXCESS_ENERGY % ("1", "false")),
     json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_TARGET_TEMPERATURE % ("0", "30")),
     json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_TARGET_TEMPERATURE % ("1", "30")),
-    json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_TARGET_TEMPERATURE_HYSTERESIS % ("0", "0.7")),
-    json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_TARGET_TEMPERATURE_HYSTERESIS % ("1", "0.7")),
+    json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_TARGET_TEMPERATURE_HYSTERESIS % ("0", "0.69999999")),
+    json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_TARGET_TEMPERATURE_HYSTERESIS % ("1", "0.69999999")),
     json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_TARGET_COOLING_TEMPERATURE % ("0", "10")),
     json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_TARGET_COOLING_TEMPERATURE % ("1", "10")),
-    json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_TARGET_COOLING_TEMPERATURE_HYSTERESIS % ("0", "0.7")),
-    json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_TARGET_COOLING_TEMPERATURE_HYSTERESIS % ("1", "0.7")),
+    json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_TARGET_COOLING_TEMPERATURE_HYSTERESIS % ("0", "0.69999999")),
+    json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_TARGET_COOLING_TEMPERATURE_HYSTERESIS % ("1", "0.69999999")),
     json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_MODE % ("0", "1")),
     json.loads(HEAT_CIRCUIT_EXCESS_ENERGY_MODE % ("1", "0")),
     json.loads(HEAT_CIRCUIT_AWAY_START_DATE % ("0", "1769036400")),
@@ -2673,9 +2279,9 @@ MULTIPLE_POSITION_HEAT_CIRCUIT_DATA: Final[list[dict[str, Any]]] = [
     json.loads(HEAT_CIRCUIT_COOLING_CURVE_OFFSET % ("0", "0.5")),
     json.loads(HEAT_CIRCUIT_COOLING_CURVE_OFFSET % ("1", "-1.5")),
     json.loads(HEAT_CIRCUIT_HEATING_CURVE_SLOPE % ("0", "0.5")),
-    json.loads(HEAT_CIRCUIT_HEATING_CURVE_SLOPE % ("1", "0.6")),
+    json.loads(HEAT_CIRCUIT_HEATING_CURVE_SLOPE % ("1", "0.60000002")),
     json.loads(HEAT_CIRCUIT_COOLING_CURVE_SLOPE % ("0", "0.5")),
-    json.loads(HEAT_CIRCUIT_COOLING_CURVE_SLOPE % ("1", "0.6")),
+    json.loads(HEAT_CIRCUIT_COOLING_CURVE_SLOPE % ("1", "0.60000002")),
     json.loads(HEAT_CIRCUIT_USE_HEATING_CURVE % ("0", "false")),
     json.loads(HEAT_CIRCUIT_USE_HEATING_CURVE % ("1", "true")),
     json.loads(HEAT_CIRCUIT_HEATING_CURVE % ("0", "HC6")),
@@ -2689,16 +2295,16 @@ MULTIPLE_POSITION_HEAT_CIRCUIT_DATA: Final[list[dict[str, Any]]] = [
 MULTIPLE_POSITION_SOLAR_CIRCUIT_DATA: Final[list[dict[str, Any]]] = [
     json.loads(SOLAR_CIRCUIT_OPERATION_MODE % ("0", "0")),
     json.loads(SOLAR_CIRCUIT_OPERATION_MODE % ("1", "1")),
-    json.loads(SOLAR_CIRCUIT_SOURCE_TEMPERATURE % ("0", "44.43")),
-    json.loads(SOLAR_CIRCUIT_SOURCE_TEMPERATURE % ("1", "34.43")),
-    json.loads(SOLAR_CIRCUIT_PUMP_1 % ("0", "0.63")),
-    json.loads(SOLAR_CIRCUIT_PUMP_1 % ("1", "0.43")),
-    json.loads(SOLAR_CIRCUIT_PUMP_2 % ("0", "0.73")),
-    json.loads(SOLAR_CIRCUIT_PUMP_2 % ("1", "0.53")),
-    json.loads(SOLAR_CIRCUIT_CURRENT_TEMPERATURE_1 % ("0", "36.76")),
-    json.loads(SOLAR_CIRCUIT_CURRENT_TEMPERATURE_2 % ("1", "26.76")),
-    json.loads(SOLAR_CIRCUIT_CURRENT_TEMPERATURE_1 % ("2", "46.76")),
-    json.loads(SOLAR_CIRCUIT_CURRENT_TEMPERATURE_2 % ("3", "56.76")),
+    json.loads(SOLAR_CIRCUIT_SOURCE_TEMPERATURE % ("0", "44.400002")),
+    json.loads(SOLAR_CIRCUIT_SOURCE_TEMPERATURE % ("1", "34.400002")),
+    json.loads(SOLAR_CIRCUIT_PUMP_1 % ("0", "0.62941831")),
+    json.loads(SOLAR_CIRCUIT_PUMP_1 % ("1", "0.43000001")),
+    json.loads(SOLAR_CIRCUIT_PUMP_2 % ("0", "0.73000002")),
+    json.loads(SOLAR_CIRCUIT_PUMP_2 % ("1", "0.52999997")),
+    json.loads(SOLAR_CIRCUIT_CURRENT_TEMPERATURE_1 % ("0", "36.799999")),
+    json.loads(SOLAR_CIRCUIT_CURRENT_TEMPERATURE_2 % ("1", "26.799999")),
+    json.loads(SOLAR_CIRCUIT_CURRENT_TEMPERATURE_1 % ("2", "46.799999")),
+    json.loads(SOLAR_CIRCUIT_CURRENT_TEMPERATURE_2 % ("3", "56.799999")),
     json.loads(SOLAR_CIRCUIT_TARGET_TEMPERATURE_1 % ("0", "55")),
     json.loads(SOLAR_CIRCUIT_TARGET_TEMPERATURE_2 % ("1", "54")),
     json.loads(SOLAR_CIRCUIT_TARGET_TEMPERATURE_1 % ("2", "53")),
@@ -2707,8 +2313,8 @@ MULTIPLE_POSITION_SOLAR_CIRCUIT_DATA: Final[list[dict[str, Any]]] = [
     json.loads(SOLAR_CIRCUIT_HEAT_REQUEST % ("1", "false")),
     json.loads(SOLAR_CIRCUIT_HEAT_REQUEST % ("2", "false")),
     json.loads(SOLAR_CIRCUIT_HEAT_REQUEST % ("3", "true")),
-    json.loads(SOLAR_CIRCUIT_HEATING_ENERGY % ("0", "1098456400")),
-    json.loads(SOLAR_CIRCUIT_HEATING_ENERGY % ("1", "1098456400")),
+    json.loads(SOLAR_CIRCUIT_HEATING_ENERGY % ("0", "1.0984564e+09")),
+    json.loads(SOLAR_CIRCUIT_HEATING_ENERGY % ("1", "1.0984564e+09")),
     json.loads(SOLAR_CIRCUIT_DAILY_ENERGY % ("0", "298018")),
     json.loads(SOLAR_CIRCUIT_DAILY_ENERGY % ("1", "298018")),
     json.loads(SOLAR_CIRCUIT_ACTUAL_POWER % ("0", "3452")),
@@ -2721,44 +2327,44 @@ MULTIPLE_POSITION_SOLAR_CIRCUIT_DATA: Final[list[dict[str, Any]]] = [
 # circuits.
 MULTIPLE_POSITION_HEAT_PUMP_TO_SYSTEM_DATA: Final[list[dict[str, Any]]] = [
     *get_heat_pump_data(compressor_night_speed="true"),
-    json.loads(BUFFER_TANK_CURRENT_TOP_TEMPERATURE % ("0", "45.67")),
-    json.loads(BUFFER_TANK_CURRENT_TOP_TEMPERATURE % ("1", "35.67")),
-    json.loads(BUFFER_TANK_CURRENT_BOTTOM_TEMPERATURE % ("0", "15.67")),
-    json.loads(BUFFER_TANK_CURRENT_BOTTOM_TEMPERATURE % ("1", "25.67")),
-    json.loads(BUFFER_TANK_EXCESS_ENERGY_TARGET_TEMPERATURE % ("0", "75.0")),
-    json.loads(BUFFER_TANK_EXCESS_ENERGY_TARGET_TEMPERATURE % ("1", "75.0")),
-    json.loads(BUFFER_TANK_EXCESS_ENERGY_TARGET_TEMPERATURE_HYSTERESIS % ("0", "2.00")),
-    json.loads(BUFFER_TANK_EXCESS_ENERGY_TARGET_TEMPERATURE_HYSTERESIS % ("1", "2.00")),
+    json.loads(BUFFER_TANK_CURRENT_TOP_TEMPERATURE % ("0", "45.700001")),
+    json.loads(BUFFER_TANK_CURRENT_TOP_TEMPERATURE % ("1", "35.700001")),
+    json.loads(BUFFER_TANK_CURRENT_BOTTOM_TEMPERATURE % ("0", "15.695418")),
+    json.loads(BUFFER_TANK_CURRENT_BOTTOM_TEMPERATURE % ("1", "25.700001")),
+    json.loads(BUFFER_TANK_EXCESS_ENERGY_TARGET_TEMPERATURE % ("0", "75")),
+    json.loads(BUFFER_TANK_EXCESS_ENERGY_TARGET_TEMPERATURE % ("1", "75")),
+    json.loads(BUFFER_TANK_EXCESS_ENERGY_TARGET_TEMPERATURE_HYSTERESIS % ("0", "2")),
+    json.loads(BUFFER_TANK_EXCESS_ENERGY_TARGET_TEMPERATURE_HYSTERESIS % ("1", "2")),
     json.loads(BUFFER_TANK_EXCESS_ENERGY_MODE % ("0", "1")),
     json.loads(BUFFER_TANK_EXCESS_ENERGY_MODE % ("1", "0")),
     json.loads(BUFFER_TANK_OPERATING_MODE % ("0", "0")),
     json.loads(BUFFER_TANK_OPERATING_MODE % ("1", "1")),
-    json.loads(BUFFER_TANK_STANDBY_TEMPERATURE % ("0", "10.00")),
-    json.loads(BUFFER_TANK_STANDBY_TEMPERATURE % ("1", "11.00")),
-    json.loads(BUFFER_TANK_TARGET_TEMPERATURE % ("0", "44.00")),
-    json.loads(BUFFER_TANK_TARGET_TEMPERATURE % ("1", "43.00")),
+    json.loads(BUFFER_TANK_STANDBY_TEMPERATURE % ("0", "10")),
+    json.loads(BUFFER_TANK_STANDBY_TEMPERATURE % ("1", "11")),
+    json.loads(BUFFER_TANK_TARGET_TEMPERATURE % ("0", "44")),
+    json.loads(BUFFER_TANK_TARGET_TEMPERATURE % ("1", "43")),
     json.loads(BUFFER_TANK_HEAT_REQUEST % ("0", "false")),
     json.loads(BUFFER_TANK_HEAT_REQUEST % ("1", "true")),
     json.loads(BUFFER_TANK_COOL_REQUEST % ("0", "true")),
     json.loads(BUFFER_TANK_COOL_REQUEST % ("1", "false")),
     json.loads(BUFFER_TANK_USE_EXCESS_ENERGY % ("0", "true")),
     json.loads(BUFFER_TANK_USE_EXCESS_ENERGY % ("1", "false")),
-    json.loads(BUFFER_TANK_OUTDOOR_TEMPERATURE_EXCESS_ENERGY_LIMIT % ("0", "25.00")),
-    json.loads(BUFFER_TANK_OUTDOOR_TEMPERATURE_EXCESS_ENERGY_LIMIT % ("1", "25.00")),
+    json.loads(BUFFER_TANK_OUTDOOR_TEMPERATURE_EXCESS_ENERGY_LIMIT % ("0", "25")),
+    json.loads(BUFFER_TANK_OUTDOOR_TEMPERATURE_EXCESS_ENERGY_LIMIT % ("1", "25")),
     json.loads(HOT_WATER_TANK_USE_EXCESS_ENERGY % ("0", "true")),
     json.loads(HOT_WATER_TANK_USE_EXCESS_ENERGY % ("1", "false")),
-    json.loads(HOT_WATER_TANK_EXCESS_ENERGY_TARGET_TEMPERATURE % ("0", "75.00")),
-    json.loads(HOT_WATER_TANK_EXCESS_ENERGY_TARGET_TEMPERATURE % ("1", "75.00")),
-    json.loads(HOT_WATER_TANK_EXCESS_ENERGY_TARGET_TEMPERATURE_HYSTERESIS % ("0", "4.00")),
-    json.loads(HOT_WATER_TANK_EXCESS_ENERGY_TARGET_TEMPERATURE_HYSTERESIS % ("1", "4.00")),
+    json.loads(HOT_WATER_TANK_EXCESS_ENERGY_TARGET_TEMPERATURE % ("0", "75")),
+    json.loads(HOT_WATER_TANK_EXCESS_ENERGY_TARGET_TEMPERATURE % ("1", "75")),
+    json.loads(HOT_WATER_TANK_EXCESS_ENERGY_TARGET_TEMPERATURE_HYSTERESIS % ("0", "4")),
+    json.loads(HOT_WATER_TANK_EXCESS_ENERGY_TARGET_TEMPERATURE_HYSTERESIS % ("1", "4")),
     json.loads(HOT_WATER_TANK_EXCESS_ENERGY_MODE % ("0", "1")),
     json.loads(HOT_WATER_TANK_EXCESS_ENERGY_MODE % ("1", "0")),
     json.loads(HOT_WATER_TANK_HEAT_REQUEST % ("0", "false")),
     json.loads(HOT_WATER_TANK_HEAT_REQUEST % ("1", "true")),
     json.loads(HOT_WATER_TANK_FRESH_WATER_FLOW % ("0", "false")),
     json.loads(HOT_WATER_TANK_FRESH_WATER_FLOW % ("1", "true")),
-    json.loads(HOT_WATER_TANK_FRESH_WATER_MODULE_TEMPERATURE % ("0", "51.23")),
-    json.loads(HOT_WATER_TANK_FRESH_WATER_MODULE_TEMPERATURE % ("1", "51.23")),
+    json.loads(HOT_WATER_TANK_FRESH_WATER_MODULE_TEMPERATURE % ("0", "51.200001")),
+    json.loads(HOT_WATER_TANK_FRESH_WATER_MODULE_TEMPERATURE % ("1", "51.200001")),
     json.loads(HOT_WATER_TANK_TARGET_TEMPERATURE % ("0", "51")),
     json.loads(HOT_WATER_TANK_TARGET_TEMPERATURE % ("1", "51")),
     json.loads(HOT_WATER_TANK_STANDBY_TEMPERATURE % ("0", "32.5")),
@@ -2767,16 +2373,16 @@ MULTIPLE_POSITION_HEAT_PUMP_TO_SYSTEM_DATA: Final[list[dict[str, Any]]] = [
     json.loads(HOT_WATER_TANK_OPERATION_MODE % ("1", "0")),
     json.loads(HOT_WATER_TANK_CURRENT_TEMPERATURE % ("0", "47.700001")),
     json.loads(HOT_WATER_TANK_CURRENT_TEMPERATURE % ("1", "47.700001")),
-    json.loads(HOT_WATER_TANK_CIRCULATION_RETURN_TEMPERATURE % ("0", "30.45")),
-    json.loads(HOT_WATER_TANK_CIRCULATION_RETURN_TEMPERATURE % ("1", "27.45")),
+    json.loads(HOT_WATER_TANK_CIRCULATION_RETURN_TEMPERATURE % ("0", "30.5")),
+    json.loads(HOT_WATER_TANK_CIRCULATION_RETURN_TEMPERATURE % ("1", "27.5")),
     json.loads(HOT_WATER_TANK_CIRCULATION_PUMP_STATE % ("0", "true")),
     json.loads(HOT_WATER_TANK_CIRCULATION_PUMP_STATE % ("1", "false")),
     json.loads(SWITCH_VALVE_POSITION % ("0", "0")),
     json.loads(SWITCH_VALVE_POSITION % ("1", "1")),
     json.loads(PHOTOVOLTAIC_EXCESS_ENERGY_ACTIVE % "true"),
-    json.loads(PHOTOVOLTAIC_EXCESS_POWER % "437.700001"),
-    json.loads(PHOTOVOLTAIC_DAILY_ENERGY % "1575720000"),
-    json.loads(PHOTOVOLTAIC_TOTAL_ENERGY % "1575720000"),
+    json.loads(PHOTOVOLTAIC_EXCESS_POWER % "437.70001"),
+    json.loads(PHOTOVOLTAIC_DAILY_ENERGY % "1.5757199e+09"),
+    json.loads(PHOTOVOLTAIC_TOTAL_ENERGY % "1.5757199e+09"),
     SYSTEM_OUTDOOR_TEMPERATURE,
     SYSTEM_OPERATING_MODE,
     SYSTEM_CPU_USAGE,
@@ -2805,10 +2411,10 @@ MULTIPLE_POSITION_OTHER_MODES_DATA_RESPONSE: Final[list[dict[str, Any]]] = repla
     (HEAT_CIRCUIT_HEATING_CURVE_OFFSET, "1", "-4.5"),
     (HEAT_CIRCUIT_COOLING_CURVE_OFFSET, "0", "4.5"),
     (HEAT_CIRCUIT_COOLING_CURVE_OFFSET, "1", "-4.5"),
-    (HEAT_CIRCUIT_HEATING_CURVE_SLOPE, "0", "0.7"),
-    (HEAT_CIRCUIT_HEATING_CURVE_SLOPE, "1", "0.8"),
-    (HEAT_CIRCUIT_COOLING_CURVE_SLOPE, "0", "0.7"),
-    (HEAT_CIRCUIT_COOLING_CURVE_SLOPE, "1", "0.8"),
+    (HEAT_CIRCUIT_HEATING_CURVE_SLOPE, "0", "0.69999999"),
+    (HEAT_CIRCUIT_HEATING_CURVE_SLOPE, "1", "0.80000001"),
+    (HEAT_CIRCUIT_COOLING_CURVE_SLOPE, "0", "0.69999999"),
+    (HEAT_CIRCUIT_COOLING_CURVE_SLOPE, "1", "0.80000001"),
     (HEAT_CIRCUIT_HEATING_CURVE, "0", "HC FBH"),
     (HEAT_CIRCUIT_HEATING_CURVE, "1", "HC HK"),
     (HEAT_CIRCUIT_COOLING_CURVE, "0", "HC2"),
@@ -2820,7 +2426,7 @@ MULTIPLE_POSITION_OTHER_MODES_DATA_RESPONSE: Final[list[dict[str, Any]]] = repla
     (BUFFER_TANK_OPERATING_MODE, "1", "2"),
     (HOT_WATER_TANK_OPERATION_MODE, "0", "2"),
     (HOT_WATER_TANK_OPERATION_MODE, "1", "1"),
-    (HOT_WATER_TANK_CIRCULATION_RETURN_TEMPERATURE, "1", "36.45"),
+    (HOT_WATER_TANK_CIRCULATION_RETURN_TEMPERATURE, "1", "36.5"),
     (HOT_WATER_TANK_CIRCULATION_PUMP_STATE, "0", "false"),
     (HOT_WATER_TANK_CIRCULATION_PUMP_STATE, "1", "true"),
 )
@@ -2839,19 +2445,19 @@ ENTITY_UPDATED_DATA_RESPONSE: Final[list[dict[str, Any]]] = replace_values(
     (HEAT_CIRCUIT_HEATING_CURVE_OFFSET, "1", "-0.5"),
     (HEAT_CIRCUIT_COOLING_CURVE_OFFSET, "1", "-0.5"),
     (HEAT_CIRCUIT_HEATING_CURVE_SLOPE, "0", "0.2"),
-    (HEAT_CIRCUIT_HEATING_CURVE_SLOPE, "1", "0.3"),
+    (HEAT_CIRCUIT_HEATING_CURVE_SLOPE, "1", "0.30000001"),
     (HEAT_CIRCUIT_COOLING_CURVE_SLOPE, "0", "0.2"),
-    (HEAT_CIRCUIT_COOLING_CURVE_SLOPE, "1", "0.3"),
+    (HEAT_CIRCUIT_COOLING_CURVE_SLOPE, "1", "0.30000001"),
     (HEAT_CIRCUIT_USE_HEATING_CURVE, "0", "true"),
     (HEAT_CIRCUIT_USE_HEATING_CURVE, "1", "false"),
     (HEAT_CIRCUIT_HEATING_CURVE, "0", "HC2"),
     (HEAT_CIRCUIT_HEATING_CURVE, "1", "HC3"),
     (HEAT_CIRCUIT_COOLING_CURVE, "0", "HC4"),
     (HEAT_CIRCUIT_COOLING_CURVE, "1", "HC4"),
-    (SOLAR_CIRCUIT_PUMP_1, "1", "0.67"),
-    (SOLAR_CIRCUIT_PUMP_2, "0", "0.43"),
-    (SOLAR_CIRCUIT_CURRENT_TEMPERATURE_1, "2", "36.76"),
-    (SOLAR_CIRCUIT_CURRENT_TEMPERATURE_2, "3", "26.76"),
+    (SOLAR_CIRCUIT_PUMP_1, "1", "0.67000002"),
+    (SOLAR_CIRCUIT_PUMP_2, "0", "0.43000001"),
+    (SOLAR_CIRCUIT_CURRENT_TEMPERATURE_1, "2", "36.799999"),
+    (SOLAR_CIRCUIT_CURRENT_TEMPERATURE_2, "3", "26.799999"),
     (SOLAR_CIRCUIT_TARGET_TEMPERATURE_2, "1", "55"),
     (SOLAR_CIRCUIT_TARGET_TEMPERATURE_1, "2", "55"),
     (SOLAR_CIRCUIT_TARGET_TEMPERATURE_2, "3", "55"),
@@ -2860,12 +2466,12 @@ ENTITY_UPDATED_DATA_RESPONSE: Final[list[dict[str, Any]]] = replace_values(
     (SOLAR_CIRCUIT_ACTUAL_POWER, "1", "3452"),
     (SOLAR_CIRCUIT_PRIORITY_1_BEFORE_2, "0", "true"),
     (SOLAR_CIRCUIT_PRIORITY_1_BEFORE_2, "1", "false"),
-    (BUFFER_TANK_CURRENT_TOP_TEMPERATURE, "0", "47.67"),
-    (BUFFER_TANK_CURRENT_TOP_TEMPERATURE, "1", "37.67"),
-    (BUFFER_TANK_CURRENT_BOTTOM_TEMPERATURE, "0", "25.67"),
-    (BUFFER_TANK_CURRENT_BOTTOM_TEMPERATURE, "1", "15.67"),
+    (BUFFER_TANK_CURRENT_TOP_TEMPERATURE, "0", "47.700001"),
+    (BUFFER_TANK_CURRENT_TOP_TEMPERATURE, "1", "37.700001"),
+    (BUFFER_TANK_CURRENT_BOTTOM_TEMPERATURE, "0", "25.700001"),
+    (BUFFER_TANK_CURRENT_BOTTOM_TEMPERATURE, "1", "15.695418"),
     (HOT_WATER_TANK_EXCESS_ENERGY_MODE, "1", "2"),
-    (HOT_WATER_TANK_CIRCULATION_RETURN_TEMPERATURE, "1", "32.45"),
+    (HOT_WATER_TANK_CIRCULATION_RETURN_TEMPERATURE, "1", "32.5"),
     (HOT_WATER_TANK_CIRCULATION_PUMP_STATE, "0", "false"),
     (HOT_WATER_TANK_CIRCULATION_PUMP_STATE, "1", "true"),
     (SWITCH_VALVE_POSITION, "0", "1"),
@@ -2895,7 +2501,7 @@ MULTIPLE_POSITION_WITHOUT_SOLAR_AND_HEATING_CIRCUITS_DATA_RESPONSE: Final[list[d
         *MULTIPLE_POSITION_HEAT_PUMP_TO_SYSTEM_DATA,
     ],
     (EXTERNAL_HEAT_SOURCE_USE_EXCESS_ENERGY, "1", "false"),
-    (BUFFER_TANK_TARGET_TEMPERATURE, "0", "42.00"),
+    (BUFFER_TANK_TARGET_TEMPERATURE, "0", "42"),
 )
 
 
@@ -2922,7 +2528,6 @@ HEATING_CURVE_POOL: Final[tuple[str, ...]] = (
 HEATING_CURVE_NAMES_RESPONSE: Final[list[dict[str, Any]]] = [
     {
         "name": f"APPL.CtrlAppl.sParam.linTabPool[{index}].name",
-        "attributes": {"longText": "Table name"},
         "value": name,
     }
     for index, name in enumerate(HEATING_CURVE_POOL)
@@ -2952,7 +2557,6 @@ def get_heating_curve_points_response(
         response += [
             {
                 "name": f"{prefix}.name",
-                "attributes": {"longText": "Table name"},
                 "value": (renamed or {}).get(name, name),
             },
             {

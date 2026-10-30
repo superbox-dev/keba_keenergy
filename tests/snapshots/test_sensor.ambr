@@ -12,8 +12,11 @@
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': '15.67',
+    'state': '15.695418',
   })
+# ---
+# name: test_sensors[de][sensor.keba_keenergy_12345678_buffer_tank_current_bottom_temperature_1_displayed]
+  '15.7 °C'
 # ---
 # name: test_sensors[de][sensor.keba_keenergy_12345678_buffer_tank_current_bottom_temperature_2]
   StateSnapshot({
@@ -28,8 +31,11 @@
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': '25.67',
+    'state': '25.700001',
   })
+# ---
+# name: test_sensors[de][sensor.keba_keenergy_12345678_buffer_tank_current_bottom_temperature_2_displayed]
+  '25.7 °C'
 # ---
 # name: test_sensors[de][sensor.keba_keenergy_12345678_buffer_tank_current_top_temperature_1]
   StateSnapshot({
@@ -44,8 +50,11 @@
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': '45.67',
+    'state': '45.700001',
   })
+# ---
+# name: test_sensors[de][sensor.keba_keenergy_12345678_buffer_tank_current_top_temperature_1_displayed]
+  '45.7 °C'
 # ---
 # name: test_sensors[de][sensor.keba_keenergy_12345678_buffer_tank_current_top_temperature_2]
   StateSnapshot({
@@ -60,8 +69,11 @@
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': '35.67',
+    'state': '35.700001',
   })
+# ---
+# name: test_sensors[de][sensor.keba_keenergy_12345678_buffer_tank_current_top_temperature_2_displayed]
+  '35.7 °C'
 # ---
 # name: test_sensors[de][sensor.keba_keenergy_12345678_buffer_tank_excess_energy_mode_1]
   StateSnapshot({
@@ -135,6 +147,9 @@
     'state': '75.0',
   })
 # ---
+# name: test_sensors[de][sensor.keba_keenergy_12345678_buffer_tank_excess_energy_target_temperature_1_displayed]
+  '75.0 °C'
+# ---
 # name: test_sensors[de][sensor.keba_keenergy_12345678_buffer_tank_excess_energy_target_temperature_2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
@@ -152,6 +167,9 @@
     'last_updated': <ANY>,
     'state': '75.0',
   })
+# ---
+# name: test_sensors[de][sensor.keba_keenergy_12345678_buffer_tank_excess_energy_target_temperature_2_displayed]
+  '75.0 °C'
 # ---
 # name: test_sensors[de][sensor.keba_keenergy_12345678_buffer_tank_operating_mode_1]
   StateSnapshot({
@@ -229,6 +247,9 @@
     'state': '10.0',
   })
 # ---
+# name: test_sensors[de][sensor.keba_keenergy_12345678_buffer_tank_standby_temperature_1_displayed]
+  '10.0 °C'
+# ---
 # name: test_sensors[de][sensor.keba_keenergy_12345678_buffer_tank_standby_temperature_2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
@@ -247,6 +268,9 @@
     'state': '11.0',
   })
 # ---
+# name: test_sensors[de][sensor.keba_keenergy_12345678_buffer_tank_standby_temperature_2_displayed]
+  '11.0 °C'
+# ---
 # name: test_sensors[de][sensor.keba_keenergy_12345678_buffer_tank_target_temperature_1]
   StateSnapshot({
     'attributes': ReadOnlyDict({
@@ -263,6 +287,9 @@
     'last_updated': <ANY>,
     'state': '44.0',
   })
+# ---
+# name: test_sensors[de][sensor.keba_keenergy_12345678_buffer_tank_target_temperature_1_displayed]
+  '44.0 °C'
 # ---
 # name: test_sensors[de][sensor.keba_keenergy_12345678_buffer_tank_target_temperature_2]
   StateSnapshot({
@@ -281,6 +308,9 @@
     'state': '43.0',
   })
 # ---
+# name: test_sensors[de][sensor.keba_keenergy_12345678_buffer_tank_target_temperature_2_displayed]
+  '43.0 °C'
+# ---
 # name: test_sensors[de][sensor.keba_keenergy_12345678_control_cpu_usage]
   StateSnapshot({
     'attributes': ReadOnlyDict({
@@ -295,6 +325,9 @@
     'last_updated': <ANY>,
     'state': '0.7',
   })
+# ---
+# name: test_sensors[de][sensor.keba_keenergy_12345678_control_cpu_usage_displayed]
+  '0.7 %'
 # ---
 # name: test_sensors[de][sensor.keba_keenergy_12345678_cpu_usage]
   StateSnapshot({
@@ -311,6 +344,9 @@
     'state': '2.7',
   })
 # ---
+# name: test_sensors[de][sensor.keba_keenergy_12345678_cpu_usage_displayed]
+  '2.7 %'
+# ---
 # name: test_sensors[de][sensor.keba_keenergy_12345678_external_heat_source_activation_counter_1]
   StateSnapshot({
     'attributes': ReadOnlyDict({
@@ -324,6 +360,9 @@
     'last_updated': <ANY>,
     'state': '812',
   })
+# ---
+# name: test_sensors[de][sensor.keba_keenergy_12345678_external_heat_source_activation_counter_1_displayed]
+  '812'
 # ---
 # name: test_sensors[de][sensor.keba_keenergy_12345678_external_heat_source_activation_counter_2]
   StateSnapshot({
@@ -339,6 +378,9 @@
     'state': '812',
   })
 # ---
+# name: test_sensors[de][sensor.keba_keenergy_12345678_external_heat_source_activation_counter_2_displayed]
+  '812'
+# ---
 # name: test_sensors[de][sensor.keba_keenergy_12345678_external_heat_source_excess_energy_activation_counter_1]
   StateSnapshot({
     'attributes': ReadOnlyDict({
@@ -353,6 +395,9 @@
     'state': '23',
   })
 # ---
+# name: test_sensors[de][sensor.keba_keenergy_12345678_external_heat_source_excess_energy_activation_counter_1_displayed]
+  '23'
+# ---
 # name: test_sensors[de][sensor.keba_keenergy_12345678_external_heat_source_excess_energy_activation_counter_2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
@@ -366,6 +411,9 @@
     'last_updated': <ANY>,
     'state': '23',
   })
+# ---
+# name: test_sensors[de][sensor.keba_keenergy_12345678_external_heat_source_excess_energy_activation_counter_2_displayed]
+  '23'
 # ---
 # name: test_sensors[de][sensor.keba_keenergy_12345678_external_heat_source_excess_energy_max_runtime_1]
   StateSnapshot({
@@ -383,6 +431,9 @@
     'state': '1.0',
   })
 # ---
+# name: test_sensors[de][sensor.keba_keenergy_12345678_external_heat_source_excess_energy_max_runtime_1_displayed]
+  '1.00 h'
+# ---
 # name: test_sensors[de][sensor.keba_keenergy_12345678_external_heat_source_excess_energy_max_runtime_2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
@@ -398,6 +449,9 @@
     'last_updated': <ANY>,
     'state': '1.0',
   })
+# ---
+# name: test_sensors[de][sensor.keba_keenergy_12345678_external_heat_source_excess_energy_max_runtime_2_displayed]
+  '1.00 h'
 # ---
 # name: test_sensors[de][sensor.keba_keenergy_12345678_external_heat_source_excess_energy_operating_time_1]
   StateSnapshot({
@@ -415,6 +469,9 @@
     'state': '1.0',
   })
 # ---
+# name: test_sensors[de][sensor.keba_keenergy_12345678_external_heat_source_excess_energy_operating_time_1_displayed]
+  '1.00 h'
+# ---
 # name: test_sensors[de][sensor.keba_keenergy_12345678_external_heat_source_excess_energy_operating_time_2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
@@ -430,6 +487,9 @@
     'last_updated': <ANY>,
     'state': '1.0',
   })
+# ---
+# name: test_sensors[de][sensor.keba_keenergy_12345678_external_heat_source_excess_energy_operating_time_2_displayed]
+  '1.00 h'
 # ---
 # name: test_sensors[de][sensor.keba_keenergy_12345678_external_heat_source_max_runtime_1]
   StateSnapshot({
@@ -447,6 +507,9 @@
     'state': '2.25805555555556',
   })
 # ---
+# name: test_sensors[de][sensor.keba_keenergy_12345678_external_heat_source_max_runtime_1_displayed]
+  '2.26 h'
+# ---
 # name: test_sensors[de][sensor.keba_keenergy_12345678_external_heat_source_max_runtime_2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
@@ -462,6 +525,9 @@
     'last_updated': <ANY>,
     'state': '2.25805555555556',
   })
+# ---
+# name: test_sensors[de][sensor.keba_keenergy_12345678_external_heat_source_max_runtime_2_displayed]
+  '2.26 h'
 # ---
 # name: test_sensors[de][sensor.keba_keenergy_12345678_external_heat_source_operating_mode_1]
   StateSnapshot({
@@ -537,6 +603,9 @@
     'state': '225.833055555556',
   })
 # ---
+# name: test_sensors[de][sensor.keba_keenergy_12345678_external_heat_source_operating_time_1_displayed]
+  '225.83 h'
+# ---
 # name: test_sensors[de][sensor.keba_keenergy_12345678_external_heat_source_operating_time_2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
@@ -553,6 +622,9 @@
     'state': '225.833055555556',
   })
 # ---
+# name: test_sensors[de][sensor.keba_keenergy_12345678_external_heat_source_operating_time_2_displayed]
+  '225.83 h'
+# ---
 # name: test_sensors[de][sensor.keba_keenergy_12345678_external_heat_source_target_temperature_1]
   StateSnapshot({
     'attributes': ReadOnlyDict({
@@ -566,8 +638,11 @@
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': '17.23',
+    'state': '17.227032',
   })
+# ---
+# name: test_sensors[de][sensor.keba_keenergy_12345678_external_heat_source_target_temperature_1_displayed]
+  '17.2 °C'
 # ---
 # name: test_sensors[de][sensor.keba_keenergy_12345678_external_heat_source_target_temperature_2]
   StateSnapshot({
@@ -582,8 +657,11 @@
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': '17.23',
+    'state': '17.227032',
   })
+# ---
+# name: test_sensors[de][sensor.keba_keenergy_12345678_external_heat_source_target_temperature_2_displayed]
+  '17.2 °C'
 # ---
 # name: test_sensors[de][sensor.keba_keenergy_12345678_flash_erase_counter]
   StateSnapshot({
@@ -599,6 +677,9 @@
     'state': '341',
   })
 # ---
+# name: test_sensors[de][sensor.keba_keenergy_12345678_flash_erase_counter_displayed]
+  '341'
+# ---
 # name: test_sensors[de][sensor.keba_keenergy_12345678_free_ram]
   StateSnapshot({
     'attributes': ReadOnlyDict({
@@ -613,6 +694,9 @@
     'last_updated': <ANY>,
     'state': '100060',
   })
+# ---
+# name: test_sensors[de][sensor.keba_keenergy_12345678_free_ram_displayed]
+  '100060 kB'
 # ---
 # name: test_sensors[de][sensor.keba_keenergy_12345678_heat_circuit_cool_request_2]
   StateSnapshot({
@@ -662,6 +746,9 @@
     'state': 'HC5',
   })
 # ---
+# name: test_sensors[de][sensor.keba_keenergy_12345678_heat_circuit_cooling_curve_2_displayed]
+  'HC5'
+# ---
 # name: test_sensors[de][sensor.keba_keenergy_12345678_heat_circuit_cooling_limit_day_2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
@@ -679,6 +766,9 @@
     'last_updated': <ANY>,
     'state': '20.0',
   })
+# ---
+# name: test_sensors[de][sensor.keba_keenergy_12345678_heat_circuit_cooling_limit_day_2_displayed]
+  '20.0 °C'
 # ---
 # name: test_sensors[de][sensor.keba_keenergy_12345678_heat_circuit_cooling_limit_night_2]
   StateSnapshot({
@@ -698,6 +788,9 @@
     'state': '18.0',
   })
 # ---
+# name: test_sensors[de][sensor.keba_keenergy_12345678_heat_circuit_cooling_limit_night_2_displayed]
+  '18.0 °C'
+# ---
 # name: test_sensors[de][sensor.keba_keenergy_12345678_heat_circuit_dew_point_1]
   StateSnapshot({
     'attributes': ReadOnlyDict({
@@ -711,8 +804,11 @@
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': '13.1',
+    'state': '13.104257',
   })
+# ---
+# name: test_sensors[de][sensor.keba_keenergy_12345678_heat_circuit_dew_point_1_displayed]
+  '13.1 °C'
 # ---
 # name: test_sensors[de][sensor.keba_keenergy_12345678_heat_circuit_excess_energy_cooling_limit_day_2]
   StateSnapshot({
@@ -732,6 +828,9 @@
     'state': '10.0',
   })
 # ---
+# name: test_sensors[de][sensor.keba_keenergy_12345678_heat_circuit_excess_energy_cooling_limit_day_2_displayed]
+  '10.0 °C'
+# ---
 # name: test_sensors[de][sensor.keba_keenergy_12345678_heat_circuit_excess_energy_cooling_limit_night_2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
@@ -749,6 +848,9 @@
     'last_updated': <ANY>,
     'state': '28.0',
   })
+# ---
+# name: test_sensors[de][sensor.keba_keenergy_12345678_heat_circuit_excess_energy_cooling_limit_night_2_displayed]
+  '28.0 °C'
 # ---
 # name: test_sensors[de][sensor.keba_keenergy_12345678_heat_circuit_excess_energy_heating_limit_day_1]
   StateSnapshot({
@@ -768,6 +870,9 @@
     'state': '30.0',
   })
 # ---
+# name: test_sensors[de][sensor.keba_keenergy_12345678_heat_circuit_excess_energy_heating_limit_day_1_displayed]
+  '30.0 °C'
+# ---
 # name: test_sensors[de][sensor.keba_keenergy_12345678_heat_circuit_excess_energy_heating_limit_night_1]
   StateSnapshot({
     'attributes': ReadOnlyDict({
@@ -785,6 +890,9 @@
     'last_updated': <ANY>,
     'state': '28.0',
   })
+# ---
+# name: test_sensors[de][sensor.keba_keenergy_12345678_heat_circuit_excess_energy_heating_limit_night_1_displayed]
+  '28.0 °C'
 # ---
 # name: test_sensors[de][sensor.keba_keenergy_12345678_heat_circuit_excess_energy_mode_1]
   StateSnapshot({
@@ -858,6 +966,9 @@
     'state': '10.0',
   })
 # ---
+# name: test_sensors[de][sensor.keba_keenergy_12345678_heat_circuit_excess_energy_target_cooling_temperature_2_displayed]
+  '10.0 °C'
+# ---
 # name: test_sensors[de][sensor.keba_keenergy_12345678_heat_circuit_excess_energy_target_temperature_1]
   StateSnapshot({
     'attributes': ReadOnlyDict({
@@ -876,6 +987,9 @@
     'state': '30.0',
   })
 # ---
+# name: test_sensors[de][sensor.keba_keenergy_12345678_heat_circuit_excess_energy_target_temperature_1_displayed]
+  '30.0 °C'
+# ---
 # name: test_sensors[de][sensor.keba_keenergy_12345678_heat_circuit_flow_temperature_1]
   StateSnapshot({
     'attributes': ReadOnlyDict({
@@ -889,8 +1003,11 @@
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': '22.21',
+    'state': '22.200001',
   })
+# ---
+# name: test_sensors[de][sensor.keba_keenergy_12345678_heat_circuit_flow_temperature_1_displayed]
+  '22.2 °C'
 # ---
 # name: test_sensors[de][sensor.keba_keenergy_12345678_heat_circuit_flow_temperature_setpoint_1]
   StateSnapshot({
@@ -905,8 +1022,11 @@
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': '26.55',
+    'state': '26.553419',
   })
+# ---
+# name: test_sensors[de][sensor.keba_keenergy_12345678_heat_circuit_flow_temperature_setpoint_1_displayed]
+  '26.6 °C'
 # ---
 # name: test_sensors[de][sensor.keba_keenergy_12345678_heat_circuit_flow_temperature_setpoint_2]
   StateSnapshot({
@@ -921,8 +1041,11 @@
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': '26.55',
+    'state': '26.553419',
   })
+# ---
+# name: test_sensors[de][sensor.keba_keenergy_12345678_heat_circuit_flow_temperature_setpoint_2_displayed]
+  '26.6 °C'
 # ---
 # name: test_sensors[de][sensor.keba_keenergy_12345678_heat_circuit_heat_request_1]
   StateSnapshot({
@@ -1002,6 +1125,9 @@
     'state': 'HC6',
   })
 # ---
+# name: test_sensors[de][sensor.keba_keenergy_12345678_heat_circuit_heating_curve_1_displayed]
+  'HC6'
+# ---
 # name: test_sensors[de][sensor.keba_keenergy_12345678_heat_circuit_heating_limit_day_1]
   StateSnapshot({
     'attributes': ReadOnlyDict({
@@ -1020,6 +1146,9 @@
     'state': '20.0',
   })
 # ---
+# name: test_sensors[de][sensor.keba_keenergy_12345678_heat_circuit_heating_limit_day_1_displayed]
+  '20.0 °C'
+# ---
 # name: test_sensors[de][sensor.keba_keenergy_12345678_heat_circuit_heating_limit_night_1]
   StateSnapshot({
     'attributes': ReadOnlyDict({
@@ -1037,6 +1166,9 @@
     'last_updated': <ANY>,
     'state': '18.0',
   })
+# ---
+# name: test_sensors[de][sensor.keba_keenergy_12345678_heat_circuit_heating_limit_night_1_displayed]
+  '18.0 °C'
 # ---
 # name: test_sensors[de][sensor.keba_keenergy_12345678_heat_circuit_mixer_position_1]
   StateSnapshot({
@@ -1079,8 +1211,11 @@
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': '20.21',
+    'state': '20.200001',
   })
+# ---
+# name: test_sensors[de][sensor.keba_keenergy_12345678_heat_circuit_mixer_return_flow_temperature_1_displayed]
+  '20.2 °C'
 # ---
 # name: test_sensors[de][sensor.keba_keenergy_12345678_heat_circuit_operating_mode_1]
   StateSnapshot({
@@ -1175,6 +1310,9 @@
     'state': '50.0',
   })
 # ---
+# name: test_sensors[de][sensor.keba_keenergy_12345678_heat_circuit_pump_speed_1_displayed]
+  '50.00 %'
+# ---
 # name: test_sensors[de][sensor.keba_keenergy_12345678_heat_circuit_return_flow_temperature_1]
   StateSnapshot({
     'attributes': ReadOnlyDict({
@@ -1188,8 +1326,11 @@
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': '21.21',
+    'state': '21.200001',
   })
+# ---
+# name: test_sensors[de][sensor.keba_keenergy_12345678_heat_circuit_return_flow_temperature_1_displayed]
+  '21.2 °C'
 # ---
 # name: test_sensors[de][sensor.keba_keenergy_12345678_heat_circuit_room_humidity_1]
   StateSnapshot({
@@ -1207,6 +1348,9 @@
     'state': '53.0',
   })
 # ---
+# name: test_sensors[de][sensor.keba_keenergy_12345678_heat_circuit_room_humidity_1_displayed]
+  '53.00 %'
+# ---
 # name: test_sensors[de][sensor.keba_keenergy_12345678_heat_circuit_room_temperature_1]
   StateSnapshot({
     'attributes': ReadOnlyDict({
@@ -1220,8 +1364,11 @@
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': '22.42',
+    'state': '22.418831',
   })
+# ---
+# name: test_sensors[de][sensor.keba_keenergy_12345678_heat_circuit_room_temperature_1_displayed]
+  '22.4 °C'
 # ---
 # name: test_sensors[de][sensor.keba_keenergy_12345678_heat_circuit_selected_target_temperature_1]
   StateSnapshot({
@@ -1239,6 +1386,9 @@
     'state': '20.0',
   })
 # ---
+# name: test_sensors[de][sensor.keba_keenergy_12345678_heat_circuit_selected_target_temperature_1_displayed]
+  '20.0 °C'
+# ---
 # name: test_sensors[de][sensor.keba_keenergy_12345678_heat_circuit_selected_target_temperature_2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
@@ -1254,6 +1404,9 @@
     'last_updated': <ANY>,
     'state': '20.0',
   })
+# ---
+# name: test_sensors[de][sensor.keba_keenergy_12345678_heat_circuit_selected_target_temperature_2_displayed]
+  '20.0 °C'
 # ---
 # name: test_sensors[de][sensor.keba_keenergy_12345678_heat_circuit_target_cooling_temperature_day_2]
   StateSnapshot({
@@ -1273,6 +1426,9 @@
     'state': '20.5',
   })
 # ---
+# name: test_sensors[de][sensor.keba_keenergy_12345678_heat_circuit_target_cooling_temperature_day_2_displayed]
+  '20.5 °C'
+# ---
 # name: test_sensors[de][sensor.keba_keenergy_12345678_heat_circuit_target_cooling_temperature_night_2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
@@ -1291,6 +1447,9 @@
     'state': '20.0',
   })
 # ---
+# name: test_sensors[de][sensor.keba_keenergy_12345678_heat_circuit_target_cooling_temperature_night_2_displayed]
+  '20.0 °C'
+# ---
 # name: test_sensors[de][sensor.keba_keenergy_12345678_heat_circuit_target_temperature_1]
   StateSnapshot({
     'attributes': ReadOnlyDict({
@@ -1307,6 +1466,9 @@
     'state': '20.5',
   })
 # ---
+# name: test_sensors[de][sensor.keba_keenergy_12345678_heat_circuit_target_temperature_1_displayed]
+  '20.5 °C'
+# ---
 # name: test_sensors[de][sensor.keba_keenergy_12345678_heat_circuit_target_temperature_2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
@@ -1322,6 +1484,9 @@
     'last_updated': <ANY>,
     'state': '20.5',
   })
+# ---
+# name: test_sensors[de][sensor.keba_keenergy_12345678_heat_circuit_target_temperature_2_displayed]
+  '20.5 °C'
 # ---
 # name: test_sensors[de][sensor.keba_keenergy_12345678_heat_circuit_target_temperature_away_1]
   StateSnapshot({
@@ -1341,6 +1506,9 @@
     'state': '18.0',
   })
 # ---
+# name: test_sensors[de][sensor.keba_keenergy_12345678_heat_circuit_target_temperature_away_1_displayed]
+  '18.0 °C'
+# ---
 # name: test_sensors[de][sensor.keba_keenergy_12345678_heat_circuit_target_temperature_day_1]
   StateSnapshot({
     'attributes': ReadOnlyDict({
@@ -1358,6 +1526,9 @@
     'last_updated': <ANY>,
     'state': '20.5',
   })
+# ---
+# name: test_sensors[de][sensor.keba_keenergy_12345678_heat_circuit_target_temperature_day_1_displayed]
+  '20.5 °C'
 # ---
 # name: test_sensors[de][sensor.keba_keenergy_12345678_heat_circuit_target_temperature_night_1]
   StateSnapshot({
@@ -1377,6 +1548,9 @@
     'state': '20.0',
   })
 # ---
+# name: test_sensors[de][sensor.keba_keenergy_12345678_heat_circuit_target_temperature_night_1_displayed]
+  '20.0 °C'
+# ---
 # name: test_sensors[de][sensor.keba_keenergy_12345678_heat_circuit_target_temperature_offset_1]
   StateSnapshot({
     'attributes': ReadOnlyDict({
@@ -1394,6 +1568,9 @@
     'last_updated': <ANY>,
     'state': '1.5',
   })
+# ---
+# name: test_sensors[de][sensor.keba_keenergy_12345678_heat_circuit_target_temperature_offset_1_displayed]
+  '1.5 °C'
 # ---
 # name: test_sensors[de][sensor.keba_keenergy_12345678_heat_circuit_target_temperature_offset_2]
   StateSnapshot({
@@ -1413,6 +1590,9 @@
     'state': '0.0',
   })
 # ---
+# name: test_sensors[de][sensor.keba_keenergy_12345678_heat_circuit_target_temperature_offset_2_displayed]
+  '0.0 °C'
+# ---
 # name: test_sensors[de][sensor.keba_keenergy_12345678_heat_pump_activation_counter]
   StateSnapshot({
     'attributes': ReadOnlyDict({
@@ -1426,6 +1606,9 @@
     'last_updated': <ANY>,
     'state': '477',
   })
+# ---
+# name: test_sensors[de][sensor.keba_keenergy_12345678_heat_pump_activation_counter_displayed]
+  '477'
 # ---
 # name: test_sensors[de][sensor.keba_keenergy_12345678_heat_pump_circulation_pump]
   StateSnapshot({
@@ -1442,6 +1625,9 @@
     'state': '0.0',
   })
 # ---
+# name: test_sensors[de][sensor.keba_keenergy_12345678_heat_pump_circulation_pump_displayed]
+  '0.00 %'
+# ---
 # name: test_sensors[de][sensor.keba_keenergy_12345678_heat_pump_compressor]
   StateSnapshot({
     'attributes': ReadOnlyDict({
@@ -1457,6 +1643,9 @@
     'state': '0.0',
   })
 # ---
+# name: test_sensors[de][sensor.keba_keenergy_12345678_heat_pump_compressor_displayed]
+  '0.00 %'
+# ---
 # name: test_sensors[de][sensor.keba_keenergy_12345678_heat_pump_compressor_input_temperature]
   StateSnapshot({
     'attributes': ReadOnlyDict({
@@ -1470,8 +1659,11 @@
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': '27.2',
+    'state': '27.200001',
   })
+# ---
+# name: test_sensors[de][sensor.keba_keenergy_12345678_heat_pump_compressor_input_temperature_displayed]
+  '27.2 °C'
 # ---
 # name: test_sensors[de][sensor.keba_keenergy_12345678_heat_pump_compressor_output_temperature]
   StateSnapshot({
@@ -1486,8 +1678,11 @@
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': '27.2',
+    'state': '27.200001',
   })
+# ---
+# name: test_sensors[de][sensor.keba_keenergy_12345678_heat_pump_compressor_output_temperature_displayed]
+  '27.2 °C'
 # ---
 # name: test_sensors[de][sensor.keba_keenergy_12345678_heat_pump_compressor_power]
   StateSnapshot({
@@ -1502,8 +1697,11 @@
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': '5.52',
+    'state': '5.5196772',
   })
+# ---
+# name: test_sensors[de][sensor.keba_keenergy_12345678_heat_pump_compressor_power_displayed]
+  '6 W'
 # ---
 # name: test_sensors[de][sensor.keba_keenergy_12345678_heat_pump_condenser_temperature]
   StateSnapshot({
@@ -1518,8 +1716,11 @@
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': '31.51',
+    'state': '31.514103',
   })
+# ---
+# name: test_sensors[de][sensor.keba_keenergy_12345678_heat_pump_condenser_temperature_displayed]
+  '31.5 °C'
 # ---
 # name: test_sensors[de][sensor.keba_keenergy_12345678_heat_pump_cooling_energy]
   StateSnapshot({
@@ -1534,7 +1735,7 @@
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': '7.21',
+    'state': '7.2140002',
   })
 # ---
 # name: test_sensors[de][sensor.keba_keenergy_12345678_heat_pump_cooling_energy_consumption]
@@ -1550,8 +1751,14 @@
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': '8.72',
+    'state': '8.7180004',
   })
+# ---
+# name: test_sensors[de][sensor.keba_keenergy_12345678_heat_pump_cooling_energy_consumption_displayed]
+  '8.72 kWh'
+# ---
+# name: test_sensors[de][sensor.keba_keenergy_12345678_heat_pump_cooling_energy_displayed]
+  '7.21 kWh'
 # ---
 # name: test_sensors[de][sensor.keba_keenergy_12345678_heat_pump_cooling_excess_energy_consumption]
   StateSnapshot({
@@ -1566,8 +1773,11 @@
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': '10.0',
+    'state': '10.003001',
   })
+# ---
+# name: test_sensors[de][sensor.keba_keenergy_12345678_heat_pump_cooling_excess_energy_consumption_displayed]
+  '10.00 kWh'
 # ---
 # name: test_sensors[de][sensor.keba_keenergy_12345678_heat_pump_cooling_spf]
   StateSnapshot({
@@ -1580,8 +1790,11 @@
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': '4.22',
+    'state': '4.2206435',
   })
+# ---
+# name: test_sensors[de][sensor.keba_keenergy_12345678_heat_pump_cooling_spf_displayed]
+  '4.22'
 # ---
 # name: test_sensors[de][sensor.keba_keenergy_12345678_heat_pump_cop]
   StateSnapshot({
@@ -1594,8 +1807,11 @@
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': '2.55',
+    'state': '2.5501628',
   })
+# ---
+# name: test_sensors[de][sensor.keba_keenergy_12345678_heat_pump_cop_displayed]
+  '2.55'
 # ---
 # name: test_sensors[de][sensor.keba_keenergy_12345678_heat_pump_current_overheating]
   StateSnapshot({
@@ -1610,8 +1826,11 @@
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': '18.68',
+    'state': '18.676249',
   })
+# ---
+# name: test_sensors[de][sensor.keba_keenergy_12345678_heat_pump_current_overheating_displayed]
+  '18.7 °C'
 # ---
 # name: test_sensors[de][sensor.keba_keenergy_12345678_heat_pump_excess_energy_activation_counter]
   StateSnapshot({
@@ -1627,6 +1846,9 @@
     'state': '3600',
   })
 # ---
+# name: test_sensors[de][sensor.keba_keenergy_12345678_heat_pump_excess_energy_activation_counter_displayed]
+  '3600'
+# ---
 # name: test_sensors[de][sensor.keba_keenergy_12345678_heat_pump_excess_energy_consumption]
   StateSnapshot({
     'attributes': ReadOnlyDict({
@@ -1640,8 +1862,11 @@
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': '10.0',
+    'state': '10.003001',
   })
+# ---
+# name: test_sensors[de][sensor.keba_keenergy_12345678_heat_pump_excess_energy_consumption_displayed]
+  '10.00 kWh'
 # ---
 # name: test_sensors[de][sensor.keba_keenergy_12345678_heat_pump_excess_energy_max_runtime]
   StateSnapshot({
@@ -1659,6 +1884,9 @@
     'state': '1.0',
   })
 # ---
+# name: test_sensors[de][sensor.keba_keenergy_12345678_heat_pump_excess_energy_max_runtime_displayed]
+  '1.00 h'
+# ---
 # name: test_sensors[de][sensor.keba_keenergy_12345678_heat_pump_excess_energy_operating_time]
   StateSnapshot({
     'attributes': ReadOnlyDict({
@@ -1675,6 +1903,9 @@
     'state': '1.0',
   })
 # ---
+# name: test_sensors[de][sensor.keba_keenergy_12345678_heat_pump_excess_energy_operating_time_displayed]
+  '1.00 h'
+# ---
 # name: test_sensors[de][sensor.keba_keenergy_12345678_heat_pump_expansion_valve_position]
   StateSnapshot({
     'attributes': ReadOnlyDict({
@@ -1687,6 +1918,9 @@
     'last_updated': <ANY>,
     'state': '20',
   })
+# ---
+# name: test_sensors[de][sensor.keba_keenergy_12345678_heat_pump_expansion_valve_position_displayed]
+  '20'
 # ---
 # name: test_sensors[de][sensor.keba_keenergy_12345678_heat_pump_flow_temperature]
   StateSnapshot({
@@ -1701,8 +1935,11 @@
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': '24.8',
+    'state': '24.803127',
   })
+# ---
+# name: test_sensors[de][sensor.keba_keenergy_12345678_heat_pump_flow_temperature_displayed]
+  '24.8 °C'
 # ---
 # name: test_sensors[de][sensor.keba_keenergy_12345678_heat_pump_heating_energy]
   StateSnapshot({
@@ -1717,7 +1954,7 @@
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': '8.43',
+    'state': '8.4317026',
   })
 # ---
 # name: test_sensors[de][sensor.keba_keenergy_12345678_heat_pump_heating_energy_consumption]
@@ -1733,8 +1970,14 @@
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': '7.33',
+    'state': '7.3290005',
   })
+# ---
+# name: test_sensors[de][sensor.keba_keenergy_12345678_heat_pump_heating_energy_consumption_displayed]
+  '7.33 kWh'
+# ---
+# name: test_sensors[de][sensor.keba_keenergy_12345678_heat_pump_heating_energy_displayed]
+  '8.43 kWh'
 # ---
 # name: test_sensors[de][sensor.keba_keenergy_12345678_heat_pump_heating_excess_energy_consumption]
   StateSnapshot({
@@ -1749,8 +1992,11 @@
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': '10.0',
+    'state': '10.003001',
   })
+# ---
+# name: test_sensors[de][sensor.keba_keenergy_12345678_heat_pump_heating_excess_energy_consumption_displayed]
+  '10.00 kWh'
 # ---
 # name: test_sensors[de][sensor.keba_keenergy_12345678_heat_pump_heating_power]
   StateSnapshot({
@@ -1765,8 +2011,11 @@
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': '3.22',
+    'state': '3.2187521',
   })
+# ---
+# name: test_sensors[de][sensor.keba_keenergy_12345678_heat_pump_heating_power_displayed]
+  '3 W'
 # ---
 # name: test_sensors[de][sensor.keba_keenergy_12345678_heat_pump_heating_spf]
   StateSnapshot({
@@ -1779,8 +2028,11 @@
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': '3.32',
+    'state': '3.3184626',
   })
+# ---
+# name: test_sensors[de][sensor.keba_keenergy_12345678_heat_pump_heating_spf_displayed]
+  '3.32'
 # ---
 # name: test_sensors[de][sensor.keba_keenergy_12345678_heat_pump_high_pressure]
   StateSnapshot({
@@ -1795,8 +2047,11 @@
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': '15.62',
+    'state': '15.61875',
   })
+# ---
+# name: test_sensors[de][sensor.keba_keenergy_12345678_heat_pump_high_pressure_displayed]
+  '15.62 bar'
 # ---
 # name: test_sensors[de][sensor.keba_keenergy_12345678_heat_pump_hot_water_energy]
   StateSnapshot({
@@ -1811,7 +2066,7 @@
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': '7.86',
+    'state': '7.8570004',
   })
 # ---
 # name: test_sensors[de][sensor.keba_keenergy_12345678_heat_pump_hot_water_energy_consumption]
@@ -1827,8 +2082,14 @@
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': '2.77',
+    'state': '2.7710001',
   })
+# ---
+# name: test_sensors[de][sensor.keba_keenergy_12345678_heat_pump_hot_water_energy_consumption_displayed]
+  '2.77 kWh'
+# ---
+# name: test_sensors[de][sensor.keba_keenergy_12345678_heat_pump_hot_water_energy_displayed]
+  '7.86 kWh'
 # ---
 # name: test_sensors[de][sensor.keba_keenergy_12345678_heat_pump_hot_water_excess_energy_consumption]
   StateSnapshot({
@@ -1843,8 +2104,11 @@
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': '10.0',
+    'state': '10.003001',
   })
+# ---
+# name: test_sensors[de][sensor.keba_keenergy_12345678_heat_pump_hot_water_excess_energy_consumption_displayed]
+  '10.00 kWh'
 # ---
 # name: test_sensors[de][sensor.keba_keenergy_12345678_heat_pump_hot_water_power]
   StateSnapshot({
@@ -1859,8 +2123,11 @@
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': '2.77',
+    'state': '2.7713845',
   })
+# ---
+# name: test_sensors[de][sensor.keba_keenergy_12345678_heat_pump_hot_water_power_displayed]
+  '3 W'
 # ---
 # name: test_sensors[de][sensor.keba_keenergy_12345678_heat_pump_hot_water_spf]
   StateSnapshot({
@@ -1873,8 +2140,11 @@
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': '2.5',
+    'state': '2.5034916',
   })
+# ---
+# name: test_sensors[de][sensor.keba_keenergy_12345678_heat_pump_hot_water_spf_displayed]
+  '2.50'
 # ---
 # name: test_sensors[de][sensor.keba_keenergy_12345678_heat_pump_low_pressure]
   StateSnapshot({
@@ -1889,8 +2159,11 @@
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': '15.35',
+    'state': '15.354687',
   })
+# ---
+# name: test_sensors[de][sensor.keba_keenergy_12345678_heat_pump_low_pressure_displayed]
+  '15.35 bar'
 # ---
 # name: test_sensors[de][sensor.keba_keenergy_12345678_heat_pump_max_runtime]
   StateSnapshot({
@@ -1908,6 +2181,9 @@
     'state': '167.334166666667',
   })
 # ---
+# name: test_sensors[de][sensor.keba_keenergy_12345678_heat_pump_max_runtime_displayed]
+  '167.33 h'
+# ---
 # name: test_sensors[de][sensor.keba_keenergy_12345678_heat_pump_operating_time]
   StateSnapshot({
     'attributes': ReadOnlyDict({
@@ -1924,6 +2200,9 @@
     'state': '1058.06333333333',
   })
 # ---
+# name: test_sensors[de][sensor.keba_keenergy_12345678_heat_pump_operating_time_displayed]
+  '1058.06 h'
+# ---
 # name: test_sensors[de][sensor.keba_keenergy_12345678_heat_pump_return_flow_temperature]
   StateSnapshot({
     'attributes': ReadOnlyDict({
@@ -1937,8 +2216,11 @@
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': '23.9',
+    'state': '23.904211',
   })
+# ---
+# name: test_sensors[de][sensor.keba_keenergy_12345678_heat_pump_return_flow_temperature_displayed]
+  '23.9 °C'
 # ---
 # name: test_sensors[de][sensor.keba_keenergy_12345678_heat_pump_source_input_temperature]
   StateSnapshot({
@@ -1953,8 +2235,11 @@
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': '25.7',
+    'state': '25.700001',
   })
+# ---
+# name: test_sensors[de][sensor.keba_keenergy_12345678_heat_pump_source_input_temperature_displayed]
+  '25.7 °C'
 # ---
 # name: test_sensors[de][sensor.keba_keenergy_12345678_heat_pump_source_output_temperature]
   StateSnapshot({
@@ -1969,8 +2254,11 @@
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': '24.9',
+    'state': '24.896341',
   })
+# ---
+# name: test_sensors[de][sensor.keba_keenergy_12345678_heat_pump_source_output_temperature_displayed]
+  '24.9 °C'
 # ---
 # name: test_sensors[de][sensor.keba_keenergy_12345678_heat_pump_source_pump_speed]
   StateSnapshot({
@@ -1984,8 +2272,11 @@
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': '44.88',
+    'state': '44.875106',
   })
+# ---
+# name: test_sensors[de][sensor.keba_keenergy_12345678_heat_pump_source_pump_speed_displayed]
+  '44.88 %'
 # ---
 # name: test_sensors[de][sensor.keba_keenergy_12345678_heat_pump_state]
   StateSnapshot({
@@ -2124,8 +2415,11 @@
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': '5.5',
+    'state': '5.4999752',
   })
+# ---
+# name: test_sensors[de][sensor.keba_keenergy_12345678_heat_pump_target_overheating_displayed]
+  '5.5 °C'
 # ---
 # name: test_sensors[de][sensor.keba_keenergy_12345678_heat_pump_total_energy_consumption]
   StateSnapshot({
@@ -2140,8 +2434,11 @@
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': '5.21',
+    'state': '5.2120004',
   })
+# ---
+# name: test_sensors[de][sensor.keba_keenergy_12345678_heat_pump_total_energy_consumption_displayed]
+  '5.21 kWh'
 # ---
 # name: test_sensors[de][sensor.keba_keenergy_12345678_heat_pump_total_spf]
   StateSnapshot({
@@ -2154,8 +2451,11 @@
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': '2.43',
+    'state': '2.4277346',
   })
+# ---
+# name: test_sensors[de][sensor.keba_keenergy_12345678_heat_pump_total_spf_displayed]
+  '2.43'
 # ---
 # name: test_sensors[de][sensor.keba_keenergy_12345678_heat_pump_total_thermal_energy]
   StateSnapshot({
@@ -2170,8 +2470,11 @@
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': '8.22',
+    'state': '8.2230005',
   })
+# ---
+# name: test_sensors[de][sensor.keba_keenergy_12345678_heat_pump_total_thermal_energy_displayed]
+  '8.22 kWh'
 # ---
 # name: test_sensors[de][sensor.keba_keenergy_12345678_heat_pump_vaporizer_temperature]
   StateSnapshot({
@@ -2186,8 +2489,11 @@
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': '-4.56',
+    'state': '-4.5617409',
   })
+# ---
+# name: test_sensors[de][sensor.keba_keenergy_12345678_heat_pump_vaporizer_temperature_displayed]
+  '-4.6 °C'
 # ---
 # name: test_sensors[de][sensor.keba_keenergy_12345678_hot_water_tank_circulation_return_temperature_1]
   StateSnapshot({
@@ -2202,8 +2508,11 @@
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': '30.45',
+    'state': '30.5',
   })
+# ---
+# name: test_sensors[de][sensor.keba_keenergy_12345678_hot_water_tank_circulation_return_temperature_1_displayed]
+  '30.5 °C'
 # ---
 # name: test_sensors[de][sensor.keba_keenergy_12345678_hot_water_tank_circulation_return_temperature_2]
   StateSnapshot({
@@ -2218,8 +2527,11 @@
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': '27.45',
+    'state': '27.5',
   })
+# ---
+# name: test_sensors[de][sensor.keba_keenergy_12345678_hot_water_tank_circulation_return_temperature_2_displayed]
+  '27.5 °C'
 # ---
 # name: test_sensors[de][sensor.keba_keenergy_12345678_hot_water_tank_current_temperature_1]
   StateSnapshot({
@@ -2234,8 +2546,11 @@
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': '47.7',
+    'state': '47.700001',
   })
+# ---
+# name: test_sensors[de][sensor.keba_keenergy_12345678_hot_water_tank_current_temperature_1_displayed]
+  '47.7 °C'
 # ---
 # name: test_sensors[de][sensor.keba_keenergy_12345678_hot_water_tank_current_temperature_2]
   StateSnapshot({
@@ -2250,8 +2565,11 @@
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': '47.7',
+    'state': '47.700001',
   })
+# ---
+# name: test_sensors[de][sensor.keba_keenergy_12345678_hot_water_tank_current_temperature_2_displayed]
+  '47.7 °C'
 # ---
 # name: test_sensors[de][sensor.keba_keenergy_12345678_hot_water_tank_excess_energy_mode_1]
   StateSnapshot({
@@ -2325,6 +2643,9 @@
     'state': '75.0',
   })
 # ---
+# name: test_sensors[de][sensor.keba_keenergy_12345678_hot_water_tank_excess_energy_target_temperature_1_displayed]
+  '75.0 °C'
+# ---
 # name: test_sensors[de][sensor.keba_keenergy_12345678_hot_water_tank_excess_energy_target_temperature_2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
@@ -2343,6 +2664,9 @@
     'state': '75.0',
   })
 # ---
+# name: test_sensors[de][sensor.keba_keenergy_12345678_hot_water_tank_excess_energy_target_temperature_2_displayed]
+  '75.0 °C'
+# ---
 # name: test_sensors[de][sensor.keba_keenergy_12345678_hot_water_tank_fresh_water_module_temperature_1]
   StateSnapshot({
     'attributes': ReadOnlyDict({
@@ -2356,8 +2680,11 @@
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': '51.23',
+    'state': '51.200001',
   })
+# ---
+# name: test_sensors[de][sensor.keba_keenergy_12345678_hot_water_tank_fresh_water_module_temperature_1_displayed]
+  '51.20 °C'
 # ---
 # name: test_sensors[de][sensor.keba_keenergy_12345678_hot_water_tank_operating_mode_1]
   StateSnapshot({
@@ -2439,6 +2766,9 @@
     'state': '32.5',
   })
 # ---
+# name: test_sensors[de][sensor.keba_keenergy_12345678_hot_water_tank_standby_temperature_1_displayed]
+  '32.5 °C'
+# ---
 # name: test_sensors[de][sensor.keba_keenergy_12345678_hot_water_tank_standby_temperature_2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
@@ -2456,6 +2786,9 @@
     'last_updated': <ANY>,
     'state': '32.5',
   })
+# ---
+# name: test_sensors[de][sensor.keba_keenergy_12345678_hot_water_tank_standby_temperature_2_displayed]
+  '32.5 °C'
 # ---
 # name: test_sensors[de][sensor.keba_keenergy_12345678_hot_water_tank_target_temperature_1]
   StateSnapshot({
@@ -2476,6 +2809,9 @@
     'state': '51.0',
   })
 # ---
+# name: test_sensors[de][sensor.keba_keenergy_12345678_hot_water_tank_target_temperature_1_displayed]
+  '51.0 °C'
+# ---
 # name: test_sensors[de][sensor.keba_keenergy_12345678_hot_water_tank_target_temperature_2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
@@ -2494,6 +2830,9 @@
     'last_updated': <ANY>,
     'state': '51.0',
   })
+# ---
+# name: test_sensors[de][sensor.keba_keenergy_12345678_hot_water_tank_target_temperature_2_displayed]
+  '51.0 °C'
 # ---
 # name: test_sensors[de][sensor.keba_keenergy_12345678_operating_mode]
   StateSnapshot({
@@ -2543,8 +2882,11 @@
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': '20.5',
+    'state': '20.504164',
   })
+# ---
+# name: test_sensors[de][sensor.keba_keenergy_12345678_outdoor_temperature_displayed]
+  '20.5 °C'
 # ---
 # name: test_sensors[de][sensor.keba_keenergy_12345678_passive_cooling_circulation_pump_speed]
   StateSnapshot({
@@ -2558,8 +2900,11 @@
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': '23.0',
+    'state': '23.14783',
   })
+# ---
+# name: test_sensors[de][sensor.keba_keenergy_12345678_passive_cooling_circulation_pump_speed_displayed]
+  '23.15 %'
 # ---
 # name: test_sensors[de][sensor.keba_keenergy_12345678_passive_cooling_mixer_flow_temperature]
   StateSnapshot({
@@ -2574,8 +2919,11 @@
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': '24.26',
+    'state': '24.299999',
   })
+# ---
+# name: test_sensors[de][sensor.keba_keenergy_12345678_passive_cooling_mixer_flow_temperature_displayed]
+  '24.3 °C'
 # ---
 # name: test_sensors[de][sensor.keba_keenergy_12345678_passive_cooling_mixer_position]
   StateSnapshot({
@@ -2618,8 +2966,11 @@
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': '19.22',
+    'state': '19.218407',
   })
+# ---
+# name: test_sensors[de][sensor.keba_keenergy_12345678_passive_cooling_mixer_target_temperature_displayed]
+  '19.2 °C'
 # ---
 # name: test_sensors[de][sensor.keba_keenergy_12345678_passive_cooling_switch_valve_position]
   StateSnapshot({
@@ -2661,8 +3012,11 @@
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': '22.34',
+    'state': '22.299999',
   })
+# ---
+# name: test_sensors[de][sensor.keba_keenergy_12345678_passive_cooling_temperature_displayed]
+  '22.3 °C'
 # ---
 # name: test_sensors[de][sensor.keba_keenergy_12345678_photovoltaics_daily_energy]
   StateSnapshot({
@@ -2677,8 +3031,11 @@
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': '437.7',
+    'state': '437.699972222222',
   })
+# ---
+# name: test_sensors[de][sensor.keba_keenergy_12345678_photovoltaics_daily_energy_displayed]
+  '437.70 kWh'
 # ---
 # name: test_sensors[de][sensor.keba_keenergy_12345678_photovoltaics_excess_power]
   StateSnapshot({
@@ -2693,8 +3050,11 @@
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': '437.7',
+    'state': '437.70001',
   })
+# ---
+# name: test_sensors[de][sensor.keba_keenergy_12345678_photovoltaics_excess_power_displayed]
+  '438 W'
 # ---
 # name: test_sensors[de][sensor.keba_keenergy_12345678_photovoltaics_total_energy]
   StateSnapshot({
@@ -2709,8 +3069,11 @@
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': '437.7',
+    'state': '437.699972222222',
   })
+# ---
+# name: test_sensors[de][sensor.keba_keenergy_12345678_photovoltaics_total_energy_displayed]
+  '437.70 kWh'
 # ---
 # name: test_sensors[de][sensor.keba_keenergy_12345678_ram_usage]
   StateSnapshot({
@@ -2726,6 +3089,9 @@
     'last_updated': <ANY>,
     'state': '6432',
   })
+# ---
+# name: test_sensors[de][sensor.keba_keenergy_12345678_ram_usage_displayed]
+  '6432 kB'
 # ---
 # name: test_sensors[de][sensor.keba_keenergy_12345678_solar_circuit_actual_power_1]
   StateSnapshot({
@@ -2743,6 +3109,9 @@
     'state': '3452.0',
   })
 # ---
+# name: test_sensors[de][sensor.keba_keenergy_12345678_solar_circuit_actual_power_1_displayed]
+  '3452 W'
+# ---
 # name: test_sensors[de][sensor.keba_keenergy_12345678_solar_circuit_actual_power_2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
@@ -2759,6 +3128,9 @@
     'state': '2452.0',
   })
 # ---
+# name: test_sensors[de][sensor.keba_keenergy_12345678_solar_circuit_actual_power_2_displayed]
+  '2452 W'
+# ---
 # name: test_sensors[de][sensor.keba_keenergy_12345678_solar_circuit_current_temperature_1_1]
   StateSnapshot({
     'attributes': ReadOnlyDict({
@@ -2772,8 +3144,11 @@
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': '36.76',
+    'state': '36.799999',
   })
+# ---
+# name: test_sensors[de][sensor.keba_keenergy_12345678_solar_circuit_current_temperature_1_1_displayed]
+  '36.8 °C'
 # ---
 # name: test_sensors[de][sensor.keba_keenergy_12345678_solar_circuit_current_temperature_1_2]
   StateSnapshot({
@@ -2788,8 +3163,11 @@
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': '46.76',
+    'state': '46.799999',
   })
+# ---
+# name: test_sensors[de][sensor.keba_keenergy_12345678_solar_circuit_current_temperature_1_2_displayed]
+  '46.8 °C'
 # ---
 # name: test_sensors[de][sensor.keba_keenergy_12345678_solar_circuit_current_temperature_2_1]
   StateSnapshot({
@@ -2804,8 +3182,11 @@
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': '26.76',
+    'state': '26.799999',
   })
+# ---
+# name: test_sensors[de][sensor.keba_keenergy_12345678_solar_circuit_current_temperature_2_1_displayed]
+  '26.8 °C'
 # ---
 # name: test_sensors[de][sensor.keba_keenergy_12345678_solar_circuit_current_temperature_2_2]
   StateSnapshot({
@@ -2820,8 +3201,11 @@
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': '56.76',
+    'state': '56.799999',
   })
+# ---
+# name: test_sensors[de][sensor.keba_keenergy_12345678_solar_circuit_current_temperature_2_2_displayed]
+  '56.8 °C'
 # ---
 # name: test_sensors[de][sensor.keba_keenergy_12345678_solar_circuit_daily_energy_1]
   StateSnapshot({
@@ -2839,6 +3223,9 @@
     'state': '0.0827827777777778',
   })
 # ---
+# name: test_sensors[de][sensor.keba_keenergy_12345678_solar_circuit_daily_energy_1_displayed]
+  '0.08 kWh'
+# ---
 # name: test_sensors[de][sensor.keba_keenergy_12345678_solar_circuit_daily_energy_2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
@@ -2854,6 +3241,9 @@
     'last_updated': <ANY>,
     'state': '0.0827827777777778',
   })
+# ---
+# name: test_sensors[de][sensor.keba_keenergy_12345678_solar_circuit_daily_energy_2_displayed]
+  '0.08 kWh'
 # ---
 # name: test_sensors[de][sensor.keba_keenergy_12345678_solar_circuit_heating_energy_1]
   StateSnapshot({
@@ -2871,6 +3261,9 @@
     'state': '305.126777777778',
   })
 # ---
+# name: test_sensors[de][sensor.keba_keenergy_12345678_solar_circuit_heating_energy_1_displayed]
+  '305.13 kWh'
+# ---
 # name: test_sensors[de][sensor.keba_keenergy_12345678_solar_circuit_heating_energy_2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
@@ -2887,6 +3280,9 @@
     'state': '305.126777777778',
   })
 # ---
+# name: test_sensors[de][sensor.keba_keenergy_12345678_solar_circuit_heating_energy_2_displayed]
+  '305.13 kWh'
+# ---
 # name: test_sensors[de][sensor.keba_keenergy_12345678_solar_circuit_pump_1_1]
   StateSnapshot({
     'attributes': ReadOnlyDict({
@@ -2899,8 +3295,11 @@
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': '63.0',
+    'state': '62.941831',
   })
+# ---
+# name: test_sensors[de][sensor.keba_keenergy_12345678_solar_circuit_pump_1_1_displayed]
+  '62.94 %'
 # ---
 # name: test_sensors[de][sensor.keba_keenergy_12345678_solar_circuit_pump_1_2]
   StateSnapshot({
@@ -2914,8 +3313,11 @@
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': '43.0',
+    'state': '43.000001',
   })
+# ---
+# name: test_sensors[de][sensor.keba_keenergy_12345678_solar_circuit_pump_1_2_displayed]
+  '43.00 %'
 # ---
 # name: test_sensors[de][sensor.keba_keenergy_12345678_solar_circuit_pump_2_1]
   StateSnapshot({
@@ -2929,8 +3331,11 @@
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': '73.0',
+    'state': '73.000002',
   })
+# ---
+# name: test_sensors[de][sensor.keba_keenergy_12345678_solar_circuit_pump_2_1_displayed]
+  '73.00 %'
 # ---
 # name: test_sensors[de][sensor.keba_keenergy_12345678_solar_circuit_pump_2_2]
   StateSnapshot({
@@ -2944,8 +3349,11 @@
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': '53.0',
+    'state': '52.999997',
   })
+# ---
+# name: test_sensors[de][sensor.keba_keenergy_12345678_solar_circuit_pump_2_2_displayed]
+  '53.00 %'
 # ---
 # name: test_sensors[de][sensor.keba_keenergy_12345678_solar_circuit_source_temperature_1]
   StateSnapshot({
@@ -2960,8 +3368,11 @@
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': '44.43',
+    'state': '44.400002',
   })
+# ---
+# name: test_sensors[de][sensor.keba_keenergy_12345678_solar_circuit_source_temperature_1_displayed]
+  '44.4 °C'
 # ---
 # name: test_sensors[de][sensor.keba_keenergy_12345678_solar_circuit_source_temperature_2]
   StateSnapshot({
@@ -2976,8 +3387,11 @@
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': '34.43',
+    'state': '34.400002',
   })
+# ---
+# name: test_sensors[de][sensor.keba_keenergy_12345678_solar_circuit_source_temperature_2_displayed]
+  '34.4 °C'
 # ---
 # name: test_sensors[de][sensor.keba_keenergy_12345678_solar_circuit_target_temperature_1_1]
   StateSnapshot({
@@ -2998,6 +3412,9 @@
     'state': '55.0',
   })
 # ---
+# name: test_sensors[de][sensor.keba_keenergy_12345678_solar_circuit_target_temperature_1_1_displayed]
+  '55.0 °C'
+# ---
 # name: test_sensors[de][sensor.keba_keenergy_12345678_solar_circuit_target_temperature_1_2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
@@ -3016,6 +3433,9 @@
     'last_updated': <ANY>,
     'state': '53.0',
   })
+# ---
+# name: test_sensors[de][sensor.keba_keenergy_12345678_solar_circuit_target_temperature_1_2_displayed]
+  '53.0 °C'
 # ---
 # name: test_sensors[de][sensor.keba_keenergy_12345678_solar_circuit_target_temperature_2_1]
   StateSnapshot({
@@ -3036,6 +3456,9 @@
     'state': '54.0',
   })
 # ---
+# name: test_sensors[de][sensor.keba_keenergy_12345678_solar_circuit_target_temperature_2_1_displayed]
+  '54.0 °C'
+# ---
 # name: test_sensors[de][sensor.keba_keenergy_12345678_solar_circuit_target_temperature_2_2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
@@ -3054,6 +3477,9 @@
     'last_updated': <ANY>,
     'state': '52.0',
   })
+# ---
+# name: test_sensors[de][sensor.keba_keenergy_12345678_solar_circuit_target_temperature_2_2_displayed]
+  '52.0 °C'
 # ---
 # name: test_sensors[de][sensor.keba_keenergy_12345678_switch_valve_position_1]
   StateSnapshot({
@@ -3124,6 +3550,9 @@
     'state': '6.7',
   })
 # ---
+# name: test_sensors[de][sensor.keba_keenergy_12345678_webserver_cpu_usage_displayed]
+  '6.7 %'
+# ---
 # name: test_sensors[de][sensor.keba_keenergy_12345678_webview_cpu_usage]
   StateSnapshot({
     'attributes': ReadOnlyDict({
@@ -3138,6 +3567,9 @@
     'last_updated': <ANY>,
     'state': '3.4',
   })
+# ---
+# name: test_sensors[de][sensor.keba_keenergy_12345678_webview_cpu_usage_displayed]
+  '3.4 %'
 # ---
 # name: test_sensors[de][sensor.keba_keenergy_12345678_weekly_write_count]
   StateSnapshot({
@@ -3155,6 +3587,9 @@
     'state': '0',
   })
 # ---
+# name: test_sensors[de][sensor.keba_keenergy_12345678_weekly_write_count_displayed]
+  '0'
+# ---
 # name: test_sensors[en][sensor.keba_keenergy_12345678_buffer_tank_current_bottom_temperature_1]
   StateSnapshot({
     'attributes': ReadOnlyDict({
@@ -3168,8 +3603,11 @@
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': '15.67',
+    'state': '15.695418',
   })
+# ---
+# name: test_sensors[en][sensor.keba_keenergy_12345678_buffer_tank_current_bottom_temperature_1_displayed]
+  '15.7 °C'
 # ---
 # name: test_sensors[en][sensor.keba_keenergy_12345678_buffer_tank_current_bottom_temperature_2]
   StateSnapshot({
@@ -3184,8 +3622,11 @@
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': '25.67',
+    'state': '25.700001',
   })
+# ---
+# name: test_sensors[en][sensor.keba_keenergy_12345678_buffer_tank_current_bottom_temperature_2_displayed]
+  '25.7 °C'
 # ---
 # name: test_sensors[en][sensor.keba_keenergy_12345678_buffer_tank_current_top_temperature_1]
   StateSnapshot({
@@ -3200,8 +3641,11 @@
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': '45.67',
+    'state': '45.700001',
   })
+# ---
+# name: test_sensors[en][sensor.keba_keenergy_12345678_buffer_tank_current_top_temperature_1_displayed]
+  '45.7 °C'
 # ---
 # name: test_sensors[en][sensor.keba_keenergy_12345678_buffer_tank_current_top_temperature_2]
   StateSnapshot({
@@ -3216,8 +3660,11 @@
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': '35.67',
+    'state': '35.700001',
   })
+# ---
+# name: test_sensors[en][sensor.keba_keenergy_12345678_buffer_tank_current_top_temperature_2_displayed]
+  '35.7 °C'
 # ---
 # name: test_sensors[en][sensor.keba_keenergy_12345678_buffer_tank_excess_energy_mode_1]
   StateSnapshot({
@@ -3291,6 +3738,9 @@
     'state': '75.0',
   })
 # ---
+# name: test_sensors[en][sensor.keba_keenergy_12345678_buffer_tank_excess_energy_target_temperature_1_displayed]
+  '75.0 °C'
+# ---
 # name: test_sensors[en][sensor.keba_keenergy_12345678_buffer_tank_excess_energy_target_temperature_2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
@@ -3308,6 +3758,9 @@
     'last_updated': <ANY>,
     'state': '75.0',
   })
+# ---
+# name: test_sensors[en][sensor.keba_keenergy_12345678_buffer_tank_excess_energy_target_temperature_2_displayed]
+  '75.0 °C'
 # ---
 # name: test_sensors[en][sensor.keba_keenergy_12345678_buffer_tank_operating_mode_1]
   StateSnapshot({
@@ -3385,6 +3838,9 @@
     'state': '10.0',
   })
 # ---
+# name: test_sensors[en][sensor.keba_keenergy_12345678_buffer_tank_standby_temperature_1_displayed]
+  '10.0 °C'
+# ---
 # name: test_sensors[en][sensor.keba_keenergy_12345678_buffer_tank_standby_temperature_2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
@@ -3403,6 +3859,9 @@
     'state': '11.0',
   })
 # ---
+# name: test_sensors[en][sensor.keba_keenergy_12345678_buffer_tank_standby_temperature_2_displayed]
+  '11.0 °C'
+# ---
 # name: test_sensors[en][sensor.keba_keenergy_12345678_buffer_tank_target_temperature_1]
   StateSnapshot({
     'attributes': ReadOnlyDict({
@@ -3419,6 +3878,9 @@
     'last_updated': <ANY>,
     'state': '44.0',
   })
+# ---
+# name: test_sensors[en][sensor.keba_keenergy_12345678_buffer_tank_target_temperature_1_displayed]
+  '44.0 °C'
 # ---
 # name: test_sensors[en][sensor.keba_keenergy_12345678_buffer_tank_target_temperature_2]
   StateSnapshot({
@@ -3437,6 +3899,9 @@
     'state': '43.0',
   })
 # ---
+# name: test_sensors[en][sensor.keba_keenergy_12345678_buffer_tank_target_temperature_2_displayed]
+  '43.0 °C'
+# ---
 # name: test_sensors[en][sensor.keba_keenergy_12345678_control_cpu_usage]
   StateSnapshot({
     'attributes': ReadOnlyDict({
@@ -3451,6 +3916,9 @@
     'last_updated': <ANY>,
     'state': '0.7',
   })
+# ---
+# name: test_sensors[en][sensor.keba_keenergy_12345678_control_cpu_usage_displayed]
+  '0.7 %'
 # ---
 # name: test_sensors[en][sensor.keba_keenergy_12345678_cpu_usage]
   StateSnapshot({
@@ -3467,6 +3935,9 @@
     'state': '2.7',
   })
 # ---
+# name: test_sensors[en][sensor.keba_keenergy_12345678_cpu_usage_displayed]
+  '2.7 %'
+# ---
 # name: test_sensors[en][sensor.keba_keenergy_12345678_external_heat_source_activation_counter_1]
   StateSnapshot({
     'attributes': ReadOnlyDict({
@@ -3480,6 +3951,9 @@
     'last_updated': <ANY>,
     'state': '812',
   })
+# ---
+# name: test_sensors[en][sensor.keba_keenergy_12345678_external_heat_source_activation_counter_1_displayed]
+  '812'
 # ---
 # name: test_sensors[en][sensor.keba_keenergy_12345678_external_heat_source_activation_counter_2]
   StateSnapshot({
@@ -3495,6 +3969,9 @@
     'state': '812',
   })
 # ---
+# name: test_sensors[en][sensor.keba_keenergy_12345678_external_heat_source_activation_counter_2_displayed]
+  '812'
+# ---
 # name: test_sensors[en][sensor.keba_keenergy_12345678_external_heat_source_excess_energy_activation_counter_1]
   StateSnapshot({
     'attributes': ReadOnlyDict({
@@ -3509,6 +3986,9 @@
     'state': '23',
   })
 # ---
+# name: test_sensors[en][sensor.keba_keenergy_12345678_external_heat_source_excess_energy_activation_counter_1_displayed]
+  '23'
+# ---
 # name: test_sensors[en][sensor.keba_keenergy_12345678_external_heat_source_excess_energy_activation_counter_2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
@@ -3522,6 +4002,9 @@
     'last_updated': <ANY>,
     'state': '23',
   })
+# ---
+# name: test_sensors[en][sensor.keba_keenergy_12345678_external_heat_source_excess_energy_activation_counter_2_displayed]
+  '23'
 # ---
 # name: test_sensors[en][sensor.keba_keenergy_12345678_external_heat_source_excess_energy_max_runtime_1]
   StateSnapshot({
@@ -3539,6 +4022,9 @@
     'state': '1.0',
   })
 # ---
+# name: test_sensors[en][sensor.keba_keenergy_12345678_external_heat_source_excess_energy_max_runtime_1_displayed]
+  '1.00 h'
+# ---
 # name: test_sensors[en][sensor.keba_keenergy_12345678_external_heat_source_excess_energy_max_runtime_2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
@@ -3554,6 +4040,9 @@
     'last_updated': <ANY>,
     'state': '1.0',
   })
+# ---
+# name: test_sensors[en][sensor.keba_keenergy_12345678_external_heat_source_excess_energy_max_runtime_2_displayed]
+  '1.00 h'
 # ---
 # name: test_sensors[en][sensor.keba_keenergy_12345678_external_heat_source_excess_energy_operating_time_1]
   StateSnapshot({
@@ -3571,6 +4060,9 @@
     'state': '1.0',
   })
 # ---
+# name: test_sensors[en][sensor.keba_keenergy_12345678_external_heat_source_excess_energy_operating_time_1_displayed]
+  '1.00 h'
+# ---
 # name: test_sensors[en][sensor.keba_keenergy_12345678_external_heat_source_excess_energy_operating_time_2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
@@ -3586,6 +4078,9 @@
     'last_updated': <ANY>,
     'state': '1.0',
   })
+# ---
+# name: test_sensors[en][sensor.keba_keenergy_12345678_external_heat_source_excess_energy_operating_time_2_displayed]
+  '1.00 h'
 # ---
 # name: test_sensors[en][sensor.keba_keenergy_12345678_external_heat_source_max_runtime_1]
   StateSnapshot({
@@ -3603,6 +4098,9 @@
     'state': '2.25805555555556',
   })
 # ---
+# name: test_sensors[en][sensor.keba_keenergy_12345678_external_heat_source_max_runtime_1_displayed]
+  '2.26 h'
+# ---
 # name: test_sensors[en][sensor.keba_keenergy_12345678_external_heat_source_max_runtime_2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
@@ -3618,6 +4116,9 @@
     'last_updated': <ANY>,
     'state': '2.25805555555556',
   })
+# ---
+# name: test_sensors[en][sensor.keba_keenergy_12345678_external_heat_source_max_runtime_2_displayed]
+  '2.26 h'
 # ---
 # name: test_sensors[en][sensor.keba_keenergy_12345678_external_heat_source_operating_mode_1]
   StateSnapshot({
@@ -3693,6 +4194,9 @@
     'state': '225.833055555556',
   })
 # ---
+# name: test_sensors[en][sensor.keba_keenergy_12345678_external_heat_source_operating_time_1_displayed]
+  '225.83 h'
+# ---
 # name: test_sensors[en][sensor.keba_keenergy_12345678_external_heat_source_operating_time_2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
@@ -3709,6 +4213,9 @@
     'state': '225.833055555556',
   })
 # ---
+# name: test_sensors[en][sensor.keba_keenergy_12345678_external_heat_source_operating_time_2_displayed]
+  '225.83 h'
+# ---
 # name: test_sensors[en][sensor.keba_keenergy_12345678_external_heat_source_target_temperature_1]
   StateSnapshot({
     'attributes': ReadOnlyDict({
@@ -3722,8 +4229,11 @@
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': '17.23',
+    'state': '17.227032',
   })
+# ---
+# name: test_sensors[en][sensor.keba_keenergy_12345678_external_heat_source_target_temperature_1_displayed]
+  '17.2 °C'
 # ---
 # name: test_sensors[en][sensor.keba_keenergy_12345678_external_heat_source_target_temperature_2]
   StateSnapshot({
@@ -3738,8 +4248,11 @@
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': '17.23',
+    'state': '17.227032',
   })
+# ---
+# name: test_sensors[en][sensor.keba_keenergy_12345678_external_heat_source_target_temperature_2_displayed]
+  '17.2 °C'
 # ---
 # name: test_sensors[en][sensor.keba_keenergy_12345678_flash_erase_counter]
   StateSnapshot({
@@ -3755,6 +4268,9 @@
     'state': '341',
   })
 # ---
+# name: test_sensors[en][sensor.keba_keenergy_12345678_flash_erase_counter_displayed]
+  '341'
+# ---
 # name: test_sensors[en][sensor.keba_keenergy_12345678_free_ram]
   StateSnapshot({
     'attributes': ReadOnlyDict({
@@ -3769,6 +4285,9 @@
     'last_updated': <ANY>,
     'state': '100060',
   })
+# ---
+# name: test_sensors[en][sensor.keba_keenergy_12345678_free_ram_displayed]
+  '100060 kB'
 # ---
 # name: test_sensors[en][sensor.keba_keenergy_12345678_heat_circuit_cool_request_2]
   StateSnapshot({
@@ -3818,6 +4337,9 @@
     'state': 'HC5',
   })
 # ---
+# name: test_sensors[en][sensor.keba_keenergy_12345678_heat_circuit_cooling_curve_2_displayed]
+  'HC5'
+# ---
 # name: test_sensors[en][sensor.keba_keenergy_12345678_heat_circuit_cooling_limit_day_2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
@@ -3835,6 +4357,9 @@
     'last_updated': <ANY>,
     'state': '20.0',
   })
+# ---
+# name: test_sensors[en][sensor.keba_keenergy_12345678_heat_circuit_cooling_limit_day_2_displayed]
+  '20.0 °C'
 # ---
 # name: test_sensors[en][sensor.keba_keenergy_12345678_heat_circuit_cooling_limit_night_2]
   StateSnapshot({
@@ -3854,6 +4379,9 @@
     'state': '18.0',
   })
 # ---
+# name: test_sensors[en][sensor.keba_keenergy_12345678_heat_circuit_cooling_limit_night_2_displayed]
+  '18.0 °C'
+# ---
 # name: test_sensors[en][sensor.keba_keenergy_12345678_heat_circuit_dew_point_1]
   StateSnapshot({
     'attributes': ReadOnlyDict({
@@ -3867,8 +4395,11 @@
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': '13.1',
+    'state': '13.104257',
   })
+# ---
+# name: test_sensors[en][sensor.keba_keenergy_12345678_heat_circuit_dew_point_1_displayed]
+  '13.1 °C'
 # ---
 # name: test_sensors[en][sensor.keba_keenergy_12345678_heat_circuit_excess_energy_cooling_limit_day_2]
   StateSnapshot({
@@ -3888,6 +4419,9 @@
     'state': '10.0',
   })
 # ---
+# name: test_sensors[en][sensor.keba_keenergy_12345678_heat_circuit_excess_energy_cooling_limit_day_2_displayed]
+  '10.0 °C'
+# ---
 # name: test_sensors[en][sensor.keba_keenergy_12345678_heat_circuit_excess_energy_cooling_limit_night_2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
@@ -3905,6 +4439,9 @@
     'last_updated': <ANY>,
     'state': '28.0',
   })
+# ---
+# name: test_sensors[en][sensor.keba_keenergy_12345678_heat_circuit_excess_energy_cooling_limit_night_2_displayed]
+  '28.0 °C'
 # ---
 # name: test_sensors[en][sensor.keba_keenergy_12345678_heat_circuit_excess_energy_heating_limit_day_1]
   StateSnapshot({
@@ -3924,6 +4461,9 @@
     'state': '30.0',
   })
 # ---
+# name: test_sensors[en][sensor.keba_keenergy_12345678_heat_circuit_excess_energy_heating_limit_day_1_displayed]
+  '30.0 °C'
+# ---
 # name: test_sensors[en][sensor.keba_keenergy_12345678_heat_circuit_excess_energy_heating_limit_night_1]
   StateSnapshot({
     'attributes': ReadOnlyDict({
@@ -3941,6 +4481,9 @@
     'last_updated': <ANY>,
     'state': '28.0',
   })
+# ---
+# name: test_sensors[en][sensor.keba_keenergy_12345678_heat_circuit_excess_energy_heating_limit_night_1_displayed]
+  '28.0 °C'
 # ---
 # name: test_sensors[en][sensor.keba_keenergy_12345678_heat_circuit_excess_energy_mode_1]
   StateSnapshot({
@@ -4014,6 +4557,9 @@
     'state': '10.0',
   })
 # ---
+# name: test_sensors[en][sensor.keba_keenergy_12345678_heat_circuit_excess_energy_target_cooling_temperature_2_displayed]
+  '10.0 °C'
+# ---
 # name: test_sensors[en][sensor.keba_keenergy_12345678_heat_circuit_excess_energy_target_temperature_1]
   StateSnapshot({
     'attributes': ReadOnlyDict({
@@ -4032,6 +4578,9 @@
     'state': '30.0',
   })
 # ---
+# name: test_sensors[en][sensor.keba_keenergy_12345678_heat_circuit_excess_energy_target_temperature_1_displayed]
+  '30.0 °C'
+# ---
 # name: test_sensors[en][sensor.keba_keenergy_12345678_heat_circuit_flow_temperature_1]
   StateSnapshot({
     'attributes': ReadOnlyDict({
@@ -4045,8 +4594,11 @@
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': '22.21',
+    'state': '22.200001',
   })
+# ---
+# name: test_sensors[en][sensor.keba_keenergy_12345678_heat_circuit_flow_temperature_1_displayed]
+  '22.2 °C'
 # ---
 # name: test_sensors[en][sensor.keba_keenergy_12345678_heat_circuit_flow_temperature_setpoint_1]
   StateSnapshot({
@@ -4061,8 +4613,11 @@
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': '26.55',
+    'state': '26.553419',
   })
+# ---
+# name: test_sensors[en][sensor.keba_keenergy_12345678_heat_circuit_flow_temperature_setpoint_1_displayed]
+  '26.6 °C'
 # ---
 # name: test_sensors[en][sensor.keba_keenergy_12345678_heat_circuit_flow_temperature_setpoint_2]
   StateSnapshot({
@@ -4077,8 +4632,11 @@
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': '26.55',
+    'state': '26.553419',
   })
+# ---
+# name: test_sensors[en][sensor.keba_keenergy_12345678_heat_circuit_flow_temperature_setpoint_2_displayed]
+  '26.6 °C'
 # ---
 # name: test_sensors[en][sensor.keba_keenergy_12345678_heat_circuit_heat_request_1]
   StateSnapshot({
@@ -4158,6 +4716,9 @@
     'state': 'HC6',
   })
 # ---
+# name: test_sensors[en][sensor.keba_keenergy_12345678_heat_circuit_heating_curve_1_displayed]
+  'HC6'
+# ---
 # name: test_sensors[en][sensor.keba_keenergy_12345678_heat_circuit_heating_limit_day_1]
   StateSnapshot({
     'attributes': ReadOnlyDict({
@@ -4176,6 +4737,9 @@
     'state': '20.0',
   })
 # ---
+# name: test_sensors[en][sensor.keba_keenergy_12345678_heat_circuit_heating_limit_day_1_displayed]
+  '20.0 °C'
+# ---
 # name: test_sensors[en][sensor.keba_keenergy_12345678_heat_circuit_heating_limit_night_1]
   StateSnapshot({
     'attributes': ReadOnlyDict({
@@ -4193,6 +4757,9 @@
     'last_updated': <ANY>,
     'state': '18.0',
   })
+# ---
+# name: test_sensors[en][sensor.keba_keenergy_12345678_heat_circuit_heating_limit_night_1_displayed]
+  '18.0 °C'
 # ---
 # name: test_sensors[en][sensor.keba_keenergy_12345678_heat_circuit_mixer_position_1]
   StateSnapshot({
@@ -4235,8 +4802,11 @@
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': '20.21',
+    'state': '20.200001',
   })
+# ---
+# name: test_sensors[en][sensor.keba_keenergy_12345678_heat_circuit_mixer_return_flow_temperature_1_displayed]
+  '20.2 °C'
 # ---
 # name: test_sensors[en][sensor.keba_keenergy_12345678_heat_circuit_operating_mode_1]
   StateSnapshot({
@@ -4331,6 +4901,9 @@
     'state': '50.0',
   })
 # ---
+# name: test_sensors[en][sensor.keba_keenergy_12345678_heat_circuit_pump_speed_1_displayed]
+  '50.00 %'
+# ---
 # name: test_sensors[en][sensor.keba_keenergy_12345678_heat_circuit_return_flow_temperature_1]
   StateSnapshot({
     'attributes': ReadOnlyDict({
@@ -4344,8 +4917,11 @@
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': '21.21',
+    'state': '21.200001',
   })
+# ---
+# name: test_sensors[en][sensor.keba_keenergy_12345678_heat_circuit_return_flow_temperature_1_displayed]
+  '21.2 °C'
 # ---
 # name: test_sensors[en][sensor.keba_keenergy_12345678_heat_circuit_room_humidity_1]
   StateSnapshot({
@@ -4363,6 +4939,9 @@
     'state': '53.0',
   })
 # ---
+# name: test_sensors[en][sensor.keba_keenergy_12345678_heat_circuit_room_humidity_1_displayed]
+  '53.00 %'
+# ---
 # name: test_sensors[en][sensor.keba_keenergy_12345678_heat_circuit_room_temperature_1]
   StateSnapshot({
     'attributes': ReadOnlyDict({
@@ -4376,8 +4955,11 @@
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': '22.42',
+    'state': '22.418831',
   })
+# ---
+# name: test_sensors[en][sensor.keba_keenergy_12345678_heat_circuit_room_temperature_1_displayed]
+  '22.4 °C'
 # ---
 # name: test_sensors[en][sensor.keba_keenergy_12345678_heat_circuit_selected_target_temperature_1]
   StateSnapshot({
@@ -4395,6 +4977,9 @@
     'state': '20.0',
   })
 # ---
+# name: test_sensors[en][sensor.keba_keenergy_12345678_heat_circuit_selected_target_temperature_1_displayed]
+  '20.0 °C'
+# ---
 # name: test_sensors[en][sensor.keba_keenergy_12345678_heat_circuit_selected_target_temperature_2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
@@ -4410,6 +4995,9 @@
     'last_updated': <ANY>,
     'state': '20.0',
   })
+# ---
+# name: test_sensors[en][sensor.keba_keenergy_12345678_heat_circuit_selected_target_temperature_2_displayed]
+  '20.0 °C'
 # ---
 # name: test_sensors[en][sensor.keba_keenergy_12345678_heat_circuit_target_cooling_temperature_day_2]
   StateSnapshot({
@@ -4429,6 +5017,9 @@
     'state': '20.5',
   })
 # ---
+# name: test_sensors[en][sensor.keba_keenergy_12345678_heat_circuit_target_cooling_temperature_day_2_displayed]
+  '20.5 °C'
+# ---
 # name: test_sensors[en][sensor.keba_keenergy_12345678_heat_circuit_target_cooling_temperature_night_2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
@@ -4447,6 +5038,9 @@
     'state': '20.0',
   })
 # ---
+# name: test_sensors[en][sensor.keba_keenergy_12345678_heat_circuit_target_cooling_temperature_night_2_displayed]
+  '20.0 °C'
+# ---
 # name: test_sensors[en][sensor.keba_keenergy_12345678_heat_circuit_target_temperature_1]
   StateSnapshot({
     'attributes': ReadOnlyDict({
@@ -4463,6 +5057,9 @@
     'state': '20.5',
   })
 # ---
+# name: test_sensors[en][sensor.keba_keenergy_12345678_heat_circuit_target_temperature_1_displayed]
+  '20.5 °C'
+# ---
 # name: test_sensors[en][sensor.keba_keenergy_12345678_heat_circuit_target_temperature_2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
@@ -4478,6 +5075,9 @@
     'last_updated': <ANY>,
     'state': '20.5',
   })
+# ---
+# name: test_sensors[en][sensor.keba_keenergy_12345678_heat_circuit_target_temperature_2_displayed]
+  '20.5 °C'
 # ---
 # name: test_sensors[en][sensor.keba_keenergy_12345678_heat_circuit_target_temperature_away_1]
   StateSnapshot({
@@ -4497,6 +5097,9 @@
     'state': '18.0',
   })
 # ---
+# name: test_sensors[en][sensor.keba_keenergy_12345678_heat_circuit_target_temperature_away_1_displayed]
+  '18.0 °C'
+# ---
 # name: test_sensors[en][sensor.keba_keenergy_12345678_heat_circuit_target_temperature_day_1]
   StateSnapshot({
     'attributes': ReadOnlyDict({
@@ -4514,6 +5117,9 @@
     'last_updated': <ANY>,
     'state': '20.5',
   })
+# ---
+# name: test_sensors[en][sensor.keba_keenergy_12345678_heat_circuit_target_temperature_day_1_displayed]
+  '20.5 °C'
 # ---
 # name: test_sensors[en][sensor.keba_keenergy_12345678_heat_circuit_target_temperature_night_1]
   StateSnapshot({
@@ -4533,6 +5139,9 @@
     'state': '20.0',
   })
 # ---
+# name: test_sensors[en][sensor.keba_keenergy_12345678_heat_circuit_target_temperature_night_1_displayed]
+  '20.0 °C'
+# ---
 # name: test_sensors[en][sensor.keba_keenergy_12345678_heat_circuit_target_temperature_offset_1]
   StateSnapshot({
     'attributes': ReadOnlyDict({
@@ -4550,6 +5159,9 @@
     'last_updated': <ANY>,
     'state': '1.5',
   })
+# ---
+# name: test_sensors[en][sensor.keba_keenergy_12345678_heat_circuit_target_temperature_offset_1_displayed]
+  '1.5 °C'
 # ---
 # name: test_sensors[en][sensor.keba_keenergy_12345678_heat_circuit_target_temperature_offset_2]
   StateSnapshot({
@@ -4569,6 +5181,9 @@
     'state': '0.0',
   })
 # ---
+# name: test_sensors[en][sensor.keba_keenergy_12345678_heat_circuit_target_temperature_offset_2_displayed]
+  '0.0 °C'
+# ---
 # name: test_sensors[en][sensor.keba_keenergy_12345678_heat_pump_activation_counter]
   StateSnapshot({
     'attributes': ReadOnlyDict({
@@ -4582,6 +5197,9 @@
     'last_updated': <ANY>,
     'state': '477',
   })
+# ---
+# name: test_sensors[en][sensor.keba_keenergy_12345678_heat_pump_activation_counter_displayed]
+  '477'
 # ---
 # name: test_sensors[en][sensor.keba_keenergy_12345678_heat_pump_circulation_pump]
   StateSnapshot({
@@ -4598,6 +5216,9 @@
     'state': '0.0',
   })
 # ---
+# name: test_sensors[en][sensor.keba_keenergy_12345678_heat_pump_circulation_pump_displayed]
+  '0.00 %'
+# ---
 # name: test_sensors[en][sensor.keba_keenergy_12345678_heat_pump_compressor]
   StateSnapshot({
     'attributes': ReadOnlyDict({
@@ -4613,6 +5234,9 @@
     'state': '0.0',
   })
 # ---
+# name: test_sensors[en][sensor.keba_keenergy_12345678_heat_pump_compressor_displayed]
+  '0.00 %'
+# ---
 # name: test_sensors[en][sensor.keba_keenergy_12345678_heat_pump_compressor_input_temperature]
   StateSnapshot({
     'attributes': ReadOnlyDict({
@@ -4626,8 +5250,11 @@
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': '27.2',
+    'state': '27.200001',
   })
+# ---
+# name: test_sensors[en][sensor.keba_keenergy_12345678_heat_pump_compressor_input_temperature_displayed]
+  '27.2 °C'
 # ---
 # name: test_sensors[en][sensor.keba_keenergy_12345678_heat_pump_compressor_output_temperature]
   StateSnapshot({
@@ -4642,8 +5269,11 @@
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': '27.2',
+    'state': '27.200001',
   })
+# ---
+# name: test_sensors[en][sensor.keba_keenergy_12345678_heat_pump_compressor_output_temperature_displayed]
+  '27.2 °C'
 # ---
 # name: test_sensors[en][sensor.keba_keenergy_12345678_heat_pump_compressor_power]
   StateSnapshot({
@@ -4658,8 +5288,11 @@
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': '5.52',
+    'state': '5.5196772',
   })
+# ---
+# name: test_sensors[en][sensor.keba_keenergy_12345678_heat_pump_compressor_power_displayed]
+  '6 W'
 # ---
 # name: test_sensors[en][sensor.keba_keenergy_12345678_heat_pump_condenser_temperature]
   StateSnapshot({
@@ -4674,8 +5307,11 @@
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': '31.51',
+    'state': '31.514103',
   })
+# ---
+# name: test_sensors[en][sensor.keba_keenergy_12345678_heat_pump_condenser_temperature_displayed]
+  '31.5 °C'
 # ---
 # name: test_sensors[en][sensor.keba_keenergy_12345678_heat_pump_cooling_energy]
   StateSnapshot({
@@ -4690,7 +5326,7 @@
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': '7.21',
+    'state': '7.2140002',
   })
 # ---
 # name: test_sensors[en][sensor.keba_keenergy_12345678_heat_pump_cooling_energy_consumption]
@@ -4706,8 +5342,14 @@
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': '8.72',
+    'state': '8.7180004',
   })
+# ---
+# name: test_sensors[en][sensor.keba_keenergy_12345678_heat_pump_cooling_energy_consumption_displayed]
+  '8.72 kWh'
+# ---
+# name: test_sensors[en][sensor.keba_keenergy_12345678_heat_pump_cooling_energy_displayed]
+  '7.21 kWh'
 # ---
 # name: test_sensors[en][sensor.keba_keenergy_12345678_heat_pump_cooling_excess_energy_consumption]
   StateSnapshot({
@@ -4722,8 +5364,11 @@
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': '10.0',
+    'state': '10.003001',
   })
+# ---
+# name: test_sensors[en][sensor.keba_keenergy_12345678_heat_pump_cooling_excess_energy_consumption_displayed]
+  '10.00 kWh'
 # ---
 # name: test_sensors[en][sensor.keba_keenergy_12345678_heat_pump_cooling_spf]
   StateSnapshot({
@@ -4736,8 +5381,11 @@
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': '4.22',
+    'state': '4.2206435',
   })
+# ---
+# name: test_sensors[en][sensor.keba_keenergy_12345678_heat_pump_cooling_spf_displayed]
+  '4.22'
 # ---
 # name: test_sensors[en][sensor.keba_keenergy_12345678_heat_pump_cop]
   StateSnapshot({
@@ -4750,8 +5398,11 @@
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': '2.55',
+    'state': '2.5501628',
   })
+# ---
+# name: test_sensors[en][sensor.keba_keenergy_12345678_heat_pump_cop_displayed]
+  '2.55'
 # ---
 # name: test_sensors[en][sensor.keba_keenergy_12345678_heat_pump_current_overheating]
   StateSnapshot({
@@ -4766,8 +5417,11 @@
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': '18.68',
+    'state': '18.676249',
   })
+# ---
+# name: test_sensors[en][sensor.keba_keenergy_12345678_heat_pump_current_overheating_displayed]
+  '18.7 °C'
 # ---
 # name: test_sensors[en][sensor.keba_keenergy_12345678_heat_pump_excess_energy_activation_counter]
   StateSnapshot({
@@ -4783,6 +5437,9 @@
     'state': '3600',
   })
 # ---
+# name: test_sensors[en][sensor.keba_keenergy_12345678_heat_pump_excess_energy_activation_counter_displayed]
+  '3600'
+# ---
 # name: test_sensors[en][sensor.keba_keenergy_12345678_heat_pump_excess_energy_consumption]
   StateSnapshot({
     'attributes': ReadOnlyDict({
@@ -4796,8 +5453,11 @@
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': '10.0',
+    'state': '10.003001',
   })
+# ---
+# name: test_sensors[en][sensor.keba_keenergy_12345678_heat_pump_excess_energy_consumption_displayed]
+  '10.00 kWh'
 # ---
 # name: test_sensors[en][sensor.keba_keenergy_12345678_heat_pump_excess_energy_max_runtime]
   StateSnapshot({
@@ -4815,6 +5475,9 @@
     'state': '1.0',
   })
 # ---
+# name: test_sensors[en][sensor.keba_keenergy_12345678_heat_pump_excess_energy_max_runtime_displayed]
+  '1.00 h'
+# ---
 # name: test_sensors[en][sensor.keba_keenergy_12345678_heat_pump_excess_energy_operating_time]
   StateSnapshot({
     'attributes': ReadOnlyDict({
@@ -4831,6 +5494,9 @@
     'state': '1.0',
   })
 # ---
+# name: test_sensors[en][sensor.keba_keenergy_12345678_heat_pump_excess_energy_operating_time_displayed]
+  '1.00 h'
+# ---
 # name: test_sensors[en][sensor.keba_keenergy_12345678_heat_pump_expansion_valve_position]
   StateSnapshot({
     'attributes': ReadOnlyDict({
@@ -4843,6 +5509,9 @@
     'last_updated': <ANY>,
     'state': '20',
   })
+# ---
+# name: test_sensors[en][sensor.keba_keenergy_12345678_heat_pump_expansion_valve_position_displayed]
+  '20'
 # ---
 # name: test_sensors[en][sensor.keba_keenergy_12345678_heat_pump_flow_temperature]
   StateSnapshot({
@@ -4857,8 +5526,11 @@
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': '24.8',
+    'state': '24.803127',
   })
+# ---
+# name: test_sensors[en][sensor.keba_keenergy_12345678_heat_pump_flow_temperature_displayed]
+  '24.8 °C'
 # ---
 # name: test_sensors[en][sensor.keba_keenergy_12345678_heat_pump_heating_energy]
   StateSnapshot({
@@ -4873,7 +5545,7 @@
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': '8.43',
+    'state': '8.4317026',
   })
 # ---
 # name: test_sensors[en][sensor.keba_keenergy_12345678_heat_pump_heating_energy_consumption]
@@ -4889,8 +5561,14 @@
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': '7.33',
+    'state': '7.3290005',
   })
+# ---
+# name: test_sensors[en][sensor.keba_keenergy_12345678_heat_pump_heating_energy_consumption_displayed]
+  '7.33 kWh'
+# ---
+# name: test_sensors[en][sensor.keba_keenergy_12345678_heat_pump_heating_energy_displayed]
+  '8.43 kWh'
 # ---
 # name: test_sensors[en][sensor.keba_keenergy_12345678_heat_pump_heating_excess_energy_consumption]
   StateSnapshot({
@@ -4905,8 +5583,11 @@
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': '10.0',
+    'state': '10.003001',
   })
+# ---
+# name: test_sensors[en][sensor.keba_keenergy_12345678_heat_pump_heating_excess_energy_consumption_displayed]
+  '10.00 kWh'
 # ---
 # name: test_sensors[en][sensor.keba_keenergy_12345678_heat_pump_heating_power]
   StateSnapshot({
@@ -4921,8 +5602,11 @@
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': '3.22',
+    'state': '3.2187521',
   })
+# ---
+# name: test_sensors[en][sensor.keba_keenergy_12345678_heat_pump_heating_power_displayed]
+  '3 W'
 # ---
 # name: test_sensors[en][sensor.keba_keenergy_12345678_heat_pump_heating_spf]
   StateSnapshot({
@@ -4935,8 +5619,11 @@
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': '3.32',
+    'state': '3.3184626',
   })
+# ---
+# name: test_sensors[en][sensor.keba_keenergy_12345678_heat_pump_heating_spf_displayed]
+  '3.32'
 # ---
 # name: test_sensors[en][sensor.keba_keenergy_12345678_heat_pump_high_pressure]
   StateSnapshot({
@@ -4951,8 +5638,11 @@
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': '15.62',
+    'state': '15.61875',
   })
+# ---
+# name: test_sensors[en][sensor.keba_keenergy_12345678_heat_pump_high_pressure_displayed]
+  '15.62 bar'
 # ---
 # name: test_sensors[en][sensor.keba_keenergy_12345678_heat_pump_hot_water_energy]
   StateSnapshot({
@@ -4967,7 +5657,7 @@
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': '7.86',
+    'state': '7.8570004',
   })
 # ---
 # name: test_sensors[en][sensor.keba_keenergy_12345678_heat_pump_hot_water_energy_consumption]
@@ -4983,8 +5673,14 @@
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': '2.77',
+    'state': '2.7710001',
   })
+# ---
+# name: test_sensors[en][sensor.keba_keenergy_12345678_heat_pump_hot_water_energy_consumption_displayed]
+  '2.77 kWh'
+# ---
+# name: test_sensors[en][sensor.keba_keenergy_12345678_heat_pump_hot_water_energy_displayed]
+  '7.86 kWh'
 # ---
 # name: test_sensors[en][sensor.keba_keenergy_12345678_heat_pump_hot_water_excess_energy_consumption]
   StateSnapshot({
@@ -4999,8 +5695,11 @@
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': '10.0',
+    'state': '10.003001',
   })
+# ---
+# name: test_sensors[en][sensor.keba_keenergy_12345678_heat_pump_hot_water_excess_energy_consumption_displayed]
+  '10.00 kWh'
 # ---
 # name: test_sensors[en][sensor.keba_keenergy_12345678_heat_pump_hot_water_power]
   StateSnapshot({
@@ -5015,8 +5714,11 @@
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': '2.77',
+    'state': '2.7713845',
   })
+# ---
+# name: test_sensors[en][sensor.keba_keenergy_12345678_heat_pump_hot_water_power_displayed]
+  '3 W'
 # ---
 # name: test_sensors[en][sensor.keba_keenergy_12345678_heat_pump_hot_water_spf]
   StateSnapshot({
@@ -5029,8 +5731,11 @@
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': '2.5',
+    'state': '2.5034916',
   })
+# ---
+# name: test_sensors[en][sensor.keba_keenergy_12345678_heat_pump_hot_water_spf_displayed]
+  '2.50'
 # ---
 # name: test_sensors[en][sensor.keba_keenergy_12345678_heat_pump_low_pressure]
   StateSnapshot({
@@ -5045,8 +5750,11 @@
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': '15.35',
+    'state': '15.354687',
   })
+# ---
+# name: test_sensors[en][sensor.keba_keenergy_12345678_heat_pump_low_pressure_displayed]
+  '15.35 bar'
 # ---
 # name: test_sensors[en][sensor.keba_keenergy_12345678_heat_pump_max_runtime]
   StateSnapshot({
@@ -5064,6 +5772,9 @@
     'state': '167.334166666667',
   })
 # ---
+# name: test_sensors[en][sensor.keba_keenergy_12345678_heat_pump_max_runtime_displayed]
+  '167.33 h'
+# ---
 # name: test_sensors[en][sensor.keba_keenergy_12345678_heat_pump_operating_time]
   StateSnapshot({
     'attributes': ReadOnlyDict({
@@ -5080,6 +5791,9 @@
     'state': '1058.06333333333',
   })
 # ---
+# name: test_sensors[en][sensor.keba_keenergy_12345678_heat_pump_operating_time_displayed]
+  '1058.06 h'
+# ---
 # name: test_sensors[en][sensor.keba_keenergy_12345678_heat_pump_return_flow_temperature]
   StateSnapshot({
     'attributes': ReadOnlyDict({
@@ -5093,8 +5807,11 @@
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': '23.9',
+    'state': '23.904211',
   })
+# ---
+# name: test_sensors[en][sensor.keba_keenergy_12345678_heat_pump_return_flow_temperature_displayed]
+  '23.9 °C'
 # ---
 # name: test_sensors[en][sensor.keba_keenergy_12345678_heat_pump_source_input_temperature]
   StateSnapshot({
@@ -5109,8 +5826,11 @@
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': '25.7',
+    'state': '25.700001',
   })
+# ---
+# name: test_sensors[en][sensor.keba_keenergy_12345678_heat_pump_source_input_temperature_displayed]
+  '25.7 °C'
 # ---
 # name: test_sensors[en][sensor.keba_keenergy_12345678_heat_pump_source_output_temperature]
   StateSnapshot({
@@ -5125,8 +5845,11 @@
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': '24.9',
+    'state': '24.896341',
   })
+# ---
+# name: test_sensors[en][sensor.keba_keenergy_12345678_heat_pump_source_output_temperature_displayed]
+  '24.9 °C'
 # ---
 # name: test_sensors[en][sensor.keba_keenergy_12345678_heat_pump_source_pump_speed]
   StateSnapshot({
@@ -5140,8 +5863,11 @@
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': '44.88',
+    'state': '44.875106',
   })
+# ---
+# name: test_sensors[en][sensor.keba_keenergy_12345678_heat_pump_source_pump_speed_displayed]
+  '44.88 %'
 # ---
 # name: test_sensors[en][sensor.keba_keenergy_12345678_heat_pump_state]
   StateSnapshot({
@@ -5280,8 +6006,11 @@
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': '5.5',
+    'state': '5.4999752',
   })
+# ---
+# name: test_sensors[en][sensor.keba_keenergy_12345678_heat_pump_target_overheating_displayed]
+  '5.5 °C'
 # ---
 # name: test_sensors[en][sensor.keba_keenergy_12345678_heat_pump_total_energy_consumption]
   StateSnapshot({
@@ -5296,8 +6025,11 @@
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': '5.21',
+    'state': '5.2120004',
   })
+# ---
+# name: test_sensors[en][sensor.keba_keenergy_12345678_heat_pump_total_energy_consumption_displayed]
+  '5.21 kWh'
 # ---
 # name: test_sensors[en][sensor.keba_keenergy_12345678_heat_pump_total_spf]
   StateSnapshot({
@@ -5310,8 +6042,11 @@
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': '2.43',
+    'state': '2.4277346',
   })
+# ---
+# name: test_sensors[en][sensor.keba_keenergy_12345678_heat_pump_total_spf_displayed]
+  '2.43'
 # ---
 # name: test_sensors[en][sensor.keba_keenergy_12345678_heat_pump_total_thermal_energy]
   StateSnapshot({
@@ -5326,8 +6061,11 @@
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': '8.22',
+    'state': '8.2230005',
   })
+# ---
+# name: test_sensors[en][sensor.keba_keenergy_12345678_heat_pump_total_thermal_energy_displayed]
+  '8.22 kWh'
 # ---
 # name: test_sensors[en][sensor.keba_keenergy_12345678_heat_pump_vaporizer_temperature]
   StateSnapshot({
@@ -5342,8 +6080,11 @@
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': '-4.56',
+    'state': '-4.5617409',
   })
+# ---
+# name: test_sensors[en][sensor.keba_keenergy_12345678_heat_pump_vaporizer_temperature_displayed]
+  '-4.6 °C'
 # ---
 # name: test_sensors[en][sensor.keba_keenergy_12345678_hot_water_tank_circulation_return_temperature_1]
   StateSnapshot({
@@ -5358,8 +6099,11 @@
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': '30.45',
+    'state': '30.5',
   })
+# ---
+# name: test_sensors[en][sensor.keba_keenergy_12345678_hot_water_tank_circulation_return_temperature_1_displayed]
+  '30.5 °C'
 # ---
 # name: test_sensors[en][sensor.keba_keenergy_12345678_hot_water_tank_circulation_return_temperature_2]
   StateSnapshot({
@@ -5374,8 +6118,11 @@
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': '27.45',
+    'state': '27.5',
   })
+# ---
+# name: test_sensors[en][sensor.keba_keenergy_12345678_hot_water_tank_circulation_return_temperature_2_displayed]
+  '27.5 °C'
 # ---
 # name: test_sensors[en][sensor.keba_keenergy_12345678_hot_water_tank_current_temperature_1]
   StateSnapshot({
@@ -5390,8 +6137,11 @@
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': '47.7',
+    'state': '47.700001',
   })
+# ---
+# name: test_sensors[en][sensor.keba_keenergy_12345678_hot_water_tank_current_temperature_1_displayed]
+  '47.7 °C'
 # ---
 # name: test_sensors[en][sensor.keba_keenergy_12345678_hot_water_tank_current_temperature_2]
   StateSnapshot({
@@ -5406,8 +6156,11 @@
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': '47.7',
+    'state': '47.700001',
   })
+# ---
+# name: test_sensors[en][sensor.keba_keenergy_12345678_hot_water_tank_current_temperature_2_displayed]
+  '47.7 °C'
 # ---
 # name: test_sensors[en][sensor.keba_keenergy_12345678_hot_water_tank_excess_energy_mode_1]
   StateSnapshot({
@@ -5481,6 +6234,9 @@
     'state': '75.0',
   })
 # ---
+# name: test_sensors[en][sensor.keba_keenergy_12345678_hot_water_tank_excess_energy_target_temperature_1_displayed]
+  '75.0 °C'
+# ---
 # name: test_sensors[en][sensor.keba_keenergy_12345678_hot_water_tank_excess_energy_target_temperature_2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
@@ -5499,6 +6255,9 @@
     'state': '75.0',
   })
 # ---
+# name: test_sensors[en][sensor.keba_keenergy_12345678_hot_water_tank_excess_energy_target_temperature_2_displayed]
+  '75.0 °C'
+# ---
 # name: test_sensors[en][sensor.keba_keenergy_12345678_hot_water_tank_fresh_water_module_temperature_1]
   StateSnapshot({
     'attributes': ReadOnlyDict({
@@ -5512,8 +6271,11 @@
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': '51.23',
+    'state': '51.200001',
   })
+# ---
+# name: test_sensors[en][sensor.keba_keenergy_12345678_hot_water_tank_fresh_water_module_temperature_1_displayed]
+  '51.20 °C'
 # ---
 # name: test_sensors[en][sensor.keba_keenergy_12345678_hot_water_tank_operating_mode_1]
   StateSnapshot({
@@ -5595,6 +6357,9 @@
     'state': '32.5',
   })
 # ---
+# name: test_sensors[en][sensor.keba_keenergy_12345678_hot_water_tank_standby_temperature_1_displayed]
+  '32.5 °C'
+# ---
 # name: test_sensors[en][sensor.keba_keenergy_12345678_hot_water_tank_standby_temperature_2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
@@ -5612,6 +6377,9 @@
     'last_updated': <ANY>,
     'state': '32.5',
   })
+# ---
+# name: test_sensors[en][sensor.keba_keenergy_12345678_hot_water_tank_standby_temperature_2_displayed]
+  '32.5 °C'
 # ---
 # name: test_sensors[en][sensor.keba_keenergy_12345678_hot_water_tank_target_temperature_1]
   StateSnapshot({
@@ -5632,6 +6400,9 @@
     'state': '51.0',
   })
 # ---
+# name: test_sensors[en][sensor.keba_keenergy_12345678_hot_water_tank_target_temperature_1_displayed]
+  '51.0 °C'
+# ---
 # name: test_sensors[en][sensor.keba_keenergy_12345678_hot_water_tank_target_temperature_2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
@@ -5650,6 +6421,9 @@
     'last_updated': <ANY>,
     'state': '51.0',
   })
+# ---
+# name: test_sensors[en][sensor.keba_keenergy_12345678_hot_water_tank_target_temperature_2_displayed]
+  '51.0 °C'
 # ---
 # name: test_sensors[en][sensor.keba_keenergy_12345678_operating_mode]
   StateSnapshot({
@@ -5699,8 +6473,11 @@
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': '20.5',
+    'state': '20.504164',
   })
+# ---
+# name: test_sensors[en][sensor.keba_keenergy_12345678_outdoor_temperature_displayed]
+  '20.5 °C'
 # ---
 # name: test_sensors[en][sensor.keba_keenergy_12345678_passive_cooling_circulation_pump_speed]
   StateSnapshot({
@@ -5714,8 +6491,11 @@
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': '23.0',
+    'state': '23.14783',
   })
+# ---
+# name: test_sensors[en][sensor.keba_keenergy_12345678_passive_cooling_circulation_pump_speed_displayed]
+  '23.15 %'
 # ---
 # name: test_sensors[en][sensor.keba_keenergy_12345678_passive_cooling_mixer_flow_temperature]
   StateSnapshot({
@@ -5730,8 +6510,11 @@
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': '24.26',
+    'state': '24.299999',
   })
+# ---
+# name: test_sensors[en][sensor.keba_keenergy_12345678_passive_cooling_mixer_flow_temperature_displayed]
+  '24.3 °C'
 # ---
 # name: test_sensors[en][sensor.keba_keenergy_12345678_passive_cooling_mixer_position]
   StateSnapshot({
@@ -5774,8 +6557,11 @@
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': '19.22',
+    'state': '19.218407',
   })
+# ---
+# name: test_sensors[en][sensor.keba_keenergy_12345678_passive_cooling_mixer_target_temperature_displayed]
+  '19.2 °C'
 # ---
 # name: test_sensors[en][sensor.keba_keenergy_12345678_passive_cooling_switch_valve_position]
   StateSnapshot({
@@ -5817,8 +6603,11 @@
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': '22.34',
+    'state': '22.299999',
   })
+# ---
+# name: test_sensors[en][sensor.keba_keenergy_12345678_passive_cooling_temperature_displayed]
+  '22.3 °C'
 # ---
 # name: test_sensors[en][sensor.keba_keenergy_12345678_photovoltaics_daily_energy]
   StateSnapshot({
@@ -5833,8 +6622,11 @@
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': '437.7',
+    'state': '437.699972222222',
   })
+# ---
+# name: test_sensors[en][sensor.keba_keenergy_12345678_photovoltaics_daily_energy_displayed]
+  '437.70 kWh'
 # ---
 # name: test_sensors[en][sensor.keba_keenergy_12345678_photovoltaics_excess_power]
   StateSnapshot({
@@ -5849,8 +6641,11 @@
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': '437.7',
+    'state': '437.70001',
   })
+# ---
+# name: test_sensors[en][sensor.keba_keenergy_12345678_photovoltaics_excess_power_displayed]
+  '438 W'
 # ---
 # name: test_sensors[en][sensor.keba_keenergy_12345678_photovoltaics_total_energy]
   StateSnapshot({
@@ -5865,8 +6660,11 @@
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': '437.7',
+    'state': '437.699972222222',
   })
+# ---
+# name: test_sensors[en][sensor.keba_keenergy_12345678_photovoltaics_total_energy_displayed]
+  '437.70 kWh'
 # ---
 # name: test_sensors[en][sensor.keba_keenergy_12345678_ram_usage]
   StateSnapshot({
@@ -5882,6 +6680,9 @@
     'last_updated': <ANY>,
     'state': '6432',
   })
+# ---
+# name: test_sensors[en][sensor.keba_keenergy_12345678_ram_usage_displayed]
+  '6432 kB'
 # ---
 # name: test_sensors[en][sensor.keba_keenergy_12345678_solar_circuit_actual_power_1]
   StateSnapshot({
@@ -5899,6 +6700,9 @@
     'state': '3452.0',
   })
 # ---
+# name: test_sensors[en][sensor.keba_keenergy_12345678_solar_circuit_actual_power_1_displayed]
+  '3452 W'
+# ---
 # name: test_sensors[en][sensor.keba_keenergy_12345678_solar_circuit_actual_power_2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
@@ -5915,6 +6719,9 @@
     'state': '2452.0',
   })
 # ---
+# name: test_sensors[en][sensor.keba_keenergy_12345678_solar_circuit_actual_power_2_displayed]
+  '2452 W'
+# ---
 # name: test_sensors[en][sensor.keba_keenergy_12345678_solar_circuit_current_temperature_1_1]
   StateSnapshot({
     'attributes': ReadOnlyDict({
@@ -5928,8 +6735,11 @@
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': '36.76',
+    'state': '36.799999',
   })
+# ---
+# name: test_sensors[en][sensor.keba_keenergy_12345678_solar_circuit_current_temperature_1_1_displayed]
+  '36.8 °C'
 # ---
 # name: test_sensors[en][sensor.keba_keenergy_12345678_solar_circuit_current_temperature_1_2]
   StateSnapshot({
@@ -5944,8 +6754,11 @@
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': '46.76',
+    'state': '46.799999',
   })
+# ---
+# name: test_sensors[en][sensor.keba_keenergy_12345678_solar_circuit_current_temperature_1_2_displayed]
+  '46.8 °C'
 # ---
 # name: test_sensors[en][sensor.keba_keenergy_12345678_solar_circuit_current_temperature_2_1]
   StateSnapshot({
@@ -5960,8 +6773,11 @@
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': '26.76',
+    'state': '26.799999',
   })
+# ---
+# name: test_sensors[en][sensor.keba_keenergy_12345678_solar_circuit_current_temperature_2_1_displayed]
+  '26.8 °C'
 # ---
 # name: test_sensors[en][sensor.keba_keenergy_12345678_solar_circuit_current_temperature_2_2]
   StateSnapshot({
@@ -5976,8 +6792,11 @@
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': '56.76',
+    'state': '56.799999',
   })
+# ---
+# name: test_sensors[en][sensor.keba_keenergy_12345678_solar_circuit_current_temperature_2_2_displayed]
+  '56.8 °C'
 # ---
 # name: test_sensors[en][sensor.keba_keenergy_12345678_solar_circuit_daily_energy_1]
   StateSnapshot({
@@ -5995,6 +6814,9 @@
     'state': '0.0827827777777778',
   })
 # ---
+# name: test_sensors[en][sensor.keba_keenergy_12345678_solar_circuit_daily_energy_1_displayed]
+  '0.08 kWh'
+# ---
 # name: test_sensors[en][sensor.keba_keenergy_12345678_solar_circuit_daily_energy_2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
@@ -6010,6 +6832,9 @@
     'last_updated': <ANY>,
     'state': '0.0827827777777778',
   })
+# ---
+# name: test_sensors[en][sensor.keba_keenergy_12345678_solar_circuit_daily_energy_2_displayed]
+  '0.08 kWh'
 # ---
 # name: test_sensors[en][sensor.keba_keenergy_12345678_solar_circuit_heating_energy_1]
   StateSnapshot({
@@ -6027,6 +6852,9 @@
     'state': '305.126777777778',
   })
 # ---
+# name: test_sensors[en][sensor.keba_keenergy_12345678_solar_circuit_heating_energy_1_displayed]
+  '305.13 kWh'
+# ---
 # name: test_sensors[en][sensor.keba_keenergy_12345678_solar_circuit_heating_energy_2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
@@ -6043,6 +6871,9 @@
     'state': '305.126777777778',
   })
 # ---
+# name: test_sensors[en][sensor.keba_keenergy_12345678_solar_circuit_heating_energy_2_displayed]
+  '305.13 kWh'
+# ---
 # name: test_sensors[en][sensor.keba_keenergy_12345678_solar_circuit_pump_1_1]
   StateSnapshot({
     'attributes': ReadOnlyDict({
@@ -6055,8 +6886,11 @@
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': '63.0',
+    'state': '62.941831',
   })
+# ---
+# name: test_sensors[en][sensor.keba_keenergy_12345678_solar_circuit_pump_1_1_displayed]
+  '62.94 %'
 # ---
 # name: test_sensors[en][sensor.keba_keenergy_12345678_solar_circuit_pump_1_2]
   StateSnapshot({
@@ -6070,8 +6904,11 @@
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': '43.0',
+    'state': '43.000001',
   })
+# ---
+# name: test_sensors[en][sensor.keba_keenergy_12345678_solar_circuit_pump_1_2_displayed]
+  '43.00 %'
 # ---
 # name: test_sensors[en][sensor.keba_keenergy_12345678_solar_circuit_pump_2_1]
   StateSnapshot({
@@ -6085,8 +6922,11 @@
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': '73.0',
+    'state': '73.000002',
   })
+# ---
+# name: test_sensors[en][sensor.keba_keenergy_12345678_solar_circuit_pump_2_1_displayed]
+  '73.00 %'
 # ---
 # name: test_sensors[en][sensor.keba_keenergy_12345678_solar_circuit_pump_2_2]
   StateSnapshot({
@@ -6100,8 +6940,11 @@
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': '53.0',
+    'state': '52.999997',
   })
+# ---
+# name: test_sensors[en][sensor.keba_keenergy_12345678_solar_circuit_pump_2_2_displayed]
+  '53.00 %'
 # ---
 # name: test_sensors[en][sensor.keba_keenergy_12345678_solar_circuit_source_temperature_1]
   StateSnapshot({
@@ -6116,8 +6959,11 @@
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': '44.43',
+    'state': '44.400002',
   })
+# ---
+# name: test_sensors[en][sensor.keba_keenergy_12345678_solar_circuit_source_temperature_1_displayed]
+  '44.4 °C'
 # ---
 # name: test_sensors[en][sensor.keba_keenergy_12345678_solar_circuit_source_temperature_2]
   StateSnapshot({
@@ -6132,8 +6978,11 @@
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': '34.43',
+    'state': '34.400002',
   })
+# ---
+# name: test_sensors[en][sensor.keba_keenergy_12345678_solar_circuit_source_temperature_2_displayed]
+  '34.4 °C'
 # ---
 # name: test_sensors[en][sensor.keba_keenergy_12345678_solar_circuit_target_temperature_1_1]
   StateSnapshot({
@@ -6154,6 +7003,9 @@
     'state': '55.0',
   })
 # ---
+# name: test_sensors[en][sensor.keba_keenergy_12345678_solar_circuit_target_temperature_1_1_displayed]
+  '55.0 °C'
+# ---
 # name: test_sensors[en][sensor.keba_keenergy_12345678_solar_circuit_target_temperature_1_2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
@@ -6172,6 +7024,9 @@
     'last_updated': <ANY>,
     'state': '53.0',
   })
+# ---
+# name: test_sensors[en][sensor.keba_keenergy_12345678_solar_circuit_target_temperature_1_2_displayed]
+  '53.0 °C'
 # ---
 # name: test_sensors[en][sensor.keba_keenergy_12345678_solar_circuit_target_temperature_2_1]
   StateSnapshot({
@@ -6192,6 +7047,9 @@
     'state': '54.0',
   })
 # ---
+# name: test_sensors[en][sensor.keba_keenergy_12345678_solar_circuit_target_temperature_2_1_displayed]
+  '54.0 °C'
+# ---
 # name: test_sensors[en][sensor.keba_keenergy_12345678_solar_circuit_target_temperature_2_2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
@@ -6210,6 +7068,9 @@
     'last_updated': <ANY>,
     'state': '52.0',
   })
+# ---
+# name: test_sensors[en][sensor.keba_keenergy_12345678_solar_circuit_target_temperature_2_2_displayed]
+  '52.0 °C'
 # ---
 # name: test_sensors[en][sensor.keba_keenergy_12345678_switch_valve_position_1]
   StateSnapshot({
@@ -6280,6 +7141,9 @@
     'state': '6.7',
   })
 # ---
+# name: test_sensors[en][sensor.keba_keenergy_12345678_webserver_cpu_usage_displayed]
+  '6.7 %'
+# ---
 # name: test_sensors[en][sensor.keba_keenergy_12345678_webview_cpu_usage]
   StateSnapshot({
     'attributes': ReadOnlyDict({
@@ -6294,6 +7158,9 @@
     'last_updated': <ANY>,
     'state': '3.4',
   })
+# ---
+# name: test_sensors[en][sensor.keba_keenergy_12345678_webview_cpu_usage_displayed]
+  '3.4 %'
 # ---
 # name: test_sensors[en][sensor.keba_keenergy_12345678_weekly_write_count]
   StateSnapshot({
@@ -6310,4 +7177,7 @@
     'last_updated': <ANY>,
     'state': '0',
   })
+# ---
+# name: test_sensors[en][sensor.keba_keenergy_12345678_weekly_write_count_displayed]
+  '0'
 # ---

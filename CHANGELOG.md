@@ -23,6 +23,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Changed more sensors and binary sensors to use the message ID of the control unit (e.g. the heat pump temperatures
   and powers, the meters of the solar circuits and photovoltaics), they are unknown or not created if the control
   unit does not use them. ([Issue #77][issue-77])
+- Changed the states of the sensors to the values of the control unit without rounding, Home Assistant rounds them
+  for the display (e.g. temperatures to one decimal). ([Issue #77][issue-77])
+- Changed the sensors to the units of the control unit, Home Assistant converts the values to the units of the Web
+  HMI (e.g. energy in `kWh`, operating times in `h`) and the unit can be changed in the entity settings. Existing
+  sensors keep their unit. ([Issue #77][issue-77])
+- Changed the display precision of the sensors to the default of Home Assistant, or to a finer one where the control
+  unit provides it (e.g. the fresh water module temperature with two decimals). ([Issue #77][issue-77])
 
 ### Removed
 

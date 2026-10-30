@@ -38,6 +38,7 @@ Before finishing a change, run `ruff format`, `lint.sh` and `pytest`, in this or
   - type alias for complex annotations (nested or repeated unions)
 - Module-level constants with `Final` (`NAME: Final = ...`)
 - Comments as complete sentences with a trailing period
+  - planned cleanups as `# TODO: …`, without author or issue link
 - `TypedDict` only for JSON data from or to the Web HMI (optional keys as `NotRequired`), `NamedTuple` only for
   small values that are unpacked (points, pairs), otherwise `@dataclass(frozen=True, kw_only=True)`, mutable only
   when needed
@@ -106,6 +107,8 @@ Before finishing a change, run `ruff format`, `lint.sh` and `pytest`, in this or
 - Constants always in `const.py`
   - except what Home Assistant reads from the module itself (`_LOGGER`, `PARALLEL_UPDATES`, `CONFIG_SCHEMA`) and
     the entity descriptions of a platform (`SENSOR_TYPES`, ...)
+- Code only needed to keep the keys and states of `keba_keenergy_api` 2.x (no breaking changes) in `legacy.py`,
+  also its constants (`SECTIONS`, `LEGACY_STATES`, `get_state()`, `new_key` via `get_data_key()`)
 - Class member order: `__init__`, dunder methods, properties, public methods (also Home Assistant overrides)
   grouped by topic, helpers directly below their first caller
   - applies to new methods, existing ones only moved when asked

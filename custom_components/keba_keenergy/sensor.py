@@ -40,12 +40,13 @@ from .const import DOMAIN
 from .const import HEATING_CURVE_KEY
 from .const import MixerPosition
 from .const import SectionPrefix
-from .coordinator import get_state
-from .coordinator import get_states
 from .entity import KebaKeEnergyBaseEntity
 from .entity import KebaKeEnergyEntity
 from .entity import KebaKeEnergyEntityDescription
 from .entity import _async_setup_entities
+from .legacy import get_data_key
+from .legacy import get_state
+from .legacy import get_states
 
 if TYPE_CHECKING:
     from collections.abc import Callable
@@ -116,7 +117,7 @@ class KebaKeEnergySensorEntity(KebaKeEnergyEntity, SensorEntity):
     @property
     def _data_key(self) -> str:
         """Return the key of the value in the coordinator data, the new key if the API renamed it."""
-        return self.entity_description.new_key or self.entity_description.key
+        return get_data_key(self.entity_description)
 
     @property
     def extra_state_attributes(self) -> Mapping[str, Any] | None:
@@ -134,8 +135,20 @@ class KebaKeEnergySensorEntity(KebaKeEnergyEntity, SensorEntity):
             if limit is not None
         }
 
-        if reading.raw_value is not None:
-            attributes["raw_value"] = reading.raw_value
+        # An enum sensor of a number (e.g. the mixer position) shows the number as raw value.
+        raw_value: float | int | None = None
+
+        if (
+            self.device_class == SensorDeviceClass.ENUM
+            and isinstance(reading.value, float | int)
+            and not isinstance(reading.value, bool)
+        ):
+            raw_value = reading.value
+        elif isinstance(reading.value, Enum):
+            raw_value = int(reading.raw_value)
+
+        if raw_value is not None:
+            attributes["raw_value"] = raw_value
 
         if self._data_key == HEATING_CURVE_KEY and isinstance(reading.value, str):
             curve_table: CurveTable | None = self.coordinator.curve_tables.get(reading.value)
@@ -178,6 +191,16 @@ class KebaKeEnergyWriteCountSensorEntity(KebaKeEnergyBaseEntity, SensorEntity):
         return {ATTR_WRITES: self.coordinator.weekly_writes}
 
 
+def get_mixer_position(setpoint: float, /) -> str:
+    """Return the position of a mixer from its setpoint (`-1..1`), open or closed only if it is fully open or closed."""
+    return get_state(MixerPosition((setpoint >= 1) - (setpoint <= -1)))
+
+
+def get_mixer_attributes(attributes: Mapping[str, Any], /) -> Mapping[str, Any]:
+    """Return the attributes of a mixer position with the setpoint as percentage."""
+    return {**attributes, "position_percent": round(attributes["raw_value"] * 100, 2)}
+
+
 WRITE_COUNT_SENSOR_TYPE: Final[SensorEntityDescription] = SensorEntityDescription(
     entity_category=EntityCategory.DIAGNOSTIC,
     key="weekly_write_count",
@@ -208,6 +231,7 @@ SENSOR_TYPES: Final[dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ..
             key="cpu_usage",
             native_unit_of_measurement=PERCENTAGE,
             state_class=SensorStateClass.MEASUREMENT,
+            suggested_display_precision=1,
             translation_key="cpu_usage",
             value=lambda data: data / 10,
         ),
@@ -217,6 +241,7 @@ SENSOR_TYPES: Final[dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ..
             key="webview_cpu_usage",
             native_unit_of_measurement=PERCENTAGE,
             state_class=SensorStateClass.MEASUREMENT,
+            suggested_display_precision=1,
             translation_key="webview_cpu_usage",
             value=lambda data: data / 10,
         ),
@@ -226,6 +251,7 @@ SENSOR_TYPES: Final[dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ..
             key="webserver_cpu_usage",
             native_unit_of_measurement=PERCENTAGE,
             state_class=SensorStateClass.MEASUREMENT,
+            suggested_display_precision=1,
             translation_key="webserver_cpu_usage",
             value=lambda data: data / 10,
         ),
@@ -235,6 +261,7 @@ SENSOR_TYPES: Final[dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ..
             key="control_cpu_usage",
             native_unit_of_measurement=PERCENTAGE,
             state_class=SensorStateClass.MEASUREMENT,
+            suggested_display_precision=1,
             translation_key="control_cpu_usage",
             value=lambda data: data / 10,
         ),
@@ -244,6 +271,7 @@ SENSOR_TYPES: Final[dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ..
             key="ram_usage",
             native_unit_of_measurement=UnitOfInformation.KILOBYTES,
             state_class=SensorStateClass.MEASUREMENT,
+            suggested_display_precision=0,
             translation_key="ram_usage",
             value=lambda data: data,
         ),
@@ -253,6 +281,7 @@ SENSOR_TYPES: Final[dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ..
             key="free_ram",
             native_unit_of_measurement=UnitOfInformation.KILOBYTES,
             state_class=SensorStateClass.MEASUREMENT,
+            suggested_display_precision=0,
             translation_key="free_ram",
             value=lambda data: data,
         ),
@@ -261,6 +290,7 @@ SENSOR_TYPES: Final[dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ..
             entity_registry_enabled_default=False,
             key="flash_erase_counter",
             state_class=SensorStateClass.TOTAL_INCREASING,
+            suggested_display_precision=0,
             translation_key="flash_erase_counter",
             value=lambda data: data,
         ),
@@ -282,6 +312,7 @@ SENSOR_TYPES: Final[dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ..
             key="room_humidity",
             native_unit_of_measurement=PERCENTAGE,
             state_class=SensorStateClass.MEASUREMENT,
+            suggested_display_precision=2,
             translation_key="room_humidity",
         ),
         KebaKeEnergySensorEntityDescription[float](
@@ -324,14 +355,15 @@ SENSOR_TYPES: Final[dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ..
             state_class=SensorStateClass.MEASUREMENT,
             translation_key="mixer_return_flow_temperature",
         ),
-        KebaKeEnergySensorEntityDescription[str](
+        KebaKeEnergySensorEntityDescription[float](
             condition=lambda coordinator, index: coordinator.has_mixer(index=index),
             device_class=SensorDeviceClass.ENUM,
             entity_registry_enabled_default=False,
             key="mixer_position",
             options=get_states(MixerPosition),
             translation_key="mixer_position",
-            attributes=lambda attributes: {**attributes, "position_percent": attributes["raw_value"] * 100},
+            value=get_mixer_position,
+            attributes=get_mixer_attributes,
         ),
         KebaKeEnergySensorEntityDescription[float](
             condition=lambda coordinator, index: coordinator.has_return_flow_temperature(index=index),
@@ -559,6 +591,7 @@ SENSOR_TYPES: Final[dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ..
             key="pump_speed",
             native_unit_of_measurement=PERCENTAGE,
             state_class=SensorStateClass.MEASUREMENT,
+            suggested_display_precision=2,
             translation_key="pump_speed",
             value=lambda data: data * 100,
         ),
@@ -575,6 +608,7 @@ SENSOR_TYPES: Final[dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ..
             key="pump_1",
             native_unit_of_measurement=PERCENTAGE,
             state_class=SensorStateClass.MEASUREMENT,
+            suggested_display_precision=2,
             translation_key="solar_circuit_pump_1",
             value=lambda data: data * 100,
         ),
@@ -582,6 +616,7 @@ SENSOR_TYPES: Final[dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ..
             key="pump_2",
             native_unit_of_measurement=PERCENTAGE,
             state_class=SensorStateClass.MEASUREMENT,
+            suggested_display_precision=2,
             translation_key="solar_circuit_pump_2",
             value=lambda data: data * 100,
         ),
@@ -635,21 +670,19 @@ SENSOR_TYPES: Final[dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ..
             device_class=SensorDeviceClass.ENERGY,
             entity_registry_enabled_default=False,
             key="heating_energy",
-            native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
+            native_unit_of_measurement=UnitOfEnergy.JOULE,
             state_class=SensorStateClass.TOTAL,
-            suggested_display_precision=2,
+            suggested_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
             translation_key="heating_energy",
-            value=lambda data: data / 3_600_000,  # Convert joule to kWh.
         ),
         KebaKeEnergySensorEntityDescription[float](
             device_class=SensorDeviceClass.ENERGY,
             entity_registry_enabled_default=False,
             key="daily_energy",
-            native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
+            native_unit_of_measurement=UnitOfEnergy.JOULE,
             state_class=SensorStateClass.TOTAL,
-            suggested_display_precision=2,
+            suggested_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
             translation_key="daily_energy",
-            value=lambda data: data / 3_600_000,  # Convert joule to kWh.
         ),
         KebaKeEnergySensorEntityDescription[float](
             device_class=SensorDeviceClass.POWER,
@@ -678,6 +711,7 @@ SENSOR_TYPES: Final[dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ..
             native_unit_of_measurement=PERCENTAGE,
             new_key="circulation_pump_speed",
             state_class=SensorStateClass.MEASUREMENT,
+            suggested_display_precision=2,
             translation_key="circulation_pump_speed",
             value=lambda data: data * 100,
         ),
@@ -685,6 +719,7 @@ SENSOR_TYPES: Final[dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ..
             key="source_pump_speed",
             native_unit_of_measurement=PERCENTAGE,
             state_class=SensorStateClass.MEASUREMENT,
+            suggested_display_precision=2,
             translation_key="source_pump_speed",
             value=lambda data: data * 100,
         ),
@@ -767,6 +802,7 @@ SENSOR_TYPES: Final[dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ..
             key="compressor",
             native_unit_of_measurement=PERCENTAGE,
             state_class=SensorStateClass.MEASUREMENT,
+            suggested_display_precision=2,
             translation_key="compressor",
             value=lambda data: data * 100,
         ),
@@ -994,22 +1030,20 @@ SENSOR_TYPES: Final[dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ..
             device_class=SensorDeviceClass.DURATION,
             entity_category=EntityCategory.DIAGNOSTIC,
             key="operating_time",
-            native_unit_of_measurement=UnitOfTime.HOURS,
+            native_unit_of_measurement=UnitOfTime.SECONDS,
             state_class=SensorStateClass.TOTAL_INCREASING,
-            suggested_display_precision=2,
+            suggested_unit_of_measurement=UnitOfTime.HOURS,
             translation_key="operating_time",
-            value=lambda data: data / 3600,
         ),
         KebaKeEnergySensorEntityDescription[int](
             device_class=SensorDeviceClass.DURATION,
             entity_category=EntityCategory.DIAGNOSTIC,
             entity_registry_enabled_default=False,
             key="max_runtime",
-            native_unit_of_measurement=UnitOfTime.HOURS,
+            native_unit_of_measurement=UnitOfTime.SECONDS,
             state_class=SensorStateClass.MEASUREMENT,
-            suggested_display_precision=2,
+            suggested_unit_of_measurement=UnitOfTime.HOURS,
             translation_key="max_runtime",
-            value=lambda data: data / 3600,
         ),
         KebaKeEnergySensorEntityDescription[int](
             entity_category=EntityCategory.DIAGNOSTIC,
@@ -1025,11 +1059,10 @@ SENSOR_TYPES: Final[dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ..
             entity_category=EntityCategory.DIAGNOSTIC,
             entity_registry_enabled_default=False,
             key="excess_energy_operating_time",
-            native_unit_of_measurement=UnitOfTime.HOURS,
+            native_unit_of_measurement=UnitOfTime.SECONDS,
             state_class=SensorStateClass.TOTAL_INCREASING,
-            suggested_display_precision=2,
+            suggested_unit_of_measurement=UnitOfTime.HOURS,
             translation_key="excess_energy_operating_time",
-            value=lambda data: data / 3600,
         ),
         KebaKeEnergySensorEntityDescription[int](
             condition=lambda coordinator, _: coordinator.has_photovoltaics(),
@@ -1037,11 +1070,10 @@ SENSOR_TYPES: Final[dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ..
             entity_category=EntityCategory.DIAGNOSTIC,
             entity_registry_enabled_default=False,
             key="excess_energy_max_runtime",
-            native_unit_of_measurement=UnitOfTime.HOURS,
+            native_unit_of_measurement=UnitOfTime.SECONDS,
             state_class=SensorStateClass.MEASUREMENT,
-            suggested_display_precision=2,
+            suggested_unit_of_measurement=UnitOfTime.HOURS,
             translation_key="excess_energy_max_runtime",
-            value=lambda data: data / 3600,
         ),
         KebaKeEnergySensorEntityDescription[int](
             condition=lambda coordinator, _: coordinator.has_photovoltaics(),
@@ -1074,6 +1106,7 @@ SENSOR_TYPES: Final[dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ..
             key="circulation_pump_speed",
             native_unit_of_measurement=PERCENTAGE,
             state_class=SensorStateClass.MEASUREMENT,
+            suggested_display_precision=2,
             translation_key="circulation_pump_speed",
             value=lambda data: data * 100,
         ),
@@ -1093,13 +1126,14 @@ SENSOR_TYPES: Final[dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ..
             state_class=SensorStateClass.MEASUREMENT,
             translation_key="mixer_target_temperature",
         ),
-        KebaKeEnergySensorEntityDescription[str](
+        KebaKeEnergySensorEntityDescription[float](
             condition=lambda coordinator, index: coordinator.has_passive_cooling(index=index),
             device_class=SensorDeviceClass.ENUM,
             key="mixer_position",
             options=get_states(MixerPosition),
             translation_key="mixer_position",
-            attributes=lambda attributes: {**attributes, "position_percent": attributes["raw_value"] * 100},
+            value=get_mixer_position,
+            attributes=get_mixer_attributes,
         ),
     ),
     SectionPrefix.BUFFER_TANK: (
@@ -1194,6 +1228,7 @@ SENSOR_TYPES: Final[dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ..
             key="fresh_water_module_temperature",
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             state_class=SensorStateClass.MEASUREMENT,
+            suggested_display_precision=2,
             translation_key="fresh_water_module_temperature",
         ),
         KebaKeEnergySensorEntityDescription[float](
@@ -1251,23 +1286,21 @@ SENSOR_TYPES: Final[dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ..
         KebaKeEnergySensorEntityDescription[int](
             entity_category=EntityCategory.DIAGNOSTIC,
             key="operating_time",
-            native_unit_of_measurement=UnitOfTime.HOURS,
             device_class=SensorDeviceClass.DURATION,
+            native_unit_of_measurement=UnitOfTime.SECONDS,
             state_class=SensorStateClass.TOTAL_INCREASING,
-            suggested_display_precision=2,
+            suggested_unit_of_measurement=UnitOfTime.HOURS,
             translation_key="operating_time",
-            value=lambda data: data / 3600,
         ),
         KebaKeEnergySensorEntityDescription[int](
             entity_category=EntityCategory.DIAGNOSTIC,
             entity_registry_enabled_default=False,
             key="max_runtime",
-            native_unit_of_measurement=UnitOfTime.HOURS,
             device_class=SensorDeviceClass.DURATION,
+            native_unit_of_measurement=UnitOfTime.SECONDS,
             state_class=SensorStateClass.MEASUREMENT,
-            suggested_display_precision=2,
+            suggested_unit_of_measurement=UnitOfTime.HOURS,
             translation_key="max_runtime",
-            value=lambda data: data / 3600,
         ),
         KebaKeEnergySensorEntityDescription[int](
             entity_category=EntityCategory.DIAGNOSTIC,
@@ -1283,11 +1316,10 @@ SENSOR_TYPES: Final[dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ..
             entity_category=EntityCategory.DIAGNOSTIC,
             entity_registry_enabled_default=False,
             key="excess_energy_operating_time",
-            native_unit_of_measurement=UnitOfTime.HOURS,
+            native_unit_of_measurement=UnitOfTime.SECONDS,
             state_class=SensorStateClass.TOTAL_INCREASING,
-            suggested_display_precision=2,
+            suggested_unit_of_measurement=UnitOfTime.HOURS,
             translation_key="excess_energy_operating_time",
-            value=lambda data: data / 3600,
         ),
         KebaKeEnergySensorEntityDescription[int](
             condition=lambda coordinator, _: coordinator.has_photovoltaics(),
@@ -1295,11 +1327,10 @@ SENSOR_TYPES: Final[dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ..
             entity_category=EntityCategory.DIAGNOSTIC,
             entity_registry_enabled_default=False,
             key="excess_energy_max_runtime",
-            native_unit_of_measurement=UnitOfTime.HOURS,
+            native_unit_of_measurement=UnitOfTime.SECONDS,
             state_class=SensorStateClass.MEASUREMENT,
-            suggested_display_precision=2,
+            suggested_unit_of_measurement=UnitOfTime.HOURS,
             translation_key="excess_energy_max_runtime",
-            value=lambda data: data / 3600,
         ),
         KebaKeEnergySensorEntityDescription[int](
             condition=lambda coordinator, _: coordinator.has_photovoltaics(),
@@ -1330,20 +1361,18 @@ SENSOR_TYPES: Final[dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ..
         KebaKeEnergySensorEntityDescription[float](
             device_class=SensorDeviceClass.ENERGY,
             key="daily_energy",
-            native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
+            native_unit_of_measurement=UnitOfEnergy.JOULE,
             state_class=SensorStateClass.TOTAL,
-            suggested_display_precision=2,
+            suggested_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
             translation_key="daily_energy",
-            value=lambda data: data / 3_600_000,  # Convert joule to kWh.
         ),
         KebaKeEnergySensorEntityDescription[float](
             device_class=SensorDeviceClass.ENERGY,
             key="total_energy",
-            native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
+            native_unit_of_measurement=UnitOfEnergy.JOULE,
             state_class=SensorStateClass.TOTAL_INCREASING,
-            suggested_display_precision=2,
+            suggested_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
             translation_key="total_energy",
-            value=lambda data: data / 3_600_000,  # Convert joule to kWh.
         ),
     ),
 }

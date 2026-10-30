@@ -222,7 +222,7 @@ async def test_update_interval_ticks_keep_message_ids(
         assert isinstance(state, State)
         states.append(state.state)
 
-    assert states == [STATE_UNKNOWN, STATE_UNKNOWN, "22.42"]
+    assert states == [STATE_UNKNOWN, STATE_UNKNOWN, "22.418831"]
 
 
 def _heat_circuit_reads(fake_api: FakeKebaKeEnergyAPI) -> int:

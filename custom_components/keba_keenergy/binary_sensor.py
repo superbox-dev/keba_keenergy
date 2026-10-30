@@ -20,6 +20,7 @@ from .const import SectionPrefix
 from .entity import KebaKeEnergyEntity
 from .entity import KebaKeEnergyEntityDescription
 from .entity import _async_setup_entities
+from .legacy import get_data_key
 
 if TYPE_CHECKING:
     from homeassistant.core import HomeAssistant
@@ -218,7 +219,7 @@ class KebaKeEnergyBinarySensorEntity(KebaKeEnergyEntity, BinarySensorEntity):
     @property
     def _data_key(self) -> str:
         """Return the key of the value in the coordinator data, the new key if the API renamed it."""
-        return self.entity_description.new_key or self.entity_description.key
+        return get_data_key(self.entity_description)
 
 
 async def async_setup_entry(

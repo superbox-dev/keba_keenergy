@@ -386,6 +386,39 @@ async def test_set_unchanged_value(
     assert fake_api.write_requests() == []
 
 
+@pytest.mark.usefixtures("entity_registry_enabled_by_default")
+async def test_set_unchanged_float32_value(
+    hass: HomeAssistant,
+    fake_api: FakeKebaKeEnergyAPI,
+) -> None:
+    """Test that a value is not written again if the Web HMI returns it as Float32 (`0.8` as `0.80000001`)."""
+    fake_api.responses = [
+        DEFAULT_POSITION_RESPONSE,
+        DEFAULT_POSITION_FIXED_DATA_RESPONSE,
+        update_response(
+            get_single_position_data_response(),
+            "APPL.CtrlAppl.sParam.heatCircuit[0].param.heatCurveGradient",
+            value="0.80000001",
+        ),
+    ]
+    await fake_api.setup_integration()
+
+    await hass.services.async_call(
+        domain=NUMBER_DOMAIN,
+        service=SERVICE_SET_VALUE,
+        service_data={
+            ATTR_ENTITY_ID: "number.keba_keenergy_12345678_heat_circuit_heating_curve_slope",
+            ATTR_VALUE: 0.8,
+        },
+        blocking=True,
+    )
+
+    async_fire_time_changed(hass, dt_util.utcnow() + timedelta(seconds=FLASH_WRITE_DELAY))
+    await hass.async_block_till_done()
+
+    assert fake_api.write_requests() == []
+
+
 async def test_value_without_limits(
     hass: HomeAssistant,
     fake_api: FakeKebaKeEnergyAPI,

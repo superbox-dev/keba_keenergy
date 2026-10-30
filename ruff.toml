@@ -6,6 +6,9 @@ select = ["ALL"]
 extend-select = ["D107", "D212", "D402", "D413", "D417"]
 ignore = [
   "COM812",  # missing-trailing-comma, conflicts with the formatter
+  "FIX002",  # line-contains-todo, TODOs mark planned cleanups
+  "TD002",   # missing-todo-author, TODOs have no author
+  "TD003",   # missing-todo-link, TODOs need no issue
 ]
 
 [lint.per-file-ignores]

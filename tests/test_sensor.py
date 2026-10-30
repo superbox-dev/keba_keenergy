@@ -8,12 +8,18 @@ from typing import TYPE_CHECKING
 from typing import Any
 
 import pytest
+from homeassistant.components.sensor import DOMAIN as SENSOR_DOMAIN
+from homeassistant.components.sensor import async_rounded_state
 from homeassistant.components.sensor.const import ATTR_OPTIONS
+from homeassistant.const import ATTR_UNIT_OF_MEASUREMENT
+from homeassistant.const import CONF_HOST
+from homeassistant.const import CONF_SSL
 from homeassistant.const import STATE_UNKNOWN
 from homeassistant.const import Platform
 from homeassistant.core import State
 from homeassistant.helpers import entity_registry as er
 
+from custom_components.keba_keenergy.const import DOMAIN
 from tests import get_option_translations
 from tests import get_platform_states
 from tests.api_data import MULTIPLE_POSITION_DATA_RESPONSE
@@ -23,6 +29,7 @@ from tests.api_data import update_response
 
 if TYPE_CHECKING:
     from homeassistant.core import HomeAssistant
+    from pytest_homeassistant_custom_component.common import MockConfigEntry
     from syrupy.assertion import SnapshotAssertion
 
     from tests.conftest import FakeKebaKeEnergyAPI
@@ -35,7 +42,7 @@ async def test_sensors(
     fake_api: FakeKebaKeEnergyAPI,
     snapshot: SnapshotAssertion,
 ) -> None:
-    """Test the states of all sensors and the translated options of the enum sensors."""
+    """Test the states of all sensors, their displayed values and the translated options of the enum sensors."""
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(has_passive_cooling="true"),
@@ -48,33 +55,52 @@ async def test_sensors(
 
         if ATTR_OPTIONS in state.attributes:
             assert await get_option_translations(hass, state) == snapshot(name=f"{state.entity_id}_options")
+        else:
+            # The value as Home Assistant shows it, rounded to the display precision of the entity.
+            displayed: str = async_rounded_state(hass, state.entity_id, state)
+            unit: str | None = state.attributes.get(ATTR_UNIT_OF_MEASUREMENT)
+            assert (f"{displayed} {unit}" if unit else displayed) == snapshot(name=f"{state.entity_id}_displayed")
 
 
 @pytest.mark.parametrize(
-    "entity_id",
+    ("unique_id", "expected"),
     [
-        "sensor.keba_keenergy_12345678_heat_pump_operating_time",
-        "sensor.keba_keenergy_12345678_photovoltaics_daily_energy",
+        ("12345678_heat_pump_operating_time", ("1058.06333333333", "h")),
+        ("12345678_photovoltaics_daily_energy", ("437.699972222222", "kWh")),
+        ("12345678_heat_pump_heating_power", ("3.2187521", "W")),
     ],
-    ids=["heat_pump_operating_time", "photovoltaics_daily_energy"],
+    ids=["heat_pump_operating_time", "photovoltaics_daily_energy", "heat_pump_heating_power"],
 )
 @pytest.mark.usefixtures("entity_registry_enabled_by_default")
-async def test_converted_sensor_display_precision(
+async def test_converted_sensor_keeps_registered_unit(
     hass: HomeAssistant,
+    config_entry: MockConfigEntry,
     fake_api: FakeKebaKeEnergyAPI,
-    entity_id: str,
+    unique_id: str,
+    expected: tuple[str, str],
 ) -> None:
-    """Test that converted sensors keep the exact value and are displayed with two decimals."""
+    """Test that an existing sensor keeps the unit it was registered with before the unit came from the endpoint."""
+    config_entry.add_to_hass(hass)
+    entry: er.RegistryEntry = er.async_get(hass).async_get_or_create(
+        SENSOR_DOMAIN,
+        DOMAIN,
+        unique_id,
+        config_entry=config_entry,
+        suggested_object_id=f"{DOMAIN}_{unique_id}",
+        unit_of_measurement=expected[1],
+    )
     fake_api.responses = [
         MULTIPLE_POSITIONS_RESPONSE,
         get_multiple_position_fixed_data_response(),
         MULTIPLE_POSITION_DATA_RESPONSE,
     ]
-    await fake_api.setup_integration()
+    fake_api.register_requests(config_entry.data[CONF_HOST], ssl=config_entry.data[CONF_SSL])
+    assert await hass.config_entries.async_setup(config_entry.entry_id)
+    await hass.async_block_till_done()
 
-    entry: er.RegistryEntry | None = er.async_get(hass).async_get(entity_id)
-    assert entry is not None
-    assert entry.options["sensor"] == {"suggested_display_precision": 2}
+    state: State | None = hass.states.get(entry.entity_id)
+    assert isinstance(state, State)
+    assert (state.state, state.attributes[ATTR_UNIT_OF_MEASUREMENT]) == expected
 
 
 @pytest.mark.parametrize(
@@ -93,10 +119,10 @@ async def test_converted_sensor_display_precision(
             # Each solar circuit has two temperatures, the first of the second solar circuit is not in use.
             "APPL.CtrlAppl.sParam.genericHeat[2].referenceTemp.state.msgId",
             {
-                "sensor.keba_keenergy_12345678_solar_circuit_current_temperature_1_1": "36.76",
-                "sensor.keba_keenergy_12345678_solar_circuit_current_temperature_2_1": "26.76",
+                "sensor.keba_keenergy_12345678_solar_circuit_current_temperature_1_1": "36.799999",
+                "sensor.keba_keenergy_12345678_solar_circuit_current_temperature_2_1": "26.799999",
                 "sensor.keba_keenergy_12345678_solar_circuit_current_temperature_1_2": STATE_UNKNOWN,
-                "sensor.keba_keenergy_12345678_solar_circuit_current_temperature_2_2": "56.76",
+                "sensor.keba_keenergy_12345678_solar_circuit_current_temperature_2_2": "56.799999",
             },
         ),
     ],
