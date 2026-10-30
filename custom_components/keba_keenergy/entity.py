@@ -31,6 +31,7 @@ from .const import MANUFACTURER_MTEC
 from .const import SectionPrefix
 from .coordinator import KebaKeEnergyConfigEntry
 from .coordinator import KebaKeEnergyDataUpdateCoordinator
+from .legacy import get_data_key
 from .legacy import get_data_keys
 
 if TYPE_CHECKING:
@@ -78,6 +79,8 @@ class KebaKeEnergyBaseEntity(
         self.index: int | None = index
         self.value_index: int | None = value_index
 
+        # TODO: Remove this default when the unique IDs of the climate and hot water tank entities are migrated to
+        # `<serial>_<device type>[_<n>]`, every entity then builds its unique ID itself.
         self._attr_unique_id: str | None = self._build_unique_id()
 
     def _build_unique_id(self, *parts: str) -> str:
@@ -338,6 +341,11 @@ class KebaKeEnergyEntity(KebaKeEnergyBaseEntity):
     def _build_key_unique_id(self, key: str, /) -> str:
         """Return the unique ID of the key, with the device type except for the control unit."""
         return self._build_unique_id(key) if self.is_system_device else self._build_unique_id(self.device_type, key)
+
+    @property
+    def _data_key(self) -> str:
+        """Return the key of the value in the coordinator data, the new key if the API renamed it."""
+        return get_data_key(self.entity_description)
 
 
 @callback

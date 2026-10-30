@@ -19,7 +19,6 @@ from .const import SectionPrefix
 from .entity import KebaKeEnergyEntity
 from .entity import KebaKeEnergyEntityDescription
 from .entity import async_setup_entities
-from .legacy import get_data_key
 
 if TYPE_CHECKING:
     from homeassistant.core import HomeAssistant
@@ -182,7 +181,7 @@ BINARY_SENSOR_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergyBinarySensorEnt
 
 
 class KebaKeEnergyBinarySensorEntity(KebaKeEnergyEntity, BinarySensorEntity):
-    """KEBA KeEnergy sensor entity."""
+    """KEBA KeEnergy binary sensor entity."""
 
     entity_description: KebaKeEnergyBinarySensorEntityDescription
     _platform_domain: str = BINARY_SENSOR_DOMAIN
@@ -191,11 +190,6 @@ class KebaKeEnergyBinarySensorEntity(KebaKeEnergyEntity, BinarySensorEntity):
     def is_on(self) -> bool | None:
         """Return true if the binary sensor is on."""
         return self.get_typed_value(self._data_key, bool)
-
-    @property
-    def _data_key(self) -> str:
-        """Return the key of the value in the coordinator data, the new key if the API renamed it."""
-        return get_data_key(self.entity_description)
 
 
 async def async_setup_entry(

@@ -27,6 +27,8 @@ from .entity import KebaKeEnergyBaseEntity
 from .entity import KebaKeEnergyDebouncedEntity
 
 if TYPE_CHECKING:
+    from collections.abc import Mapping
+
     from homeassistant.core import HomeAssistant
     from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
@@ -36,11 +38,23 @@ if TYPE_CHECKING:
 PARALLEL_UPDATES: Final[int] = 0
 
 
-class KebaKeEnergyWaterHeaterTankEntity(KebaKeEnergyBaseEntity, WaterHeaterEntity):
-    """KEBA KeEnergy water heat entity."""
+class KebaKeEnergyWaterHeaterEntity[M: BufferTankOperatingMode | DHWTankOperatingMode](
+    KebaKeEnergyBaseEntity,
+    WaterHeaterEntity,
+):
+    """KEBA KeEnergy water heater entity of a tank."""
 
     _attr_temperature_unit: str = UnitOfTemperature.CELSIUS
     _attr_name = None
+
+    # The operating modes of the tank and their operation modes in Home Assistant.
+    _operating_mode_type: type[M]
+    _operating_mode_to_ha: Mapping[M, str]
+    # Operation modes whose writes are not counted for the weekly write limit.
+    _uncounted_operation_modes: frozenset[str] = frozenset()
+    # The buffer tank has the device type in its unique ID, the hot water tank not.
+    # TODO: Remove when the unique IDs of the tanks are migrated to `<serial>_<device type>[_<n>]`.
+    _unique_id_with_device_type: bool = False
 
     def __init__(
         self,
@@ -52,6 +66,12 @@ class KebaKeEnergyWaterHeaterTankEntity(KebaKeEnergyBaseEntity, WaterHeaterEntit
         """Initialize the entity."""
         self.entity_description: WaterHeaterEntityDescription = description
         super().__init__(coordinator, device_type=device_type, index=index)
+        self._attr_operation_list = list(self._operating_mode_to_ha.values())
+
+        if self._unique_id_with_device_type:
+            self._attr_unique_id = self._build_unique_id(self.device_type)
+
+        self.entity_id: str = f"{WATER_HEATER_DOMAIN}.{DOMAIN}_{self._attr_unique_id}"
 
     @property
     def target_temperature_low(self) -> float | None:
@@ -63,28 +83,47 @@ class KebaKeEnergyWaterHeaterTankEntity(KebaKeEnergyBaseEntity, WaterHeaterEntit
         """Return the high bound target temperature we try to reach."""
         return self.get_float("target_temperature")
 
+    @property
+    def current_operation(self) -> str | None:
+        """Return current operation mode."""
+        operating_mode: M | None = self.get_typed_value("operating_mode", self._operating_mode_type)
+        return None if operating_mode is None else self._operating_mode_to_ha.get(operating_mode, STATE_OFF)
 
-class KebaKeEnergyHotWaterTankEntity(KebaKeEnergyDebouncedEntity, KebaKeEnergyWaterHeaterTankEntity, WaterHeaterEntity):
-    """KEBA KeEnergy water heat entity for hot water tank."""
+    async def async_turn_off(self, **kwargs: object) -> None:  # noqa: ARG002
+        """Turn the tank off."""
+        if self.current_operation != STATE_OFF:
+            await self._async_write_data(self._operating_mode_type.OFF, key="operating_mode")
+
+    async def async_turn_on(self, **kwargs: object) -> None:  # noqa: ARG002
+        """Turn the tank on."""
+        if self.current_operation != STATE_HEAT_PUMP:
+            await self._async_write_data(self._operating_mode_type.ON, key="operating_mode")
+
+    async def async_set_operation_mode(self, operation_mode: str) -> None:
+        """Set operation mode for the tank."""
+        for operating_mode, state in self._operating_mode_to_ha.items():
+            if state == operation_mode and operation_mode != self.current_operation:
+                await self._async_write_data(
+                    operating_mode,
+                    key="operating_mode",
+                    ignore_weekly_write_count=operation_mode in self._uncounted_operation_modes,
+                )
+
+
+class KebaKeEnergyHotWaterTankEntity(
+    KebaKeEnergyDebouncedEntity,
+    KebaKeEnergyWaterHeaterEntity[DHWTankOperatingMode],
+):
+    """KEBA KeEnergy water heater entity of a hot water tank."""
 
     _attr_supported_features: WaterHeaterEntityFeature = (
         WaterHeaterEntityFeature.ON_OFF
         | WaterHeaterEntityFeature.OPERATION_MODE
         | WaterHeaterEntityFeature.TARGET_TEMPERATURE
     )
-
-    def __init__(
-        self,
-        coordinator: KebaKeEnergyDataUpdateCoordinator,
-        description: WaterHeaterEntityDescription,
-        device_type: SectionPrefix,
-        index: int | None,
-    ) -> None:
-        """Initialize the entity."""
-        super().__init__(coordinator, description=description, device_type=device_type, index=index)
-        self._attr_operation_list = list(HOT_WATER_TANK_STATE_TO_HA.values())
-
-        self.entity_id: str = f"{WATER_HEATER_DOMAIN}.{DOMAIN}_{self._attr_unique_id}"
+    _operating_mode_type: type[DHWTankOperatingMode] = DHWTankOperatingMode
+    _operating_mode_to_ha: Mapping[DHWTankOperatingMode, str] = HOT_WATER_TANK_STATE_TO_HA
+    _uncounted_operation_modes: frozenset[str] = frozenset({STATE_PERFORMANCE})
 
     @property
     def _debounced_key(self) -> str:
@@ -112,65 +151,21 @@ class KebaKeEnergyHotWaterTankEntity(KebaKeEnergyDebouncedEntity, KebaKeEnergyWa
         upper_limit: float | None = self.get_limit("target_temperature", attr="upper_limit")
         return super().max_temp if upper_limit is None else upper_limit
 
-    @property
-    def current_operation(self) -> str | None:
-        """Return current operation mode."""
-        operating_mode: DHWTankOperatingMode | None = self.get_typed_value("operating_mode", DHWTankOperatingMode)
-        return None if operating_mode is None else HOT_WATER_TANK_STATE_TO_HA.get(operating_mode, STATE_OFF)
-
-    async def async_turn_off(self, **kwargs: object) -> None:  # noqa: ARG002
-        """Turn the hot water tank off."""
-        if self.current_operation != STATE_OFF:
-            await self._async_write_data(
-                DHWTankOperatingMode.OFF,
-                key="operating_mode",
-            )
-
-    async def async_turn_on(self, **kwargs: object) -> None:  # noqa: ARG002
-        """Turn the hot water tank on."""
-        if self.current_operation != STATE_HEAT_PUMP:
-            await self._async_write_data(
-                DHWTankOperatingMode.ON,
-                key="operating_mode",
-            )
-
-    async def async_set_operation_mode(self, operation_mode: str) -> None:
-        """Set operation mode for hot water tank."""
-        for operating_mode, state in HOT_WATER_TANK_STATE_TO_HA.items():
-            if state == operation_mode and operation_mode != self.current_operation:
-                await self._async_write_data(
-                    operating_mode,
-                    key="operating_mode",
-                    ignore_weekly_write_count=operation_mode == STATE_PERFORMANCE,
-                )
-
     async def async_set_temperature(self, **kwargs: object) -> None:
         """Set temperature for hot water tank."""
         temperature: object = kwargs.get(ATTR_TEMPERATURE)
         self._schedule_debounced_write(float(temperature) if isinstance(temperature, float | int) else None)
 
 
-class KebaKeEnergyBufferTankEntity(KebaKeEnergyWaterHeaterTankEntity, WaterHeaterEntity):
-    """KEBA KeEnergy water heat entity for buffer tank."""
+class KebaKeEnergyBufferTankEntity(KebaKeEnergyWaterHeaterEntity[BufferTankOperatingMode]):
+    """KEBA KeEnergy water heater entity of a buffer tank."""
 
     _attr_supported_features: WaterHeaterEntityFeature = (
         WaterHeaterEntityFeature.ON_OFF | WaterHeaterEntityFeature.OPERATION_MODE
     )
-
-    def __init__(
-        self,
-        coordinator: KebaKeEnergyDataUpdateCoordinator,
-        description: WaterHeaterEntityDescription,
-        device_type: SectionPrefix,
-        index: int | None,
-    ) -> None:
-        """Initialize the entity."""
-        super().__init__(coordinator, description=description, device_type=device_type, index=index)
-        self._attr_operation_list = list(BUFFER_TANK_STATE_TO_HA.values())
-
-        self._attr_unique_id: str | None = self._build_unique_id(self.device_type)
-
-        self.entity_id: str = f"{WATER_HEATER_DOMAIN}.{DOMAIN}_{self._attr_unique_id}"
+    _operating_mode_type: type[BufferTankOperatingMode] = BufferTankOperatingMode
+    _operating_mode_to_ha: Mapping[BufferTankOperatingMode, str] = BUFFER_TANK_STATE_TO_HA
+    _unique_id_with_device_type: bool = True
 
     @property
     def current_temperature(self) -> float | None:
@@ -191,37 +186,6 @@ class KebaKeEnergyBufferTankEntity(KebaKeEnergyWaterHeaterTankEntity, WaterHeate
         """Return the temperature we try to reach."""
         return self.get_float("target_temperature")
 
-    @property
-    def current_operation(self) -> str | None:
-        """Return current operation mode."""
-        operating_mode: BufferTankOperatingMode | None = self.get_typed_value("operating_mode", BufferTankOperatingMode)
-        return None if operating_mode is None else BUFFER_TANK_STATE_TO_HA.get(operating_mode, STATE_OFF)
-
-    async def async_turn_off(self, **kwargs: object) -> None:  # noqa: ARG002
-        """Turn the buffer tank off."""
-        if self.current_operation != STATE_OFF:
-            await self._async_write_data(
-                BufferTankOperatingMode.OFF,
-                key="operating_mode",
-            )
-
-    async def async_turn_on(self, **kwargs: object) -> None:  # noqa: ARG002
-        """Turn the buffer tank on."""
-        if self.current_operation != STATE_HEAT_PUMP:
-            await self._async_write_data(
-                BufferTankOperatingMode.ON,
-                key="operating_mode",
-            )
-
-    async def async_set_operation_mode(self, operation_mode: str) -> None:
-        """Set operation mode for buffer tank."""
-        for operating_mode, state in BUFFER_TANK_STATE_TO_HA.items():
-            if state == operation_mode and operation_mode != self.current_operation:
-                await self._async_write_data(
-                    operating_mode,
-                    key="operating_mode",
-                )
-
 
 async def async_setup_entry(
     hass: HomeAssistant,  # noqa: ARG001
@@ -230,7 +194,7 @@ async def async_setup_entry(
 ) -> None:
     """Set up KEBA KeEnergy water heaters from a config entry."""
     coordinator: KebaKeEnergyDataUpdateCoordinator = entry.runtime_data
-    water_heaters: list[KebaKeEnergyWaterHeaterTankEntity] = []
+    water_heaters: list[KebaKeEnergyWaterHeaterEntity] = []
     hot_water_tank_numbers: int = coordinator.device_count(SectionPrefix.HOT_WATER_TANK)
     buffer_tank_numbers: int = coordinator.device_count(SectionPrefix.BUFFER_TANK)
 

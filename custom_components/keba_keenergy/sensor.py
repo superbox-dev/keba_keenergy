@@ -44,7 +44,6 @@ from .entity import KebaKeEnergyBaseEntity
 from .entity import KebaKeEnergyEntity
 from .entity import KebaKeEnergyEntityDescription
 from .entity import async_setup_entities
-from .legacy import get_data_key
 from .legacy import get_state
 from .legacy import get_states
 
@@ -93,11 +92,6 @@ class KebaKeEnergySensorEntity(KebaKeEnergyEntity, SensorEntity):
             return get_state(value)
 
         return None if value is None or isinstance(value, bool) else self.entity_description.value(value)
-
-    @property
-    def _data_key(self) -> str:
-        """Return the key of the value in the coordinator data, the new key if the API renamed it."""
-        return get_data_key(self.entity_description)
 
     @property
     def extra_state_attributes(self) -> Mapping[str, Any] | None:

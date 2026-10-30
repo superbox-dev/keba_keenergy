@@ -74,7 +74,7 @@ class KebaKeEnergyClimateEntity(KebaKeEnergyDebouncedEntity, ClimateEntity):
         """Initialize KEBA KeEnergy climate entity."""
         self.entity_description = description
 
-        super().__init__(coordinator, device_type, index)
+        super().__init__(coordinator, device_type=device_type, index=index)
 
         self.entity_id = f"{CLIMATE_DOMAIN}.{DOMAIN}_{self._attr_unique_id}"
 

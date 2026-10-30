@@ -36,7 +36,7 @@ class KebaKeEnergySwitchEntityDescription(
     SwitchEntityDescription,
     KebaKeEnergyEntityDescription,
 ):
-    """Class describing KEBA KeEnergy number entities."""
+    """Class describing KEBA KeEnergy switch entities."""
 
 
 class KebaKeEnergySwitchEntity(KebaKeEnergyEntity, SwitchEntity):
@@ -48,25 +48,19 @@ class KebaKeEnergySwitchEntity(KebaKeEnergyEntity, SwitchEntity):
     @property
     def is_on(self) -> bool | None:
         """Return true if the switch is on."""
-        return self.get_typed_value(self.entity_description.key, bool)
+        return self.get_typed_value(self._data_key, bool)
 
     async def async_turn_off(self, **kwargs: object) -> None:  # noqa: ARG002
         """Turn the switch off."""
         if self.is_on:
             value: bool = False
-            await self._async_write_data(
-                value,
-                key=self.entity_description.key,
-            )
+            await self._async_write_data(value, key=self._data_key)
 
     async def async_turn_on(self, **kwargs: object) -> None:  # noqa: ARG002
         """Turn the switch on."""
         if not self.is_on:
             value: bool = True
-            await self._async_write_data(
-                value,
-                key=self.entity_description.key,
-            )
+            await self._async_write_data(value, key=self._data_key)
 
 
 SWITCH_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergySwitchEntityDescription, ...]]] = {

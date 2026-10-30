@@ -70,7 +70,7 @@ class KebaKeEnergySelectEntity(KebaKeEnergyEntity, SelectEntity):
     @property
     def current_option(self) -> str | None:
         """Return current select option."""
-        value: Value | None = self.get_value(self.entity_description.key)
+        value: Value | None = self.get_value(self._data_key)
 
         if isinstance(value, Enum):
             return get_state(value)
@@ -82,10 +82,7 @@ class KebaKeEnergySelectEntity(KebaKeEnergyEntity, SelectEntity):
         if option != self.current_option:
             enum: type[Enum] | None = self.entity_description.enum
             value: WriteValue = option if enum is None else get_member(enum, option)
-            await self._async_write_data(
-                value,
-                key=self.entity_description.key,
-            )
+            await self._async_write_data(value, key=self._data_key)
 
 
 class KebaKeEnergySystemOperatingModeSelectEntity(KebaKeEnergySelectEntity):
@@ -118,7 +115,7 @@ class KebaKeEnergyHeatCircuitOperatingModeSelectEntity(KebaKeEnergySelectEntity)
         """Return a set of selectable options."""
         options: list[str] = super().options
 
-        if self.coordinator.is_heating_circuit(index=self.index or 0):
+        if self.coordinator.is_heating_circuit(index=self.index):
             return [
                 *options,
                 get_state(HeatingCircuitOperatingMode.VACATION),
