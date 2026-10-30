@@ -22,7 +22,6 @@ from keba_keenergy_api.enums import HeatingCircuitOperatingMode
 from keba_keenergy_api.enums import SolarCircuitOperatingMode
 from keba_keenergy_api.enums import SystemOperatingMode
 
-from .const import DOMAIN
 from .const import SectionPrefix
 from .entity import KebaKeEnergyEntity
 from .entity import KebaKeEnergyEntityDescription
@@ -38,7 +37,6 @@ if TYPE_CHECKING:
     from keba_keenergy_api.models import WriteValue
 
     from .coordinator import KebaKeEnergyConfigEntry
-    from .coordinator import KebaKeEnergyDataUpdateCoordinator
 
 
 _LOGGER: Final = logging.getLogger(__name__)
@@ -62,19 +60,7 @@ class KebaKeEnergySelectEntity(KebaKeEnergyEntity, SelectEntity):
     """KEBA KeEnergy select entity."""
 
     entity_description: KebaKeEnergySelectEntityDescription
-
-    def __init__(
-        self,
-        coordinator: KebaKeEnergyDataUpdateCoordinator,
-        description: KebaKeEnergySelectEntityDescription,
-        device_type: str,
-        index: int | None,
-    ) -> None:
-        """Initialize the entity."""
-        self.entity_description = description
-
-        super().__init__(coordinator, device_type=device_type, index=index)
-        self.entity_id: str = f"{SELECT_DOMAIN}.{DOMAIN}_{self._attr_unique_id}"
+    _platform_domain: str = SELECT_DOMAIN
 
     @cached_property
     def options(self) -> list[str]:

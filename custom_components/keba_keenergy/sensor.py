@@ -82,25 +82,7 @@ class KebaKeEnergySensorEntity(KebaKeEnergyEntity, SensorEntity):
     """KEBA KeEnergy sensor entity."""
 
     entity_description: KebaKeEnergySensorEntityDescription[StateType]
-
-    def __init__(
-        self,
-        coordinator: KebaKeEnergyDataUpdateCoordinator,
-        description: KebaKeEnergySensorEntityDescription[StateType],
-        device_type: str,
-        index: int | None,
-    ) -> None:
-        """Initialize the entity."""
-        self.entity_description = description
-
-        super().__init__(
-            coordinator,
-            device_type=device_type,
-            index=index,
-            value_index=self.entity_description.value_index,
-        )
-
-        self.entity_id: str = f"{SENSOR_DOMAIN}.{DOMAIN}_{self._attr_unique_id}"
+    _platform_domain: str = SENSOR_DOMAIN
 
     @property
     def native_value(self) -> StateType:

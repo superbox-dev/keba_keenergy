@@ -18,7 +18,6 @@ from homeassistant.const import EntityCategory
 from homeassistant.const import UnitOfTemperature
 from homeassistant.const import UnitOfTime
 
-from .const import DOMAIN
 from .const import SectionPrefix
 from .entity import KebaKeEnergyEntity
 from .entity import KebaKeEnergyEntityDescription
@@ -51,6 +50,7 @@ class KebaKeEnergyNumberEntity(KebaKeEnergyEntity, NumberEntity):
     """KEBA KeEnergy number entity."""
 
     entity_description: KebaKeEnergyNumberEntityDescription
+    _platform_domain: str = NUMBER_DOMAIN
 
     def __init__(
         self,
@@ -60,16 +60,7 @@ class KebaKeEnergyNumberEntity(KebaKeEnergyEntity, NumberEntity):
         index: int | None,
     ) -> None:
         """Initialize the entity."""
-        self.entity_description = description
-
-        super().__init__(
-            coordinator,
-            device_type=device_type,
-            index=index,
-            value_index=self.entity_description.value_index,
-        )
-
-        self.entity_id: str = f"{NUMBER_DOMAIN}.{DOMAIN}_{self._attr_unique_id}"
+        super().__init__(coordinator, description=description, device_type=device_type, index=index)
 
         self._pending_key = self.entity_description.key
 

@@ -313,9 +313,9 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[CoordinatorData]):
         if not readings:
             return None
 
-        return readings[self._reading_index(device_type, key, index=index, value_index=value_index)]
+        return readings[self.reading_index(device_type, key, index=index, value_index=value_index)]
 
-    def _reading_index(self, device_type: str, key: str, /, *, index: int | None, value_index: int | None) -> int:
+    def reading_index(self, device_type: str, key: str, /, *, index: int | None, value_index: int | None) -> int:
         """Return the index in the readings of the key, of the device (and the value with the value index)."""
         return (index or 0) * self.get_endpoint(device_type, key).value.quantity + (value_index or 0)
 
@@ -331,7 +331,7 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[CoordinatorData]):
     ) -> Value:
         """Set a single value in the coordinator data, without writing it, and return the replaced value."""
         readings: list[Reading] = self.data[device_type][key]
-        reading_index: int = self._reading_index(device_type, key, index=index, value_index=value_index)
+        reading_index: int = self.reading_index(device_type, key, index=index, value_index=value_index)
         previous_value: Value = readings[reading_index].value
 
         # Only copy the changed values, the other values are shared with the previous data.

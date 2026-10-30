@@ -15,7 +15,6 @@ from homeassistant.components.switch import SwitchEntityDescription
 from homeassistant.components.switch.const import DOMAIN as SWITCH_DOMAIN
 from homeassistant.const import EntityCategory
 
-from .const import DOMAIN
 from .const import SectionPrefix
 from .entity import KebaKeEnergyEntity
 from .entity import KebaKeEnergyEntityDescription
@@ -26,7 +25,6 @@ if TYPE_CHECKING:
     from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
     from .coordinator import KebaKeEnergyConfigEntry
-    from .coordinator import KebaKeEnergyDataUpdateCoordinator
 
 _LOGGER: Final = logging.getLogger(__name__)
 
@@ -44,21 +42,8 @@ class KebaKeEnergySwitchEntityDescription(
 class KebaKeEnergySwitchEntity(KebaKeEnergyEntity, SwitchEntity):
     """KEBA KeEnergy switch entity."""
 
-    def __init__(
-        self,
-        coordinator: KebaKeEnergyDataUpdateCoordinator,
-        description: KebaKeEnergySwitchEntityDescription,
-        device_type: str,
-        index: int | None,
-    ) -> None:
-        """Initialize the entity."""
-        self.entity_description: KebaKeEnergySwitchEntityDescription = description
-        super().__init__(coordinator, device_type=device_type, index=index)
-
-        self._attr_unique_id: str | None = self._build_key_unique_id(
-            self.entity_description.ref_key or self.entity_description.key,
-        )
-        self.entity_id: str = f"{SWITCH_DOMAIN}.{DOMAIN}_{self._attr_unique_id}"
+    entity_description: KebaKeEnergySwitchEntityDescription
+    _platform_domain: str = SWITCH_DOMAIN
 
     @property
     def is_on(self) -> bool | None:

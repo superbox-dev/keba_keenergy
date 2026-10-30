@@ -17,6 +17,7 @@ from homeassistant.core import callback
 from homeassistant.exceptions import HomeAssistantError
 from homeassistant.helpers import entity_registry as er
 from homeassistant.helpers.device_registry import DeviceInfo
+from homeassistant.helpers.entity import EntityDescription
 from homeassistant.helpers.event import async_call_later
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
@@ -47,12 +48,12 @@ _LOGGER: Final = logging.getLogger(__name__)
 
 
 @dataclass(frozen=True, kw_only=True)
-class KebaKeEnergyEntityDescription:
+class KebaKeEnergyEntityDescription(EntityDescription):
     """Shared values of the KEBA KeEnergy entity descriptions."""
 
     value_index: int | None = None
     new_key: str | None = None  # New key name, required for a future migration of the entity ID.
-    ref_key: str | None = None  # Reference to another key, used for the entity ID.
+    ref_key: str | None = None  # Name in the unique ID instead of the key, for a second entity on the same value.
     condition: Callable[[KebaKeEnergyDataUpdateCoordinator, int], bool] | None = None
     entity_class: type[Any] | None = None  # Entity class instead of the default class of the platform.
 
@@ -214,15 +215,15 @@ class KebaKeEnergyBaseEntity(
         ignore_weekly_write_count: bool = False,
     ) -> None:
         """Write data to the KEBA KeEnergy API."""
-        reading_index: int = self.index or 0
-        # One value per device, the control unit has no device count and gets one value.
-        reading_count: int = self.coordinator.device_count(self.device_type) or 1
-
-        if self.value_index is not None:
-            quantity: int = self.coordinator.get_endpoint(self.device_type, key).value.quantity
-            reading_index = reading_index * quantity + self.value_index
-            reading_count = reading_count * quantity
-
+        reading_index: int = self.coordinator.reading_index(
+            self.device_type,
+            key,
+            index=self.index,
+            value_index=self.value_index,
+        )
+        quantity: int = self.coordinator.get_endpoint(self.device_type, key).value.quantity
+        # The values of all devices, the control unit has no device count and has the values of one device.
+        reading_count: int = (self.coordinator.device_count(self.device_type) or 1) * quantity
         values: list[WriteValue | None] = [value if index == reading_index else None for index in range(reading_count)]
 
         previous_value: Value = self.coordinator.async_set_local_value(
@@ -307,17 +308,24 @@ class KebaKeEnergyBaseEntity(
 class KebaKeEnergyEntity(KebaKeEnergyBaseEntity):
     """KEBA KeEnergy entity with an entity description."""
 
+    entity_description: KebaKeEnergyEntityDescription
+    # Domain of the platform, the entity ID is `<platform domain>.<domain>_<unique ID>`.
+    _platform_domain: str
+
     def __init__(
         self,
         coordinator: KebaKeEnergyDataUpdateCoordinator,
+        description: KebaKeEnergyEntityDescription,
         device_type: str,
         index: int | None,
-        value_index: int | None = None,
     ) -> None:
         """Initialize the KEBA KeEnergy entity."""
-        super().__init__(coordinator, device_type=device_type, index=index, value_index=value_index)
+        self.entity_description = description
 
-        self._attr_unique_id: str | None = self._build_key_unique_id(self.entity_description.key)
+        super().__init__(coordinator, device_type=device_type, index=index, value_index=description.value_index)
+
+        self._attr_unique_id: str | None = self._build_key_unique_id(description.ref_key or description.key)
+        self.entity_id: str = f"{self._platform_domain}.{DOMAIN}_{self._attr_unique_id}"
 
     def _build_key_unique_id(self, key: str, /) -> str:
         """Return the unique ID of the key, with the device type except for the control unit."""

@@ -15,7 +15,6 @@ from homeassistant.components.binary_sensor import BinarySensorEntity
 from homeassistant.components.binary_sensor import BinarySensorEntityDescription
 from homeassistant.const import EntityCategory
 
-from .const import DOMAIN
 from .const import SectionPrefix
 from .entity import KebaKeEnergyEntity
 from .entity import KebaKeEnergyEntityDescription
@@ -27,7 +26,6 @@ if TYPE_CHECKING:
     from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
     from .coordinator import KebaKeEnergyConfigEntry
-    from .coordinator import KebaKeEnergyDataUpdateCoordinator
 
 
 _LOGGER: Final = logging.getLogger(__name__)
@@ -187,25 +185,7 @@ class KebaKeEnergyBinarySensorEntity(KebaKeEnergyEntity, BinarySensorEntity):
     """KEBA KeEnergy sensor entity."""
 
     entity_description: KebaKeEnergyBinarySensorEntityDescription
-
-    def __init__(
-        self,
-        coordinator: KebaKeEnergyDataUpdateCoordinator,
-        description: KebaKeEnergyBinarySensorEntityDescription,
-        device_type: str,
-        index: int | None,
-    ) -> None:
-        """Initialize the entity."""
-        self.entity_description = description
-
-        super().__init__(
-            coordinator,
-            device_type=device_type,
-            index=index,
-            value_index=self.entity_description.value_index,
-        )
-
-        self.entity_id: str = f"{BINARY_SENSOR_DOMAIN}.{DOMAIN}_{self.unique_id}"
+    _platform_domain: str = BINARY_SENSOR_DOMAIN
 
     @property
     def is_on(self) -> bool | None:
