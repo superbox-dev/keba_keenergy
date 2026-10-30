@@ -139,47 +139,24 @@ EXTERNAL_HEAT_SOURCE_EXCESS_ENERGY_ACTIVATION_COUNTER: Final[str] = """
     }
 """
 
-HEAT_CIRCUIT_HAS_ROOM_TEMPERATURE: Final[str] = """
-    {
-        "name": "APPL.CtrlAppl.sParam.options.heatCircuit[%s].hasRoomTemp",
-        "value": "%s"
-    }
-"""
-
-HEAT_CIRCUIT_HAS_ROOM_HUMIDITY: Final[str] = """
-    {
-        "name": "APPL.CtrlAppl.sParam.options.heatCircuit[%s].hasRoomHumidity",
-        "value": "%s"
-    }
-"""
-
-HEAT_CIRCUIT_HAS_MIXER: Final[str] = """
-    {
-        "name": "APPL.CtrlAppl.sParam.options.heatCircuit[%s].hasMixer",
-        "value": "%s"
-    }
-"""
-
-HEAT_CIRCUIT_HAS_RETURN_FLOW_TEMPERATURE: Final[str] = """
-    {
-        "name": "APPL.CtrlAppl.sParam.options.heatCircuit[%s].hasRefluxTemp",
-        "value": "%s"
-    }
-"""
-
-HEAT_CIRCUIT_HAS_PUMP: Final[str] = """
-    {
-        "name": "APPL.CtrlAppl.sParam.options.heatCircuit[%s].hasPump",
-        "value": "%s"
-    }
-"""
-
-HEAT_CIRCUIT_HAS_VAR_SPEED_PUMP: Final[str] = """
-    {
-        "name": "APPL.CtrlAppl.sParam.options.heatCircuit[%s].hasVarSpeedPump",
-        "value": "%s"
-    }
-"""
+# The sensors that the second heating circuit and hot water tank do not have, the control unit reports them as
+# deactivated.
+DEACTIVATED_MESSAGE_IDS: Final[dict[str, int]] = {
+    f"APPL.CtrlAppl.sParam.{name}.state.msgId": 10
+    for name in (
+        "heatCircuit[1].dewPoint",
+        "heatCircuit[1].heatCircuitMixer.flowTemp",
+        "heatCircuit[1].heatCircuitMixer.mixer",
+        "heatCircuit[1].heatCircuitMixer.refluxTemp",
+        "heatCircuit[1].humidityRoom",
+        "heatCircuit[1].pump",
+        "heatCircuit[1].pumpAO",
+        "heatCircuit[1].tempReflux",
+        "heatCircuit[1].tempRoom",
+        "hotWaterTank[1].FreshWater.freshWaterFlow",
+        "hotWaterTank[1].FreshWater.freshWaterTemp",
+    )
+}
 
 HEAT_CIRCUIT_MODE: Final[str] = """
     {
@@ -1585,13 +1562,6 @@ HOT_WATER_TANK_CIRCULATION_PUMP_STATE: Final[str] = """
     }
 """
 
-HOT_WATER_TANK_HAS_FRESH_WATER_MODULE: Final[str] = """
-    {
-        "name": "APPL.CtrlAppl.sParam.options.hotWaterTank[%s].hasFreshWaterModule",
-        "value": "%s"
-    }
-"""
-
 PASSIVE_COOLING_TEMPERATURE: Final[dict[str, Any]] = {
     "name": "APPL.CtrlAppl.sParam.passivecooling[0].TempCoolPassive.values.actValue",
     "attributes": {
@@ -1983,13 +1953,6 @@ def get_heat_pump_data(compressor_night_speed: str = "true") -> list[dict[str, A
 SINGLE_DEVICE_FIXED_DATA_RESPONSE: Final[list[dict[str, Any]]] = [
     json.loads(SYSTEM_HAS_PHOTOVOLTAICS % "true"),
     json.loads(HEAT_CIRCUIT_MODE % ("0", "0")),
-    json.loads(HEAT_CIRCUIT_HAS_ROOM_TEMPERATURE % ("0", "true")),
-    json.loads(HEAT_CIRCUIT_HAS_ROOM_HUMIDITY % ("0", "true")),
-    json.loads(HEAT_CIRCUIT_HAS_MIXER % ("0", "true")),
-    json.loads(HEAT_CIRCUIT_HAS_RETURN_FLOW_TEMPERATURE % ("0", "true")),
-    json.loads(HEAT_CIRCUIT_HAS_PUMP % ("0", "true")),
-    json.loads(HEAT_CIRCUIT_HAS_VAR_SPEED_PUMP % ("0", "true")),
-    json.loads(HOT_WATER_TANK_HAS_FRESH_WATER_MODULE % ("0", "true")),
     json.loads(HEAT_PUMP_HAS_ACTIVE_COOLING % "false"),
     json.loads(HEAT_PUMP_HAS_PASSIVE_COOLING % "true"),
     json.loads(HEAT_PUMP_ELECTRIC_ENERGY_METER_TYPE % "2"),
@@ -2009,20 +1972,6 @@ def get_multiple_devices_fixed_data_response(
         json.loads(SYSTEM_HAS_PHOTOVOLTAICS % has_photovoltaics),
         json.loads(HEAT_CIRCUIT_MODE % ("0", "0")),
         json.loads(HEAT_CIRCUIT_MODE % ("1", "1" if has_cooling_circuits else "0")),
-        json.loads(HEAT_CIRCUIT_HAS_ROOM_TEMPERATURE % ("0", "true")),
-        json.loads(HEAT_CIRCUIT_HAS_ROOM_TEMPERATURE % ("1", "false")),
-        json.loads(HEAT_CIRCUIT_HAS_ROOM_HUMIDITY % ("0", "true")),
-        json.loads(HEAT_CIRCUIT_HAS_ROOM_HUMIDITY % ("1", "false")),
-        json.loads(HEAT_CIRCUIT_HAS_MIXER % ("0", "true")),
-        json.loads(HEAT_CIRCUIT_HAS_MIXER % ("1", "false")),
-        json.loads(HEAT_CIRCUIT_HAS_RETURN_FLOW_TEMPERATURE % ("0", "true")),
-        json.loads(HEAT_CIRCUIT_HAS_RETURN_FLOW_TEMPERATURE % ("1", "false")),
-        json.loads(HEAT_CIRCUIT_HAS_PUMP % ("0", "true")),
-        json.loads(HEAT_CIRCUIT_HAS_PUMP % ("1", "false")),
-        json.loads(HEAT_CIRCUIT_HAS_VAR_SPEED_PUMP % ("0", "true")),
-        json.loads(HEAT_CIRCUIT_HAS_VAR_SPEED_PUMP % ("1", "false")),
-        json.loads(HOT_WATER_TANK_HAS_FRESH_WATER_MODULE % ("0", "true")),
-        json.loads(HOT_WATER_TANK_HAS_FRESH_WATER_MODULE % ("1", "false")),
         json.loads(HEAT_PUMP_HAS_ACTIVE_COOLING % "false"),
         json.loads(HEAT_PUMP_HAS_PASSIVE_COOLING % f"{has_passive_cooling}"),
         json.loads(HEAT_PUMP_ELECTRIC_ENERGY_METER_TYPE % "2"),

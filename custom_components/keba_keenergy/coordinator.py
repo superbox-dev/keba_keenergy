@@ -241,6 +241,17 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[CoordinatorData]):
             if section in supported
         }
 
+    @staticmethod
+    def _group_readings(readings: Readings, request: Mapping[Section, tuple[str, str]], /) -> CoordinatorData:
+        """Return the readings per device type and key."""
+        data: CoordinatorData = {}
+
+        for section, section_readings in readings.items():
+            section_id, key = request[section]
+            data.setdefault(section_id, {})[key] = section_readings
+
+        return data
+
     async def _async_update_data(self) -> CoordinatorData:
         """Read all values from API to update coordinator data."""
         first_run: bool = self._tick_counter == 0
@@ -286,17 +297,6 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[CoordinatorData]):
             return await self._api_call_for_update(
                 self._api.read(request, counts=self.device_counts, limits="writable", message_ids=True),
             )
-
-    @staticmethod
-    def _group_readings(readings: Readings, request: Mapping[Section, tuple[str, str]], /) -> CoordinatorData:
-        """Return the readings per device type and key."""
-        data: CoordinatorData = {}
-
-        for section, section_readings in readings.items():
-            section_id, key = request[section]
-            data.setdefault(section_id, {})[key] = section_readings
-
-        return data
 
     @staticmethod
     def get_section(section_id: str, key: str, /) -> Section:
@@ -440,15 +440,6 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[CoordinatorData]):
         self.curve_tables = {**self.curve_tables, name: CurveTable(name=name, points=tuple(points))}
         self.async_update_listeners()
 
-    async def async_get_timezone(self) -> ZoneInfo:
-        """Get the timezone from the Web HMI."""
-        timezone: str = await self._api_call_for_user(self._api.get_timezone())
-        return ZoneInfo(timezone)
-
-    async def async_read_curve_tables(self) -> dict[str, CurveTable]:
-        """Read the heating and cooling curves from the Web HMI, by name."""
-        return await self._api_call_for_user(self._api.get_curve_tables())
-
     async def async_set_away_date_range(self, *, start_timestamp: float, end_timestamp: float) -> None:
         """Set the away date range of all heating circuits, if it changed."""
         away_start_date: list[int] = [int(start_timestamp)] * self.device_count(SectionPrefix.HEAT_CIRCUIT)
@@ -468,6 +459,15 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[CoordinatorData]):
     def _heat_circuit_values(self, key: str, /) -> list[Value]:
         """Return the values of all heating circuits."""
         return [reading.value for reading in self.data[SectionPrefix.HEAT_CIRCUIT].get(key, [])]
+
+    async def async_get_timezone(self) -> ZoneInfo:
+        """Get the timezone from the Web HMI."""
+        timezone: str = await self._api_call_for_user(self._api.get_timezone())
+        return ZoneInfo(timezone)
+
+    async def async_read_curve_tables(self) -> dict[str, CurveTable]:
+        """Read the heating and cooling curves from the Web HMI, by name."""
+        return await self._api_call_for_user(self._api.get_curve_tables())
 
     def device_identifiers(self) -> set[str]:
         """Return the identifiers of all devices that the control unit is configured with.
@@ -509,42 +509,14 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[CoordinatorData]):
 
         return self.device_count(prefix) > 0
 
-    def _get_option(self, prefix: SectionPrefix, key: str, /, *, index: int | None = None) -> Value | None:
-        """Return an option that is read once on setup, of the device with the index."""
-        readings: list[Reading] = self.options.get(prefix, {}).get(key, [])
-        return readings[index or 0].value if len(readings) > (index or 0) else None
-
-    def has_room_temperature(self, *, index: int | None = None) -> bool:
-        """Check if room temperature sensor is available."""
-        return self._get_option(SectionPrefix.HEAT_CIRCUIT, "has_room_temperature", index=index) is True
-
-    def has_room_humidity(self, *, index: int | None = None) -> bool:
-        """Check if room humidity sensor is available."""
-        return self._get_option(SectionPrefix.HEAT_CIRCUIT, "has_room_humidity", index=index) is True
-
     def has_photovoltaics(self) -> bool:
         """Check if photovoltaics is available."""
         return self._get_option(SectionPrefix.SYSTEM, "has_photovoltaics") is True
 
-    def has_mixer(self, *, index: int | None = None) -> bool:
-        """Check if heating circuit mixer is available."""
-        return self._get_option(SectionPrefix.HEAT_CIRCUIT, "has_mixer", index=index) is True
-
-    def has_return_flow_temperature(self, *, index: int | None = None) -> bool:
-        """Check if heating circuit return flow temperature sensor is available."""
-        return self._get_option(SectionPrefix.HEAT_CIRCUIT, "has_return_flow_temperature", index=index) is True
-
-    def has_pump(self, *, index: int | None = None) -> bool:
-        """Check if heating circuit pump is available."""
-        return self._get_option(SectionPrefix.HEAT_CIRCUIT, "has_pump", index=index) is True
-
-    def has_var_speed_pump(self, *, index: int | None = None) -> bool:
-        """Check if heating circuit variable speed pump is available."""
-        return self._get_option(SectionPrefix.HEAT_CIRCUIT, "has_var_speed_pump", index=index) is True
-
-    def has_fresh_water_module(self, *, index: int | None = None) -> bool:
-        """Check if fresh water module is available."""
-        return self._get_option(SectionPrefix.HOT_WATER_TANK, "has_fresh_water_module", index=index) is True
+    def _get_option(self, prefix: SectionPrefix, key: str, /, *, index: int | None = None) -> Value | None:
+        """Return an option that is read once on setup, of the device with the index."""
+        readings: list[Reading] = self.options.get(prefix, {}).get(key, [])
+        return readings[index or 0].value if len(readings) > (index or 0) else None
 
     def has_electrical_energy_meter(self, *, index: int | None = None) -> bool:
         """Check if electrical energy meter is available."""

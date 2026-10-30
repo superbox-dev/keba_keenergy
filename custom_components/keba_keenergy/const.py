@@ -33,7 +33,6 @@ from keba_keenergy_api.enums import DeviceType
 from keba_keenergy_api.enums import DHWTankOperatingMode
 from keba_keenergy_api.enums import HeatingCircuitOperatingMode
 from keba_keenergy_api.enums import HeatPumpState
-from keba_keenergy_api.sections import DHWTank
 from keba_keenergy_api.sections import ExternalHeatSource
 from keba_keenergy_api.sections import HeatingCircuit
 from keba_keenergy_api.sections import HeatPump
@@ -158,16 +157,8 @@ OPTION_SECTIONS: Final[Mapping[SectionPrefix, Mapping[str, Section]]] = {
     },
     SectionPrefix.HEAT_CIRCUIT: {
         "mode": HeatingCircuit.TYPE,
-        "has_room_temperature": HeatingCircuit.HAS_ROOM_TEMPERATURE_SENSOR,
-        "has_room_humidity": HeatingCircuit.HAS_ROOM_HUMIDITY_SENSOR,
-        "has_mixer": HeatingCircuit.HAS_MIXER,
-        "has_return_flow_temperature": HeatingCircuit.HAS_RETURN_TEMPERATURE_SENSOR,
-        "has_pump": HeatingCircuit.HAS_PUMP,
-        "has_var_speed_pump": HeatingCircuit.HAS_VARIABLE_SPEED_PUMP,
     },
-    SectionPrefix.HOT_WATER_TANK: {
-        "has_fresh_water_module": DHWTank.HAS_FRESH_WATER_MODULE,
-    },
+    SectionPrefix.HOT_WATER_TANK: {},
     SectionPrefix.HEAT_PUMP: {
         "has_active_cooling": HeatPump.HAS_ACTIVE_COOLING,
         "has_passive_cooling": HeatPump.HAS_PASSIVE_COOLING,

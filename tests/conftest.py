@@ -24,6 +24,7 @@ from yarl import URL
 from custom_components.keba_keenergy.const import DOMAIN
 from custom_components.keba_keenergy.const import PLATFORMS
 from tests.api_data import CURVES_RESPONSE
+from tests.api_data import DEACTIVATED_MESSAGE_IDS
 from tests.api_data import DEVICE_INFO_RESPONSE
 from tests.api_data import HMI_RESPONSE
 from tests.api_data import MESSAGE_ID_SUFFIX
@@ -162,7 +163,8 @@ class FakeKebaKeEnergyAPI:
         device counts, the options and the values of each update), the other reads (e.g. of `filter_supported()`)
         return the values it already has. An `HTTPStatus` returns an empty response with this status and an exception
         (e.g. `TimeoutError`) is raised by the next read.
-        The message ids of the sensors come from `message_ids` (variable name to id, 0 if not given).
+        The message ids of the sensors come from `message_ids` (variable name to id), otherwise from
+        `DEACTIVATED_MESSAGE_IDS`, 0 if not given.
         The next read of the `responses` awaits `during_read` once before it responds, e.g. to set a value during an
         update.
         A read of an unknown value or of one of the `unsupported_variables` fails like the Web HMI rejects it. The
@@ -263,7 +265,10 @@ class FakeKebaKeEnergyAPI:
 
             # Like the Web HMI, only a read with `attr` "1" returns the attributes, e.g. the limits.
             response = [
-                {"name": item["name"], "value": str(self.message_ids.get(item["name"], 0))}
+                {
+                    "name": item["name"],
+                    "value": str({**DEACTIVATED_MESSAGE_IDS, **self.message_ids}.get(item["name"], 0)),
+                }
                 if self._is_message_id(item["name"])
                 else values[item["name"]]
                 if item["attr"] == "1"

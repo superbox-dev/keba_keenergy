@@ -116,7 +116,7 @@ class KebaKeEnergyClimateEntity(KebaKeEnergyBaseEntity, ClimateEntity):
     @property
     def current_temperature(self) -> float | None:
         """Return the current temperature."""
-        return self.get_float("room_temperature") if self.coordinator.has_room_temperature(index=self.index) else None
+        return self.get_float("room_temperature")
 
     @property
     def target_temperature(self) -> float | None:
@@ -157,7 +157,7 @@ class KebaKeEnergyClimateEntity(KebaKeEnergyBaseEntity, ClimateEntity):
     @property
     def current_humidity(self) -> float | None:
         """Return the current humidity."""
-        return self.get_float("room_humidity") if self.coordinator.has_room_humidity(index=self.index) else None
+        return self.get_float("room_humidity")
 
     @property
     def hvac_mode(self) -> HVACMode | None:

@@ -297,7 +297,6 @@ SENSOR_TYPES: Final[dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ..
     ),
     SectionPrefix.HEAT_CIRCUIT: (
         KebaKeEnergySensorEntityDescription[float](
-            condition=lambda coordinator, index: coordinator.has_room_temperature(index=index),
             device_class=SensorDeviceClass.TEMPERATURE,
             entity_registry_enabled_default=False,
             key="room_temperature",
@@ -306,7 +305,6 @@ SENSOR_TYPES: Final[dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ..
             translation_key="room_temperature",
         ),
         KebaKeEnergySensorEntityDescription[float](
-            condition=lambda coordinator, index: coordinator.has_room_humidity(index=index),
             device_class=SensorDeviceClass.HUMIDITY,
             entity_registry_enabled_default=False,
             key="room_humidity",
@@ -316,11 +314,6 @@ SENSOR_TYPES: Final[dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ..
             translation_key="room_humidity",
         ),
         KebaKeEnergySensorEntityDescription[float](
-            condition=(
-                lambda coordinator, index: (
-                    coordinator.has_room_temperature(index=index) and coordinator.has_room_humidity(index=index)
-                )
-            ),
             device_class=SensorDeviceClass.TEMPERATURE,
             entity_registry_enabled_default=False,
             key="dew_point",
@@ -337,7 +330,6 @@ SENSOR_TYPES: Final[dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ..
             translation_key="flow_temperature_setpoint",
         ),
         KebaKeEnergySensorEntityDescription[float](
-            condition=lambda coordinator, index: coordinator.has_mixer(index=index),
             device_class=SensorDeviceClass.TEMPERATURE,
             entity_registry_enabled_default=False,
             key="flow_temperature",
@@ -347,7 +339,6 @@ SENSOR_TYPES: Final[dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ..
             translation_key="mixer_flow_temperature",
         ),
         KebaKeEnergySensorEntityDescription[float](
-            condition=lambda coordinator, index: coordinator.has_mixer(index=index),
             device_class=SensorDeviceClass.TEMPERATURE,
             entity_registry_enabled_default=False,
             key="mixer_return_flow_temperature",
@@ -356,7 +347,6 @@ SENSOR_TYPES: Final[dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ..
             translation_key="mixer_return_flow_temperature",
         ),
         KebaKeEnergySensorEntityDescription[float](
-            condition=lambda coordinator, index: coordinator.has_mixer(index=index),
             device_class=SensorDeviceClass.ENUM,
             entity_registry_enabled_default=False,
             key="mixer_position",
@@ -366,7 +356,6 @@ SENSOR_TYPES: Final[dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ..
             attributes=get_mixer_attributes,
         ),
         KebaKeEnergySensorEntityDescription[float](
-            condition=lambda coordinator, index: coordinator.has_return_flow_temperature(index=index),
             device_class=SensorDeviceClass.TEMPERATURE,
             entity_registry_enabled_default=False,
             key="return_flow_temperature",
@@ -586,7 +575,6 @@ SENSOR_TYPES: Final[dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ..
             translation_key="cooling_curve",
         ),
         KebaKeEnergySensorEntityDescription[float](
-            condition=lambda coordinator, index: coordinator.has_var_speed_pump(index=index),
             entity_registry_enabled_default=False,
             key="pump_speed",
             native_unit_of_measurement=PERCENTAGE,
@@ -1087,7 +1075,6 @@ SENSOR_TYPES: Final[dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ..
     ),
     SectionPrefix.PASSIVE_COOLING: (
         KebaKeEnergySensorEntityDescription[float](
-            condition=lambda coordinator, index: coordinator.has_passive_cooling(index=index),
             device_class=SensorDeviceClass.TEMPERATURE,
             key="temperature",
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
@@ -1095,14 +1082,12 @@ SENSOR_TYPES: Final[dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ..
             translation_key="temperature",
         ),
         KebaKeEnergySensorEntityDescription[str](
-            condition=lambda coordinator, index: coordinator.has_passive_cooling(index=index),
             device_class=SensorDeviceClass.ENUM,
             key="switch_valve_position",
             options=get_states(SwitchValvePosition),
             translation_key="passive_cooling_valve_position",
         ),
         KebaKeEnergySensorEntityDescription[float](
-            condition=lambda coordinator, index: coordinator.has_passive_cooling(index=index),
             key="circulation_pump_speed",
             native_unit_of_measurement=PERCENTAGE,
             state_class=SensorStateClass.MEASUREMENT,
@@ -1111,7 +1096,6 @@ SENSOR_TYPES: Final[dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ..
             value=lambda data: data * 100,
         ),
         KebaKeEnergySensorEntityDescription[float](
-            condition=lambda coordinator, index: coordinator.has_passive_cooling(index=index),
             device_class=SensorDeviceClass.TEMPERATURE,
             key="mixer_flow_temperature",
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
@@ -1119,7 +1103,6 @@ SENSOR_TYPES: Final[dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ..
             icon="mdi:snowflake-thermometer",
         ),
         KebaKeEnergySensorEntityDescription[float](
-            condition=lambda coordinator, index: coordinator.has_passive_cooling(index=index),
             device_class=SensorDeviceClass.TEMPERATURE,
             key="mixer_target_temperature",
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
@@ -1127,7 +1110,6 @@ SENSOR_TYPES: Final[dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ..
             translation_key="mixer_target_temperature",
         ),
         KebaKeEnergySensorEntityDescription[float](
-            condition=lambda coordinator, index: coordinator.has_passive_cooling(index=index),
             device_class=SensorDeviceClass.ENUM,
             key="mixer_position",
             options=get_states(MixerPosition),
@@ -1222,7 +1204,6 @@ SENSOR_TYPES: Final[dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ..
             translation_key="standby_temperature",
         ),
         KebaKeEnergySensorEntityDescription[float](
-            condition=lambda coordinator, index: coordinator.has_fresh_water_module(index=index),
             device_class=SensorDeviceClass.TEMPERATURE,
             entity_registry_enabled_default=False,
             key="fresh_water_module_temperature",

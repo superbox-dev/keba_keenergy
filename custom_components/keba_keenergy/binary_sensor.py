@@ -64,7 +64,6 @@ BINARY_SENSOR_TYPES: Final[dict[str, tuple[KebaKeEnergyBinarySensorEntityDescrip
     ),
     SectionPrefix.HEAT_CIRCUIT: (
         KebaKeEnergyBinarySensorEntityDescription(
-            condition=lambda coordinator, index: coordinator.has_pump(index=index),
             device_class=BinarySensorDeviceClass.RUNNING,
             entity_registry_enabled_default=False,
             key="pump_state",
@@ -148,7 +147,6 @@ BINARY_SENSOR_TYPES: Final[dict[str, tuple[KebaKeEnergyBinarySensorEntityDescrip
             },
         ),
         KebaKeEnergyBinarySensorEntityDescription(
-            condition=lambda coordinator, index: coordinator.has_fresh_water_module(index=index),
             entity_registry_enabled_default=False,
             key="hot_water_flow",
             new_key="fresh_water_flow",
