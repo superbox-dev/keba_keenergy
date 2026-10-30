@@ -187,7 +187,7 @@ WRITE_COUNT_SENSOR_TYPE: Final[SensorEntityDescription] = SensorEntityDescriptio
     translation_key="weekly_write_count",
 )
 
-SENSOR_TYPES: Final[dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]]] = {
+SENSOR_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergySensorEntityDescription[Any], ...]]] = {
     SectionPrefix.SYSTEM: (
         KebaKeEnergySensorEntityDescription[float](
             device_class=SensorDeviceClass.TEMPERATURE,

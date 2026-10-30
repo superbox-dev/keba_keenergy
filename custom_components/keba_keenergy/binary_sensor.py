@@ -41,7 +41,7 @@ class KebaKeEnergyBinarySensorEntityDescription(
     """Class describing KEBA KeEnergy binary sensor entities."""
 
 
-BINARY_SENSOR_TYPES: Final[dict[str, tuple[KebaKeEnergyBinarySensorEntityDescription, ...]]] = {
+BINARY_SENSOR_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergyBinarySensorEntityDescription, ...]]] = {
     SectionPrefix.SOLAR_CIRCUIT: (
         KebaKeEnergyBinarySensorEntityDescription(
             key="heat_request",

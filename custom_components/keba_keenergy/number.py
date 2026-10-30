@@ -80,7 +80,7 @@ class KebaKeEnergyNumberEntity(KebaKeEnergyDebouncedEntity, KebaKeEnergyEntity, 
         self._schedule_debounced_write(value / self.entity_description.scale)
 
 
-NUMBER_TYPES: Final[dict[str, tuple[KebaKeEnergyNumberEntityDescription, ...]]] = {
+NUMBER_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergyNumberEntityDescription, ...]]] = {
     SectionPrefix.HEAT_CIRCUIT: (
         KebaKeEnergyNumberEntityDescription(
             condition=lambda coordinator, index: coordinator.is_heating_circuit(index=index),

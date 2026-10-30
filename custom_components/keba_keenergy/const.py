@@ -201,7 +201,7 @@ TO_REDACT: Final[set[str]] = {
     "unique_id",
 }
 
-DEVICE_TRANSLATION_KEYS: Final[dict[str, str]] = {
+DEVICE_TRANSLATION_KEYS: Final[Mapping[SectionPrefix, str]] = {
     SectionPrefix.SYSTEM: "control_unit",
     SectionPrefix.HEAT_CIRCUIT: "heat_circuit",
     SectionPrefix.SOLAR_CIRCUIT: "solar_circuit",

@@ -9,7 +9,6 @@ from abc import abstractmethod
 from dataclasses import dataclass
 from functools import cached_property
 from typing import TYPE_CHECKING
-from typing import Any
 from typing import Final
 from typing import Literal
 
@@ -56,7 +55,7 @@ class KebaKeEnergyEntityDescription(EntityDescription):
     new_key: str | None = None  # New key name, required for a future migration of the entity ID.
     ref_key: str | None = None  # Name in the unique ID instead of the key, for a second entity on the same value.
     condition: Callable[[KebaKeEnergyDataUpdateCoordinator, int], bool] | None = None
-    entity_class: type[Any] | None = None  # Entity class instead of the default class of the platform.
+    entity_class: type[KebaKeEnergyEntity] | None = None  # Entity class instead of the default class of the platform.
 
 
 class KebaKeEnergyBaseEntity(
@@ -69,13 +68,13 @@ class KebaKeEnergyBaseEntity(
     def __init__(
         self,
         coordinator: KebaKeEnergyDataUpdateCoordinator,
-        device_type: str,
+        device_type: SectionPrefix,
         index: int | None,
         value_index: int | None = None,
     ) -> None:
         """Initialize the KEBA KeEnergy entity."""
         super().__init__(coordinator)
-        self.device_type: str = device_type
+        self.device_type: SectionPrefix = device_type
         self.index: int | None = index
         self.value_index: int | None = value_index
 
@@ -325,7 +324,7 @@ class KebaKeEnergyEntity(KebaKeEnergyBaseEntity):
         self,
         coordinator: KebaKeEnergyDataUpdateCoordinator,
         description: KebaKeEnergyEntityDescription,
-        device_type: str,
+        device_type: SectionPrefix,
         index: int | None,
     ) -> None:
         """Initialize the KEBA KeEnergy entity."""
@@ -345,14 +344,14 @@ class KebaKeEnergyEntity(KebaKeEnergyBaseEntity):
 def async_setup_entities(
     entry: KebaKeEnergyConfigEntry,
     async_add_entities: AddEntitiesCallback,
-    entity_types: dict[str, tuple[Any, ...]],
-    entity_cls: type[Any],
+    entity_types: Mapping[SectionPrefix, tuple[KebaKeEnergyEntityDescription, ...]],
+    entity_cls: type[KebaKeEnergyEntity],
     entity_name: str,
 ) -> None:
     """Set up KEBA KeEnergy entities."""
     coordinator: KebaKeEnergyDataUpdateCoordinator = entry.runtime_data
-    entities: list[Any] = []
-    deactivated_unique_ids: set[str] = set()
+    entities: list[KebaKeEnergyEntity] = []
+    deactivated_unique_ids: set[str | None] = set()
 
     for device_type, readings_by_key in coordinator.data.items():
         for description in entity_types.get(device_type, ()):
@@ -375,8 +374,8 @@ def async_setup_entities(
                         )
                         continue
 
-                    cls: type[Any] = description.entity_class or entity_cls
-                    entity: Any = cls(
+                    cls: type[KebaKeEnergyEntity] = description.entity_class or entity_cls
+                    entity: KebaKeEnergyEntity = cls(
                         coordinator=coordinator,
                         description=description,
                         device_type=device_type,
@@ -406,7 +405,7 @@ def async_setup_entities(
 
 
 @callback
-def _async_remove_deactivated_entities(entry: KebaKeEnergyConfigEntry, unique_ids: set[str], /) -> None:
+def _async_remove_deactivated_entities(entry: KebaKeEnergyConfigEntry, unique_ids: set[str | None], /) -> None:
     """Remove the entities of deactivated sensors that were created before from the entity registry."""
     entity_registry: er.EntityRegistry = er.async_get(entry.runtime_data.hass)
 

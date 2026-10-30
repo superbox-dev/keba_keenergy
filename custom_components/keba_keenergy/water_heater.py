@@ -46,7 +46,7 @@ class KebaKeEnergyWaterHeaterTankEntity(KebaKeEnergyBaseEntity, WaterHeaterEntit
         self,
         coordinator: KebaKeEnergyDataUpdateCoordinator,
         description: WaterHeaterEntityDescription,
-        device_type: str,
+        device_type: SectionPrefix,
         index: int | None,
     ) -> None:
         """Initialize the entity."""
@@ -77,7 +77,7 @@ class KebaKeEnergyHotWaterTankEntity(KebaKeEnergyDebouncedEntity, KebaKeEnergyWa
         self,
         coordinator: KebaKeEnergyDataUpdateCoordinator,
         description: WaterHeaterEntityDescription,
-        device_type: str,
+        device_type: SectionPrefix,
         index: int | None,
     ) -> None:
         """Initialize the entity."""
@@ -161,7 +161,7 @@ class KebaKeEnergyBufferTankEntity(KebaKeEnergyWaterHeaterTankEntity, WaterHeate
         self,
         coordinator: KebaKeEnergyDataUpdateCoordinator,
         description: WaterHeaterEntityDescription,
-        device_type: str,
+        device_type: SectionPrefix,
         index: int | None,
     ) -> None:
         """Initialize the entity."""
@@ -241,7 +241,7 @@ async def async_setup_entry(
                 key="hot_water_tank",
                 translation_key="hot_water_tank",
             ),
-            device_type=SectionPrefix.HOT_WATER_TANK.value,
+            device_type=SectionPrefix.HOT_WATER_TANK,
             index=index if hot_water_tank_numbers > 1 else None,
         )
         for index in range(hot_water_tank_numbers)
@@ -254,7 +254,7 @@ async def async_setup_entry(
                 key="buffer_tank",
                 translation_key="buffer_tank",
             ),
-            device_type=SectionPrefix.BUFFER_TANK.value,
+            device_type=SectionPrefix.BUFFER_TANK,
             index=index if buffer_tank_numbers > 1 else None,
         )
         for index in range(buffer_tank_numbers)

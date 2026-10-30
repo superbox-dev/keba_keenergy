@@ -153,7 +153,7 @@ class KebaKeEnergyCurveSelectEntity(KebaKeEnergySelectEntity):
         return list(self.coordinator.curve_names)
 
 
-SELECT_TYPES: Final[dict[str, tuple[KebaKeEnergySelectEntityDescription, ...]]] = {
+SELECT_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergySelectEntityDescription, ...]]] = {
     SectionPrefix.SYSTEM: (
         KebaKeEnergySelectEntityDescription(
             entity_class=KebaKeEnergySystemOperatingModeSelectEntity,

@@ -69,7 +69,7 @@ class KebaKeEnergySwitchEntity(KebaKeEnergyEntity, SwitchEntity):
             )
 
 
-SWITCH_TYPES: Final[dict[str, tuple[KebaKeEnergySwitchEntityDescription, ...]]] = {
+SWITCH_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergySwitchEntityDescription, ...]]] = {
     SectionPrefix.HEAT_CIRCUIT: (
         KebaKeEnergySwitchEntityDescription(
             condition=lambda coordinator, _: coordinator.has_photovoltaics(),
