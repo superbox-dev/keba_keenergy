@@ -563,6 +563,13 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[CoordinatorData]):
         """Check if the external heat source has emissions."""
         return self._get_configuration(SectionPrefix.EXTERNAL_HEAT_SOURCE, "has_emissions", index=index) is True
 
+    def has_cooling_heat_pumps(self) -> bool:
+        """Check if one heat pump supports active or passive cooling."""
+        return any(
+            self.has_active_cooling(index=index) or self.has_passive_cooling(index=index)
+            for index in range(self.device_count(SectionPrefix.HEAT_PUMP))
+        )
+
     def has_cooling_circuits(self) -> bool:
         """Check if one heating circuit supports cooling."""
         # Some KEBA KeEnergy software versions do not have the configuration for active and passive cooling.

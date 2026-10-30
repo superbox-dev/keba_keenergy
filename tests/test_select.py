@@ -24,6 +24,9 @@ from tests.api_data import MULTIPLE_DEVICES_RESPONSE
 from tests.api_data import get_multiple_devices_fixed_data_response
 from tests.test_select_data import CURVE_SELECTS
 from tests.test_select_data import HEATING_CURVE_ENTITY_ID
+from tests.test_select_data import TWO_HEAT_PUMPS_DATA_RESPONSE
+from tests.test_select_data import TWO_HEAT_PUMPS_RESPONSE
+from tests.test_select_data import TWO_HEAT_PUMPS_SECOND_PASSIVE_COOLING_FIXED_DATA_RESPONSE
 
 if TYPE_CHECKING:
     from syrupy.assertion import SnapshotAssertion
@@ -77,6 +80,23 @@ async def test_selects_without_cooling(
         assert isinstance(state, State)
         assert state == snapshot(name=entity_id)
         assert await get_option_translations(hass, state) == snapshot(name=f"{entity_id}_options")
+
+
+async def test_system_operating_mode_cooling_of_second_heat_pump(
+    hass: HomeAssistant,
+    fake_api: FakeKebaKeEnergyAPI,
+) -> None:
+    """Test that the system operating mode offers the cooling modes if only the second heat pump can cool."""
+    fake_api.responses = [
+        TWO_HEAT_PUMPS_RESPONSE,
+        TWO_HEAT_PUMPS_SECOND_PASSIVE_COOLING_FIXED_DATA_RESPONSE,
+        TWO_HEAT_PUMPS_DATA_RESPONSE,
+    ]
+    await fake_api.setup_integration()
+
+    state: State | None = hass.states.get("select.keba_keenergy_12345678_operating_mode")
+    assert isinstance(state, State)
+    assert "auto_cool" in state.attributes["options"]
 
 
 @pytest.mark.parametrize(

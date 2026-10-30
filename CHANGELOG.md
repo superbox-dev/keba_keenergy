@@ -53,6 +53,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   `heating_curve`.
 - Showed the points written with the action `set_heating_curve_points` in the sensors `heating_curve` and
   `cooling_curve` right away, not only after the next update of the heating circuits.
+- Offered the cooling modes in the select `operating_mode` of the control unit if any heat pump supports active or
+  passive cooling, not only the first one.
 
 [issue-77]: https://github.com/superbox-dev/keba_keenergy/issues/77
 [issue-84]: https://github.com/superbox-dev/keba_keenergy/issues/84
