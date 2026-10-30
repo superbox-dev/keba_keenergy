@@ -7,11 +7,9 @@ from __future__ import annotations
 import logging
 from asyncio import Lock
 from dataclasses import replace
-from datetime import date
 from datetime import timedelta
 from functools import cached_property
 from typing import TYPE_CHECKING
-from typing import Any
 from typing import Final
 from zoneinfo import ZoneInfo
 
@@ -23,12 +21,10 @@ from homeassistant.const import CONF_SSL
 from homeassistant.const import CONF_USERNAME
 from homeassistant.exceptions import ConfigEntryAuthFailed
 from homeassistant.exceptions import HomeAssistantError
-from homeassistant.helpers import issue_registry as ir
 from homeassistant.helpers.debounce import Debouncer
-from homeassistant.helpers.storage import Store
+from homeassistant.helpers.event import async_track_time_change
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator
 from homeassistant.helpers.update_coordinator import UpdateFailed
-from homeassistant.util.dt import now
 from keba_keenergy_api.client import KebaKeEnergyAPI
 from keba_keenergy_api.enums import ElectricalEnergyMeterType
 from keba_keenergy_api.enums import HeatingCircuitType
@@ -42,14 +38,13 @@ from keba_keenergy_api.sections import System
 from .const import DEFAULT_SCAN_INTERVAL
 from .const import DEVICE_TYPES
 from .const import DOMAIN
-from .const import FLASH_WRITE_ISSUE_ID
-from .const import FLASH_WRITE_LIMIT_PER_WEEK
 from .const import HEATING_CURVE_KEY
 from .const import OPTION_SECTIONS
 from .const import REQUEST_REFRESH_COOLDOWN
 from .const import SCAN_INTERVAL_PREFIXES
 from .const import SectionPrefix
 from .legacy import SECTIONS
+from .write_counter import FlashWriteCounter
 
 if TYPE_CHECKING:
     from collections.abc import Awaitable
@@ -57,6 +52,7 @@ if TYPE_CHECKING:
     from collections.abc import Iterable
     from collections.abc import Mapping
     from collections.abc import Sequence
+    from datetime import datetime
 
     from aiohttp import ClientSession
     from homeassistant.core import HomeAssistant
@@ -87,14 +83,6 @@ def get_device_identifier(entry_unique_id: str | None, section_id: str, position
     return identifier if position is None else f"{identifier}_{position}"
 
 
-def get_write_counter_store(hass: HomeAssistant, *, entry_id: str | None = None) -> Store[dict[str, Any]]:
-    """Return the store of the write counter of a config entry, without entry ID the store shared by all entries.
-
-    The shared store was used by older versions and is only removed.
-    """
-    return Store(hass, version=1, key=DOMAIN if entry_id is None else f"{DOMAIN}.{entry_id}")
-
-
 class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[CoordinatorData]):
     """Class to manage fetching KEBA KeEnergy data API."""
 
@@ -121,7 +109,7 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[CoordinatorData]):
         self.config_entry: KebaKeEnergyConfigEntry = entry
         self.control_unit_device_id: str = ""
 
-        self._store: Store[dict[str, Any]] = get_write_counter_store(hass, entry_id=entry.entry_id)
+        self.write_counter: FlashWriteCounter = FlashWriteCounter(hass, entry)
         self._write_lock: Lock = Lock()
         self._local_change_count: int = 0
 
@@ -136,11 +124,6 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[CoordinatorData]):
         self._api_device_info: DeviceInfo | None = None
         self._api_system_info: SystemInfo | None = None
         self._api_hmi_info: HmiInfo | None = None
-
-        self._weekly_write_count: int = 0
-        self._weekly_writes: dict[str, int] = {}
-        self._write_count_week: tuple[int, int] | None = None
-        self._flash_issue_active: bool = False
 
         self._options: CoordinatorData = {}
         self._tick_counter: int = 0
@@ -183,21 +166,6 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[CoordinatorData]):
             for section_id, section_data in (self.data or {}).items()
         }
 
-    @property
-    def weekly_write_count(self) -> int:
-        """Return the number of writes in the current week."""
-        return self._weekly_write_count
-
-    @property
-    def weekly_writes(self) -> dict[str, int]:
-        """Return how often each value was written in the current week, sorted by name."""
-        return dict(sorted(self._weekly_writes.items()))
-
-    @property
-    def _issue_id(self) -> str:
-        """Return the ID of the repair issue for frequent write operations of this control unit."""
-        return f"{FLASH_WRITE_ISSUE_ID}_{self.config_entry.entry_id}"
-
     @cached_property
     def configuration_url(self) -> str:
         """Return web gui url."""
@@ -239,20 +207,16 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[CoordinatorData]):
 
     async def _async_setup(self) -> None:
         """Set up the coordinator."""
-        store_data: dict[str, Any] = await self._store.async_load() or {}
-        counter: dict[str, Any] | None = store_data.get("flash_write_counter")
-
-        if isinstance(counter, dict):
-            self._write_count_week = tuple(counter["week"])
-            self._weekly_write_count = counter["count"]
-            self._weekly_writes = counter.get("writes", {})
-
-        # Older versions stored one counter and created one repair issue for all config entries.
-        # TODO: Remove this cleanup and the shared store once hardly any installation updates from those versions.
-        await get_write_counter_store(self.hass).async_remove()
-        ir.async_delete_issue(self.hass, domain=DOMAIN, issue_id=FLASH_WRITE_ISSUE_ID)
-
+        await self.write_counter.async_load()
+        # The write counter is reset at midnight of a new week, without an update or a write.
+        self.config_entry.async_on_unload(
+            async_track_time_change(self.hass, self._async_reset_write_counter, hour=0, minute=0, second=0),
+        )
         await self._api_call_for_update(self._async_fixed_data())
+
+    async def _async_reset_write_counter(self, _now: datetime, /) -> None:
+        if await self.write_counter.async_reset_if_new_week():
+            self.async_update_listeners()
 
     @staticmethod
     async def _api_call_for_update[R](coro: Awaitable[R]) -> R:
@@ -332,9 +296,6 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[CoordinatorData]):
         first_run: bool = self._tick_counter == 0
         self._tick_counter = (self._tick_counter + 1) % 1_000_000
 
-        if self._reset_weekly_counter_if_needed():
-            await self._async_save_write_counter()
-
         request: dict[Section, tuple[str, str]] = {}
 
         for prefix, sections in self.request_data_groups.items():
@@ -408,17 +369,6 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[CoordinatorData]):
 
         return data
 
-    async def _async_save_write_counter(self) -> None:
-        await self._store.async_save(
-            {
-                "flash_write_counter": {
-                    "week": list(self._write_count_week) if self._write_count_week else [],
-                    "count": self._weekly_write_count,
-                    "writes": self._weekly_writes,
-                },
-            },
-        )
-
     def get_section(self, section_id: str, key: str, /) -> Section:
         """Return the section of a key."""
         return SECTIONS[SectionPrefix(section_id)][key]
@@ -471,71 +421,19 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[CoordinatorData]):
         names: tuple[str, ...],
         ignore_weekly_write_count: bool = False,
     ) -> None:
-        """Set the weekly counter and write to the NAND.
-
-        The names of the written values are counted separately, a write of several values counts once in total.
-        """
+        """Count the write and write to the NAND."""
         async with self._write_lock:
-            counter_changed: bool = self._reset_weekly_counter_if_needed()
-
             if not ignore_weekly_write_count:
-                self._weekly_write_count += 1
-
-                for name in names:
-                    self._weekly_writes[name] = self._weekly_writes.get(name, 0) + 1
-
-                counter_changed = True
-
-            if counter_changed:
-                await self._async_save_write_counter()
+                await self.write_counter.async_add_write(names)
                 self.async_update_listeners()
 
             _LOGGER.debug(
                 "API write request %s (writes this week: %s)",
                 names,
-                self._weekly_write_count,
+                self.write_counter.weekly_count,
             )
 
-            if self._weekly_write_count > FLASH_WRITE_LIMIT_PER_WEEK and not self._flash_issue_active:
-                self._flash_issue_active = True
-                self._create_issue()
-
             await self._api_call_for_user(write_fn())
-
-    def _reset_weekly_counter_if_needed(self) -> bool:
-        """Reset the write counter in a new week, return True if it was reset."""
-        today: date = now().date()
-        current_week: tuple[int, int] = today.isocalendar().year, today.isocalendar().week
-
-        if self._write_count_week == current_week:
-            return False
-
-        self._write_count_week = current_week
-        self._weekly_write_count = 0
-        self._weekly_writes = {}
-        self._flash_issue_active = False
-
-        ir.async_delete_issue(
-            self.hass,
-            domain=DOMAIN,
-            issue_id=self._issue_id,
-        )
-
-        return True
-
-    def _create_issue(self) -> None:
-        ir.async_create_issue(
-            self.hass,
-            domain=DOMAIN,
-            issue_id=self._issue_id,
-            is_fixable=False,
-            translation_key=FLASH_WRITE_ISSUE_ID,
-            translation_placeholders={
-                "limit": str(FLASH_WRITE_LIMIT_PER_WEEK),
-                "name": self.config_entry.title,
-            },
-            severity=ir.IssueSeverity.WARNING,
-        )
 
     @staticmethod
     async def _api_call_for_user[R](coro: Awaitable[R]) -> R:

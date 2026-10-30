@@ -183,12 +183,12 @@ class KebaKeEnergyWriteCountSensorEntity(KebaKeEnergyBaseEntity, SensorEntity):
     @property
     def native_value(self) -> int:
         """Return the number of write operations of the current week."""
-        return self.coordinator.weekly_write_count
+        return self.coordinator.write_counter.weekly_count
 
     @property
     def extra_state_attributes(self) -> Mapping[str, Any]:
         """Return how often each value was written in the current week."""
-        return {ATTR_WRITES: self.coordinator.weekly_writes}
+        return {ATTR_WRITES: self.coordinator.write_counter.weekly_writes}
 
 
 def get_mixer_position(setpoint: float, /) -> str:

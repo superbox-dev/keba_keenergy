@@ -20,8 +20,8 @@ from .const import SectionPrefix
 from .coordinator import KebaKeEnergyConfigEntry
 from .coordinator import KebaKeEnergyDataUpdateCoordinator
 from .coordinator import get_device_identifier
-from .coordinator import get_write_counter_store
 from .services import async_setup_services
+from .write_counter import FlashWriteCounter
 
 if TYPE_CHECKING:
     from aiohttp import ClientSession
@@ -91,4 +91,4 @@ async def async_unload_entry(hass: HomeAssistant, entry: KebaKeEnergyConfigEntry
 
 async def async_remove_entry(hass: HomeAssistant, entry: KebaKeEnergyConfigEntry) -> None:
     """Remove the write counter of a removed config entry."""
-    await get_write_counter_store(hass, entry_id=entry.entry_id).async_remove()
+    await FlashWriteCounter.async_remove(hass, entry.entry_id)

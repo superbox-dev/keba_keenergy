@@ -4,6 +4,7 @@
 
 from __future__ import annotations
 
+from datetime import date
 from datetime import timedelta
 from typing import TYPE_CHECKING
 from typing import Any
@@ -47,8 +48,9 @@ from tests.test_issues_data import WRITE_COUNT_ENTITY_ID
 from tests.test_issues_data import WRITES_PER_VALUE
 
 if TYPE_CHECKING:
-    from datetime import date
+    from datetime import datetime
 
+    from freezegun.api import FrozenDateTimeFactory
     from homeassistant.core import HomeAssistant
     from pytest_homeassistant_custom_component.common import MockConfigEntry
 
@@ -168,6 +170,53 @@ async def test_ignored_write_is_not_counted(
     assert isinstance(state, State)
     assert state.state == "5"
     assert state.attributes["writes"] == {"system.operating_mode": 5}
+
+
+@pytest.mark.parametrize(
+    ("setup_day", "expected_writes"),
+    [
+        (date(2026, 3, 8), {}),
+        (date(2026, 3, 9), {"system.operating_mode": 5}),
+    ],
+    ids=["new_week", "same_week"],
+)
+async def test_write_counter_at_midnight(
+    fake_api: FakeKebaKeEnergyAPI,
+    hass_storage: dict[str, Any],
+    freezer: FrozenDateTimeFactory,
+    setup_day: date,
+    expected_writes: dict[str, int],
+) -> None:
+    """Test that the write counter resets at midnight of a new week only, without an update or a write."""
+    fake_api.responses = [
+        MULTIPLE_POSITIONS_RESPONSE,
+        get_multiple_position_fixed_data_response(),
+        MULTIPLE_POSITION_DATA_RESPONSE,
+        # The polling at midnight.
+        MULTIPLE_POSITION_DATA_RESPONSE,
+    ]
+    freezer.move_to(dt_util.start_of_local_day(setup_day) + timedelta(hours=12))
+    key: str = f"{DOMAIN}.{fake_api.config_entry.entry_id}"
+    hass_storage[key] = _store(key, {"week": _week(setup_day), "count": 5, "writes": {"system.operating_mode": 5}})
+    await fake_api.setup_integration()
+
+    # Midnight of Tuesday, 2026-03-10: 2026-03-08 is the Sunday of the previous week, 2026-03-09 the Monday of the same.
+    midnight: datetime = dt_util.start_of_local_day(date(2026, 3, 10))
+    freezer.move_to(midnight)
+    async_fire_time_changed(fake_api.hass, midnight)
+    await fake_api.hass.async_block_till_done()
+
+    state: State | None = fake_api.hass.states.get(WRITE_COUNT_ENTITY_ID)
+    expected_count: int = sum(expected_writes.values())
+
+    assert hass_storage[key]["data"]["flash_write_counter"] == {
+        "week": _week(midnight.date()),
+        "count": expected_count,
+        "writes": expected_writes,
+    }
+    assert isinstance(state, State)
+    assert state.state == str(expected_count)
+    assert state.attributes["writes"] == expected_writes
 
 
 async def test_new_week_resets_write_counter(
