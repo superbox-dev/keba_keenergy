@@ -19,6 +19,9 @@ from .const import SectionPrefix
 from .entity import KebaKeEnergyEntity
 from .entity import KebaKeEnergyEntityDescription
 from .entity import async_setup_entities
+from .entity import has_photovoltaics
+from .entity import is_cooling_only_circuit
+from .entity import is_heating_circuit
 
 if TYPE_CHECKING:
     from homeassistant.core import HomeAssistant
@@ -66,7 +69,7 @@ class KebaKeEnergySwitchEntity(KebaKeEnergyEntity, SwitchEntity):
 SWITCH_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergySwitchEntityDescription, ...]]] = {
     SectionPrefix.HEAT_CIRCUIT: (
         KebaKeEnergySwitchEntityDescription(
-            condition=lambda coordinator, _: coordinator.has_photovoltaics(),
+            condition=has_photovoltaics,
             device_class=SwitchDeviceClass.SWITCH,
             entity_category=EntityCategory.CONFIG,
             entity_registry_enabled_default=False,
@@ -74,7 +77,7 @@ SWITCH_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergySwitchEntityDescriptio
             translation_key="use_excess_energy",
         ),
         KebaKeEnergySwitchEntityDescription(
-            condition=lambda coordinator, index: coordinator.is_heating_circuit(index=index),
+            condition=is_heating_circuit,
             device_class=SwitchDeviceClass.SWITCH,
             entity_category=EntityCategory.CONFIG,
             entity_registry_enabled_default=False,
@@ -85,9 +88,7 @@ SWITCH_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergySwitchEntityDescriptio
         # TODO: Use the key `use_curve_table` without `ref_key` when the unique IDs are migrated to the keys of
         # `keba_keenergy_api` 3.0.
         KebaKeEnergySwitchEntityDescription(
-            condition=lambda coordinator, index: (
-                coordinator.is_cooling_circuit(index=index) and not coordinator.is_heating_circuit(index=index)
-            ),
+            condition=is_cooling_only_circuit,
             device_class=SwitchDeviceClass.SWITCH,
             entity_category=EntityCategory.CONFIG,
             entity_registry_enabled_default=False,
@@ -115,7 +116,7 @@ SWITCH_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergySwitchEntityDescriptio
     ),
     SectionPrefix.BUFFER_TANK: (
         KebaKeEnergySwitchEntityDescription(
-            condition=lambda coordinator, _: coordinator.has_photovoltaics(),
+            condition=has_photovoltaics,
             device_class=SwitchDeviceClass.SWITCH,
             entity_category=EntityCategory.CONFIG,
             entity_registry_enabled_default=False,
@@ -125,7 +126,7 @@ SWITCH_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergySwitchEntityDescriptio
     ),
     SectionPrefix.HOT_WATER_TANK: (
         KebaKeEnergySwitchEntityDescription(
-            condition=lambda coordinator, _: coordinator.has_photovoltaics(),
+            condition=has_photovoltaics,
             device_class=SwitchDeviceClass.SWITCH,
             entity_category=EntityCategory.CONFIG,
             entity_registry_enabled_default=False,
@@ -135,7 +136,7 @@ SWITCH_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergySwitchEntityDescriptio
     ),
     SectionPrefix.EXTERNAL_HEAT_SOURCE: (
         KebaKeEnergySwitchEntityDescription(
-            condition=lambda coordinator, _: coordinator.has_photovoltaics(),
+            condition=has_photovoltaics,
             device_class=SwitchDeviceClass.SWITCH,
             entity_category=EntityCategory.CONFIG,
             entity_registry_enabled_default=False,

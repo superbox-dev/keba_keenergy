@@ -44,6 +44,15 @@ from .entity import KebaKeEnergyBaseEntity
 from .entity import KebaKeEnergyEntity
 from .entity import KebaKeEnergyEntityDescription
 from .entity import async_setup_entities
+from .entity import has_both_meters
+from .entity import has_electrical_energy_meter
+from .entity import has_electrical_energy_meter_and_cooling
+from .entity import has_heat_meter
+from .entity import has_photovoltaics
+from .entity import is_cooling_circuit
+from .entity import is_cooling_circuit_with_photovoltaics
+from .entity import is_heating_circuit
+from .entity import is_heating_circuit_with_photovoltaics
 from .legacy import get_state
 from .legacy import get_states
 
@@ -351,7 +360,7 @@ SENSOR_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergySensorEntityDescriptio
             translation_key="target_room_temperature",
         ),
         KebaKeEnergySensorEntityDescription[float](
-            condition=lambda coordinator, index: coordinator.is_heating_circuit(index=index),
+            condition=is_heating_circuit,
             device_class=SensorDeviceClass.TEMPERATURE,
             key="target_temperature_day",
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
@@ -359,7 +368,7 @@ SENSOR_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergySensorEntityDescriptio
             translation_key="target_room_temperature_day",
         ),
         KebaKeEnergySensorEntityDescription[float](
-            condition=lambda coordinator, index: coordinator.is_cooling_circuit(index=index),
+            condition=is_cooling_circuit,
             device_class=SensorDeviceClass.TEMPERATURE,
             key="target_cooling_temperature_day",
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
@@ -367,7 +376,7 @@ SENSOR_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergySensorEntityDescriptio
             translation_key="target_room_cooling_temperature_day",
         ),
         KebaKeEnergySensorEntityDescription[float](
-            condition=lambda coordinator, index: coordinator.is_heating_circuit(index=index),
+            condition=is_heating_circuit,
             device_class=SensorDeviceClass.TEMPERATURE,
             entity_registry_enabled_default=False,
             key="heating_limit_day",
@@ -376,7 +385,7 @@ SENSOR_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergySensorEntityDescriptio
             translation_key="heating_limit_day",
         ),
         KebaKeEnergySensorEntityDescription[float](
-            condition=lambda coordinator, index: coordinator.is_cooling_circuit(index=index),
+            condition=is_cooling_circuit,
             device_class=SensorDeviceClass.TEMPERATURE,
             entity_registry_enabled_default=False,
             key="cooling_limit_day",
@@ -385,11 +394,7 @@ SENSOR_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergySensorEntityDescriptio
             translation_key="cooling_limit_day",
         ),
         KebaKeEnergySensorEntityDescription[float](
-            condition=(
-                lambda coordinator, index: (
-                    coordinator.is_heating_circuit(index=index) and coordinator.has_photovoltaics()
-                )
-            ),
+            condition=is_heating_circuit_with_photovoltaics,
             device_class=SensorDeviceClass.TEMPERATURE,
             entity_registry_enabled_default=False,
             key="excess_energy_heating_limit_day",
@@ -398,11 +403,7 @@ SENSOR_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergySensorEntityDescriptio
             translation_key="excess_energy_heating_limit_day",
         ),
         KebaKeEnergySensorEntityDescription[float](
-            condition=(
-                lambda coordinator, index: (
-                    coordinator.is_cooling_circuit(index=index) and coordinator.has_photovoltaics()
-                )
-            ),
+            condition=is_cooling_circuit_with_photovoltaics,
             device_class=SensorDeviceClass.TEMPERATURE,
             entity_registry_enabled_default=False,
             key="excess_energy_cooling_limit_day",
@@ -411,7 +412,7 @@ SENSOR_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergySensorEntityDescriptio
             translation_key="excess_energy_cooling_limit_day",
         ),
         KebaKeEnergySensorEntityDescription[float](
-            condition=lambda coordinator, index: coordinator.is_heating_circuit(index=index),
+            condition=is_heating_circuit,
             device_class=SensorDeviceClass.TEMPERATURE,
             key="target_temperature_night",
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
@@ -419,7 +420,7 @@ SENSOR_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergySensorEntityDescriptio
             translation_key="target_room_temperature_night",
         ),
         KebaKeEnergySensorEntityDescription[float](
-            condition=lambda coordinator, index: coordinator.is_cooling_circuit(index=index),
+            condition=is_cooling_circuit,
             device_class=SensorDeviceClass.TEMPERATURE,
             key="target_cooling_temperature_night",
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
@@ -427,7 +428,7 @@ SENSOR_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergySensorEntityDescriptio
             translation_key="target_room_cooling_temperature_night",
         ),
         KebaKeEnergySensorEntityDescription[float](
-            condition=lambda coordinator, index: coordinator.is_heating_circuit(index=index),
+            condition=is_heating_circuit,
             device_class=SensorDeviceClass.TEMPERATURE,
             entity_registry_enabled_default=False,
             key="heating_limit_night",
@@ -436,7 +437,7 @@ SENSOR_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergySensorEntityDescriptio
             translation_key="heating_limit_night",
         ),
         KebaKeEnergySensorEntityDescription[float](
-            condition=lambda coordinator, index: coordinator.is_cooling_circuit(index=index),
+            condition=is_cooling_circuit,
             device_class=SensorDeviceClass.TEMPERATURE,
             entity_registry_enabled_default=False,
             key="cooling_limit_night",
@@ -445,11 +446,7 @@ SENSOR_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergySensorEntityDescriptio
             translation_key="cooling_limit_night",
         ),
         KebaKeEnergySensorEntityDescription[float](
-            condition=(
-                lambda coordinator, index: (
-                    coordinator.is_heating_circuit(index=index) and coordinator.has_photovoltaics()
-                )
-            ),
+            condition=is_heating_circuit_with_photovoltaics,
             device_class=SensorDeviceClass.TEMPERATURE,
             entity_registry_enabled_default=False,
             key="excess_energy_heating_limit_night",
@@ -458,11 +455,7 @@ SENSOR_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergySensorEntityDescriptio
             translation_key="excess_energy_heating_limit_night",
         ),
         KebaKeEnergySensorEntityDescription[float](
-            condition=(
-                lambda coordinator, index: (
-                    coordinator.is_cooling_circuit(index=index) and coordinator.has_photovoltaics()
-                )
-            ),
+            condition=is_cooling_circuit_with_photovoltaics,
             device_class=SensorDeviceClass.TEMPERATURE,
             entity_registry_enabled_default=False,
             key="excess_energy_cooling_limit_night",
@@ -471,7 +464,7 @@ SENSOR_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergySensorEntityDescriptio
             translation_key="excess_energy_cooling_limit_night",
         ),
         KebaKeEnergySensorEntityDescription[float](
-            condition=lambda coordinator, index: coordinator.is_heating_circuit(index=index),
+            condition=is_heating_circuit,
             device_class=SensorDeviceClass.TEMPERATURE,
             key="target_temperature_away",
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
@@ -486,11 +479,7 @@ SENSOR_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergySensorEntityDescriptio
             translation_key="target_room_temperature_offset",
         ),
         KebaKeEnergySensorEntityDescription[float](
-            condition=(
-                lambda coordinator, index: (
-                    coordinator.is_heating_circuit(index=index) and coordinator.has_photovoltaics()
-                )
-            ),
+            condition=is_heating_circuit_with_photovoltaics,
             device_class=SensorDeviceClass.TEMPERATURE,
             key="excess_energy_target_temperature",
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
@@ -498,11 +487,7 @@ SENSOR_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergySensorEntityDescriptio
             translation_key="excess_energy_target_room_temperature",
         ),
         KebaKeEnergySensorEntityDescription[float](
-            condition=(
-                lambda coordinator, index: (
-                    coordinator.is_cooling_circuit(index=index) and coordinator.has_photovoltaics()
-                )
-            ),
+            condition=is_cooling_circuit_with_photovoltaics,
             device_class=SensorDeviceClass.TEMPERATURE,
             key="excess_energy_target_cooling_temperature",
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
@@ -510,7 +495,7 @@ SENSOR_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergySensorEntityDescriptio
             translation_key="excess_energy_target_room_cooling_temperature",
         ),
         KebaKeEnergySensorEntityDescription[str](
-            condition=lambda coordinator, _: coordinator.has_photovoltaics(),
+            condition=has_photovoltaics,
             device_class=SensorDeviceClass.ENUM,
             key="excess_energy_mode",
             options=get_states(ExcessEnergyState),
@@ -523,14 +508,14 @@ SENSOR_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergySensorEntityDescriptio
             translation_key="heat_circuit_operating_mode",
         ),
         KebaKeEnergySensorEntityDescription[str](
-            condition=lambda coordinator, index: coordinator.is_heating_circuit(index=index),
+            condition=is_heating_circuit,
             device_class=SensorDeviceClass.ENUM,
             key="heat_request",
             options=get_states(HeatingCircuitRequest),
             translation_key="heat_request",
         ),
         KebaKeEnergySensorEntityDescription[str](
-            condition=lambda coordinator, index: coordinator.is_cooling_circuit(index=index),
+            condition=is_cooling_circuit,
             device_class=SensorDeviceClass.ENUM,
             entity_registry_enabled_default=False,
             key="cool_request",
@@ -538,12 +523,12 @@ SENSOR_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergySensorEntityDescriptio
             translation_key="cool_request",
         ),
         KebaKeEnergySensorEntityDescription[str](
-            condition=lambda coordinator, index: coordinator.is_heating_circuit(index=index),
+            condition=is_heating_circuit,
             key="heating_curve",
             translation_key="heating_curve",
         ),
         KebaKeEnergySensorEntityDescription[str](
-            condition=lambda coordinator, index: coordinator.is_cooling_circuit(index=index),
+            condition=is_cooling_circuit,
             key="cooling_curve",
             translation_key="cooling_curve",
         ),
@@ -782,7 +767,7 @@ SENSOR_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergySensorEntityDescriptio
             translation_key="low_pressure",
         ),
         KebaKeEnergySensorEntityDescription[float](
-            condition=lambda coordinator, index: coordinator.has_electrical_energy_meter(index=index),
+            condition=has_electrical_energy_meter,
             device_class=SensorDeviceClass.POWER,
             entity_registry_enabled_default=False,
             key="compressor_power",
@@ -791,7 +776,7 @@ SENSOR_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergySensorEntityDescriptio
             translation_key="compressor_power",
         ),
         KebaKeEnergySensorEntityDescription[float](
-            condition=lambda coordinator, index: coordinator.has_heat_meter(index=index),
+            condition=has_heat_meter,
             device_class=SensorDeviceClass.POWER,
             entity_registry_enabled_default=False,
             key="heating_power",
@@ -800,7 +785,7 @@ SENSOR_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergySensorEntityDescriptio
             translation_key="heating_power",
         ),
         KebaKeEnergySensorEntityDescription[float](
-            condition=lambda coordinator, index: coordinator.has_heat_meter(index=index),
+            condition=has_heat_meter,
             device_class=SensorDeviceClass.POWER,
             entity_registry_enabled_default=False,
             key="hot_water_power",
@@ -809,11 +794,7 @@ SENSOR_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergySensorEntityDescriptio
             translation_key="hot_water_power",
         ),
         KebaKeEnergySensorEntityDescription[float](
-            condition=(
-                lambda coordinator, index: (
-                    coordinator.has_electrical_energy_meter(index=index) and coordinator.has_heat_meter(index=index)
-                )
-            ),
+            condition=has_both_meters,
             entity_category=EntityCategory.DIAGNOSTIC,
             entity_registry_enabled_default=False,
             key="cop",
@@ -822,7 +803,7 @@ SENSOR_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergySensorEntityDescriptio
             translation_key="cop",
         ),
         KebaKeEnergySensorEntityDescription[float](
-            condition=lambda coordinator, index: coordinator.has_heat_meter(index=index),
+            condition=has_heat_meter,
             device_class=SensorDeviceClass.ENERGY,
             entity_registry_enabled_default=False,
             key="heating_energy",
@@ -831,7 +812,7 @@ SENSOR_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergySensorEntityDescriptio
             translation_key="heating_energy",
         ),
         KebaKeEnergySensorEntityDescription[float](
-            condition=lambda coordinator, index: coordinator.has_electrical_energy_meter(index=index),
+            condition=has_electrical_energy_meter,
             device_class=SensorDeviceClass.ENERGY,
             entity_registry_enabled_default=False,
             key="heating_energy_consumption",
@@ -840,11 +821,7 @@ SENSOR_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergySensorEntityDescriptio
             translation_key="heating_energy_consumption",
         ),
         KebaKeEnergySensorEntityDescription[float](
-            condition=(
-                lambda coordinator, index: (
-                    coordinator.has_electrical_energy_meter(index=index) and coordinator.has_heat_meter(index=index)
-                )
-            ),
+            condition=has_both_meters,
             entity_category=EntityCategory.DIAGNOSTIC,
             entity_registry_enabled_default=False,
             key="heating_spf",
@@ -853,7 +830,7 @@ SENSOR_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergySensorEntityDescriptio
             translation_key="heating_spf",
         ),
         KebaKeEnergySensorEntityDescription[float](
-            condition=lambda coordinator, index: coordinator.has_heat_meter(index=index),
+            condition=has_heat_meter,
             device_class=SensorDeviceClass.ENERGY,
             entity_registry_enabled_default=False,
             key="cooling_energy",
@@ -862,12 +839,7 @@ SENSOR_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergySensorEntityDescriptio
             translation_key="cooling_energy",
         ),
         KebaKeEnergySensorEntityDescription[float](
-            condition=(
-                lambda coordinator, index: (
-                    coordinator.has_electrical_energy_meter(index=index)
-                    and (coordinator.has_active_cooling(index=index) or coordinator.has_passive_cooling(index=index))
-                )
-            ),
+            condition=has_electrical_energy_meter_and_cooling,
             device_class=SensorDeviceClass.ENERGY,
             entity_registry_enabled_default=False,
             key="cooling_energy_consumption",
@@ -876,11 +848,7 @@ SENSOR_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergySensorEntityDescriptio
             translation_key="cooling_energy_consumption",
         ),
         KebaKeEnergySensorEntityDescription[float](
-            condition=(
-                lambda coordinator, index: (
-                    coordinator.has_electrical_energy_meter(index=index) and coordinator.has_heat_meter(index=index)
-                )
-            ),
+            condition=has_both_meters,
             entity_category=EntityCategory.DIAGNOSTIC,
             entity_registry_enabled_default=False,
             key="cooling_spf",
@@ -889,7 +857,7 @@ SENSOR_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergySensorEntityDescriptio
             translation_key="cooling_spf",
         ),
         KebaKeEnergySensorEntityDescription[float](
-            condition=(lambda coordinator, index: coordinator.has_heat_meter(index=index)),
+            condition=has_heat_meter,
             device_class=SensorDeviceClass.ENERGY,
             entity_registry_enabled_default=False,
             key="hot_water_energy",
@@ -898,7 +866,7 @@ SENSOR_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergySensorEntityDescriptio
             translation_key="hot_water_energy",
         ),
         KebaKeEnergySensorEntityDescription[float](
-            condition=lambda coordinator, index: coordinator.has_electrical_energy_meter(index=index),
+            condition=has_electrical_energy_meter,
             device_class=SensorDeviceClass.ENERGY,
             entity_registry_enabled_default=False,
             key="hot_water_energy_consumption",
@@ -907,11 +875,7 @@ SENSOR_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergySensorEntityDescriptio
             translation_key="hot_water_energy_consumption",
         ),
         KebaKeEnergySensorEntityDescription[float](
-            condition=(
-                lambda coordinator, index: (
-                    coordinator.has_electrical_energy_meter(index=index) and coordinator.has_heat_meter(index=index)
-                )
-            ),
+            condition=has_both_meters,
             entity_category=EntityCategory.DIAGNOSTIC,
             entity_registry_enabled_default=False,
             key="hot_water_spf",
@@ -920,7 +884,7 @@ SENSOR_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergySensorEntityDescriptio
             translation_key="hot_water_spf",
         ),
         KebaKeEnergySensorEntityDescription[float](
-            condition=lambda coordinator, index: coordinator.has_heat_meter(index=index),
+            condition=has_heat_meter,
             device_class=SensorDeviceClass.ENERGY,
             entity_registry_enabled_default=False,
             key="total_thermal_energy",
@@ -929,7 +893,7 @@ SENSOR_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergySensorEntityDescriptio
             translation_key="total_thermal_energy",
         ),
         KebaKeEnergySensorEntityDescription[float](
-            condition=lambda coordinator, index: coordinator.has_electrical_energy_meter(index=index),
+            condition=has_electrical_energy_meter,
             device_class=SensorDeviceClass.ENERGY,
             entity_registry_enabled_default=False,
             key="total_energy_consumption",
@@ -938,12 +902,7 @@ SENSOR_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergySensorEntityDescriptio
             translation_key="total_energy_consumption",
         ),
         KebaKeEnergySensorEntityDescription[float](
-            condition=(
-                lambda coordinator, index: (
-                    coordinator.has_electrical_energy_meter(index=index)
-                    and (coordinator.has_heat_meter(index=index) or coordinator.has_heat_meter(index=index))
-                )
-            ),
+            condition=has_both_meters,
             entity_category=EntityCategory.DIAGNOSTIC,
             entity_registry_enabled_default=False,
             key="total_spf",
@@ -952,7 +911,7 @@ SENSOR_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergySensorEntityDescriptio
             translation_key="total_spf",
         ),
         KebaKeEnergySensorEntityDescription[float](
-            condition=lambda coordinator, _: coordinator.has_photovoltaics(),
+            condition=has_photovoltaics,
             device_class=SensorDeviceClass.ENERGY,
             entity_registry_enabled_default=False,
             key="excess_energy_consumption",
@@ -961,7 +920,7 @@ SENSOR_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergySensorEntityDescriptio
             translation_key="excess_energy_consumption",
         ),
         KebaKeEnergySensorEntityDescription[float](
-            condition=lambda coordinator, _: coordinator.has_photovoltaics(),
+            condition=has_photovoltaics,
             device_class=SensorDeviceClass.ENERGY,
             entity_registry_enabled_default=False,
             key="heating_excess_energy_consumption",
@@ -970,7 +929,7 @@ SENSOR_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergySensorEntityDescriptio
             translation_key="heating_excess_energy_consumption",
         ),
         KebaKeEnergySensorEntityDescription[float](
-            condition=(lambda coordinator, _: coordinator.has_photovoltaics()),
+            condition=has_photovoltaics,
             device_class=SensorDeviceClass.ENERGY,
             entity_registry_enabled_default=False,
             key="cooling_excess_energy_consumption",
@@ -979,7 +938,7 @@ SENSOR_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergySensorEntityDescriptio
             translation_key="cooling_excess_energy_consumption",
         ),
         KebaKeEnergySensorEntityDescription[float](
-            condition=lambda coordinator, _: coordinator.has_photovoltaics(),
+            condition=has_photovoltaics,
             device_class=SensorDeviceClass.ENERGY,
             entity_registry_enabled_default=False,
             key="hot_water_excess_energy_consumption",
@@ -1015,7 +974,7 @@ SENSOR_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergySensorEntityDescriptio
             translation_key="activation_counter",
         ),
         KebaKeEnergySensorEntityDescription[int](
-            condition=lambda coordinator, _: coordinator.has_photovoltaics(),
+            condition=has_photovoltaics,
             device_class=SensorDeviceClass.DURATION,
             entity_category=EntityCategory.DIAGNOSTIC,
             entity_registry_enabled_default=False,
@@ -1026,7 +985,7 @@ SENSOR_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergySensorEntityDescriptio
             translation_key="excess_energy_operating_time",
         ),
         KebaKeEnergySensorEntityDescription[int](
-            condition=lambda coordinator, _: coordinator.has_photovoltaics(),
+            condition=has_photovoltaics,
             device_class=SensorDeviceClass.DURATION,
             entity_category=EntityCategory.DIAGNOSTIC,
             entity_registry_enabled_default=False,
@@ -1037,7 +996,7 @@ SENSOR_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergySensorEntityDescriptio
             translation_key="excess_energy_max_runtime",
         ),
         KebaKeEnergySensorEntityDescription[int](
-            condition=lambda coordinator, _: coordinator.has_photovoltaics(),
+            condition=has_photovoltaics,
             entity_registry_enabled_default=False,
             entity_category=EntityCategory.DIAGNOSTIC,
             key="excess_energy_activation_counter",
@@ -1113,7 +1072,7 @@ SENSOR_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergySensorEntityDescriptio
             },
         ),
         KebaKeEnergySensorEntityDescription[float](
-            condition=lambda coordinator, _: coordinator.has_photovoltaics(),
+            condition=has_photovoltaics,
             device_class=SensorDeviceClass.TEMPERATURE,
             key="excess_energy_target_temperature",
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
@@ -1121,7 +1080,7 @@ SENSOR_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergySensorEntityDescriptio
             translation_key="excess_energy_target_temperature",
         ),
         KebaKeEnergySensorEntityDescription[str](
-            condition=lambda coordinator, _: coordinator.has_photovoltaics(),
+            condition=has_photovoltaics,
             device_class=SensorDeviceClass.ENUM,
             key="excess_energy_mode",
             options=get_states(ExcessEnergyState),
@@ -1197,7 +1156,7 @@ SENSOR_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergySensorEntityDescriptio
             icon="mdi:thermometer-chevron-up",
         ),
         KebaKeEnergySensorEntityDescription[float](
-            condition=lambda coordinator, _: coordinator.has_photovoltaics(),
+            condition=has_photovoltaics,
             device_class=SensorDeviceClass.TEMPERATURE,
             key="excess_energy_target_temperature",
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
@@ -1205,7 +1164,7 @@ SENSOR_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergySensorEntityDescriptio
             translation_key="excess_energy_target_temperature",
         ),
         KebaKeEnergySensorEntityDescription[str](
-            condition=lambda coordinator, _: coordinator.has_photovoltaics(),
+            condition=has_photovoltaics,
             device_class=SensorDeviceClass.ENUM,
             key="excess_energy_mode",
             options=get_states(ExcessEnergyState),
@@ -1265,7 +1224,7 @@ SENSOR_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergySensorEntityDescriptio
             translation_key="activation_counter",
         ),
         KebaKeEnergySensorEntityDescription[int](
-            condition=lambda coordinator, _: coordinator.has_photovoltaics(),
+            condition=has_photovoltaics,
             device_class=SensorDeviceClass.DURATION,
             entity_category=EntityCategory.DIAGNOSTIC,
             entity_registry_enabled_default=False,
@@ -1276,7 +1235,7 @@ SENSOR_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergySensorEntityDescriptio
             translation_key="excess_energy_operating_time",
         ),
         KebaKeEnergySensorEntityDescription[int](
-            condition=lambda coordinator, _: coordinator.has_photovoltaics(),
+            condition=has_photovoltaics,
             device_class=SensorDeviceClass.DURATION,
             entity_category=EntityCategory.DIAGNOSTIC,
             entity_registry_enabled_default=False,
@@ -1287,7 +1246,7 @@ SENSOR_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergySensorEntityDescriptio
             translation_key="excess_energy_max_runtime",
         ),
         KebaKeEnergySensorEntityDescription[int](
-            condition=lambda coordinator, _: coordinator.has_photovoltaics(),
+            condition=has_photovoltaics,
             entity_category=EntityCategory.DIAGNOSTIC,
             entity_registry_enabled_default=False,
             key="excess_energy_activation_counter",

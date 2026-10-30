@@ -19,6 +19,7 @@ from .const import SectionPrefix
 from .entity import KebaKeEnergyEntity
 from .entity import KebaKeEnergyEntityDescription
 from .entity import async_setup_entities
+from .entity import has_photovoltaics
 
 if TYPE_CHECKING:
     from homeassistant.core import HomeAssistant
@@ -69,7 +70,7 @@ BINARY_SENSOR_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergyBinarySensorEnt
     ),
     SectionPrefix.HEAT_PUMP: (
         KebaKeEnergyBinarySensorEntityDescription(
-            condition=lambda coordinator, _: coordinator.has_photovoltaics(),
+            condition=has_photovoltaics,
             key="consuming_excess_energy",
             translation_key="consuming_excess_energy",
             icon="mdi:solar-power",
@@ -158,7 +159,7 @@ BINARY_SENSOR_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergyBinarySensorEnt
     ),
     SectionPrefix.EXTERNAL_HEAT_SOURCE: (
         KebaKeEnergyBinarySensorEntityDescription(
-            condition=lambda coordinator, _: coordinator.has_photovoltaics(),
+            condition=has_photovoltaics,
             key="consuming_excess_energy",
             translation_key="consuming_excess_energy",
             icon="mdi:solar-power",

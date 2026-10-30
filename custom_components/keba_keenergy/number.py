@@ -23,6 +23,11 @@ from .entity import KebaKeEnergyDebouncedEntity
 from .entity import KebaKeEnergyEntity
 from .entity import KebaKeEnergyEntityDescription
 from .entity import async_setup_entities
+from .entity import has_photovoltaics
+from .entity import is_cooling_circuit
+from .entity import is_cooling_circuit_with_photovoltaics
+from .entity import is_heating_circuit
+from .entity import is_heating_circuit_with_photovoltaics
 
 if TYPE_CHECKING:
     from homeassistant.core import HomeAssistant
@@ -83,7 +88,7 @@ class KebaKeEnergyNumberEntity(KebaKeEnergyDebouncedEntity, KebaKeEnergyEntity, 
 NUMBER_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergyNumberEntityDescription, ...]]] = {
     SectionPrefix.HEAT_CIRCUIT: (
         KebaKeEnergyNumberEntityDescription(
-            condition=lambda coordinator, index: coordinator.is_heating_circuit(index=index),
+            condition=is_heating_circuit,
             device_class=NumberDeviceClass.TEMPERATURE,
             entity_category=EntityCategory.CONFIG,
             entity_registry_enabled_default=False,
@@ -94,7 +99,7 @@ NUMBER_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergyNumberEntityDescriptio
             scale=1,
         ),
         KebaKeEnergyNumberEntityDescription(
-            condition=lambda coordinator, index: coordinator.is_cooling_circuit(index=index),
+            condition=is_cooling_circuit,
             device_class=NumberDeviceClass.TEMPERATURE,
             entity_category=EntityCategory.CONFIG,
             entity_registry_enabled_default=False,
@@ -105,7 +110,7 @@ NUMBER_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergyNumberEntityDescriptio
             scale=1,
         ),
         KebaKeEnergyNumberEntityDescription(
-            condition=lambda coordinator, index: coordinator.is_heating_circuit(index=index),
+            condition=is_heating_circuit,
             device_class=NumberDeviceClass.TEMPERATURE,
             entity_category=EntityCategory.CONFIG,
             entity_registry_enabled_default=False,
@@ -116,7 +121,7 @@ NUMBER_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergyNumberEntityDescriptio
             scale=1,
         ),
         KebaKeEnergyNumberEntityDescription(
-            condition=lambda coordinator, index: coordinator.is_cooling_circuit(index=index),
+            condition=is_cooling_circuit,
             device_class=NumberDeviceClass.TEMPERATURE,
             entity_category=EntityCategory.CONFIG,
             entity_registry_enabled_default=False,
@@ -127,11 +132,7 @@ NUMBER_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergyNumberEntityDescriptio
             scale=1,
         ),
         KebaKeEnergyNumberEntityDescription(
-            condition=(
-                lambda coordinator, index: (
-                    coordinator.is_heating_circuit(index=index) and coordinator.has_photovoltaics()
-                )
-            ),
+            condition=is_heating_circuit_with_photovoltaics,
             device_class=NumberDeviceClass.TEMPERATURE,
             entity_category=EntityCategory.CONFIG,
             entity_registry_enabled_default=False,
@@ -142,11 +143,7 @@ NUMBER_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergyNumberEntityDescriptio
             scale=1,
         ),
         KebaKeEnergyNumberEntityDescription(
-            condition=(
-                lambda coordinator, index: (
-                    coordinator.is_cooling_circuit(index=index) and coordinator.has_photovoltaics()
-                )
-            ),
+            condition=is_cooling_circuit_with_photovoltaics,
             device_class=NumberDeviceClass.TEMPERATURE,
             entity_category=EntityCategory.CONFIG,
             entity_registry_enabled_default=False,
@@ -157,7 +154,7 @@ NUMBER_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergyNumberEntityDescriptio
             scale=1,
         ),
         KebaKeEnergyNumberEntityDescription(
-            condition=lambda coordinator, index: coordinator.is_heating_circuit(index=index),
+            condition=is_heating_circuit,
             device_class=NumberDeviceClass.TEMPERATURE,
             entity_category=EntityCategory.CONFIG,
             entity_registry_enabled_default=False,
@@ -168,7 +165,7 @@ NUMBER_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergyNumberEntityDescriptio
             scale=1,
         ),
         KebaKeEnergyNumberEntityDescription(
-            condition=lambda coordinator, index: coordinator.is_cooling_circuit(index=index),
+            condition=is_cooling_circuit,
             device_class=NumberDeviceClass.TEMPERATURE,
             entity_category=EntityCategory.CONFIG,
             entity_registry_enabled_default=False,
@@ -179,7 +176,7 @@ NUMBER_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergyNumberEntityDescriptio
             scale=1,
         ),
         KebaKeEnergyNumberEntityDescription(
-            condition=lambda coordinator, index: coordinator.is_heating_circuit(index=index),
+            condition=is_heating_circuit,
             device_class=NumberDeviceClass.TEMPERATURE,
             entity_category=EntityCategory.CONFIG,
             entity_registry_enabled_default=False,
@@ -190,7 +187,7 @@ NUMBER_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergyNumberEntityDescriptio
             scale=1,
         ),
         KebaKeEnergyNumberEntityDescription(
-            condition=lambda coordinator, index: coordinator.is_cooling_circuit(index=index),
+            condition=is_cooling_circuit,
             device_class=NumberDeviceClass.TEMPERATURE,
             entity_category=EntityCategory.CONFIG,
             entity_registry_enabled_default=False,
@@ -201,11 +198,7 @@ NUMBER_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergyNumberEntityDescriptio
             scale=1,
         ),
         KebaKeEnergyNumberEntityDescription(
-            condition=(
-                lambda coordinator, index: (
-                    coordinator.is_heating_circuit(index=index) and coordinator.has_photovoltaics()
-                )
-            ),
+            condition=is_heating_circuit_with_photovoltaics,
             device_class=NumberDeviceClass.TEMPERATURE,
             entity_category=EntityCategory.CONFIG,
             entity_registry_enabled_default=False,
@@ -216,11 +209,7 @@ NUMBER_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergyNumberEntityDescriptio
             scale=1,
         ),
         KebaKeEnergyNumberEntityDescription(
-            condition=(
-                lambda coordinator, index: (
-                    coordinator.is_cooling_circuit(index=index) and coordinator.has_photovoltaics()
-                )
-            ),
+            condition=is_cooling_circuit_with_photovoltaics,
             device_class=NumberDeviceClass.TEMPERATURE,
             entity_category=EntityCategory.CONFIG,
             entity_registry_enabled_default=False,
@@ -231,7 +220,7 @@ NUMBER_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergyNumberEntityDescriptio
             scale=1,
         ),
         KebaKeEnergyNumberEntityDescription(
-            condition=lambda coordinator, index: coordinator.is_heating_circuit(index=index),
+            condition=is_heating_circuit,
             device_class=NumberDeviceClass.TEMPERATURE,
             entity_category=EntityCategory.CONFIG,
             entity_registry_enabled_default=False,
@@ -251,11 +240,7 @@ NUMBER_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergyNumberEntityDescriptio
             scale=1,
         ),
         KebaKeEnergyNumberEntityDescription(
-            condition=(
-                lambda coordinator, index: (
-                    coordinator.is_heating_circuit(index=index) and coordinator.has_photovoltaics()
-                )
-            ),
+            condition=is_heating_circuit_with_photovoltaics,
             entity_category=EntityCategory.CONFIG,
             entity_registry_enabled_default=False,
             device_class=NumberDeviceClass.TEMPERATURE,
@@ -266,11 +251,7 @@ NUMBER_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergyNumberEntityDescriptio
             scale=1,
         ),
         KebaKeEnergyNumberEntityDescription(
-            condition=(
-                lambda coordinator, index: (
-                    coordinator.is_heating_circuit(index=index) and coordinator.has_photovoltaics()
-                )
-            ),
+            condition=is_heating_circuit_with_photovoltaics,
             entity_category=EntityCategory.CONFIG,
             entity_registry_enabled_default=False,
             device_class=NumberDeviceClass.TEMPERATURE,
@@ -281,11 +262,7 @@ NUMBER_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergyNumberEntityDescriptio
             scale=1,
         ),
         KebaKeEnergyNumberEntityDescription(
-            condition=(
-                lambda coordinator, index: (
-                    coordinator.is_cooling_circuit(index=index) and coordinator.has_photovoltaics()
-                )
-            ),
+            condition=is_cooling_circuit_with_photovoltaics,
             entity_category=EntityCategory.CONFIG,
             entity_registry_enabled_default=False,
             device_class=NumberDeviceClass.TEMPERATURE,
@@ -296,11 +273,7 @@ NUMBER_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergyNumberEntityDescriptio
             scale=1,
         ),
         KebaKeEnergyNumberEntityDescription(
-            condition=(
-                lambda coordinator, index: (
-                    coordinator.is_cooling_circuit(index=index) and coordinator.has_photovoltaics()
-                )
-            ),
+            condition=is_cooling_circuit_with_photovoltaics,
             entity_category=EntityCategory.CONFIG,
             entity_registry_enabled_default=False,
             device_class=NumberDeviceClass.TEMPERATURE,
@@ -311,7 +284,7 @@ NUMBER_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergyNumberEntityDescriptio
             scale=1,
         ),
         KebaKeEnergyNumberEntityDescription(
-            condition=lambda coordinator, index: coordinator.is_heating_circuit(index=index),
+            condition=is_heating_circuit,
             device_class=NumberDeviceClass.TEMPERATURE,
             entity_category=EntityCategory.CONFIG,
             entity_registry_enabled_default=False,
@@ -322,7 +295,7 @@ NUMBER_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergyNumberEntityDescriptio
             scale=1,
         ),
         KebaKeEnergyNumberEntityDescription(
-            condition=lambda coordinator, index: coordinator.is_cooling_circuit(index=index),
+            condition=is_cooling_circuit,
             device_class=NumberDeviceClass.TEMPERATURE,
             entity_category=EntityCategory.CONFIG,
             entity_registry_enabled_default=False,
@@ -333,7 +306,7 @@ NUMBER_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergyNumberEntityDescriptio
             scale=1,
         ),
         KebaKeEnergyNumberEntityDescription(
-            condition=lambda coordinator, index: coordinator.is_heating_circuit(index=index),
+            condition=is_heating_circuit,
             entity_category=EntityCategory.CONFIG,
             entity_registry_enabled_default=False,
             key="heating_curve_slope",
@@ -342,7 +315,7 @@ NUMBER_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergyNumberEntityDescriptio
             scale=1,
         ),
         KebaKeEnergyNumberEntityDescription(
-            condition=lambda coordinator, index: coordinator.is_cooling_circuit(index=index),
+            condition=is_cooling_circuit,
             entity_category=EntityCategory.CONFIG,
             entity_registry_enabled_default=False,
             key="cooling_curve_slope",
@@ -395,7 +368,7 @@ NUMBER_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergyNumberEntityDescriptio
     ),
     SectionPrefix.BUFFER_TANK: (
         KebaKeEnergyNumberEntityDescription(
-            condition=lambda coordinator, _: coordinator.has_photovoltaics(),
+            condition=has_photovoltaics,
             entity_category=EntityCategory.CONFIG,
             entity_registry_enabled_default=False,
             device_class=NumberDeviceClass.TEMPERATURE,
@@ -406,7 +379,7 @@ NUMBER_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergyNumberEntityDescriptio
             scale=1,
         ),
         KebaKeEnergyNumberEntityDescription(
-            condition=lambda coordinator, _: coordinator.has_photovoltaics(),
+            condition=has_photovoltaics,
             entity_category=EntityCategory.CONFIG,
             entity_registry_enabled_default=False,
             device_class=NumberDeviceClass.TEMPERATURE,
@@ -426,7 +399,7 @@ NUMBER_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergyNumberEntityDescriptio
             scale=1,
         ),
         KebaKeEnergyNumberEntityDescription(
-            condition=lambda coordinator, _: coordinator.has_photovoltaics(),
+            condition=has_photovoltaics,
             entity_category=EntityCategory.CONFIG,
             entity_registry_enabled_default=False,
             device_class=NumberDeviceClass.TEMPERATURE,
@@ -461,7 +434,7 @@ NUMBER_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergyNumberEntityDescriptio
             scale=1,
         ),
         KebaKeEnergyNumberEntityDescription(
-            condition=lambda coordinator, _: coordinator.has_photovoltaics(),
+            condition=has_photovoltaics,
             entity_category=EntityCategory.CONFIG,
             entity_registry_enabled_default=False,
             device_class=NumberDeviceClass.TEMPERATURE,
@@ -472,7 +445,7 @@ NUMBER_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergyNumberEntityDescriptio
             scale=1,
         ),
         KebaKeEnergyNumberEntityDescription(
-            condition=lambda coordinator, _: coordinator.has_photovoltaics(),
+            condition=has_photovoltaics,
             entity_category=EntityCategory.CONFIG,
             entity_registry_enabled_default=False,
             device_class=NumberDeviceClass.TEMPERATURE,

@@ -421,3 +421,55 @@ def _async_remove_deactivated_entities(entry: KebaKeEnergyConfigEntry, unique_id
         if registry_entry.unique_id in unique_ids:
             _LOGGER.debug("Remove entity %s of a deactivated sensor", registry_entry.entity_id)
             entity_registry.async_remove(registry_entry.entity_id)
+
+
+def has_photovoltaics(coordinator: KebaKeEnergyDataUpdateCoordinator, _: int) -> bool:
+    """Return True if the control unit has photovoltaics, condition of an entity description."""
+    return coordinator.has_photovoltaics()
+
+
+def has_electrical_energy_meter(coordinator: KebaKeEnergyDataUpdateCoordinator, index: int) -> bool:
+    """Return True if the heat pump has an electrical energy meter, condition of an entity description."""
+    return coordinator.has_electrical_energy_meter(index=index)
+
+
+def has_heat_meter(coordinator: KebaKeEnergyDataUpdateCoordinator, index: int) -> bool:
+    """Return True if the heat pump has a heat meter, condition of an entity description."""
+    return coordinator.has_heat_meter(index=index)
+
+
+def has_both_meters(coordinator: KebaKeEnergyDataUpdateCoordinator, index: int) -> bool:
+    """Return True if the heat pump has an electrical energy and a heat meter, condition of an entity description."""
+    return coordinator.has_electrical_energy_meter(index=index) and coordinator.has_heat_meter(index=index)
+
+
+def has_electrical_energy_meter_and_cooling(coordinator: KebaKeEnergyDataUpdateCoordinator, index: int) -> bool:
+    """Return True if the heat pump has an electrical energy meter and cools, condition of an entity description."""
+    return coordinator.has_electrical_energy_meter(index=index) and (
+        coordinator.has_active_cooling(index=index) or coordinator.has_passive_cooling(index=index)
+    )
+
+
+def is_heating_circuit(coordinator: KebaKeEnergyDataUpdateCoordinator, index: int) -> bool:
+    """Return True if the heating circuit heats, condition of an entity description."""
+    return coordinator.is_heating_circuit(index=index)
+
+
+def is_cooling_circuit(coordinator: KebaKeEnergyDataUpdateCoordinator, index: int) -> bool:
+    """Return True if the heating circuit cools, condition of an entity description."""
+    return coordinator.is_cooling_circuit(index=index)
+
+
+def is_cooling_only_circuit(coordinator: KebaKeEnergyDataUpdateCoordinator, index: int) -> bool:
+    """Return True if the heating circuit only cools, condition of an entity description."""
+    return coordinator.is_cooling_circuit(index=index) and not coordinator.is_heating_circuit(index=index)
+
+
+def is_heating_circuit_with_photovoltaics(coordinator: KebaKeEnergyDataUpdateCoordinator, index: int) -> bool:
+    """Return True if the heating circuit heats with photovoltaics, condition of an entity description."""
+    return coordinator.is_heating_circuit(index=index) and coordinator.has_photovoltaics()
+
+
+def is_cooling_circuit_with_photovoltaics(coordinator: KebaKeEnergyDataUpdateCoordinator, index: int) -> bool:
+    """Return True if the heating circuit cools with photovoltaics, condition of an entity description."""
+    return coordinator.is_cooling_circuit(index=index) and coordinator.has_photovoltaics()

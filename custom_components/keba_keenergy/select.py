@@ -26,6 +26,8 @@ from .const import SectionPrefix
 from .entity import KebaKeEnergyEntity
 from .entity import KebaKeEnergyEntityDescription
 from .entity import async_setup_entities
+from .entity import is_cooling_circuit
+from .entity import is_heating_circuit
 from .legacy import get_member
 from .legacy import get_state
 from .legacy import get_states
@@ -177,7 +179,7 @@ SELECT_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergySelectEntityDescriptio
             translation_key="heat_circuit_operating_mode",
         ),
         KebaKeEnergySelectEntityDescription(
-            condition=lambda coordinator, index: coordinator.is_heating_circuit(index=index),
+            condition=is_heating_circuit,
             entity_class=KebaKeEnergyCurveSelectEntity,
             entity_category=EntityCategory.CONFIG,
             entity_registry_enabled_default=False,
@@ -185,7 +187,7 @@ SELECT_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergySelectEntityDescriptio
             translation_key="heating_curve",
         ),
         KebaKeEnergySelectEntityDescription(
-            condition=lambda coordinator, index: coordinator.is_cooling_circuit(index=index),
+            condition=is_cooling_circuit,
             entity_class=KebaKeEnergyCurveSelectEntity,
             entity_category=EntityCategory.CONFIG,
             entity_registry_enabled_default=False,
