@@ -66,7 +66,7 @@ class KebaKeEnergyNumberEntity(KebaKeEnergyEntity, NumberEntity):
             coordinator,
             device_type=device_type,
             index=index,
-            key_index=self.entity_description.key_index,
+            value_index=self.entity_description.value_index,
         )
 
         self.entity_id: str = f"{NUMBER_DOMAIN}.{DOMAIN}_{self._attr_unique_id}"
@@ -373,7 +373,7 @@ NUMBER_TYPES: Final[dict[str, tuple[KebaKeEnergyNumberEntityDescription, ...]]] 
             entity_category=EntityCategory.CONFIG,
             device_class=NumberDeviceClass.TEMPERATURE,
             key="target_temperature",
-            key_index=0,
+            value_index=0,
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             native_step=0.5,
             translation_key="target_temperature",
@@ -387,7 +387,7 @@ NUMBER_TYPES: Final[dict[str, tuple[KebaKeEnergyNumberEntityDescription, ...]]] 
             entity_category=EntityCategory.CONFIG,
             device_class=NumberDeviceClass.TEMPERATURE,
             key="target_temperature",
-            key_index=1,
+            value_index=1,
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             native_step=0.5,
             translation_key="target_temperature",

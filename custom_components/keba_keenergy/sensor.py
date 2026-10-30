@@ -97,7 +97,7 @@ class KebaKeEnergySensorEntity(KebaKeEnergyEntity, SensorEntity):
             coordinator,
             device_type=device_type,
             index=index,
-            key_index=self.entity_description.key_index,
+            value_index=self.entity_description.value_index,
         )
 
         self.entity_id: str = f"{SENSOR_DOMAIN}.{DOMAIN}_{self._attr_unique_id}"
@@ -608,7 +608,7 @@ SENSOR_TYPES: Final[dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ..
         KebaKeEnergySensorEntityDescription[float](
             device_class=SensorDeviceClass.TEMPERATURE,
             key="current_temperature",
-            key_index=0,
+            value_index=0,
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             state_class=SensorStateClass.MEASUREMENT,
             translation_key="consumer_temperature",
@@ -619,7 +619,7 @@ SENSOR_TYPES: Final[dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ..
         KebaKeEnergySensorEntityDescription[float](
             device_class=SensorDeviceClass.TEMPERATURE,
             key="current_temperature",
-            key_index=1,
+            value_index=1,
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             state_class=SensorStateClass.MEASUREMENT,
             translation_key="consumer_temperature",
@@ -630,7 +630,7 @@ SENSOR_TYPES: Final[dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ..
         KebaKeEnergySensorEntityDescription[float](
             device_class=SensorDeviceClass.TEMPERATURE,
             key="target_temperature",
-            key_index=0,
+            value_index=0,
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             state_class=SensorStateClass.MEASUREMENT,
             translation_key="target_temperature",
@@ -642,7 +642,7 @@ SENSOR_TYPES: Final[dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ..
         KebaKeEnergySensorEntityDescription[float](
             device_class=SensorDeviceClass.TEMPERATURE,
             key="target_temperature",
-            key_index=1,
+            value_index=1,
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             state_class=SensorStateClass.MEASUREMENT,
             translation_key="target_temperature",

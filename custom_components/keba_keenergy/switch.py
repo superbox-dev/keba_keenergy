@@ -103,6 +103,8 @@ SWITCH_TYPES: Final[dict[str, tuple[KebaKeEnergySwitchEntityDescription, ...]]] 
             translation_key="use_heating_curve",
         ),
         # Heating and cooling circuits have one curve setting, so only cooling circuits get the cooling curve switch.
+        # TODO: Use the key `use_curve_table` without `ref_key` when the unique IDs are migrated to the keys of
+        # `keba_keenergy_api` 3.0.
         KebaKeEnergySwitchEntityDescription(
             condition=lambda coordinator, index: (
                 coordinator.is_cooling_circuit(index=index) and not coordinator.is_heating_circuit(index=index)

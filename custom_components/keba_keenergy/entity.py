@@ -50,7 +50,7 @@ _LOGGER: Final = logging.getLogger(__name__)
 class KebaKeEnergyEntityDescription:
     """Shared values of the KEBA KeEnergy entity descriptions."""
 
-    key_index: int | None = None
+    value_index: int | None = None
     new_key: str | None = None  # New key name, required for a future migration of the entity ID.
     ref_key: str | None = None  # Reference to another key, used for the entity ID.
     condition: Callable[[KebaKeEnergyDataUpdateCoordinator, int], bool] | None = None
@@ -69,13 +69,13 @@ class KebaKeEnergyBaseEntity(
         coordinator: KebaKeEnergyDataUpdateCoordinator,
         device_type: str,
         index: int | None,
-        key_index: int | None = None,
+        value_index: int | None = None,
     ) -> None:
         """Initialize the KEBA KeEnergy entity."""
         super().__init__(coordinator)
         self.device_type: str = device_type
         self.index: int | None = index
-        self.key_index: int | None = key_index
+        self.value_index: int | None = value_index
 
         self._attr_unique_id: str | None = self._build_unique_id()
 
@@ -84,11 +84,11 @@ class KebaKeEnergyBaseEntity(
         self._pending_key: str = ""
 
     def _build_unique_id(self, *parts: str) -> str:
-        """Return `<entry unique_id>[_<part>...][_<key_index + 1>][_<index + 1>]`."""
+        """Return `<entry unique_id>[_<part>...][_<value_index + 1>][_<index + 1>]`."""
         unique_id: str = "_".join((str(self.coordinator.config_entry.unique_id), *parts))
 
-        if self.key_index is not None:
-            unique_id = f"{unique_id}_{self.key_index + 1}"
+        if self.value_index is not None:
+            unique_id = f"{unique_id}_{self.value_index + 1}"
 
         if self.device_number is not None:
             unique_id = f"{unique_id}_{self.device_number}"
@@ -180,10 +180,10 @@ class KebaKeEnergyBaseEntity(
 
     def get_reading(self, key: str, /) -> Reading | None:
         """Get the reading of the entity from the coordinator data, or None if the sensor is not in use."""
-        if not self.coordinator.is_sensor_in_use(self.device_type, key, index=self.index, key_index=self.key_index):
+        if not self.coordinator.is_sensor_in_use(self.device_type, key, index=self.index, value_index=self.value_index):
             return None
 
-        return self.coordinator.get_reading(self.device_type, key, index=self.index, key_index=self.key_index)
+        return self.coordinator.get_reading(self.device_type, key, index=self.index, value_index=self.value_index)
 
     def get_limit(self, key: str, /, *, attr: Literal["lower_limit", "upper_limit"]) -> float | None:
         """Get a limit of the value from the API by key, or None if the value has no limit."""
@@ -214,23 +214,23 @@ class KebaKeEnergyBaseEntity(
         ignore_weekly_write_count: bool = False,
     ) -> None:
         """Write data to the KEBA KeEnergy API."""
-        value_index: int = self.index or 0
+        reading_index: int = self.index or 0
         # One value per device, the control unit has no device count and gets one value.
-        value_count: int = self.coordinator.device_count(self.device_type) or 1
+        reading_count: int = self.coordinator.device_count(self.device_type) or 1
 
-        if self.key_index is not None:
+        if self.value_index is not None:
             quantity: int = self.coordinator.get_endpoint(self.device_type, key).value.quantity
-            value_index = value_index * quantity + self.key_index
-            value_count = value_count * quantity
+            reading_index = reading_index * quantity + self.value_index
+            reading_count = reading_count * quantity
 
-        values: list[WriteValue | None] = [value if index == value_index else None for index in range(value_count)]
+        values: list[WriteValue | None] = [value if index == reading_index else None for index in range(reading_count)]
 
         previous_value: Value = self.coordinator.async_set_local_value(
             value,
             device_type=self.device_type,
             key=key,
             index=self.index,
-            key_index=self.key_index,
+            value_index=self.value_index,
         )
 
         try:
@@ -247,7 +247,7 @@ class KebaKeEnergyBaseEntity(
                 device_type=self.device_type,
                 key=key,
                 index=self.index,
-                key_index=self.key_index,
+                value_index=self.value_index,
             )
             raise
 
@@ -312,10 +312,10 @@ class KebaKeEnergyEntity(KebaKeEnergyBaseEntity):
         coordinator: KebaKeEnergyDataUpdateCoordinator,
         device_type: str,
         index: int | None,
-        key_index: int | None = None,
+        value_index: int | None = None,
     ) -> None:
         """Initialize the KEBA KeEnergy entity."""
-        super().__init__(coordinator, device_type=device_type, index=index, key_index=key_index)
+        super().__init__(coordinator, device_type=device_type, index=index, value_index=value_index)
 
         self._attr_unique_id: str | None = self._build_key_unique_id(self.entity_description.key)
 
@@ -371,7 +371,7 @@ def async_setup_entities(
                         device_type,
                         key,
                         index=entity.index,
-                        key_index=entity.key_index,
+                        value_index=entity.value_index,
                     ):
                         _LOGGER.debug(
                             'Skip deactivated %s with key "%s" (index: %s)',

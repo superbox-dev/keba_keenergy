@@ -47,7 +47,7 @@ BINARY_SENSOR_TYPES: Final[dict[str, tuple[KebaKeEnergyBinarySensorEntityDescrip
     SectionPrefix.SOLAR_CIRCUIT: (
         KebaKeEnergyBinarySensorEntityDescription(
             key="heat_request",
-            key_index=0,
+            value_index=0,
             translation_key="heat_request",
             translation_placeholders={
                 "counter": " 1",
@@ -55,7 +55,7 @@ BINARY_SENSOR_TYPES: Final[dict[str, tuple[KebaKeEnergyBinarySensorEntityDescrip
         ),
         KebaKeEnergyBinarySensorEntityDescription(
             key="heat_request",
-            key_index=1,
+            value_index=1,
             translation_key="heat_request",
             translation_placeholders={
                 "counter": " 2",
@@ -202,7 +202,7 @@ class KebaKeEnergyBinarySensorEntity(KebaKeEnergyEntity, BinarySensorEntity):
             coordinator,
             device_type=device_type,
             index=index,
-            key_index=self.entity_description.key_index,
+            value_index=self.entity_description.value_index,
         )
 
         self.entity_id: str = f"{BINARY_SENSOR_DOMAIN}.{DOMAIN}_{self.unique_id}"

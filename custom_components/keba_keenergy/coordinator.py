@@ -304,18 +304,20 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[CoordinatorData]):
         """Return the endpoint of a key."""
         return ENDPOINTS[SectionPrefix(device_type)][key]
 
-    def get_reading(self, device_type: str, key: str, /, *, index: int | None, key_index: int | None) -> Reading | None:
-        """Return the reading of the device with the index (and the consumer with the key index), None if missing."""
+    def get_reading(
+        self, device_type: str, key: str, /, *, index: int | None, value_index: int | None
+    ) -> Reading | None:
+        """Return the reading of the device with the index (and the value with the value index), None if missing."""
         readings: list[Reading] | None = self.data.get(device_type, {}).get(key)
 
         if not readings:
             return None
 
-        return readings[self._reading_index(device_type, key, index=index, key_index=key_index)]
+        return readings[self._reading_index(device_type, key, index=index, value_index=value_index)]
 
-    def _reading_index(self, device_type: str, key: str, /, *, index: int | None, key_index: int | None) -> int:
-        """Return the index in the readings of the key, of the device (and the consumer with the key index)."""
-        return (index or 0) * self.get_endpoint(device_type, key).value.quantity + (key_index or 0)
+    def _reading_index(self, device_type: str, key: str, /, *, index: int | None, value_index: int | None) -> int:
+        """Return the index in the readings of the key, of the device (and the value with the value index)."""
+        return (index or 0) * self.get_endpoint(device_type, key).value.quantity + (value_index or 0)
 
     def async_set_local_value(
         self,
@@ -325,11 +327,11 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[CoordinatorData]):
         device_type: str,
         key: str,
         index: int | None,
-        key_index: int | None,
+        value_index: int | None,
     ) -> Value:
         """Set a single value in the coordinator data, without writing it, and return the replaced value."""
         readings: list[Reading] = self.data[device_type][key]
-        reading_index: int = self._reading_index(device_type, key, index=index, key_index=key_index)
+        reading_index: int = self._reading_index(device_type, key, index=index, value_index=value_index)
         previous_value: Value = readings[reading_index].value
 
         # Only copy the changed values, the other values are shared with the previous data.
@@ -424,8 +426,8 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[CoordinatorData]):
                 if item is None:
                     continue
 
-                device_index, key_index = divmod(index, quantity)
-                counter: str = f"_{key_index + 1}" if quantity > 1 else ""
+                device_index, value_index = divmod(index, quantity)
+                counter: str = f"_{value_index + 1}" if quantity > 1 else ""
                 names.append(f"{device_type}_{device_index + 1}.{key}{counter}")
 
         return tuple(names)
@@ -579,9 +581,12 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[CoordinatorData]):
             HeatingCircuitType.HEATING_AND_ACTIVE_COOLING,
         )
 
-    def is_sensor_in_use(self, device_type: str, key: str, /, *, index: int | None, key_index: int | None) -> bool:
+    def is_sensor_in_use(self, device_type: str, key: str, /, *, index: int | None, value_index: int | None) -> bool:
         """Check if the control unit reports the sensor as in use (message id 0) or has no message id for it."""
-        return self._get_message_id_kind(device_type, key, index=index, key_index=key_index) in (MessageIdKind.OK, None)
+        return self._get_message_id_kind(device_type, key, index=index, value_index=value_index) in (
+            MessageIdKind.OK,
+            None,
+        )
 
     def _get_message_id_kind(
         self,
@@ -590,14 +595,17 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[CoordinatorData]):
         /,
         *,
         index: int | None,
-        key_index: int | None,
+        value_index: int | None,
     ) -> MessageIdKind | None:
         """Return the kind of the message id of a sensor, or None if the sensor has none."""
-        reading: Reading | None = self.get_reading(device_type, key, index=index, key_index=key_index)
+        reading: Reading | None = self.get_reading(device_type, key, index=index, value_index=value_index)
         return None if reading is None or reading.message_id is None else reading.message_id.kind
 
-    def is_sensor_deactivated(self, device_type: str, key: str, /, *, index: int | None, key_index: int | None) -> bool:
+    def is_sensor_deactivated(
+        self, device_type: str, key: str, /, *, index: int | None, value_index: int | None
+    ) -> bool:
         """Check if the control unit reports the sensor as deactivated (message id 10), i.e. not configured."""
         return (
-            self._get_message_id_kind(device_type, key, index=index, key_index=key_index) is MessageIdKind.DEACTIVATED
+            self._get_message_id_kind(device_type, key, index=index, value_index=value_index)
+            is MessageIdKind.DEACTIVATED
         )
