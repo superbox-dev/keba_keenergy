@@ -23,9 +23,9 @@ from homeassistant.setup import async_setup_component
 from custom_components.keba_keenergy.const import DOMAIN
 from tests import init_translations
 from tests.api_data import ENTITY_UPDATED_DATA_RESPONSE
-from tests.api_data import MULTIPLE_POSITION_DATA_RESPONSE
-from tests.api_data import MULTIPLE_POSITIONS_RESPONSE
-from tests.api_data import get_multiple_position_fixed_data_response
+from tests.api_data import MULTIPLE_DEVICES_DATA_RESPONSE
+from tests.api_data import MULTIPLE_DEVICES_RESPONSE
+from tests.api_data import get_multiple_devices_fixed_data_response
 
 if TYPE_CHECKING:
     from tests.conftest import FakeKebaKeEnergyAPI
@@ -37,9 +37,9 @@ async def test_entity_update(
 ) -> None:
     """Test writing a value of an entity."""
     fake_api.responses = [
-        MULTIPLE_POSITIONS_RESPONSE,
-        get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITION_DATA_RESPONSE,
+        MULTIPLE_DEVICES_RESPONSE,
+        get_multiple_devices_fixed_data_response(),
+        MULTIPLE_DEVICES_DATA_RESPONSE,
         # Read the API after the action call.
         ENTITY_UPDATED_DATA_RESPONSE,
     ]
@@ -73,9 +73,9 @@ async def test_entity_update_failed(
 ) -> None:
     """Test the translated error if writing a value of an entity fails."""
     fake_api.responses = [
-        MULTIPLE_POSITIONS_RESPONSE,
-        get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITION_DATA_RESPONSE,
+        MULTIPLE_DEVICES_RESPONSE,
+        get_multiple_devices_fixed_data_response(),
+        MULTIPLE_DEVICES_DATA_RESPONSE,
     ]
     fake_api.write_status = HTTPStatus.BAD_REQUEST
     hass.config.language = "de"
@@ -117,9 +117,9 @@ async def test_heat_pump_manufacturer(
 ) -> None:
     """Test the manufacturer of the heat pump device, detected from the system name."""
     fake_api.responses = [
-        MULTIPLE_POSITIONS_RESPONSE,
-        get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITION_DATA_RESPONSE,
+        MULTIPLE_DEVICES_RESPONSE,
+        get_multiple_devices_fixed_data_response(),
+        MULTIPLE_DEVICES_DATA_RESPONSE,
     ]
     fake_api.system_name = system_name
     await fake_api.setup_integration()
@@ -139,9 +139,9 @@ async def test_entity_keeps_state_if_update_failed(
     """Test that an entity keeps its state if writing the new value fails."""
     entity_id: str = "select.keba_keenergy_12345678_buffer_tank_operating_mode_1"
     fake_api.responses = [
-        MULTIPLE_POSITIONS_RESPONSE,
-        get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITION_DATA_RESPONSE,
+        MULTIPLE_DEVICES_RESPONSE,
+        get_multiple_devices_fixed_data_response(),
+        MULTIPLE_DEVICES_DATA_RESPONSE,
     ]
     fake_api.write_status = HTTPStatus.BAD_REQUEST
     await fake_api.setup_integration()
@@ -176,9 +176,9 @@ async def test_entities_keep_their_state_if_queued_updates_failed(
         "select.keba_keenergy_12345678_buffer_tank_operating_mode_2",
     ]
     fake_api.responses = [
-        MULTIPLE_POSITIONS_RESPONSE,
-        get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITION_DATA_RESPONSE,
+        MULTIPLE_DEVICES_RESPONSE,
+        get_multiple_devices_fixed_data_response(),
+        MULTIPLE_DEVICES_DATA_RESPONSE,
     ]
     fake_api.write_status = HTTPStatus.BAD_REQUEST
     await fake_api.setup_integration()

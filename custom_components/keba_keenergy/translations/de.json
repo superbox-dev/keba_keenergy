@@ -54,34 +54,34 @@
   },
   "device": {
     "buffer_tank": {
-      "name": "Pufferspeicher{position}"
+      "name": "Pufferspeicher{device_number}"
     },
     "control_unit": {
       "name": "Bedieneinheit"
     },
     "external_heat_source": {
-      "name": "Externe Wärmequelle{position}"
+      "name": "Externe Wärmequelle{device_number}"
     },
     "heat_circuit": {
-      "name": "Heizkreis{position}"
+      "name": "Heizkreis{device_number}"
     },
     "heat_pump": {
-      "name": "Wärmepumpe{position}"
+      "name": "Wärmepumpe{device_number}"
     },
     "hot_water_tank": {
-      "name": "Warmwasserspeicher{position}"
+      "name": "Warmwasserspeicher{device_number}"
     },
     "passive_cooling": {
-      "name": "Passivkühlung{position}"
+      "name": "Passivkühlung{device_number}"
     },
     "photovoltaics": {
-      "name": "Photovoltaik{position}"
+      "name": "Photovoltaik{device_number}"
     },
     "solar_circuit": {
-      "name": "Solarkreis{position}"
+      "name": "Solarkreis{device_number}"
     },
     "switch_valve": {
-      "name": "Umschaltventil{position}"
+      "name": "Umschaltventil{device_number}"
     }
   },
   "entity": {

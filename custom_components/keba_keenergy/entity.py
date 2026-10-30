@@ -93,16 +93,15 @@ class KebaKeEnergyBaseEntity(
         if self.key_index is not None:
             unique_id = f"{unique_id}_{self.key_index + 1}"
 
-        if self.position is not None:
-            unique_id = f"{unique_id}_{self.position}"
+        if self.device_number is not None:
+            unique_id = f"{unique_id}_{self.device_number}"
 
         return unique_id
 
     @property
-    def position(self) -> int | None:
-        """Return device position number."""
-        _position: int | None = None if self.index is None else self.index + 1
-        return _position
+    def device_number(self) -> int | None:
+        """Return the number of the device (from 1), None if the section has only one device."""
+        return None if self.index is None else self.index + 1
 
     @property
     def is_system_device(self) -> bool:
@@ -122,7 +121,7 @@ class KebaKeEnergyBaseEntity(
     @cached_property
     def device_identifier(self) -> str:
         """Return the device identifier."""
-        return get_device_identifier(self.entry.unique_id, self.section_id, self.position)
+        return get_device_identifier(self.entry.unique_id, self.section_id, self.device_number)
 
     @cached_property
     def device_manufacturer(self) -> str | None:
@@ -179,7 +178,7 @@ class KebaKeEnergyBaseEntity(
     @property
     def _translation_placeholders(self) -> Mapping[str, str] | None:
         return {
-            "position": f" {self.position}" if self.position else "",
+            "device_number": f" {self.device_number}" if self.device_number else "",
         }
 
     async def async_will_remove_from_hass(self) -> None:
@@ -237,7 +236,7 @@ class KebaKeEnergyBaseEntity(
 
         values: list[WriteValue | None] = [value if index == current_index else None for index in range(_range)]
 
-        previous_value: Value = self.coordinator.async_set_value(
+        previous_value: Value = self.coordinator.async_set_local_value(
             value,
             section_id=self.section_id,
             key=key,
@@ -254,7 +253,7 @@ class KebaKeEnergyBaseEntity(
         except HomeAssistantError:
             # The control unit still has the previous value, so the entity shows it again. Only this value is reset,
             # other values may have changed while the write waited for the lock.
-            self.coordinator.async_set_value(
+            self.coordinator.async_set_local_value(
                 previous_value,
                 section_id=self.section_id,
                 key=key,
@@ -399,13 +398,6 @@ def _async_setup_entities(
                         )
                         deactivated_unique_ids.add(entity.unique_id)
                         continue
-
-                    _LOGGER.debug(
-                        'Add %s with key "%s" (index: %s)',
-                        entity_name,
-                        description.ref_key or description.key,
-                        index,
-                    )
 
                     entities.append(entity)
 

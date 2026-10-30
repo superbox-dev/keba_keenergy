@@ -12,9 +12,9 @@ from homeassistant.helpers import entity_registry as er
 from homeassistant.helpers.icon import async_get_icons
 
 from custom_components.keba_keenergy.const import DOMAIN
-from tests.api_data import MULTIPLE_POSITION_DATA_RESPONSE
-from tests.api_data import MULTIPLE_POSITIONS_RESPONSE
-from tests.api_data import get_multiple_position_fixed_data_response
+from tests.api_data import MULTIPLE_DEVICES_DATA_RESPONSE
+from tests.api_data import MULTIPLE_DEVICES_RESPONSE
+from tests.api_data import get_multiple_devices_fixed_data_response
 
 if TYPE_CHECKING:
     from homeassistant.core import HomeAssistant
@@ -31,9 +31,9 @@ async def test_icons(
 ) -> None:
     """Test that every icon in icons.json is used and the icons that the entities get."""
     fake_api.responses = [
-        MULTIPLE_POSITIONS_RESPONSE,
-        get_multiple_position_fixed_data_response(has_passive_cooling="true"),
-        MULTIPLE_POSITION_DATA_RESPONSE,
+        MULTIPLE_DEVICES_RESPONSE,
+        get_multiple_devices_fixed_data_response(has_passive_cooling="true"),
+        MULTIPLE_DEVICES_DATA_RESPONSE,
     ]
     await fake_api.setup_integration()
 

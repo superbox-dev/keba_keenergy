@@ -74,6 +74,9 @@ Before finishing a change, run `ruff format`, `lint.sh` and `pytest`, in this or
   - thermal statistics (`*_THERMAL_ENERGY`, `*_SPF`, `*_PF`) only when the meter of the mode is not deactivated,
     otherwise they are always `0`
 - Log messages start with a capital letter, no trailing period, values as `%s` arguments
+- Debug logs only for events and decisions the diagnostics do not show (writes, skipped or removed entities and
+  devices, read retries), never for data the diagnostics contain (device counts, options, values, message IDs), at
+  most one line per update
 - Every file follows `.editorconfig`, whether a linter checks it or not
 - Style rules apply to new and changed code, existing code only adapted when asked
 - Every `.py` file starts with (after the shebang of an executable script, update the end year when editing a

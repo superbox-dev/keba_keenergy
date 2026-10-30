@@ -105,12 +105,12 @@ async def _async_set_away_range(call: ServiceCall) -> None:
             translation_key="end_date_smaller_than_start_date",
         )
 
-    tz: ZoneInfo = await coordinator.get_timezone()
+    tz: ZoneInfo = await coordinator.async_get_timezone()
 
     start_date_tz: datetime = datetime.combine(start_date, time.min, tzinfo=tz)
     end_date_tz: datetime = datetime.combine(end_date, time.max, tzinfo=tz)
 
-    await coordinator.set_away_date_range(
+    await coordinator.async_set_away_date_range(
         start_timestamp=start_date_tz.timestamp(),
         end_timestamp=end_date_tz.timestamp(),
     )
@@ -120,7 +120,7 @@ async def _async_set_heating_curve_points(call: ServiceCall) -> None:
     coordinator: KebaKeEnergyDataUpdateCoordinator = _get_coordinator(call)
 
     heating_curve: str = call.data[ATTR_HEATING_CURVE]
-    heating_curves: dict[str, CurveTable] = await coordinator.get_curve_tables()
+    heating_curves: dict[str, CurveTable] = await coordinator.async_read_curve_tables()
 
     if heating_curve not in heating_curves:
         raise ServiceValidationError(
@@ -154,10 +154,7 @@ async def _async_set_heating_curve_points(call: ServiceCall) -> None:
     if current_points == points:
         return
 
-    await coordinator.async_execute_write(
-        write_fn=lambda: coordinator.api.set_curve_table_points(heating_curve, points),
-        names=(f"heating_curve_points.{heating_curve}",),
-    )
+    await coordinator.async_set_curve_table_points(heating_curve, points)
 
 
 @callback

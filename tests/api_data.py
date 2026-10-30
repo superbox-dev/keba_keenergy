@@ -1685,13 +1685,6 @@ PHOTOVOLTAIC_TOTAL_ENERGY: Final[str] = """
     }
 """
 
-SYSTEM_HAS_OUTDOOR_TEMPERATURE: Final[str] = """
-    {
-        "name": "APPL.CtrlAppl.sParam.options.hasOutdoorTemp",
-        "value": "%s"
-    }
-"""
-
 SYSTEM_HEAT_CIRCUIT_NUMBERS: Final[str] = """
     {
         "name": "APPL.CtrlAppl.sParam.options.systemNumberOfHeatingCircuits",
@@ -1899,7 +1892,7 @@ SYSTEM_FLASH_ERASE_COUNTER: Final[dict[str, Any]] = {
     "value": "341",
 }
 
-DEFAULT_POSITION_RESPONSE: Final[list[dict[str, Any]]] = [
+SINGLE_DEVICE_RESPONSE: Final[list[dict[str, Any]]] = [
     json.loads(SYSTEM_HEAT_PUMP_NUMBERS % "1"),
     json.loads(SYSTEM_HEAT_CIRCUIT_NUMBERS % "1"),
     json.loads(SYSTEM_SOLAR_CIRCUIT_NUMBERS % "1"),
@@ -1909,7 +1902,7 @@ DEFAULT_POSITION_RESPONSE: Final[list[dict[str, Any]]] = [
     json.loads(SYSTEM_SWITCH_VALVE_NUMBERS % "1"),
 ]
 
-MULTIPLE_POSITIONS_RESPONSE: Final[list[dict[str, Any]]] = [
+MULTIPLE_DEVICES_RESPONSE: Final[list[dict[str, Any]]] = [
     json.loads(SYSTEM_HEAT_PUMP_NUMBERS % "1"),
     json.loads(SYSTEM_HEAT_CIRCUIT_NUMBERS % "2"),
     json.loads(SYSTEM_SOLAR_CIRCUIT_NUMBERS % "2"),
@@ -1987,8 +1980,7 @@ def get_heat_pump_data(compressor_night_speed: str = "true") -> list[dict[str, A
     ]
 
 
-DEFAULT_POSITION_FIXED_DATA_RESPONSE: Final[list[dict[str, Any]]] = [
-    json.loads(SYSTEM_HAS_OUTDOOR_TEMPERATURE % "true"),
+SINGLE_DEVICE_FIXED_DATA_RESPONSE: Final[list[dict[str, Any]]] = [
     json.loads(SYSTEM_HAS_PHOTOVOLTAICS % "true"),
     json.loads(HEAT_CIRCUIT_MODE % ("0", "0")),
     json.loads(HEAT_CIRCUIT_HAS_ROOM_TEMPERATURE % ("0", "true")),
@@ -2006,7 +1998,7 @@ DEFAULT_POSITION_FIXED_DATA_RESPONSE: Final[list[dict[str, Any]]] = [
 ]
 
 
-def get_multiple_position_fixed_data_response(
+def get_multiple_devices_fixed_data_response(
     *,
     has_passive_cooling: str = "false",
     has_cooling_circuits: bool = True,
@@ -2014,7 +2006,6 @@ def get_multiple_position_fixed_data_response(
 ) -> list[dict[str, Any]]:
     """Return the values that are read once on setup, for a setup with several devices of each type."""
     return [
-        json.loads(SYSTEM_HAS_OUTDOOR_TEMPERATURE % "true"),
         json.loads(SYSTEM_HAS_PHOTOVOLTAICS % has_photovoltaics),
         json.loads(HEAT_CIRCUIT_MODE % ("0", "0")),
         json.loads(HEAT_CIRCUIT_MODE % ("1", "1" if has_cooling_circuits else "0")),
@@ -2041,7 +2032,7 @@ def get_multiple_position_fixed_data_response(
     ]
 
 
-def get_single_position_data_response(
+def get_single_device_data_response(
     heat_circuit_target_temperature_offset: str = "0",
     hot_water_tank_target_temperature: str = "51",
 ) -> list[dict[str, Any]]:
@@ -2160,9 +2151,9 @@ def get_single_position_data_response(
     ]
 
 
-# The response of `get_single_position_data_response()` with other values.
-DEFAULT_POSITION_DATA_RESPONSE: Final[list[dict[str, Any]]] = replace_values(
-    get_single_position_data_response(heat_circuit_target_temperature_offset="1.5"),
+# The response of `get_single_device_data_response()` with other values.
+SINGLE_DEVICE_DATA_RESPONSE: Final[list[dict[str, Any]]] = replace_values(
+    get_single_device_data_response(heat_circuit_target_temperature_offset="1.5"),
     (EXTERNAL_HEAT_SOURCE_TARGET_TEMPERATURE, "0", "1"),
     (HEAT_CIRCUIT_COOL_REQUEST, "0", "0"),
     (HEAT_CIRCUIT_HEATING_CURVE_SLOPE, "0", "0.1"),
@@ -2173,8 +2164,8 @@ DEFAULT_POSITION_DATA_RESPONSE: Final[list[dict[str, Any]]] = replace_values(
     (HOT_WATER_TANK_CIRCULATION_RETURN_TEMPERATURE, "0", "30.5"),
 )
 
-# The values of `MULTIPLE_POSITION_DATA_RESPONSE` are split by section.
-MULTIPLE_POSITION_EXTERNAL_HEAT_SOURCE_DATA: Final[list[dict[str, Any]]] = [
+# The values of `MULTIPLE_DEVICES_DATA_RESPONSE` are split by section.
+MULTIPLE_DEVICES_EXTERNAL_HEAT_SOURCE_DATA: Final[list[dict[str, Any]]] = [
     json.loads(EXTERNAL_HEAT_SOURCE_OPERATING_MODE % ("0", "0")),
     json.loads(EXTERNAL_HEAT_SOURCE_OPERATING_MODE % ("1", "1")),
     json.loads(EXTERNAL_HEAT_SOURCE_TARGET_TEMPERATURE % ("0", "17.227032")),
@@ -2201,7 +2192,7 @@ MULTIPLE_POSITION_EXTERNAL_HEAT_SOURCE_DATA: Final[list[dict[str, Any]]] = [
     json.loads(EXTERNAL_HEAT_SOURCE_EXCESS_ENERGY_ACTIVATION_COUNTER % ("1", "23")),
 ]
 
-MULTIPLE_POSITION_HEAT_CIRCUIT_DATA: Final[list[dict[str, Any]]] = [
+MULTIPLE_DEVICES_HEAT_CIRCUIT_DATA: Final[list[dict[str, Any]]] = [
     json.loads(HEAT_CIRCUIT_ROOM_TEMPERATURE % ("0", "22.418831")),
     json.loads(HEAT_CIRCUIT_ROOM_TEMPERATURE % ("1", "22.418831")),
     json.loads(HEAT_CIRCUIT_ROOM_HUMIDITY % ("0", "53")),
@@ -2292,7 +2283,7 @@ MULTIPLE_POSITION_HEAT_CIRCUIT_DATA: Final[list[dict[str, Any]]] = [
     json.loads(HEAT_CIRCUIT_PUMP_SPEED % ("1", "0.5")),
 ]
 
-MULTIPLE_POSITION_SOLAR_CIRCUIT_DATA: Final[list[dict[str, Any]]] = [
+MULTIPLE_DEVICES_SOLAR_CIRCUIT_DATA: Final[list[dict[str, Any]]] = [
     json.loads(SOLAR_CIRCUIT_OPERATION_MODE % ("0", "0")),
     json.loads(SOLAR_CIRCUIT_OPERATION_MODE % ("1", "1")),
     json.loads(SOLAR_CIRCUIT_SOURCE_TEMPERATURE % ("0", "44.400002")),
@@ -2325,7 +2316,7 @@ MULTIPLE_POSITION_SOLAR_CIRCUIT_DATA: Final[list[dict[str, Any]]] = [
 
 # The heat pump, buffer and hot water tanks, switch valves, photovoltaics and system, the sections after the solar
 # circuits.
-MULTIPLE_POSITION_HEAT_PUMP_TO_SYSTEM_DATA: Final[list[dict[str, Any]]] = [
+MULTIPLE_DEVICES_HEAT_PUMP_TO_SYSTEM_DATA: Final[list[dict[str, Any]]] = [
     *get_heat_pump_data(compressor_night_speed="true"),
     json.loads(BUFFER_TANK_CURRENT_TOP_TEMPERATURE % ("0", "45.700001")),
     json.loads(BUFFER_TANK_CURRENT_TOP_TEMPERATURE % ("1", "35.700001")),
@@ -2394,16 +2385,16 @@ MULTIPLE_POSITION_HEAT_PUMP_TO_SYSTEM_DATA: Final[list[dict[str, Any]]] = [
     SYSTEM_FLASH_ERASE_COUNTER,
 ]
 
-MULTIPLE_POSITION_DATA_RESPONSE: Final[list[dict[str, Any]]] = [
-    *MULTIPLE_POSITION_EXTERNAL_HEAT_SOURCE_DATA,
-    *MULTIPLE_POSITION_HEAT_CIRCUIT_DATA,
-    *MULTIPLE_POSITION_SOLAR_CIRCUIT_DATA,
-    *MULTIPLE_POSITION_HEAT_PUMP_TO_SYSTEM_DATA,
+MULTIPLE_DEVICES_DATA_RESPONSE: Final[list[dict[str, Any]]] = [
+    *MULTIPLE_DEVICES_EXTERNAL_HEAT_SOURCE_DATA,
+    *MULTIPLE_DEVICES_HEAT_CIRCUIT_DATA,
+    *MULTIPLE_DEVICES_SOLAR_CIRCUIT_DATA,
+    *MULTIPLE_DEVICES_HEAT_PUMP_TO_SYSTEM_DATA,
 ]
 
-# The `MULTIPLE_POSITION_DATA_RESPONSE` with other modes and settings.
-MULTIPLE_POSITION_OTHER_MODES_DATA_RESPONSE: Final[list[dict[str, Any]]] = replace_values(
-    MULTIPLE_POSITION_DATA_RESPONSE,
+# The `MULTIPLE_DEVICES_DATA_RESPONSE` with other modes and settings.
+MULTIPLE_DEVICES_OTHER_MODES_DATA_RESPONSE: Final[list[dict[str, Any]]] = replace_values(
+    MULTIPLE_DEVICES_DATA_RESPONSE,
     (EXTERNAL_HEAT_SOURCE_USE_EXCESS_ENERGY, "1", "false"),
     (HEAT_CIRCUIT_OPERATION_MODE, "0", "4"),
     (HEAT_CIRCUIT_OPERATION_MODE, "1", "4"),
@@ -2432,9 +2423,9 @@ MULTIPLE_POSITION_OTHER_MODES_DATA_RESPONSE: Final[list[dict[str, Any]]] = repla
 )
 
 
-# The `MULTIPLE_POSITION_DATA_RESPONSE` after an update of the entities.
+# The `MULTIPLE_DEVICES_DATA_RESPONSE` after an update of the entities.
 ENTITY_UPDATED_DATA_RESPONSE: Final[list[dict[str, Any]]] = replace_values(
-    MULTIPLE_POSITION_DATA_RESPONSE,
+    MULTIPLE_DEVICES_DATA_RESPONSE,
     (EXTERNAL_HEAT_SOURCE_OPERATING_MODE, "0", "1"),
     (EXTERNAL_HEAT_SOURCE_OPERATING_MODE, "1", "0"),
     (EXTERNAL_HEAT_SOURCE_TARGET_TEMPERATURE, "0", "13"),
@@ -2479,12 +2470,12 @@ ENTITY_UPDATED_DATA_RESPONSE: Final[list[dict[str, Any]]] = replace_values(
 )
 
 
-# The `MULTIPLE_POSITION_DATA_RESPONSE` without the solar circuits and with other values.
-MULTIPLE_POSITION_WITHOUT_SOLAR_CIRCUITS_DATA_RESPONSE: Final[list[dict[str, Any]]] = replace_values(
+# The `MULTIPLE_DEVICES_DATA_RESPONSE` without the solar circuits and with other values.
+MULTIPLE_DEVICES_WITHOUT_SOLAR_CIRCUITS_DATA_RESPONSE: Final[list[dict[str, Any]]] = replace_values(
     [
-        *MULTIPLE_POSITION_EXTERNAL_HEAT_SOURCE_DATA,
-        *MULTIPLE_POSITION_HEAT_CIRCUIT_DATA,
-        *MULTIPLE_POSITION_HEAT_PUMP_TO_SYSTEM_DATA,
+        *MULTIPLE_DEVICES_EXTERNAL_HEAT_SOURCE_DATA,
+        *MULTIPLE_DEVICES_HEAT_CIRCUIT_DATA,
+        *MULTIPLE_DEVICES_HEAT_PUMP_TO_SYSTEM_DATA,
     ],
     (EXTERNAL_HEAT_SOURCE_USE_EXCESS_ENERGY, "1", "false"),
     (HEAT_CIRCUIT_OPERATION_MODE, "1", "0"),
@@ -2493,12 +2484,12 @@ MULTIPLE_POSITION_WITHOUT_SOLAR_CIRCUITS_DATA_RESPONSE: Final[list[dict[str, Any
     (HEAT_CIRCUIT_COOLING_CURVE, "1", "HC2"),
 )
 
-# The `MULTIPLE_POSITION_WITHOUT_SOLAR_CIRCUITS_DATA_RESPONSE` without the heating circuits, which are skipped by
+# The `MULTIPLE_DEVICES_WITHOUT_SOLAR_CIRCUITS_DATA_RESPONSE` without the heating circuits, which are skipped by
 # their multiplier.
-MULTIPLE_POSITION_WITHOUT_SOLAR_AND_HEATING_CIRCUITS_DATA_RESPONSE: Final[list[dict[str, Any]]] = replace_values(
+MULTIPLE_DEVICES_WITHOUT_SOLAR_AND_HEATING_CIRCUITS_DATA_RESPONSE: Final[list[dict[str, Any]]] = replace_values(
     [
-        *MULTIPLE_POSITION_EXTERNAL_HEAT_SOURCE_DATA,
-        *MULTIPLE_POSITION_HEAT_PUMP_TO_SYSTEM_DATA,
+        *MULTIPLE_DEVICES_EXTERNAL_HEAT_SOURCE_DATA,
+        *MULTIPLE_DEVICES_HEAT_PUMP_TO_SYSTEM_DATA,
     ],
     (EXTERNAL_HEAT_SOURCE_USE_EXCESS_ENERGY, "1", "false"),
     (BUFFER_TANK_TARGET_TEMPERATURE, "0", "42"),

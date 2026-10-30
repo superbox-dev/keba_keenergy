@@ -54,34 +54,34 @@
   },
   "device": {
     "buffer_tank": {
-      "name": "Buffer tank{position}"
+      "name": "Buffer tank{device_number}"
     },
     "control_unit": {
       "name": "Control unit"
     },
     "external_heat_source": {
-      "name": "External heat source{position}"
+      "name": "External heat source{device_number}"
     },
     "heat_circuit": {
-      "name": "Heating circuit{position}"
+      "name": "Heating circuit{device_number}"
     },
     "heat_pump": {
-      "name": "Heat pump{position}"
+      "name": "Heat pump{device_number}"
     },
     "hot_water_tank": {
-      "name": "Hot water tank{position}"
+      "name": "Hot water tank{device_number}"
     },
     "passive_cooling": {
-      "name": "Passive cooling{position}"
+      "name": "Passive cooling{device_number}"
     },
     "photovoltaics": {
-      "name": "Photovoltaics{position}"
+      "name": "Photovoltaics{device_number}"
     },
     "solar_circuit": {
-      "name": "Solar circuit{position}"
+      "name": "Solar circuit{device_number}"
     },
     "switch_valve": {
-      "name": "Switch valve{position}"
+      "name": "Switch valve{device_number}"
     }
   },
   "entity": {

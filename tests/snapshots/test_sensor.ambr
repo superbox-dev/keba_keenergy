@@ -737,6 +737,36 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Heizkreis 2 Kühlkurve',
+      'points': list([
+        dict({
+          'flow': 20.0,
+          'outdoor': -15.0,
+        }),
+        dict({
+          'flow': 20.0,
+          'outdoor': -15.0,
+        }),
+        dict({
+          'flow': 20.0,
+          'outdoor': -15.0,
+        }),
+        dict({
+          'flow': 20.0,
+          'outdoor': -15.0,
+        }),
+        dict({
+          'flow': 20.0,
+          'outdoor': -15.0,
+        }),
+        dict({
+          'flow': 20.0,
+          'outdoor': -15.0,
+        }),
+        dict({
+          'flow': 20.0,
+          'outdoor': -15.0,
+        }),
+      ]),
     }),
     'context': <ANY>,
     'entity_id': 'sensor.keba_keenergy_12345678_heat_circuit_cooling_curve_2',
@@ -4328,6 +4358,36 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Heating circuit 2 Cooling curve',
+      'points': list([
+        dict({
+          'flow': 20.0,
+          'outdoor': -15.0,
+        }),
+        dict({
+          'flow': 20.0,
+          'outdoor': -15.0,
+        }),
+        dict({
+          'flow': 20.0,
+          'outdoor': -15.0,
+        }),
+        dict({
+          'flow': 20.0,
+          'outdoor': -15.0,
+        }),
+        dict({
+          'flow': 20.0,
+          'outdoor': -15.0,
+        }),
+        dict({
+          'flow': 20.0,
+          'outdoor': -15.0,
+        }),
+        dict({
+          'flow': 20.0,
+          'outdoor': -15.0,
+        }),
+      ]),
     }),
     'context': <ANY>,
     'entity_id': 'sensor.keba_keenergy_12345678_heat_circuit_cooling_curve_2',

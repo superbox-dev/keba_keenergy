@@ -13,9 +13,9 @@ from homeassistant.const import Platform
 from homeassistant.core import State
 
 from tests import get_platform_states
-from tests.api_data import MULTIPLE_POSITION_DATA_RESPONSE
-from tests.api_data import MULTIPLE_POSITIONS_RESPONSE
-from tests.api_data import get_multiple_position_fixed_data_response
+from tests.api_data import MULTIPLE_DEVICES_DATA_RESPONSE
+from tests.api_data import MULTIPLE_DEVICES_RESPONSE
+from tests.api_data import get_multiple_devices_fixed_data_response
 from tests.test_binary_sensor_data import COMPRESSOR_FAILURE_ENTITY_ID
 from tests.test_binary_sensor_data import COMPRESSOR_FAILURE_MESSAGE_ID
 
@@ -36,9 +36,9 @@ async def test_binary_sensors(
 ) -> None:
     """Test the states of all binary sensors."""
     fake_api.responses = [
-        MULTIPLE_POSITIONS_RESPONSE,
-        get_multiple_position_fixed_data_response(has_passive_cooling="true"),
-        MULTIPLE_POSITION_DATA_RESPONSE,
+        MULTIPLE_DEVICES_RESPONSE,
+        get_multiple_devices_fixed_data_response(has_passive_cooling="true"),
+        MULTIPLE_DEVICES_DATA_RESPONSE,
     ]
     await fake_api.setup_integration()
 
@@ -58,9 +58,9 @@ async def test_failure_input_not_in_use(
     """Test that a failure input is unknown if the control unit reports it as not in use (message id not 0)."""
     fake_api.message_ids = {COMPRESSOR_FAILURE_MESSAGE_ID: message_id}
     fake_api.responses = [
-        MULTIPLE_POSITIONS_RESPONSE,
-        get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITION_DATA_RESPONSE,
+        MULTIPLE_DEVICES_RESPONSE,
+        get_multiple_devices_fixed_data_response(),
+        MULTIPLE_DEVICES_DATA_RESPONSE,
     ]
     await fake_api.setup_integration()
 
@@ -76,10 +76,10 @@ async def test_failure_input_in_use_again(
     """Test that a failure input has a state again after the next update, once the control unit reports it in use."""
     fake_api.message_ids = {COMPRESSOR_FAILURE_MESSAGE_ID: 50}
     fake_api.responses = [
-        MULTIPLE_POSITIONS_RESPONSE,
-        get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITION_DATA_RESPONSE,
-        MULTIPLE_POSITION_DATA_RESPONSE,
+        MULTIPLE_DEVICES_RESPONSE,
+        get_multiple_devices_fixed_data_response(),
+        MULTIPLE_DEVICES_DATA_RESPONSE,
+        MULTIPLE_DEVICES_DATA_RESPONSE,
     ]
     await fake_api.setup_integration()
 

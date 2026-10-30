@@ -19,10 +19,10 @@ from homeassistant.helpers.update_coordinator import UpdateFailed
 from homeassistant.util import dt as dt_util
 from pytest_homeassistant_custom_component.common import async_fire_time_changed
 
-from tests.api_data import MULTIPLE_POSITION_DATA_RESPONSE
-from tests.api_data import MULTIPLE_POSITION_WITHOUT_SOLAR_AND_HEATING_CIRCUITS_DATA_RESPONSE
-from tests.api_data import MULTIPLE_POSITION_WITHOUT_SOLAR_CIRCUITS_DATA_RESPONSE
-from tests.api_data import MULTIPLE_POSITIONS_RESPONSE
+from tests.api_data import MULTIPLE_DEVICES_DATA_RESPONSE
+from tests.api_data import MULTIPLE_DEVICES_RESPONSE
+from tests.api_data import MULTIPLE_DEVICES_WITHOUT_SOLAR_AND_HEATING_CIRCUITS_DATA_RESPONSE
+from tests.api_data import MULTIPLE_DEVICES_WITHOUT_SOLAR_CIRCUITS_DATA_RESPONSE
 from tests.api_data import SYSTEM_BUFFER_TANK_NUMBERS
 from tests.api_data import SYSTEM_EXTERNAL_HEAT_SOURCE_NUMBERS
 from tests.api_data import SYSTEM_HEAT_CIRCUIT_NUMBERS
@@ -30,7 +30,7 @@ from tests.api_data import SYSTEM_HEAT_PUMP_NUMBERS
 from tests.api_data import SYSTEM_HOT_WATER_TANK_NUMBERS
 from tests.api_data import SYSTEM_SOLAR_CIRCUIT_NUMBERS
 from tests.api_data import SYSTEM_SWITCH_VALVE_NUMBERS
-from tests.api_data import get_multiple_position_fixed_data_response
+from tests.api_data import get_multiple_devices_fixed_data_response
 
 if TYPE_CHECKING:
     from homeassistant.core import HomeAssistant
@@ -48,9 +48,9 @@ async def test_update_authentication_error(
 ) -> None:
     """Test that rejected credentials during an update start the reauthentication flow."""
     fake_api.responses = [
-        MULTIPLE_POSITIONS_RESPONSE,
-        get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITION_DATA_RESPONSE,
+        MULTIPLE_DEVICES_RESPONSE,
+        get_multiple_devices_fixed_data_response(),
+        MULTIPLE_DEVICES_DATA_RESPONSE,
     ]
     await fake_api.setup_integration()
 
@@ -77,9 +77,9 @@ async def test_update_api_error(
 ) -> None:
     """Test that the entities are unavailable if an update fails or times out."""
     fake_api.responses = [
-        MULTIPLE_POSITIONS_RESPONSE,
-        get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITION_DATA_RESPONSE,
+        MULTIPLE_DEVICES_RESPONSE,
+        get_multiple_devices_fixed_data_response(),
+        MULTIPLE_DEVICES_DATA_RESPONSE,
     ]
     await fake_api.setup_integration()
 
@@ -136,11 +136,11 @@ async def test_update_interval_ticks(
             json.loads(SYSTEM_EXTERNAL_HEAT_SOURCE_NUMBERS % "2"),
             json.loads(SYSTEM_SWITCH_VALVE_NUMBERS % "2"),
         ],
-        get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITION_WITHOUT_SOLAR_CIRCUITS_DATA_RESPONSE,
-        MULTIPLE_POSITION_WITHOUT_SOLAR_CIRCUITS_DATA_RESPONSE,
+        get_multiple_devices_fixed_data_response(),
+        MULTIPLE_DEVICES_WITHOUT_SOLAR_CIRCUITS_DATA_RESPONSE,
+        MULTIPLE_DEVICES_WITHOUT_SOLAR_CIRCUITS_DATA_RESPONSE,
         # The values of the heating circuits are skipped on this refresh.
-        MULTIPLE_POSITION_WITHOUT_SOLAR_AND_HEATING_CIRCUITS_DATA_RESPONSE,
+        MULTIPLE_DEVICES_WITHOUT_SOLAR_AND_HEATING_CIRCUITS_DATA_RESPONSE,
     ]
     await fake_api.setup_integration()
 
@@ -200,12 +200,12 @@ async def test_update_interval_ticks_keep_message_ids(
             json.loads(SYSTEM_EXTERNAL_HEAT_SOURCE_NUMBERS % "2"),
             json.loads(SYSTEM_SWITCH_VALVE_NUMBERS % "2"),
         ],
-        get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITION_WITHOUT_SOLAR_CIRCUITS_DATA_RESPONSE,
-        MULTIPLE_POSITION_WITHOUT_SOLAR_CIRCUITS_DATA_RESPONSE,
+        get_multiple_devices_fixed_data_response(),
+        MULTIPLE_DEVICES_WITHOUT_SOLAR_CIRCUITS_DATA_RESPONSE,
+        MULTIPLE_DEVICES_WITHOUT_SOLAR_CIRCUITS_DATA_RESPONSE,
         # The values of the heating circuits are skipped on this refresh.
-        MULTIPLE_POSITION_WITHOUT_SOLAR_AND_HEATING_CIRCUITS_DATA_RESPONSE,
-        MULTIPLE_POSITION_WITHOUT_SOLAR_CIRCUITS_DATA_RESPONSE,
+        MULTIPLE_DEVICES_WITHOUT_SOLAR_AND_HEATING_CIRCUITS_DATA_RESPONSE,
+        MULTIPLE_DEVICES_WITHOUT_SOLAR_CIRCUITS_DATA_RESPONSE,
     ]
     await fake_api.setup_integration()
 

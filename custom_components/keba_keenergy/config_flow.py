@@ -149,7 +149,7 @@ class KebaKeEnergyConfigFlow(ConfigFlow, domain=DOMAIN):
                     self.ssl = True
                     has_authentication = True
         except ClientError as error:
-            _LOGGER.debug(error)
+            _LOGGER.debug("Cannot check the authentication of %s: %s", self.host, error)
 
         return has_authentication
 

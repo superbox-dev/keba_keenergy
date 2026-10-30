@@ -154,7 +154,6 @@ STEP_AUTH_DATA_SCHEMA: Final[probatio.Schema] = probatio.Schema(
 # The options of the control unit per device type, read once on setup.
 OPTION_SECTIONS: Final[Mapping[SectionPrefix, Mapping[str, Section]]] = {
     SectionPrefix.SYSTEM: {
-        "has_outdoor_temperature": System.HAS_OUTDOOR_TEMPERATURE_SENSOR,
         "has_photovoltaics": System.HAS_PHOTOVOLTAICS,
     },
     SectionPrefix.HEAT_CIRCUIT: {
@@ -185,7 +184,7 @@ SCAN_INTERVAL_PREFIXES: Final[Mapping[SectionPrefix, SectionPrefix]] = {
     SectionPrefix.PASSIVE_COOLING: SectionPrefix.HEAT_PUMP,
 }
 
-# Device types of the API whose number of devices `get_device_counts()` returns, the others have no position.
+# Device types of the API whose number of devices `get_device_counts()` returns, the others have no device number.
 DEVICE_TYPES: Final[Mapping[SectionPrefix, DeviceType]] = {
     SectionPrefix.BUFFER_TANK: DeviceType.BUFFER_TANK,
     SectionPrefix.HOT_WATER_TANK: DeviceType.DHW_TANK,
@@ -197,8 +196,8 @@ DEVICE_TYPES: Final[Mapping[SectionPrefix, DeviceType]] = {
     SectionPrefix.PASSIVE_COOLING: DeviceType.PASSIVE_COOLING,
 }
 
-# Key of the heating curve in use, its sensor shows the points of the curve.
-HEATING_CURVE_KEY: Final[str] = "heating_curve"
+# Keys of the heating and cooling curve in use, their sensors show the points of the curve.
+CURVE_KEYS: Final[frozenset[str]] = frozenset({"cooling_curve", "heating_curve"})
 
 TO_REDACT: Final[set[str]] = {
     CONF_HOST,

@@ -38,10 +38,10 @@ from custom_components.keba_keenergy.const import FLASH_WRITE_LIMIT_PER_WEEK
 from custom_components.keba_keenergy.const import SERVICE_SET_AWAY_DATE_RANGE
 from custom_components.keba_keenergy.const import SERVICE_SET_HEATING_CURVE_POINTS
 from tests import init_translations
-from tests.api_data import MULTIPLE_POSITION_DATA_RESPONSE
-from tests.api_data import MULTIPLE_POSITION_OTHER_MODES_DATA_RESPONSE
-from tests.api_data import MULTIPLE_POSITIONS_RESPONSE
-from tests.api_data import get_multiple_position_fixed_data_response
+from tests.api_data import MULTIPLE_DEVICES_DATA_RESPONSE
+from tests.api_data import MULTIPLE_DEVICES_OTHER_MODES_DATA_RESPONSE
+from tests.api_data import MULTIPLE_DEVICES_RESPONSE
+from tests.api_data import get_multiple_devices_fixed_data_response
 from tests.test_issues_data import ISSUE_DESCRIPTION_DE
 from tests.test_issues_data import ISSUE_DESCRIPTION_EN
 from tests.test_issues_data import WRITE_COUNT_ENTITY_ID
@@ -105,13 +105,13 @@ async def test_issues(
 ) -> None:
     """Test the repair issue for frequent write operations of a control unit."""
     fake_api.responses = [
-        MULTIPLE_POSITIONS_RESPONSE,
-        get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITION_DATA_RESPONSE,
+        MULTIPLE_DEVICES_RESPONSE,
+        get_multiple_devices_fixed_data_response(),
+        MULTIPLE_DEVICES_DATA_RESPONSE,
         # Read the API after the first action call.
-        MULTIPLE_POSITION_DATA_RESPONSE,
+        MULTIPLE_DEVICES_DATA_RESPONSE,
         # Read the API after the second action call.
-        MULTIPLE_POSITION_DATA_RESPONSE,
+        MULTIPLE_DEVICES_DATA_RESPONSE,
     ]
     key: str = f"{DOMAIN}.{config_entry.entry_id}"
     hass_storage[key] = _store(key, {"week": _week(dt_util.now().date()), "count": FLASH_WRITE_LIMIT_PER_WEEK})
@@ -142,11 +142,11 @@ async def test_ignored_write_is_not_counted(
 ) -> None:
     """Test that a write that is not counted (heat up the hot water tank) keeps the weekly write counter."""
     fake_api.responses = [
-        MULTIPLE_POSITIONS_RESPONSE,
-        get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITION_OTHER_MODES_DATA_RESPONSE,
+        MULTIPLE_DEVICES_RESPONSE,
+        get_multiple_devices_fixed_data_response(),
+        MULTIPLE_DEVICES_OTHER_MODES_DATA_RESPONSE,
         # Read the API after the action call.
-        MULTIPLE_POSITION_OTHER_MODES_DATA_RESPONSE,
+        MULTIPLE_DEVICES_OTHER_MODES_DATA_RESPONSE,
     ]
     key: str = f"{DOMAIN}.{config_entry.entry_id}"
     counter: dict[str, Any] = {"week": _week(dt_util.now().date()), "count": 5, "writes": {"system.operating_mode": 5}}
@@ -189,11 +189,11 @@ async def test_write_counter_at_midnight(
 ) -> None:
     """Test that the write counter resets at midnight of a new week only, without an update or a write."""
     fake_api.responses = [
-        MULTIPLE_POSITIONS_RESPONSE,
-        get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITION_DATA_RESPONSE,
+        MULTIPLE_DEVICES_RESPONSE,
+        get_multiple_devices_fixed_data_response(),
+        MULTIPLE_DEVICES_DATA_RESPONSE,
         # The polling at midnight.
-        MULTIPLE_POSITION_DATA_RESPONSE,
+        MULTIPLE_DEVICES_DATA_RESPONSE,
     ]
     freezer.move_to(dt_util.start_of_local_day(setup_day) + timedelta(hours=12))
     key: str = f"{DOMAIN}.{fake_api.config_entry.entry_id}"
@@ -219,6 +219,33 @@ async def test_write_counter_at_midnight(
     assert state.attributes["writes"] == expected_writes
 
 
+async def test_write_counter_after_unload(
+    hass: HomeAssistant,
+    fake_api: FakeKebaKeEnergyAPI,
+    hass_storage: dict[str, Any],
+    freezer: FrozenDateTimeFactory,
+) -> None:
+    """Test that the write counter no longer resets at midnight after the integration is unloaded."""
+    fake_api.responses = [
+        MULTIPLE_DEVICES_RESPONSE,
+        get_multiple_devices_fixed_data_response(),
+        MULTIPLE_DEVICES_DATA_RESPONSE,
+    ]
+    freezer.move_to(dt_util.start_of_local_day(date(2026, 3, 8)) + timedelta(hours=12))
+    key: str = f"{DOMAIN}.{fake_api.config_entry.entry_id}"
+    counter: dict[str, Any] = {"week": _week(date(2026, 3, 8)), "count": 5, "writes": {"system.operating_mode": 5}}
+    hass_storage[key] = _store(key, counter)
+    await fake_api.setup_integration()
+    await hass.config_entries.async_unload(fake_api.config_entry.entry_id)
+
+    midnight: datetime = dt_util.start_of_local_day(date(2026, 3, 9))
+    freezer.move_to(midnight)
+    async_fire_time_changed(hass, midnight)
+    await hass.async_block_till_done()
+
+    assert hass_storage[key]["data"]["flash_write_counter"] == counter
+
+
 async def test_new_week_resets_write_counter(
     hass: HomeAssistant,
     config_entry: MockConfigEntry,
@@ -227,9 +254,9 @@ async def test_new_week_resets_write_counter(
 ) -> None:
     """Test that an update in a new week resets the write counter and removes the repair issue, without a write."""
     fake_api.responses = [
-        MULTIPLE_POSITIONS_RESPONSE,
-        get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITION_DATA_RESPONSE,
+        MULTIPLE_DEVICES_RESPONSE,
+        get_multiple_devices_fixed_data_response(),
+        MULTIPLE_DEVICES_DATA_RESPONSE,
     ]
     today: date = dt_util.now().date()
     key: str = f"{DOMAIN}.{config_entry.entry_id}"
@@ -268,9 +295,9 @@ async def test_shared_write_counter_is_removed(
 ) -> None:
     """Test that the write counter and the repair issue shared by all control units in older versions are removed."""
     fake_api.responses = [
-        MULTIPLE_POSITIONS_RESPONSE,
-        get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITION_DATA_RESPONSE,
+        MULTIPLE_DEVICES_RESPONSE,
+        get_multiple_devices_fixed_data_response(),
+        MULTIPLE_DEVICES_DATA_RESPONSE,
     ]
     hass_storage[DOMAIN] = _store(DOMAIN, {"week": _week(dt_util.now().date()), "count": 7})
     ir.async_create_issue(
@@ -300,10 +327,10 @@ async def test_writes_per_value(
 ) -> None:
     """Test that each written value is counted, a write of several values counts once in total."""
     fake_api.responses = [
-        MULTIPLE_POSITIONS_RESPONSE,
-        get_multiple_position_fixed_data_response(),
+        MULTIPLE_DEVICES_RESPONSE,
+        get_multiple_devices_fixed_data_response(),
         # Read the API on setup and after each action call.
-        *[MULTIPLE_POSITION_DATA_RESPONSE] * 6,
+        *[MULTIPLE_DEVICES_DATA_RESPONSE] * 6,
     ]
     await fake_api.setup_integration()
 
@@ -364,9 +391,9 @@ async def test_remove_entry(
 ) -> None:
     """Test that removing a config entry removes its write counter."""
     fake_api.responses = [
-        MULTIPLE_POSITIONS_RESPONSE,
-        get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITION_DATA_RESPONSE,
+        MULTIPLE_DEVICES_RESPONSE,
+        get_multiple_devices_fixed_data_response(),
+        MULTIPLE_DEVICES_DATA_RESPONSE,
     ]
     key: str = f"{DOMAIN}.{config_entry.entry_id}"
     hass_storage[key] = _store(key, {"week": _week(dt_util.now().date()), "count": 1})

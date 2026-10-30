@@ -21,9 +21,9 @@ from homeassistant.helpers.service_info.zeroconf import ZeroconfServiceInfo
 from keba_keenergy_api.exceptions import APIError
 
 from custom_components.keba_keenergy.const import DOMAIN
-from tests.api_data import MULTIPLE_POSITION_DATA_RESPONSE
-from tests.api_data import MULTIPLE_POSITIONS_RESPONSE
-from tests.api_data import get_multiple_position_fixed_data_response
+from tests.api_data import MULTIPLE_DEVICES_DATA_RESPONSE
+from tests.api_data import MULTIPLE_DEVICES_RESPONSE
+from tests.api_data import get_multiple_devices_fixed_data_response
 from tests.test_config_flow_data import ZERO_CONF_SERVICE_INFO
 
 if TYPE_CHECKING:
@@ -40,9 +40,9 @@ async def test_user_flow(
 ) -> None:
     """Test the user flow without authentication."""
     fake_api.responses = [
-        MULTIPLE_POSITIONS_RESPONSE,
-        get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITION_DATA_RESPONSE,
+        MULTIPLE_DEVICES_RESPONSE,
+        get_multiple_devices_fixed_data_response(),
+        MULTIPLE_DEVICES_DATA_RESPONSE,
     ]
     fake_api.register_auth_request("10.0.0.100")
     fake_api.register_requests("10.0.0.100")
@@ -81,9 +81,9 @@ async def test_user_flow_authentication(
 ) -> None:
     """Test the user flow with authentication."""
     fake_api.responses = [
-        MULTIPLE_POSITIONS_RESPONSE,
-        get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITION_DATA_RESPONSE,
+        MULTIPLE_DEVICES_RESPONSE,
+        get_multiple_devices_fixed_data_response(),
+        MULTIPLE_DEVICES_DATA_RESPONSE,
     ]
     fake_api.register_auth_request("10.0.0.100", status=401)
     fake_api.register_requests("10.0.0.100", ssl=True)
@@ -134,9 +134,9 @@ async def test_reconfigure_flow_authentication(
 ) -> None:
     """Test the reconfiguration flow with authentication."""
     fake_api.responses = [
-        MULTIPLE_POSITIONS_RESPONSE,
-        get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITION_DATA_RESPONSE,
+        MULTIPLE_DEVICES_RESPONSE,
+        get_multiple_devices_fixed_data_response(),
+        MULTIPLE_DEVICES_DATA_RESPONSE,
     ]
 
     fake_api.register_auth_request("10.0.0.200", status=401)
@@ -216,9 +216,9 @@ async def test_user_flow_authentication_cannot_connect(
 ) -> None:
     """Test the errors of the authentication step of the user flow."""
     fake_api.responses = [
-        MULTIPLE_POSITIONS_RESPONSE,
-        get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITION_DATA_RESPONSE,
+        MULTIPLE_DEVICES_RESPONSE,
+        get_multiple_devices_fixed_data_response(),
+        MULTIPLE_DEVICES_DATA_RESPONSE,
     ]
     fake_api.register_auth_request("10.0.0.100", exc=ClientError())
     fake_api.register_requests("10.0.0.100", ssl=True)
@@ -266,9 +266,9 @@ async def test_reauth_flow_success(
 ) -> None:
     """Test the reauthentication flow with valid credentials."""
     fake_api.responses = [
-        MULTIPLE_POSITIONS_RESPONSE,
-        get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITION_DATA_RESPONSE,
+        MULTIPLE_DEVICES_RESPONSE,
+        get_multiple_devices_fixed_data_response(),
+        MULTIPLE_DEVICES_DATA_RESPONSE,
     ]
     fake_api.register_requests("10.0.0.100", ssl=True)
 
@@ -423,9 +423,9 @@ async def test_zeroconf_flow(
 ) -> None:
     """Test the zeroconf discovery flow without authentication."""
     fake_api.responses = [
-        MULTIPLE_POSITIONS_RESPONSE,
-        get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITION_DATA_RESPONSE,
+        MULTIPLE_DEVICES_RESPONSE,
+        get_multiple_devices_fixed_data_response(),
+        MULTIPLE_DEVICES_DATA_RESPONSE,
     ]
     fake_api.register_auth_request("ap4400.local")
     fake_api.register_requests("ap4400.local")
@@ -460,9 +460,9 @@ async def test_zeroconf_flow_authentication(
 ) -> None:
     """Test the zeroconf discovery flow with authentication."""
     fake_api.responses = [
-        MULTIPLE_POSITIONS_RESPONSE,
-        get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITION_DATA_RESPONSE,
+        MULTIPLE_DEVICES_RESPONSE,
+        get_multiple_devices_fixed_data_response(),
+        MULTIPLE_DEVICES_DATA_RESPONSE,
     ]
     fake_api.register_auth_request("ap4400.local", status=401)
     fake_api.register_requests("ap4400.local", ssl=True)
@@ -499,8 +499,8 @@ async def test_zeroconf_flow_authentication_cannot_connect(
 ) -> None:
     """Test the errors of the authentication step of the zeroconf discovery flow."""
     fake_api.responses = [
-        MULTIPLE_POSITIONS_RESPONSE,
-        MULTIPLE_POSITION_DATA_RESPONSE,
+        MULTIPLE_DEVICES_RESPONSE,
+        MULTIPLE_DEVICES_DATA_RESPONSE,
     ]
     fake_api.register_auth_request("ap4400.local", exc=ClientError())
     fake_api.register_requests("ap4400.local", ssl=True)
@@ -691,13 +691,13 @@ async def test_option_flow(
     """Test the options flow and the normalization of the update multipliers."""
     fake_api.responses = [
         # The first setup of the coordinator.
-        MULTIPLE_POSITIONS_RESPONSE,
-        get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITION_DATA_RESPONSE,
+        MULTIPLE_DEVICES_RESPONSE,
+        get_multiple_devices_fixed_data_response(),
+        MULTIPLE_DEVICES_DATA_RESPONSE,
         # The second setup of the coordinator after the reload.
-        MULTIPLE_POSITIONS_RESPONSE,
-        get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITION_DATA_RESPONSE,
+        MULTIPLE_DEVICES_RESPONSE,
+        get_multiple_devices_fixed_data_response(),
+        MULTIPLE_DEVICES_DATA_RESPONSE,
     ]
     await fake_api.setup_integration()
 
@@ -739,9 +739,9 @@ async def test_option_flow_without_photovoltaics(
 ) -> None:
     """Test that the options flow hides the photovoltaics option without photovoltaics."""
     fake_api.responses = [
-        MULTIPLE_POSITIONS_RESPONSE,
-        get_multiple_position_fixed_data_response(has_photovoltaics="false"),
-        [value for value in MULTIPLE_POSITION_DATA_RESPONSE if ".photovoltaics." not in value["name"]],
+        MULTIPLE_DEVICES_RESPONSE,
+        get_multiple_devices_fixed_data_response(has_photovoltaics="false"),
+        [value for value in MULTIPLE_DEVICES_DATA_RESPONSE if ".photovoltaics." not in value["name"]],
     ]
     await fake_api.setup_integration()
 
@@ -775,9 +775,9 @@ async def test_option_flow_when_integration_unloaded(
     """Test that the options flow aborts if the integration was unloaded."""
     fake_api.responses = [
         # The first setup of the coordinator.
-        MULTIPLE_POSITIONS_RESPONSE,
-        get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITION_DATA_RESPONSE,
+        MULTIPLE_DEVICES_RESPONSE,
+        get_multiple_devices_fixed_data_response(),
+        MULTIPLE_DEVICES_DATA_RESPONSE,
     ]
     await fake_api.setup_integration()
     await hass.config_entries.async_unload(config_entry.entry_id)
@@ -801,9 +801,9 @@ async def test_option_flow_when_integration_reload_failed(
     """Test that the options flow aborts if a reload of the integration failed."""
     fake_api.responses = [
         # The first setup of the coordinator.
-        MULTIPLE_POSITIONS_RESPONSE,
-        get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITION_DATA_RESPONSE,
+        MULTIPLE_DEVICES_RESPONSE,
+        get_multiple_devices_fixed_data_response(),
+        MULTIPLE_DEVICES_DATA_RESPONSE,
         # The reload fails.
         HTTPStatus.BAD_REQUEST,
     ]

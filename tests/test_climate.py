@@ -41,14 +41,14 @@ from pytest_homeassistant_custom_component.common import async_fire_time_changed
 
 from custom_components.keba_keenergy.const import FLASH_WRITE_DELAY
 from tests import get_platform_states
-from tests.api_data import DEFAULT_POSITION_DATA_RESPONSE
-from tests.api_data import DEFAULT_POSITION_FIXED_DATA_RESPONSE
-from tests.api_data import DEFAULT_POSITION_RESPONSE
-from tests.api_data import MULTIPLE_POSITION_DATA_RESPONSE
-from tests.api_data import MULTIPLE_POSITION_OTHER_MODES_DATA_RESPONSE
-from tests.api_data import MULTIPLE_POSITIONS_RESPONSE
-from tests.api_data import get_multiple_position_fixed_data_response
-from tests.api_data import get_single_position_data_response
+from tests.api_data import MULTIPLE_DEVICES_DATA_RESPONSE
+from tests.api_data import MULTIPLE_DEVICES_OTHER_MODES_DATA_RESPONSE
+from tests.api_data import MULTIPLE_DEVICES_RESPONSE
+from tests.api_data import SINGLE_DEVICE_DATA_RESPONSE
+from tests.api_data import SINGLE_DEVICE_FIXED_DATA_RESPONSE
+from tests.api_data import SINGLE_DEVICE_RESPONSE
+from tests.api_data import get_multiple_devices_fixed_data_response
+from tests.api_data import get_single_device_data_response
 from tests.api_data import update_response
 from tests.test_climate_data import ENTITY_ID
 from tests.test_climate_data import ENTITY_ID_1
@@ -67,22 +67,22 @@ if TYPE_CHECKING:
     [
         (
             [
-                DEFAULT_POSITION_RESPONSE,
-                DEFAULT_POSITION_FIXED_DATA_RESPONSE,
-                DEFAULT_POSITION_DATA_RESPONSE,
+                SINGLE_DEVICE_RESPONSE,
+                SINGLE_DEVICE_FIXED_DATA_RESPONSE,
+                SINGLE_DEVICE_DATA_RESPONSE,
             ],
             [ENTITY_ID],
         ),
         (
             [
-                MULTIPLE_POSITIONS_RESPONSE,
-                get_multiple_position_fixed_data_response(),
-                MULTIPLE_POSITION_DATA_RESPONSE,
+                MULTIPLE_DEVICES_RESPONSE,
+                get_multiple_devices_fixed_data_response(),
+                MULTIPLE_DEVICES_DATA_RESPONSE,
             ],
             [ENTITY_ID_1, ENTITY_ID_2],
         ),
     ],
-    ids=["single_position", "multiple_positions"],
+    ids=["single_device", "multiple_devices"],
 )
 async def test_climate_entities(
     hass: HomeAssistant,
@@ -107,9 +107,9 @@ async def test_climate(
 ) -> None:
     """Test the states of all climate entities."""
     fake_api.responses = [
-        MULTIPLE_POSITIONS_RESPONSE,
-        get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITION_DATA_RESPONSE,
+        MULTIPLE_DEVICES_RESPONSE,
+        get_multiple_devices_fixed_data_response(),
+        MULTIPLE_DEVICES_DATA_RESPONSE,
     ]
     await fake_api.setup_integration()
 
@@ -121,7 +121,7 @@ async def test_climate(
     ("responses", "expected_target_temperature"),
     [
         (
-            get_single_position_data_response(heat_circuit_target_temperature_offset="1.5"),
+            get_single_device_data_response(heat_circuit_target_temperature_offset="1.5"),
             21.5,
         ),  # The selected target temperature 20.0 plus the offset 1.5.
     ],
@@ -135,8 +135,8 @@ async def test_target_temperature(
 ) -> None:
     """Test the target temperature of the climate entity."""
     fake_api.responses = [
-        DEFAULT_POSITION_RESPONSE,
-        DEFAULT_POSITION_FIXED_DATA_RESPONSE,
+        SINGLE_DEVICE_RESPONSE,
+        SINGLE_DEVICE_FIXED_DATA_RESPONSE,
         responses,
     ]
     await fake_api.setup_integration()
@@ -153,11 +153,11 @@ async def test_set_temperature_debounced(
 ) -> None:
     """Test that quick target temperature changes are shown at once and written once, with the last value."""
     fake_api.responses = [
-        DEFAULT_POSITION_RESPONSE,
-        DEFAULT_POSITION_FIXED_DATA_RESPONSE,
-        get_single_position_data_response(heat_circuit_target_temperature_offset="1.5"),
+        SINGLE_DEVICE_RESPONSE,
+        SINGLE_DEVICE_FIXED_DATA_RESPONSE,
+        get_single_device_data_response(heat_circuit_target_temperature_offset="1.5"),
         # Read the API after the update of the entity.
-        get_single_position_data_response(heat_circuit_target_temperature_offset="1.5"),
+        get_single_device_data_response(heat_circuit_target_temperature_offset="1.5"),
     ]
     await fake_api.setup_integration()
 
@@ -196,9 +196,9 @@ async def test_set_temperature_without_selected_target_temperature(
     """Test that no offset is written if the Web HMI does not provide the selected target temperature."""
     fake_api.unsupported_variables = {"APPL.CtrlAppl.sParam.heatCircuit[0].values.selectedSetTemp"}
     fake_api.responses = [
-        DEFAULT_POSITION_RESPONSE,
-        DEFAULT_POSITION_FIXED_DATA_RESPONSE,
-        get_single_position_data_response(),
+        SINGLE_DEVICE_RESPONSE,
+        SINGLE_DEVICE_FIXED_DATA_RESPONSE,
+        get_single_device_data_response(),
     ]
     await fake_api.setup_integration()
 
@@ -227,11 +227,11 @@ async def test_turn_off(
 ) -> None:
     """Test turning off a heating circuit."""
     fake_api.responses = [
-        MULTIPLE_POSITIONS_RESPONSE,
-        get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITION_DATA_RESPONSE,
+        MULTIPLE_DEVICES_RESPONSE,
+        get_multiple_devices_fixed_data_response(),
+        MULTIPLE_DEVICES_DATA_RESPONSE,
         # Read the API after the action call.
-        MULTIPLE_POSITION_DATA_RESPONSE,
+        MULTIPLE_DEVICES_DATA_RESPONSE,
     ]
     await fake_api.setup_integration()
 
@@ -256,11 +256,11 @@ async def test_turn_on(
 ) -> None:
     """Test turning on a heating circuit."""
     fake_api.responses = [
-        MULTIPLE_POSITIONS_RESPONSE,
-        get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITION_DATA_RESPONSE,
+        MULTIPLE_DEVICES_RESPONSE,
+        get_multiple_devices_fixed_data_response(),
+        MULTIPLE_DEVICES_DATA_RESPONSE,
         # Read the API after the action call.
-        MULTIPLE_POSITION_DATA_RESPONSE,
+        MULTIPLE_DEVICES_DATA_RESPONSE,
     ]
     await fake_api.setup_integration()
 
@@ -296,11 +296,11 @@ async def test_set_hvac_mode(
 ) -> None:
     """Test setting the HVAC mode of a heating circuit in holiday mode."""
     fake_api.responses = [
-        MULTIPLE_POSITIONS_RESPONSE,
-        get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITION_OTHER_MODES_DATA_RESPONSE,
+        MULTIPLE_DEVICES_RESPONSE,
+        get_multiple_devices_fixed_data_response(),
+        MULTIPLE_DEVICES_OTHER_MODES_DATA_RESPONSE,
         # Read the API after the action call.
-        MULTIPLE_POSITION_OTHER_MODES_DATA_RESPONSE,
+        MULTIPLE_DEVICES_OTHER_MODES_DATA_RESPONSE,
     ]
     await fake_api.setup_integration()
 
@@ -325,9 +325,9 @@ async def test_set_unchanged_hvac_mode(
 ) -> None:
     """Test that the HVAC mode is not written if the heating circuit already has it."""
     fake_api.responses = [
-        MULTIPLE_POSITIONS_RESPONSE,
-        get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITION_DATA_RESPONSE,
+        MULTIPLE_DEVICES_RESPONSE,
+        get_multiple_devices_fixed_data_response(),
+        MULTIPLE_DEVICES_DATA_RESPONSE,
     ]
     await fake_api.setup_integration()
 
@@ -347,10 +347,10 @@ async def test_set_unchanged_hvac_mode(
 @pytest.mark.parametrize(
     ("preset_mode", "response", "expected_preset_mode"),
     [
-        (PRESET_HOME, MULTIPLE_POSITION_DATA_RESPONSE, HeatingCircuitOperatingMode.AUTO.value),
-        (PRESET_COMFORT, MULTIPLE_POSITION_OTHER_MODES_DATA_RESPONSE, HeatingCircuitOperatingMode.NORMAL.value),
-        (PRESET_SLEEP, MULTIPLE_POSITION_DATA_RESPONSE, HeatingCircuitOperatingMode.REDUCED.value),
-        (PRESET_BOOST, MULTIPLE_POSITION_DATA_RESPONSE, HeatingCircuitOperatingMode.PARTY.value),
+        (PRESET_HOME, MULTIPLE_DEVICES_DATA_RESPONSE, HeatingCircuitOperatingMode.AUTO.value),
+        (PRESET_COMFORT, MULTIPLE_DEVICES_OTHER_MODES_DATA_RESPONSE, HeatingCircuitOperatingMode.NORMAL.value),
+        (PRESET_SLEEP, MULTIPLE_DEVICES_DATA_RESPONSE, HeatingCircuitOperatingMode.REDUCED.value),
+        (PRESET_BOOST, MULTIPLE_DEVICES_DATA_RESPONSE, HeatingCircuitOperatingMode.PARTY.value),
     ],
     ids=["home", "comfort", "sleep", "boost"],
 )
@@ -363,8 +363,8 @@ async def test_set_preset_mode(
 ) -> None:
     """Test setting the preset mode of a heating circuit."""
     fake_api.responses = [
-        MULTIPLE_POSITIONS_RESPONSE,
-        get_multiple_position_fixed_data_response(),
+        MULTIPLE_DEVICES_RESPONSE,
+        get_multiple_devices_fixed_data_response(),
         response,
         # Read the API after the action call.
         response,
@@ -393,9 +393,9 @@ async def test_set_preset_mode_away(
 ) -> None:
     """Test that the preset mode away sets the away date range."""
     fake_api.responses = [
-        MULTIPLE_POSITIONS_RESPONSE,
-        get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITION_DATA_RESPONSE,
+        MULTIPLE_DEVICES_RESPONSE,
+        get_multiple_devices_fixed_data_response(),
+        MULTIPLE_DEVICES_DATA_RESPONSE,
     ]
     await fake_api.setup_integration()
 
@@ -425,11 +425,11 @@ async def test_unset_preset_mode_away(
 ) -> None:
     """Test that leaving the preset mode away resets the away date range."""
     fake_api.responses = [
-        MULTIPLE_POSITIONS_RESPONSE,
-        get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITION_OTHER_MODES_DATA_RESPONSE,
+        MULTIPLE_DEVICES_RESPONSE,
+        get_multiple_devices_fixed_data_response(),
+        MULTIPLE_DEVICES_OTHER_MODES_DATA_RESPONSE,
         # Read the API after the action call.
-        MULTIPLE_POSITION_DATA_RESPONSE,
+        MULTIPLE_DEVICES_DATA_RESPONSE,
     ]
     await fake_api.setup_integration()
 
@@ -462,11 +462,11 @@ async def test_set_temperature(
 ) -> None:
     """Test setting the target temperature of a heating circuit."""
     fake_api.responses = [
-        MULTIPLE_POSITIONS_RESPONSE,
-        get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITION_DATA_RESPONSE,
+        MULTIPLE_DEVICES_RESPONSE,
+        get_multiple_devices_fixed_data_response(),
+        MULTIPLE_DEVICES_DATA_RESPONSE,
         # Read the API after the action call.
-        MULTIPLE_POSITION_DATA_RESPONSE,
+        MULTIPLE_DEVICES_DATA_RESPONSE,
     ]
     await fake_api.setup_integration()
 
@@ -500,10 +500,10 @@ async def test_operating_mode_without_preset(
 ) -> None:
     """Test that a heating circuit in an operating mode without a preset has the home preset."""
     fake_api.responses = [
-        DEFAULT_POSITION_RESPONSE,
-        DEFAULT_POSITION_FIXED_DATA_RESPONSE,
+        SINGLE_DEVICE_RESPONSE,
+        SINGLE_DEVICE_FIXED_DATA_RESPONSE,
         update_response(
-            get_single_position_data_response(),
+            get_single_device_data_response(),
             "APPL.CtrlAppl.sParam.heatCircuit[0].param.operatingMode",
             value=str(operating_mode.value),
         ),
@@ -522,11 +522,11 @@ async def test_set_preset_mode_without_time_zone_request(
 ) -> None:
     """Test that a preset mode change outside of away does not request the time zone."""
     fake_api.responses = [
-        MULTIPLE_POSITIONS_RESPONSE,
-        get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITION_DATA_RESPONSE,
+        MULTIPLE_DEVICES_RESPONSE,
+        get_multiple_devices_fixed_data_response(),
+        MULTIPLE_DEVICES_DATA_RESPONSE,
         # Read the API after the action call.
-        MULTIPLE_POSITION_DATA_RESPONSE,
+        MULTIPLE_DEVICES_DATA_RESPONSE,
     ]
     await fake_api.setup_integration()
 
@@ -556,9 +556,9 @@ async def test_room_sensor_not_in_use(
     """
     fake_api.message_ids = {"APPL.CtrlAppl.sParam.heatCircuit[0].tempRoom.state.msgId": 10}
     fake_api.responses = [
-        MULTIPLE_POSITIONS_RESPONSE,
-        get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITION_DATA_RESPONSE,
+        MULTIPLE_DEVICES_RESPONSE,
+        get_multiple_devices_fixed_data_response(),
+        MULTIPLE_DEVICES_DATA_RESPONSE,
     ]
     await fake_api.setup_integration()
 
@@ -642,8 +642,8 @@ async def test_hvac_action(
 ) -> None:
     """Test the action of a heating circuit with the requests of the heating circuit and the heat pump state."""
     fake_api.responses = [
-        DEFAULT_POSITION_RESPONSE,
-        DEFAULT_POSITION_FIXED_DATA_RESPONSE,
+        SINGLE_DEVICE_RESPONSE,
+        SINGLE_DEVICE_FIXED_DATA_RESPONSE,
         response,
     ]
     await fake_api.setup_integration()

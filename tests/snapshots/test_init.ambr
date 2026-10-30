@@ -1,5 +1,5 @@
 # serializer version: 1
-# name: test_devices[default_position]
+# name: test_devices[single_device]
   list([
     '12345678_buffer_tank',
     '12345678_external_heat_source',
@@ -13,7 +13,7 @@
     '12345678_switch_valve',
   ])
 # ---
-# name: test_devices[multiple_positions]
+# name: test_devices[multiple_devices]
   list([
     '12345678_buffer_tank_1',
     '12345678_buffer_tank_2',

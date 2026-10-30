@@ -30,6 +30,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   sensors keep their unit. ([Issue #77][issue-77])
 - Changed the display precision of the sensors to the default of Home Assistant, or to a finer one where the control
   unit provides it (e.g. the fresh water module temperature with two decimals). ([Issue #77][issue-77])
+- Changed the options of the heating curve selects to the heating curves of the control unit after every update, a
+  new or renamed heating curve is shown without reloading the integration.
+- Changed the sensor `weekly_write_count` to reset at midnight of a new week, also without an update or a write.
 
 ### Removed
 
@@ -41,6 +44,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Showed the HVAC action `heating` of a heating circuit only while a heat pump heats. The heat request of the
   heating circuit stays on during the whole heating period on newer software versions, so `heating` was also shown
   while the heat pump was in standby. ([Issue #84][issue-84])
+- Added the attribute `points` to the sensor `cooling_curve` of the heating circuits, like the sensor
+  `heating_curve`.
+- Showed the points written with the action `set_heating_curve_points` in the sensors `heating_curve` and
+  `cooling_curve` right away, not only after the next update of the heating circuits.
 
 [issue-77]: https://github.com/superbox-dev/keba_keenergy/issues/77
 [issue-84]: https://github.com/superbox-dev/keba_keenergy/issues/84

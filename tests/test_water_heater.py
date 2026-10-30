@@ -32,14 +32,14 @@ from pytest_homeassistant_custom_component.common import async_fire_time_changed
 
 from custom_components.keba_keenergy.const import FLASH_WRITE_DELAY
 from tests import get_platform_states
-from tests.api_data import DEFAULT_POSITION_DATA_RESPONSE
-from tests.api_data import DEFAULT_POSITION_FIXED_DATA_RESPONSE
-from tests.api_data import DEFAULT_POSITION_RESPONSE
-from tests.api_data import MULTIPLE_POSITION_DATA_RESPONSE
-from tests.api_data import MULTIPLE_POSITION_OTHER_MODES_DATA_RESPONSE
-from tests.api_data import MULTIPLE_POSITIONS_RESPONSE
-from tests.api_data import get_multiple_position_fixed_data_response
-from tests.api_data import get_single_position_data_response
+from tests.api_data import MULTIPLE_DEVICES_DATA_RESPONSE
+from tests.api_data import MULTIPLE_DEVICES_OTHER_MODES_DATA_RESPONSE
+from tests.api_data import MULTIPLE_DEVICES_RESPONSE
+from tests.api_data import SINGLE_DEVICE_DATA_RESPONSE
+from tests.api_data import SINGLE_DEVICE_FIXED_DATA_RESPONSE
+from tests.api_data import SINGLE_DEVICE_RESPONSE
+from tests.api_data import get_multiple_devices_fixed_data_response
+from tests.api_data import get_single_device_data_response
 from tests.api_data import update_response
 from tests.test_water_heater_data import ENTITY_ID
 from tests.test_water_heater_data import ENTITY_ID_1
@@ -59,22 +59,22 @@ if TYPE_CHECKING:
     [
         (
             [
-                DEFAULT_POSITION_RESPONSE,
-                DEFAULT_POSITION_FIXED_DATA_RESPONSE,
-                DEFAULT_POSITION_DATA_RESPONSE,
+                SINGLE_DEVICE_RESPONSE,
+                SINGLE_DEVICE_FIXED_DATA_RESPONSE,
+                SINGLE_DEVICE_DATA_RESPONSE,
             ],
             [ENTITY_ID, ENTITY_ID_3],
         ),
         (
             [
-                MULTIPLE_POSITIONS_RESPONSE,
-                get_multiple_position_fixed_data_response(),
-                MULTIPLE_POSITION_DATA_RESPONSE,
+                MULTIPLE_DEVICES_RESPONSE,
+                get_multiple_devices_fixed_data_response(),
+                MULTIPLE_DEVICES_DATA_RESPONSE,
             ],
             [ENTITY_ID_1, ENTITY_ID_2, ENTITY_ID_4],
         ),
     ],
-    ids=["single_position", "multiple_positions"],
+    ids=["single_device", "multiple_devices"],
 )
 async def test_water_heater_entities(
     hass: HomeAssistant,
@@ -99,9 +99,9 @@ async def test_water_heater(
 ) -> None:
     """Test the states of all water heater entities."""
     fake_api.responses = [
-        MULTIPLE_POSITIONS_RESPONSE,
-        get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITION_DATA_RESPONSE,
+        MULTIPLE_DEVICES_RESPONSE,
+        get_multiple_devices_fixed_data_response(),
+        MULTIPLE_DEVICES_DATA_RESPONSE,
     ]
     await fake_api.setup_integration()
 
@@ -114,12 +114,12 @@ async def test_water_heater(
     [
         (
             "water_heater.keba_keenergy_12345678_1",
-            MULTIPLE_POSITION_OTHER_MODES_DATA_RESPONSE,
+            MULTIPLE_DEVICES_OTHER_MODES_DATA_RESPONSE,
             '[{"name": "APPL.CtrlAppl.sParam.hotWaterTank[0].param.operatingMode", "value": "0"}]',
         ),
         (
             "water_heater.keba_keenergy_12345678_buffer_tank_1",
-            MULTIPLE_POSITION_OTHER_MODES_DATA_RESPONSE,
+            MULTIPLE_DEVICES_OTHER_MODES_DATA_RESPONSE,
             '[{"name": "APPL.CtrlAppl.sParam.bufferTank[0].param.operatingMode", "value": "0"}]',
         ),
     ],
@@ -134,8 +134,8 @@ async def test_turn_off(
 ) -> None:
     """Test turning off a tank."""
     fake_api.responses = [
-        MULTIPLE_POSITIONS_RESPONSE,
-        get_multiple_position_fixed_data_response(),
+        MULTIPLE_DEVICES_RESPONSE,
+        get_multiple_devices_fixed_data_response(),
         response,
         # Read the API after the action call.
         response,
@@ -176,11 +176,11 @@ async def test_turn_on(
 ) -> None:
     """Test turning on a tank."""
     fake_api.responses = [
-        MULTIPLE_POSITIONS_RESPONSE,
-        get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITION_DATA_RESPONSE,
+        MULTIPLE_DEVICES_RESPONSE,
+        get_multiple_devices_fixed_data_response(),
+        MULTIPLE_DEVICES_DATA_RESPONSE,
         # Read the API after the action call.
-        MULTIPLE_POSITION_DATA_RESPONSE,
+        MULTIPLE_DEVICES_DATA_RESPONSE,
     ]
     await fake_api.setup_integration()
 
@@ -201,22 +201,22 @@ async def test_turn_on(
     [
         (
             STATE_ECO,
-            MULTIPLE_POSITION_DATA_RESPONSE,
+            MULTIPLE_DEVICES_DATA_RESPONSE,
             '[{"name": "APPL.CtrlAppl.sParam.hotWaterTank[0].param.operatingMode", "value": "1"}]',
         ),
         (
             STATE_PERFORMANCE,
-            MULTIPLE_POSITION_OTHER_MODES_DATA_RESPONSE,
+            MULTIPLE_DEVICES_OTHER_MODES_DATA_RESPONSE,
             '[{"name": "APPL.CtrlAppl.sParam.hotWaterTank[0].param.operatingMode", "value": "3"}]',
         ),
         (
             STATE_OFF,
-            MULTIPLE_POSITION_DATA_RESPONSE,
+            MULTIPLE_DEVICES_DATA_RESPONSE,
             '[{"name": "APPL.CtrlAppl.sParam.hotWaterTank[0].param.operatingMode", "value": "0"}]',
         ),
         (
             STATE_HEAT_PUMP,
-            MULTIPLE_POSITION_DATA_RESPONSE,
+            MULTIPLE_DEVICES_DATA_RESPONSE,
             '[{"name": "APPL.CtrlAppl.sParam.hotWaterTank[0].param.operatingMode", "value": "2"}]',
         ),
     ],
@@ -231,8 +231,8 @@ async def test_set_operation_mode_hot_water_tank(
 ) -> None:
     """Test setting the operation mode of a hot water tank."""
     fake_api.responses = [
-        MULTIPLE_POSITIONS_RESPONSE,
-        get_multiple_position_fixed_data_response(),
+        MULTIPLE_DEVICES_RESPONSE,
+        get_multiple_devices_fixed_data_response(),
         response,
         # Read the API after the action call.
         response,
@@ -257,17 +257,17 @@ async def test_set_operation_mode_hot_water_tank(
     [
         (
             STATE_PERFORMANCE,
-            MULTIPLE_POSITION_DATA_RESPONSE,
+            MULTIPLE_DEVICES_DATA_RESPONSE,
             '[{"name": "APPL.CtrlAppl.sParam.bufferTank[0].param.operatingMode", "value": "2"}]',
         ),
         (
             STATE_OFF,
-            MULTIPLE_POSITION_OTHER_MODES_DATA_RESPONSE,
+            MULTIPLE_DEVICES_OTHER_MODES_DATA_RESPONSE,
             '[{"name": "APPL.CtrlAppl.sParam.bufferTank[0].param.operatingMode", "value": "0"}]',
         ),
         (
             STATE_HEAT_PUMP,
-            MULTIPLE_POSITION_DATA_RESPONSE,
+            MULTIPLE_DEVICES_DATA_RESPONSE,
             '[{"name": "APPL.CtrlAppl.sParam.bufferTank[0].param.operatingMode", "value": "1"}]',
         ),
     ],
@@ -282,8 +282,8 @@ async def test_set_operation_mode_buffer_tank(
 ) -> None:
     """Test setting the operation mode of a buffer tank."""
     fake_api.responses = [
-        MULTIPLE_POSITIONS_RESPONSE,
-        get_multiple_position_fixed_data_response(),
+        MULTIPLE_DEVICES_RESPONSE,
+        get_multiple_devices_fixed_data_response(),
         response,
         # Read the API after the action call.
         response,
@@ -323,11 +323,11 @@ async def test_set_temperature(
 ) -> None:
     """Test setting the target temperature of a hot water tank."""
     fake_api.responses = [
-        MULTIPLE_POSITIONS_RESPONSE,
-        get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITION_DATA_RESPONSE,
+        MULTIPLE_DEVICES_RESPONSE,
+        get_multiple_devices_fixed_data_response(),
+        MULTIPLE_DEVICES_DATA_RESPONSE,
         # Read the API after the action call.
-        MULTIPLE_POSITION_DATA_RESPONSE,
+        MULTIPLE_DEVICES_DATA_RESPONSE,
     ]
     await fake_api.setup_integration()
 
@@ -353,11 +353,11 @@ async def test_set_temperature_debounced(
 ) -> None:
     """Test that quick target temperature changes are shown at once and written once, with the last value."""
     fake_api.responses = [
-        DEFAULT_POSITION_RESPONSE,
-        DEFAULT_POSITION_FIXED_DATA_RESPONSE,
-        get_single_position_data_response(hot_water_tank_target_temperature="51"),
+        SINGLE_DEVICE_RESPONSE,
+        SINGLE_DEVICE_FIXED_DATA_RESPONSE,
+        get_single_device_data_response(hot_water_tank_target_temperature="51"),
         # Read the API after the update of the entity.
-        get_single_position_data_response(hot_water_tank_target_temperature="51"),
+        get_single_device_data_response(hot_water_tank_target_temperature="51"),
     ]
     await fake_api.setup_integration()
 
@@ -392,10 +392,10 @@ async def test_set_temperature_debounced(
 @pytest.mark.parametrize(
     ("entity_id", "service", "response"),
     [
-        (ENTITY_ID_2, SERVICE_TURN_OFF, MULTIPLE_POSITION_DATA_RESPONSE),
-        (ENTITY_ID_1, SERVICE_TURN_ON, MULTIPLE_POSITION_OTHER_MODES_DATA_RESPONSE),
-        (ENTITY_ID_4, SERVICE_TURN_OFF, MULTIPLE_POSITION_DATA_RESPONSE),
-        (ENTITY_ID_4, SERVICE_TURN_ON, MULTIPLE_POSITION_OTHER_MODES_DATA_RESPONSE),
+        (ENTITY_ID_2, SERVICE_TURN_OFF, MULTIPLE_DEVICES_DATA_RESPONSE),
+        (ENTITY_ID_1, SERVICE_TURN_ON, MULTIPLE_DEVICES_OTHER_MODES_DATA_RESPONSE),
+        (ENTITY_ID_4, SERVICE_TURN_OFF, MULTIPLE_DEVICES_DATA_RESPONSE),
+        (ENTITY_ID_4, SERVICE_TURN_ON, MULTIPLE_DEVICES_OTHER_MODES_DATA_RESPONSE),
     ],
     ids=["hot_water_tank_2_turn_off", "hot_water_tank_1_turn_on", "buffer_tank_turn_off", "buffer_tank_turn_on"],
 )
@@ -408,8 +408,8 @@ async def test_unchanged_state(
 ) -> None:
     """Test that a tank is not written if it is already turned on or off."""
     fake_api.responses = [
-        MULTIPLE_POSITIONS_RESPONSE,
-        get_multiple_position_fixed_data_response(),
+        MULTIPLE_DEVICES_RESPONSE,
+        get_multiple_devices_fixed_data_response(),
         response,
     ]
     await fake_api.setup_integration()
@@ -432,9 +432,9 @@ async def test_set_unchanged_target_temperature(
 ) -> None:
     """Test that the current target temperature of a hot water tank is not written again."""
     fake_api.responses = [
-        DEFAULT_POSITION_RESPONSE,
-        DEFAULT_POSITION_FIXED_DATA_RESPONSE,
-        get_single_position_data_response(hot_water_tank_target_temperature="51"),
+        SINGLE_DEVICE_RESPONSE,
+        SINGLE_DEVICE_FIXED_DATA_RESPONSE,
+        get_single_device_data_response(hot_water_tank_target_temperature="51"),
     ]
     await fake_api.setup_integration()
 
@@ -461,14 +461,14 @@ async def test_limits_after_update(
 ) -> None:
     """Test that a hot water tank uses the limits from the API once an update provides them."""
     fake_api.responses = [
-        DEFAULT_POSITION_RESPONSE,
-        DEFAULT_POSITION_FIXED_DATA_RESPONSE,
+        SINGLE_DEVICE_RESPONSE,
+        SINGLE_DEVICE_FIXED_DATA_RESPONSE,
         update_response(
-            get_single_position_data_response(),
+            get_single_device_data_response(),
             "APPL.CtrlAppl.sParam.hotWaterTank[0].param.normalSetTempMax.value",
             attributes={},
         ),
-        get_single_position_data_response(),
+        get_single_device_data_response(),
     ]
     await fake_api.setup_integration()
 
@@ -490,9 +490,9 @@ async def test_buffer_tank_sensor_not_in_use(
     """Test that a buffer tank uses the other temperature if the control unit reports the top sensor as not in use."""
     fake_api.message_ids = {"APPL.CtrlAppl.sParam.bufferTank[0].topTemp.state.msgId": 10}
     fake_api.responses = [
-        MULTIPLE_POSITIONS_RESPONSE,
-        get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITION_DATA_RESPONSE,
+        MULTIPLE_DEVICES_RESPONSE,
+        get_multiple_devices_fixed_data_response(),
+        MULTIPLE_DEVICES_DATA_RESPONSE,
     ]
     await fake_api.setup_integration()
 

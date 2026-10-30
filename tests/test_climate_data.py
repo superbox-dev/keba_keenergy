@@ -10,10 +10,10 @@ from keba_keenergy_api.enums import HeatingCircuitOperatingMode
 from keba_keenergy_api.enums import HeatingCircuitRequest
 from keba_keenergy_api.enums import HeatPumpState
 
-from tests.api_data import DEFAULT_POSITION_DATA_RESPONSE
 from tests.api_data import HEAT_CIRCUIT_COOL_REQUEST
 from tests.api_data import HEAT_CIRCUIT_HEAT_REQUEST
 from tests.api_data import HEAT_CIRCUIT_OPERATION_MODE
+from tests.api_data import SINGLE_DEVICE_DATA_RESPONSE
 from tests.api_data import replace_values
 from tests.api_data import update_response
 
@@ -32,7 +32,7 @@ def get_hvac_action_data_response(
     """Return the values of a setup with one device of each type, with the requests and the heat pump state."""
     return update_response(
         replace_values(
-            DEFAULT_POSITION_DATA_RESPONSE,
+            SINGLE_DEVICE_DATA_RESPONSE,
             (HEAT_CIRCUIT_OPERATION_MODE, "0", str(operating_mode.value)),
             (HEAT_CIRCUIT_HEAT_REQUEST, "0", str(heat_request.value)),
             (HEAT_CIRCUIT_COOL_REQUEST, "0", str(cool_request.value)),

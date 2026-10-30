@@ -20,10 +20,10 @@ from keba_keenergy_api.enums import HeatingCircuitType
 
 from tests import get_platform_states
 from tests.api_data import ENTITY_UPDATED_DATA_RESPONSE
-from tests.api_data import MULTIPLE_POSITION_DATA_RESPONSE
-from tests.api_data import MULTIPLE_POSITION_OTHER_MODES_DATA_RESPONSE
-from tests.api_data import MULTIPLE_POSITIONS_RESPONSE
-from tests.api_data import get_multiple_position_fixed_data_response
+from tests.api_data import MULTIPLE_DEVICES_DATA_RESPONSE
+from tests.api_data import MULTIPLE_DEVICES_OTHER_MODES_DATA_RESPONSE
+from tests.api_data import MULTIPLE_DEVICES_RESPONSE
+from tests.api_data import get_multiple_devices_fixed_data_response
 from tests.api_data import update_response
 
 if TYPE_CHECKING:
@@ -41,9 +41,9 @@ async def test_switches(
 ) -> None:
     """Test the states of all switch entities."""
     fake_api.responses = [
-        MULTIPLE_POSITIONS_RESPONSE,
-        get_multiple_position_fixed_data_response(has_passive_cooling="true"),
-        MULTIPLE_POSITION_DATA_RESPONSE,
+        MULTIPLE_DEVICES_RESPONSE,
+        get_multiple_devices_fixed_data_response(has_passive_cooling="true"),
+        MULTIPLE_DEVICES_DATA_RESPONSE,
     ]
     await fake_api.setup_integration()
 
@@ -56,12 +56,12 @@ async def test_switches(
     [
         (
             "switch.keba_keenergy_12345678_heat_pump_compressor_use_night_speed",
-            MULTIPLE_POSITION_OTHER_MODES_DATA_RESPONSE,
+            MULTIPLE_DEVICES_OTHER_MODES_DATA_RESPONSE,
             '[{"name": "APPL.CtrlAppl.sParam.heatpump[0].HeatPumpPowerCtrl.param.useDayNightSpeed", "value": "1"}]',
         ),
         (
             "switch.keba_keenergy_12345678_solar_circuit_priority_1_before_2_2",
-            MULTIPLE_POSITION_OTHER_MODES_DATA_RESPONSE,
+            MULTIPLE_DEVICES_OTHER_MODES_DATA_RESPONSE,
             (
                 '[{"name": "APPL.CtrlAppl.sParam.hmiRetainData.consumer1PrioritySolar[1]", "value": "1"}, '
                 '{"name": "APPL.CtrlAppl.sParam.genericHeat[2].param.priority", "value": "14"}]'
@@ -69,7 +69,7 @@ async def test_switches(
         ),
         (
             "switch.keba_keenergy_12345678_heat_circuit_use_heating_curve_1",
-            MULTIPLE_POSITION_DATA_RESPONSE,
+            MULTIPLE_DEVICES_DATA_RESPONSE,
             '[{"name": "APPL.CtrlAppl.sParam.heatCircuit[0].param.enableHeatCurveLinTab", "value": "1"}]',
         ),
         (
@@ -95,8 +95,8 @@ async def test_turn_on(
 ) -> None:
     """Test turning on a switch."""
     fake_api.responses = [
-        MULTIPLE_POSITIONS_RESPONSE,
-        get_multiple_position_fixed_data_response(),
+        MULTIPLE_DEVICES_RESPONSE,
+        get_multiple_devices_fixed_data_response(),
         response,
         # Read the API after the action call.
         response,
@@ -123,12 +123,12 @@ async def test_turn_on(
     [
         (
             "switch.keba_keenergy_12345678_heat_pump_compressor_use_night_speed",
-            MULTIPLE_POSITION_DATA_RESPONSE,
+            MULTIPLE_DEVICES_DATA_RESPONSE,
             '[{"name": "APPL.CtrlAppl.sParam.heatpump[0].HeatPumpPowerCtrl.param.useDayNightSpeed", "value": "0"}]',
         ),
         (
             "switch.keba_keenergy_12345678_solar_circuit_priority_1_before_2_2",
-            MULTIPLE_POSITION_DATA_RESPONSE,
+            MULTIPLE_DEVICES_DATA_RESPONSE,
             (
                 '[{"name": "APPL.CtrlAppl.sParam.hmiRetainData.consumer1PrioritySolar[1]", "value": "0"}, '
                 '{"name": "APPL.CtrlAppl.sParam.genericHeat[2].param.priority", "value": "15"}]'
@@ -147,8 +147,8 @@ async def test_turn_off(
 ) -> None:
     """Test turning off a switch."""
     fake_api.responses = [
-        MULTIPLE_POSITIONS_RESPONSE,
-        get_multiple_position_fixed_data_response(),
+        MULTIPLE_DEVICES_RESPONSE,
+        get_multiple_devices_fixed_data_response(),
         response,
         # Read the API after the action call.
         response,
@@ -173,8 +173,8 @@ async def test_turn_off(
 @pytest.mark.parametrize(
     ("service", "response"),
     [
-        (SERVICE_TURN_ON, MULTIPLE_POSITION_DATA_RESPONSE),
-        (SERVICE_TURN_OFF, MULTIPLE_POSITION_OTHER_MODES_DATA_RESPONSE),
+        (SERVICE_TURN_ON, MULTIPLE_DEVICES_DATA_RESPONSE),
+        (SERVICE_TURN_OFF, MULTIPLE_DEVICES_OTHER_MODES_DATA_RESPONSE),
     ],
     ids=["turn_on", "turn_off"],
 )
@@ -186,8 +186,8 @@ async def test_unchanged_state(
 ) -> None:
     """Test that a switch is not written if it already has the state."""
     fake_api.responses = [
-        MULTIPLE_POSITIONS_RESPONSE,
-        get_multiple_position_fixed_data_response(),
+        MULTIPLE_DEVICES_RESPONSE,
+        get_multiple_devices_fixed_data_response(),
         response,
     ]
     await fake_api.setup_integration()
@@ -211,13 +211,13 @@ async def test_heating_and_cooling_circuit_has_one_curve_switch(
 ) -> None:
     """Test that a heating and cooling circuit only has the heating curve switch, because both use one setting."""
     fake_api.responses = [
-        MULTIPLE_POSITIONS_RESPONSE,
+        MULTIPLE_DEVICES_RESPONSE,
         update_response(
-            get_multiple_position_fixed_data_response(),
+            get_multiple_devices_fixed_data_response(),
             "APPL.CtrlAppl.sParam.options.heatCircuit[1].type",
             value=str(HeatingCircuitType.HEATING_AND_COOLING.value),
         ),
-        MULTIPLE_POSITION_DATA_RESPONSE,
+        MULTIPLE_DEVICES_DATA_RESPONSE,
     ]
     await fake_api.setup_integration()
 

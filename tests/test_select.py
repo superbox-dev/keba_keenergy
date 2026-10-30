@@ -18,9 +18,11 @@ from homeassistant.exceptions import ServiceValidationError
 
 from tests import get_option_translations
 from tests import get_platform_states
-from tests.api_data import MULTIPLE_POSITION_DATA_RESPONSE
-from tests.api_data import MULTIPLE_POSITIONS_RESPONSE
-from tests.api_data import get_multiple_position_fixed_data_response
+from tests.api_data import HEATING_CURVES_RENAMED_RESPONSE
+from tests.api_data import MULTIPLE_DEVICES_DATA_RESPONSE
+from tests.api_data import MULTIPLE_DEVICES_RESPONSE
+from tests.api_data import get_multiple_devices_fixed_data_response
+from tests.test_select_data import HEATING_CURVE_ENTITY_ID
 from tests.test_select_data import HEATING_CURVE_SELECTS
 
 if TYPE_CHECKING:
@@ -38,9 +40,9 @@ async def test_selects(
 ) -> None:
     """Test the states and the translated options of all select entities, with cooling."""
     fake_api.responses = [
-        MULTIPLE_POSITIONS_RESPONSE,
-        get_multiple_position_fixed_data_response(has_passive_cooling="true"),
-        MULTIPLE_POSITION_DATA_RESPONSE,
+        MULTIPLE_DEVICES_RESPONSE,
+        get_multiple_devices_fixed_data_response(has_passive_cooling="true"),
+        MULTIPLE_DEVICES_DATA_RESPONSE,
     ]
     await fake_api.setup_integration()
 
@@ -60,9 +62,9 @@ async def test_selects_without_cooling(
 ) -> None:
     """Test the operating mode selects of a setup without cooling."""
     fake_api.responses = [
-        MULTIPLE_POSITIONS_RESPONSE,
-        get_multiple_position_fixed_data_response(has_passive_cooling="false", has_cooling_circuits=False),
-        MULTIPLE_POSITION_DATA_RESPONSE,
+        MULTIPLE_DEVICES_RESPONSE,
+        get_multiple_devices_fixed_data_response(has_passive_cooling="false", has_cooling_circuits=False),
+        MULTIPLE_DEVICES_DATA_RESPONSE,
     ]
     await fake_api.setup_integration()
 
@@ -136,11 +138,11 @@ async def test_select_option(
 ) -> None:
     """Test selecting an option of a select entity."""
     fake_api.responses = [
-        MULTIPLE_POSITIONS_RESPONSE,
-        get_multiple_position_fixed_data_response(has_passive_cooling="true"),
-        MULTIPLE_POSITION_DATA_RESPONSE,
+        MULTIPLE_DEVICES_RESPONSE,
+        get_multiple_devices_fixed_data_response(has_passive_cooling="true"),
+        MULTIPLE_DEVICES_DATA_RESPONSE,
         # Read the API after the action call.
-        MULTIPLE_POSITION_DATA_RESPONSE,
+        MULTIPLE_DEVICES_DATA_RESPONSE,
     ]
     await fake_api.setup_integration()
 
@@ -183,11 +185,11 @@ async def test_select_invalid_option(
 ) -> None:
     """Test selecting an invalid option of a select entity."""
     fake_api.responses = [
-        MULTIPLE_POSITIONS_RESPONSE,
-        get_multiple_position_fixed_data_response(has_passive_cooling="false", has_cooling_circuits=False),
-        MULTIPLE_POSITION_DATA_RESPONSE,
+        MULTIPLE_DEVICES_RESPONSE,
+        get_multiple_devices_fixed_data_response(has_passive_cooling="false", has_cooling_circuits=False),
+        MULTIPLE_DEVICES_DATA_RESPONSE,
         # Read the API after the action call.
-        MULTIPLE_POSITION_DATA_RESPONSE,
+        MULTIPLE_DEVICES_DATA_RESPONSE,
     ]
     await fake_api.setup_integration()
 
@@ -212,9 +214,9 @@ async def test_select_unchanged_option(
 ) -> None:
     """Test that the current option of a select entity is not written again."""
     fake_api.responses = [
-        MULTIPLE_POSITIONS_RESPONSE,
-        get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITION_DATA_RESPONSE,
+        MULTIPLE_DEVICES_RESPONSE,
+        get_multiple_devices_fixed_data_response(),
+        MULTIPLE_DEVICES_DATA_RESPONSE,
     ]
     await fake_api.setup_integration()
 
@@ -229,3 +231,30 @@ async def test_select_unchanged_option(
     )
 
     assert fake_api.write_requests() == []
+
+
+@pytest.mark.usefixtures("entity_registry_enabled_by_default")
+async def test_heating_curve_options_after_update(
+    hass: HomeAssistant,
+    fake_api: FakeKebaKeEnergyAPI,
+) -> None:
+    """Test that the heating curve select drops a heating curve renamed on the control unit with the next update."""
+    fake_api.responses = [
+        MULTIPLE_DEVICES_RESPONSE,
+        get_multiple_devices_fixed_data_response(),
+        MULTIPLE_DEVICES_DATA_RESPONSE,
+        MULTIPLE_DEVICES_DATA_RESPONSE,
+    ]
+    await fake_api.setup_integration()
+
+    state: State | None = hass.states.get(HEATING_CURVE_ENTITY_ID)
+    assert isinstance(state, State)
+    assert "HC1" in state.attributes["options"]
+
+    fake_api.heating_curves = HEATING_CURVES_RENAMED_RESPONSE
+    await fake_api.config_entry.runtime_data.async_refresh()
+
+    state = hass.states.get(HEATING_CURVE_ENTITY_ID)
+
+    assert isinstance(state, State)
+    assert "HC1" not in state.attributes["options"]

@@ -17,12 +17,12 @@ from homeassistant.helpers import device_registry as dr
 from homeassistant.helpers import entity_registry as er
 
 from custom_components.keba_keenergy.const import DOMAIN
-from tests.api_data import DEFAULT_POSITION_DATA_RESPONSE
-from tests.api_data import DEFAULT_POSITION_FIXED_DATA_RESPONSE
-from tests.api_data import DEFAULT_POSITION_RESPONSE
-from tests.api_data import MULTIPLE_POSITION_DATA_RESPONSE
-from tests.api_data import MULTIPLE_POSITIONS_RESPONSE
-from tests.api_data import get_multiple_position_fixed_data_response
+from tests.api_data import MULTIPLE_DEVICES_DATA_RESPONSE
+from tests.api_data import MULTIPLE_DEVICES_RESPONSE
+from tests.api_data import SINGLE_DEVICE_DATA_RESPONSE
+from tests.api_data import SINGLE_DEVICE_FIXED_DATA_RESPONSE
+from tests.api_data import SINGLE_DEVICE_RESPONSE
+from tests.api_data import get_multiple_devices_fixed_data_response
 
 if TYPE_CHECKING:
     from homeassistant.core import HomeAssistant
@@ -41,9 +41,9 @@ async def test_load_entry(
 ) -> None:
     """Test setting up the integration."""
     fake_api.responses = [
-        MULTIPLE_POSITIONS_RESPONSE,
-        get_multiple_position_fixed_data_response(has_passive_cooling="true"),
-        MULTIPLE_POSITION_DATA_RESPONSE,
+        MULTIPLE_DEVICES_RESPONSE,
+        get_multiple_devices_fixed_data_response(has_passive_cooling="true"),
+        MULTIPLE_DEVICES_DATA_RESPONSE,
     ]
     await fake_api.setup_integration()
 
@@ -76,9 +76,9 @@ async def test_unload_entry(
 ) -> None:
     """Test unloading the integration."""
     fake_api.responses = [
-        MULTIPLE_POSITIONS_RESPONSE,
-        get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITION_DATA_RESPONSE,
+        MULTIPLE_DEVICES_RESPONSE,
+        get_multiple_devices_fixed_data_response(),
+        MULTIPLE_DEVICES_DATA_RESPONSE,
     ]
     await fake_api.setup_integration()
 
@@ -91,17 +91,17 @@ async def test_unload_entry(
     "response",
     [
         [
-            MULTIPLE_POSITIONS_RESPONSE,
-            get_multiple_position_fixed_data_response(has_passive_cooling="true"),
-            MULTIPLE_POSITION_DATA_RESPONSE,
+            MULTIPLE_DEVICES_RESPONSE,
+            get_multiple_devices_fixed_data_response(has_passive_cooling="true"),
+            MULTIPLE_DEVICES_DATA_RESPONSE,
         ],
         [
-            DEFAULT_POSITION_RESPONSE,
-            DEFAULT_POSITION_FIXED_DATA_RESPONSE,
-            DEFAULT_POSITION_DATA_RESPONSE,
+            SINGLE_DEVICE_RESPONSE,
+            SINGLE_DEVICE_FIXED_DATA_RESPONSE,
+            SINGLE_DEVICE_DATA_RESPONSE,
         ],
     ],
-    ids=["multiple_positions", "default_position"],
+    ids=["multiple_devices", "single_device"],
 )
 @pytest.mark.usefixtures("entity_registry_enabled_by_default")
 async def test_devices(
@@ -146,9 +146,9 @@ async def test_remove_stale_devices(
         device_id=stale_device.id,
     )
     fake_api.responses = [
-        MULTIPLE_POSITIONS_RESPONSE,
-        get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITION_DATA_RESPONSE,
+        MULTIPLE_DEVICES_RESPONSE,
+        get_multiple_devices_fixed_data_response(),
+        MULTIPLE_DEVICES_DATA_RESPONSE,
     ]
     fake_api.register_requests(config_entry.data[CONF_HOST], ssl=config_entry.data[CONF_SSL])
     assert await hass.config_entries.async_setup(config_entry.entry_id)

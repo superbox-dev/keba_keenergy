@@ -36,8 +36,8 @@ from keba_keenergy_api.enums import SwitchValvePosition
 from keba_keenergy_api.enums import SystemOperatingMode
 
 from .const import ATTR_WRITES
+from .const import CURVE_KEYS
 from .const import DOMAIN
-from .const import HEATING_CURVE_KEY
 from .const import MixerPosition
 from .const import SectionPrefix
 from .entity import KebaKeEnergyBaseEntity
@@ -150,7 +150,7 @@ class KebaKeEnergySensorEntity(KebaKeEnergyEntity, SensorEntity):
         if raw_value is not None:
             attributes["raw_value"] = raw_value
 
-        if self._data_key == HEATING_CURVE_KEY and isinstance(reading.value, str):
+        if self._data_key in CURVE_KEYS and isinstance(reading.value, str):
             curve_table: CurveTable | None = self.coordinator.curve_tables.get(reading.value)
             attributes["points"] = [
                 {"outdoor": point.outdoor, "flow": round(point.flow, 2)}

@@ -22,9 +22,9 @@ from homeassistant.helpers import entity_registry as er
 from custom_components.keba_keenergy.const import DOMAIN
 from tests import get_option_translations
 from tests import get_platform_states
-from tests.api_data import MULTIPLE_POSITION_DATA_RESPONSE
-from tests.api_data import MULTIPLE_POSITIONS_RESPONSE
-from tests.api_data import get_multiple_position_fixed_data_response
+from tests.api_data import MULTIPLE_DEVICES_DATA_RESPONSE
+from tests.api_data import MULTIPLE_DEVICES_RESPONSE
+from tests.api_data import get_multiple_devices_fixed_data_response
 from tests.api_data import update_response
 
 if TYPE_CHECKING:
@@ -44,9 +44,9 @@ async def test_sensors(
 ) -> None:
     """Test the states of all sensors, their displayed values and the translated options of the enum sensors."""
     fake_api.responses = [
-        MULTIPLE_POSITIONS_RESPONSE,
-        get_multiple_position_fixed_data_response(has_passive_cooling="true"),
-        MULTIPLE_POSITION_DATA_RESPONSE,
+        MULTIPLE_DEVICES_RESPONSE,
+        get_multiple_devices_fixed_data_response(has_passive_cooling="true"),
+        MULTIPLE_DEVICES_DATA_RESPONSE,
     ]
     await fake_api.setup_integration()
 
@@ -90,9 +90,9 @@ async def test_converted_sensor_keeps_registered_unit(
         unit_of_measurement=expected[1],
     )
     fake_api.responses = [
-        MULTIPLE_POSITIONS_RESPONSE,
-        get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITION_DATA_RESPONSE,
+        MULTIPLE_DEVICES_RESPONSE,
+        get_multiple_devices_fixed_data_response(),
+        MULTIPLE_DEVICES_DATA_RESPONSE,
     ]
     fake_api.register_requests(config_entry.data[CONF_HOST], ssl=config_entry.data[CONF_SSL])
     assert await hass.config_entries.async_setup(config_entry.entry_id)
@@ -138,9 +138,9 @@ async def test_sensor_not_in_use(
     """Test that a sensor is unknown if the control unit reports it as not in use."""
     fake_api.message_ids = {message_id: 50}
     fake_api.responses = [
-        MULTIPLE_POSITIONS_RESPONSE,
-        get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITION_DATA_RESPONSE,
+        MULTIPLE_DEVICES_RESPONSE,
+        get_multiple_devices_fixed_data_response(),
+        MULTIPLE_DEVICES_DATA_RESPONSE,
     ]
     await fake_api.setup_integration()
 
@@ -175,9 +175,9 @@ async def test_sensor_deactivated(
 ) -> None:
     """Test that the entity of a deactivated sensor is removed and no longer created."""
     responses: list[list[dict[str, Any]]] = [
-        MULTIPLE_POSITIONS_RESPONSE,
-        get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITION_DATA_RESPONSE,
+        MULTIPLE_DEVICES_RESPONSE,
+        get_multiple_devices_fixed_data_response(),
+        MULTIPLE_DEVICES_DATA_RESPONSE,
     ]
     fake_api.responses = list(responses)
     await fake_api.setup_integration()
@@ -222,9 +222,9 @@ async def test_sensor_enum_state(
     """Test the enum sensor states that are only reported in rare situations."""
     name, raw_value = value
     fake_api.responses = [
-        MULTIPLE_POSITIONS_RESPONSE,
-        get_multiple_position_fixed_data_response(),
-        update_response(MULTIPLE_POSITION_DATA_RESPONSE, name, value=raw_value),
+        MULTIPLE_DEVICES_RESPONSE,
+        get_multiple_devices_fixed_data_response(),
+        update_response(MULTIPLE_DEVICES_DATA_RESPONSE, name, value=raw_value),
     ]
     await fake_api.setup_integration()
 
@@ -261,9 +261,9 @@ async def test_sensor_raw_value(
     """Test that `raw_value` is the value read, also for enum members with several values and mixer positions."""
     name, raw_value = value
     fake_api.responses = [
-        MULTIPLE_POSITIONS_RESPONSE,
-        get_multiple_position_fixed_data_response(),
-        update_response(MULTIPLE_POSITION_DATA_RESPONSE, name, value=raw_value),
+        MULTIPLE_DEVICES_RESPONSE,
+        get_multiple_devices_fixed_data_response(),
+        update_response(MULTIPLE_DEVICES_DATA_RESPONSE, name, value=raw_value),
     ]
     await fake_api.setup_integration()
 

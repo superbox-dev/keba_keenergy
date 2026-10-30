@@ -3657,17 +3657,6 @@
         ]),
       }),
       'system': dict({
-        'has_outdoor_temperature': list([
-          dict({
-            'consumer_number': None,
-            'device_number': 1,
-            'lower_limit': None,
-            'message_id': None,
-            'raw_value': 'true',
-            'upper_limit': None,
-            'value': True,
-          }),
-        ]),
         'has_photovoltaics': list([
           dict({
             'consumer_number': None,

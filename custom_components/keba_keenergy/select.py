@@ -163,9 +163,9 @@ class KebaKeEnergyExternalHeatSourceOperatingModeSelectEntity(KebaKeEnergySelect
 class KebaKeEnergyHeatingCircuitHeatingCurveSelectEntity(KebaKeEnergySelectEntity):
     """KEBA KeEnergy heating curve select entity."""
 
-    @cached_property
+    @property
     def options(self) -> list[str]:
-        """Return a set of selectable options."""
+        """Return the names of the heating curves, read with every update of the heating circuits."""
         return list(self.coordinator.available_heating_curves)
 
 

@@ -137,7 +137,8 @@ provide are not created. Changes are written to the control unit, see [Known lim
 - **Switches**: use PV surplus, use heating curve table, use cooling curve table (only for cooling circuits, a
   heating and cooling circuit uses one setting for both and only has **Use heating curve table**)
 - **Sensors**: room temperature and humidity, dew point, flow and return flow temperatures, mixer, pump speed,
-  heat and cool request, the current setpoints
+  heat and cool request, the current setpoints, heating and cooling curve in use (the attribute `points` shows the
+  points of the curve)
 - **Binary sensor**: pump
 
 ### Hot water tank and buffer tank
@@ -175,7 +176,8 @@ A date with time, e.g. `2026-01-01T08:00:00`, is accepted too, only the date is 
 
 ### `keba_keenergy.set_heating_curve_points`
 
-Sets the points of a heating curve. If the heating curve already has these points, nothing is written.
+Sets the points of a heating curve, or of a cooling curve, which are in the same pool on the control unit. If the
+curve already has these points, nothing is written.
 
 | Field           | Description                                                                                        |
 |-----------------|----------------------------------------------------------------------------------------------------|
@@ -311,11 +313,11 @@ The climate and water heater entities are still created, but leave out the curre
   Avoid automations that change values very often. If more than 30 changes are written to a control unit in a week,
   Home Assistant shows a repair issue for this control unit. See
   [Issue #23](https://github.com/superbox-dev/keba_keenergy/issues/23).
-- The diagnostic sensor **Write operations this week** of the control unit counts the write operations since Monday.
-  Its attribute `writes` shows how often each value was written, e.g. `heat_circuit_1.target_temperature_offset`,
-  `system.operating_mode` or `heating_curve_points.HC1`. A change of several values at once (e.g. the away date range
-  of all heating circuits) counts once in the sensor, but once for each value in `writes`. Switching a hot water tank
-  to heat up is not counted.
+- The diagnostic sensor **Write operations this week** of the control unit counts the write operations since Monday
+  and resets at midnight of a new week. Its attribute `writes` shows how often each value was written, e.g.
+  `heat_circuit_1.target_temperature_offset`, `system.operating_mode` or `heating_curve_points.HC1`. A change of
+  several values at once (e.g. the away date range of all heating circuits) counts once in the sensor, but once for
+  each value in `writes`. Switching a hot water tank to heat up is not counted.
 - The diagnostic sensor **Flash erase counter** of the control unit (disabled by default) shows the long-term wear of
   the flash memory, also from changes in the Web HMI or on the display. It is the highest erase count of a flash
   block and rises slowly, not with every write operation.
