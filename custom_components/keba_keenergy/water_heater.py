@@ -24,6 +24,7 @@ from .const import DOMAIN
 from .const import HOT_WATER_TANK_STATE_TO_HA
 from .const import SectionPrefix
 from .entity import KebaKeEnergyBaseEntity
+from .entity import KebaKeEnergyDebouncedEntity
 
 if TYPE_CHECKING:
     from homeassistant.core import HomeAssistant
@@ -63,7 +64,7 @@ class KebaKeEnergyWaterHeaterTankEntity(KebaKeEnergyBaseEntity, WaterHeaterEntit
         return self.get_float("target_temperature")
 
 
-class KebaKeEnergyHotWaterTankEntity(KebaKeEnergyWaterHeaterTankEntity, WaterHeaterEntity):
+class KebaKeEnergyHotWaterTankEntity(KebaKeEnergyDebouncedEntity, KebaKeEnergyWaterHeaterTankEntity, WaterHeaterEntity):
     """KEBA KeEnergy water heat entity for hot water tank."""
 
     _attr_supported_features: WaterHeaterEntityFeature = (
@@ -71,6 +72,7 @@ class KebaKeEnergyHotWaterTankEntity(KebaKeEnergyWaterHeaterTankEntity, WaterHea
         | WaterHeaterEntityFeature.OPERATION_MODE
         | WaterHeaterEntityFeature.TARGET_TEMPERATURE
     )
+    _debounced_key: str = "target_temperature"
 
     def __init__(
         self,
@@ -84,8 +86,6 @@ class KebaKeEnergyHotWaterTankEntity(KebaKeEnergyWaterHeaterTankEntity, WaterHea
         self._attr_operation_list = list(HOT_WATER_TANK_STATE_TO_HA.values())
 
         self.entity_id: str = f"{WATER_HEATER_DOMAIN}.{DOMAIN}_{self._attr_unique_id}"
-
-        self._pending_key = "target_temperature"
 
     @property
     def current_temperature(self) -> float | None:

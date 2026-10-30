@@ -19,6 +19,7 @@ from homeassistant.const import UnitOfTemperature
 from homeassistant.const import UnitOfTime
 
 from .const import SectionPrefix
+from .entity import KebaKeEnergyDebouncedEntity
 from .entity import KebaKeEnergyEntity
 from .entity import KebaKeEnergyEntityDescription
 from .entity import async_setup_entities
@@ -28,7 +29,6 @@ if TYPE_CHECKING:
     from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
     from .coordinator import KebaKeEnergyConfigEntry
-    from .coordinator import KebaKeEnergyDataUpdateCoordinator
 
 
 _LOGGER: Final = logging.getLogger(__name__)
@@ -46,23 +46,15 @@ class KebaKeEnergyNumberEntityDescription(
     scale: float
 
 
-class KebaKeEnergyNumberEntity(KebaKeEnergyEntity, NumberEntity):
+class KebaKeEnergyNumberEntity(KebaKeEnergyDebouncedEntity, KebaKeEnergyEntity, NumberEntity):
     """KEBA KeEnergy number entity."""
 
     entity_description: KebaKeEnergyNumberEntityDescription
     _platform_domain: str = NUMBER_DOMAIN
 
-    def __init__(
-        self,
-        coordinator: KebaKeEnergyDataUpdateCoordinator,
-        description: KebaKeEnergyNumberEntityDescription,
-        device_type: str,
-        index: int | None,
-    ) -> None:
-        """Initialize the entity."""
-        super().__init__(coordinator, description=description, device_type=device_type, index=index)
-
-        self._pending_key = self.entity_description.key
+    @property
+    def _debounced_key(self) -> str:
+        return self.entity_description.key
 
     @property
     def native_min_value(self) -> float:

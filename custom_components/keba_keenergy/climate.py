@@ -32,7 +32,7 @@ from .const import DOMAIN
 from .const import HEAT_PUMP_STATE_TO_HVAC_ACTION
 from .const import HEATING_CIRCUIT_PRESET_TO_HA
 from .const import SectionPrefix
-from .entity import KebaKeEnergyBaseEntity
+from .entity import KebaKeEnergyDebouncedEntity
 
 if TYPE_CHECKING:
     from collections.abc import Mapping
@@ -50,7 +50,7 @@ _LOGGER: Final = logging.getLogger(__name__)
 PARALLEL_UPDATES: Final[int] = 0
 
 
-class KebaKeEnergyClimateEntity(KebaKeEnergyBaseEntity, ClimateEntity):
+class KebaKeEnergyClimateEntity(KebaKeEnergyDebouncedEntity, ClimateEntity):
     """KEBA KeEnergy climate entity."""
 
     _attr_supported_features: ClimateEntityFeature = (
@@ -63,6 +63,7 @@ class KebaKeEnergyClimateEntity(KebaKeEnergyBaseEntity, ClimateEntity):
     _attr_target_temperature_step: float = 0.5
     _attr_temperature_unit: str = UnitOfTemperature.CELSIUS
     _attr_name = None
+    _debounced_key: str = "target_temperature_offset"
 
     def __init__(
         self,
@@ -77,8 +78,6 @@ class KebaKeEnergyClimateEntity(KebaKeEnergyBaseEntity, ClimateEntity):
         super().__init__(coordinator, device_type, index)
 
         self.entity_id = f"{CLIMATE_DOMAIN}.{DOMAIN}_{self._attr_unique_id}"
-
-        self._pending_key = "target_temperature_offset"
 
     @cached_property
     def hvac_modes(self) -> list[HVACMode]:

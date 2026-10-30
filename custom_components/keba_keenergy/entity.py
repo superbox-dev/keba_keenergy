@@ -80,10 +80,6 @@ class KebaKeEnergyBaseEntity(
 
         self._attr_unique_id: str | None = self._build_unique_id()
 
-        self._async_call_later: CALLBACK_TYPE | None = None
-        self._pending_value: float | None = None
-        self._pending_key: str = ""
-
     def _build_unique_id(self, *parts: str) -> str:
         """Return `<entry unique_id>[_<part>...][_<value_index + 1>][_<index + 1>]`."""
         unique_id: str = "_".join((str(self.coordinator.config_entry.unique_id), *parts))
@@ -171,14 +167,6 @@ class KebaKeEnergyBaseEntity(
             "device_number": f" {self.device_number}" if self.device_number else "",
         }
 
-    async def async_will_remove_from_hass(self) -> None:
-        """Cancel a pending debounced write when the entity is removed."""
-        if self._async_call_later:
-            self._async_call_later()
-            self._async_call_later = None
-
-        await super().async_will_remove_from_hass()
-
     def get_reading(self, key: str, /) -> Reading | None:
         """Get the reading of the entity from the coordinator data, or None if the sensor is not in use."""
         if not self.coordinator.is_sensor_in_use(self.device_type, key, index=self.index, value_index=self.value_index):
@@ -252,6 +240,28 @@ class KebaKeEnergyBaseEntity(
             )
             raise
 
+    @staticmethod
+    def _round_float32(value: float, /) -> float:
+        """Round a value to the significant digits of a Float32, the Web HMI returns `0.8` as `0.80000001`."""
+        return float(f"{value:.{FLOAT32_SIGNIFICANT_DIGITS}g}")
+
+
+class KebaKeEnergyDebouncedEntity(KebaKeEnergyBaseEntity):
+    """KEBA KeEnergy entity that writes a fast-changing value debounced, to limit the writes to the flash."""
+
+    # Key of the value that is written debounced.
+    _debounced_key: str
+    _async_call_later: CALLBACK_TYPE | None = None
+    _pending_value: float | None = None
+
+    async def async_will_remove_from_hass(self) -> None:
+        """Cancel a pending debounced write when the entity is removed."""
+        if self._async_call_later:
+            self._async_call_later()
+            self._async_call_later = None
+
+        await super().async_will_remove_from_hass()
+
     def _schedule_debounced_write(self, value: float | None, /) -> None:
         """Write the value after `FLASH_WRITE_DELAY`, a new value restarts the delay.
 
@@ -261,7 +271,7 @@ class KebaKeEnergyBaseEntity(
             return
 
         # The API only writes integers to integer values, e.g. a runtime in seconds.
-        value_type: type = self.coordinator.get_endpoint(self.device_type, self._pending_key).value.value_type
+        value_type: type = self.coordinator.get_endpoint(self.device_type, self._debounced_key).value.value_type
         self._pending_value = round(value) if value_type is int else self._round_float32(value)
 
         if self._async_call_later:
@@ -276,26 +286,21 @@ class KebaKeEnergyBaseEntity(
             ),
         )
 
-    @staticmethod
-    def _round_float32(value: float, /) -> float:
-        """Round a value to the significant digits of a Float32, the Web HMI returns `0.8` as `0.80000001`."""
-        return float(f"{value:.{FLOAT32_SIGNIFICANT_DIGITS}g}")
-
     async def _async_debounced_write_data(self, _: datetime) -> None:
         """Write data (debounced) to the KEBA KeEnergy API."""
         self._async_call_later = None
 
-        if self._pending_key and self._pending_value is not None and self._pending_value != self._get_current_value():
+        if self._pending_value is not None and self._pending_value != self._get_current_value():
             try:
-                await self._async_write_data(self._pending_value, key=self._pending_key)
+                await self._async_write_data(self._pending_value, key=self._debounced_key)
             except HomeAssistantError as error:
                 # No caller gets the error of a debounced write, the entity already shows the previous value again.
                 _LOGGER.warning("Failed to write the value of %s: %s", self.entity_id, error)
 
     def _get_current_value(self) -> float | None:
-        """Return the current value of the pending key, a float rounded to the significant digits of a Float32."""
-        value: float | None = self.get_typed_value(self._pending_key, float)
-        return self.get_float(self._pending_key) if value is None else self._round_float32(value)
+        """Return the current value of the debounced key, a float rounded to the significant digits of a Float32."""
+        value: float | None = self.get_typed_value(self._debounced_key, float)
+        return self.get_float(self._debounced_key) if value is None else self._round_float32(value)
 
     def _get_debounced_value(self) -> float | None:
         """Return the value that waits for the debounced write, otherwise the current value."""
