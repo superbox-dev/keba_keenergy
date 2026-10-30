@@ -68,14 +68,13 @@ class KebaKeEnergyClimateEntity(KebaKeEnergyBaseEntity, ClimateEntity):
         self,
         coordinator: KebaKeEnergyDataUpdateCoordinator,
         description: ClimateEntityDescription,
-        entry: KebaKeEnergyConfigEntry,
         device_type: str,
         index: int | None,
     ) -> None:
         """Initialize KEBA KeEnergy climate entity."""
         self.entity_description = description
 
-        super().__init__(coordinator, entry, device_type, index)
+        super().__init__(coordinator, device_type, index)
 
         self.entity_id = f"{CLIMATE_DOMAIN}.{DOMAIN}_{self._attr_unique_id}"
 
@@ -245,7 +244,6 @@ class KebaKeEnergyClimateEntity(KebaKeEnergyBaseEntity, ClimateEntity):
             await self._async_write_data(
                 operating_mode_status,
                 key="operating_mode",
-                device_numbers=self.device_numbers,
             )
 
     async def _async_set_away_date_range(self, preset_mode: str, /) -> None:
@@ -280,7 +278,6 @@ class KebaKeEnergyClimateEntity(KebaKeEnergyBaseEntity, ClimateEntity):
                 await self._async_write_data(
                     operating_mode,
                     key="operating_mode",
-                    device_numbers=self.device_numbers,
                 )
 
     async def async_set_temperature(self, **kwargs: object) -> None:
@@ -310,7 +307,6 @@ async def async_setup_entry(
                 key="heat_circuit",
                 translation_key="heat_circuit",
             ),
-            entry=entry,
             device_type=SectionPrefix.HEAT_CIRCUIT.value,
             index=index if heat_circuit_numbers > 1 else None,
         )

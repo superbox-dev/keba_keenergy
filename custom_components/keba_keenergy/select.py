@@ -26,7 +26,7 @@ from .const import DOMAIN
 from .const import SectionPrefix
 from .entity import KebaKeEnergyEntity
 from .entity import KebaKeEnergyEntityDescription
-from .entity import _async_setup_entities
+from .entity import async_setup_entities
 from .legacy import get_member
 from .legacy import get_state
 from .legacy import get_states
@@ -67,14 +67,13 @@ class KebaKeEnergySelectEntity(KebaKeEnergyEntity, SelectEntity):
         self,
         coordinator: KebaKeEnergyDataUpdateCoordinator,
         description: KebaKeEnergySelectEntityDescription,
-        entry: KebaKeEnergyConfigEntry,
         device_type: str,
         index: int | None,
     ) -> None:
         """Initialize the entity."""
         self.entity_description = description
 
-        super().__init__(coordinator, entry=entry, device_type=device_type, index=index)
+        super().__init__(coordinator, device_type=device_type, index=index)
         self.entity_id: str = f"{SELECT_DOMAIN}.{DOMAIN}_{self._attr_unique_id}"
 
     @cached_property
@@ -100,7 +99,6 @@ class KebaKeEnergySelectEntity(KebaKeEnergyEntity, SelectEntity):
             await self._async_write_data(
                 value,
                 key=self.entity_description.key,
-                device_numbers=self.device_numbers,
             )
 
 
@@ -269,7 +267,7 @@ async def async_setup_entry(
     async_add_entities: AddEntitiesCallback,
 ) -> None:
     """Set up KEBA KeEnergy selects from a config entry."""
-    _async_setup_entities(
+    async_setup_entities(
         entry,
         async_add_entities,
         SELECT_TYPES,

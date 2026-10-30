@@ -67,14 +67,12 @@ class KebaKeEnergyBaseEntity(
     def __init__(
         self,
         coordinator: KebaKeEnergyDataUpdateCoordinator,
-        entry: KebaKeEnergyConfigEntry,
         device_type: str,
         index: int | None,
         key_index: int | None = None,
     ) -> None:
         """Initialize the KEBA KeEnergy entity."""
         super().__init__(coordinator)
-        self.entry: KebaKeEnergyConfigEntry = entry
         self.device_type: str = device_type
         self.index: int | None = index
         self.key_index: int | None = key_index
@@ -87,7 +85,7 @@ class KebaKeEnergyBaseEntity(
 
     def _build_unique_id(self, *parts: str) -> str:
         """Return `<entry unique_id>[_<part>...][_<key_index + 1>][_<index + 1>]`."""
-        unique_id: str = "_".join((str(self.entry.unique_id), *parts))
+        unique_id: str = "_".join((str(self.coordinator.config_entry.unique_id), *parts))
 
         if self.key_index is not None:
             unique_id = f"{unique_id}_{self.key_index + 1}"
@@ -104,18 +102,13 @@ class KebaKeEnergyBaseEntity(
 
     @property
     def is_system_device(self) -> bool:
-        """Return True if the entity is part of a KEBA KeEnergy control device else False."""
+        """Return True if the entity is part of the control unit else False."""
         return self.device_type == SectionPrefix.SYSTEM
 
     @property
     def is_heat_pump(self) -> bool:
         """Return True if the entity is part of a heat pump else False."""
         return self.device_type == SectionPrefix.HEAT_PUMP
-
-    @property
-    def device_numbers(self) -> int | None:
-        """Return the number of devices of the device type, or None for the control unit."""
-        return None if self.is_system_device else self.coordinator.device_count(self.device_type)
 
     @cached_property
     def device_identifier(self) -> str:
@@ -125,37 +118,34 @@ class KebaKeEnergyBaseEntity(
     @cached_property
     def device_manufacturer(self) -> str | None:
         """Return the device manufacturer."""
-        _manufacturer: str | None = None
-
         if self.is_system_device:
-            _manufacturer = MANUFACTURER
-        elif self.is_heat_pump:
-            if self.coordinator.device_name.endswith("MTec"):
-                _manufacturer = MANUFACTURER_MTEC
-            elif self.coordinator.device_name.startswith("Bartl"):
-                _manufacturer = MANUFACTURER_INO
+            return MANUFACTURER
 
-        return _manufacturer
+        if self.is_heat_pump:
+            if self.coordinator.device_name.endswith("MTec"):
+                return MANUFACTURER_MTEC
+
+            if self.coordinator.device_name.startswith("Bartl"):
+                return MANUFACTURER_INO
+
+        return None
 
     @cached_property
     def device_model(self) -> str | None:
         """Return the device model."""
-        _device_model: str | None = None
-
-        # Add the model if we know it. We only know the model from the
-        # KEBA KeEnergy control device and from the heat pump device.
-        # We don't have model info from the hot water tank or the heat circuit.
+        # Only the control unit and the heat pumps report a model, the other devices have none.
         if self.is_system_device:
-            _device_model = self.coordinator.device_model
-        elif self.is_heat_pump:
-            _device_model = self.coordinator.heat_pump_names[self.index or 0]
+            return self.coordinator.device_model
 
-        return _device_model
+        if self.is_heat_pump:
+            return self.coordinator.heat_pump_names[self.index or 0]
+
+        return None
 
     @property
     def device_info(self) -> DeviceInfo:
         """Return updated device specific attributes."""
-        _device_info: DeviceInfo = DeviceInfo(
+        device_info: DeviceInfo = DeviceInfo(
             configuration_url=self.coordinator.configuration_url,
             identifiers={(DOMAIN, self.device_identifier)},
             model=self.device_model,
@@ -166,9 +156,9 @@ class KebaKeEnergyBaseEntity(
         )
 
         if not self.is_system_device:
-            _device_info["via_device_id"] = self.coordinator.control_unit_device_id
+            device_info["via_device_id"] = self.coordinator.control_unit_device_id
 
-        return _device_info
+        return device_info
 
     @cached_property
     def _translation_key(self) -> str | None:
@@ -221,19 +211,19 @@ class KebaKeEnergyBaseEntity(
         /,
         *,
         key: str,
-        device_numbers: int | None = None,
         ignore_weekly_write_count: bool = False,
     ) -> None:
         """Write data to the KEBA KeEnergy API."""
-        current_index: int = self.index or 0
-        _range: int = device_numbers or 1
+        value_index: int = self.index or 0
+        # One value per device, the control unit has no device count and gets one value.
+        value_count: int = self.coordinator.device_count(self.device_type) or 1
 
         if self.key_index is not None:
             quantity: int = self.coordinator.get_endpoint(self.device_type, key).value.quantity
-            current_index = current_index * quantity + self.key_index
-            _range = _range * quantity
+            value_index = value_index * quantity + self.key_index
+            value_count = value_count * quantity
 
-        values: list[WriteValue | None] = [value if index == current_index else None for index in range(_range)]
+        values: list[WriteValue | None] = [value if index == value_index else None for index in range(value_count)]
 
         previous_value: Value = self.coordinator.async_set_local_value(
             value,
@@ -296,11 +286,7 @@ class KebaKeEnergyBaseEntity(
 
         if self._pending_key and self._pending_value is not None and self._pending_value != self._get_current_value():
             try:
-                await self._async_write_data(
-                    self._pending_value,
-                    key=self._pending_key,
-                    device_numbers=self.device_numbers,
-                )
+                await self._async_write_data(self._pending_value, key=self._pending_key)
             except HomeAssistantError as error:
                 # No caller gets the error of a debounced write, the entity already shows the previous value again.
                 _LOGGER.warning("Failed to write the value of %s: %s", self.entity_id, error)
@@ -319,28 +305,27 @@ class KebaKeEnergyBaseEntity(
 
 
 class KebaKeEnergyEntity(KebaKeEnergyBaseEntity):
-    """KEBA KeEnergy base extended entity."""
+    """KEBA KeEnergy entity with an entity description."""
 
     def __init__(
         self,
         coordinator: KebaKeEnergyDataUpdateCoordinator,
-        entry: KebaKeEnergyConfigEntry,
         device_type: str,
         index: int | None,
         key_index: int | None = None,
     ) -> None:
-        """Initialize the KEBA KeEnergy extended entity."""
-        super().__init__(coordinator, entry=entry, device_type=device_type, index=index, key_index=key_index)
+        """Initialize the KEBA KeEnergy entity."""
+        super().__init__(coordinator, device_type=device_type, index=index, key_index=key_index)
 
-        self._attr_unique_id: str | None = self.get_unique_id(self.entity_description.key)
+        self._attr_unique_id: str | None = self._build_key_unique_id(self.entity_description.key)
 
-    def get_unique_id(self, key: str, /) -> str | None:
-        """Generate unique id."""
+    def _build_key_unique_id(self, key: str, /) -> str:
+        """Return the unique ID of the key, with the device type except for the control unit."""
         return self._build_unique_id(key) if self.is_system_device else self._build_unique_id(self.device_type, key)
 
 
 @callback
-def _async_setup_entities(
+def async_setup_entities(
     entry: KebaKeEnergyConfigEntry,
     async_add_entities: AddEntitiesCallback,
     entity_types: dict[str, tuple[Any, ...]],
@@ -361,9 +346,9 @@ def _async_setup_entities(
                     continue
 
                 quantity: int = coordinator.get_endpoint(device_type, key).value.quantity
-                device_numbers: int = len(readings) // quantity
+                device_count: int = len(readings) // quantity
 
-                for index in range(device_numbers):
+                for index in range(device_count):
                     if description.condition is not None and not description.condition(coordinator, index):
                         _LOGGER.debug(
                             'Skip %s with key "%s" (index: %s)',
@@ -377,9 +362,8 @@ def _async_setup_entities(
                     entity: Any = cls(
                         coordinator=coordinator,
                         description=description,
-                        entry=entry,
                         device_type=device_type,
-                        index=index if device_numbers > 1 else None,
+                        index=index if device_count > 1 else None,
                     )
 
                     # A deactivated sensor is not configured on the control unit, the Web HMI hides it as well.

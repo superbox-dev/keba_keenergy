@@ -19,7 +19,7 @@ from .const import DOMAIN
 from .const import SectionPrefix
 from .entity import KebaKeEnergyEntity
 from .entity import KebaKeEnergyEntityDescription
-from .entity import _async_setup_entities
+from .entity import async_setup_entities
 
 if TYPE_CHECKING:
     from homeassistant.core import HomeAssistant
@@ -48,15 +48,14 @@ class KebaKeEnergySwitchEntity(KebaKeEnergyEntity, SwitchEntity):
         self,
         coordinator: KebaKeEnergyDataUpdateCoordinator,
         description: KebaKeEnergySwitchEntityDescription,
-        entry: KebaKeEnergyConfigEntry,
         device_type: str,
         index: int | None,
     ) -> None:
         """Initialize the entity."""
         self.entity_description: KebaKeEnergySwitchEntityDescription = description
-        super().__init__(coordinator, entry=entry, device_type=device_type, index=index)
+        super().__init__(coordinator, device_type=device_type, index=index)
 
-        self._attr_unique_id: str | None = self.get_unique_id(
+        self._attr_unique_id: str | None = self._build_key_unique_id(
             self.entity_description.ref_key or self.entity_description.key,
         )
         self.entity_id: str = f"{SWITCH_DOMAIN}.{DOMAIN}_{self._attr_unique_id}"
@@ -73,7 +72,6 @@ class KebaKeEnergySwitchEntity(KebaKeEnergyEntity, SwitchEntity):
             await self._async_write_data(
                 value,
                 key=self.entity_description.key,
-                device_numbers=self.device_numbers,
             )
 
     async def async_turn_on(self, **kwargs: object) -> None:  # noqa: ARG002
@@ -83,7 +81,6 @@ class KebaKeEnergySwitchEntity(KebaKeEnergyEntity, SwitchEntity):
             await self._async_write_data(
                 value,
                 key=self.entity_description.key,
-                device_numbers=self.device_numbers,
             )
 
 
@@ -174,7 +171,7 @@ async def async_setup_entry(
     async_add_entities: AddEntitiesCallback,
 ) -> None:
     """Set up KEBA KeEnergy switches from a config entry."""
-    _async_setup_entities(
+    async_setup_entities(
         entry,
         async_add_entities,
         SWITCH_TYPES,

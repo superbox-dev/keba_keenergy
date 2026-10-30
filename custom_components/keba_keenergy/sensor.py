@@ -43,7 +43,7 @@ from .const import SectionPrefix
 from .entity import KebaKeEnergyBaseEntity
 from .entity import KebaKeEnergyEntity
 from .entity import KebaKeEnergyEntityDescription
-from .entity import _async_setup_entities
+from .entity import async_setup_entities
 from .legacy import get_data_key
 from .legacy import get_state
 from .legacy import get_states
@@ -87,7 +87,6 @@ class KebaKeEnergySensorEntity(KebaKeEnergyEntity, SensorEntity):
         self,
         coordinator: KebaKeEnergyDataUpdateCoordinator,
         description: KebaKeEnergySensorEntityDescription[StateType],
-        entry: KebaKeEnergyConfigEntry,
         device_type: str,
         index: int | None,
     ) -> None:
@@ -96,7 +95,6 @@ class KebaKeEnergySensorEntity(KebaKeEnergyEntity, SensorEntity):
 
         super().__init__(
             coordinator,
-            entry=entry,
             device_type=device_type,
             index=index,
             key_index=self.entity_description.key_index,
@@ -170,12 +168,11 @@ class KebaKeEnergyWriteCountSensorEntity(KebaKeEnergyBaseEntity, SensorEntity):
         self,
         coordinator: KebaKeEnergyDataUpdateCoordinator,
         description: SensorEntityDescription,
-        entry: KebaKeEnergyConfigEntry,
     ) -> None:
         """Initialize the entity."""
         self.entity_description = description
 
-        super().__init__(coordinator, entry=entry, device_type=SectionPrefix.SYSTEM, index=None)
+        super().__init__(coordinator, device_type=SectionPrefix.SYSTEM, index=None)
 
         self._attr_unique_id = self._build_unique_id(description.key)
         self.entity_id: str = f"{SENSOR_DOMAIN}.{DOMAIN}_{self._attr_unique_id}"
@@ -1365,7 +1362,7 @@ async def async_setup_entry(
     async_add_entities: AddEntitiesCallback,
 ) -> None:
     """Set up KEBA KeEnergy sensors from a config entry."""
-    _async_setup_entities(
+    async_setup_entities(
         entry,
         async_add_entities,
         SENSOR_TYPES,
@@ -1373,5 +1370,5 @@ async def async_setup_entry(
         "sensor",
     )
     async_add_entities(
-        [KebaKeEnergyWriteCountSensorEntity(entry.runtime_data, WRITE_COUNT_SENSOR_TYPE, entry)],
+        [KebaKeEnergyWriteCountSensorEntity(entry.runtime_data, WRITE_COUNT_SENSOR_TYPE)],
     )

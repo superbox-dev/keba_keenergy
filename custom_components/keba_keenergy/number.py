@@ -22,7 +22,7 @@ from .const import DOMAIN
 from .const import SectionPrefix
 from .entity import KebaKeEnergyEntity
 from .entity import KebaKeEnergyEntityDescription
-from .entity import _async_setup_entities
+from .entity import async_setup_entities
 
 if TYPE_CHECKING:
     from homeassistant.core import HomeAssistant
@@ -56,7 +56,6 @@ class KebaKeEnergyNumberEntity(KebaKeEnergyEntity, NumberEntity):
         self,
         coordinator: KebaKeEnergyDataUpdateCoordinator,
         description: KebaKeEnergyNumberEntityDescription,
-        entry: KebaKeEnergyConfigEntry,
         device_type: str,
         index: int | None,
     ) -> None:
@@ -65,7 +64,6 @@ class KebaKeEnergyNumberEntity(KebaKeEnergyEntity, NumberEntity):
 
         super().__init__(
             coordinator,
-            entry=entry,
             device_type=device_type,
             index=index,
             key_index=self.entity_description.key_index,
@@ -522,7 +520,7 @@ async def async_setup_entry(
     async_add_entities: AddEntitiesCallback,
 ) -> None:
     """Set up KEBA KeEnergy numbers from a config entry."""
-    _async_setup_entities(
+    async_setup_entities(
         entry,
         async_add_entities,
         NUMBER_TYPES,

@@ -19,7 +19,7 @@ from .const import DOMAIN
 from .const import SectionPrefix
 from .entity import KebaKeEnergyEntity
 from .entity import KebaKeEnergyEntityDescription
-from .entity import _async_setup_entities
+from .entity import async_setup_entities
 from .legacy import get_data_key
 
 if TYPE_CHECKING:
@@ -192,7 +192,6 @@ class KebaKeEnergyBinarySensorEntity(KebaKeEnergyEntity, BinarySensorEntity):
         self,
         coordinator: KebaKeEnergyDataUpdateCoordinator,
         description: KebaKeEnergyBinarySensorEntityDescription,
-        entry: KebaKeEnergyConfigEntry,
         device_type: str,
         index: int | None,
     ) -> None:
@@ -201,7 +200,6 @@ class KebaKeEnergyBinarySensorEntity(KebaKeEnergyEntity, BinarySensorEntity):
 
         super().__init__(
             coordinator,
-            entry=entry,
             device_type=device_type,
             index=index,
             key_index=self.entity_description.key_index,
@@ -226,7 +224,7 @@ async def async_setup_entry(
     async_add_entities: AddEntitiesCallback,
 ) -> None:
     """Set up KEBA KeEnergy binary sensors from a config entry."""
-    _async_setup_entities(
+    async_setup_entities(
         entry,
         async_add_entities,
         BINARY_SENSOR_TYPES,
