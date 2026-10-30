@@ -19,7 +19,6 @@ from .const import PLATFORMS
 from .const import SectionPrefix
 from .coordinator import KebaKeEnergyConfigEntry
 from .coordinator import KebaKeEnergyDataUpdateCoordinator
-from .coordinator import get_device_identifier
 from .services import async_setup_services
 from .write_counter import FlashWriteCounter
 
@@ -61,7 +60,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: KebaKeEnergyConfigEntry)
 
     control_unit: DeviceEntry = device_registry.async_get_or_create(
         config_entry_id=entry.entry_id,
-        identifiers={(DOMAIN, get_device_identifier(entry.unique_id, SectionPrefix.SYSTEM, None))},
+        identifiers={(DOMAIN, coordinator.device_identifier(SectionPrefix.SYSTEM, None))},
         manufacturer=MANUFACTURER,
         name=coordinator.name,
         model=coordinator.device_model,

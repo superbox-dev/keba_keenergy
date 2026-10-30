@@ -30,7 +30,6 @@ from .const import MANUFACTURER_MTEC
 from .const import SectionPrefix
 from .coordinator import KebaKeEnergyConfigEntry
 from .coordinator import KebaKeEnergyDataUpdateCoordinator
-from .coordinator import get_device_identifier
 from .legacy import get_data_keys
 
 if TYPE_CHECKING:
@@ -121,7 +120,7 @@ class KebaKeEnergyBaseEntity(
     @cached_property
     def device_identifier(self) -> str:
         """Return the device identifier."""
-        return get_device_identifier(self.entry.unique_id, self.section_id, self.device_number)
+        return self.coordinator.device_identifier(self.section_id, self.device_number)
 
     @cached_property
     def device_manufacturer(self) -> str | None:

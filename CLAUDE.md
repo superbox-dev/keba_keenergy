@@ -127,8 +127,8 @@ Before finishing a change, run `ruff format`, `lint.sh` and `pytest`, in this or
   only for diagnosis or service, or entities only useful for rare setups
 - `log-when-unavailable`: failed updates raise `UpdateFailed`, the coordinator logs the outage once
 - `parallel-updates`: every platform sets `PARALLEL_UPDATES`
-- `stale-devices`: device identifiers always come from `get_device_identifier()`, otherwise devices with entities
-  are removed
+- `stale-devices`: device identifiers always come from `coordinator.device_identifier()`, otherwise devices with
+  entities are removed
 - The coordinator gets `config_entry` explicitly
 - The options flow aborts while the integration is not loaded (`options_not_ready`), it needs the detected devices
 

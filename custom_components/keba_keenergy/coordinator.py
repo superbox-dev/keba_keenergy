@@ -71,15 +71,6 @@ type KebaKeEnergyConfigEntry = ConfigEntry[KebaKeEnergyDataUpdateCoordinator]
 type CoordinatorData = dict[str, dict[str, list[Reading]]]
 
 
-def get_device_identifier(entry_unique_id: str | None, section_id: str, device_number: int | None) -> str:
-    """Return the device identifier `<entry unique_id>_<section or domain for the control unit>[_<device number>]`.
-
-    The device number is only added if the section has more than one device.
-    """
-    identifier: str = f"{entry_unique_id}_{DOMAIN if section_id == SectionPrefix.SYSTEM else section_id}"
-    return identifier if device_number is None else f"{identifier}_{device_number}"
-
-
 class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[CoordinatorData]):
     """Read the values of a KEBA KeEnergy control unit and write changed values to it."""
 
@@ -469,6 +460,16 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[CoordinatorData]):
         """Read the heating and cooling curves from the Web HMI, by name."""
         return await self._api_call_for_user(self._api.get_curve_tables())
 
+    def device_identifier(self, section_id: str, device_number: int | None, /) -> str:
+        """Return the device identifier `<entry unique_id>_<section or domain for the control unit>[_<device number>]`.
+
+        The device number is only added if the section has more than one device.
+        """
+        identifier: str = (
+            f"{self.config_entry.unique_id}_{DOMAIN if section_id == SectionPrefix.SYSTEM else section_id}"
+        )
+        return identifier if device_number is None else f"{identifier}_{device_number}"
+
     def device_identifiers(self) -> set[str]:
         """Return the identifiers of all devices that the control unit is configured with.
 
@@ -484,12 +485,7 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[CoordinatorData]):
                 else self.device_count(prefix)
             )
             identifiers.update(
-                get_device_identifier(
-                    self.config_entry.unique_id,
-                    prefix,
-                    index + 1 if count > 1 else None,
-                )
-                for index in range(count)
+                self.device_identifier(prefix, index + 1 if count > 1 else None) for index in range(count)
             )
 
         return identifiers
