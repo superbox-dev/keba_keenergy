@@ -11,6 +11,7 @@ from datetime import timedelta
 from typing import TYPE_CHECKING
 from typing import Final
 from zoneinfo import ZoneInfo
+from zoneinfo import ZoneInfoNotFoundError
 
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import CONF_HOST
@@ -375,16 +376,13 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[CoordinatorData]):
         ignore_weekly_write_count: bool = False,
     ) -> None:
         async with self._write_lock:
+            _LOGGER.debug("API write request %s", names)
+
+            # A failed write raises here and is not counted, it does not change the flash memory.
+            await self._api_call_for_user(write_fn())
+
             if not ignore_weekly_write_count:
                 await self.write_counter.async_add_write(names)
-
-            _LOGGER.debug(
-                "API write request %s (writes this week: %s)",
-                names,
-                self.write_counter.weekly_count,
-            )
-
-            await self._api_call_for_user(write_fn())
 
     @staticmethod
     async def _api_call_for_user[R](coro: Awaitable[R]) -> R:
@@ -457,6 +455,17 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[CoordinatorData]):
                 },
             )
 
+            # The written date range is known before the next update, so the same date range is not written again.
+            for key, timestamp in (("away_start_date", start_timestamp), ("away_end_date", end_timestamp)):
+                for index in range(self.device_count(SectionPrefix.HEATING_CIRCUIT)):
+                    self.async_set_local_value(
+                        int(timestamp),
+                        device_type=SectionPrefix.HEATING_CIRCUIT,
+                        key=key,
+                        index=index,
+                        value_index=None,
+                    )
+
     def _heating_circuit_values(self, key: str, /) -> list[Value]:
         """Return the values of all heating circuits."""
         return [reading.value for reading in self.data[SectionPrefix.HEATING_CIRCUIT].get(key, [])]
@@ -464,7 +473,17 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[CoordinatorData]):
     async def async_get_timezone(self) -> ZoneInfo:
         """Read the time zone from the Web HMI."""
         timezone: str = await self._api_call_for_user(self._api.get_timezone())
-        return ZoneInfo(timezone)
+
+        try:
+            return ZoneInfo(timezone)
+        except (ValueError, ZoneInfoNotFoundError) as error:
+            raise HomeAssistantError(
+                translation_domain=DOMAIN,
+                translation_key="invalid_time_zone",
+                translation_placeholders={
+                    "time_zone": timezone,
+                },
+            ) from error
 
     async def async_read_curve_table(self, name: str, /) -> CurveTable | None:
         """Read a heating or cooling curve from the Web HMI, None if there is no curve with the name."""

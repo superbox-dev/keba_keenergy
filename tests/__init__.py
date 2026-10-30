@@ -6,7 +6,11 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
+from homeassistant.components.select import ATTR_OPTION
+from homeassistant.components.select import DOMAIN as SELECT_DOMAIN
+from homeassistant.components.select import SERVICE_SELECT_OPTION
 from homeassistant.components.sensor.const import ATTR_OPTIONS
+from homeassistant.const import ATTR_ENTITY_ID
 from homeassistant.core import State
 from homeassistant.helpers import entity_registry as er
 from homeassistant.helpers.translation import async_get_translations
@@ -45,6 +49,13 @@ def get_platform_states(hass: HomeAssistant, config_entry: MockConfigEntry, plat
     return platform_states
 
 
+def get_state(hass: HomeAssistant, entity_id: str, /) -> str:
+    """Return the state of an entity, which must exist."""
+    state: State | None = hass.states.get(entity_id)
+    assert isinstance(state, State)
+    return state.state
+
+
 async def get_option_translations(hass: HomeAssistant, state: State, /) -> dict[str, str]:
     """Return the translated options of an entity with options (an enum sensor or a select)."""
     entry: er.RegistryEntry | None = er.async_get(hass).async_get(state.entity_id)
@@ -55,3 +66,16 @@ async def get_option_translations(hass: HomeAssistant, state: State, /) -> dict[
         option: translations[f"component.keba_keenergy.entity.{entry.domain}.{entry.translation_key}.state.{option}"]
         for option in state.attributes[ATTR_OPTIONS]
     }
+
+
+async def select_option(hass: HomeAssistant, entity_id: str, option: str, /) -> None:
+    """Select the option of a select entity with the action."""
+    await hass.services.async_call(
+        domain=SELECT_DOMAIN,
+        service=SERVICE_SELECT_OPTION,
+        service_data={
+            ATTR_ENTITY_ID: entity_id,
+            ATTR_OPTION: option,
+        },
+        blocking=True,
+    )

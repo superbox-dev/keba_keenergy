@@ -810,6 +810,9 @@
     "invalid_config_entry": {
       "message": "Ungültige Integration angegeben. {config_entry_id} erhalten."
     },
+    "invalid_time_zone": {
+      "message": "Die Steuerung hat eine ungültige Zeitzone: {time_zone}."
+    },
     "unloaded_config_entry": {
       "message": "Ungültige Integration angegeben. {config_entry_id} ist nicht geladen."
     }

@@ -15,7 +15,9 @@ from homeassistant.config_entries import SOURCE_USER
 from homeassistant.config_entries import SOURCE_ZEROCONF
 from homeassistant.config_entries import ConfigEntryState
 from homeassistant.const import CONF_HOST
+from homeassistant.const import CONF_PASSWORD
 from homeassistant.const import CONF_SSL
+from homeassistant.const import CONF_USERNAME
 from homeassistant.data_entry_flow import FlowResultType
 from homeassistant.helpers.service_info.zeroconf import ZeroconfServiceInfo
 from keba_keenergy_api.exceptions import APIError
@@ -24,6 +26,7 @@ from custom_components.keba_keenergy.const import DOMAIN
 from tests.api_data import MULTIPLE_DEVICES_DATA_RESPONSE
 from tests.api_data import MULTIPLE_DEVICES_RESPONSE
 from tests.api_data import get_multiple_devices_fixed_data_response
+from tests.api_data import get_multiple_devices_responses
 from tests.test_config_flow_data import ZERO_CONF_SERVICE_INFO
 
 if TYPE_CHECKING:
@@ -39,11 +42,7 @@ async def test_user_flow(
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
     """Test the user flow without authentication."""
-    fake_api.responses = [
-        MULTIPLE_DEVICES_RESPONSE,
-        get_multiple_devices_fixed_data_response(),
-        MULTIPLE_DEVICES_DATA_RESPONSE,
-    ]
+    fake_api.responses = get_multiple_devices_responses(MULTIPLE_DEVICES_DATA_RESPONSE)
     fake_api.register_auth_request("10.0.0.100")
     fake_api.register_requests("10.0.0.100")
 
@@ -75,16 +74,35 @@ async def test_user_flow(
     assert hass.config_entries.async_entry_for_domain_unique_id(DOMAIN, "12345678")
 
 
+async def test_user_flow_already_setup(
+    hass: HomeAssistant,
+    config_entry: MockConfigEntry,
+    fake_api: FakeKebaKeEnergyAPI,
+) -> None:
+    """Test that the user flow aborts for a device that is already configured."""
+    config_entry.add_to_hass(hass)
+    fake_api.register_auth_request("10.0.0.100")
+    fake_api.register_get_device_info("10.0.0.100")
+
+    result_init: ConfigFlowResult = await hass.config_entries.flow.async_init(
+        DOMAIN,
+        context={"source": SOURCE_USER},
+    )
+    result: ConfigFlowResult = await hass.config_entries.flow.async_configure(
+        result_init["flow_id"],
+        user_input={CONF_HOST: "10.0.0.100"},
+    )
+
+    assert result["type"] is FlowResultType.ABORT
+    assert result["reason"] == "already_configured"
+
+
 async def test_user_flow_authentication(
     hass: HomeAssistant,
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
     """Test the user flow with authentication."""
-    fake_api.responses = [
-        MULTIPLE_DEVICES_RESPONSE,
-        get_multiple_devices_fixed_data_response(),
-        MULTIPLE_DEVICES_DATA_RESPONSE,
-    ]
+    fake_api.responses = get_multiple_devices_responses(MULTIPLE_DEVICES_DATA_RESPONSE)
     fake_api.register_auth_request("10.0.0.100", status=401)
     fake_api.register_requests("10.0.0.100", ssl=True)
 
@@ -133,11 +151,7 @@ async def test_reconfigure_flow_authentication(
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
     """Test the reconfiguration flow with authentication."""
-    fake_api.responses = [
-        MULTIPLE_DEVICES_RESPONSE,
-        get_multiple_devices_fixed_data_response(),
-        MULTIPLE_DEVICES_DATA_RESPONSE,
-    ]
+    fake_api.responses = get_multiple_devices_responses(MULTIPLE_DEVICES_DATA_RESPONSE)
 
     fake_api.register_auth_request("10.0.0.200", status=401)
     fake_api.register_requests("10.0.0.200", ssl=True)
@@ -215,11 +229,7 @@ async def test_user_flow_authentication_cannot_connect(
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
     """Test the errors of the authentication step of the user flow."""
-    fake_api.responses = [
-        MULTIPLE_DEVICES_RESPONSE,
-        get_multiple_devices_fixed_data_response(),
-        MULTIPLE_DEVICES_DATA_RESPONSE,
-    ]
+    fake_api.responses = get_multiple_devices_responses(MULTIPLE_DEVICES_DATA_RESPONSE)
     fake_api.register_auth_request("10.0.0.100", exc=ClientError())
     fake_api.register_requests("10.0.0.100", ssl=True)
 
@@ -265,11 +275,7 @@ async def test_reauth_flow_success(
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
     """Test the reauthentication flow with valid credentials."""
-    fake_api.responses = [
-        MULTIPLE_DEVICES_RESPONSE,
-        get_multiple_devices_fixed_data_response(),
-        MULTIPLE_DEVICES_DATA_RESPONSE,
-    ]
+    fake_api.responses = get_multiple_devices_responses(MULTIPLE_DEVICES_DATA_RESPONSE)
     fake_api.register_requests("10.0.0.100", ssl=True)
 
     config_entry.add_to_hass(hass)
@@ -296,62 +302,32 @@ async def test_reauth_flow_success(
 
     assert result["type"] is FlowResultType.ABORT
     assert result["reason"] == "reauth_successful"
-
-
-async def test_reauth_flow_failure(
-    hass: HomeAssistant,
-    config_entry: MockConfigEntry,
-    fake_api: FakeKebaKeEnergyAPI,
-) -> None:
-    """Test the reauthentication flow with invalid credentials."""
-    fake_api.register_get_device_info("10.0.0.100", ssl=True, status=401)
-
-    config_entry.add_to_hass(hass)
-
-    result_start_reauth: ConfigFlowResult = await config_entry.start_reauth_flow(
-        hass,
-        data={
-            "host": "10.0.0.100",
-            "ssl": True,
-        },
-    )
-
-    assert result_start_reauth["type"] is FlowResultType.FORM
-    assert result_start_reauth["step_id"] == "reauth_confirm"
-    assert result_start_reauth["errors"] == {}
-
-    result: ConfigFlowResult = await hass.config_entries.flow.async_configure(
-        result_start_reauth["flow_id"],
-        user_input={
-            "username": "test",
-            "password": "test",
-        },
-    )
-
-    assert result["type"] is FlowResultType.FORM
-    assert result["step_id"] == "reauth_confirm"
-    assert result["errors"] == {
-        "base": "invalid_auth",
+    assert config_entry.data == {
+        CONF_HOST: "10.0.0.100",
+        CONF_SSL: True,
+        CONF_USERNAME: "test",
+        CONF_PASSWORD: "test",
     }
 
 
 @pytest.mark.parametrize(
-    "config_entry",
+    ("config_entry", "device_info_status", "expected"),
     [
-        {
-            "unique_id": "12345679",
-        },
+        ({}, HTTPStatus.UNAUTHORIZED, {"type": FlowResultType.FORM, "errors": {"base": "invalid_auth"}}),
+        ({"unique_id": "12345679"}, HTTPStatus.OK, {"type": FlowResultType.ABORT, "reason": "wrong_account"}),
     ],
-    indirect=True,
-    ids=["other_unique_id"],
+    indirect=["config_entry"],
+    ids=["invalid_auth", "wrong_account"],
 )
-async def test_reauth_flow_wrong_account(
+async def test_reauth_flow_failure(
     hass: HomeAssistant,
     config_entry: MockConfigEntry,
     fake_api: FakeKebaKeEnergyAPI,
+    device_info_status: HTTPStatus,
+    expected: dict[str, object],
 ) -> None:
-    """Test that the reauthentication flow aborts for another device."""
-    fake_api.register_get_device_info("10.0.0.100", ssl=True)
+    """Test that the reauthentication flow shows invalid credentials and aborts for another device."""
+    fake_api.register_get_device_info("10.0.0.100", ssl=True, status=device_info_status)
 
     config_entry.add_to_hass(hass)
 
@@ -375,8 +351,7 @@ async def test_reauth_flow_wrong_account(
         },
     )
 
-    assert result["type"] is FlowResultType.ABORT
-    assert result["reason"] == "wrong_account"
+    assert {key: result.get(key) for key in expected} == expected
 
 
 @pytest.mark.parametrize(
@@ -422,11 +397,7 @@ async def test_zeroconf_flow(
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
     """Test the zeroconf discovery flow without authentication."""
-    fake_api.responses = [
-        MULTIPLE_DEVICES_RESPONSE,
-        get_multiple_devices_fixed_data_response(),
-        MULTIPLE_DEVICES_DATA_RESPONSE,
-    ]
+    fake_api.responses = get_multiple_devices_responses(MULTIPLE_DEVICES_DATA_RESPONSE)
     fake_api.register_auth_request("ap4400.local")
     fake_api.register_requests("ap4400.local")
 
@@ -459,11 +430,7 @@ async def test_zeroconf_flow_authentication(
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
     """Test the zeroconf discovery flow with authentication."""
-    fake_api.responses = [
-        MULTIPLE_DEVICES_RESPONSE,
-        get_multiple_devices_fixed_data_response(),
-        MULTIPLE_DEVICES_DATA_RESPONSE,
-    ]
+    fake_api.responses = get_multiple_devices_responses(MULTIPLE_DEVICES_DATA_RESPONSE)
     fake_api.register_auth_request("ap4400.local", status=401)
     fake_api.register_requests("ap4400.local", ssl=True)
 
@@ -493,15 +460,11 @@ async def test_zeroconf_flow_authentication(
     assert hass.config_entries.async_entry_for_domain_unique_id(DOMAIN, "12345678")
 
 
-async def test_zeroconf_flow_authentication_cannot_connect(
+async def test_zeroconf_flow_authentication_check_failed(
     hass: HomeAssistant,
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
-    """Test the errors of the authentication step of the zeroconf discovery flow."""
-    fake_api.responses = [
-        MULTIPLE_DEVICES_RESPONSE,
-        MULTIPLE_DEVICES_DATA_RESPONSE,
-    ]
+    """Test that the zeroconf discovery flow asks for confirmation without credentials if the check for them fails."""
     fake_api.register_auth_request("ap4400.local", exc=ClientError())
     fake_api.register_requests("ap4400.local", ssl=True)
 
@@ -730,6 +693,8 @@ async def test_option_flow(
 
     assert result_create_entry["type"] is FlowResultType.CREATE_ENTRY
     assert result_create_entry["data"] == expected
+    # The number selectors return floats, the options are stored as integers.
+    assert {type(value) for value in result_create_entry["data"].values()} == {int}
 
 
 async def test_option_flow_without_photovoltaics(
@@ -738,11 +703,10 @@ async def test_option_flow_without_photovoltaics(
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
     """Test that the options flow hides the photovoltaics option without photovoltaics."""
-    fake_api.responses = [
-        MULTIPLE_DEVICES_RESPONSE,
-        get_multiple_devices_fixed_data_response(has_photovoltaics="false"),
+    fake_api.responses = get_multiple_devices_responses(
         [value for value in MULTIPLE_DEVICES_DATA_RESPONSE if ".photovoltaics." not in value["name"]],
-    ]
+        has_photovoltaics="false",
+    )
     await fake_api.setup_integration()
 
     result_init: ConfigFlowResult = await hass.config_entries.options.async_init(

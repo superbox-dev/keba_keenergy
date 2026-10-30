@@ -66,11 +66,12 @@ AWAY_DATE_RANGE_SCHEMA: Final[probatio.Schema] = probatio.Schema(
 
 
 def _get_coordinator(call: ServiceCall) -> KebaKeEnergyDataUpdateCoordinator:
-    """Return the coordinator of the config entry of the action, which must be loaded."""
+    """Return the coordinator of the config entry of the action, which must be a loaded entry of this integration."""
     entry_id: str = call.data[ATTR_CONFIG_ENTRY]
     entry: KebaKeEnergyConfigEntry | None = call.hass.config_entries.async_get_entry(entry_id)
 
-    if not entry:
+    # The selector of the action does not check the integration of the config entry.
+    if not entry or entry.domain != DOMAIN:
         raise ServiceValidationError(
             translation_domain=DOMAIN,
             translation_key="invalid_config_entry",

@@ -810,6 +810,9 @@
     "invalid_config_entry": {
       "message": "Invalid integration provided. Got {config_entry_id}."
     },
+    "invalid_time_zone": {
+      "message": "The control unit has an invalid time zone: {time_zone}."
+    },
     "unloaded_config_entry": {
       "message": "Invalid integration provided. {config_entry_id} is not loaded."
     }

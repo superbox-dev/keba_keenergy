@@ -13,9 +13,6 @@ import pytest
 from homeassistant.components.number import ATTR_VALUE
 from homeassistant.components.number import DOMAIN as NUMBER_DOMAIN
 from homeassistant.components.number.const import SERVICE_SET_VALUE
-from homeassistant.components.select import ATTR_OPTION
-from homeassistant.components.select import DOMAIN as SELECT_DOMAIN
-from homeassistant.components.select import SERVICE_SELECT_OPTION
 from homeassistant.components.water_heater import ATTR_OPERATION_MODE
 from homeassistant.components.water_heater import SERVICE_SET_OPERATION_MODE
 from homeassistant.components.water_heater.const import DOMAIN as WATER_HEATER_DOMAIN
@@ -38,14 +35,19 @@ from custom_components.keba_keenergy.const import FLASH_WRITE_LIMIT_PER_WEEK
 from custom_components.keba_keenergy.const import SERVICE_SET_AWAY_DATE_RANGE
 from custom_components.keba_keenergy.const import SERVICE_SET_HEATING_CURVE_POINTS
 from tests import init_translations
+from tests import select_option
 from tests.api_data import MULTIPLE_DEVICES_DATA_RESPONSE
 from tests.api_data import MULTIPLE_DEVICES_OTHER_MODES_DATA_RESPONSE
-from tests.api_data import MULTIPLE_DEVICES_RESPONSE
-from tests.api_data import get_multiple_devices_fixed_data_response
+from tests.api_data import get_multiple_devices_responses
 from tests.test_issues_data import ISSUE_DESCRIPTION_DE
 from tests.test_issues_data import ISSUE_DESCRIPTION_EN
+from tests.test_issues_data import STORED_WRITES
 from tests.test_issues_data import WRITE_COUNT_ENTITY_ID
 from tests.test_issues_data import WRITES_PER_VALUE
+from tests.test_issues_data import get_issue_id
+from tests.test_issues_data import get_store
+from tests.test_issues_data import get_store_key
+from tests.test_issues_data import get_week
 
 if TYPE_CHECKING:
     from datetime import datetime
@@ -55,35 +57,6 @@ if TYPE_CHECKING:
     from pytest_homeassistant_custom_component.common import MockConfigEntry
 
     from tests.conftest import FakeKebaKeEnergyAPI
-
-
-def _week(day: date, /) -> list[int]:
-    return [day.isocalendar().year, day.isocalendar().week]
-
-
-def _store(key: str, counter: dict[str, Any], /) -> dict[str, Any]:
-    return {
-        "version": 1,
-        "minor_version": 1,
-        "key": key,
-        "data": {"flash_write_counter": counter},
-    }
-
-
-def _issue_id(config_entry: MockConfigEntry, /) -> str:
-    return f"{FLASH_WRITE_ISSUE_ID}_{config_entry.entry_id}"
-
-
-async def _select_option(hass: HomeAssistant, entity_id: str, option: str, /) -> None:
-    await hass.services.async_call(
-        domain=SELECT_DOMAIN,
-        service=SERVICE_SELECT_OPTION,
-        service_data={
-            ATTR_ENTITY_ID: entity_id,
-            ATTR_OPTION: option,
-        },
-        blocking=True,
-    )
 
 
 @pytest.mark.parametrize(
@@ -104,24 +77,16 @@ async def test_issues(
     expected: tuple[str, str],
 ) -> None:
     """Test the repair issue for frequent write operations of a control unit."""
-    fake_api.responses = [
-        MULTIPLE_DEVICES_RESPONSE,
-        get_multiple_devices_fixed_data_response(),
-        MULTIPLE_DEVICES_DATA_RESPONSE,
-        # Read the API after the first action call.
-        MULTIPLE_DEVICES_DATA_RESPONSE,
-        # Read the API after the second action call.
-        MULTIPLE_DEVICES_DATA_RESPONSE,
-    ]
-    key: str = f"{DOMAIN}.{config_entry.entry_id}"
-    hass_storage[key] = _store(key, {"week": _week(dt_util.now().date()), "count": FLASH_WRITE_LIMIT_PER_WEEK})
+    fake_api.responses = get_multiple_devices_responses(MULTIPLE_DEVICES_DATA_RESPONSE)
+    key: str = get_store_key(config_entry.entry_id)
+    hass_storage[key] = get_store(key, {"week": get_week(dt_util.now().date()), "count": FLASH_WRITE_LIMIT_PER_WEEK})
     await fake_api.setup_integration()
     translations: dict[str, str] = await init_translations(hass, category="issues")
 
-    await _select_option(hass, "select.keba_keenergy_12345678_buffer_tank_operating_mode_1", "on")
-    await _select_option(hass, "select.keba_keenergy_12345678_buffer_tank_operating_mode_1", "off")
+    await select_option(hass, "select.keba_keenergy_12345678_buffer_tank_operating_mode_1", "on")
+    await select_option(hass, "select.keba_keenergy_12345678_buffer_tank_operating_mode_1", "off")
 
-    issue: ir.IssueEntry | None = ir.async_get(hass).async_get_issue(DOMAIN, _issue_id(config_entry))
+    issue: ir.IssueEntry | None = ir.async_get(hass).async_get_issue(DOMAIN, get_issue_id(config_entry.entry_id))
 
     assert issue is not None
     assert issue.severity == ir.IssueSeverity.WARNING
@@ -134,6 +99,30 @@ async def test_issues(
     assert (title, description) == expected
 
 
+async def test_issue_after_restart(
+    hass: HomeAssistant,
+    config_entry: MockConfigEntry,
+    fake_api: FakeKebaKeEnergyAPI,
+    hass_storage: dict[str, Any],
+) -> None:
+    """Test that the repair issue is created on setup if the stored counter of this week exceeds the limit.
+
+    Home Assistant does not restore the issue after a restart, because it is not persistent.
+    """
+    fake_api.responses = get_multiple_devices_responses(MULTIPLE_DEVICES_DATA_RESPONSE)
+    key: str = get_store_key(config_entry.entry_id)
+    hass_storage[key] = get_store(
+        key,
+        {"week": get_week(dt_util.now().date()), "count": FLASH_WRITE_LIMIT_PER_WEEK + 5, "writes": STORED_WRITES},
+    )
+    await fake_api.setup_integration()
+
+    issue: ir.IssueEntry | None = ir.async_get(hass).async_get_issue(DOMAIN, get_issue_id(config_entry.entry_id))
+
+    assert issue is not None
+    assert issue.active
+
+
 async def test_ignored_write_is_not_counted(
     hass: HomeAssistant,
     config_entry: MockConfigEntry,
@@ -141,16 +130,14 @@ async def test_ignored_write_is_not_counted(
     hass_storage: dict[str, Any],
 ) -> None:
     """Test that a write that is not counted (heat up the hot water tank) keeps the weekly write counter."""
-    fake_api.responses = [
-        MULTIPLE_DEVICES_RESPONSE,
-        get_multiple_devices_fixed_data_response(),
-        MULTIPLE_DEVICES_OTHER_MODES_DATA_RESPONSE,
-        # Read the API after the action call.
-        MULTIPLE_DEVICES_OTHER_MODES_DATA_RESPONSE,
-    ]
-    key: str = f"{DOMAIN}.{config_entry.entry_id}"
-    counter: dict[str, Any] = {"week": _week(dt_util.now().date()), "count": 5, "writes": {"system.operating_mode": 5}}
-    hass_storage[key] = _store(key, counter)
+    fake_api.responses = get_multiple_devices_responses(MULTIPLE_DEVICES_OTHER_MODES_DATA_RESPONSE)
+    key: str = get_store_key(config_entry.entry_id)
+    counter: dict[str, Any] = {
+        "week": get_week(dt_util.now().date()),
+        "count": 5,
+        "writes": STORED_WRITES,
+    }
+    hass_storage[key] = get_store(key, counter)
     await fake_api.setup_integration()
 
     await hass.services.async_call(
@@ -165,18 +152,20 @@ async def test_ignored_write_is_not_counted(
 
     state: State | None = hass.states.get(WRITE_COUNT_ENTITY_ID)
 
-    assert len(fake_api.write_requests()) == 1
+    assert fake_api.write_requests() == [
+        '[{"name": "APPL.CtrlAppl.sParam.hotWaterTank[0].param.operatingMode", "value": "3"}]',
+    ]
     assert hass_storage[key]["data"]["flash_write_counter"] == counter
     assert isinstance(state, State)
     assert state.state == "5"
-    assert state.attributes["writes"] == {"system.operating_mode": 5}
+    assert state.attributes["writes"] == STORED_WRITES
 
 
 @pytest.mark.parametrize(
-    ("setup_day", "expected_writes"),
+    ("setup_day", "expected_counter"),
     [
-        (date(2026, 3, 8), {}),
-        (date(2026, 3, 9), {"system.operating_mode": 5}),
+        (date(2026, 3, 8), {"count": 0, "writes": {}}),
+        (date(2026, 3, 9), {"count": 5, "writes": STORED_WRITES}),
     ],
     ids=["new_week", "same_week"],
 )
@@ -185,19 +174,17 @@ async def test_write_counter_at_midnight(
     hass_storage: dict[str, Any],
     freezer: FrozenDateTimeFactory,
     setup_day: date,
-    expected_writes: dict[str, int],
+    expected_counter: dict[str, Any],
 ) -> None:
     """Test that the write counter resets at midnight of a new week only, without an update or a write."""
-    fake_api.responses = [
-        MULTIPLE_DEVICES_RESPONSE,
-        get_multiple_devices_fixed_data_response(),
+    fake_api.responses = get_multiple_devices_responses(
         MULTIPLE_DEVICES_DATA_RESPONSE,
         # The polling at midnight.
         MULTIPLE_DEVICES_DATA_RESPONSE,
-    ]
+    )
     freezer.move_to(dt_util.start_of_local_day(setup_day) + timedelta(hours=12))
-    key: str = f"{DOMAIN}.{fake_api.config_entry.entry_id}"
-    hass_storage[key] = _store(key, {"week": _week(setup_day), "count": 5, "writes": {"system.operating_mode": 5}})
+    key: str = get_store_key(fake_api.config_entry.entry_id)
+    hass_storage[key] = get_store(key, {"week": get_week(setup_day), "count": 5, "writes": STORED_WRITES})
     await fake_api.setup_integration()
 
     # Midnight of Tuesday, 2026-03-10: 2026-03-08 is the Sunday of the previous week, 2026-03-09 the Monday of the same.
@@ -207,16 +194,38 @@ async def test_write_counter_at_midnight(
     await fake_api.hass.async_block_till_done()
 
     state: State | None = fake_api.hass.states.get(WRITE_COUNT_ENTITY_ID)
-    expected_count: int = sum(expected_writes.values())
+
+    assert hass_storage[key]["data"]["flash_write_counter"] == {"week": get_week(midnight.date()), **expected_counter}
+    assert isinstance(state, State)
+    assert state.state == str(expected_counter["count"])
+    assert state.attributes["writes"] == expected_counter["writes"]
+
+
+async def test_write_in_new_year_week_resets_write_counter(
+    hass: HomeAssistant,
+    fake_api: FakeKebaKeEnergyAPI,
+    hass_storage: dict[str, Any],
+    freezer: FrozenDateTimeFactory,
+) -> None:
+    """Test that the first write in a new week resets the write counter before it counts, also without the timer.
+
+    Sunday, 2027-01-03, is in the ISO week 53 of 2026, Monday, 2027-01-04, in the week 1 of 2027.
+    """
+    fake_api.responses = get_multiple_devices_responses(MULTIPLE_DEVICES_DATA_RESPONSE)
+    freezer.move_to(dt_util.start_of_local_day(date(2027, 1, 3)) + timedelta(hours=12))
+    key: str = get_store_key(fake_api.config_entry.entry_id)
+    hass_storage[key] = get_store(key, {"week": [2026, 53], "count": 5, "writes": STORED_WRITES})
+    await fake_api.setup_integration()
+
+    # The time changes without the timer at midnight, e.g. while Home Assistant was suspended.
+    freezer.move_to(dt_util.start_of_local_day(date(2027, 1, 4)) + timedelta(hours=12))
+    await select_option(hass, "select.keba_keenergy_12345678_buffer_tank_operating_mode_1", "on")
 
     assert hass_storage[key]["data"]["flash_write_counter"] == {
-        "week": _week(midnight.date()),
-        "count": expected_count,
-        "writes": expected_writes,
+        "week": [2027, 1],
+        "count": 1,
+        "writes": {"buffer_tank_1.operating_mode": 1},
     }
-    assert isinstance(state, State)
-    assert state.state == str(expected_count)
-    assert state.attributes["writes"] == expected_writes
 
 
 async def test_write_counter_after_unload(
@@ -226,15 +235,11 @@ async def test_write_counter_after_unload(
     freezer: FrozenDateTimeFactory,
 ) -> None:
     """Test that the write counter no longer resets at midnight after the integration is unloaded."""
-    fake_api.responses = [
-        MULTIPLE_DEVICES_RESPONSE,
-        get_multiple_devices_fixed_data_response(),
-        MULTIPLE_DEVICES_DATA_RESPONSE,
-    ]
+    fake_api.responses = get_multiple_devices_responses(MULTIPLE_DEVICES_DATA_RESPONSE)
     freezer.move_to(dt_util.start_of_local_day(date(2026, 3, 8)) + timedelta(hours=12))
-    key: str = f"{DOMAIN}.{fake_api.config_entry.entry_id}"
-    counter: dict[str, Any] = {"week": _week(date(2026, 3, 8)), "count": 5, "writes": {"system.operating_mode": 5}}
-    hass_storage[key] = _store(key, counter)
+    key: str = get_store_key(fake_api.config_entry.entry_id)
+    counter: dict[str, Any] = {"week": get_week(date(2026, 3, 8)), "count": 5, "writes": STORED_WRITES}
+    hass_storage[key] = get_store(key, counter)
     await fake_api.setup_integration()
     await hass.config_entries.async_unload(fake_api.config_entry.entry_id)
 
@@ -246,24 +251,29 @@ async def test_write_counter_after_unload(
     assert hass_storage[key]["data"]["flash_write_counter"] == counter
 
 
+@pytest.mark.parametrize(
+    "stored_week_offset",
+    [timedelta(weeks=-1), timedelta(weeks=1)],
+    ids=["previous_week", "future_week"],
+)
 async def test_new_week_resets_write_counter(
     hass: HomeAssistant,
     config_entry: MockConfigEntry,
     fake_api: FakeKebaKeEnergyAPI,
     hass_storage: dict[str, Any],
+    stored_week_offset: timedelta,
 ) -> None:
-    """Test that an update in a new week resets the write counter and removes the repair issue, without a write."""
-    fake_api.responses = [
-        MULTIPLE_DEVICES_RESPONSE,
-        get_multiple_devices_fixed_data_response(),
-        MULTIPLE_DEVICES_DATA_RESPONSE,
-    ]
+    """Test that the setup in another week resets the write counter and removes the repair issue, without a write.
+
+    A stored week in the future, e.g. after the clock was set back, is another week as well.
+    """
+    fake_api.responses = get_multiple_devices_responses(MULTIPLE_DEVICES_DATA_RESPONSE)
     today: date = dt_util.now().date()
-    key: str = f"{DOMAIN}.{config_entry.entry_id}"
-    hass_storage[key] = _store(
+    key: str = get_store_key(config_entry.entry_id)
+    hass_storage[key] = get_store(
         key,
         {
-            "week": _week(today - timedelta(weeks=1)),
+            "week": get_week(today + stored_week_offset),
             "count": FLASH_WRITE_LIMIT_PER_WEEK + 1,
             "writes": {"system.operating_mode": FLASH_WRITE_LIMIT_PER_WEEK + 1},
         },
@@ -271,7 +281,7 @@ async def test_new_week_resets_write_counter(
     ir.async_create_issue(
         hass,
         domain=DOMAIN,
-        issue_id=_issue_id(config_entry),
+        issue_id=get_issue_id(config_entry.entry_id),
         is_fixable=False,
         severity=ir.IssueSeverity.WARNING,
         translation_key=FLASH_WRITE_ISSUE_ID,
@@ -281,8 +291,8 @@ async def test_new_week_resets_write_counter(
     state: State | None = hass.states.get(WRITE_COUNT_ENTITY_ID)
 
     assert fake_api.write_requests() == []
-    assert ir.async_get(hass).async_get_issue(DOMAIN, _issue_id(config_entry)) is None
-    assert hass_storage[key]["data"]["flash_write_counter"] == {"week": _week(today), "count": 0, "writes": {}}
+    assert ir.async_get(hass).async_get_issue(DOMAIN, get_issue_id(config_entry.entry_id)) is None
+    assert hass_storage[key]["data"]["flash_write_counter"] == {"week": get_week(today), "count": 0, "writes": {}}
     assert isinstance(state, State)
     assert state.state == "0"
     assert state.attributes["writes"] == {}
@@ -294,12 +304,8 @@ async def test_shared_write_counter_is_removed(
     hass_storage: dict[str, Any],
 ) -> None:
     """Test that the write counter and the repair issue shared by all control units in older versions are removed."""
-    fake_api.responses = [
-        MULTIPLE_DEVICES_RESPONSE,
-        get_multiple_devices_fixed_data_response(),
-        MULTIPLE_DEVICES_DATA_RESPONSE,
-    ]
-    hass_storage[DOMAIN] = _store(DOMAIN, {"week": _week(dt_util.now().date()), "count": 7})
+    fake_api.responses = get_multiple_devices_responses(MULTIPLE_DEVICES_DATA_RESPONSE)
+    hass_storage[DOMAIN] = get_store(DOMAIN, {"week": get_week(dt_util.now().date()), "count": 7})
     ir.async_create_issue(
         hass,
         domain=DOMAIN,
@@ -326,16 +332,11 @@ async def test_writes_per_value(
     hass_storage: dict[str, Any],
 ) -> None:
     """Test that each written value is counted, a write of several values counts once in total."""
-    fake_api.responses = [
-        MULTIPLE_DEVICES_RESPONSE,
-        get_multiple_devices_fixed_data_response(),
-        # Read the API on setup and after each action call.
-        *[MULTIPLE_DEVICES_DATA_RESPONSE] * 6,
-    ]
+    fake_api.responses = get_multiple_devices_responses(MULTIPLE_DEVICES_DATA_RESPONSE)
     await fake_api.setup_integration()
 
-    await _select_option(hass, "select.keba_keenergy_12345678_operating_mode", "auto")
-    await _select_option(hass, "select.keba_keenergy_12345678_buffer_tank_operating_mode_2", "off")
+    await select_option(hass, "select.keba_keenergy_12345678_operating_mode", "auto")
+    await select_option(hass, "select.keba_keenergy_12345678_buffer_tank_operating_mode_2", "off")
 
     await hass.services.async_call(
         domain=NUMBER_DOMAIN,
@@ -373,8 +374,8 @@ async def test_writes_per_value(
 
     state: State | None = hass.states.get(WRITE_COUNT_ENTITY_ID)
 
-    assert hass_storage[f"{DOMAIN}.{config_entry.entry_id}"]["data"]["flash_write_counter"] == {
-        "week": _week(dt_util.now().date()),
+    assert hass_storage[get_store_key(config_entry.entry_id)]["data"]["flash_write_counter"] == {
+        "week": get_week(dt_util.now().date()),
         "count": 5,
         "writes": WRITES_PER_VALUE,
     }
@@ -390,13 +391,9 @@ async def test_remove_entry(
     hass_storage: dict[str, Any],
 ) -> None:
     """Test that removing a config entry removes its write counter."""
-    fake_api.responses = [
-        MULTIPLE_DEVICES_RESPONSE,
-        get_multiple_devices_fixed_data_response(),
-        MULTIPLE_DEVICES_DATA_RESPONSE,
-    ]
-    key: str = f"{DOMAIN}.{config_entry.entry_id}"
-    hass_storage[key] = _store(key, {"week": _week(dt_util.now().date()), "count": 1})
+    fake_api.responses = get_multiple_devices_responses(MULTIPLE_DEVICES_DATA_RESPONSE)
+    key: str = get_store_key(config_entry.entry_id)
+    hass_storage[key] = get_store(key, {"week": get_week(dt_util.now().date()), "count": 1})
     await fake_api.setup_integration()
 
     await hass.config_entries.async_remove(config_entry.entry_id)

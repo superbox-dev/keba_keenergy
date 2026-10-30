@@ -356,17 +356,18 @@ class KebaKeEnergyOptionsFlow(OptionsFlowWithReload):
     def _normalize_user_input(user_input: dict[str, Any], /) -> dict[str, Any]:
         """Return the user input with the greatest common divisor of the multipliers moved into the scan interval.
 
-        E.g. a scan interval of 20 s with the multipliers 2 and 4 becomes 40 s with the multipliers 1 and 2.
+        E.g. a scan interval of 20 s with the multipliers 2 and 4 becomes 40 s with the multipliers 1 and 2. The number
+        selectors return floats, the options are stored as integers.
         """
-        scan_interval: int = user_input[CONF_SCAN_INTERVAL]
+        scan_interval: int = int(user_input[CONF_SCAN_INTERVAL])
         ticks: dict[str, int] = {
             key: int(user_input[key]) for key in SCAN_INTERVAL_TICK_OPTIONS.values() if key in user_input
         }
+        # The system multiplier is always in the user input, so the divisor is at least 1.
         gcd: int = math.gcd(*ticks.values())
 
-        if gcd > 1:
-            user_input[CONF_SCAN_INTERVAL] = int(scan_interval * gcd)
-            user_input.update({key: tick // gcd for key, tick in ticks.items()})
+        user_input[CONF_SCAN_INTERVAL] = scan_interval * gcd
+        user_input.update({key: tick // gcd for key, tick in ticks.items()})
 
         _LOGGER.debug("Tick normalization: %s -> gcd=%s", user_input, gcd)
 

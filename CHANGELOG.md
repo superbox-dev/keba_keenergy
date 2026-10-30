@@ -55,6 +55,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   `cooling_curve` right away, not only after the next update of the heating circuits.
 - Offered the cooling modes in the select `operating_mode` of the control unit if any heat pump supports active or
   passive cooling, not only the first one.
+- Rejected the config entry of another integration in the actions with a translated error, instead of an unexpected
+  error.
+- Wrote the same away date range only once, also if it is set again before the next update (flash writes).
+- Stored the scan interval and the update multipliers of the options as integers, they were stored as decimal numbers
+  if the multipliers had no common divisor.
+- Showed the repair issue for frequent write operations again after a restart of Home Assistant, if the limit of the
+  week is still exceeded.
+- Ended the away date range of the heating circuits also with the HVAC modes `heat` and `off` (and `turn_off`), not
+  only with `auto` and the presets. The date range stayed active with the new operating mode.
+- Wrote the HVAC mode `heat` of a heating circuit only if it changes, a heating circuit with the preset `sleep` or
+  `boost` kept the mode `heat` but was switched to `comfort` (flash writes).
+- Counted only successful writes in the sensor `weekly_write_count`, a failed write was counted as well.
+- Raised a translated error if the control unit has an invalid time zone, instead of an unexpected error of the away
+  preset and the action `set_away_date_range`.
 
 [issue-77]: https://github.com/superbox-dev/keba_keenergy/issues/77
 [issue-84]: https://github.com/superbox-dev/keba_keenergy/issues/84

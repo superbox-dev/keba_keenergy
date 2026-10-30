@@ -5,7 +5,6 @@
 from __future__ import annotations
 
 from typing import TYPE_CHECKING
-from typing import Any
 
 import pytest
 from homeassistant.components.sensor import DOMAIN as SENSOR_DOMAIN
@@ -22,11 +21,12 @@ from homeassistant.helpers import entity_registry as er
 from custom_components.keba_keenergy.const import DOMAIN
 from tests import get_option_translations
 from tests import get_platform_states
-from tests.api_data import CURVE_NAMES_RESPONSE
+from tests.api_data import CURVES_WITHOUT_NAMES_RESPONSE
 from tests.api_data import MULTIPLE_DEVICES_DATA_RESPONSE
 from tests.api_data import MULTIPLE_DEVICES_RESPONSE
-from tests.api_data import get_curve_points_response
+from tests.api_data import Response
 from tests.api_data import get_multiple_devices_fixed_data_response
+from tests.api_data import get_multiple_devices_responses
 from tests.api_data import update_response
 
 if TYPE_CHECKING:
@@ -37,7 +37,6 @@ if TYPE_CHECKING:
     from tests.conftest import FakeKebaKeEnergyAPI
 
 
-@pytest.mark.parametrize("language", ["en", "de"], indirect=True, ids=["en", "de"])
 @pytest.mark.usefixtures("entity_registry_enabled_by_default", "language")
 async def test_sensors(
     hass: HomeAssistant,
@@ -45,23 +44,28 @@ async def test_sensors(
     snapshot: SnapshotAssertion,
 ) -> None:
     """Test the states of all sensors, their displayed values and the translated options of the enum sensors."""
-    fake_api.responses = [
-        MULTIPLE_DEVICES_RESPONSE,
-        get_multiple_devices_fixed_data_response(has_passive_cooling="true"),
-        MULTIPLE_DEVICES_DATA_RESPONSE,
-    ]
+    fake_api.responses = get_multiple_devices_responses(MULTIPLE_DEVICES_DATA_RESPONSE, has_passive_cooling="true")
     await fake_api.setup_integration()
 
-    for state in get_platform_states(hass, fake_api.config_entry, Platform.SENSOR):
+    states: list[State] = get_platform_states(hass, fake_api.config_entry, Platform.SENSOR)
+    enum_states: list[State] = [state for state in states if ATTR_OPTIONS in state.attributes]
+    value_states: list[State] = [state for state in states if ATTR_OPTIONS not in state.attributes]
+
+    for state in states:
         assert state == snapshot(name=state.entity_id)
 
-        if ATTR_OPTIONS in state.attributes:
-            assert await get_option_translations(hass, state) == snapshot(name=f"{state.entity_id}_options")
-        else:
-            # The value as Home Assistant shows it, rounded to the display precision of the entity.
-            displayed: str = async_rounded_state(hass, state.entity_id, state)
-            unit: str | None = state.attributes.get(ATTR_UNIT_OF_MEASUREMENT)
-            assert (f"{displayed} {unit}" if unit else displayed) == snapshot(name=f"{state.entity_id}_displayed")
+    for state in enum_states:
+        assert await get_option_translations(hass, state) == snapshot(name=f"{state.entity_id}_options")
+
+    for state in value_states:
+        # The value as Home Assistant shows it, rounded to the display precision of the entity, with its unit.
+        displayed: str = " ".join(
+            filter(
+                None,
+                (async_rounded_state(hass, state.entity_id, state), state.attributes.get(ATTR_UNIT_OF_MEASUREMENT)),
+            ),
+        )
+        assert displayed == snapshot(name=f"{state.entity_id}_displayed")
 
 
 @pytest.mark.parametrize(
@@ -91,11 +95,7 @@ async def test_converted_sensor_keeps_registered_unit(
         suggested_object_id=f"{DOMAIN}_{unique_id}",
         unit_of_measurement=expected[1],
     )
-    fake_api.responses = [
-        MULTIPLE_DEVICES_RESPONSE,
-        get_multiple_devices_fixed_data_response(),
-        MULTIPLE_DEVICES_DATA_RESPONSE,
-    ]
+    fake_api.responses = get_multiple_devices_responses(MULTIPLE_DEVICES_DATA_RESPONSE)
     fake_api.register_requests(config_entry.data[CONF_HOST], ssl=config_entry.data[CONF_SSL])
     assert await hass.config_entries.async_setup(config_entry.entry_id)
     await hass.async_block_till_done()
@@ -149,11 +149,7 @@ async def test_sensor_not_in_use(
 ) -> None:
     """Test that a sensor is unknown if the control unit reports it as not in use."""
     fake_api.message_ids = {message_id: 50}
-    fake_api.responses = [
-        MULTIPLE_DEVICES_RESPONSE,
-        get_multiple_devices_fixed_data_response(),
-        MULTIPLE_DEVICES_DATA_RESPONSE,
-    ]
+    fake_api.responses = get_multiple_devices_responses(MULTIPLE_DEVICES_DATA_RESPONSE)
     await fake_api.setup_integration()
 
     states: dict[str, str] = {}
@@ -186,7 +182,7 @@ async def test_sensor_deactivated(
     entity_id: str,
 ) -> None:
     """Test that the entity of a deactivated sensor is removed and no longer created."""
-    responses: list[list[dict[str, Any]]] = [
+    responses: list[Response] = [
         MULTIPLE_DEVICES_RESPONSE,
         get_multiple_devices_fixed_data_response(),
         MULTIPLE_DEVICES_DATA_RESPONSE,
@@ -233,11 +229,9 @@ async def test_sensor_enum_state(
 ) -> None:
     """Test the enum sensor states that are only reported in rare situations."""
     name, raw_value = value
-    fake_api.responses = [
-        MULTIPLE_DEVICES_RESPONSE,
-        get_multiple_devices_fixed_data_response(),
+    fake_api.responses = get_multiple_devices_responses(
         update_response(MULTIPLE_DEVICES_DATA_RESPONSE, name, value=raw_value),
-    ]
+    )
     await fake_api.setup_integration()
 
     state: State | None = hass.states.get(entity_id)
@@ -252,12 +246,12 @@ async def test_sensor_enum_state(
         (
             ("APPL.CtrlAppl.sParam.heatpump[0].values.heatpumpSubState", "25"),
             "sensor.keba_keenergy_12345678_heat_pump_substate",
-            {"state": "drip", "raw_value": 25},
+            ("drip", {"raw_value": 25}),
         ),
         (
             ("APPL.CtrlAppl.sParam.heatCircuit[0].heatCircuitMixer.mixer.values.setValueScaled", "0.37"),
             "sensor.keba_keenergy_12345678_heat_circuit_mixer_position_1",
-            {"state": "off", "raw_value": 0.37, "position_percent": 37},
+            ("off", {"raw_value": 0.37, "position_percent": 37}),
         ),
     ],
     ids=["heat_pump_substate_second_value", "heat_circuit_mixer_partly_open"],
@@ -268,20 +262,20 @@ async def test_sensor_raw_value(
     fake_api: FakeKebaKeEnergyAPI,
     value: tuple[str, str],
     entity_id: str,
-    expected: dict[str, Any],
+    expected: tuple[str, dict[str, float]],
 ) -> None:
     """Test that `raw_value` is the value read, also for enum members with several values and mixer positions."""
     name, raw_value = value
-    fake_api.responses = [
-        MULTIPLE_DEVICES_RESPONSE,
-        get_multiple_devices_fixed_data_response(),
+    fake_api.responses = get_multiple_devices_responses(
         update_response(MULTIPLE_DEVICES_DATA_RESPONSE, name, value=raw_value),
-    ]
+    )
     await fake_api.setup_integration()
 
     state: State | None = hass.states.get(entity_id)
     assert isinstance(state, State)
-    assert {"state": state.state} | {key: state.attributes.get(key) for key in expected if key != "state"} == expected
+    expected_state, expected_attributes = expected
+    assert state.state == expected_state
+    assert {key: state.attributes.get(key) for key in expected_attributes} == expected_attributes
 
 
 async def test_curve_sensor_without_curve(
@@ -289,13 +283,9 @@ async def test_curve_sensor_without_curve(
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
     """Test that a curve sensor has no points if its curve is no longer on the control unit."""
-    fake_api.responses = [
-        MULTIPLE_DEVICES_RESPONSE,
-        get_multiple_devices_fixed_data_response(),
-        MULTIPLE_DEVICES_DATA_RESPONSE,
-    ]
+    fake_api.responses = get_multiple_devices_responses(MULTIPLE_DEVICES_DATA_RESPONSE)
     # The control unit has no curves, so the curves in use (e.g. `HC6`) do not exist.
-    fake_api.curves = [[{**value, "value": ""} for value in CURVE_NAMES_RESPONSE], get_curve_points_response()]
+    fake_api.curves = CURVES_WITHOUT_NAMES_RESPONSE
     await fake_api.setup_integration()
 
     state: State | None = hass.states.get("sensor.keba_keenergy_12345678_heat_circuit_heating_curve_1")

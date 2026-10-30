@@ -69,6 +69,8 @@ class FlashWriteCounter:
 
         # A counter of a past week is reset here, e.g. if Home Assistant was not running at midnight.
         await self._async_reset_if_new_week()
+        # Home Assistant does not restore the repair issue after a restart, because it is not persistent.
+        self._create_issue_if_over_limit()
         self._entry.async_on_unload(
             async_track_time_change(self._hass, self._async_reset_if_new_week, hour=0, minute=0, second=0),
         )
@@ -129,11 +131,13 @@ class FlashWriteCounter:
         await self._async_save()
         self._on_change()
 
-        # The repair issue is created once, when the counter exceeds the limit.
-        if self._weekly_count == FLASH_WRITE_LIMIT_PER_WEEK + 1:
-            self._create_issue()
+        self._create_issue_if_over_limit()
 
-    def _create_issue(self) -> None:
+    def _create_issue_if_over_limit(self) -> None:
+        """Create the repair issue if the counter exceeds the limit, an existing issue is kept."""
+        if self._weekly_count <= FLASH_WRITE_LIMIT_PER_WEEK:
+            return
+
         ir.async_create_issue(
             self._hass,
             domain=DOMAIN,

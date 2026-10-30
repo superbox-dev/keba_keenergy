@@ -231,7 +231,11 @@ class KebaKeEnergyClimateEntity(KebaKeEnergyDebouncedEntity, ClimateEntity):
         await self.async_set_hvac_mode(hvac_mode=HVACMode.AUTO)
 
     async def async_set_hvac_mode(self, hvac_mode: HVACMode) -> None:
-        """Set the HVAC mode of the heating circuit, automatic mode also ends an away date range."""
+        """Set the HVAC mode of the heating circuit if it changes, every HVAC mode also ends an away date range."""
+        # An HVAC mode that is already active is not written again, e.g. heat keeps the presets sleep and boost.
+        if hvac_mode == self.hvac_mode and self.preset_mode != PRESET_AWAY:
+            return
+
         operating_mode: HeatingCircuitOperatingMode = (
             HeatingCircuitOperatingMode.AUTO
             if hvac_mode == HVACMode.AUTO
@@ -240,14 +244,13 @@ class KebaKeEnergyClimateEntity(KebaKeEnergyDebouncedEntity, ClimateEntity):
             else HeatingCircuitOperatingMode.NORMAL
         )
 
-        if hvac_mode == HVACMode.AUTO:
-            await self._async_set_away_date_range(PRESET_HOME)
-
-        if self._operating_mode is not operating_mode:
-            await self._async_write_value(
-                operating_mode,
-                key="operating_mode",
-            )
+        # Otherwise the away date range would stay active with the new operating mode.
+        await self._async_set_away_date_range(PRESET_HOME)
+        # The operating mode always changes here, a new HVAC mode or the end of away has another operating mode.
+        await self._async_write_value(
+            operating_mode,
+            key="operating_mode",
+        )
 
     async def _async_set_away_date_range(self, preset_mode: str, /) -> None:
         is_away: bool = preset_mode == PRESET_AWAY

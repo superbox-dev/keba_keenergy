@@ -16,10 +16,8 @@ import pytest
 from homeassistant.const import CONF_HOST
 from homeassistant.const import CONF_SSL
 from pytest_homeassistant_custom_component.common import MockConfigEntry
-from pytest_homeassistant_custom_component.syrupy import HomeAssistantSnapshotExtension
 from pytest_homeassistant_custom_component.test_util.aiohttp import AiohttpClientMocker
 from pytest_homeassistant_custom_component.test_util.aiohttp import AiohttpClientMockResponse
-from yarl import URL
 
 from custom_components.keba_keenergy.const import DOMAIN
 from custom_components.keba_keenergy.const import PLATFORMS
@@ -30,6 +28,9 @@ from tests.api_data import HMI_RESPONSE
 from tests.api_data import MESSAGE_ID_SUFFIX
 from tests.api_data import SYSTEM_RESPONSE
 from tests.api_data import TIMEZONE_RESPONSE
+from tests.api_data import ReadResponse
+from tests.api_data import ReadValue
+from tests.api_data import Response
 
 if TYPE_CHECKING:
     from collections.abc import AsyncGenerator
@@ -39,13 +40,7 @@ if TYPE_CHECKING:
 
     from _pytest.fixtures import SubRequest
     from homeassistant.core import HomeAssistant
-    from syrupy.assertion import SnapshotAssertion
-
-
-@pytest.fixture
-def snapshot(snapshot: SnapshotAssertion) -> SnapshotAssertion:
-    """Return snapshot assertion fixture with the Home Assistant extension."""
-    return snapshot.use_extension(HomeAssistantSnapshotExtension)
+    from yarl import URL
 
 
 @pytest.fixture(autouse=True)
@@ -122,14 +117,15 @@ class FakeKebaKeEnergyAPI:
         self.hass: HomeAssistant = hass
         self.aioclient_mock: AiohttpClientMocker = aioclient_mock
         self.config_entry: MockConfigEntry = config_entry
-        self.responses: list[Exception | HTTPStatus | list[dict[str, Any]]] = []
-        self.curves: HTTPStatus | list[list[dict[str, Any]]] = CURVES_RESPONSE
+        self.responses: list[ReadResponse] = []
+        self.curves: HTTPStatus | list[Response] = CURVES_RESPONSE
         self.system_name: str = SYSTEM_RESPONSE["name"]
+        self.timezone: str = TIMEZONE_RESPONSE["timezone"]
         self.write_status: HTTPStatus = HTTPStatus.OK
         self.unsupported_variables: set[str] = set()
         self.message_ids: dict[str, int] = {}
         self.during_read: Callable[[], Awaitable[None]] | None = None
-        self._values: dict[str, dict[str, Any]] = {}
+        self._values: dict[str, ReadValue] = {}
         self._read_requests: list[str] = []
 
     def register_auth_request(self, host: str, /, *, status: int = 200, exc: Exception | None = None) -> None:
@@ -169,7 +165,8 @@ class FakeKebaKeEnergyAPI:
         update.
         A read of an unknown value or of one of the `unsupported_variables` fails like the Web HMI rejects it. The
         values of the curves come from `curves` (an `HTTPStatus` fails them). The system name and the
-        status of the write requests can be changed with `system_name` and `write_status`.
+        status of the write requests can be changed with `system_name` and `write_status`, the time zone with
+        `timezone` (before the setup).
         """
         schema: str = "https" if ssl else "http"
 
@@ -189,7 +186,7 @@ class FakeKebaKeEnergyAPI:
 
         self.aioclient_mock.post(
             f"{schema}://{host}/dateTime?action=getTimeZone",
-            text=json.dumps(TIMEZONE_RESPONSE),
+            text=json.dumps({**TIMEZONE_RESPONSE, "timezone": self.timezone}),
             headers={"Content-Type": "application/json;charset=utf-8"},
         )
 
@@ -219,14 +216,14 @@ class FakeKebaKeEnergyAPI:
     async def _read_side_effect(self, method: str, url: URL, data: object, *_: object) -> AiohttpClientMockResponse:
         payload: list[dict[str, str]] = json.loads(str(data))
         names: list[str] = [item["name"] for item in payload]
-        response: Exception | HTTPStatus | list[dict[str, Any]]
+        response: ReadResponse
 
         if all(".linTabPool[" in name for name in names):
             response = self._curve_response(payload)
         else:
             if self._takes_next_response(names):
                 self._read_requests.append(str(data))
-                next_response: Exception | HTTPStatus | list[dict[str, Any]] = self.responses.pop(0)
+                next_response: ReadResponse = self.responses.pop(0)
 
                 if self.during_read:
                     during_read: Callable[[], Awaitable[None]] = self.during_read
@@ -239,7 +236,7 @@ class FakeKebaKeEnergyAPI:
                 self._values.update({value["name"]: value for value in next_response})
 
             # The values of the next responses are known as well, e.g. for the checks of `filter_supported()`.
-            values: dict[str, dict[str, Any]] = {
+            values: dict[str, ReadValue] = {
                 **{
                     value["name"]: value
                     for queued in reversed(self.responses)
@@ -263,16 +260,14 @@ class FakeKebaKeEnergyAPI:
                     text=f"Reading variable: {unknown[0]} failed",
                 )
 
+            message_ids: dict[str, int] = {**DEACTIVATED_MESSAGE_IDS, **self.message_ids}
             # Like the Web HMI, only a read with `attr` "1" returns the attributes, e.g. the limits.
             response = [
-                {
-                    "name": item["name"],
-                    "value": str({**DEACTIVATED_MESSAGE_IDS, **self.message_ids}.get(item["name"], 0)),
-                }
+                {"name": item["name"], "value": str(message_ids.get(item["name"], 0))}
                 if self._is_message_id(item["name"])
                 else values[item["name"]]
                 if item["attr"] == "1"
-                else {key: value for key, value in values[item["name"]].items() if key != "attributes"}
+                else {"name": item["name"], "value": values[item["name"]]["value"]}
                 for item in payload
             ]
 
@@ -295,7 +290,7 @@ class FakeKebaKeEnergyAPI:
         if not self.responses:
             return False
 
-        next_response: Exception | HTTPStatus | list[dict[str, Any]] = self.responses[0]
+        next_response: ReadResponse = self.responses[0]
 
         if not isinstance(next_response, list):
             return True
@@ -317,7 +312,7 @@ class FakeKebaKeEnergyAPI:
 
         return AiohttpClientMockResponse(method, url=url, status=error)
 
-    def _curve_response(self, payload: list[dict[str, str]], /) -> HTTPStatus | list[dict[str, Any]]:
+    def _curve_response(self, payload: list[dict[str, str]], /) -> HTTPStatus | Response:
         """Return the requested values of the curves.
 
         `get_curve_tables()` reads the names alone, then the points with the name of their curve,
@@ -328,7 +323,7 @@ class FakeKebaKeEnergyAPI:
 
         names, points = self.curves
         is_names_request: bool = all(item["name"].endswith(".name") for item in payload)
-        values: dict[str, dict[str, Any]] = {value["name"]: value for value in (names if is_names_request else points)}
+        values: dict[str, ReadValue] = {value["name"]: value for value in (names if is_names_request else points)}
         return [values[item["name"]] for item in payload]
 
     async def setup_integration(self) -> None:
@@ -343,39 +338,40 @@ class FakeKebaKeEnergyAPI:
         """Return the bodies of the read requests that took one of the `responses`, in order."""
         return list(self._read_requests)
 
-    def assert_called_write_with(self, data: str, /) -> None:
-        """Assert that the data was written to the Web HMI."""
-        assert data in self.write_requests()
-
     def write_requests(self) -> list[str]:
         """Return the bodies of all write requests, in order."""
         return [
             str(data)
             for method, url, data, _ in self.aioclient_mock.mock_calls
-            if method == "POST" and url == URL("http://10.0.0.100/var/readWriteVars?action=set")
+            if method == "POST" and url.path == "/var/readWriteVars" and url.query.get("action") == "set"
         ]
 
 
 @pytest.fixture
-async def fake_api(
+def fake_api(
     hass: HomeAssistant,
     aioclient_mock: AiohttpClientMocker,
     config_entry: MockConfigEntry,
-) -> FakeKebaKeEnergyAPI:
-    """Return the fake Web HMI."""
-    return FakeKebaKeEnergyAPI(hass, aioclient_mock, config_entry)
+) -> Generator[FakeKebaKeEnergyAPI]:
+    """Return the fake Web HMI, every response of a test must be read."""
+    api: FakeKebaKeEnergyAPI = FakeKebaKeEnergyAPI(hass, aioclient_mock, config_entry)
+    yield api
+    assert not api.responses, "every response is read"
 
 
-@pytest.fixture
+@pytest.fixture(params=["en", "de"], ids=["en", "de"])
 def language(hass: HomeAssistant, request: SubRequest) -> str:
-    """Set the language of Home Assistant, parametrized indirectly."""
+    """Set the language of Home Assistant, every language or parametrized indirectly."""
     hass.config.language = request.param
     return request.param
 
 
 @pytest.fixture
 def config_entry(request: SubRequest) -> MockConfigEntry:
-    """Return the config entry, parametrized indirectly with `data` and `options` to update."""
+    """Return the config entry, parametrized indirectly with `data` and `options` to update.
+
+    The `options` are merged with the default options.
+    """
     mock_config_entry_data: dict[str, Any] = {
         "title": "KEBA KeEnergy (ap4400.local)",
         "data": {
@@ -399,7 +395,10 @@ def config_entry(request: SubRequest) -> MockConfigEntry:
     }
 
     if hasattr(request, "param"):
-        mock_config_entry_data.update(request.param)
+        param: dict[str, Any] = request.param
+        mock_config_entry_data.update(
+            {**param, "options": {**mock_config_entry_data["options"], **param.get("options", {})}},
+        )
 
     return MockConfigEntry(
         domain=DOMAIN,

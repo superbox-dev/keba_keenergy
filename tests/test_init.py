@@ -6,7 +6,6 @@ from __future__ import annotations
 
 from http import HTTPStatus
 from typing import TYPE_CHECKING
-from typing import Any
 
 import pytest
 from homeassistant.config_entries import SOURCE_REAUTH
@@ -22,7 +21,9 @@ from tests.api_data import MULTIPLE_DEVICES_RESPONSE
 from tests.api_data import SINGLE_DEVICE_DATA_RESPONSE
 from tests.api_data import SINGLE_DEVICE_FIXED_DATA_RESPONSE
 from tests.api_data import SINGLE_DEVICE_RESPONSE
+from tests.api_data import Response
 from tests.api_data import get_multiple_devices_fixed_data_response
+from tests.api_data import get_multiple_devices_responses
 
 if TYPE_CHECKING:
     from homeassistant.core import HomeAssistant
@@ -40,11 +41,7 @@ async def test_load_entry(
     snapshot: SnapshotAssertion,
 ) -> None:
     """Test setting up the integration."""
-    fake_api.responses = [
-        MULTIPLE_DEVICES_RESPONSE,
-        get_multiple_devices_fixed_data_response(has_passive_cooling="true"),
-        MULTIPLE_DEVICES_DATA_RESPONSE,
-    ]
+    fake_api.responses = get_multiple_devices_responses(MULTIPLE_DEVICES_DATA_RESPONSE, has_passive_cooling="true")
     await fake_api.setup_integration()
 
     assert config_entry.state is ConfigEntryState.LOADED
@@ -52,34 +49,13 @@ async def test_load_entry(
     assert set(hass.states.async_entity_ids()) == snapshot
 
 
-@pytest.mark.parametrize(
-    "config_entry",
-    [
-        (
-            {
-                "title": "KEBA KeEnergy (ap4400.local)",
-                "data": {
-                    CONF_HOST: "ap4400.local",
-                    CONF_SSL: False,
-                },
-                "unique_id": "12345678",
-            }
-        ),
-    ],
-    indirect=["config_entry"],
-    ids=["hostname"],
-)
 async def test_unload_entry(
     hass: HomeAssistant,
     config_entry: MockConfigEntry,
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
     """Test unloading the integration."""
-    fake_api.responses = [
-        MULTIPLE_DEVICES_RESPONSE,
-        get_multiple_devices_fixed_data_response(),
-        MULTIPLE_DEVICES_DATA_RESPONSE,
-    ]
+    fake_api.responses = get_multiple_devices_responses(MULTIPLE_DEVICES_DATA_RESPONSE)
     await fake_api.setup_integration()
 
     assert config_entry.state == ConfigEntryState.LOADED
@@ -107,7 +83,7 @@ async def test_unload_entry(
 async def test_devices(
     hass: HomeAssistant,
     fake_api: FakeKebaKeEnergyAPI,
-    response: list[list[dict[str, Any]]],
+    response: list[Response],
     snapshot: SnapshotAssertion,
 ) -> None:
     """Test the devices that the integration creates."""
@@ -145,11 +121,7 @@ async def test_remove_stale_devices(
         config_entry=config_entry,
         device_id=stale_device.id,
     )
-    fake_api.responses = [
-        MULTIPLE_DEVICES_RESPONSE,
-        get_multiple_devices_fixed_data_response(),
-        MULTIPLE_DEVICES_DATA_RESPONSE,
-    ]
+    fake_api.responses = get_multiple_devices_responses(MULTIPLE_DEVICES_DATA_RESPONSE)
     fake_api.register_requests(config_entry.data[CONF_HOST], ssl=config_entry.data[CONF_SSL])
     assert await hass.config_entries.async_setup(config_entry.entry_id)
     await hass.async_block_till_done()
