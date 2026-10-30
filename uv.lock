@@ -1420,7 +1420,7 @@ wheels = [
 
 [[package]]
 name = "keba-keenergy"
-version = "1.12.0b1"
+version = "1.12.0b2"
 source = { editable = "." }
 dependencies = [
     { name = "homeassistant" },
