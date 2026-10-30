@@ -32,6 +32,7 @@ from tests.test_switch_data import USE_HEATING_CURVE_ENTITY_ID
 
 if TYPE_CHECKING:
     from homeassistant.core import HomeAssistant
+    from pytest_homeassistant_custom_component.common import MockConfigEntry
     from syrupy.assertion import SnapshotAssertion
 
     from tests.conftest import FakeKebaKeEnergyAPI
@@ -40,6 +41,7 @@ if TYPE_CHECKING:
 @pytest.mark.usefixtures("entity_registry_enabled_by_default", "language")
 async def test_switches(
     hass: HomeAssistant,
+    config_entry: MockConfigEntry,
     fake_api: FakeKebaKeEnergyAPI,
     snapshot: SnapshotAssertion,
 ) -> None:
@@ -47,7 +49,7 @@ async def test_switches(
     fake_api.responses = get_multiple_devices_responses(MULTIPLE_DEVICES_DATA_RESPONSE, has_passive_cooling="true")
     await fake_api.setup_integration()
 
-    for state in get_platform_states(hass, fake_api.config_entry, Platform.SWITCH):
+    for state in get_platform_states(hass, config_entry, Platform.SWITCH):
         assert state == snapshot(name=state.entity_id)
 
 
@@ -136,6 +138,7 @@ async def test_turn_on_off(
 @pytest.mark.usefixtures("entity_registry_enabled_by_default")
 async def test_heating_and_cooling_circuit_has_one_curve_switch(
     hass: HomeAssistant,
+    config_entry: MockConfigEntry,
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
     """Test that a heating and cooling circuit only has the heating curve switch, because both use one setting."""
@@ -151,7 +154,7 @@ async def test_heating_and_cooling_circuit_has_one_curve_switch(
 
     assert sorted(
         entry.unique_id
-        for entry in er.async_entries_for_config_entry(er.async_get(hass), fake_api.config_entry.entry_id)
+        for entry in er.async_entries_for_config_entry(er.async_get(hass), config_entry.entry_id)
         if entry.domain == SWITCH_DOMAIN and "_curve_" in entry.unique_id
     ) == [
         "12345678_heat_circuit_use_heating_curve_1",

@@ -343,6 +343,10 @@ class FakeKebaKeEnergyAPI:
         """Return the bodies of the read requests that took one of the `responses`, in order."""
         return list(self._read_requests)
 
+    def time_zone_request_count(self) -> int:
+        """Return the number of requests of the time zone."""
+        return len([url for _, url, *_ in self.aioclient_mock.mock_calls if url.path == "/dateTime"])
+
     def write_requests(self) -> list[str]:
         """Return the bodies of all write requests, in order."""
         return [

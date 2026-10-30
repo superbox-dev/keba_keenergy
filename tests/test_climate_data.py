@@ -26,9 +26,9 @@ from tests.api_data import get_single_device_data_response
 from tests.api_data import replace_values
 from tests.api_data import update_response
 
-ENTITY_ID: Final[str] = "climate.keba_keenergy_12345678"
-ENTITY_ID_1: Final[str] = "climate.keba_keenergy_12345678_1"
-ENTITY_ID_2: Final[str] = "climate.keba_keenergy_12345678_2"
+# The heating circuit of the setup with one device of each type and the first one of the setup with several.
+HEAT_CIRCUIT_ENTITY_ID: Final[str] = "climate.keba_keenergy_12345678"
+HEAT_CIRCUIT_1_ENTITY_ID: Final[str] = "climate.keba_keenergy_12345678_1"
 # The selected target temperature 20.0 plus the offset 1.5.
 TARGET_TEMPERATURE_WITH_OFFSET: Final[float] = 21.5
 
@@ -66,7 +66,7 @@ def get_hvac_action_data_response(
 # The time of the action calls, 2026-01-24 13:00 in the time zone of the Web HMI.
 NOW: Final[datetime] = datetime(2026, 1, 24, 12, 0, tzinfo=UTC)
 # The away date range of one year from today.
-AWAY_DATE_RANGE_WRITE: Final[str] = (
+AWAY_PRESET_WRITE: Final[str] = (
     '[{"name": "APPL.CtrlAppl.sParam.heatCircuit[0].param.holiday.start", "value": "1769209200"}, '
     '{"name": "APPL.CtrlAppl.sParam.heatCircuit[1].param.holiday.start", "value": "1769209200"}, '
     '{"name": "APPL.CtrlAppl.sParam.heatCircuit[0].param.holiday.stop", "value": "1800831599"}, '

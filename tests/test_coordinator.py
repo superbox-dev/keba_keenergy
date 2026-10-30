@@ -11,7 +11,6 @@ import pytest
 from homeassistant.config_entries import SOURCE_REAUTH
 from homeassistant.const import STATE_UNAVAILABLE
 from homeassistant.const import STATE_UNKNOWN
-from homeassistant.core import State
 from homeassistant.exceptions import ConfigEntryAuthFailed
 from homeassistant.helpers.update_coordinator import UpdateFailed
 
@@ -29,6 +28,7 @@ from tests.test_coordinator_data import HEAT_CIRCUIT_VALUE
 
 if TYPE_CHECKING:
     from homeassistant.core import HomeAssistant
+    from homeassistant.core import State
     from pytest_homeassistant_custom_component.common import MockConfigEntry
 
     from custom_components.keba_keenergy.coordinator import KebaKeEnergyDataUpdateCoordinator
@@ -79,8 +79,7 @@ async def test_update_api_error(
     assert isinstance(coordinator.last_exception, UpdateFailed)
     assert coordinator.last_exception.translation_key == "communication_error"
 
-    state: State | None = hass.states.get("sensor.keba_keenergy_12345678_outdoor_temperature")
-    assert isinstance(state, State)
+    state: State = get_state(hass, "sensor.keba_keenergy_12345678_outdoor_temperature")
     assert state.state == STATE_UNAVAILABLE
 
 
@@ -101,7 +100,7 @@ async def test_update_curves_error(
 
     assert isinstance(coordinator.last_exception, UpdateFailed)
     assert coordinator.last_exception.translation_key == "communication_error"
-    assert get_state(hass, "sensor.keba_keenergy_12345678_outdoor_temperature") == STATE_UNAVAILABLE
+    assert get_state(hass, "sensor.keba_keenergy_12345678_outdoor_temperature").state == STATE_UNAVAILABLE
 
 
 @pytest.mark.parametrize(
@@ -132,7 +131,7 @@ async def test_update_interval_ticks(
     await fake_api.setup_integration()
 
     coordinator: KebaKeEnergyDataUpdateCoordinator = config_entry.runtime_data
-    heat_circuit_state: str = get_state(hass, HEAT_CIRCUIT_ENTITY_ID)
+    heat_circuit_state: str = get_state(hass, HEAT_CIRCUIT_ENTITY_ID).state
 
     assert HEAT_CIRCUIT_VALUE in fake_api.read_requests()[-1]
 
@@ -143,8 +142,8 @@ async def test_update_interval_ticks(
     await coordinator.async_refresh()
 
     assert HEAT_CIRCUIT_VALUE not in fake_api.read_requests()[-1]
-    assert get_state(hass, HEAT_CIRCUIT_ENTITY_ID) == heat_circuit_state
-    assert get_state(hass, "sensor.keba_keenergy_12345678_buffer_tank_target_temperature_1") == "42.0"
+    assert get_state(hass, HEAT_CIRCUIT_ENTITY_ID).state == heat_circuit_state
+    assert get_state(hass, "sensor.keba_keenergy_12345678_buffer_tank_target_temperature_1").state == "42.0"
     # The control unit has no solar circuit, so its values are never requested.
     assert not any("solarCircuit" in body for body in fake_api.read_requests())
 
@@ -182,13 +181,13 @@ async def test_update_interval_ticks_keep_message_ids(
     # The heating circuits are requested on the first and the third refresh.
     await coordinator.async_refresh()
 
-    assert get_state(hass, entity_id) == STATE_UNKNOWN
+    assert get_state(hass, entity_id).state == STATE_UNKNOWN
 
     fake_api.message_ids = {}
     await coordinator.async_refresh()
 
-    assert get_state(hass, entity_id) == STATE_UNKNOWN
+    assert get_state(hass, entity_id).state == STATE_UNKNOWN
 
     await coordinator.async_refresh()
 
-    assert get_state(hass, entity_id) == "22.418831"
+    assert get_state(hass, entity_id).state == "22.418831"

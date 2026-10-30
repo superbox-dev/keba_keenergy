@@ -4,10 +4,11 @@
 
 from __future__ import annotations
 
-from datetime import timedelta
 from typing import TYPE_CHECKING
 
 import pytest
+from homeassistant.components.climate.const import ATTR_CURRENT_HUMIDITY
+from homeassistant.components.climate.const import ATTR_CURRENT_TEMPERATURE
 from homeassistant.components.climate.const import ATTR_HVAC_ACTION
 from homeassistant.components.climate.const import ATTR_HVAC_MODE
 from homeassistant.components.climate.const import ATTR_HVAC_MODES
@@ -25,7 +26,6 @@ from homeassistant.components.climate.const import PRESET_HOME
 from homeassistant.components.climate.const import PRESET_SLEEP
 from homeassistant.components.climate.const import SERVICE_SET_HVAC_MODE
 from homeassistant.components.climate.const import SERVICE_SET_PRESET_MODE
-from homeassistant.components.climate.const import SERVICE_SET_TEMPERATURE
 from homeassistant.components.climate.const import HVACAction
 from homeassistant.components.climate.const import HVACMode
 from homeassistant.const import ATTR_ENTITY_ID
@@ -33,21 +33,18 @@ from homeassistant.const import ATTR_TEMPERATURE
 from homeassistant.const import SERVICE_TURN_OFF
 from homeassistant.const import SERVICE_TURN_ON
 from homeassistant.const import Platform
-from homeassistant.core import HomeAssistant
-from homeassistant.core import State
 from homeassistant.exceptions import HomeAssistantError
 from homeassistant.exceptions import ServiceValidationError
 from homeassistant.helpers.entity_component import async_update_entity
-from homeassistant.util import dt as dt_util
 from keba_keenergy_api.enums import HeatingCircuitOperatingMode
-from keba_keenergy_api.enums import HeatingCircuitOperatingMode as Mode
 from keba_keenergy_api.enums import HeatingCircuitRequest
 from keba_keenergy_api.enums import HeatingCircuitType
 from keba_keenergy_api.enums import HeatPumpState
-from pytest_homeassistant_custom_component.common import async_fire_time_changed
 
-from custom_components.keba_keenergy.const import FLASH_WRITE_DELAY
+from tests import fire_debounced_writes
 from tests import get_platform_states
+from tests import get_state
+from tests import set_target_temperature
 from tests.api_data import MULTIPLE_DEVICES_DATA_RESPONSE
 from tests.api_data import MULTIPLE_DEVICES_OTHER_MODES_DATA_RESPONSE
 from tests.api_data import Response
@@ -56,9 +53,9 @@ from tests.api_data import get_single_device_data_response
 from tests.api_data import get_single_device_responses
 from tests.api_data import update_response
 from tests.test_climate_data import AWAY_DATE_RANGE_RESET_WRITE
-from tests.test_climate_data import AWAY_DATE_RANGE_WRITE
-from tests.test_climate_data import ENTITY_ID
-from tests.test_climate_data import ENTITY_ID_1
+from tests.test_climate_data import AWAY_PRESET_WRITE
+from tests.test_climate_data import HEAT_CIRCUIT_1_ENTITY_ID
+from tests.test_climate_data import HEAT_CIRCUIT_ENTITY_ID
 from tests.test_climate_data import NOW
 from tests.test_climate_data import PARTY_DATA_RESPONSE
 from tests.test_climate_data import REDUCED_DATA_RESPONSE
@@ -68,6 +65,9 @@ from tests.test_climate_data import get_hvac_action_data_response
 from tests.test_climate_data import get_operating_mode_write
 
 if TYPE_CHECKING:
+    from homeassistant.core import HomeAssistant
+    from homeassistant.core import State
+    from pytest_homeassistant_custom_component.common import MockConfigEntry
     from syrupy.assertion import SnapshotAssertion
 
     from tests.conftest import FakeKebaKeEnergyAPI
@@ -76,6 +76,7 @@ if TYPE_CHECKING:
 @pytest.mark.usefixtures("entity_registry_enabled_by_default", "language")
 async def test_climate(
     hass: HomeAssistant,
+    config_entry: MockConfigEntry,
     fake_api: FakeKebaKeEnergyAPI,
     snapshot: SnapshotAssertion,
 ) -> None:
@@ -83,7 +84,7 @@ async def test_climate(
     fake_api.responses = get_multiple_devices_responses(MULTIPLE_DEVICES_DATA_RESPONSE)
     await fake_api.setup_integration()
 
-    for state in get_platform_states(hass, fake_api.config_entry, Platform.CLIMATE):
+    for state in get_platform_states(hass, config_entry, Platform.CLIMATE):
         assert state == snapshot(name=state.entity_id)
 
 
@@ -124,9 +125,8 @@ async def test_hvac_and_preset_modes(
     fake_api.responses = get_circuit_type_responses(circuit_type)
     await fake_api.setup_integration()
 
-    state: State | None = hass.states.get(ENTITY_ID)
+    state: State = get_state(hass, HEAT_CIRCUIT_ENTITY_ID)
 
-    assert isinstance(state, State)
     assert (state.attributes[ATTR_HVAC_MODES], state.attributes[ATTR_PRESET_MODES]) == expected_modes
 
 
@@ -142,13 +142,13 @@ async def test_set_hvac_mode_cool(
         domain=CLIMATE_DOMAIN,
         service=SERVICE_SET_HVAC_MODE,
         service_data={
-            ATTR_ENTITY_ID: ENTITY_ID,
+            ATTR_ENTITY_ID: HEAT_CIRCUIT_ENTITY_ID,
             ATTR_HVAC_MODE: HVACMode.COOL,
         },
         blocking=True,
     )
 
-    assert fake_api.write_requests() == [get_operating_mode_write(Mode.NORMAL)]
+    assert fake_api.write_requests() == [get_operating_mode_write(HeatingCircuitOperatingMode.NORMAL)]
 
 
 async def test_set_preset_mode_away_of_cooling_circuit(
@@ -164,7 +164,7 @@ async def test_set_preset_mode_away_of_cooling_circuit(
             domain=CLIMATE_DOMAIN,
             service=SERVICE_SET_PRESET_MODE,
             service_data={
-                ATTR_ENTITY_ID: ENTITY_ID,
+                ATTR_ENTITY_ID: HEAT_CIRCUIT_ENTITY_ID,
                 ATTR_PRESET_MODE: PRESET_AWAY,
             },
             blocking=True,
@@ -200,9 +200,8 @@ async def test_temperature_limits(
     fake_api.responses = get_single_device_responses(response)
     await fake_api.setup_integration()
 
-    state: State | None = hass.states.get(ENTITY_ID)
+    state: State = get_state(hass, HEAT_CIRCUIT_ENTITY_ID)
 
-    assert isinstance(state, State)
     assert (state.attributes[ATTR_MIN_TEMP], state.attributes[ATTR_MAX_TEMP]) == expected_limits
 
 
@@ -215,18 +214,9 @@ async def test_set_temperature_out_of_range(
     await fake_api.setup_integration()
 
     with pytest.raises(ServiceValidationError) as error:
-        await hass.services.async_call(
-            domain=CLIMATE_DOMAIN,
-            service=SERVICE_SET_TEMPERATURE,
-            service_data={
-                ATTR_ENTITY_ID: ENTITY_ID,
-                ATTR_TEMPERATURE: 23.0,
-            },
-            blocking=True,
-        )
+        await set_target_temperature(hass, HEAT_CIRCUIT_ENTITY_ID, 23.0)
 
-    async_fire_time_changed(hass, dt_util.utcnow() + timedelta(seconds=FLASH_WRITE_DELAY))
-    await hass.async_block_till_done()
+    await fire_debounced_writes(hass)
 
     assert error.value.translation_key == "temp_out_of_range"
     assert fake_api.write_requests() == []
@@ -242,8 +232,7 @@ async def test_target_temperature(
     )
     await fake_api.setup_integration()
 
-    state: State | None = hass.states.get(ENTITY_ID)
-    assert isinstance(state, State)
+    state: State = get_state(hass, HEAT_CIRCUIT_ENTITY_ID)
     assert state.attributes[ATTR_TEMPERATURE] == TARGET_TEMPERATURE_WITH_OFFSET
 
 
@@ -262,25 +251,15 @@ async def test_set_temperature_debounced(
     temperatures: tuple[float, ...] = (21.0, 20.5)
 
     for temperature in temperatures:
-        await hass.services.async_call(
-            domain=CLIMATE_DOMAIN,
-            service=SERVICE_SET_TEMPERATURE,
-            service_data={
-                ATTR_ENTITY_ID: ENTITY_ID,
-                ATTR_TEMPERATURE: temperature,
-            },
-            blocking=True,
-        )
+        await set_target_temperature(hass, HEAT_CIRCUIT_ENTITY_ID, temperature)
 
-    await async_update_entity(hass, ENTITY_ID)
+    await async_update_entity(hass, HEAT_CIRCUIT_ENTITY_ID)
 
-    state: State | None = hass.states.get(ENTITY_ID)
-    assert isinstance(state, State)
+    state: State = get_state(hass, HEAT_CIRCUIT_ENTITY_ID)
     assert state.attributes[ATTR_TEMPERATURE] == temperatures[-1]
     assert fake_api.write_requests() == []
 
-    async_fire_time_changed(hass, dt_util.utcnow() + timedelta(seconds=FLASH_WRITE_DELAY))
-    await hass.async_block_till_done()
+    await fire_debounced_writes(hass)
 
     assert fake_api.write_requests() == [
         '[{"name": "APPL.CtrlAppl.sParam.heatCircuit[0].param.offsetRoomTemp", "value": "0.5"}]',
@@ -296,21 +275,11 @@ async def test_set_temperature_without_selected_target_temperature(
     fake_api.responses = get_single_device_responses(get_single_device_data_response())
     await fake_api.setup_integration()
 
-    await hass.services.async_call(
-        domain=CLIMATE_DOMAIN,
-        service=SERVICE_SET_TEMPERATURE,
-        service_data={
-            ATTR_ENTITY_ID: ENTITY_ID,
-            ATTR_TEMPERATURE: 21.0,
-        },
-        blocking=True,
-    )
+    await set_target_temperature(hass, HEAT_CIRCUIT_ENTITY_ID, 21.0)
 
-    async_fire_time_changed(hass, dt_util.utcnow() + timedelta(seconds=FLASH_WRITE_DELAY))
-    await hass.async_block_till_done()
+    await fire_debounced_writes(hass)
 
-    state: State | None = hass.states.get(ENTITY_ID)
-    assert isinstance(state, State)
+    state: State = get_state(hass, HEAT_CIRCUIT_ENTITY_ID)
     assert state.attributes[ATTR_TEMPERATURE] is None
     assert fake_api.write_requests() == []
 
@@ -318,25 +287,33 @@ async def test_set_temperature_without_selected_target_temperature(
 @pytest.mark.parametrize(
     ("service_call", "response", "expected_writes"),
     [
-        ((SERVICE_TURN_OFF, {}), MULTIPLE_DEVICES_DATA_RESPONSE, [get_operating_mode_write(Mode.OFF)]),
-        ((SERVICE_TURN_ON, {}), MULTIPLE_DEVICES_DATA_RESPONSE, [get_operating_mode_write(Mode.AUTO)]),
+        (
+            (SERVICE_TURN_OFF, {}),
+            MULTIPLE_DEVICES_DATA_RESPONSE,
+            [get_operating_mode_write(HeatingCircuitOperatingMode.OFF)],
+        ),
+        (
+            (SERVICE_TURN_ON, {}),
+            MULTIPLE_DEVICES_DATA_RESPONSE,
+            [get_operating_mode_write(HeatingCircuitOperatingMode.AUTO)],
+        ),
         ((SERVICE_SET_HVAC_MODE, {ATTR_HVAC_MODE: HVACMode.HEAT}), MULTIPLE_DEVICES_DATA_RESPONSE, []),
         ((SERVICE_SET_HVAC_MODE, {ATTR_HVAC_MODE: HVACMode.HEAT}), REDUCED_DATA_RESPONSE, []),
         ((SERVICE_SET_HVAC_MODE, {ATTR_HVAC_MODE: HVACMode.HEAT}), PARTY_DATA_RESPONSE, []),
         (
             (SERVICE_SET_HVAC_MODE, {ATTR_HVAC_MODE: HVACMode.AUTO}),
             MULTIPLE_DEVICES_OTHER_MODES_DATA_RESPONSE,
-            [AWAY_DATE_RANGE_RESET_WRITE, get_operating_mode_write(Mode.AUTO)],
+            [AWAY_DATE_RANGE_RESET_WRITE, get_operating_mode_write(HeatingCircuitOperatingMode.AUTO)],
         ),
         (
             (SERVICE_SET_HVAC_MODE, {ATTR_HVAC_MODE: HVACMode.HEAT}),
             MULTIPLE_DEVICES_OTHER_MODES_DATA_RESPONSE,
-            [AWAY_DATE_RANGE_RESET_WRITE, get_operating_mode_write(Mode.NORMAL)],
+            [AWAY_DATE_RANGE_RESET_WRITE, get_operating_mode_write(HeatingCircuitOperatingMode.NORMAL)],
         ),
         (
             (SERVICE_SET_HVAC_MODE, {ATTR_HVAC_MODE: HVACMode.OFF}),
             MULTIPLE_DEVICES_OTHER_MODES_DATA_RESPONSE,
-            [AWAY_DATE_RANGE_RESET_WRITE, get_operating_mode_write(Mode.OFF)],
+            [AWAY_DATE_RANGE_RESET_WRITE, get_operating_mode_write(HeatingCircuitOperatingMode.OFF)],
         ),
     ],
     ids=[
@@ -369,7 +346,7 @@ async def test_set_hvac_mode(
     await hass.services.async_call(
         domain=CLIMATE_DOMAIN,
         service=service,
-        service_data={ATTR_ENTITY_ID: ENTITY_ID_1, **service_data},
+        service_data={ATTR_ENTITY_ID: HEAT_CIRCUIT_1_ENTITY_ID, **service_data},
         blocking=True,
     )
 
@@ -377,22 +354,34 @@ async def test_set_hvac_mode(
 
 
 @pytest.mark.parametrize(
-    ("preset_mode", "response", "expected_writes"),
+    ("preset_mode", "response", "expected"),
     [
-        (PRESET_HOME, MULTIPLE_DEVICES_DATA_RESPONSE, [get_operating_mode_write(Mode.AUTO)]),
-        (PRESET_COMFORT, MULTIPLE_DEVICES_DATA_RESPONSE, []),
-        (PRESET_SLEEP, MULTIPLE_DEVICES_DATA_RESPONSE, [get_operating_mode_write(Mode.REDUCED)]),
-        (PRESET_BOOST, MULTIPLE_DEVICES_DATA_RESPONSE, [get_operating_mode_write(Mode.PARTY)]),
-        (PRESET_AWAY, MULTIPLE_DEVICES_DATA_RESPONSE, [AWAY_DATE_RANGE_WRITE]),
+        (
+            PRESET_HOME,
+            MULTIPLE_DEVICES_DATA_RESPONSE,
+            ([get_operating_mode_write(HeatingCircuitOperatingMode.AUTO)], 0),
+        ),
+        (PRESET_COMFORT, MULTIPLE_DEVICES_DATA_RESPONSE, ([], 0)),
+        (
+            PRESET_SLEEP,
+            MULTIPLE_DEVICES_DATA_RESPONSE,
+            ([get_operating_mode_write(HeatingCircuitOperatingMode.REDUCED)], 0),
+        ),
+        (
+            PRESET_BOOST,
+            MULTIPLE_DEVICES_DATA_RESPONSE,
+            ([get_operating_mode_write(HeatingCircuitOperatingMode.PARTY)], 0),
+        ),
+        (PRESET_AWAY, MULTIPLE_DEVICES_DATA_RESPONSE, ([AWAY_PRESET_WRITE], 1)),
         (
             PRESET_HOME,
             MULTIPLE_DEVICES_OTHER_MODES_DATA_RESPONSE,
-            [AWAY_DATE_RANGE_RESET_WRITE, get_operating_mode_write(Mode.AUTO)],
+            ([AWAY_DATE_RANGE_RESET_WRITE, get_operating_mode_write(HeatingCircuitOperatingMode.AUTO)], 1),
         ),
         (
             PRESET_COMFORT,
             MULTIPLE_DEVICES_OTHER_MODES_DATA_RESPONSE,
-            [AWAY_DATE_RANGE_RESET_WRITE, get_operating_mode_write(Mode.NORMAL)],
+            ([AWAY_DATE_RANGE_RESET_WRITE, get_operating_mode_write(HeatingCircuitOperatingMode.NORMAL)], 1),
         ),
     ],
     ids=["home", "comfort_unchanged", "sleep", "boost", "away", "home_while_away", "comfort_while_away"],
@@ -403,12 +392,12 @@ async def test_set_preset_mode(
     fake_api: FakeKebaKeEnergyAPI,
     preset_mode: str,
     response: Response,
-    expected_writes: list[str],
+    expected: tuple[list[str], int],
 ) -> None:
     """Test setting the preset mode of a heating circuit.
 
     The away preset sets an away date range of one year, leaving it resets the date range to yesterday. Only a
-    change of the away date range requests the time zone of the Web HMI.
+    change of the away date range requests the time zone of the Web HMI (the second expected value).
     """
     fake_api.responses = get_multiple_devices_responses(response)
     await fake_api.setup_integration()
@@ -417,16 +406,13 @@ async def test_set_preset_mode(
         domain=CLIMATE_DOMAIN,
         service=SERVICE_SET_PRESET_MODE,
         service_data={
-            ATTR_ENTITY_ID: ENTITY_ID_1,
+            ATTR_ENTITY_ID: HEAT_CIRCUIT_1_ENTITY_ID,
             ATTR_PRESET_MODE: preset_mode,
         },
         blocking=True,
     )
 
-    assert fake_api.write_requests() == expected_writes
-    assert len([url for _, url, *_ in fake_api.aioclient_mock.mock_calls if url.path == "/dateTime"]) == len(
-        [write for write in expected_writes if "holiday" in write],
-    )
+    assert (fake_api.write_requests(), fake_api.time_zone_request_count()) == expected
 
 
 async def test_set_preset_mode_away_with_invalid_time_zone(
@@ -443,7 +429,7 @@ async def test_set_preset_mode_away_with_invalid_time_zone(
             domain=CLIMATE_DOMAIN,
             service=SERVICE_SET_PRESET_MODE,
             service_data={
-                ATTR_ENTITY_ID: ENTITY_ID_1,
+                ATTR_ENTITY_ID: HEAT_CIRCUIT_1_ENTITY_ID,
                 ATTR_PRESET_MODE: PRESET_AWAY,
             },
             blocking=True,
@@ -462,18 +448,9 @@ async def test_set_temperature(
     fake_api.responses = get_multiple_devices_responses(MULTIPLE_DEVICES_DATA_RESPONSE)
     await fake_api.setup_integration()
 
-    await hass.services.async_call(
-        domain=CLIMATE_DOMAIN,
-        service=SERVICE_SET_TEMPERATURE,
-        service_data={
-            ATTR_ENTITY_ID: ENTITY_ID_1,
-            ATTR_TEMPERATURE: 19.5,
-        },
-        blocking=True,
-    )
+    await set_target_temperature(hass, HEAT_CIRCUIT_1_ENTITY_ID, 19.5)
 
-    async_fire_time_changed(hass, dt_util.utcnow() + timedelta(seconds=FLASH_WRITE_DELAY))
-    await hass.async_block_till_done()
+    await fire_debounced_writes(hass)
 
     assert fake_api.write_requests() == [
         '[{"name": "APPL.CtrlAppl.sParam.heatCircuit[0].param.offsetRoomTemp", "value": "-0.5"}]'
@@ -500,8 +477,7 @@ async def test_operating_mode_without_preset(
     )
     await fake_api.setup_integration()
 
-    state: State | None = hass.states.get(ENTITY_ID)
-    assert isinstance(state, State)
+    state: State = get_state(hass, HEAT_CIRCUIT_ENTITY_ID)
     assert state.state == HVACMode.OFF
     assert state.attributes[ATTR_PRESET_MODE] == PRESET_HOME
 
@@ -518,9 +494,8 @@ async def test_room_sensor_not_in_use(
     fake_api.responses = get_multiple_devices_responses(MULTIPLE_DEVICES_DATA_RESPONSE)
     await fake_api.setup_integration()
 
-    state: State | None = hass.states.get(ENTITY_ID_1)
-    assert isinstance(state, State)
-    assert (state.state, state.attributes["current_temperature"], state.attributes["current_humidity"]) == (
+    state: State = get_state(hass, HEAT_CIRCUIT_1_ENTITY_ID)
+    assert (state.state, state.attributes[ATTR_CURRENT_TEMPERATURE], state.attributes[ATTR_CURRENT_HUMIDITY]) == (
         HVACMode.HEAT,
         None,
         53.0,
@@ -575,19 +550,19 @@ async def test_room_sensor_not_in_use(
     ],
     ids=[
         "standby",
-        "flow",
-        "auto_heat",
+        "pre_run",
+        "automatic",
         "defrost",
-        "auto_cool",
-        "inflow",
+        "cooling",
+        "post_run",
         "pump_down",
         "shutdown",
         "error",
         "source_flush",
-        "hot_water",
-        "cool_request",
-        "no_request",
-        "hvac_mode_off",
+        "automatic_hot_water_priority",
+        "standby_cool_request",
+        "standby_cool_request_outdoor_off",
+        "automatic_hvac_mode_off",
     ],
 )
 async def test_hvac_action(
@@ -600,6 +575,5 @@ async def test_hvac_action(
     fake_api.responses = get_single_device_responses(response)
     await fake_api.setup_integration()
 
-    state: State | None = hass.states.get(ENTITY_ID)
-    assert isinstance(state, State)
+    state: State = get_state(hass, HEAT_CIRCUIT_ENTITY_ID)
     assert state.attributes[ATTR_HVAC_ACTION] == expected_hvac_action

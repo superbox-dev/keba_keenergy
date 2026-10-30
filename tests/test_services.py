@@ -11,7 +11,6 @@ from typing import TYPE_CHECKING
 import probatio
 import pytest
 from homeassistant.config_entries import ConfigEntryState
-from homeassistant.core import State
 from homeassistant.exceptions import HomeAssistantError
 from homeassistant.exceptions import ServiceValidationError
 from pytest_homeassistant_custom_component.common import MockConfigEntry
@@ -24,6 +23,7 @@ from custom_components.keba_keenergy.const import ATTR_START_DATE
 from custom_components.keba_keenergy.const import DOMAIN
 from custom_components.keba_keenergy.const import SERVICE_SET_AWAY_DATE_RANGE
 from custom_components.keba_keenergy.const import SERVICE_SET_HEATING_CURVE_POINTS
+from tests import get_state
 from tests.api_data import CURVE_NAMES_RESPONSE
 from tests.api_data import CURVES_RENAMED_RESPONSE
 from tests.api_data import CURVES_RESPONSE
@@ -37,6 +37,7 @@ from tests.test_services_data import HEATING_CURVE_POINTS_WRITE
 
 if TYPE_CHECKING:
     from homeassistant.core import HomeAssistant
+    from homeassistant.core import State
 
     from tests.conftest import FakeKebaKeEnergyAPI
 
@@ -46,7 +47,7 @@ if TYPE_CHECKING:
     [("2025-01-01", "2025-01-14"), ("2025-01-01T08:00:00", "2025-01-14T20:00:00+00:00")],
     ids=["date", "date_and_time"],
 )
-async def test_set_away_range(
+async def test_set_away_date_range(
     hass: HomeAssistant,
     config_entry: MockConfigEntry,
     fake_api: FakeKebaKeEnergyAPI,
@@ -71,7 +72,7 @@ async def test_set_away_range(
     assert fake_api.write_requests() == [AWAY_DATE_RANGE_WRITE]
 
 
-async def test_set_unchanged_away_range(
+async def test_set_unchanged_away_date_range(
     hass: HomeAssistant,
     config_entry: MockConfigEntry,
     fake_api: FakeKebaKeEnergyAPI,
@@ -94,7 +95,7 @@ async def test_set_unchanged_away_range(
     assert fake_api.write_requests() == []
 
 
-async def test_set_same_away_range_twice(
+async def test_set_same_away_date_range_twice(
     hass: HomeAssistant,
     config_entry: MockConfigEntry,
     fake_api: FakeKebaKeEnergyAPI,
@@ -141,7 +142,7 @@ async def test_set_same_away_range_twice(
     ],
     ids=["end_date_before_start_date", "invalid_config_entry"],
 )
-async def test_set_away_range_invalid(
+async def test_set_away_date_range_invalid(
     hass: HomeAssistant,
     config_entry: MockConfigEntry,
     fake_api: FakeKebaKeEnergyAPI,
@@ -164,7 +165,7 @@ async def test_set_away_range_invalid(
     assert fake_api.write_requests() == []
 
 
-async def test_set_away_range_with_unloaded_config_entry(
+async def test_set_away_date_range_with_unloaded_config_entry(
     hass: HomeAssistant,
     config_entry: MockConfigEntry,
     fake_api: FakeKebaKeEnergyAPI,
@@ -190,7 +191,7 @@ async def test_set_away_range_with_unloaded_config_entry(
     assert error.value.translation_key == "unloaded_config_entry"
 
 
-async def test_set_away_range_with_config_entry_of_other_integration(
+async def test_set_away_date_range_with_config_entry_of_other_integration(
     hass: HomeAssistant,
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
@@ -227,7 +228,7 @@ async def test_set_away_range_with_config_entry_of_other_integration(
     ],
     ids=["missing_start_date", "invalid_date"],
 )
-async def test_set_away_range_invalid_data(
+async def test_set_away_date_range_invalid_data(
     hass: HomeAssistant,
     config_entry: MockConfigEntry,
     fake_api: FakeKebaKeEnergyAPI,
@@ -454,8 +455,7 @@ async def test_set_heating_curve_points_updates_sensor(
         blocking=True,
     )
 
-    state: State | None = hass.states.get("sensor.keba_keenergy_12345678_heat_circuit_heating_curve_1")
+    state: State = get_state(hass, "sensor.keba_keenergy_12345678_heat_circuit_heating_curve_1")
 
-    assert isinstance(state, State)
     assert state.state == "HC6"
-    assert state.attributes["points"] == [{"outdoor": -20, "flow": 35.3}, {"outdoor": 20, "flow": 23.9}]
+    assert state.attributes[ATTR_POINTS] == [{"outdoor": -20, "flow": 35.3}, {"outdoor": 20, "flow": 23.9}]

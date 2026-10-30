@@ -13,22 +13,21 @@ from homeassistant.components.sensor.const import ATTR_OPTIONS
 from homeassistant.const import ATTR_UNIT_OF_MEASUREMENT
 from homeassistant.const import STATE_UNKNOWN
 from homeassistant.const import Platform
-from homeassistant.core import State
 from homeassistant.helpers import entity_registry as er
 
+from custom_components.keba_keenergy.const import ATTR_POINTS
 from custom_components.keba_keenergy.const import DOMAIN
 from tests import get_option_translations
 from tests import get_platform_states
+from tests import get_state
 from tests.api_data import CURVES_WITHOUT_NAMES_RESPONSE
 from tests.api_data import MULTIPLE_DEVICES_DATA_RESPONSE
-from tests.api_data import MULTIPLE_DEVICES_RESPONSE
-from tests.api_data import Response
-from tests.api_data import get_multiple_devices_fixed_data_response
 from tests.api_data import get_multiple_devices_responses
 from tests.api_data import update_response
 
 if TYPE_CHECKING:
     from homeassistant.core import HomeAssistant
+    from homeassistant.core import State
     from pytest_homeassistant_custom_component.common import MockConfigEntry
     from syrupy.assertion import SnapshotAssertion
 
@@ -38,6 +37,7 @@ if TYPE_CHECKING:
 @pytest.mark.usefixtures("entity_registry_enabled_by_default", "language")
 async def test_sensors(
     hass: HomeAssistant,
+    config_entry: MockConfigEntry,
     fake_api: FakeKebaKeEnergyAPI,
     snapshot: SnapshotAssertion,
 ) -> None:
@@ -45,7 +45,7 @@ async def test_sensors(
     fake_api.responses = get_multiple_devices_responses(MULTIPLE_DEVICES_DATA_RESPONSE, has_passive_cooling="true")
     await fake_api.setup_integration()
 
-    states: list[State] = get_platform_states(hass, fake_api.config_entry, Platform.SENSOR)
+    states: list[State] = get_platform_states(hass, config_entry, Platform.SENSOR)
     enum_states: list[State] = [state for state in states if ATTR_OPTIONS in state.attributes]
     value_states: list[State] = [state for state in states if ATTR_OPTIONS not in state.attributes]
 
@@ -96,8 +96,7 @@ async def test_converted_sensor_keeps_registered_unit(
     fake_api.responses = get_multiple_devices_responses(MULTIPLE_DEVICES_DATA_RESPONSE)
     await fake_api.setup_integration()
 
-    state: State | None = hass.states.get(entry.entity_id)
-    assert isinstance(state, State)
+    state: State = get_state(hass, entry.entity_id)
     assert (state.state, state.attributes[ATTR_UNIT_OF_MEASUREMENT]) == expected
 
 
@@ -151,8 +150,7 @@ async def test_sensor_not_in_use(
     states: dict[str, str] = {}
 
     for entity_id in expected:
-        state: State | None = hass.states.get(entity_id)
-        assert isinstance(state, State)
+        state: State = get_state(hass, entity_id)
         states[entity_id] = state.state
 
     assert states == expected
@@ -173,25 +171,21 @@ async def test_sensor_not_in_use(
 @pytest.mark.usefixtures("entity_registry_enabled_by_default")
 async def test_sensor_deactivated(
     hass: HomeAssistant,
+    config_entry: MockConfigEntry,
     fake_api: FakeKebaKeEnergyAPI,
     message_id: str,
     entity_id: str,
 ) -> None:
     """Test that the entity of a deactivated sensor is removed and no longer created."""
-    responses: list[Response] = [
-        MULTIPLE_DEVICES_RESPONSE,
-        get_multiple_devices_fixed_data_response(),
-        MULTIPLE_DEVICES_DATA_RESPONSE,
-    ]
-    fake_api.responses = list(responses)
+    fake_api.responses = get_multiple_devices_responses(MULTIPLE_DEVICES_DATA_RESPONSE)
     await fake_api.setup_integration()
 
     entity_registry: er.EntityRegistry = er.async_get(hass)
     assert entity_registry.async_get(entity_id) is not None
 
     fake_api.message_ids = {message_id: 10}
-    fake_api.responses = list(responses)
-    await hass.config_entries.async_reload(fake_api.config_entry.entry_id)
+    fake_api.responses = get_multiple_devices_responses(MULTIPLE_DEVICES_DATA_RESPONSE)
+    await hass.config_entries.async_reload(config_entry.entry_id)
     await hass.async_block_till_done()
 
     assert entity_registry.async_get(entity_id) is None
@@ -230,8 +224,7 @@ async def test_sensor_enum_state(
     )
     await fake_api.setup_integration()
 
-    state: State | None = hass.states.get(entity_id)
-    assert isinstance(state, State)
+    state: State = get_state(hass, entity_id)
     assert state.state == expected
     assert expected in state.attributes[ATTR_OPTIONS]
 
@@ -267,8 +260,7 @@ async def test_sensor_raw_value(
     )
     await fake_api.setup_integration()
 
-    state: State | None = hass.states.get(entity_id)
-    assert isinstance(state, State)
+    state: State = get_state(hass, entity_id)
     expected_state, expected_attributes = expected
     assert state.state == expected_state
     assert {key: state.attributes.get(key) for key in expected_attributes} == expected_attributes
@@ -284,8 +276,7 @@ async def test_curve_sensor_without_curve(
     fake_api.curves = CURVES_WITHOUT_NAMES_RESPONSE
     await fake_api.setup_integration()
 
-    state: State | None = hass.states.get("sensor.keba_keenergy_12345678_heat_circuit_heating_curve_1")
+    state: State = get_state(hass, "sensor.keba_keenergy_12345678_heat_circuit_heating_curve_1")
 
-    assert isinstance(state, State)
     assert state.state == "HC6"
-    assert state.attributes["points"] == []
+    assert state.attributes[ATTR_POINTS] == []

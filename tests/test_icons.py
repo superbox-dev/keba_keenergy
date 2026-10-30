@@ -17,6 +17,7 @@ from tests.api_data import get_multiple_devices_responses
 
 if TYPE_CHECKING:
     from homeassistant.core import HomeAssistant
+    from pytest_homeassistant_custom_component.common import MockConfigEntry
     from syrupy.assertion import SnapshotAssertion
 
     from tests.conftest import FakeKebaKeEnergyAPI
@@ -25,6 +26,7 @@ if TYPE_CHECKING:
 @pytest.mark.usefixtures("entity_registry_enabled_by_default")
 async def test_icons(
     hass: HomeAssistant,
+    config_entry: MockConfigEntry,
     fake_api: FakeKebaKeEnergyAPI,
     snapshot: SnapshotAssertion,
 ) -> None:
@@ -35,7 +37,7 @@ async def test_icons(
     icons: dict[str, dict[str, Any]] = (await async_get_icons(hass, "entity", [DOMAIN]))[DOMAIN]
     entries: list[er.RegistryEntry] = er.async_entries_for_config_entry(
         er.async_get(hass),
-        fake_api.config_entry.entry_id,
+        config_entry.entry_id,
     )
 
     used: set[tuple[str, str | None]] = {(entry.domain, entry.translation_key) for entry in entries}

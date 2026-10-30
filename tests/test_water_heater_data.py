@@ -5,11 +5,11 @@
 
 from typing import Final
 
-ENTITY_ID: Final[str] = "water_heater.keba_keenergy_12345678"
-ENTITY_ID_1: Final[str] = "water_heater.keba_keenergy_12345678_1"
-ENTITY_ID_2: Final[str] = "water_heater.keba_keenergy_12345678_2"
-ENTITY_ID_3: Final[str] = "water_heater.keba_keenergy_12345678_buffer_tank"
-ENTITY_ID_4: Final[str] = "water_heater.keba_keenergy_12345678_buffer_tank_1"
+# The hot water tank of the setup with one device of each type and the tanks of the setup with several.
+HOT_WATER_TANK_ENTITY_ID: Final[str] = "water_heater.keba_keenergy_12345678"
+HOT_WATER_TANK_1_ENTITY_ID: Final[str] = "water_heater.keba_keenergy_12345678_1"
+HOT_WATER_TANK_2_ENTITY_ID: Final[str] = "water_heater.keba_keenergy_12345678_2"
+BUFFER_TANK_1_ENTITY_ID: Final[str] = "water_heater.keba_keenergy_12345678_buffer_tank_1"
 # The tank types in the names of the Web HMI values.
 HOT_WATER_TANK: Final[str] = "hotWaterTank"
 BUFFER_TANK: Final[str] = "bufferTank"

@@ -12,23 +12,19 @@ import probatio
 import pytest
 from homeassistant.components.number import ATTR_MAX
 from homeassistant.components.number import ATTR_MIN
-from homeassistant.components.number import ATTR_VALUE
 from homeassistant.components.number import DEFAULT_MAX_VALUE
 from homeassistant.components.number import DEFAULT_MIN_VALUE
-from homeassistant.components.number import DOMAIN as NUMBER_DOMAIN
-from homeassistant.components.number.const import SERVICE_SET_VALUE
-from homeassistant.const import ATTR_ENTITY_ID
 from homeassistant.const import Platform
-from homeassistant.core import HomeAssistant
-from homeassistant.core import State
 from homeassistant.exceptions import ServiceValidationError
 from homeassistant.helpers.entity_component import async_update_entity
 from homeassistant.util import dt as dt_util
 from pytest_homeassistant_custom_component.common import async_fire_time_changed
 
 from custom_components.keba_keenergy.const import FLASH_WRITE_DELAY
+from tests import fire_debounced_writes
 from tests import get_platform_states
 from tests import get_state
+from tests import set_number_value
 from tests.api_data import MULTIPLE_DEVICES_DATA_RESPONSE
 from tests.api_data import Response
 from tests.api_data import get_multiple_devices_responses
@@ -40,6 +36,8 @@ from tests.test_number_data import TARGET_TEMPERATURE_OFFSET_ENTITY_ID
 from tests.test_number_data import TARGET_TEMPERATURE_OFFSET_WRITE
 
 if TYPE_CHECKING:
+    from homeassistant.core import HomeAssistant
+    from homeassistant.core import State
     from pytest_homeassistant_custom_component.common import MockConfigEntry
     from syrupy.assertion import SnapshotAssertion
 
@@ -49,6 +47,7 @@ if TYPE_CHECKING:
 @pytest.mark.usefixtures("entity_registry_enabled_by_default", "language")
 async def test_numbers(
     hass: HomeAssistant,
+    config_entry: MockConfigEntry,
     fake_api: FakeKebaKeEnergyAPI,
     snapshot: SnapshotAssertion,
 ) -> None:
@@ -56,7 +55,7 @@ async def test_numbers(
     fake_api.responses = get_multiple_devices_responses(MULTIPLE_DEVICES_DATA_RESPONSE, has_passive_cooling="true")
     await fake_api.setup_integration()
 
-    for state in get_platform_states(hass, fake_api.config_entry, Platform.NUMBER):
+    for state in get_platform_states(hass, config_entry, Platform.NUMBER):
         assert state == snapshot(name=state.entity_id)
 
 
@@ -151,18 +150,9 @@ async def test_set_value(
     fake_api.responses = get_multiple_devices_responses(MULTIPLE_DEVICES_DATA_RESPONSE)
     await fake_api.setup_integration()
 
-    await hass.services.async_call(
-        domain=NUMBER_DOMAIN,
-        service=SERVICE_SET_VALUE,
-        service_data={
-            ATTR_ENTITY_ID: entity_id,
-            ATTR_VALUE: value,
-        },
-        blocking=True,
-    )
+    await set_number_value(hass, entity_id, value)
 
-    async_fire_time_changed(hass, dt_util.utcnow() + timedelta(seconds=FLASH_WRITE_DELAY))
-    await hass.async_block_till_done()
+    await fire_debounced_writes(hass)
 
     assert fake_api.write_requests() == [expected]
 
@@ -229,27 +219,19 @@ async def test_set_value(
     ],
 )
 @pytest.mark.usefixtures("entity_registry_enabled_by_default")
-async def test_set_value_bad_range(
+async def test_set_value_out_of_range(
     hass: HomeAssistant,
     fake_api: FakeKebaKeEnergyAPI,
     entity_id: str,
     value: float,
     expected: str,
 ) -> None:
-    """Test setting a value out of range of a number entity."""
+    """Test that a number entity rejects a value outside of its limits."""
     fake_api.responses = get_multiple_devices_responses(MULTIPLE_DEVICES_DATA_RESPONSE)
     await fake_api.setup_integration()
 
     with pytest.raises(ServiceValidationError, match=expected):
-        await hass.services.async_call(
-            domain=NUMBER_DOMAIN,
-            service=SERVICE_SET_VALUE,
-            service_data={
-                ATTR_ENTITY_ID: entity_id,
-                ATTR_VALUE: value,
-            },
-            blocking=True,
-        )
+        await set_number_value(hass, entity_id, value)
 
 
 @pytest.mark.parametrize(
@@ -268,27 +250,19 @@ async def test_set_value_bad_range(
     ],
     ids=["none", "string"],
 )
-async def test_set_value_bad_attr(
+async def test_set_value_invalid_data(
     hass: HomeAssistant,
     fake_api: FakeKebaKeEnergyAPI,
     entity_id: str,
     value: str | None,
     expected: str,
 ) -> None:
-    """Test setting an invalid value of a number entity."""
+    """Test that the schema of the action rejects a value that is not a number."""
     fake_api.responses = get_multiple_devices_responses(MULTIPLE_DEVICES_DATA_RESPONSE)
     await fake_api.setup_integration()
 
     with pytest.raises(probatio.Invalid, match=expected):
-        await hass.services.async_call(
-            domain=NUMBER_DOMAIN,
-            service=SERVICE_SET_VALUE,
-            service_data={
-                ATTR_ENTITY_ID: entity_id,
-                ATTR_VALUE: value,
-            },
-            blocking=True,
-        )
+        await set_number_value(hass, entity_id, value)
 
 
 async def test_set_value_debounced(
@@ -296,7 +270,6 @@ async def test_set_value_debounced(
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
     """Test that quick value changes are shown at once and written once, with the last value."""
-    entity_id: str = TARGET_TEMPERATURE_OFFSET_ENTITY_ID
     fake_api.responses = get_single_device_responses(
         get_single_device_data_response(heat_circuit_target_temperature_offset="1.5"),
         # Read the API after the update of the entity.
@@ -307,25 +280,15 @@ async def test_set_value_debounced(
     values: tuple[float, ...] = (1.0, 0.5)
 
     for value in values:
-        await hass.services.async_call(
-            domain=NUMBER_DOMAIN,
-            service=SERVICE_SET_VALUE,
-            service_data={
-                ATTR_ENTITY_ID: entity_id,
-                ATTR_VALUE: value,
-            },
-            blocking=True,
-        )
+        await set_number_value(hass, TARGET_TEMPERATURE_OFFSET_ENTITY_ID, value)
 
-    await async_update_entity(hass, entity_id)
+    await async_update_entity(hass, TARGET_TEMPERATURE_OFFSET_ENTITY_ID)
 
-    state: State | None = hass.states.get(entity_id)
-    assert isinstance(state, State)
+    state: State = get_state(hass, TARGET_TEMPERATURE_OFFSET_ENTITY_ID)
     assert state.state == str(values[-1])
     assert fake_api.write_requests() == []
 
-    async_fire_time_changed(hass, dt_util.utcnow() + timedelta(seconds=FLASH_WRITE_DELAY))
-    await hass.async_block_till_done()
+    await fire_debounced_writes(hass)
 
     assert fake_api.write_requests() == [TARGET_TEMPERATURE_OFFSET_WRITE]
 
@@ -363,18 +326,9 @@ async def test_set_unchanged_value(
     fake_api.responses = get_single_device_responses(response)
     await fake_api.setup_integration()
 
-    await hass.services.async_call(
-        domain=NUMBER_DOMAIN,
-        service=SERVICE_SET_VALUE,
-        service_data={
-            ATTR_ENTITY_ID: entity_id,
-            ATTR_VALUE: value,
-        },
-        blocking=True,
-    )
+    await set_number_value(hass, entity_id, value)
 
-    async_fire_time_changed(hass, dt_util.utcnow() + timedelta(seconds=FLASH_WRITE_DELAY))
-    await hass.async_block_till_done()
+    await fire_debounced_writes(hass)
 
     assert fake_api.write_requests() == []
 
@@ -389,29 +343,12 @@ async def test_set_value_back_before_write(
     )
     await fake_api.setup_integration()
 
-    await hass.services.async_call(
-        domain=NUMBER_DOMAIN,
-        service=SERVICE_SET_VALUE,
-        service_data={
-            ATTR_ENTITY_ID: TARGET_TEMPERATURE_OFFSET_ENTITY_ID,
-            ATTR_VALUE: 0.5,
-        },
-        blocking=True,
-    )
-    await hass.services.async_call(
-        domain=NUMBER_DOMAIN,
-        service=SERVICE_SET_VALUE,
-        service_data={
-            ATTR_ENTITY_ID: TARGET_TEMPERATURE_OFFSET_ENTITY_ID,
-            ATTR_VALUE: 1.5,
-        },
-        blocking=True,
-    )
+    await set_number_value(hass, TARGET_TEMPERATURE_OFFSET_ENTITY_ID, 0.5)
+    await set_number_value(hass, TARGET_TEMPERATURE_OFFSET_ENTITY_ID, 1.5)
 
-    async_fire_time_changed(hass, dt_util.utcnow() + timedelta(seconds=FLASH_WRITE_DELAY))
-    await hass.async_block_till_done()
+    await fire_debounced_writes(hass)
 
-    assert get_state(hass, TARGET_TEMPERATURE_OFFSET_ENTITY_ID) == "1.5"
+    assert get_state(hass, TARGET_TEMPERATURE_OFFSET_ENTITY_ID).state == "1.5"
     assert fake_api.write_requests() == []
 
 
@@ -431,14 +368,12 @@ async def test_limits_after_update(
     )
     await fake_api.setup_integration()
 
-    state: State | None = hass.states.get(TARGET_TEMPERATURE_OFFSET_ENTITY_ID)
-    assert isinstance(state, State)
+    state: State = get_state(hass, TARGET_TEMPERATURE_OFFSET_ENTITY_ID)
     assert (state.attributes[ATTR_MIN], state.attributes[ATTR_MAX]) == (DEFAULT_MIN_VALUE, DEFAULT_MAX_VALUE)
 
     await config_entry.runtime_data.async_refresh()
 
-    state = hass.states.get(TARGET_TEMPERATURE_OFFSET_ENTITY_ID)
-    assert isinstance(state, State)
+    state = get_state(hass, TARGET_TEMPERATURE_OFFSET_ENTITY_ID)
     assert (state.attributes[ATTR_MIN], state.attributes[ATTR_MAX]) == (-2.5, 2.5)
 
 
@@ -453,20 +388,11 @@ async def test_debounced_value_not_written_after_unload(
     )
     await fake_api.setup_integration()
 
-    await hass.services.async_call(
-        domain=NUMBER_DOMAIN,
-        service=SERVICE_SET_VALUE,
-        service_data={
-            ATTR_ENTITY_ID: TARGET_TEMPERATURE_OFFSET_ENTITY_ID,
-            ATTR_VALUE: 0.5,
-        },
-        blocking=True,
-    )
+    await set_number_value(hass, TARGET_TEMPERATURE_OFFSET_ENTITY_ID, 0.5)
 
     await hass.config_entries.async_unload(config_entry.entry_id)
 
-    async_fire_time_changed(hass, dt_util.utcnow() + timedelta(seconds=FLASH_WRITE_DELAY))
-    await hass.async_block_till_done()
+    await fire_debounced_writes(hass)
 
     assert fake_api.write_requests() == []
 
@@ -477,42 +403,32 @@ async def test_debounced_write_failed(
     caplog: pytest.LogCaptureFixture,
 ) -> None:
     """Test that a failed debounced write shows the previous value again and logs a warning, not an error."""
-    entity_id: str = TARGET_TEMPERATURE_OFFSET_ENTITY_ID
     fake_api.responses = get_single_device_responses(
         get_single_device_data_response(heat_circuit_target_temperature_offset="1.5"),
     )
     await fake_api.setup_integration()
     fake_api.write_status = HTTPStatus.BAD_REQUEST
 
-    await hass.services.async_call(
-        domain=NUMBER_DOMAIN,
-        service=SERVICE_SET_VALUE,
-        service_data={
-            ATTR_ENTITY_ID: entity_id,
-            ATTR_VALUE: 0.5,
-        },
-        blocking=True,
-    )
+    await set_number_value(hass, TARGET_TEMPERATURE_OFFSET_ENTITY_ID, 0.5)
 
-    async_fire_time_changed(hass, dt_util.utcnow() + timedelta(seconds=FLASH_WRITE_DELAY))
-    await hass.async_block_till_done()
+    await fire_debounced_writes(hass)
 
-    state: State | None = hass.states.get(entity_id)
-    assert isinstance(state, State)
+    state: State = get_state(hass, TARGET_TEMPERATURE_OFFSET_ENTITY_ID)
     assert state.state == "1.5"
     assert fake_api.write_requests() == [TARGET_TEMPERATURE_OFFSET_WRITE]
     # A warning, `fail_on_log_errors` fails the test on an error.
-    assert f"Failed to write the value of {entity_id}: An error occurred while communicating with the API" in (
-        caplog.text
-    )
+    assert (
+        f"Failed to write the value of {TARGET_TEMPERATURE_OFFSET_ENTITY_ID}: "
+        "An error occurred while communicating with the API"
+    ) in caplog.text
 
 
 async def test_debounced_write_during_update(
     hass: HomeAssistant,
+    config_entry: MockConfigEntry,
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
     """Test that a value written during an update is not replaced by the previous value of the update."""
-    entity_id: str = TARGET_TEMPERATURE_OFFSET_ENTITY_ID
     fake_api.responses = get_single_device_responses(
         get_single_device_data_response(heat_circuit_target_temperature_offset="1.5"),
         # The update reads the previous value while the value is written.
@@ -522,23 +438,15 @@ async def test_debounced_write_during_update(
     )
     await fake_api.setup_integration()
 
-    async def set_value() -> None:
-        await hass.services.async_call(
-            domain=NUMBER_DOMAIN,
-            service=SERVICE_SET_VALUE,
-            service_data={
-                ATTR_ENTITY_ID: entity_id,
-                ATTR_VALUE: 0.5,
-            },
-            blocking=True,
-        )
+    async def set_value_during_read() -> None:
+        await set_number_value(hass, TARGET_TEMPERATURE_OFFSET_ENTITY_ID, 0.5)
+        # Only the timer of the write, waiting for it would wait for the update that is still reading.
         async_fire_time_changed(hass, dt_util.utcnow() + timedelta(seconds=FLASH_WRITE_DELAY))
 
-    fake_api.during_read = set_value
-    await fake_api.config_entry.runtime_data.async_refresh()
+    fake_api.during_read = set_value_during_read
+    await config_entry.runtime_data.async_refresh()
     await hass.async_block_till_done()
 
-    state: State | None = hass.states.get(entity_id)
-    assert isinstance(state, State)
+    state: State = get_state(hass, TARGET_TEMPERATURE_OFFSET_ENTITY_ID)
     assert state.state == "0.5"
     assert fake_api.write_requests() == [TARGET_TEMPERATURE_OFFSET_WRITE]
