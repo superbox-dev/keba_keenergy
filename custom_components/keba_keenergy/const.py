@@ -28,22 +28,24 @@ from homeassistant.const import Platform
 from homeassistant.helpers import config_validation as cv
 from homeassistant.helpers import selector
 from keba_keenergy_api.constants import MAX_CURVE_TABLE_POINTS
+from keba_keenergy_api.endpoints import ExternalHeatSource
+from keba_keenergy_api.endpoints import HeatingCircuit
+from keba_keenergy_api.endpoints import HeatPump
+from keba_keenergy_api.endpoints import System
 from keba_keenergy_api.enums import BufferTankOperatingMode
 from keba_keenergy_api.enums import DeviceType
 from keba_keenergy_api.enums import DHWTankOperatingMode
 from keba_keenergy_api.enums import HeatingCircuitOperatingMode
 from keba_keenergy_api.enums import HeatPumpState
-from keba_keenergy_api.sections import ExternalHeatSource
-from keba_keenergy_api.sections import HeatingCircuit
-from keba_keenergy_api.sections import HeatPump
-from keba_keenergy_api.sections import System
 
 if TYPE_CHECKING:
     from collections.abc import Mapping
 
-    from keba_keenergy_api.sections import Section
+    from keba_keenergy_api.endpoints import Endpoint
 
 
+# TODO: Replace with the `DeviceType` of `keba_keenergy_api` and move to `legacy.py` as `LegacyDeviceType` when the
+#  unique IDs, device identifiers and option keys are migrated to the `DeviceType` values.
 class SectionPrefix(StrEnum):
     """Device types of the integration, part of the device identifiers and of the unique IDs."""
 
@@ -151,7 +153,7 @@ STEP_AUTH_DATA_SCHEMA: Final[probatio.Schema] = probatio.Schema(
 )
 
 # The configuration of the control unit per device type (e.g. the installed meters), read once on setup.
-CONFIGURATION_SECTIONS: Final[Mapping[SectionPrefix, Mapping[str, Section]]] = {
+CONFIGURATION_ENDPOINTS: Final[Mapping[SectionPrefix, Mapping[str, Endpoint]]] = {
     SectionPrefix.SYSTEM: {
         "has_photovoltaics": System.HAS_PHOTOVOLTAICS,
     },
@@ -171,7 +173,7 @@ CONFIGURATION_SECTIONS: Final[Mapping[SectionPrefix, Mapping[str, Section]]] = {
 }
 
 # Passive cooling is a part of the heat pumps and uses their scan interval.
-SCAN_INTERVAL_PREFIXES: Final[Mapping[SectionPrefix, SectionPrefix]] = {
+SCAN_INTERVAL_DEVICE_TYPES: Final[Mapping[SectionPrefix, SectionPrefix]] = {
     SectionPrefix.PASSIVE_COOLING: SectionPrefix.HEAT_PUMP,
 }
 

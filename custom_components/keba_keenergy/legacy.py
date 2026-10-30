@@ -12,6 +12,16 @@ from typing import TYPE_CHECKING
 from typing import Final
 from typing import Protocol
 
+from keba_keenergy_api.endpoints import BufferTank
+from keba_keenergy_api.endpoints import DHWTank
+from keba_keenergy_api.endpoints import ExternalHeatSource
+from keba_keenergy_api.endpoints import HeatingCircuit
+from keba_keenergy_api.endpoints import HeatPump
+from keba_keenergy_api.endpoints import PassiveCooling
+from keba_keenergy_api.endpoints import Photovoltaics
+from keba_keenergy_api.endpoints import SolarCircuit
+from keba_keenergy_api.endpoints import SwitchValve
+from keba_keenergy_api.endpoints import System
 from keba_keenergy_api.enums import BufferTankOperatingMode
 from keba_keenergy_api.enums import DHWTankOperatingMode
 from keba_keenergy_api.enums import HeatingCircuitOperatingMode
@@ -20,16 +30,6 @@ from keba_keenergy_api.enums import HeatPumpState
 from keba_keenergy_api.enums import HeatPumpSubState
 from keba_keenergy_api.enums import SwitchValvePosition
 from keba_keenergy_api.enums import SystemOperatingMode
-from keba_keenergy_api.sections import BufferTank
-from keba_keenergy_api.sections import DHWTank
-from keba_keenergy_api.sections import ExternalHeatSource
-from keba_keenergy_api.sections import HeatingCircuit
-from keba_keenergy_api.sections import HeatPump
-from keba_keenergy_api.sections import PassiveCooling
-from keba_keenergy_api.sections import Photovoltaics
-from keba_keenergy_api.sections import SolarCircuit
-from keba_keenergy_api.sections import SwitchValve
-from keba_keenergy_api.sections import System
 
 from .const import SectionPrefix
 
@@ -37,7 +37,7 @@ if TYPE_CHECKING:
     from collections.abc import Mapping
     from enum import Enum
 
-    from keba_keenergy_api.sections import Section
+    from keba_keenergy_api.endpoints import Endpoint
 
 # States of the entities that kept the names of the enum members of `keba_keenergy_api` 2.x, the states of all other
 # members are their lowercase names.
@@ -70,7 +70,7 @@ LEGACY_STATES: Final[Mapping[Enum, str]] = {
 
 # The polled values per device type, by the key of the coordinator data (the name of the value in
 # `keba_keenergy_api` 2.x, also part of the unique IDs).
-SECTIONS: Final[Mapping[SectionPrefix, Mapping[str, Section]]] = {
+ENDPOINTS: Final[Mapping[SectionPrefix, Mapping[str, Endpoint]]] = {
     SectionPrefix.EXTERNAL_HEAT_SOURCE: {
         "operating_mode": ExternalHeatSource.OPERATING_MODE,
         "target_temperature": ExternalHeatSource.TARGET_TEMPERATURE,

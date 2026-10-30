@@ -2113,7 +2113,7 @@ SINGLE_DEVICE_DATA_RESPONSE: Final[list[dict[str, Any]]] = replace_values(
     (HOT_WATER_TANK_CIRCULATION_RETURN_TEMPERATURE, "0", "30.5"),
 )
 
-# The values of `MULTIPLE_DEVICES_DATA_RESPONSE` are split by section.
+# The values of `MULTIPLE_DEVICES_DATA_RESPONSE` are split by device type.
 MULTIPLE_DEVICES_EXTERNAL_HEAT_SOURCE_DATA: Final[list[dict[str, Any]]] = [
     json.loads(EXTERNAL_HEAT_SOURCE_OPERATING_MODE % ("0", "0")),
     json.loads(EXTERNAL_HEAT_SOURCE_OPERATING_MODE % ("1", "1")),
@@ -2263,7 +2263,7 @@ MULTIPLE_DEVICES_SOLAR_CIRCUIT_DATA: Final[list[dict[str, Any]]] = [
     json.loads(SOLAR_CIRCUIT_PRIORITY_1_BEFORE_2 % ("1", "true")),
 ]
 
-# The heat pump, buffer and hot water tanks, switch valves, photovoltaics and system, the sections after the solar
+# The heat pump, buffer and hot water tanks, switch valves, photovoltaics and system, the device types after the solar
 # circuits.
 MULTIPLE_DEVICES_HEAT_PUMP_TO_SYSTEM_DATA: Final[list[dict[str, Any]]] = [
     *get_heat_pump_data(compressor_night_speed="true"),

@@ -111,7 +111,7 @@ Before finishing a change, run `ruff format`, `lint.sh` and `pytest`, in this or
   - except what Home Assistant reads from the module itself (`_LOGGER`, `PARALLEL_UPDATES`, `CONFIG_SCHEMA`) and
     the entity descriptions of a platform (`SENSOR_TYPES`, ...)
 - Code only needed to keep the keys and states of `keba_keenergy_api` 2.x (no breaking changes) in `legacy.py`,
-  also its constants (`SECTIONS`, `LEGACY_STATES`, `get_state()`, `new_key` via `get_data_key()`)
+  also its constants (`ENDPOINTS`, `LEGACY_STATES`, `get_state()`, `new_key` via `get_data_key()`)
 - Class member order: `__init__`, dunder methods, properties, public methods (also Home Assistant overrides)
   grouped by topic, helpers directly below their first caller
   - applies to new methods, existing ones only moved when asked

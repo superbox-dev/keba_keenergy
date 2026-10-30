@@ -69,13 +69,13 @@ class KebaKeEnergyClimateEntity(KebaKeEnergyBaseEntity, ClimateEntity):
         coordinator: KebaKeEnergyDataUpdateCoordinator,
         description: ClimateEntityDescription,
         entry: KebaKeEnergyConfigEntry,
-        section_id: str,
+        device_type: str,
         index: int | None,
     ) -> None:
         """Initialize KEBA KeEnergy climate entity."""
         self.entity_description = description
 
-        super().__init__(coordinator, entry, section_id, index)
+        super().__init__(coordinator, entry, device_type, index)
 
         self.entity_id = f"{CLIMATE_DOMAIN}.{DOMAIN}_{self._attr_unique_id}"
 
@@ -311,7 +311,7 @@ async def async_setup_entry(
                 translation_key="heat_circuit",
             ),
             entry=entry,
-            section_id=SectionPrefix.HEAT_CIRCUIT.value,
+            device_type=SectionPrefix.HEAT_CIRCUIT.value,
             index=index if heat_circuit_numbers > 1 else None,
         )
         for index in range(heat_circuit_numbers)

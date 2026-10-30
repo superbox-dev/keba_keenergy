@@ -68,13 +68,13 @@ class KebaKeEnergySelectEntity(KebaKeEnergyEntity, SelectEntity):
         coordinator: KebaKeEnergyDataUpdateCoordinator,
         description: KebaKeEnergySelectEntityDescription,
         entry: KebaKeEnergyConfigEntry,
-        section_id: str,
+        device_type: str,
         index: int | None,
     ) -> None:
         """Initialize the entity."""
         self.entity_description = description
 
-        super().__init__(coordinator, entry=entry, section_id=section_id, index=index)
+        super().__init__(coordinator, entry=entry, device_type=device_type, index=index)
         self.entity_id: str = f"{SELECT_DOMAIN}.{DOMAIN}_{self._attr_unique_id}"
 
     @cached_property

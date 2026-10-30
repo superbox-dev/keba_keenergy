@@ -68,14 +68,14 @@ class KebaKeEnergyBaseEntity(
         self,
         coordinator: KebaKeEnergyDataUpdateCoordinator,
         entry: KebaKeEnergyConfigEntry,
-        section_id: str,
+        device_type: str,
         index: int | None,
         key_index: int | None = None,
     ) -> None:
         """Initialize the KEBA KeEnergy entity."""
         super().__init__(coordinator)
         self.entry: KebaKeEnergyConfigEntry = entry
-        self.section_id: str = section_id
+        self.device_type: str = device_type
         self.index: int | None = index
         self.key_index: int | None = key_index
 
@@ -99,28 +99,28 @@ class KebaKeEnergyBaseEntity(
 
     @property
     def device_number(self) -> int | None:
-        """Return the number of the device (from 1), None if the section has only one device."""
+        """Return the number of the device (from 1), None if the device type has only one device."""
         return None if self.index is None else self.index + 1
 
     @property
     def is_system_device(self) -> bool:
         """Return True if the entity is part of a KEBA KeEnergy control device else False."""
-        return self.section_id == SectionPrefix.SYSTEM
+        return self.device_type == SectionPrefix.SYSTEM
 
     @property
     def is_heat_pump(self) -> bool:
         """Return True if the entity is part of a heat pump else False."""
-        return self.section_id == SectionPrefix.HEAT_PUMP
+        return self.device_type == SectionPrefix.HEAT_PUMP
 
     @property
     def device_numbers(self) -> int | None:
-        """Return the number of devices of the section, or None for the control unit."""
-        return None if self.is_system_device else self.coordinator.device_count(self.section_id)
+        """Return the number of devices of the device type, or None for the control unit."""
+        return None if self.is_system_device else self.coordinator.device_count(self.device_type)
 
     @cached_property
     def device_identifier(self) -> str:
         """Return the device identifier."""
-        return self.coordinator.device_identifier(self.section_id, self.device_number)
+        return self.coordinator.device_identifier(self.device_type, self.device_number)
 
     @cached_property
     def device_manufacturer(self) -> str | None:
@@ -172,7 +172,7 @@ class KebaKeEnergyBaseEntity(
 
     @cached_property
     def _translation_key(self) -> str | None:
-        return DEVICE_TRANSLATION_KEYS.get(self.section_id)
+        return DEVICE_TRANSLATION_KEYS.get(self.device_type)
 
     @property
     def _translation_placeholders(self) -> Mapping[str, str] | None:
@@ -190,10 +190,10 @@ class KebaKeEnergyBaseEntity(
 
     def get_reading(self, key: str, /) -> Reading | None:
         """Get the reading of the entity from the coordinator data, or None if the sensor is not in use."""
-        if not self.coordinator.is_sensor_in_use(self.section_id, key, index=self.index, key_index=self.key_index):
+        if not self.coordinator.is_sensor_in_use(self.device_type, key, index=self.index, key_index=self.key_index):
             return None
 
-        return self.coordinator.get_reading(self.section_id, key, index=self.index, key_index=self.key_index)
+        return self.coordinator.get_reading(self.device_type, key, index=self.index, key_index=self.key_index)
 
     def get_limit(self, key: str, /, *, attr: Literal["lower_limit", "upper_limit"]) -> float | None:
         """Get a limit of the value from the API by key, or None if the value has no limit."""
@@ -229,7 +229,7 @@ class KebaKeEnergyBaseEntity(
         _range: int = device_numbers or 1
 
         if self.key_index is not None:
-            quantity: int = self.coordinator.get_section(self.section_id, key).value.quantity
+            quantity: int = self.coordinator.get_endpoint(self.device_type, key).value.quantity
             current_index = current_index * quantity + self.key_index
             _range = _range * quantity
 
@@ -237,7 +237,7 @@ class KebaKeEnergyBaseEntity(
 
         previous_value: Value = self.coordinator.async_set_local_value(
             value,
-            section_id=self.section_id,
+            device_type=self.device_type,
             key=key,
             index=self.index,
             key_index=self.key_index,
@@ -245,7 +245,7 @@ class KebaKeEnergyBaseEntity(
 
         try:
             await self.coordinator.async_write_data(
-                self.section_id,
+                self.device_type,
                 {key: values},
                 ignore_weekly_write_count=ignore_weekly_write_count,
             )
@@ -254,7 +254,7 @@ class KebaKeEnergyBaseEntity(
             # other values may have changed while the write waited for the lock.
             self.coordinator.async_set_local_value(
                 previous_value,
-                section_id=self.section_id,
+                device_type=self.device_type,
                 key=key,
                 index=self.index,
                 key_index=self.key_index,
@@ -270,7 +270,7 @@ class KebaKeEnergyBaseEntity(
             return
 
         # The API only writes integers to integer values, e.g. a runtime in seconds.
-        value_type: type = self.coordinator.get_section(self.section_id, self._pending_key).value.value_type
+        value_type: type = self.coordinator.get_endpoint(self.device_type, self._pending_key).value.value_type
         self._pending_value = round(value) if value_type is int else self._round_float32(value)
 
         if self._async_call_later:
@@ -325,18 +325,18 @@ class KebaKeEnergyEntity(KebaKeEnergyBaseEntity):
         self,
         coordinator: KebaKeEnergyDataUpdateCoordinator,
         entry: KebaKeEnergyConfigEntry,
-        section_id: str,
+        device_type: str,
         index: int | None,
         key_index: int | None = None,
     ) -> None:
         """Initialize the KEBA KeEnergy extended entity."""
-        super().__init__(coordinator, entry=entry, section_id=section_id, index=index, key_index=key_index)
+        super().__init__(coordinator, entry=entry, device_type=device_type, index=index, key_index=key_index)
 
         self._attr_unique_id: str | None = self.get_unique_id(self.entity_description.key)
 
     def get_unique_id(self, key: str, /) -> str | None:
         """Generate unique id."""
-        return self._build_unique_id(key) if self.is_system_device else self._build_unique_id(self.section_id, key)
+        return self._build_unique_id(key) if self.is_system_device else self._build_unique_id(self.device_type, key)
 
 
 @callback
@@ -352,15 +352,15 @@ def _async_setup_entities(
     entities: list[Any] = []
     deactivated_unique_ids: set[str] = set()
 
-    for section_id, section_data in coordinator.data.items():
-        for description in entity_types.get(section_id, ()):
+    for device_type, readings_by_key in coordinator.data.items():
+        for description in entity_types.get(device_type, ()):
             for key in get_data_keys(description):
-                readings: list[Reading] | None = section_data.get(key)
+                readings: list[Reading] | None = readings_by_key.get(key)
 
                 if not readings:
                     continue
 
-                quantity: int = coordinator.get_section(section_id, key).value.quantity
+                quantity: int = coordinator.get_endpoint(device_type, key).value.quantity
                 device_numbers: int = len(readings) // quantity
 
                 for index in range(device_numbers):
@@ -378,13 +378,13 @@ def _async_setup_entities(
                         coordinator=coordinator,
                         description=description,
                         entry=entry,
-                        section_id=section_id,
+                        device_type=device_type,
                         index=index if device_numbers > 1 else None,
                     )
 
                     # A deactivated sensor is not configured on the control unit, the Web HMI hides it as well.
                     if coordinator.is_sensor_deactivated(
-                        section_id,
+                        device_type,
                         key,
                         index=entity.index,
                         key_index=entity.key_index,

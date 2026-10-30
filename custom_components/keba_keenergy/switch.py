@@ -49,12 +49,12 @@ class KebaKeEnergySwitchEntity(KebaKeEnergyEntity, SwitchEntity):
         coordinator: KebaKeEnergyDataUpdateCoordinator,
         description: KebaKeEnergySwitchEntityDescription,
         entry: KebaKeEnergyConfigEntry,
-        section_id: str,
+        device_type: str,
         index: int | None,
     ) -> None:
         """Initialize the entity."""
         self.entity_description: KebaKeEnergySwitchEntityDescription = description
-        super().__init__(coordinator, entry=entry, section_id=section_id, index=index)
+        super().__init__(coordinator, entry=entry, device_type=device_type, index=index)
 
         self._attr_unique_id: str | None = self.get_unique_id(
             self.entity_description.ref_key or self.entity_description.key,

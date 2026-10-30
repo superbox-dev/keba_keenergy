@@ -193,7 +193,7 @@ class KebaKeEnergyBinarySensorEntity(KebaKeEnergyEntity, BinarySensorEntity):
         coordinator: KebaKeEnergyDataUpdateCoordinator,
         description: KebaKeEnergyBinarySensorEntityDescription,
         entry: KebaKeEnergyConfigEntry,
-        section_id: str,
+        device_type: str,
         index: int | None,
     ) -> None:
         """Initialize the entity."""
@@ -202,7 +202,7 @@ class KebaKeEnergyBinarySensorEntity(KebaKeEnergyEntity, BinarySensorEntity):
         super().__init__(
             coordinator,
             entry=entry,
-            section_id=section_id,
+            device_type=device_type,
             index=index,
             key_index=self.entity_description.key_index,
         )

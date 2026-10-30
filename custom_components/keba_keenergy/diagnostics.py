@@ -56,7 +56,7 @@ async def async_get_config_entry_diagnostics(
 def _dump(data: CoordinatorData, /) -> dict[str, dict[str, list[dict[str, Any]]]]:
     """Return the readings as JSON data, enum members by their name."""
     return {
-        section_id: {
+        device_type: {
             key: [
                 {
                     **asdict(reading),
@@ -65,7 +65,7 @@ def _dump(data: CoordinatorData, /) -> dict[str, dict[str, list[dict[str, Any]]]
                 }
                 for reading in readings
             ]
-            for key, readings in section_data.items()
+            for key, readings in readings_by_key.items()
         }
-        for section_id, section_data in data.items()
+        for device_type, readings_by_key in data.items()
     }

@@ -46,12 +46,12 @@ class KebaKeEnergyWaterHeaterTankEntity(KebaKeEnergyBaseEntity, WaterHeaterEntit
         coordinator: KebaKeEnergyDataUpdateCoordinator,
         description: WaterHeaterEntityDescription,
         entry: KebaKeEnergyConfigEntry,
-        section_id: str,
+        device_type: str,
         index: int | None,
     ) -> None:
         """Initialize the entity."""
         self.entity_description: WaterHeaterEntityDescription = description
-        super().__init__(coordinator, entry=entry, section_id=section_id, index=index)
+        super().__init__(coordinator, entry=entry, device_type=device_type, index=index)
 
     @property
     def target_temperature_low(self) -> float | None:
@@ -78,11 +78,11 @@ class KebaKeEnergyHotWaterTankEntity(KebaKeEnergyWaterHeaterTankEntity, WaterHea
         coordinator: KebaKeEnergyDataUpdateCoordinator,
         description: WaterHeaterEntityDescription,
         entry: KebaKeEnergyConfigEntry,
-        section_id: str,
+        device_type: str,
         index: int | None,
     ) -> None:
         """Initialize the entity."""
-        super().__init__(coordinator, description=description, entry=entry, section_id=section_id, index=index)
+        super().__init__(coordinator, description=description, entry=entry, device_type=device_type, index=index)
         self._attr_operation_list = list(HOT_WATER_TANK_STATE_TO_HA.values())
 
         self.entity_id: str = f"{WATER_HEATER_DOMAIN}.{DOMAIN}_{self._attr_unique_id}"
@@ -164,14 +164,14 @@ class KebaKeEnergyBufferTankEntity(KebaKeEnergyWaterHeaterTankEntity, WaterHeate
         coordinator: KebaKeEnergyDataUpdateCoordinator,
         description: WaterHeaterEntityDescription,
         entry: KebaKeEnergyConfigEntry,
-        section_id: str,
+        device_type: str,
         index: int | None,
     ) -> None:
         """Initialize the entity."""
-        super().__init__(coordinator, description=description, entry=entry, section_id=section_id, index=index)
+        super().__init__(coordinator, description=description, entry=entry, device_type=device_type, index=index)
         self._attr_operation_list = list(BUFFER_TANK_STATE_TO_HA.values())
 
-        self._attr_unique_id: str | None = self._build_unique_id(self.section_id)
+        self._attr_unique_id: str | None = self._build_unique_id(self.device_type)
 
         self.entity_id: str = f"{WATER_HEATER_DOMAIN}.{DOMAIN}_{self._attr_unique_id}"
 
@@ -248,7 +248,7 @@ async def async_setup_entry(
                 translation_key="hot_water_tank",
             ),
             entry=entry,
-            section_id=SectionPrefix.HOT_WATER_TANK.value,
+            device_type=SectionPrefix.HOT_WATER_TANK.value,
             index=index if hot_water_tank_numbers > 1 else None,
         )
         for index in range(hot_water_tank_numbers)
@@ -262,7 +262,7 @@ async def async_setup_entry(
                 translation_key="buffer_tank",
             ),
             entry=entry,
-            section_id=SectionPrefix.BUFFER_TANK.value,
+            device_type=SectionPrefix.BUFFER_TANK.value,
             index=index if buffer_tank_numbers > 1 else None,
         )
         for index in range(buffer_tank_numbers)

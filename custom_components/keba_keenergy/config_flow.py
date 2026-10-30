@@ -366,8 +366,8 @@ class KebaKeEnergyOptionsFlow(OptionsFlowWithReload):
             CONF_PHOTOVOLTAICS_TICK: SectionPrefix.PHOTOVOLTAICS,
         }
 
-        for conf_key, prefix in tick_mapping.items():
-            if coordinator.has_device(prefix):
+        for conf_key, device_type in tick_mapping.items():
+            if coordinator.has_device(device_type):
                 schema_fields[
                     probatio.Required(
                         conf_key,

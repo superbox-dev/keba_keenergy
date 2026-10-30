@@ -88,7 +88,7 @@ class KebaKeEnergySensorEntity(KebaKeEnergyEntity, SensorEntity):
         coordinator: KebaKeEnergyDataUpdateCoordinator,
         description: KebaKeEnergySensorEntityDescription[StateType],
         entry: KebaKeEnergyConfigEntry,
-        section_id: str,
+        device_type: str,
         index: int | None,
     ) -> None:
         """Initialize the entity."""
@@ -97,7 +97,7 @@ class KebaKeEnergySensorEntity(KebaKeEnergyEntity, SensorEntity):
         super().__init__(
             coordinator,
             entry=entry,
-            section_id=section_id,
+            device_type=device_type,
             index=index,
             key_index=self.entity_description.key_index,
         )
@@ -175,7 +175,7 @@ class KebaKeEnergyWriteCountSensorEntity(KebaKeEnergyBaseEntity, SensorEntity):
         """Initialize the entity."""
         self.entity_description = description
 
-        super().__init__(coordinator, entry=entry, section_id=SectionPrefix.SYSTEM, index=None)
+        super().__init__(coordinator, entry=entry, device_type=SectionPrefix.SYSTEM, index=None)
 
         self._attr_unique_id = self._build_unique_id(description.key)
         self.entity_id: str = f"{SENSOR_DOMAIN}.{DOMAIN}_{self._attr_unique_id}"

@@ -33,15 +33,15 @@ from keba_keenergy_api.exceptions import APIError
 from keba_keenergy_api.exceptions import AuthenticationError
 from keba_keenergy_api.models import CurveTable
 
-from .const import CONFIGURATION_SECTIONS
+from .const import CONFIGURATION_ENDPOINTS
 from .const import CURVE_KEYS
 from .const import DEFAULT_SCAN_INTERVAL
 from .const import DEVICE_TYPES
 from .const import DOMAIN
 from .const import REQUEST_REFRESH_COOLDOWN
-from .const import SCAN_INTERVAL_PREFIXES
+from .const import SCAN_INTERVAL_DEVICE_TYPES
 from .const import SectionPrefix
-from .legacy import SECTIONS
+from .legacy import ENDPOINTS
 from .write_counter import FlashWriteCounter
 
 if TYPE_CHECKING:
@@ -53,6 +53,7 @@ if TYPE_CHECKING:
 
     from aiohttp import ClientSession
     from homeassistant.core import HomeAssistant
+    from keba_keenergy_api.endpoints import Endpoint
     from keba_keenergy_api.models import CurvePoint
     from keba_keenergy_api.models import DeviceCounts
     from keba_keenergy_api.models import DeviceInfo
@@ -62,7 +63,6 @@ if TYPE_CHECKING:
     from keba_keenergy_api.models import SystemInfo
     from keba_keenergy_api.models import Value
     from keba_keenergy_api.models import WriteValue
-    from keba_keenergy_api.sections import Section
 
 _LOGGER: Final = logging.getLogger(__name__)
 
@@ -121,8 +121,8 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[CoordinatorData]):
         self.configuration: CoordinatorData = {}
         self._tick_counter: int = 0
 
-        # The polled sections of the installed devices that the Web HMI supports, per device type and key.
-        self._polled_sections: dict[SectionPrefix, dict[str, Section]] = {}
+        # The polled endpoints of the installed devices that the Web HMI supports, per device type and key.
+        self._polled_endpoints: dict[SectionPrefix, dict[str, Endpoint]] = {}
 
         self.device_counts: DeviceCounts | None = None
         # The names of all heating and cooling curves and the points of the curves in use, read with every update of
@@ -192,50 +192,50 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[CoordinatorData]):
         self.device_counts = await self._api.get_device_counts()
 
         # One check for the polled values and the configuration, each unknown value costs one more request.
-        supported: set[Section] = set(
+        supported: set[Endpoint] = set(
             await self._api.filter_supported(
                 [
-                    section
-                    for sections in (*SECTIONS.values(), *CONFIGURATION_SECTIONS.values())
-                    for section in sections.values()
+                    endpoint
+                    for endpoints in (*ENDPOINTS.values(), *CONFIGURATION_ENDPOINTS.values())
+                    for endpoint in endpoints.values()
                 ],
                 counts=self.device_counts,
             ),
         )
 
-        configuration_sections: dict[Section, tuple[str, str]] = self._get_request(CONFIGURATION_SECTIONS, supported)
-        readings: Readings = await self._api.read(configuration_sections, counts=self.device_counts, limits="none")
-        self.configuration = self._group_readings(readings, configuration_sections)
+        configuration_endpoints: dict[Endpoint, tuple[str, str]] = self._get_request(CONFIGURATION_ENDPOINTS, supported)
+        readings: Readings = await self._api.read(configuration_endpoints, counts=self.device_counts, limits="none")
+        self.configuration = self._group_readings(readings, configuration_endpoints)
 
         # Group the polled values by device but only add the values that are available for the heat pump setup.
-        self._polled_sections = {
-            SectionPrefix(prefix): {key: section for key, section in sections.items() if section in supported}
-            for prefix, sections in SECTIONS.items()
-            if self.has_device(prefix)
+        self._polled_endpoints = {
+            SectionPrefix(device_type): {key: endpoint for key, endpoint in endpoints.items() if endpoint in supported}
+            for device_type, endpoints in ENDPOINTS.items()
+            if self.has_device(device_type)
         }
 
     @staticmethod
     def _get_request(
-        sections: Mapping[SectionPrefix, Mapping[str, Section]],
-        supported: set[Section],
+        endpoints: Mapping[SectionPrefix, Mapping[str, Endpoint]],
+        supported: set[Endpoint],
         /,
-    ) -> dict[Section, tuple[str, str]]:
-        """Return the supported sections with their device type and key."""
+    ) -> dict[Endpoint, tuple[str, str]]:
+        """Return the supported endpoints with their device type and key."""
         return {
-            section: (prefix, key)
-            for prefix, prefix_sections in sections.items()
-            for key, section in prefix_sections.items()
-            if section in supported
+            endpoint: (device_type, key)
+            for device_type, device_type_endpoints in endpoints.items()
+            for key, endpoint in device_type_endpoints.items()
+            if endpoint in supported
         }
 
     @staticmethod
-    def _group_readings(readings: Readings, request: Mapping[Section, tuple[str, str]], /) -> CoordinatorData:
+    def _group_readings(readings: Readings, request: Mapping[Endpoint, tuple[str, str]], /) -> CoordinatorData:
         """Return the readings per device type and key."""
         data: CoordinatorData = {}
 
-        for section, section_readings in readings.items():
-            section_id, key = request[section]
-            data.setdefault(section_id, {})[key] = section_readings
+        for endpoint, endpoint_readings in readings.items():
+            device_type, key = request[endpoint]
+            data.setdefault(device_type, {})[key] = endpoint_readings
 
         return data
 
@@ -244,16 +244,18 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[CoordinatorData]):
         first_run: bool = self._tick_counter == 0
         self._tick_counter = (self._tick_counter + 1) % 1_000_000
 
-        request: dict[Section, tuple[str, str]] = {}
+        request: dict[Endpoint, tuple[str, str]] = {}
 
-        for prefix, sections in self._polled_sections.items():
-            tick_prefix: SectionPrefix = SCAN_INTERVAL_PREFIXES.get(prefix, prefix)
-            multiplier: int = self.config_entry.options.get(f"scan_interval_tick_{tick_prefix}", 1)
+        for device_type, endpoints in self._polled_endpoints.items():
+            tick_device_type: SectionPrefix = SCAN_INTERVAL_DEVICE_TYPES.get(device_type, device_type)
+            multiplier: int = self.config_entry.options.get(f"scan_interval_tick_{tick_device_type}", 1)
 
             if first_run or self._tick_counter % multiplier == 0:
-                request.update({section: (prefix, key) for key, section in sections.items()})
+                request.update({endpoint: (device_type, key) for key, endpoint in endpoints.items()})
 
-        _LOGGER.debug("Requesting the sections %s", ", ".join(sorted({prefix for prefix, _ in request.values()})))
+        _LOGGER.debug(
+            "Requesting the device types %s", ", ".join(sorted({device_type for device_type, _ in request.values()}))
+        )
 
         local_change_count: int = self._local_change_count
         readings: Readings = await self._async_read(request)
@@ -264,13 +266,13 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[CoordinatorData]):
             _LOGGER.debug("Reading the values again, a value was set during the update")
             readings = await self._async_read(request)
 
-        # Skipped sections keep their previous values.
+        # Skipped device types keep their previous values.
         data: CoordinatorData = {
-            section_id: dict(section_data) for section_id, section_data in (self.data or {}).items()
+            device_type: dict(readings_by_key) for device_type, readings_by_key in (self.data or {}).items()
         }
 
-        for section_id, section_data in self._group_readings(readings, request).items():
-            data.setdefault(section_id, {}).update(section_data)
+        for device_type, readings_by_key in self._group_readings(readings, request).items():
+            data.setdefault(device_type, {}).update(readings_by_key)
 
         if any(key in CURVE_KEYS for _, key in request.values()):
             await self._async_read_curves(data)
@@ -282,15 +284,15 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[CoordinatorData]):
         self.curve_names = await self._api_call_for_update(self._api.get_curve_table_names())
         in_use: list[str] = [
             reading.value
-            for section_data in data.values()
-            for key, readings in section_data.items()
+            for readings_by_key in data.values()
+            for key, readings in readings_by_key.items()
             if key in CURVE_KEYS
             for reading in readings
             if isinstance(reading.value, str) and reading.value in self.curve_names
         ]
         self.curve_tables = await self._api_call_for_update(self._api.get_curve_tables(in_use)) if in_use else {}
 
-    async def _async_read(self, request: Iterable[Section], /) -> Readings:
+    async def _async_read(self, request: Iterable[Endpoint], /) -> Readings:
         # The read waits for a running write, so it gets the written value.
         async with self._write_lock:
             return await self._api_call_for_update(
@@ -298,43 +300,43 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[CoordinatorData]):
             )
 
     @staticmethod
-    def get_section(section_id: str, key: str, /) -> Section:
-        """Return the section of a key."""
-        return SECTIONS[SectionPrefix(section_id)][key]
+    def get_endpoint(device_type: str, key: str, /) -> Endpoint:
+        """Return the endpoint of a key."""
+        return ENDPOINTS[SectionPrefix(device_type)][key]
 
-    def get_reading(self, section_id: str, key: str, /, *, index: int | None, key_index: int | None) -> Reading | None:
+    def get_reading(self, device_type: str, key: str, /, *, index: int | None, key_index: int | None) -> Reading | None:
         """Return the reading of the device with the index (and the consumer with the key index), None if missing."""
-        readings: list[Reading] | None = self.data.get(section_id, {}).get(key)
+        readings: list[Reading] | None = self.data.get(device_type, {}).get(key)
 
         if not readings:
             return None
 
-        return readings[self._reading_index(section_id, key, index=index, key_index=key_index)]
+        return readings[self._reading_index(device_type, key, index=index, key_index=key_index)]
 
-    def _reading_index(self, section_id: str, key: str, /, *, index: int | None, key_index: int | None) -> int:
+    def _reading_index(self, device_type: str, key: str, /, *, index: int | None, key_index: int | None) -> int:
         """Return the index in the readings of the key, of the device (and the consumer with the key index)."""
-        return (index or 0) * self.get_section(section_id, key).value.quantity + (key_index or 0)
+        return (index or 0) * self.get_endpoint(device_type, key).value.quantity + (key_index or 0)
 
     def async_set_local_value(
         self,
         value: Value,
         /,
         *,
-        section_id: str,
+        device_type: str,
         key: str,
         index: int | None,
         key_index: int | None,
     ) -> Value:
         """Set a single value in the coordinator data, without writing it, and return the replaced value."""
-        readings: list[Reading] = self.data[section_id][key]
-        reading_index: int = self._reading_index(section_id, key, index=index, key_index=key_index)
+        readings: list[Reading] = self.data[device_type][key]
+        reading_index: int = self._reading_index(device_type, key, index=index, key_index=key_index)
         previous_value: Value = readings[reading_index].value
 
         # Only copy the changed values, the other values are shared with the previous data.
         data: CoordinatorData = {
             **self.data,
-            section_id: {
-                **self.data[section_id],
+            device_type: {
+                **self.data[device_type],
                 key: [
                     replace(reading, value=value) if i == reading_index else reading
                     for i, reading in enumerate(readings)
@@ -349,19 +351,19 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[CoordinatorData]):
 
     async def async_write_data(
         self,
-        section_id: str,
+        device_type: str,
         values: Mapping[str, Sequence[WriteValue | None]],
         /,
         *,
         ignore_weekly_write_count: bool = False,
     ) -> None:
         """Write values of one device type to the NAND, one sequence per key with one value per device."""
-        request: dict[Section, Sequence[WriteValue | None]] = {
-            self.get_section(section_id, key): key_values for key, key_values in values.items()
+        request: dict[Endpoint, Sequence[WriteValue | None]] = {
+            self.get_endpoint(device_type, key): key_values for key, key_values in values.items()
         }
         await self._async_execute_write(
             write_fn=lambda: self._api.write(request),
-            names=self._write_names(section_id, request, values),
+            names=self._write_names(device_type, request, values),
             ignore_weekly_write_count=ignore_weekly_write_count,
         )
 
@@ -399,32 +401,32 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[CoordinatorData]):
 
     @staticmethod
     def _write_names(
-        section_id: str,
-        request: Mapping[Section, Sequence[WriteValue | None]],
+        device_type: str,
+        request: Mapping[Endpoint, Sequence[WriteValue | None]],
         values: Mapping[str, Sequence[WriteValue | None]],
         /,
     ) -> tuple[str, ...]:
-        """Return the names of the written values, `<section>[_<device number>].<key>[_<counter>]`.
+        """Return the names of the written values, `<device type>[_<device number>].<key>[_<counter>]`.
 
-        A system-wide value has no device number, sections with a quantity > 1 have several values per device, which get
-        a counter. `None` skips a device.
+        A system-wide value has no device number, endpoints with a quantity > 1 have several values per device, which
+        get a counter. `None` skips a device.
         """
         names: list[str] = []
 
-        for (section, section_values), key in zip(request.items(), values, strict=True):
-            if not section.value.has_device_index:
-                names.append(f"{section_id}.{key}")
+        for (endpoint, endpoint_values), key in zip(request.items(), values, strict=True):
+            if not endpoint.value.has_device_index:
+                names.append(f"{device_type}.{key}")
                 continue
 
-            quantity: int = section.value.quantity
+            quantity: int = endpoint.value.quantity
 
-            for index, item in enumerate(section_values):
+            for index, item in enumerate(endpoint_values):
                 if item is None:
                     continue
 
                 device_index, key_index = divmod(index, quantity)
                 counter: str = f"_{key_index + 1}" if quantity > 1 else ""
-                names.append(f"{section_id}_{device_index + 1}.{key}{counter}")
+                names.append(f"{device_type}_{device_index + 1}.{key}{counter}")
 
         return tuple(names)
 
@@ -472,13 +474,14 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[CoordinatorData]):
         curve_tables: dict[str, CurveTable] = await self._api_call_for_user(self._api.get_curve_tables([name]))
         return curve_tables[name]
 
-    def device_identifier(self, section_id: str, device_number: int | None, /) -> str:
-        """Return the device identifier `<entry unique_id>_<section or domain for the control unit>[_<device number>]`.
+    def device_identifier(self, device_type: str, device_number: int | None, /) -> str:
+        """Return the device identifier `<entry unique_id>_<device type>[_<device number>]`.
 
-        The device number is only added if the section has more than one device.
+        The control unit has the domain as device type, the device number is only added if the device type has more
+        than one device.
         """
         identifier: str = (
-            f"{self.config_entry.unique_id}_{DOMAIN if section_id == SectionPrefix.SYSTEM else section_id}"
+            f"{self.config_entry.unique_id}_{DOMAIN if device_type == SectionPrefix.SYSTEM else device_type}"
         )
         return identifier if device_number is None else f"{identifier}_{device_number}"
 
@@ -486,44 +489,46 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[CoordinatorData]):
         """Return the identifiers of all devices that the control unit is configured with.
 
         The devices come from the device counts and the configuration that are read on setup, not from the polled data,
-        so a section that is missing in a response never removes a device.
+        so a device type that is missing in a response never removes a device.
         """
         identifiers: set[str] = set()
 
-        for prefix in SectionPrefix:
+        for device_type in SectionPrefix:
             count: int = (
-                int(self.has_device(prefix))
-                if prefix in (SectionPrefix.SYSTEM, SectionPrefix.PHOTOVOLTAICS)
-                else self.device_count(prefix)
+                int(self.has_device(device_type))
+                if device_type in (SectionPrefix.SYSTEM, SectionPrefix.PHOTOVOLTAICS)
+                else self.device_count(device_type)
             )
             identifiers.update(
-                self.device_identifier(prefix, index + 1 if count > 1 else None) for index in range(count)
+                self.device_identifier(device_type, index + 1 if count > 1 else None) for index in range(count)
             )
 
         return identifiers
 
-    def device_count(self, prefix: str, /) -> int:
-        """Return the number of devices of the section, 0 for the device types without a device number."""
-        device_type: str | None = DEVICE_TYPES.get(SectionPrefix(prefix))
-        return 0 if self.device_counts is None or device_type is None else getattr(self.device_counts, device_type)
+    def device_count(self, device_type: str, /) -> int:
+        """Return the number of devices of the device type, 0 for the device types without a device number."""
+        api_device_type: str | None = DEVICE_TYPES.get(SectionPrefix(device_type))
+        return (
+            0 if self.device_counts is None or api_device_type is None else getattr(self.device_counts, api_device_type)
+        )
 
-    def has_device(self, prefix: str, /) -> bool:
+    def has_device(self, device_type: str, /) -> bool:
         """Return True if the device group is available in this setup."""
-        if prefix == SectionPrefix.SYSTEM:
+        if device_type == SectionPrefix.SYSTEM:
             return True
 
-        if prefix == SectionPrefix.PHOTOVOLTAICS:
+        if device_type == SectionPrefix.PHOTOVOLTAICS:
             return self.has_photovoltaics()
 
-        return self.device_count(prefix) > 0
+        return self.device_count(device_type) > 0
 
     def has_photovoltaics(self) -> bool:
         """Check if photovoltaics is available."""
         return self._get_configuration(SectionPrefix.SYSTEM, "has_photovoltaics") is True
 
-    def _get_configuration(self, prefix: SectionPrefix, key: str, /, *, index: int | None = None) -> Value | None:
+    def _get_configuration(self, device_type: SectionPrefix, key: str, /, *, index: int | None = None) -> Value | None:
         """Return a value of the configuration that is read once on setup, of the device with the index."""
-        readings: list[Reading] = self.configuration.get(prefix, {}).get(key, [])
+        readings: list[Reading] = self.configuration.get(device_type, {}).get(key, [])
         return readings[index or 0].value if len(readings) > (index or 0) else None
 
     def has_electrical_energy_meter(self, *, index: int | None = None) -> bool:
@@ -574,13 +579,13 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[CoordinatorData]):
             HeatingCircuitType.HEATING_AND_ACTIVE_COOLING,
         )
 
-    def is_sensor_in_use(self, section_id: str, key: str, /, *, index: int | None, key_index: int | None) -> bool:
+    def is_sensor_in_use(self, device_type: str, key: str, /, *, index: int | None, key_index: int | None) -> bool:
         """Check if the control unit reports the sensor as in use (message id 0) or has no message id for it."""
-        return self._get_message_id_kind(section_id, key, index=index, key_index=key_index) in (MessageIdKind.OK, None)
+        return self._get_message_id_kind(device_type, key, index=index, key_index=key_index) in (MessageIdKind.OK, None)
 
     def _get_message_id_kind(
         self,
-        section_id: str,
+        device_type: str,
         key: str,
         /,
         *,
@@ -588,9 +593,11 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[CoordinatorData]):
         key_index: int | None,
     ) -> MessageIdKind | None:
         """Return the kind of the message id of a sensor, or None if the sensor has none."""
-        reading: Reading | None = self.get_reading(section_id, key, index=index, key_index=key_index)
+        reading: Reading | None = self.get_reading(device_type, key, index=index, key_index=key_index)
         return None if reading is None or reading.message_id is None else reading.message_id.kind
 
-    def is_sensor_deactivated(self, section_id: str, key: str, /, *, index: int | None, key_index: int | None) -> bool:
+    def is_sensor_deactivated(self, device_type: str, key: str, /, *, index: int | None, key_index: int | None) -> bool:
         """Check if the control unit reports the sensor as deactivated (message id 10), i.e. not configured."""
-        return self._get_message_id_kind(section_id, key, index=index, key_index=key_index) is MessageIdKind.DEACTIVATED
+        return (
+            self._get_message_id_kind(device_type, key, index=index, key_index=key_index) is MessageIdKind.DEACTIVATED
+        )

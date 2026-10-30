@@ -124,7 +124,7 @@ async def test_update_interval_ticks(
 ) -> None:
     """Test that a device with an update multiplier of 2 is only requested every second update.
 
-    A skipped section keeps its values, the other sections are updated.
+    A skipped endpoint keeps its values, the other endpoints are updated.
     """
     fake_api.responses = [
         [
@@ -187,7 +187,7 @@ async def test_update_interval_ticks_keep_message_ids(
     config_entry: MockConfigEntry,
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
-    """Test that a skipped section keeps its message ids until it is requested again."""
+    """Test that a skipped device type keeps its message ids until it is requested again."""
     entity_id: str = "sensor.keba_keenergy_12345678_heat_circuit_room_temperature_1"
     fake_api.message_ids = {"APPL.CtrlAppl.sParam.heatCircuit[0].tempRoom.state.msgId": 50}
     fake_api.responses = [

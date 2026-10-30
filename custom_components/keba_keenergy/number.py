@@ -57,7 +57,7 @@ class KebaKeEnergyNumberEntity(KebaKeEnergyEntity, NumberEntity):
         coordinator: KebaKeEnergyDataUpdateCoordinator,
         description: KebaKeEnergyNumberEntityDescription,
         entry: KebaKeEnergyConfigEntry,
-        section_id: str,
+        device_type: str,
         index: int | None,
     ) -> None:
         """Initialize the entity."""
@@ -66,7 +66,7 @@ class KebaKeEnergyNumberEntity(KebaKeEnergyEntity, NumberEntity):
         super().__init__(
             coordinator,
             entry=entry,
-            section_id=section_id,
+            device_type=device_type,
             index=index,
             key_index=self.entity_description.key_index,
         )
