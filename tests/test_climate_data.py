@@ -9,14 +9,20 @@ from typing import Final
 
 from keba_keenergy_api.enums import HeatingCircuitOperatingMode
 from keba_keenergy_api.enums import HeatingCircuitRequest
+from keba_keenergy_api.enums import HeatingCircuitType
 from keba_keenergy_api.enums import HeatPumpState
 
 from tests.api_data import HEAT_CIRCUIT_COOL_REQUEST
 from tests.api_data import HEAT_CIRCUIT_HEAT_REQUEST
+from tests.api_data import HEAT_CIRCUIT_MODE
 from tests.api_data import HEAT_CIRCUIT_OPERATION_MODE
 from tests.api_data import MULTIPLE_DEVICES_DATA_RESPONSE
 from tests.api_data import SINGLE_DEVICE_DATA_RESPONSE
+from tests.api_data import SINGLE_DEVICE_FIXED_DATA_RESPONSE
+from tests.api_data import SINGLE_DEVICE_RESPONSE
+from tests.api_data import ReadResponse
 from tests.api_data import Response
+from tests.api_data import get_single_device_data_response
 from tests.api_data import replace_values
 from tests.api_data import update_response
 
@@ -78,3 +84,20 @@ AWAY_DATE_RANGE_RESET_WRITE: Final[str] = (
 def get_operating_mode_write(operating_mode: HeatingCircuitOperatingMode, /) -> str:
     """Return the write request of the operating mode of the first heating circuit."""
     return f'[{{"name": "APPL.CtrlAppl.sParam.heatCircuit[0].param.operatingMode", "value": "{operating_mode.value}"}}]'
+
+
+def get_circuit_type_responses(
+    circuit_type: HeatingCircuitType,
+    /,
+    *,
+    operating_mode: str = "3",
+) -> list[ReadResponse]:
+    """Return the responses of a setup with one device of each type and a heating circuit of the type.
+
+    The operating mode of the heating circuit is `REDUCED` by default.
+    """
+    return [
+        SINGLE_DEVICE_RESPONSE,
+        replace_values(SINGLE_DEVICE_FIXED_DATA_RESPONSE, HEAT_CIRCUIT_MODE.read(str(circuit_type.value))),
+        replace_values(get_single_device_data_response(), HEAT_CIRCUIT_OPERATION_MODE.read(operating_mode)),
+    ]

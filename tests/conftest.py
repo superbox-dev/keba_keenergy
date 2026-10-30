@@ -327,9 +327,14 @@ class FakeKebaKeEnergyAPI:
         return [values[item["name"]] for item in payload]
 
     async def setup_integration(self) -> None:
-        """Register all requests for the host of the config entry and set up the integration."""
+        """Register all requests for the host of the config entry and set up the integration.
+
+        The config entry is added to Home Assistant if a test has not added it yet, e.g. to register entities before.
+        """
         self.register_requests(self.config_entry.data[CONF_HOST], ssl=self.config_entry.data[CONF_SSL])
-        self.config_entry.add_to_hass(self.hass)
+
+        if self.hass.config_entries.async_get_entry(self.config_entry.entry_id) is None:
+            self.config_entry.add_to_hass(self.hass)
 
         assert await self.hass.config_entries.async_setup(self.config_entry.entry_id)
         await self.hass.async_block_till_done()

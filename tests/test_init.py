@@ -122,9 +122,7 @@ async def test_remove_stale_devices(
         device_id=stale_device.id,
     )
     fake_api.responses = get_multiple_devices_responses(MULTIPLE_DEVICES_DATA_RESPONSE)
-    fake_api.register_requests(config_entry.data[CONF_HOST], ssl=config_entry.data[CONF_SSL])
-    assert await hass.config_entries.async_setup(config_entry.entry_id)
-    await hass.async_block_till_done()
+    await fake_api.setup_integration()
 
     assert device_registry.async_get(stale_device.id) is None
     assert entity_registry.async_get(stale_entity.entity_id) is None

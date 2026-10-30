@@ -60,11 +60,21 @@ async def test_selects(
         assert await get_option_translations(hass, state) == snapshot(name=f"{state.entity_id}_options")
 
 
+@pytest.mark.parametrize(
+    "entity_id",
+    [
+        "select.keba_keenergy_12345678_operating_mode",
+        "select.keba_keenergy_12345678_heat_circuit_operating_mode_1",
+        "select.keba_keenergy_12345678_heat_circuit_operating_mode_2",
+    ],
+    ids=["operating_mode", "heat_circuit_operating_mode_1", "heat_circuit_operating_mode_2"],
+)
 @pytest.mark.usefixtures("language")
 async def test_selects_without_cooling(
     hass: HomeAssistant,
     fake_api: FakeKebaKeEnergyAPI,
     snapshot: SnapshotAssertion,
+    entity_id: str,
 ) -> None:
     """Test the operating mode selects of a setup without cooling."""
     fake_api.responses = get_multiple_devices_responses(
@@ -74,15 +84,10 @@ async def test_selects_without_cooling(
     )
     await fake_api.setup_integration()
 
-    for entity_id in (
-        "select.keba_keenergy_12345678_operating_mode",
-        "select.keba_keenergy_12345678_heat_circuit_operating_mode_1",
-        "select.keba_keenergy_12345678_heat_circuit_operating_mode_2",
-    ):
-        state: State | None = hass.states.get(entity_id)
-        assert isinstance(state, State)
-        assert state == snapshot(name=entity_id)
-        assert await get_option_translations(hass, state) == snapshot(name=f"{entity_id}_options")
+    state: State | None = hass.states.get(entity_id)
+    assert isinstance(state, State)
+    assert state == snapshot(name=entity_id)
+    assert await get_option_translations(hass, state) == snapshot(name=f"{entity_id}_options")
 
 
 async def test_system_operating_mode_cooling_of_second_heat_pump(

@@ -8,9 +8,12 @@ from typing import Final
 
 from homeassistant.helpers.service_info.zeroconf import ZeroconfServiceInfo
 
+# The IP address of the Web HMI, also of the config entry fixture.
+HOST: Final[str] = "10.0.0.100"
+
 ZERO_CONF_SERVICE_INFO: Final[ZeroconfServiceInfo] = ZeroconfServiceInfo(
-    ip_address=ip_address("10.0.0.100"),
-    ip_addresses=[ip_address("10.0.0.100")],
+    ip_address=ip_address(HOST),
+    ip_addresses=[ip_address(HOST)],
     port=0,
     hostname="ap4400.local.",
     type="_keba-device._tcp.local.",

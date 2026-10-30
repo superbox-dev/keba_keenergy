@@ -27,6 +27,7 @@ from tests.api_data import MULTIPLE_DEVICES_DATA_RESPONSE
 from tests.api_data import MULTIPLE_DEVICES_RESPONSE
 from tests.api_data import get_multiple_devices_fixed_data_response
 from tests.api_data import get_multiple_devices_responses
+from tests.test_config_flow_data import HOST
 from tests.test_config_flow_data import ZERO_CONF_SERVICE_INFO
 
 if TYPE_CHECKING:
@@ -43,8 +44,8 @@ async def test_user_flow(
 ) -> None:
     """Test the user flow without authentication."""
     fake_api.responses = get_multiple_devices_responses(MULTIPLE_DEVICES_DATA_RESPONSE)
-    fake_api.register_auth_request("10.0.0.100")
-    fake_api.register_requests("10.0.0.100")
+    fake_api.register_auth_request(HOST)
+    fake_api.register_requests(HOST)
 
     assert await setup.async_setup_component(hass, DOMAIN, {})
 
@@ -59,7 +60,7 @@ async def test_user_flow(
     result_create_entry: ConfigFlowResult = await hass.config_entries.flow.async_configure(
         result_user_step["flow_id"],
         user_input={
-            CONF_HOST: "10.0.0.100",
+            CONF_HOST: HOST,
             CONF_SSL: False,
         },
     )
@@ -67,7 +68,7 @@ async def test_user_flow(
     assert result_create_entry["type"] == FlowResultType.CREATE_ENTRY
     assert result_create_entry["result"].title == "KEBA KeEnergy (10.0.0.100)"
     assert result_create_entry["data"] == {
-        "host": "10.0.0.100",
+        "host": HOST,
         "ssl": False,
     }
 
@@ -81,8 +82,8 @@ async def test_user_flow_already_setup(
 ) -> None:
     """Test that the user flow aborts for a device that is already configured."""
     config_entry.add_to_hass(hass)
-    fake_api.register_auth_request("10.0.0.100")
-    fake_api.register_get_device_info("10.0.0.100")
+    fake_api.register_auth_request(HOST)
+    fake_api.register_get_device_info(HOST)
 
     result_init: ConfigFlowResult = await hass.config_entries.flow.async_init(
         DOMAIN,
@@ -90,7 +91,7 @@ async def test_user_flow_already_setup(
     )
     result: ConfigFlowResult = await hass.config_entries.flow.async_configure(
         result_init["flow_id"],
-        user_input={CONF_HOST: "10.0.0.100"},
+        user_input={CONF_HOST: HOST},
     )
 
     assert result["type"] is FlowResultType.ABORT
@@ -103,8 +104,8 @@ async def test_user_flow_authentication(
 ) -> None:
     """Test the user flow with authentication."""
     fake_api.responses = get_multiple_devices_responses(MULTIPLE_DEVICES_DATA_RESPONSE)
-    fake_api.register_auth_request("10.0.0.100", status=401)
-    fake_api.register_requests("10.0.0.100", ssl=True)
+    fake_api.register_auth_request(HOST, status=401)
+    fake_api.register_requests(HOST, ssl=True)
 
     assert await setup.async_setup_component(hass, DOMAIN, {})
 
@@ -119,7 +120,7 @@ async def test_user_flow_authentication(
     result_auth_step: ConfigFlowResult = await hass.config_entries.flow.async_configure(
         result_user_step["flow_id"],
         user_input={
-            CONF_HOST: "10.0.0.100",
+            CONF_HOST: HOST,
             CONF_SSL: True,
         },
     )
@@ -138,7 +139,7 @@ async def test_user_flow_authentication(
     assert result_create_entry["result"].data == {
         "username": "test",
         "password": "test",
-        "host": "10.0.0.100",
+        "host": HOST,
         "ssl": True,
     }
 
@@ -191,8 +192,8 @@ async def test_user_flow_authentication_invalid_auth(
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
     """Test that the authentication step of the user flow shows an error for invalid credentials."""
-    fake_api.register_auth_request("10.0.0.100", status=401)
-    fake_api.register_get_device_info("10.0.0.100", ssl=True, status=401)
+    fake_api.register_auth_request(HOST, status=401)
+    fake_api.register_get_device_info(HOST, ssl=True, status=401)
 
     assert await setup.async_setup_component(hass, DOMAIN, {})
 
@@ -204,7 +205,7 @@ async def test_user_flow_authentication_invalid_auth(
     result_auth_step: ConfigFlowResult = await hass.config_entries.flow.async_configure(
         result_user_step["flow_id"],
         user_input={
-            CONF_HOST: "10.0.0.100",
+            CONF_HOST: HOST,
             CONF_SSL: True,
         },
     )
@@ -230,8 +231,8 @@ async def test_user_flow_authentication_cannot_connect(
 ) -> None:
     """Test the errors of the authentication step of the user flow."""
     fake_api.responses = get_multiple_devices_responses(MULTIPLE_DEVICES_DATA_RESPONSE)
-    fake_api.register_auth_request("10.0.0.100", exc=ClientError())
-    fake_api.register_requests("10.0.0.100", ssl=True)
+    fake_api.register_auth_request(HOST, exc=ClientError())
+    fake_api.register_requests(HOST, ssl=True)
 
     assert await setup.async_setup_component(hass, DOMAIN, {})
 
@@ -246,7 +247,7 @@ async def test_user_flow_authentication_cannot_connect(
     result_auth_step: ConfigFlowResult = await hass.config_entries.flow.async_configure(
         result_user_step["flow_id"],
         user_input={
-            "host": "10.0.0.100",
+            "host": HOST,
             "ssl": True,
         },
     )
@@ -276,14 +277,14 @@ async def test_reauth_flow_success(
 ) -> None:
     """Test the reauthentication flow with valid credentials."""
     fake_api.responses = get_multiple_devices_responses(MULTIPLE_DEVICES_DATA_RESPONSE)
-    fake_api.register_requests("10.0.0.100", ssl=True)
+    fake_api.register_requests(HOST, ssl=True)
 
     config_entry.add_to_hass(hass)
 
     result_start_reauth: ConfigFlowResult = await config_entry.start_reauth_flow(
         hass,
         data={
-            "host": "10.0.0.100",
+            "host": HOST,
             "ssl": True,
         },
     )
@@ -303,7 +304,7 @@ async def test_reauth_flow_success(
     assert result["type"] is FlowResultType.ABORT
     assert result["reason"] == "reauth_successful"
     assert config_entry.data == {
-        CONF_HOST: "10.0.0.100",
+        CONF_HOST: HOST,
         CONF_SSL: True,
         CONF_USERNAME: "test",
         CONF_PASSWORD: "test",
@@ -327,14 +328,14 @@ async def test_reauth_flow_failure(
     expected: dict[str, object],
 ) -> None:
     """Test that the reauthentication flow shows invalid credentials and aborts for another device."""
-    fake_api.register_get_device_info("10.0.0.100", ssl=True, status=device_info_status)
+    fake_api.register_get_device_info(HOST, ssl=True, status=device_info_status)
 
     config_entry.add_to_hass(hass)
 
     result_start_reauth: ConfigFlowResult = await config_entry.start_reauth_flow(
         hass,
         data={
-            "host": "10.0.0.100",
+            "host": HOST,
             "ssl": True,
         },
     )
@@ -372,8 +373,8 @@ async def test_user_flow_cannot_connect(
     expected_error: str,
 ) -> None:
     """Test the errors of the user flow."""
-    fake_api.register_auth_request("10.0.0.100")
-    fake_api.register_get_device_info("10.0.0.100", status=status, exc=exc)
+    fake_api.register_auth_request(HOST)
+    fake_api.register_get_device_info(HOST, status=status, exc=exc)
 
     result_user_step_1: ConfigFlowResult = await hass.config_entries.flow.async_init(
         DOMAIN,
@@ -383,7 +384,7 @@ async def test_user_flow_cannot_connect(
     result_user_step_2: ConfigFlowResult = await hass.config_entries.flow.async_configure(
         result_user_step_1["flow_id"],
         user_input={
-            "host": "10.0.0.100",
+            "host": HOST,
             "ssl": False,
         },
     )
@@ -497,7 +498,7 @@ async def test_zeroconf_flow_already_setup(
 @pytest.mark.parametrize(
     ("config_entry", "expected_host"),
     [
-        ({"data": {CONF_HOST: "10.0.0.50", CONF_SSL: False}}, "10.0.0.100"),
+        ({"data": {CONF_HOST: "10.0.0.50", CONF_SSL: False}}, HOST),
         ({"data": {CONF_HOST: "keba.local", CONF_SSL: False}}, "keba.local"),
     ],
     indirect=["config_entry"],
@@ -548,7 +549,7 @@ async def test_zeroconf_flow_keeps_ip_address_for_ipv6(
 
     assert result["type"] == FlowResultType.ABORT
     assert result["reason"] == "already_configured"
-    assert config_entry.data[CONF_HOST] == "10.0.0.100"
+    assert config_entry.data[CONF_HOST] == HOST
 
 
 @pytest.mark.parametrize(

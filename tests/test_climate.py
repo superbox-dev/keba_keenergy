@@ -10,7 +10,13 @@ from typing import TYPE_CHECKING
 import pytest
 from homeassistant.components.climate.const import ATTR_HVAC_ACTION
 from homeassistant.components.climate.const import ATTR_HVAC_MODE
+from homeassistant.components.climate.const import ATTR_HVAC_MODES
+from homeassistant.components.climate.const import ATTR_MAX_TEMP
+from homeassistant.components.climate.const import ATTR_MIN_TEMP
 from homeassistant.components.climate.const import ATTR_PRESET_MODE
+from homeassistant.components.climate.const import ATTR_PRESET_MODES
+from homeassistant.components.climate.const import DEFAULT_MAX_TEMP
+from homeassistant.components.climate.const import DEFAULT_MIN_TEMP
 from homeassistant.components.climate.const import DOMAIN as CLIMATE_DOMAIN
 from homeassistant.components.climate.const import PRESET_AWAY
 from homeassistant.components.climate.const import PRESET_BOOST
@@ -30,11 +36,13 @@ from homeassistant.const import Platform
 from homeassistant.core import HomeAssistant
 from homeassistant.core import State
 from homeassistant.exceptions import HomeAssistantError
+from homeassistant.exceptions import ServiceValidationError
 from homeassistant.helpers.entity_component import async_update_entity
 from homeassistant.util import dt as dt_util
 from keba_keenergy_api.enums import HeatingCircuitOperatingMode
 from keba_keenergy_api.enums import HeatingCircuitOperatingMode as Mode
 from keba_keenergy_api.enums import HeatingCircuitRequest
+from keba_keenergy_api.enums import HeatingCircuitType
 from keba_keenergy_api.enums import HeatPumpState
 from pytest_homeassistant_custom_component.common import async_fire_time_changed
 
@@ -55,6 +63,7 @@ from tests.test_climate_data import NOW
 from tests.test_climate_data import PARTY_DATA_RESPONSE
 from tests.test_climate_data import REDUCED_DATA_RESPONSE
 from tests.test_climate_data import TARGET_TEMPERATURE_WITH_OFFSET
+from tests.test_climate_data import get_circuit_type_responses
 from tests.test_climate_data import get_hvac_action_data_response
 from tests.test_climate_data import get_operating_mode_write
 
@@ -76,6 +85,151 @@ async def test_climate(
 
     for state in get_platform_states(hass, fake_api.config_entry, Platform.CLIMATE):
         assert state == snapshot(name=state.entity_id)
+
+
+@pytest.mark.parametrize(
+    ("circuit_type", "expected_modes"),
+    [
+        (
+            HeatingCircuitType.HEATING,
+            (
+                [HVACMode.AUTO, HVACMode.HEAT, HVACMode.OFF],
+                [PRESET_HOME, PRESET_AWAY, PRESET_COMFORT, PRESET_SLEEP, PRESET_BOOST],
+            ),
+        ),
+        (
+            HeatingCircuitType.COOLING,
+            (
+                [HVACMode.AUTO, HVACMode.COOL, HVACMode.OFF],
+                [PRESET_HOME, PRESET_COMFORT, PRESET_SLEEP, PRESET_BOOST],
+            ),
+        ),
+        (
+            HeatingCircuitType.HEATING_AND_COOLING,
+            (
+                [HVACMode.AUTO, HVACMode.HEAT_COOL, HVACMode.OFF],
+                [PRESET_HOME, PRESET_AWAY, PRESET_COMFORT, PRESET_SLEEP, PRESET_BOOST],
+            ),
+        ),
+    ],
+    ids=["heating", "cooling", "heating_and_cooling"],
+)
+async def test_hvac_and_preset_modes(
+    hass: HomeAssistant,
+    fake_api: FakeKebaKeEnergyAPI,
+    circuit_type: HeatingCircuitType,
+    expected_modes: tuple[list[HVACMode], list[str]],
+) -> None:
+    """Test that the HVAC modes and presets depend on the type of the heating circuit, only cooling has no away."""
+    fake_api.responses = get_circuit_type_responses(circuit_type)
+    await fake_api.setup_integration()
+
+    state: State | None = hass.states.get(ENTITY_ID)
+
+    assert isinstance(state, State)
+    assert (state.attributes[ATTR_HVAC_MODES], state.attributes[ATTR_PRESET_MODES]) == expected_modes
+
+
+async def test_set_hvac_mode_cool(
+    hass: HomeAssistant,
+    fake_api: FakeKebaKeEnergyAPI,
+) -> None:
+    """Test that the HVAC mode cool of a heating circuit that only cools writes the operating mode normal."""
+    fake_api.responses = get_circuit_type_responses(HeatingCircuitType.COOLING, operating_mode="0")
+    await fake_api.setup_integration()
+
+    await hass.services.async_call(
+        domain=CLIMATE_DOMAIN,
+        service=SERVICE_SET_HVAC_MODE,
+        service_data={
+            ATTR_ENTITY_ID: ENTITY_ID,
+            ATTR_HVAC_MODE: HVACMode.COOL,
+        },
+        blocking=True,
+    )
+
+    assert fake_api.write_requests() == [get_operating_mode_write(Mode.NORMAL)]
+
+
+async def test_set_preset_mode_away_of_cooling_circuit(
+    hass: HomeAssistant,
+    fake_api: FakeKebaKeEnergyAPI,
+) -> None:
+    """Test that a heating circuit that only cools rejects the away preset."""
+    fake_api.responses = get_circuit_type_responses(HeatingCircuitType.COOLING)
+    await fake_api.setup_integration()
+
+    with pytest.raises(ServiceValidationError) as error:
+        await hass.services.async_call(
+            domain=CLIMATE_DOMAIN,
+            service=SERVICE_SET_PRESET_MODE,
+            service_data={
+                ATTR_ENTITY_ID: ENTITY_ID,
+                ATTR_PRESET_MODE: PRESET_AWAY,
+            },
+            blocking=True,
+        )
+
+    assert error.value.translation_key == "not_valid_preset_mode"
+    assert fake_api.write_requests() == []
+
+
+@pytest.mark.parametrize(
+    ("response", "expected_limits"),
+    [
+        # The selected target temperature 20.0 plus the limits of the offset (-2.5 and 2.5).
+        (get_single_device_data_response(), (17.5, 22.5)),
+        (
+            update_response(
+                get_single_device_data_response(),
+                "APPL.CtrlAppl.sParam.heatCircuit[0].param.offsetRoomTemp",
+                attributes={},
+            ),
+            (DEFAULT_MIN_TEMP, DEFAULT_MAX_TEMP),
+        ),
+    ],
+    ids=["offset_limits", "without_limits"],
+)
+async def test_temperature_limits(
+    hass: HomeAssistant,
+    fake_api: FakeKebaKeEnergyAPI,
+    response: Response,
+    expected_limits: tuple[float, float],
+) -> None:
+    """Test the limits of the target temperature, the defaults of Home Assistant without the limits of the offset."""
+    fake_api.responses = get_single_device_responses(response)
+    await fake_api.setup_integration()
+
+    state: State | None = hass.states.get(ENTITY_ID)
+
+    assert isinstance(state, State)
+    assert (state.attributes[ATTR_MIN_TEMP], state.attributes[ATTR_MAX_TEMP]) == expected_limits
+
+
+async def test_set_temperature_out_of_range(
+    hass: HomeAssistant,
+    fake_api: FakeKebaKeEnergyAPI,
+) -> None:
+    """Test that a target temperature outside of the limits is rejected and not written."""
+    fake_api.responses = get_single_device_responses(get_single_device_data_response())
+    await fake_api.setup_integration()
+
+    with pytest.raises(ServiceValidationError) as error:
+        await hass.services.async_call(
+            domain=CLIMATE_DOMAIN,
+            service=SERVICE_SET_TEMPERATURE,
+            service_data={
+                ATTR_ENTITY_ID: ENTITY_ID,
+                ATTR_TEMPERATURE: 23.0,
+            },
+            blocking=True,
+        )
+
+    async_fire_time_changed(hass, dt_util.utcnow() + timedelta(seconds=FLASH_WRITE_DELAY))
+    await hass.async_block_till_done()
+
+    assert error.value.translation_key == "temp_out_of_range"
+    assert fake_api.write_requests() == []
 
 
 async def test_target_temperature(

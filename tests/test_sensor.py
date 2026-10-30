@@ -11,8 +11,6 @@ from homeassistant.components.sensor import DOMAIN as SENSOR_DOMAIN
 from homeassistant.components.sensor import async_rounded_state
 from homeassistant.components.sensor.const import ATTR_OPTIONS
 from homeassistant.const import ATTR_UNIT_OF_MEASUREMENT
-from homeassistant.const import CONF_HOST
-from homeassistant.const import CONF_SSL
 from homeassistant.const import STATE_UNKNOWN
 from homeassistant.const import Platform
 from homeassistant.core import State
@@ -96,9 +94,7 @@ async def test_converted_sensor_keeps_registered_unit(
         unit_of_measurement=expected[1],
     )
     fake_api.responses = get_multiple_devices_responses(MULTIPLE_DEVICES_DATA_RESPONSE)
-    fake_api.register_requests(config_entry.data[CONF_HOST], ssl=config_entry.data[CONF_SSL])
-    assert await hass.config_entries.async_setup(config_entry.entry_id)
-    await hass.async_block_till_done()
+    await fake_api.setup_integration()
 
     state: State | None = hass.states.get(entry.entity_id)
     assert isinstance(state, State)
