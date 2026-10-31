@@ -6,9 +6,9 @@ from __future__ import annotations
 
 from http import HTTPStatus
 from typing import TYPE_CHECKING
-from typing import Any
 
 import pytest
+from homeassistant.components.sensor import DOMAIN as SENSOR_DOMAIN
 from homeassistant.config_entries import SOURCE_REAUTH
 from homeassistant.config_entries import ConfigEntryState
 from homeassistant.const import CONF_HOST
@@ -17,12 +17,11 @@ from homeassistant.helpers import device_registry as dr
 from homeassistant.helpers import entity_registry as er
 
 from custom_components.keba_keenergy.const import DOMAIN
-from tests.api_data import DEFAULT_POSITION_DATA_RESPONSE
-from tests.api_data import DEFAULT_POSITION_FIXED_DATA_RESPONSE
-from tests.api_data import DEFAULT_POSITION_RESPONSE
-from tests.api_data import MULTIPLE_POSITION_DATA_RESPONSE
-from tests.api_data import MULTIPLE_POSITIONS_RESPONSE
-from tests.api_data import get_multiple_position_fixed_data_response
+from tests.api_data import MULTIPLE_DEVICES_DATA_RESPONSE
+from tests.api_data import SINGLE_DEVICE_DATA_RESPONSE
+from tests.api_data import ReadResponse
+from tests.api_data import get_multiple_devices_responses
+from tests.api_data import get_single_device_responses
 
 if TYPE_CHECKING:
     from homeassistant.core import HomeAssistant
@@ -40,11 +39,7 @@ async def test_load_entry(
     snapshot: SnapshotAssertion,
 ) -> None:
     """Test setting up the integration."""
-    fake_api.responses = [
-        MULTIPLE_POSITIONS_RESPONSE,
-        get_multiple_position_fixed_data_response(has_passive_cooling="true"),
-        MULTIPLE_POSITION_DATA_RESPONSE,
-    ]
+    fake_api.responses = get_multiple_devices_responses(MULTIPLE_DEVICES_DATA_RESPONSE, has_passive_cooling="true")
     await fake_api.setup_integration()
 
     assert config_entry.state is ConfigEntryState.LOADED
@@ -52,76 +47,57 @@ async def test_load_entry(
     assert set(hass.states.async_entity_ids()) == snapshot
 
 
-@pytest.mark.parametrize(
-    "config_entry",
-    [
-        (
-            {
-                "title": "KEBA KeEnergy (ap4400.local)",
-                "data": {
-                    CONF_HOST: "ap4400.local",
-                    CONF_SSL: False,
-                },
-                "unique_id": "12345678",
-            }
-        ),
-    ],
-    indirect=["config_entry"],
-    ids=["hostname"],
-)
 async def test_unload_entry(
     hass: HomeAssistant,
     config_entry: MockConfigEntry,
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
     """Test unloading the integration."""
-    fake_api.responses = [
-        MULTIPLE_POSITIONS_RESPONSE,
-        get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITION_DATA_RESPONSE,
-    ]
+    fake_api.responses = get_multiple_devices_responses(MULTIPLE_DEVICES_DATA_RESPONSE)
     await fake_api.setup_integration()
 
-    assert config_entry.state == ConfigEntryState.LOADED
+    assert config_entry.state is ConfigEntryState.LOADED
     await hass.config_entries.async_unload(config_entry.entry_id)
-    assert config_entry.state == ConfigEntryState.NOT_LOADED
+    assert config_entry.state is ConfigEntryState.NOT_LOADED
 
 
 @pytest.mark.parametrize(
-    "response",
+    "responses",
     [
-        [
-            MULTIPLE_POSITIONS_RESPONSE,
-            get_multiple_position_fixed_data_response(has_passive_cooling="true"),
-            MULTIPLE_POSITION_DATA_RESPONSE,
-        ],
-        [
-            DEFAULT_POSITION_RESPONSE,
-            DEFAULT_POSITION_FIXED_DATA_RESPONSE,
-            DEFAULT_POSITION_DATA_RESPONSE,
-        ],
+        get_multiple_devices_responses(MULTIPLE_DEVICES_DATA_RESPONSE, has_passive_cooling="true"),
+        get_single_device_responses(SINGLE_DEVICE_DATA_RESPONSE),
     ],
-    ids=["multiple_positions", "default_position"],
+    ids=["multiple_devices", "single_device"],
 )
-@pytest.mark.usefixtures("entity_registry_enabled_by_default")
+@pytest.mark.usefixtures("entity_registry_enabled_by_default", "language")
 async def test_devices(
     hass: HomeAssistant,
+    config_entry: MockConfigEntry,
     fake_api: FakeKebaKeEnergyAPI,
-    response: list[list[dict[str, Any]]],
+    responses: list[ReadResponse],
     snapshot: SnapshotAssertion,
 ) -> None:
-    """Test the devices that the integration creates."""
-    fake_api.responses = [*response]
+    """Test the devices that the integration creates, with their translated names and the device they belong to."""
+    fake_api.responses = list(responses)
     await fake_api.setup_integration()
 
-    assert (
-        sorted(
-            identifier
-            for device in dr.async_entries_for_config_entry(dr.async_get(hass), fake_api.config_entry.entry_id)
-            for _, identifier in device.identifiers
-        )
-        == snapshot
-    )
+    device_registry: dr.DeviceRegistry = dr.async_get(hass)
+    devices: dict[str, dr.DeviceEntry] = {
+        identifier: device
+        for device in dr.async_entries_for_config_entry(device_registry, config_entry.entry_id)
+        for _, identifier in device.identifiers
+    }
+    # The snapshot of a device replaces the ID of the device it belongs to, so its identifier is compared as well.
+    identifiers: dict[str, str] = {device.id: identifier for identifier, device in devices.items()}
+    via_devices: dict[str, str | None] = {
+        identifier: identifiers.get(device.via_device_id or "") for identifier, device in sorted(devices.items())
+    }
+
+    assert sorted(devices) == snapshot(name="identifiers")
+    assert via_devices == snapshot(name="via_devices")
+
+    for identifier, device in sorted(devices.items()):
+        assert device == snapshot(name=identifier)
 
 
 @pytest.mark.usefixtures("entity_registry_enabled_by_default")
@@ -139,20 +115,14 @@ async def test_remove_stale_devices(
         identifiers={(DOMAIN, "12345678_buffer_tank_3")},
     )
     stale_entity: er.RegistryEntry = entity_registry.async_get_or_create(
-        "sensor",
+        SENSOR_DOMAIN,
         DOMAIN,
         "12345678_buffer_tank_current_top_temperature_3",
         config_entry=config_entry,
         device_id=stale_device.id,
     )
-    fake_api.responses = [
-        MULTIPLE_POSITIONS_RESPONSE,
-        get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITION_DATA_RESPONSE,
-    ]
-    fake_api.register_requests(config_entry.data[CONF_HOST], ssl=config_entry.data[CONF_SSL])
-    assert await hass.config_entries.async_setup(config_entry.entry_id)
-    await hass.async_block_till_done()
+    fake_api.responses = get_multiple_devices_responses(MULTIPLE_DEVICES_DATA_RESPONSE)
+    await fake_api.setup_integration()
 
     assert device_registry.async_get(stale_device.id) is None
     assert entity_registry.async_get(stale_entity.entity_id) is None
@@ -165,24 +135,23 @@ async def test_remove_stale_devices(
 
 
 @pytest.mark.parametrize(
-    ("error", "expected_state", "expected_flows"),
+    ("error", "expected"),
     [
-        (HTTPStatus.BAD_REQUEST, ConfigEntryState.SETUP_RETRY, []),
-        (TimeoutError(), ConfigEntryState.SETUP_RETRY, []),
-        (HTTPStatus.UNAUTHORIZED, ConfigEntryState.SETUP_ERROR, [SOURCE_REAUTH]),
+        (HTTPStatus.BAD_REQUEST, (ConfigEntryState.SETUP_RETRY, [])),
+        (TimeoutError(), (ConfigEntryState.SETUP_RETRY, [])),
+        (HTTPStatus.UNAUTHORIZED, (ConfigEntryState.SETUP_ERROR, [SOURCE_REAUTH])),
     ],
     ids=["http_error", "timeout", "authentication_error"],
 )
 @pytest.mark.no_fail_on_keba_errors
 async def test_setup_failed(
     hass: HomeAssistant,
+    config_entry: MockConfigEntry,
     fake_api: FakeKebaKeEnergyAPI,
     error: Exception | HTTPStatus,
-    expected_state: ConfigEntryState,
-    expected_flows: list[str],
+    expected: tuple[ConfigEntryState, list[str]],
 ) -> None:
     """Test that a failed setup is retried, or starts the reauthentication for rejected credentials."""
-    config_entry: MockConfigEntry = fake_api.config_entry
     fake_api.responses = [error]
     fake_api.register_requests(config_entry.data[CONF_HOST], ssl=config_entry.data[CONF_SSL])
     config_entry.add_to_hass(hass)
@@ -190,5 +159,7 @@ async def test_setup_failed(
     assert not await hass.config_entries.async_setup(config_entry.entry_id)
     await hass.async_block_till_done()
 
-    assert config_entry.state is expected_state
-    assert [flow["context"]["source"] for flow in hass.config_entries.flow.async_progress()] == expected_flows
+    assert (
+        config_entry.state,
+        [flow["context"]["source"] for flow in hass.config_entries.flow.async_progress()],
+    ) == expected

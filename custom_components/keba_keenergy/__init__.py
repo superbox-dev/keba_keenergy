@@ -12,16 +12,15 @@ from typing import Final
 from homeassistant.helpers import config_validation as cv
 from homeassistant.helpers import device_registry as dr
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
-from keba_keenergy_api.constants import SectionPrefix
 
 from .const import DOMAIN
 from .const import MANUFACTURER
 from .const import PLATFORMS
+from .const import SectionPrefix
 from .coordinator import KebaKeEnergyConfigEntry
 from .coordinator import KebaKeEnergyDataUpdateCoordinator
-from .coordinator import get_device_identifier
-from .coordinator import get_write_counter_store
 from .services import async_setup_services
+from .write_counter import FlashWriteCounter
 
 if TYPE_CHECKING:
     from aiohttp import ClientSession
@@ -36,13 +35,13 @@ _LOGGER: Final = logging.getLogger(__name__)
 
 
 async def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:  # noqa: ARG001
-    """Set up the  KEBA KeEnergy component."""
+    """Set up the KEBA KeEnergy integration and register its actions."""
     async_setup_services(hass)
     return True
 
 
 async def async_setup_entry(hass: HomeAssistant, entry: KebaKeEnergyConfigEntry) -> bool:
-    """Set up the KEBA KeEnergy platform."""
+    """Set up a KEBA KeEnergy config entry, its control unit device and its platforms."""
     # Newer software versions of the Web HMI comes with self-signed SSL certificates.
     session: ClientSession = async_get_clientsession(hass, verify_ssl=False, family=socket.AF_INET)
 
@@ -61,7 +60,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: KebaKeEnergyConfigEntry)
 
     control_unit: DeviceEntry = device_registry.async_get_or_create(
         config_entry_id=entry.entry_id,
-        identifiers={(DOMAIN, get_device_identifier(entry.unique_id, SectionPrefix.SYSTEM, None))},
+        identifiers={(DOMAIN, coordinator.device_identifier(SectionPrefix.SYSTEM, None))},
         manufacturer=MANUFACTURER,
         name=coordinator.name,
         model=coordinator.device_model,
@@ -91,4 +90,4 @@ async def async_unload_entry(hass: HomeAssistant, entry: KebaKeEnergyConfigEntry
 
 async def async_remove_entry(hass: HomeAssistant, entry: KebaKeEnergyConfigEntry) -> None:
     """Remove the write counter of a removed config entry."""
-    await get_write_counter_store(hass, entry_id=entry.entry_id).async_remove()
+    await FlashWriteCounter.async_remove(hass, entry.entry_id)

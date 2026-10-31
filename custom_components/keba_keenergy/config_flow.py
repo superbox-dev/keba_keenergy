@@ -23,7 +23,6 @@ from homeassistant.const import CONF_PASSWORD
 from homeassistant.const import CONF_SCAN_INTERVAL
 from homeassistant.const import CONF_SSL
 from homeassistant.const import CONF_USERNAME
-from homeassistant.core import HomeAssistant
 from homeassistant.core import callback
 from homeassistant.exceptions import HomeAssistantError
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
@@ -31,25 +30,16 @@ from homeassistant.helpers.selector import NumberSelector
 from homeassistant.helpers.selector import NumberSelectorConfig
 from homeassistant.helpers.selector import NumberSelectorMode
 from homeassistant.util.network import is_ip_address
-from keba_keenergy_api.api import KebaKeEnergyAPI
-from keba_keenergy_api.constants import SectionPrefix
-from keba_keenergy_api.error import APIError
+from keba_keenergy_api.client import KebaKeEnergyAPI
+from keba_keenergy_api.exceptions import APIError
 
-from .const import CONF_BUFFER_TANK_TICK
-from .const import CONF_EXTERNAL_HEAT_SOURCE_TICK
-from .const import CONF_HEAT_CIRCUIT_TICK
-from .const import CONF_HEAT_PUMP_TICK
-from .const import CONF_HOT_WATER_TANK_TICK
-from .const import CONF_PHOTOVOLTAICS_TICK
-from .const import CONF_SOLAR_CIRCUIT_TICK
-from .const import CONF_SWITCH_VALVE_TICK
-from .const import CONF_SYSTEM_TICK
 from .const import CONFIG_ENTRY_VERSION
 from .const import DEFAULT_SCAN_INTERVAL
 from .const import DOMAIN
 from .const import MANUFACTURER
 from .const import MIN_SCAN_INTERVAL
 from .const import NAME
+from .const import SCAN_INTERVAL_TICK_OPTIONS
 from .const import STEP_AUTH_DATA_SCHEMA
 
 if TYPE_CHECKING:
@@ -57,6 +47,7 @@ if TYPE_CHECKING:
 
     from aiohttp import ClientSession
     from homeassistant.helpers.service_info.zeroconf import ZeroconfServiceInfo
+    from keba_keenergy_api.models import DeviceInfo
 
     from .coordinator import KebaKeEnergyConfigEntry
     from .coordinator import KebaKeEnergyDataUpdateCoordinator
@@ -65,41 +56,13 @@ if TYPE_CHECKING:
 _LOGGER: Final = logging.getLogger(__name__)
 
 
-async def validate_input(hass: HomeAssistant, /, *, data: dict[str, Any]) -> str:
-    """Validate the user input allows us to connect."""
-    session: ClientSession = async_get_clientsession(hass)
-    _LOGGER.debug("Try to connect to %s", data[CONF_HOST])
-
-    client: KebaKeEnergyAPI = KebaKeEnergyAPI(
-        data[CONF_HOST],
-        session=session,
-        username=data.get(CONF_USERNAME),
-        password=data.get(CONF_PASSWORD),
-        ssl=data[CONF_SSL],
-        skip_ssl_verification=True,
-    )
-
-    try:
-        response: dict[str, Any] = await client.system.get_device_info()
-    except APIError as error:
-        _LOGGER.debug("API error %s", error)
-        if error.status == HTTPStatus.UNAUTHORIZED:
-            raise InvalidAuthError from error
-
-        raise CannotConnectError from error
-    else:
-        _LOGGER.debug("Connected to %s", data[CONF_HOST])
-
-    return str(response["serNo"])
-
-
 class KebaKeEnergyConfigFlow(ConfigFlow, domain=DOMAIN):
     """Config flow for KEBA KeEnergy."""
 
     VERSION: int = CONFIG_ENTRY_VERSION
 
     def __init__(self) -> None:
-        """Initialize flow."""
+        """Initialize the config flow."""
         self.host: str = ""
         self.ssl: bool = False
         self.serial_number: str | None = None
@@ -112,9 +75,9 @@ class KebaKeEnergyConfigFlow(ConfigFlow, domain=DOMAIN):
 
         if user_input is not None:
             self.host = user_input[CONF_HOST]
-            has_authentication: bool = await self._async_check_authentication_required()
+            requires_authentication: bool = await self._async_check_authentication_required()
 
-            if has_authentication:
+            if requires_authentication:
                 return await self.async_step_auth(user_input)
 
             errors = await self._async_validate_or_error(user_input)
@@ -138,26 +101,26 @@ class KebaKeEnergyConfigFlow(ConfigFlow, domain=DOMAIN):
         )
 
     async def _async_check_authentication_required(self) -> bool:
-        """Check if authentication required."""
+        """Return True if the Web HMI requires authentication, which also enables SSL."""
         session: ClientSession = async_get_clientsession(self.hass)
-        has_authentication: bool = False
+        requires_authentication: bool = False
 
         try:
             async with session.get(f"https://{self.host}", ssl=False) as response:
                 if response.status == HTTPStatus.UNAUTHORIZED:
                     self.ssl = True
-                    has_authentication = True
+                    requires_authentication = True
         except ClientError as error:
-            _LOGGER.debug(error)
+            _LOGGER.debug("Cannot check the authentication of %s: %s", self.host, error)
 
-        return has_authentication
+        return requires_authentication
 
-    async def _async_validate_or_error(self, user_input: dict[str, Any]) -> dict[str, Any]:
-        """Validate or error."""
+    async def _async_validate_or_error(self, user_input: dict[str, Any]) -> dict[str, str]:
+        """Read the serial number with the user input, return the errors of the form if that fails."""
         errors: dict[str, str] = {}
 
         try:
-            self.serial_number = await validate_input(self.hass, data=user_input)
+            self.serial_number = await self._async_get_serial_number(user_input)
         except CannotConnectError:
             errors["base"] = "cannot_connect"
         except InvalidAuthError:
@@ -167,6 +130,33 @@ class KebaKeEnergyConfigFlow(ConfigFlow, domain=DOMAIN):
             _LOGGER.exception("Unexpected exception")
 
         return errors
+
+    async def _async_get_serial_number(self, data: dict[str, Any], /) -> str:
+        """Connect to the Web HMI with the user input and return its serial number."""
+        session: ClientSession = async_get_clientsession(self.hass)
+        _LOGGER.debug("Try to connect to %s", data[CONF_HOST])
+
+        client: KebaKeEnergyAPI = KebaKeEnergyAPI(
+            data[CONF_HOST],
+            session=session,
+            username=data.get(CONF_USERNAME),
+            password=data.get(CONF_PASSWORD),
+            ssl=data[CONF_SSL],
+            verify_ssl=False,
+        )
+
+        try:
+            response: DeviceInfo = await client.get_device_info()
+        except APIError as error:
+            _LOGGER.debug("API error %s", error)
+            if error.status == HTTPStatus.UNAUTHORIZED:
+                raise InvalidAuthError from error
+
+            raise CannotConnectError from error
+        else:
+            _LOGGER.debug("Connected to %s", data[CONF_HOST])
+
+        return str(response["serNo"])
 
     async def _async_complete_entry(self, user_input: dict[str, Any]) -> ConfigFlowResult:
         await self.async_set_unique_id(self.serial_number)
@@ -270,9 +260,9 @@ class KebaKeEnergyConfigFlow(ConfigFlow, domain=DOMAIN):
     async def async_step_discovery_confirm(self, user_input: dict[str, Any] | None = None) -> ConfigFlowResult:
         """Handle user-confirmation of discovered node."""
         errors: dict[str, str] = {}
-        has_authentication: bool = await self._async_check_authentication_required()
+        requires_authentication: bool = await self._async_check_authentication_required()
 
-        if has_authentication:
+        if requires_authentication:
             return await self.async_step_auth(user_input)
 
         if user_input is not None:
@@ -313,10 +303,10 @@ class KebaKeEnergyConfigFlow(ConfigFlow, domain=DOMAIN):
 
 
 class KebaKeEnergyOptionsFlow(OptionsFlowWithReload):
-    """Option flow for KEBA KeEnergy."""
+    """Options flow for KEBA KeEnergy."""
 
     async def async_step_init(self, user_input: dict[str, Any] | None = None) -> ConfigFlowResult:
-        """Handle options flow."""
+        """Handle the options of the scan interval and the multipliers of the installed device types."""
         if user_input is not None:
             return self.async_create_entry(data=self._normalize_user_input(user_input))
 
@@ -325,7 +315,7 @@ class KebaKeEnergyOptionsFlow(OptionsFlowWithReload):
 
         coordinator: KebaKeEnergyDataUpdateCoordinator = self.config_entry.runtime_data
 
-        schema_fields: dict[Any, Any] = {}
+        schema_fields: dict[probatio.Required, object] = {}
 
         schema_fields[
             probatio.Required(
@@ -340,33 +330,9 @@ class KebaKeEnergyOptionsFlow(OptionsFlowWithReload):
             ),
         )
 
-        schema_fields[
-            probatio.Required(
-                CONF_SYSTEM_TICK,
-                default=self.config_entry.options.get(CONF_SYSTEM_TICK, 1),
-            )
-        ] = NumberSelector(
-            NumberSelectorConfig(
-                min=1,
-                max=180,
-                step=1,
-                mode=NumberSelectorMode.BOX,
-            ),
-        )
-
-        tick_mapping: dict[str, SectionPrefix] = {
-            CONF_HEAT_PUMP_TICK: SectionPrefix.HEAT_PUMP,
-            CONF_HEAT_CIRCUIT_TICK: SectionPrefix.HEAT_CIRCUIT,
-            CONF_SOLAR_CIRCUIT_TICK: SectionPrefix.SOLAR_CIRCUIT,
-            CONF_HOT_WATER_TANK_TICK: SectionPrefix.HOT_WATER_TANK,
-            CONF_BUFFER_TANK_TICK: SectionPrefix.BUFFER_TANK,
-            CONF_SWITCH_VALVE_TICK: SectionPrefix.SWITCH_VALVE,
-            CONF_EXTERNAL_HEAT_SOURCE_TICK: SectionPrefix.EXTERNAL_HEAT_SOURCE,
-            CONF_PHOTOVOLTAICS_TICK: SectionPrefix.PHOTOVOLTAICS,
-        }
-
-        for conf_key, prefix in tick_mapping.items():
-            if coordinator.has_device(prefix):
+        # The control unit is always installed, so the system multiplier is always shown.
+        for device_type, conf_key in SCAN_INTERVAL_TICK_OPTIONS.items():
+            if coordinator.has_device(device_type):
                 schema_fields[
                     probatio.Required(
                         conf_key,
@@ -387,27 +353,21 @@ class KebaKeEnergyOptionsFlow(OptionsFlowWithReload):
         )
 
     @staticmethod
-    def _normalize_user_input(user_input: dict[str, Any]) -> dict[str, Any]:
-        scan_interval: int = user_input[CONF_SCAN_INTERVAL]
+    def _normalize_user_input(user_input: dict[str, Any], /) -> dict[str, Any]:
+        """Return the user input with the greatest common divisor of the multipliers moved into the scan interval.
 
-        tick_keys: list[str] = [
-            CONF_SYSTEM_TICK,
-            CONF_HEAT_PUMP_TICK,
-            CONF_HEAT_CIRCUIT_TICK,
-            CONF_SOLAR_CIRCUIT_TICK,
-            CONF_HOT_WATER_TANK_TICK,
-            CONF_BUFFER_TANK_TICK,
-            CONF_SWITCH_VALVE_TICK,
-            CONF_EXTERNAL_HEAT_SOURCE_TICK,
-            CONF_PHOTOVOLTAICS_TICK,
-        ]
-
-        ticks: dict[str, int] = {key: int(user_input[key]) for key in tick_keys if key in user_input}
+        E.g. a scan interval of 20 s with the multipliers 2 and 4 becomes 40 s with the multipliers 1 and 2. The number
+        selectors return floats, the options are stored as integers.
+        """
+        scan_interval: int = int(user_input[CONF_SCAN_INTERVAL])
+        ticks: dict[str, int] = {
+            key: int(user_input[key]) for key in SCAN_INTERVAL_TICK_OPTIONS.values() if key in user_input
+        }
+        # The system multiplier is always in the user input, so the divisor is at least 1.
         gcd: int = math.gcd(*ticks.values())
 
-        if gcd > 1:
-            user_input[CONF_SCAN_INTERVAL] = int(scan_interval * gcd)
-            user_input.update({key: tick // gcd for key, tick in ticks.items()})
+        user_input[CONF_SCAN_INTERVAL] = scan_interval * gcd
+        user_input.update({key: tick // gcd for key, tick in ticks.items()})
 
         _LOGGER.debug("Tick normalization: %s -> gcd=%s", user_input, gcd)
 

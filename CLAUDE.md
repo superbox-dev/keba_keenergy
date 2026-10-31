@@ -38,6 +38,7 @@ Before finishing a change, run `ruff format`, `lint.sh` and `pytest`, in this or
   - type alias for complex annotations (nested or repeated unions)
 - Module-level constants with `Final` (`NAME: Final = ...`)
 - Comments as complete sentences with a trailing period
+  - planned cleanups as `# TODO: …`, without author or issue link
 - `TypedDict` only for JSON data from or to the Web HMI (optional keys as `NotRequired`), `NamedTuple` only for
   small values that are unpacked (points, pairs), otherwise `@dataclass(frozen=True, kw_only=True)`, mutable only
   when needed
@@ -73,6 +74,9 @@ Before finishing a change, run `ruff format`, `lint.sh` and `pytest`, in this or
   - thermal statistics (`*_THERMAL_ENERGY`, `*_SPF`, `*_PF`) only when the meter of the mode is not deactivated,
     otherwise they are always `0`
 - Log messages start with a capital letter, no trailing period, values as `%s` arguments
+- Debug logs only for events and decisions the diagnostics do not show (writes, skipped or removed entities and
+  devices, read retries), never for data the diagnostics contain (device counts, options, values, message IDs), at
+  most one line per update
 - Every file follows `.editorconfig`, whether a linter checks it or not
 - Style rules apply to new and changed code, existing code only adapted when asked
 - Every `.py` file starts with (after the shebang of an executable script, update the end year when editing a
@@ -88,11 +92,12 @@ Before finishing a change, run `ruff format`, `lint.sh` and `pytest`, in this or
 - No real credentials, serial numbers or IP addresses, use the fake data in `tests/api_data.py`
 - Missing device endpoints or values belong in `keba_keenergy_api`, stop and ask how to proceed
   - values calculated from existing ones are fine in the integration
-- Limited flash writes: write only changed values, only via the coordinator write methods, debounce fast-changing
-  values (e.g. temperatures set with a slider)
+- Limited flash writes: write only changed values, only via `coordinator.async_write_data()`, debounce
+  fast-changing values (e.g. temperatures set with a slider) with `KebaKeEnergyDebouncedEntity`
 - No new dependencies (`pyproject.toml`, `manifest.json`, also dev dependencies) without asking first
 - `git add` new files, the pre-commit hooks only check tracked files
-- Never edit generated files (`coverage-badge.svg`) or `config/` (except `config/configuration.yaml`)
+- Never edit generated files (`coverage-badge.svg`, `website/docs/`) or `config/` (except
+  `config/configuration.yaml`)
 - **Never edit `CLAUDE.md` files or `.claude/skills/` on your own**, only when asked
   - if a change conflicts with them, stop and ask
 
@@ -103,12 +108,41 @@ Before finishing a change, run `ruff format`, `lint.sh` and `pytest`, in this or
   - module-level functions only when shared across classes or modules, for Home Assistant callbacks (action
     handlers, validators), as helpers of module-level Home Assistant functions (`async_setup_entry`) or to build
     the entity descriptions of a platform
+- `condition` of entity descriptions as named predicates in `entity.py` (`has_…`, `is_…`), no lambdas
 - Constants always in `const.py`
   - except what Home Assistant reads from the module itself (`_LOGGER`, `PARALLEL_UPDATES`, `CONFIG_SCHEMA`) and
     the entity descriptions of a platform (`SENSOR_TYPES`, ...)
+- Code only needed to keep the keys and states of `keba_keenergy_api` 2.x (no breaking changes) in `legacy.py`,
+  also its constants (`ENDPOINTS`, `LEGACY_STATES`, `get_state()`, `new_key` via `get_data_key()`)
 - Class member order: `__init__`, dunder methods, properties, public methods (also Home Assistant overrides)
   grouped by topic, helpers directly below their first caller
   - applies to new methods, existing ones only moved when asked
+
+## Domain
+
+- Heating circuit operating modes of the Web HMI map to Home Assistant (`HEATING_CIRCUIT_PRESET_TO_HA`)
+  - off: HVAC `off`, no preset
+  - schedule (`AUTO`): HVAC `auto`, preset `home`
+  - day (`NORMAL`), night (`REDUCED`), party: HVAC `heat` (`cool` or `heat_cool` by circuit type), presets `comfort`,
+    `sleep`, `boost`
+  - `EXTERNAL`, `ROOM_CONTROL`: HVAC `off`, no preset
+- Away is a date range, not an operating mode
+  - global for all heating circuits, set by the preset `away`, the action `set_away_date_range` or the blueprint
+  - the preset writes the range (today until +365 days, time zone of the control unit) and `NORMAL` unless a manual
+    mode is active, every other HVAC mode or preset ends it (range of yesterday)
+  - shown at once while the range is active, the control unit takes it over later
+  - circuits that only cool have no away
+- Target temperature is the value of the effective operating mode, shown at once after a change
+  - day and party `target_temperature_day`, night `target_temperature_night`, away `target_temperature_away`,
+    circuits that only cool use the cooling variants
+  - schedule: day or night of the week timer now (`coordinator.get_scheduled_operating_mode()`)
+  - circuits that heat and cool: `selected_target_temperature` of the control unit, the season is unknown, so it is
+    shown after the next update
+  - the user changes only the offset (`target_temperature_offset`, debounced), a pending offset is discarded if the
+    mode changes
+- Week timers: blocks are day, outside of them night, the week starts with Sunday, read with the heating circuits,
+  the time zone once on setup
+- `_async_write_value()` sets the local value at once, new writes keep that, otherwise the UI flickers
 
 ## Quality scale
 
@@ -121,8 +155,8 @@ Before finishing a change, run `ruff format`, `lint.sh` and `pytest`, in this or
   only for diagnosis or service, or entities only useful for rare setups
 - `log-when-unavailable`: failed updates raise `UpdateFailed`, the coordinator logs the outage once
 - `parallel-updates`: every platform sets `PARALLEL_UPDATES`
-- `stale-devices`: device identifiers always come from `get_device_identifier()`, otherwise devices with entities
-  are removed
+- `stale-devices`: device identifiers always come from `coordinator.device_identifier()`, otherwise devices with
+  entities are removed
 - The coordinator gets `config_entry` explicitly
 - The options flow aborts while the integration is not loaded (`options_not_ready`), it needs the detected devices
 

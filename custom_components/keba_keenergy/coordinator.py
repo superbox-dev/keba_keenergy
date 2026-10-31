@@ -6,14 +6,13 @@ from __future__ import annotations
 
 import logging
 from asyncio import Lock
-from copy import deepcopy
-from datetime import date
+from dataclasses import replace
+from datetime import datetime
 from datetime import timedelta
-from functools import cached_property
 from typing import TYPE_CHECKING
-from typing import Any
 from typing import Final
 from zoneinfo import ZoneInfo
+from zoneinfo import ZoneInfoNotFoundError
 
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import CONF_HOST
@@ -23,84 +22,69 @@ from homeassistant.const import CONF_SSL
 from homeassistant.const import CONF_USERNAME
 from homeassistant.exceptions import ConfigEntryAuthFailed
 from homeassistant.exceptions import HomeAssistantError
-from homeassistant.helpers import issue_registry as ir
 from homeassistant.helpers.debounce import Debouncer
-from homeassistant.helpers.storage import Store
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator
 from homeassistant.helpers.update_coordinator import UpdateFailed
-from homeassistant.util.dt import now
-from keba_keenergy_api.api import KebaKeEnergyAPI
-from keba_keenergy_api.constants import BoolEnum
-from keba_keenergy_api.constants import ExternalHeatSource
-from keba_keenergy_api.constants import HeatCircuit
-from keba_keenergy_api.constants import HeatCircuitMode
-from keba_keenergy_api.constants import HeatPump
-from keba_keenergy_api.constants import HeatPumpState
-from keba_keenergy_api.constants import HotWaterTank
-from keba_keenergy_api.constants import MessageIdKind
-from keba_keenergy_api.constants import Section
-from keba_keenergy_api.constants import SectionPrefix
-from keba_keenergy_api.constants import System
-from keba_keenergy_api.endpoints import HeatingCurves
-from keba_keenergy_api.endpoints import Position
-from keba_keenergy_api.endpoints import Value
-from keba_keenergy_api.endpoints import ValueResponse
-from keba_keenergy_api.error import APIError
-from keba_keenergy_api.error import AuthenticationError
+from homeassistant.util import dt as dt_util
+from keba_keenergy_api.client import KebaKeEnergyAPI
+from keba_keenergy_api.enums import ElectricalEnergyMeterType
+from keba_keenergy_api.enums import HeatingCircuitOperatingMode
+from keba_keenergy_api.enums import HeatingCircuitType
+from keba_keenergy_api.enums import HeatMeterType
+from keba_keenergy_api.enums import HeatPumpState
+from keba_keenergy_api.enums import MessageIdKind
+from keba_keenergy_api.enums import WeekDay
+from keba_keenergy_api.enums import WeekTimerType
+from keba_keenergy_api.exceptions import APIError
+from keba_keenergy_api.exceptions import AuthenticationError
+from keba_keenergy_api.models import CurveTable
 
+from .const import CONFIGURATION_ENDPOINTS
+from .const import CURVE_KEYS
 from .const import DEFAULT_SCAN_INTERVAL
+from .const import DEVICE_TYPES
 from .const import DOMAIN
-from .const import FLASH_WRITE_ISSUE_ID
-from .const import FLASH_WRITE_LIMIT_PER_WEEK
-from .const import REQUEST_DATA_GROUPS
 from .const import REQUEST_REFRESH_COOLDOWN
-from .const import SECTION_PREFIXES
+from .const import SCAN_INTERVAL_DEVICE_TYPES
+from .const import SCAN_INTERVAL_TICK_OPTIONS
+from .const import SectionPrefix
+from .legacy import ENDPOINTS
+from .write_counter import FlashWriteCounter
 
 if TYPE_CHECKING:
     from collections.abc import Awaitable
     from collections.abc import Callable
+    from collections.abc import Iterable
+    from collections.abc import Mapping
+    from collections.abc import Sequence
 
     from aiohttp import ClientSession
     from homeassistant.core import HomeAssistant
+    from keba_keenergy_api.endpoints import Endpoint
+    from keba_keenergy_api.models import CurvePoint
+    from keba_keenergy_api.models import DeviceCounts
+    from keba_keenergy_api.models import DeviceInfo
+    from keba_keenergy_api.models import HmiInfo
+    from keba_keenergy_api.models import Reading
+    from keba_keenergy_api.models import Readings
+    from keba_keenergy_api.models import SystemInfo
+    from keba_keenergy_api.models import Value
+    from keba_keenergy_api.models import WeekTimer
+    from keba_keenergy_api.models import WriteValue
 
 _LOGGER: Final = logging.getLogger(__name__)
 
 type KebaKeEnergyConfigEntry = ConfigEntry[KebaKeEnergyDataUpdateCoordinator]
-type MessageIds = list[int] | list[list[int]]
-type Values = Value | list[Value] | list[list[Value]]
+# The readings per device type and key, one reading per device (and consumer).
+type CoordinatorData = dict[SectionPrefix, dict[str, list[Reading]]]
+# The endpoints of a read with the device type and the key of their readings.
+type ReadRequest = dict[Endpoint, tuple[SectionPrefix, str]]
+# The values of a write per key, one value per device (and consumer), None skips it.
+type WriteValues = Mapping[str, Sequence[WriteValue | None]]
 
 
-def get_device_identifier(entry_unique_id: str | None, section_id: str, position: int | None) -> str:
-    """Return the device identifier `<entry unique_id>_<section or domain for the control unit>[_<position>]`.
-
-    The position is only added if the section has more than one device.
-    """
-    identifier: str = f"{entry_unique_id}_{DOMAIN if section_id == SectionPrefix.SYSTEM else section_id}"
-    return identifier if position is None else f"{identifier}_{position}"
-
-
-def get_write_counter_store(hass: HomeAssistant, *, entry_id: str | None = None) -> Store[dict[str, Any]]:
-    """Return the store of the write counter of a config entry, without entry ID the store shared by all entries.
-
-    The shared store was used by older versions and is only removed.
-    """
-    return Store(hass, version=1, key=DOMAIN if entry_id is None else f"{DOMAIN}.{entry_id}")
-
-
-def get_value_by_index(
-    values: Values,
-    /,
-    *,
-    index: int | None,
-    key_index: int | None,
-) -> Value:
-    """Return the value of the device with the index, and of the key with the key index if the device has several."""
-    value: Value | list[Value] = values[index or 0] if isinstance(values, list) else values
-    return value[key_index or 0] if isinstance(value, list) else value
-
-
-class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueResponse]]):
-    """Class to manage fetching KEBA KeEnergy data API."""
+class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[CoordinatorData]):
+    """Read the values of a KEBA KeEnergy control unit and write changed values to it."""
 
     def __init__(
         self,
@@ -110,53 +94,49 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
         *,
         session: ClientSession,
     ) -> None:
-        """Initialize the coordinator.
-
-        Parameters
-        ----------
-        hass
-            The Home Assistant instance.
-        entry
-            The config entry with the host, the SSL setting and the optional credentials.
-        session
-            The HTTP session for the requests to the Web HMI.
-
-        """
+        """Initialize the coordinator of the config entry, `session` is the HTTP session for the Web HMI."""
         self.config_entry: KebaKeEnergyConfigEntry = entry
         self.control_unit_device_id: str = ""
 
-        self._store: Store[dict[str, Any]] = get_write_counter_store(hass, entry_id=entry.entry_id)
+        self.write_counter: FlashWriteCounter = FlashWriteCounter(hass, entry, on_change=self.async_update_listeners)
         self._write_lock: Lock = Lock()
         self._local_change_count: int = 0
 
-        self.api: KebaKeEnergyAPI = KebaKeEnergyAPI(
+        self._api: KebaKeEnergyAPI = KebaKeEnergyAPI(
             entry.data[CONF_HOST],
             username=entry.data.get(CONF_USERNAME),
             password=entry.data.get(CONF_PASSWORD),
             ssl=entry.data[CONF_SSL],
-            skip_ssl_verification=True,
+            verify_ssl=False,
             session=session,
         )
-        self._api_device_info: dict[str, Any] = {}
-        self._api_system_info: dict[str, Any] = {}
-        self._api_hmi_info: dict[str, Any] = {}
+        self.configuration_url: str = str(self._api.device_url)
 
-        self._weekly_write_count: int = 0
-        self._weekly_writes: dict[str, int] = {}
-        self._write_count_week: tuple[int, int] | None = None
-        self._flash_issue_active: bool = False
+        # The device information, read once on setup.
+        self.device_model: str = ""
+        self.device_name: str = ""
+        self.device_hmi_sw_version: str = ""
+        self.device_serial_number: str = ""
 
-        self._fixed_data: dict[str, ValueResponse] = {}
-        self._message_ids: dict[str, dict[str, MessageIds]] = {}
+        # The configuration of the control unit, read once on setup.
+        self.configuration: CoordinatorData = {}
+
+        # The number of updates, for the scan interval multipliers of the device types.
         self._tick_counter: int = 0
 
-        self.request_data: list[Section] = [
-            section for sections in REQUEST_DATA_GROUPS.values() for section in sections
-        ]
-        self.request_data_groups: dict[SectionPrefix, list[Section]] = {}
+        # The polled endpoints of the installed devices that the Web HMI supports, per device type and key.
+        self._polled_endpoints: dict[SectionPrefix, dict[str, Endpoint]] = {}
 
-        self.position: Position | None = None
-        self.available_heating_curves: tuple[tuple[int, str], ...] = ()
+        self.device_counts: DeviceCounts | None = None
+        # The names of all heating and cooling curves and the points of the curves in use, read with every update of
+        # the heating circuits.
+        self.curve_names: tuple[str, ...] = ()
+        self.curve_tables: dict[str, CurveTable] = {}
+
+        # The time zone of the control unit, read once on setup (None if it is invalid), and the week timers of the
+        # heating circuits by device number, read with every update of the heating circuits.
+        self.timezone: ZoneInfo | None = None
+        self.week_timers: dict[WeekTimerType, dict[int, WeekTimer]] = {}
 
         super().__init__(
             hass,
@@ -173,90 +153,23 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
         )
 
     @property
-    def fixed_data(self) -> dict[str, ValueResponse]:
-        """Return the values that are read once on setup."""
-        return self._fixed_data
-
-    @property
-    def message_ids(self) -> dict[str, dict[str, MessageIds]]:
-        """Return the message ids of the sensors, 0 means the sensor is in use."""
-        return self._message_ids
-
-    @property
-    def weekly_write_count(self) -> int:
-        """Return the number of writes in the current week."""
-        return self._weekly_write_count
-
-    @property
-    def weekly_writes(self) -> dict[str, int]:
-        """Return how often each value was written in the current week, sorted by name."""
-        return dict(sorted(self._weekly_writes.items()))
-
-    @property
-    def _issue_id(self) -> str:
-        """Return the ID of the repair issue for frequent write operations of this control unit."""
-        return f"{FLASH_WRITE_ISSUE_ID}_{self.config_entry.entry_id}"
-
-    @cached_property
-    def configuration_url(self) -> str:
-        """Return web gui url."""
-        return str(self.api.device_url)
-
-    @cached_property
-    def device_model(self) -> str:
-        """Return device model name."""
-        return str(self._api_device_info["name"])
-
-    @cached_property
-    def device_name(self) -> str:
-        """Return device name."""
-        return str(self._api_system_info["name"])
-
-    @cached_property
-    def device_hmi_sw_version(self) -> str:
-        """Return HMI software version."""
-        return str(self._api_hmi_info["name"].replace("KeEnergy.WebHmi_", ""))
-
-    @cached_property
-    def device_serial_number(self) -> str:
-        """Return serial number."""
-        return str(self._api_device_info["serNo"])
-
-    @property
-    def heat_pump_names(self) -> list[Value]:
-        """Return heat pump names."""
-        names: Values = self.data[SectionPrefix.HEAT_PUMP]["name"]
-        return [name for name in names if isinstance(name, dict)] if isinstance(names, list) else []
+    def heat_pump_names(self) -> list[str]:
+        """Return the names of all heat pumps."""
+        return [str(reading.value) for reading in self.data[SectionPrefix.HEAT_PUMP].get("name", [])]
 
     @property
     def heat_pump_states(self) -> set[HeatPumpState]:
         """Return the states of all heat pumps."""
         return {
-            HeatPumpState[
-                str(
-                    get_value_by_index(self.data[SectionPrefix.HEAT_PUMP]["state"], index=index, key_index=None).get(
-                        "value",
-                    ),
-                ).upper()
-            ]
-            for index in range(self.device_count(SectionPrefix.HEAT_PUMP))
+            reading.value
+            for reading in self.data[SectionPrefix.HEAT_PUMP].get("state", [])
+            if isinstance(reading.value, HeatPumpState)
         }
 
     async def _async_setup(self) -> None:
         """Set up the coordinator."""
-        store_data: dict[str, Any] = await self._store.async_load() or {}
-        counter: dict[str, Any] | None = store_data.get("flash_write_counter")
-
-        if isinstance(counter, dict):
-            self._write_count_week = tuple(counter["week"])
-            self._weekly_write_count = counter["count"]
-            self._weekly_writes = counter.get("writes", {})
-
-        # Older versions stored one counter and created one repair issue for all config entries.
-        await get_write_counter_store(self.hass).async_remove()
-        ir.async_delete_issue(self.hass, domain=DOMAIN, issue_id=FLASH_WRITE_ISSUE_ID)
-
-        await self._api_call_for_update(self._async_fixed_data())
+        await self.write_counter.async_setup()
+        await self._api_call_for_update(self._async_read_setup_data())
 
     @staticmethod
     async def _api_call_for_update[R](coro: Awaitable[R]) -> R:
@@ -276,264 +189,269 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
                 },
             ) from error
 
-    async def _async_fixed_data(self) -> None:
-        self._api_device_info = await self.api.system.get_device_info()
-        self._api_system_info = await self.api.system.get_info()
-        self._api_hmi_info = await self.api.system.get_hmi_info()
-        self.position = await self.api.system.get_positions()
-        self.available_heating_curves = await self.api.heat_circuit.get_available_heating_curves()
+    async def _async_read_setup_data(self) -> None:
+        device_info: DeviceInfo = await self._api.get_device_info()
+        system_info: SystemInfo = await self._api.get_system_info()
+        hmi_info: HmiInfo = await self._api.get_hmi_info()
+        self.device_model = device_info["name"]
+        self.device_serial_number = str(device_info["serNo"])
+        self.device_name = system_info["name"]
+        self.device_hmi_sw_version = hmi_info["name"].replace("KeEnergy.WebHmi_", "")
+        self.device_counts = await self._api.get_device_counts()
 
-        _LOGGER.debug("Position: %s", self.position)
+        try:
+            self.timezone = ZoneInfo(await self._api.get_timezone())
+        except ValueError, ZoneInfoNotFoundError:
+            _LOGGER.warning("The control unit has an invalid time zone, the week timers are not used")
 
-        self.request_data = await self.api.filter_request(
-            request=self.request_data,
-            position=self.position,
-        )
-
-        fixed_request_data: list[Section] = await self.api.filter_request(
-            request=[
-                System.HAS_OUTDOOR_TEMPERATURE,
-                System.HAS_PHOTOVOLTAICS,
-                HeatCircuit.MODE,
-                HeatCircuit.HAS_ROOM_TEMPERATURE,
-                HeatCircuit.HAS_ROOM_HUMIDITY,
-                HeatCircuit.HAS_MIXER,
-                HeatCircuit.HAS_RETURN_FLOW_TEMPERATURE,
-                HeatCircuit.HAS_PUMP,
-                HeatCircuit.HAS_VAR_SPEED_PUMP,
-                HotWaterTank.HAS_FRESH_WATER_MODULE,
-                HeatPump.HAS_ACTIVE_COOLING,
-                HeatPump.HAS_PASSIVE_COOLING,
-                HeatPump.ELECTRIC_ENERGY_METER_TYPE,
-                HeatPump.HEAT_METER_TYPE,
-                ExternalHeatSource.HAS_EMISSIONS,
-            ],
-            position=self.position,
-        )
-
-        self._fixed_data = await self.api.read_data(
-            request=fixed_request_data,
-            position=self.position,
-        )
-
-        _LOGGER.debug("Options: %s", self._fixed_data)
-
-        has_outdoor_temperature: bool = self.has_outdoor_temperature()
-        self.request_data = [
-            section for section in self.request_data if section != System.OUTDOOR_TEMPERATURE or has_outdoor_temperature
-        ]
-
-        # Group request data by device but only add data that are available for the heat pump setup.
-        self.request_data_groups = {
-            prefix: [section for section in sections if section in self.request_data]
-            for prefix, sections in REQUEST_DATA_GROUPS.items()
-            if self.has_device(prefix)
-        }
-
-    async def _async_update_data(self) -> dict[str, ValueResponse]:
-        """Read all values from API to update coordinator data."""
-        first_run: bool = self._tick_counter == 0
-        self._tick_counter = (self._tick_counter + 1) % 1_000_000
-
-        if self._reset_weekly_counter_if_needed():
-            await self._async_save_write_counter()
-
-        request: list[Section] = []
-        section_ids: dict[Section, str] = {}
-
-        for section, section_data in self.request_data_groups.items():
-            multiplier: int = self.config_entry.options.get(f"scan_interval_tick_{section.value}", 1)
-
-            if not first_run and self._tick_counter % multiplier != 0:
-                _LOGGER.debug(
-                    "Skipping section '%s' this tick (multiplier=%d)",
-                    section.value,
-                    multiplier,
-                )
-                continue
-
-            request.extend(section_data)
-            section_ids.update(dict.fromkeys(section_data, section.value))
-
-            _LOGGER.debug(
-                "Requesting section '%s' (multiplier=%d, position=%d)",
-                section.value,
-                multiplier,
-                self.device_count(section),
-            )
-
-        local_change_count: int = self._local_change_count
-        response: dict[str, ValueResponse] = await self._async_read_data(request)
-
-        message_ids: dict[Section, list[int]] = await self._api_call_for_update(
-            self.api.read_message_ids(
-                request=request,
-                position=self.position,
+        # One check for the polled values and the configuration, each unknown value costs one more request.
+        supported: set[Endpoint] = set(
+            await self._api.filter_supported(
+                [
+                    endpoint
+                    for endpoints in (*ENDPOINTS.values(), *CONFIGURATION_ENDPOINTS.values())
+                    for endpoint in endpoints.values()
+                ],
+                counts=self.device_counts,
             ),
         )
 
-        # A value set during the reads (e.g. before its write) would be replaced by its previous value until the next
+        configuration_request: ReadRequest = self._get_request(CONFIGURATION_ENDPOINTS, supported)
+        readings: Readings = await self._api.read(configuration_request, counts=self.device_counts, limits="none")
+        self.configuration = self._group_readings(readings, configuration_request)
+
+        # Group the polled values by device but only add the values that are available for the heat pump setup.
+        self._polled_endpoints = {
+            device_type: {key: endpoint for key, endpoint in endpoints.items() if endpoint in supported}
+            for device_type, endpoints in ENDPOINTS.items()
+            if self.has_device(device_type)
+        }
+
+    @staticmethod
+    def _get_request(
+        endpoints: Mapping[SectionPrefix, Mapping[str, Endpoint]],
+        supported: set[Endpoint],
+        /,
+    ) -> ReadRequest:
+        """Return the supported endpoints with their device type and key."""
+        return {
+            endpoint: (device_type, key)
+            for device_type, device_type_endpoints in endpoints.items()
+            for key, endpoint in device_type_endpoints.items()
+            if endpoint in supported
+        }
+
+    @staticmethod
+    def _group_readings(readings: Readings, request: ReadRequest, /) -> CoordinatorData:
+        """Return the readings per device type and key."""
+        data: CoordinatorData = {}
+
+        for endpoint, endpoint_readings in readings.items():
+            device_type, key = request[endpoint]
+            data.setdefault(device_type, {})[key] = endpoint_readings
+
+        return data
+
+    async def _async_update_data(self) -> CoordinatorData:
+        """Read the values of the device types that are due in this update."""
+        first_run: bool = self._tick_counter == 0
+        self._tick_counter = (self._tick_counter + 1) % 1_000_000
+
+        request: ReadRequest = {}
+
+        for device_type, endpoints in self._polled_endpoints.items():
+            tick_device_type: SectionPrefix = SCAN_INTERVAL_DEVICE_TYPES.get(device_type, device_type)
+            multiplier: int = self.config_entry.options.get(SCAN_INTERVAL_TICK_OPTIONS[tick_device_type], 1)
+
+            if first_run or self._tick_counter % multiplier == 0:
+                request.update({endpoint: (device_type, key) for key, endpoint in endpoints.items()})
+
+        _LOGGER.debug(
+            "Requesting the device types %s", ", ".join(sorted({device_type for device_type, _ in request.values()}))
+        )
+
+        local_change_count: int = self._local_change_count
+        readings: Readings = await self._async_read(request)
+
+        # A value set during the read (e.g. before its write) would be replaced by its previous value until the next
         # update, so the values are read again after the write.
         if self._local_change_count != local_change_count:
             _LOGGER.debug("Reading the values again, a value was set during the update")
-            response = await self._async_read_data(request)
+            readings = await self._async_read(request)
 
-        # Skipped sections keep their previous message ids.
-        for message_section, ids in message_ids.items():
-            quantity: int = message_section.value.quantity
-            self._message_ids.setdefault(section_ids[message_section], {})[message_section.name.lower()] = (
-                ids if quantity == 1 else [ids[index : index + quantity] for index in range(0, len(ids), quantity)]
-            )
+        # Skipped device types keep their previous values.
+        data: CoordinatorData = {
+            device_type: dict(readings_by_key) for device_type, readings_by_key in (self.data or {}).items()
+        }
 
-        _LOGGER.debug(
-            "Sensors not in use: %s",
-            {str(message_section): ids for message_section, ids in message_ids.items() if any(ids)},
+        for device_type, readings_by_key in self._group_readings(readings, request).items():
+            data.setdefault(device_type, {}).update(readings_by_key)
+
+        if any(key in CURVE_KEYS for _, key in request.values()):
+            await self._async_read_curves(data)
+
+        if any(device_type is SectionPrefix.HEATING_CIRCUIT for device_type, _ in request.values()):
+            await self._async_read_week_timers()
+
+        return data
+
+    async def _async_read_week_timers(self) -> None:
+        # The week timers tell if a heating circuit is currently in day or night operation.
+        week_timers: dict[WeekTimerType, dict[int, WeekTimer]] = {}
+
+        for timer_type, is_supported in (
+            (WeekTimerType.HEATING_CIRCUIT_HEATING, self.is_heating_circuit),
+            (WeekTimerType.HEATING_CIRCUIT_COOLING, self.is_cooling_circuit),
+        ):
+            device_numbers: list[int] = [
+                index + 1
+                for index in range(self.device_count(SectionPrefix.HEATING_CIRCUIT))
+                if is_supported(index=index)
+            ]
+
+            if device_numbers:
+                week_timers[timer_type] = await self._api_call_for_update(
+                    self._api.get_week_timers(timer_type, device_numbers),
+                )
+
+        self.week_timers = week_timers
+
+    def get_scheduled_operating_mode(
+        self,
+        *,
+        index: int | None,
+        cooling: bool,
+    ) -> HeatingCircuitOperatingMode | None:
+        """Return normal (day) or reduced (night) operation of the week timer of a heating circuit right now.
+
+        None if there is no week timer or time zone, e.g. an invalid time zone or an older software version.
+        """
+        timer_type: WeekTimerType = (
+            WeekTimerType.HEATING_CIRCUIT_COOLING if cooling else WeekTimerType.HEATING_CIRCUIT_HEATING
+        )
+        timer: WeekTimer | None = self.week_timers.get(timer_type, {}).get((index or 0) + 1)
+
+        if timer is None or self.timezone is None:
+            return None
+
+        now: datetime = dt_util.now(self.timezone)
+        # The week of the Web HMI starts with Sunday, Python with Monday.
+        day: WeekDay = WeekDay((now.weekday() + 1) % 7)
+        seconds_of_day: int = now.hour * 3600 + now.minute * 60 + now.second
+
+        return (
+            HeatingCircuitOperatingMode.NORMAL
+            if any(block.start <= seconds_of_day < block.stop for block in timer.days[day].blocks)
+            else HeatingCircuitOperatingMode.REDUCED
         )
 
-        if self.data:
-            for section_id, previous_section_data in self.data.items():
-                if not response[section_id]:
-                    response[section_id] = previous_section_data
+    async def _async_read_curves(self, data: CoordinatorData, /) -> None:
+        # The selects show the names of all curves, the sensors the points of the curves in use.
+        self.curve_names = await self._api_call_for_update(self._api.get_curve_table_names())
+        in_use: list[str] = [
+            reading.value
+            for readings_by_key in data.values()
+            for key, readings in readings_by_key.items()
+            if key in CURVE_KEYS
+            for reading in readings
+            if isinstance(reading.value, str) and reading.value in self.curve_names
+        ]
+        self.curve_tables = await self._api_call_for_update(self._api.get_curve_tables(in_use)) if in_use else {}
 
-        return response
-
-    async def _async_read_data(self, request: list[Section], /) -> dict[str, ValueResponse]:
+    async def _async_read(self, request: Iterable[Endpoint], /) -> Readings:
         # The read waits for a running write, so it gets the written value.
         async with self._write_lock:
             return await self._api_call_for_update(
-                self.api.read_data(
-                    request=request,
-                    position=self.position,
-                ),
+                self._api.read(request, counts=self.device_counts, limits="writable", message_ids=True),
             )
 
-    async def _async_save_write_counter(self) -> None:
-        await self._store.async_save(
-            {
-                "flash_write_counter": {
-                    "week": list(self._write_count_week) if self._write_count_week else [],
-                    "count": self._weekly_write_count,
-                    "writes": self._weekly_writes,
-                },
-            },
-        )
+    @staticmethod
+    def get_endpoint(device_type: SectionPrefix, key: str, /) -> Endpoint:
+        """Return the endpoint of a key."""
+        return ENDPOINTS[device_type][key]
 
-    def async_update_value(
+    def get_reading(
+        self, device_type: SectionPrefix, key: str, /, *, index: int | None, value_index: int | None
+    ) -> Reading | None:
+        """Return the reading of the device with the index (and the value with the value index), None if missing."""
+        readings: list[Reading] | None = self.data.get(device_type, {}).get(key)
+
+        if not readings:
+            return None
+
+        return readings[self.reading_index(device_type, key, index=index, value_index=value_index)]
+
+    def reading_index(
+        self, device_type: SectionPrefix, key: str, /, *, index: int | None, value_index: int | None
+    ) -> int:
+        """Return the index in the readings of the key, of the device (and the value with the value index)."""
+        return (index or 0) * self.get_endpoint(device_type, key).value.quantity + (value_index or 0)
+
+    def async_set_local_value(
         self,
-        value: object,
+        value: Value,
         /,
         *,
-        section_id: str,
-        section: Section,
-        index: int,
-        key_index: int | None,
-    ) -> object:
-        """Optimistically update a single value into coordinator data, return the replaced value."""
-        if section.value.human_readable:
-            value = section.value.human_readable(value).name.lower()
-
-        return self.async_set_value(
-            value,
-            section_id=section_id,
-            key=section.name.lower(),
-            index=index,
-            key_index=key_index,
-        )
-
-    def async_set_value(
-        self,
-        value: object,
-        /,
-        *,
-        section_id: str,
+        device_type: SectionPrefix,
         key: str,
-        index: int,
-        key_index: int | None,
-    ) -> object:
-        """Set a single value, as stored in the coordinator data, and return the replaced value."""
-        # Only copy the changed section, the other sections are shared with the previous data.
-        data: dict[str, ValueResponse] = {**self.data, section_id: deepcopy(self.data[section_id])}
-        entity_data: Value = get_value_by_index(data[section_id][key], index=index, key_index=key_index)
-        previous_value: object = entity_data.get("value")
-        entity_data["value"] = value
+        index: int | None,
+        value_index: int | None,
+    ) -> Value:
+        """Set a single value in the coordinator data, without writing it, and return the replaced value."""
+        readings: list[Reading] = self.data[device_type][key]
+        reading_index: int = self.reading_index(device_type, key, index=index, value_index=value_index)
+        previous_value: Value = readings[reading_index].value
+
+        # Only copy the changed values, the other values are shared with the previous data.
+        data: CoordinatorData = {
+            **self.data,
+            device_type: {
+                **self.data[device_type],
+                key: [
+                    replace(reading, value=value) if i == reading_index else reading
+                    for i, reading in enumerate(readings)
+                ],
+            },
+        }
         self._local_change_count += 1
 
         self.async_set_updated_data(data)
 
         return previous_value
 
-    async def async_execute_write(
+    async def async_write_data(
+        self,
+        device_type: SectionPrefix,
+        values: WriteValues,
+        /,
+        *,
+        ignore_weekly_write_count: bool = False,
+    ) -> None:
+        """Write values of one device type to the NAND, one sequence per key with one value per device."""
+        request: dict[Endpoint, Sequence[WriteValue | None]] = {
+            self.get_endpoint(device_type, key): key_values for key, key_values in values.items()
+        }
+        await self._async_execute_write(
+            write_fn=lambda: self._api.write(request),
+            names=self._write_names(device_type, request, values),
+            ignore_weekly_write_count=ignore_weekly_write_count,
+        )
+
+    async def _async_execute_write(
         self,
         *,
         write_fn: Callable[[], Awaitable[None]],
         names: tuple[str, ...],
         ignore_weekly_write_count: bool = False,
     ) -> None:
-        """Set the weekly counter and write to the NAND.
-
-        The names of the written values are counted separately, a write of several values counts once in total.
-        """
         async with self._write_lock:
-            counter_changed: bool = self._reset_weekly_counter_if_needed()
+            _LOGGER.debug("API write request %s", names)
 
-            if not ignore_weekly_write_count:
-                self._weekly_write_count += 1
-
-                for name in names:
-                    self._weekly_writes[name] = self._weekly_writes.get(name, 0) + 1
-
-                counter_changed = True
-
-            if counter_changed:
-                await self._async_save_write_counter()
-                self.async_update_listeners()
-
-            _LOGGER.debug(
-                "API write request %s (writes this week: %s)",
-                names,
-                self._weekly_write_count,
-            )
-
-            if self._weekly_write_count > FLASH_WRITE_LIMIT_PER_WEEK and not self._flash_issue_active:
-                self._flash_issue_active = True
-                self._create_issue()
-
+            # A failed write raises here and is not counted, it does not change the flash memory.
             await self._api_call_for_user(write_fn())
 
-    def _reset_weekly_counter_if_needed(self) -> bool:
-        """Reset the write counter in a new week, return True if it was reset."""
-        today: date = now().date()
-        current_week: tuple[int, int] = today.isocalendar().year, today.isocalendar().week
-
-        if self._write_count_week == current_week:
-            return False
-
-        self._write_count_week = current_week
-        self._weekly_write_count = 0
-        self._weekly_writes = {}
-        self._flash_issue_active = False
-
-        ir.async_delete_issue(
-            self.hass,
-            domain=DOMAIN,
-            issue_id=self._issue_id,
-        )
-
-        return True
-
-    def _create_issue(self) -> None:
-        ir.async_create_issue(
-            self.hass,
-            domain=DOMAIN,
-            issue_id=self._issue_id,
-            is_fixable=False,
-            translation_key=FLASH_WRITE_ISSUE_ID,
-            translation_placeholders={
-                "limit": str(FLASH_WRITE_LIMIT_PER_WEEK),
-                "name": self.config_entry.title,
-            },
-            severity=ir.IssueSeverity.WARNING,
-        )
+            if not ignore_weekly_write_count:
+                await self.write_counter.async_add_write(names)
 
     @staticmethod
     async def _api_call_for_user[R](coro: Awaitable[R]) -> R:
@@ -548,236 +466,242 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, ValueRes
                 },
             ) from error
 
-    async def async_write_data(self, request: dict[Section, Any], *, ignore_weekly_write_count: bool = False) -> None:
-        """Write data to the NAND from the KEBA KeEnergy control unit."""
-        await self.async_execute_write(
-            write_fn=lambda: self.api.write_data(request=request),
-            names=self._write_names(request),
-            ignore_weekly_write_count=ignore_weekly_write_count,
-        )
-
     @staticmethod
-    def _write_names(request: dict[Section, Any], /) -> tuple[str, ...]:
-        """Return the names of the written values, `<section>[_<position>].<value>[_<counter>]`.
+    def _write_names(
+        device_type: SectionPrefix,
+        request: Mapping[Endpoint, Sequence[WriteValue | None]],
+        values: WriteValues,
+        /,
+    ) -> tuple[str, ...]:
+        """Return the names of the written values, `<device type>[_<device number>].<key>[_<counter>]`.
 
-        A list has one value per device (`None` skips a device), sections with a quantity > 1 have several values
-        per device, which get a counter.
+        A system-wide value has no device number, endpoints with a quantity > 1 have several values per device, which
+        get a counter. `None` skips a device.
         """
         names: list[str] = []
 
-        for section, value in request.items():
-            prefix: str = SECTION_PREFIXES[type(section)]
-            key: str = section.name.lower()
-
-            if not isinstance(value, list | tuple):
-                names.append(f"{prefix}.{key}")
+        for (endpoint, endpoint_values), key in zip(request.items(), values, strict=True):
+            if not endpoint.value.has_device_index:
+                names.append(f"{device_type}.{key}")
                 continue
 
-            quantity: int = section.value.quantity
+            quantity: int = endpoint.value.quantity
 
-            for index, item in enumerate(value):
+            for index, item in enumerate(endpoint_values):
                 if item is None:
                     continue
 
-                position, key_index = divmod(index, quantity)
-                counter: str = f"_{key_index + 1}" if quantity > 1 else ""
-                names.append(f"{prefix}_{position + 1}.{key}{counter}")
+                device_index, value_index = divmod(index, quantity)
+                counter: str = f"_{value_index + 1}" if quantity > 1 else ""
+                names.append(f"{device_type}_{device_index + 1}.{key}{counter}")
 
         return tuple(names)
 
-    async def get_timezone(self) -> ZoneInfo:
-        """Get the timezone from the Web HMI."""
-        timezone: str = await self._api_call_for_user(self.api.system.get_timezone())
-        return ZoneInfo(timezone)
+    async def async_set_curve_table_points(self, name: str, points: Sequence[CurvePoint], /) -> None:
+        """Write the points of a heating or cooling curve to the NAND."""
+        await self._async_execute_write(
+            write_fn=lambda: self._api.set_curve_table_points(name, points),
+            names=(f"heating_curve_points.{name}",),
+        )
 
-    async def get_heating_curve_points(self) -> HeatingCurves:
-        """Get the points of all heating curves from the Web HMI."""
-        return await self._api_call_for_user(self.api.heat_circuit.get_heating_curve_points())
+        # The sensors of the curve show the written points without reading them again.
+        self.curve_tables = {**self.curve_tables, name: CurveTable(name=name, points=tuple(points))}
+        self.async_update_listeners()
 
-    async def set_away_date_range(self, *, start_timestamp: float, end_timestamp: float) -> None:
+    async def async_set_away_date_range(self, *, start_timestamp: float, end_timestamp: float) -> None:
         """Set the away date range of all heating circuits, if it changed."""
-        away_start_date: list[int] = [int(start_timestamp)] * self.device_count(SectionPrefix.HEAT_CIRCUIT)
-        away_end_date: list[int] = [int(end_timestamp)] * self.device_count(SectionPrefix.HEAT_CIRCUIT)
+        away_start_date: list[int] = [int(start_timestamp)] * self.device_count(SectionPrefix.HEATING_CIRCUIT)
+        away_end_date: list[int] = [int(end_timestamp)] * self.device_count(SectionPrefix.HEATING_CIRCUIT)
 
-        if self._heat_circuit_values("away_start_date") != away_start_date or (
-            self._heat_circuit_values("away_end_date") != away_end_date
+        if self._heating_circuit_values("away_start_date") != away_start_date or (
+            self._heating_circuit_values("away_end_date") != away_end_date
         ):
             await self.async_write_data(
-                request={
-                    HeatCircuit.AWAY_START_DATE: away_start_date,
-                    HeatCircuit.AWAY_END_DATE: away_end_date,
+                SectionPrefix.HEATING_CIRCUIT,
+                {
+                    "away_start_date": away_start_date,
+                    "away_end_date": away_end_date,
                 },
             )
 
-    def _heat_circuit_values(self, key: str, /) -> list[object]:
+            # The written date range is known before the next update, so the same date range is not written again.
+            for key, timestamp in (("away_start_date", start_timestamp), ("away_end_date", end_timestamp)):
+                for index in range(self.device_count(SectionPrefix.HEATING_CIRCUIT)):
+                    self.async_set_local_value(
+                        int(timestamp),
+                        device_type=SectionPrefix.HEATING_CIRCUIT,
+                        key=key,
+                        index=index,
+                        value_index=None,
+                    )
+
+    def _heating_circuit_values(self, key: str, /) -> list[Value]:
         """Return the values of all heating circuits."""
-        return [
-            get_value_by_index(self.data[SectionPrefix.HEAT_CIRCUIT][key], index=index, key_index=None).get("value")
-            for index in range(self.device_count(SectionPrefix.HEAT_CIRCUIT))
-        ]
+        return [reading.value for reading in self.data[SectionPrefix.HEATING_CIRCUIT].get(key, [])]
+
+    async def async_get_timezone(self) -> ZoneInfo:
+        """Read the time zone from the Web HMI."""
+        timezone: str = await self._api_call_for_user(self._api.get_timezone())
+
+        try:
+            return ZoneInfo(timezone)
+        except (ValueError, ZoneInfoNotFoundError) as error:
+            raise HomeAssistantError(
+                translation_domain=DOMAIN,
+                translation_key="invalid_time_zone",
+                translation_placeholders={
+                    "time_zone": timezone,
+                },
+            ) from error
+
+    async def async_read_curve_table(self, name: str, /) -> CurveTable | None:
+        """Read a heating or cooling curve from the Web HMI, None if there is no curve with the name."""
+        if name not in await self._api_call_for_user(self._api.get_curve_table_names()):
+            return None
+
+        curve_tables: dict[str, CurveTable] = await self._api_call_for_user(self._api.get_curve_tables([name]))
+        return curve_tables[name]
+
+    def device_identifier(self, device_type: SectionPrefix, device_number: int | None, /) -> str:
+        """Return the device identifier `<entry unique_id>_<device type>[_<device number>]`.
+
+        The control unit has the domain as device type, the device number is only added if the device type has more
+        than one device.
+        """
+        identifier: str = (
+            f"{self.config_entry.unique_id}_{DOMAIN if device_type == SectionPrefix.SYSTEM else device_type}"
+        )
+        return identifier if device_number is None else f"{identifier}_{device_number}"
 
     def device_identifiers(self) -> set[str]:
         """Return the identifiers of all devices that the control unit is configured with.
 
-        The devices come from the positions and options that are read on setup, not from the polled data,
-        so a section that is missing in a response never removes a device.
+        The devices come from the device counts and the configuration that are read on setup, not from the polled data,
+        so a device type that is missing in a response never removes a device.
         """
         identifiers: set[str] = set()
 
-        for prefix in SectionPrefix:
-            device_numbers: int = (
-                int(self.has_device(prefix))
-                if prefix in (SectionPrefix.SYSTEM, SectionPrefix.PHOTOVOLTAICS)
-                else self.device_count(prefix)
+        for device_type in SectionPrefix:
+            count: int = (
+                int(self.has_device(device_type))
+                if device_type in (SectionPrefix.SYSTEM, SectionPrefix.PHOTOVOLTAICS)
+                else self.device_count(device_type)
             )
             identifiers.update(
-                get_device_identifier(
-                    self.config_entry.unique_id,
-                    prefix,
-                    index + 1 if device_numbers > 1 else None,
-                )
-                for index in range(device_numbers)
+                self.device_identifier(device_type, index + 1 if count > 1 else None) for index in range(count)
             )
 
         return identifiers
 
-    def device_count(self, prefix: str, /) -> int:
-        """Return the number of devices of the section."""
-        count: object = getattr(self.position, prefix, 0)
-        return count if isinstance(count, int) else 0
+    def device_count(self, device_type: SectionPrefix, /) -> int:
+        """Return the number of devices of the device type, 0 for the device types without a device number."""
+        api_device_type: str | None = DEVICE_TYPES.get(device_type)
+        return (
+            0 if self.device_counts is None or api_device_type is None else getattr(self.device_counts, api_device_type)
+        )
 
-    def has_device(self, prefix: SectionPrefix) -> bool:
-        """Return True if the device group is available in this setup."""
-        if prefix == SectionPrefix.SYSTEM:
+    def has_device(self, device_type: SectionPrefix, /) -> bool:
+        """Return True if the control unit has at least one device of the device type."""
+        if device_type == SectionPrefix.SYSTEM:
             return True
 
-        if prefix == SectionPrefix.PHOTOVOLTAICS:
+        if device_type == SectionPrefix.PHOTOVOLTAICS:
             return self.has_photovoltaics()
 
-        return self.device_count(prefix) > 0
-
-    def _is_fixed_value_on(self, prefix: SectionPrefix, key: str, /, *, index: int | None = None) -> bool:
-        """Return True if a value that is read once on setup is switched on."""
-        return self._get_fixed_value(prefix, key, index=index) == BoolEnum.ON.name.lower()
-
-    def _get_fixed_value(self, prefix: SectionPrefix, key: str, /, *, index: int | None = None) -> object:
-        """Return a value that is read once on setup, of the device with the index if the value is a list."""
-        data: Values | None = self._fixed_data.get(prefix, {}).get(key)
-
-        if isinstance(data, list):
-            data = data[index or 0]
-
-        return data.get("value") if isinstance(data, dict) else None
-
-    def has_outdoor_temperature(self) -> bool:
-        """Check if outdoor temperature sensor is available."""
-        return self._is_fixed_value_on(SectionPrefix.SYSTEM, "has_outdoor_temperature")
-
-    def has_room_temperature(self, *, index: int | None = None) -> bool:
-        """Check if room temperature sensor is available."""
-        return self._is_fixed_value_on(SectionPrefix.HEAT_CIRCUIT, "has_room_temperature", index=index)
-
-    def has_room_humidity(self, *, index: int | None = None) -> bool:
-        """Check if room humidity sensor is available."""
-        return self._is_fixed_value_on(SectionPrefix.HEAT_CIRCUIT, "has_room_humidity", index=index)
+        return self.device_count(device_type) > 0
 
     def has_photovoltaics(self) -> bool:
-        """Check if photovoltaics is available."""
-        return self._is_fixed_value_on(SectionPrefix.SYSTEM, "has_photovoltaics")
+        """Return True if the control unit has photovoltaics."""
+        return self._get_configuration(SectionPrefix.SYSTEM, "has_photovoltaics") is True
 
-    def has_mixer(self, *, index: int | None = None) -> bool:
-        """Check if heating circuit mixer is available."""
-        return self._is_fixed_value_on(SectionPrefix.HEAT_CIRCUIT, "has_mixer", index=index)
-
-    def has_return_flow_temperature(self, *, index: int | None = None) -> bool:
-        """Check if heating circuit return flow temperature sensor is available."""
-        return self._is_fixed_value_on(SectionPrefix.HEAT_CIRCUIT, "has_return_flow_temperature", index=index)
-
-    def has_pump(self, *, index: int | None = None) -> bool:
-        """Check if heating circuit pump is available."""
-        return self._is_fixed_value_on(SectionPrefix.HEAT_CIRCUIT, "has_pump", index=index)
-
-    def has_var_speed_pump(self, *, index: int | None = None) -> bool:
-        """Check if heating circuit variable speed pump is available."""
-        return self._is_fixed_value_on(SectionPrefix.HEAT_CIRCUIT, "has_var_speed_pump", index=index)
-
-    def has_fresh_water_module(self, *, index: int | None = None) -> bool:
-        """Check if fresh water module is available."""
-        return self._is_fixed_value_on(SectionPrefix.HOT_WATER_TANK, "has_fresh_water_module", index=index)
+    def _get_configuration(self, device_type: SectionPrefix, key: str, /, *, index: int | None = None) -> Value | None:
+        """Return a value of the configuration that is read once on setup, of the device with the index."""
+        readings: list[Reading] = self.configuration.get(device_type, {}).get(key, [])
+        return readings[index or 0].value if len(readings) > (index or 0) else None
 
     def has_electrical_energy_meter(self, *, index: int | None = None) -> bool:
-        """Check if electrical energy meter is available."""
-        value: object = self._get_fixed_value(SectionPrefix.HEAT_PUMP, "electric_energy_meter_type", index=index)
-        return isinstance(value, int) and value > 0
+        """Return True if the heat pump has an electrical energy meter."""
+        value: Value | None = self._get_configuration(
+            SectionPrefix.HEAT_PUMP, "electrical_energy_meter_type", index=index
+        )
+        return isinstance(value, ElectricalEnergyMeterType) and value is not ElectricalEnergyMeterType.NONE
 
     def has_heat_meter(self, *, index: int | None = None) -> bool:
-        """Check if heat meter is available."""
-        value: object = self._get_fixed_value(SectionPrefix.HEAT_PUMP, "heat_meter_type", index=index)
-        return isinstance(value, int) and value > 0
+        """Return True if the heat pump has a heat meter."""
+        value: Value | None = self._get_configuration(SectionPrefix.HEAT_PUMP, "heat_meter_type", index=index)
+        return isinstance(value, HeatMeterType) and value is not HeatMeterType.NONE
 
     def has_active_cooling(self, *, index: int | None = None) -> bool:
-        """Check if active cooling is available."""
-        return self._is_fixed_value_on(SectionPrefix.HEAT_PUMP, "has_active_cooling", index=index)
+        """Return True if the heat pump supports active cooling."""
+        return self._get_configuration(SectionPrefix.HEAT_PUMP, "has_active_cooling", index=index) is True
 
     def has_passive_cooling(self, *, index: int | None = None) -> bool:
-        """Check if passive cooling is available."""
-        return self._is_fixed_value_on(SectionPrefix.HEAT_PUMP, "has_passive_cooling", index=index)
+        """Return True if the heat pump supports passive cooling."""
+        return self._get_configuration(SectionPrefix.HEAT_PUMP, "has_passive_cooling", index=index) is True
+
+    def has_cooling(self, *, index: int | None = None) -> bool:
+        """Return True if the heat pump supports active or passive cooling."""
+        return self.has_active_cooling(index=index) or self.has_passive_cooling(index=index)
 
     def has_emissions(self, *, index: int | None = None) -> bool:
-        """Check if the external heat source has emissions."""
-        return self._is_fixed_value_on(SectionPrefix.EXTERNAL_HEAT_SOURCE, "has_emissions", index=index)
+        """Return True if the external heat source has emissions."""
+        return self._get_configuration(SectionPrefix.EXTERNAL_HEAT_SOURCE, "has_emissions", index=index) is True
 
-    def has_cooling_circuits(self) -> bool:
-        """Check if one heating circuit support cooling."""
-        # Some KEBA KeEnergy software versions did not have an active or passive cooling options.
+    def has_cooling_heat_pump(self) -> bool:
+        """Return True if any heat pump supports active or passive cooling."""
+        return any(self.has_cooling(index=index) for index in range(self.device_count(SectionPrefix.HEAT_PUMP)))
+
+    def has_cooling_circuit(self) -> bool:
+        """Return True if any heating circuit cools."""
+        # Some KEBA KeEnergy software versions do not have the configuration for active and passive cooling.
         # Cooling support can only be detected with the heating circuit mode.
         return any(
-            self.is_cooling_circuit(index=index) for index in range(self.device_count(SectionPrefix.HEAT_CIRCUIT))
+            self.is_cooling_circuit(index=index) for index in range(self.device_count(SectionPrefix.HEATING_CIRCUIT))
         )
 
     def is_cooling_circuit(self, *, index: int | None = None) -> bool:
-        """Check if heating circuit mode is cooling."""
-        return self._get_fixed_value(SectionPrefix.HEAT_CIRCUIT, "mode", index=index) in (
-            HeatCircuitMode.COOLING.name.lower(),
-            HeatCircuitMode.HEATING_AND_COOLING.name.lower(),
-            HeatCircuitMode.HEATING_AND_ACTIVE_COOLING.name.lower(),
+        """Return True if the heating circuit cools, also if it heats as well."""
+        return self._get_configuration(SectionPrefix.HEATING_CIRCUIT, "mode", index=index) in (
+            HeatingCircuitType.COOLING,
+            HeatingCircuitType.HEATING_AND_COOLING,
+            HeatingCircuitType.HEATING_AND_ACTIVE_COOLING,
         )
 
     def is_heating_circuit(self, *, index: int | None = None) -> bool:
-        """Check if heating circuit mode is heating."""
-        return self._get_fixed_value(SectionPrefix.HEAT_CIRCUIT, "mode", index=index) in (
-            HeatCircuitMode.HEATING.name.lower(),
-            HeatCircuitMode.HEATING_AND_COOLING.name.lower(),
-            HeatCircuitMode.HEATING_AND_ACTIVE_COOLING.name.lower(),
+        """Return True if the heating circuit heats, also if it cools as well."""
+        return self._get_configuration(SectionPrefix.HEATING_CIRCUIT, "mode", index=index) in (
+            HeatingCircuitType.HEATING,
+            HeatingCircuitType.HEATING_AND_COOLING,
+            HeatingCircuitType.HEATING_AND_ACTIVE_COOLING,
         )
 
-    def get_message_id(self, section_id: str, key: str, /, *, index: int | None, key_index: int | None) -> int | None:
-        """Return the message id of a sensor (0 means the sensor is in use), or None if the sensor has none."""
-        ids: MessageIds | None = self._message_ids.get(section_id, {}).get(key)
+    def is_sensor_in_use(
+        self, device_type: SectionPrefix, key: str, /, *, index: int | None, value_index: int | None
+    ) -> bool:
+        """Return True if the control unit reports the sensor as in use (message ID 0) or has no message ID for it."""
+        return self._get_message_id_kind(device_type, key, index=index, value_index=value_index) in (
+            MessageIdKind.OK,
+            None,
+        )
 
-        if not ids:
-            return None
-
-        message_id: int | list[int] = ids[index or 0]
-        return message_id[key_index or 0] if isinstance(message_id, list) else message_id
-
-    def get_message_id_kind(
+    def _get_message_id_kind(
         self,
-        section_id: str,
+        device_type: SectionPrefix,
         key: str,
         /,
         *,
         index: int | None,
-        key_index: int | None,
+        value_index: int | None,
     ) -> MessageIdKind | None:
-        """Return the kind of the message id of a sensor, or None if the sensor has none."""
-        message_id: int | None = self.get_message_id(section_id, key, index=index, key_index=key_index)
-        return None if message_id is None else MessageIdKind.from_message_id(message_id)
+        """Return the kind of the message ID of a sensor, or None if the sensor has none."""
+        reading: Reading | None = self.get_reading(device_type, key, index=index, value_index=value_index)
+        return None if reading is None or reading.message_id is None else reading.message_id.kind
 
-    def is_sensor_in_use(self, section_id: str, key: str, /, *, index: int | None, key_index: int | None) -> bool:
-        """Check if the control unit reports the sensor as in use (message id 0) or has no message id for it."""
-        return self.get_message_id_kind(section_id, key, index=index, key_index=key_index) in (MessageIdKind.OK, None)
-
-    def is_sensor_deactivated(self, section_id: str, key: str, /, *, index: int | None, key_index: int | None) -> bool:
-        """Check if the control unit reports the sensor as deactivated (message id 10), i.e. not configured."""
-        return self.get_message_id_kind(section_id, key, index=index, key_index=key_index) is MessageIdKind.DEACTIVATED
+    def is_sensor_deactivated(
+        self, device_type: SectionPrefix, key: str, /, *, index: int | None, value_index: int | None
+    ) -> bool:
+        """Return True if the control unit reports the sensor as deactivated (message ID 10), i.e. not configured."""
+        return (
+            self._get_message_id_kind(device_type, key, index=index, value_index=value_index)
+            is MessageIdKind.DEACTIVATED
+        )

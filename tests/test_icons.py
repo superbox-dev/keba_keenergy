@@ -12,12 +12,12 @@ from homeassistant.helpers import entity_registry as er
 from homeassistant.helpers.icon import async_get_icons
 
 from custom_components.keba_keenergy.const import DOMAIN
-from tests.api_data import MULTIPLE_POSITION_DATA_RESPONSE
-from tests.api_data import MULTIPLE_POSITIONS_RESPONSE
-from tests.api_data import get_multiple_position_fixed_data_response
+from tests.api_data import MULTIPLE_DEVICES_DATA_RESPONSE
+from tests.api_data import get_multiple_devices_responses
 
 if TYPE_CHECKING:
     from homeassistant.core import HomeAssistant
+    from pytest_homeassistant_custom_component.common import MockConfigEntry
     from syrupy.assertion import SnapshotAssertion
 
     from tests.conftest import FakeKebaKeEnergyAPI
@@ -26,21 +26,18 @@ if TYPE_CHECKING:
 @pytest.mark.usefixtures("entity_registry_enabled_by_default")
 async def test_icons(
     hass: HomeAssistant,
+    config_entry: MockConfigEntry,
     fake_api: FakeKebaKeEnergyAPI,
     snapshot: SnapshotAssertion,
 ) -> None:
     """Test that every icon in icons.json is used and the icons that the entities get."""
-    fake_api.responses = [
-        MULTIPLE_POSITIONS_RESPONSE,
-        get_multiple_position_fixed_data_response(has_passive_cooling="true"),
-        MULTIPLE_POSITION_DATA_RESPONSE,
-    ]
+    fake_api.responses = get_multiple_devices_responses(MULTIPLE_DEVICES_DATA_RESPONSE, has_passive_cooling="true")
     await fake_api.setup_integration()
 
     icons: dict[str, dict[str, Any]] = (await async_get_icons(hass, "entity", [DOMAIN]))[DOMAIN]
     entries: list[er.RegistryEntry] = er.async_entries_for_config_entry(
         er.async_get(hass),
-        fake_api.config_entry.entry_id,
+        config_entry.entry_id,
     )
 
     used: set[tuple[str, str | None]] = {(entry.domain, entry.translation_key) for entry in entries}

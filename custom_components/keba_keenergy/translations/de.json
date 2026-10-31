@@ -54,34 +54,34 @@
   },
   "device": {
     "buffer_tank": {
-      "name": "Pufferspeicher{position}"
+      "name": "Pufferspeicher{device_number}"
     },
     "control_unit": {
       "name": "Bedieneinheit"
     },
-    "external_heat_source": {
-      "name": "Externe Wärmequelle{position}"
+    "dhw_tank": {
+      "name": "Warmwasserspeicher{device_number}"
     },
-    "heat_circuit": {
-      "name": "Heizkreis{position}"
+    "external_heat_source": {
+      "name": "Externe Wärmequelle{device_number}"
     },
     "heat_pump": {
-      "name": "Wärmepumpe{position}"
+      "name": "Wärmepumpe{device_number}"
     },
-    "hot_water_tank": {
-      "name": "Warmwasserspeicher{position}"
+    "heating_circuit": {
+      "name": "Heizkreis{device_number}"
     },
     "passive_cooling": {
-      "name": "Passivkühlung{position}"
+      "name": "Passivkühlung{device_number}"
     },
     "photovoltaics": {
-      "name": "Photovoltaik{position}"
+      "name": "Photovoltaik{device_number}"
     },
     "solar_circuit": {
-      "name": "Solarkreis{position}"
+      "name": "Solarkreis{device_number}"
     },
     "switch_valve": {
-      "name": "Umschaltventil{position}"
+      "name": "Umschaltventil{device_number}"
     }
   },
   "entity": {
@@ -127,7 +127,7 @@
       }
     },
     "climate": {
-      "heat_circuit": {
+      "heating_circuit": {
         "state": {
           "heat": "Ein"
         },
@@ -137,7 +137,7 @@
               "away": "Urlaub",
               "boost": "Party",
               "comfort": "Tag",
-              "eco": "Auto",
+              "home": "Zeitplan",
               "sleep": "Nacht"
             }
           }
@@ -248,6 +248,15 @@
       "cooling_curve": {
         "name": "Kühlkurve"
       },
+      "dhw_tank_operating_mode": {
+        "name": "Betriebsart",
+        "state": {
+          "auto": "Zeitplan",
+          "heat_up": "Aufheizen",
+          "off": "Aus",
+          "on": "Ein"
+        }
+      },
       "external_heat_source_operating_mode": {
         "name": "Betriebsart",
         "state": {
@@ -256,7 +265,7 @@
           "on": "Ein"
         }
       },
-      "heat_circuit_operating_mode": {
+      "heating_circuit_operating_mode": {
         "name": "Betriebsart",
         "state": {
           "auto": "Auto",
@@ -269,15 +278,6 @@
       },
       "heating_curve": {
         "name": "Heizkurve"
-      },
-      "hot_water_tank_operating_mode": {
-        "name": "Betriebsart",
-        "state": {
-          "auto": "Zeitplan",
-          "heat_up": "Aufheizen",
-          "off": "Aus",
-          "on": "Ein"
-        }
       },
       "solar_circuit_operating_mode": {
         "name": "Betriebsart",
@@ -397,6 +397,15 @@
       "dew_point": {
         "name": "Taupunkt"
       },
+      "dhw_tank_operating_mode": {
+        "name": "Betriebsart",
+        "state": {
+          "auto": "Zeitplan",
+          "heat_up": "Aufheizen",
+          "off": "Aus",
+          "on": "Ein"
+        }
+      },
       "excess_energy_activation_counter": {
         "name": "Einschaltvorgänge (PV-Überschuss)"
       },
@@ -467,19 +476,6 @@
       "fresh_water_module_temperature": {
         "name": "Frischwassermodul-Temperatur"
       },
-      "heat_circuit_operating_mode": {
-        "name": "Betriebsart",
-        "state": {
-          "auto": "Auto",
-          "day": "Tag",
-          "external": "Extern",
-          "holiday": "Urlaub",
-          "night": "Nacht",
-          "off": "Aus",
-          "party": "Party",
-          "room_control": "Raumregelung"
-        }
-      },
       "heat_request": {
         "name": "Heizanforderung",
         "state": {
@@ -490,6 +486,19 @@
           "outdoor_off": "Aus (Außentemperatur)",
           "room_off": "Aus (Raumtemperatur)",
           "temporary_off": "Aus (Vorrang)"
+        }
+      },
+      "heating_circuit_operating_mode": {
+        "name": "Betriebsart",
+        "state": {
+          "auto": "Auto",
+          "day": "Tag",
+          "external": "Extern",
+          "holiday": "Urlaub",
+          "night": "Nacht",
+          "off": "Aus",
+          "party": "Party",
+          "room_control": "Raumregelung"
         }
       },
       "heating_curve": {
@@ -533,15 +542,6 @@
       },
       "hot_water_spf": {
         "name": "JAZ Warmwasser"
-      },
-      "hot_water_tank_operating_mode": {
-        "name": "Betriebsart",
-        "state": {
-          "auto": "Zeitplan",
-          "heat_up": "Aufheizen",
-          "off": "Aus",
-          "on": "Ein"
-        }
       },
       "low_pressure": {
         "name": "Niederdruck"
@@ -781,7 +781,7 @@
           "performance": "Aufheizen"
         }
       },
-      "hot_water_tank": {
+      "dhw_tank": {
         "state": {
           "eco": "Zeitplan",
           "heat_pump": "Ein",
@@ -795,8 +795,8 @@
     "authentication_error": {
       "message": "Authentifizierung fehlgeschlagen. Bitte überprüfe deine Anmeldedaten."
     },
-    "cannot_find_heating_curve": {
-      "message": "Heizkurve \"{heating_curve}\" nicht gefunden."
+    "cannot_find_curve": {
+      "message": "Kurve \"{curve}\" nicht gefunden."
     },
     "communication_error": {
       "message": "Bei der Kommunikation mit der API ist ein Fehler aufgetreten: {error}"
@@ -809,6 +809,9 @@
     },
     "invalid_config_entry": {
       "message": "Ungültige Integration angegeben. {config_entry_id} erhalten."
+    },
+    "invalid_time_zone": {
+      "message": "Die Steuerung hat eine ungültige Zeitzone: {time_zone}."
     },
     "unloaded_config_entry": {
       "message": "Ungültige Integration angegeben. {config_entry_id} ist nicht geladen."
@@ -873,7 +876,7 @@
       "name": "Datumsbereich für Abwesenheit festlegen"
     },
     "set_heating_curve_points": {
-      "description": "Setzt die Punkte einer Heizkurve.",
+      "description": "Setzt die Punkte einer Heiz- oder Kühlkurve.",
       "fields": {
         "config_entry": {
           "description": "Die für diese Aktion zu verwendende Integration.",
@@ -881,14 +884,14 @@
         },
         "heating_curve": {
           "description": "z.B. HC 1, HC 2, HC FBH, HC HK",
-          "name": "Heizkurve"
+          "name": "Kurve"
         },
         "points": {
-          "description": "Liste der Heizkurvenpunkte mit Außentemperatur und zugehöriger Vorlauftemperatur.",
+          "description": "Liste der Kurvenpunkte mit Außentemperatur und zugehöriger Vorlauftemperatur.",
           "name": "Punkte"
         }
       },
-      "name": "Heizkurvenpunkte setzen"
+      "name": "Kurvenpunkte setzen"
     }
   }
 }

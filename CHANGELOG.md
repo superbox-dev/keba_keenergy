@@ -11,16 +11,67 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Added the HVAC actions `defrosting` and `preheating` to the climate entities of the heating circuits, shown while
-  a heat pump defrosts or is in the pre-run of a heating cycle. ([Issue #84][issue-84])
+- Added the HVAC actions `defrosting` and `preheating` to the heating circuits, shown while a heat pump defrosts or
+  preheats. ([Issue #84][issue-84])
+
+### Changed
+
+- Changed the requirement to `keba_keenergy_api` 3.0, an update reads all values with one request, the curves of
+  the heating circuits separately and only those in use. ([Issue #77][issue-77])
+- Changed the attributes `lower_limit` and `upper_limit` to numbers, only writable values have them.
+  ([Issue #77][issue-77])
+- Changed more sensors and binary sensors to use the message IDs of the control unit, unused values are unknown or
+  not created. Optional components (e.g. room sensor, mixer, pump, fresh water module) are detected by their message
+  ID instead of the options of the control unit. ([Issue #77][issue-77])
+- Changed the sensor states to the unrounded values of the control unit, Home Assistant rounds them for the display.
+  ([Issue #77][issue-77])
+- Changed the unit of the energies of the solar circuits and photovoltaics to `J` and of the operating times and
+  maximum runtimes of the heat pumps and external heat sources to `s`, shown in `kWh` and `h`. Existing sensors keep
+  their unit. ([Issue #77][issue-77])
+- Changed the display precision of the pump speeds, the room humidity and the fresh water module temperature to two
+  decimals, of the CPU usage to one and of the RAM usage and the flash erase counter to none. ([Issue #77][issue-77])
+- Changed the options of the curve selects to follow the curves of the control unit after every update, without a
+  reload.
+- Changed the name of the action `set_heating_curve_points` to `Set curve points`, it also sets cooling curves.
+  ([Issue #85][issue-85])
+- Changed the sensor `weekly_write_count` to reset at midnight of a new week, also without an update or a write.
+- Changed the preset `away` to switch a heating circuit that is off or follows the schedule to the day operating
+  mode, it heats after the end of away. A manual operating mode is kept.
+- Changed the target temperature of a heating circuit to the one of the operating mode (day, night, party, away, in
+  `auto` from the week timer), shown right away after a change of the preset or the HVAC mode. Circuits that heat
+  and cool, or `auto` without week timers, show the selected target temperature of the control unit after the next
+  update.
+
+### Removed
+
+- Removed the attribute `message_id` of the sensors and binary sensors, the message IDs are in the diagnostics.
+  ([Issue #77][issue-77])
 
 ### Fixed
 
-- Showed the HVAC action `heating` of a heating circuit only while a heat pump heats. The heat request of the
-  heating circuit stays on during the whole heating period on newer software versions, so `heating` was also shown
-  while the heat pump was in standby. ([Issue #84][issue-84])
+- Showed the HVAC action `heating` only while a heat pump heats, newer software versions keep the heat request on
+  during the whole heating period. ([Issue #84][issue-84])
+- Showed the preset `away` right away, not only after the next update.
+- Showed no preset for a heating circuit that is off or in external or room control mode, instead of `home`.
+- Ended the away date range also with the HVAC modes `heat` and `off`, not only with `auto` and the presets.
+- Wrote the HVAC mode `heat` only if it changes, it switched the presets `sleep` and `boost` to `comfort`.
+- Discarded a pending target temperature if the preset or the HVAC mode changes, it was written as offset to the
+  new operating mode.
+- Wrote the same away date range only once, also if it is set again before the next update.
+- Added the attribute `points` to the sensor `cooling_curve`, like `heating_curve`.
+- Showed the points written with `set_heating_curve_points` in `heating_curve` and `cooling_curve` right away.
+- Offered the cooling modes in the select `operating_mode` of the control unit if any heat pump can cool, not only
+  the first one.
+- Rejected config entries of other integrations in the actions with a translated error.
+- Raised a translated error for an invalid time zone of the control unit in the preset `away` and the action
+  `set_away_date_range`.
+- Stored the scan interval and the update multipliers of the options as integers, not as decimal numbers.
+- Counted only successful writes in the sensor `weekly_write_count`.
+- Showed the repair issue for frequent writes again after a restart if the weekly limit is still exceeded.
 
+[issue-77]: https://github.com/superbox-dev/keba_keenergy/issues/77
 [issue-84]: https://github.com/superbox-dev/keba_keenergy/issues/84
+[issue-85]: https://github.com/superbox-dev/keba_keenergy/issues/85
 
 ## [1.11.0] - 2026-10-28
 

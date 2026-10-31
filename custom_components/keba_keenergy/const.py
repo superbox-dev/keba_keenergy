@@ -4,6 +4,9 @@
 
 from __future__ import annotations
 
+from enum import Enum
+from enum import StrEnum
+from typing import TYPE_CHECKING
 from typing import Final
 
 import probatio
@@ -16,7 +19,6 @@ from homeassistant.components.climate.const import HVACAction
 from homeassistant.components.water_heater import STATE_ECO
 from homeassistant.components.water_heater import STATE_HEAT_PUMP
 from homeassistant.components.water_heater import STATE_PERFORMANCE
-from homeassistant.const import ATTR_TEMPERATURE
 from homeassistant.const import CONF_HOST
 from homeassistant.const import CONF_PASSWORD
 from homeassistant.const import CONF_USERNAME
@@ -24,51 +26,73 @@ from homeassistant.const import STATE_OFF
 from homeassistant.const import Platform
 from homeassistant.helpers import config_validation as cv
 from homeassistant.helpers import selector
-from keba_keenergy_api.constants import MAX_HEATING_CURVE_POINTS
-from keba_keenergy_api.constants import BufferTank
-from keba_keenergy_api.constants import BufferTankOperatingMode
-from keba_keenergy_api.constants import ExternalHeatSource
-from keba_keenergy_api.constants import HeatCircuit
-from keba_keenergy_api.constants import HeatCircuitOperatingMode
-from keba_keenergy_api.constants import HeatPump
-from keba_keenergy_api.constants import HeatPumpState
-from keba_keenergy_api.constants import HotWaterTank
-from keba_keenergy_api.constants import HotWaterTankOperatingMode
-from keba_keenergy_api.constants import PassiveCooling
-from keba_keenergy_api.constants import Photovoltaics
-from keba_keenergy_api.constants import Section
-from keba_keenergy_api.constants import SectionPrefix
-from keba_keenergy_api.constants import SolarCircuit
-from keba_keenergy_api.constants import SwitchValve
-from keba_keenergy_api.constants import System
+from keba_keenergy_api.constants import MAX_CURVE_TABLE_POINTS
+from keba_keenergy_api.endpoints import ExternalHeatSource
+from keba_keenergy_api.endpoints import HeatingCircuit
+from keba_keenergy_api.endpoints import HeatPump
+from keba_keenergy_api.endpoints import System
+from keba_keenergy_api.enums import BufferTankOperatingMode
+from keba_keenergy_api.enums import DeviceType
+from keba_keenergy_api.enums import DHWTankOperatingMode
+from keba_keenergy_api.enums import HeatingCircuitOperatingMode
+from keba_keenergy_api.enums import HeatPumpState
+
+if TYPE_CHECKING:
+    from collections.abc import Mapping
+
+    from keba_keenergy_api.endpoints import Endpoint
+
+
+# TODO: Replace with the `DeviceType` of `keba_keenergy_api` and move to `legacy.py` as `LegacyDeviceType` when the
+#  unique IDs, device identifiers and option keys are migrated to the `DeviceType` values.
+class SectionPrefix(StrEnum):
+    """Device types of the integration, part of the device identifiers and of the unique IDs."""
+
+    SYSTEM = "system"
+    BUFFER_TANK = "buffer_tank"
+    DHW_TANK = "hot_water_tank"
+    HEAT_PUMP = "heat_pump"
+    HEATING_CIRCUIT = "heat_circuit"
+    SOLAR_CIRCUIT = "solar_circuit"
+    EXTERNAL_HEAT_SOURCE = "external_heat_source"
+    SWITCH_VALVE = "switch_valve"
+    PASSIVE_COOLING = "passive_cooling"
+    PHOTOVOLTAICS = "photovoltaics"
+
+
+class MixerPosition(Enum):
+    """Positions of a mixer, derived from its setpoint (`-1..1`)."""
+
+    CLOSED = -1
+    OFF = 0
+    OPEN = 1
+
 
 ATTR_CONFIG_ENTRY: Final[str] = "config_entry"
-ATTR_MESSAGE_ID: Final[str] = "message_id"
-ATTR_OFFSET: Final[str] = "offset"
 ATTR_WRITES: Final[str] = "writes"
 CONF_EXTERNAL_HEAT_SOURCE_TICK: Final[str] = "scan_interval_tick_external_heat_source"
 CONF_BUFFER_TANK_TICK: Final[str] = "scan_interval_tick_buffer_tank"
-CONF_HEAT_CIRCUIT_TICK: Final[str] = "scan_interval_tick_heat_circuit"
+CONF_HEATING_CIRCUIT_TICK: Final[str] = "scan_interval_tick_heat_circuit"
 CONF_HEAT_PUMP_TICK: Final[str] = "scan_interval_tick_heat_pump"
-CONF_HOT_WATER_TANK_TICK: Final[str] = "scan_interval_tick_hot_water_tank"
+CONF_DHW_TANK_TICK: Final[str] = "scan_interval_tick_hot_water_tank"
 CONF_PHOTOVOLTAICS_TICK: Final[str] = "scan_interval_tick_photovoltaics"
 CONF_SOLAR_CIRCUIT_TICK: Final[str] = "scan_interval_tick_solar_circuit"
 CONF_SWITCH_VALVE_TICK: Final[str] = "scan_interval_tick_switch_valve"
 CONF_SYSTEM_TICK: Final[str] = "scan_interval_tick_system"
 CONFIG_ENTRY_VERSION: Final[int] = 1
 DEFAULT_SCAN_INTERVAL: Final[int] = 20
-DEFAULT_SSL: Final[bool] = False
 DOMAIN: Final[str] = "keba_keenergy"
 FLASH_WRITE_ISSUE_ID: Final[str] = "frequent_flash_writes"
 FLASH_WRITE_LIMIT_PER_WEEK: Final[int] = 30
 FLASH_WRITE_DELAY: Final[float] = 1
+# Significant digits of a Float32, the Web HMI returns 8 digits (`0.8` as `0.80000001`).
+FLOAT32_SIGNIFICANT_DIGITS: Final[int] = 7
 MANUFACTURER: Final[str] = "KEBA"
 MANUFACTURER_MTEC: Final[str] = "M-TEC"
 MANUFACTURER_INO: Final[str] = "ino"
 MIN_SCAN_INTERVAL: Final[int] = 20
 NAME: Final[str] = "KeEnergy"
 REQUEST_REFRESH_COOLDOWN: Final[float] = 0.5
-SCAN_INTERVAL: Final[int] = 20
 
 SERVICE_SET_AWAY_DATE_RANGE: Final[str] = "set_away_date_range"
 SERVICE_SET_HEATING_CURVE_POINTS: Final[str] = "set_heating_curve_points"
@@ -83,38 +107,56 @@ PLATFORMS: Final[list[Platform]] = [
     Platform.WATER_HEATER,
 ]
 
-HEATING_CIRCUIT_PRESET_TO_HA: Final[dict[int, str]] = {
-    HeatCircuitOperatingMode.AUTO.value: PRESET_HOME,
-    HeatCircuitOperatingMode.HOLIDAY.value: PRESET_AWAY,
-    HeatCircuitOperatingMode.DAY.value: PRESET_COMFORT,
-    HeatCircuitOperatingMode.NIGHT.value: PRESET_SLEEP,
-    HeatCircuitOperatingMode.PARTY.value: PRESET_BOOST,
+HEATING_CIRCUIT_PRESET_TO_HA: Final[Mapping[HeatingCircuitOperatingMode, str]] = {
+    HeatingCircuitOperatingMode.AUTO: PRESET_HOME,
+    HeatingCircuitOperatingMode.VACATION: PRESET_AWAY,
+    HeatingCircuitOperatingMode.NORMAL: PRESET_COMFORT,
+    HeatingCircuitOperatingMode.REDUCED: PRESET_SLEEP,
+    HeatingCircuitOperatingMode.PARTY: PRESET_BOOST,
 }
 
-COOLING_CIRCUIT_PRESET_TO_HA: Final[dict[int, str]] = {
-    HeatCircuitOperatingMode.AUTO.value: PRESET_HOME,
-    HeatCircuitOperatingMode.DAY.value: PRESET_COMFORT,
-    HeatCircuitOperatingMode.NIGHT.value: PRESET_SLEEP,
-    HeatCircuitOperatingMode.PARTY.value: PRESET_BOOST,
+COOLING_CIRCUIT_PRESET_TO_HA: Final[Mapping[HeatingCircuitOperatingMode, str]] = {
+    HeatingCircuitOperatingMode.AUTO: PRESET_HOME,
+    HeatingCircuitOperatingMode.NORMAL: PRESET_COMFORT,
+    HeatingCircuitOperatingMode.REDUCED: PRESET_SLEEP,
+    HeatingCircuitOperatingMode.PARTY: PRESET_BOOST,
+}
+
+HA_PRESET_TO_HEATING_CIRCUIT_MODE: Final[Mapping[str, HeatingCircuitOperatingMode]] = {
+    preset: operating_mode for operating_mode, preset in HEATING_CIRCUIT_PRESET_TO_HA.items()
+}
+
+# Operating modes with a fixed temperature, party heats with the day temperature.
+MANUAL_HEATING_CIRCUIT_MODES: Final[frozenset[HeatingCircuitOperatingMode]] = frozenset(
+    {
+        HeatingCircuitOperatingMode.NORMAL,
+        HeatingCircuitOperatingMode.REDUCED,
+        HeatingCircuitOperatingMode.PARTY,
+    },
+)
+
+HEATING_CIRCUIT_TARGET_TEMPERATURE_KEYS: Final[Mapping[HeatingCircuitOperatingMode, str]] = {
+    HeatingCircuitOperatingMode.NORMAL: "target_temperature_day",
+    HeatingCircuitOperatingMode.PARTY: "target_temperature_day",
+    HeatingCircuitOperatingMode.REDUCED: "target_temperature_night",
+    HeatingCircuitOperatingMode.VACATION: "target_temperature_away",
+}
+
+COOLING_CIRCUIT_TARGET_TEMPERATURE_KEYS: Final[Mapping[HeatingCircuitOperatingMode, str]] = {
+    HeatingCircuitOperatingMode.NORMAL: "target_cooling_temperature_day",
+    HeatingCircuitOperatingMode.PARTY: "target_cooling_temperature_day",
+    HeatingCircuitOperatingMode.REDUCED: "target_cooling_temperature_night",
 }
 
 # The order is the priority with several heat pumps, e.g. one heat pump heats while another one defrosts.
 # All other heat pump states are idle.
-HEAT_PUMP_STATE_TO_HVAC_ACTION: Final[dict[HeatPumpState, HVACAction]] = {
-    HeatPumpState.AUTO_HEAT: HVACAction.HEATING,
+HEAT_PUMP_STATE_TO_HVAC_ACTION: Final[Mapping[HeatPumpState, HVACAction]] = {
+    HeatPumpState.AUTOMATIC: HVACAction.HEATING,
     # The post-run still delivers heat while the compressor stops.
-    HeatPumpState.INFLOW: HVACAction.HEATING,
+    HeatPumpState.POST_RUN: HVACAction.HEATING,
     HeatPumpState.DEFROST: HVACAction.DEFROSTING,
     # The pre-run starts the pumps, the compressor does not run yet.
-    HeatPumpState.FLOW: HVACAction.PREHEATING,
-}
-
-TEMPERATURE_OFFSET_SCHEMA: Final = {
-    probatio.Required(ATTR_OFFSET, default=0): probatio.Coerce(float),
-}
-
-TEMPERATURE_SCHEMA: Final = {
-    probatio.Required(ATTR_TEMPERATURE): probatio.Coerce(float),
+    HeatPumpState.PRE_RUN: HVACAction.PREHEATING,
 }
 
 STEP_AUTH_DATA_SCHEMA: Final[probatio.Schema] = probatio.Schema(
@@ -124,248 +166,93 @@ STEP_AUTH_DATA_SCHEMA: Final[probatio.Schema] = probatio.Schema(
     },
 )
 
-REQUEST_DATA_GROUPS: Final[dict[SectionPrefix, list[Section]]] = {
-    SectionPrefix.EXTERNAL_HEAT_SOURCE: [
-        ExternalHeatSource.OPERATING_MODE,
-        ExternalHeatSource.TARGET_TEMPERATURE,
-        ExternalHeatSource.HEAT_REQUEST,
-        ExternalHeatSource.OPERATING_TIME,
-        ExternalHeatSource.MAX_RUNTIME,
-        ExternalHeatSource.ACTIVATION_COUNTER,
-        ExternalHeatSource.USE_EXCESS_ENERGY,
-        ExternalHeatSource.MIN_RUNTIME_EXCESS_ENERGY,
-        ExternalHeatSource.CONSUMING_EXCESS_ENERGY,
-        ExternalHeatSource.EXCESS_ENERGY_OPERATING_TIME,
-        ExternalHeatSource.EXCESS_ENERGY_MAX_RUNTIME,
-        ExternalHeatSource.EXCESS_ENERGY_ACTIVATION_COUNTER,
-    ],
-    SectionPrefix.HEAT_CIRCUIT: [
-        HeatCircuit.ROOM_TEMPERATURE,
-        HeatCircuit.ROOM_HUMIDITY,
-        HeatCircuit.DEW_POINT,
-        HeatCircuit.FLOW_TEMPERATURE_SETPOINT,
-        HeatCircuit.MIXER_FLOW_TEMPERATURE,
-        HeatCircuit.MIXER_RETURN_FLOW_TEMPERATURE,
-        HeatCircuit.MIXER_POSITION,
-        HeatCircuit.PUMP_STATE,
-        HeatCircuit.RETURN_FLOW_TEMPERATURE,
-        HeatCircuit.TARGET_TEMPERATURE_DAY,
-        HeatCircuit.TARGET_COOLING_TEMPERATURE_DAY,
-        HeatCircuit.HEATING_LIMIT_DAY,
-        HeatCircuit.COOLING_LIMIT_DAY,
-        HeatCircuit.EXCESS_ENERGY_HEATING_LIMIT_DAY,
-        HeatCircuit.EXCESS_ENERGY_COOLING_LIMIT_DAY,
-        HeatCircuit.HEAT_REQUEST,
-        HeatCircuit.COOL_REQUEST,
-        HeatCircuit.TARGET_TEMPERATURE_AWAY,
-        HeatCircuit.TARGET_TEMPERATURE_NIGHT,
-        HeatCircuit.TARGET_COOLING_TEMPERATURE_NIGHT,
-        HeatCircuit.HEATING_LIMIT_NIGHT,
-        HeatCircuit.COOLING_LIMIT_NIGHT,
-        HeatCircuit.EXCESS_ENERGY_HEATING_LIMIT_NIGHT,
-        HeatCircuit.EXCESS_ENERGY_COOLING_LIMIT_NIGHT,
-        HeatCircuit.OPERATING_MODE,
-        HeatCircuit.SELECTED_TARGET_TEMPERATURE,
-        HeatCircuit.TARGET_TEMPERATURE,
-        HeatCircuit.TARGET_TEMPERATURE_OFFSET,
-        HeatCircuit.USE_EXCESS_ENERGY,
-        HeatCircuit.EXCESS_ENERGY_TARGET_TEMPERATURE,
-        HeatCircuit.EXCESS_ENERGY_TARGET_TEMPERATURE_HYSTERESIS,
-        HeatCircuit.EXCESS_ENERGY_TARGET_COOLING_TEMPERATURE,
-        HeatCircuit.EXCESS_ENERGY_TARGET_COOLING_TEMPERATURE_HYSTERESIS,
-        HeatCircuit.EXCESS_ENERGY_MODE,
-        HeatCircuit.AWAY_START_DATE,
-        HeatCircuit.AWAY_END_DATE,
-        HeatCircuit.HEATING_CURVE_OFFSET,
-        HeatCircuit.COOLING_CURVE_OFFSET,
-        HeatCircuit.HEATING_CURVE_SLOPE,
-        HeatCircuit.COOLING_CURVE_SLOPE,
-        HeatCircuit.USE_HEATING_CURVE,
-        HeatCircuit.HEATING_CURVE,
-        HeatCircuit.COOLING_CURVE,
-        HeatCircuit.PUMP_SPEED,
-    ],
-    SectionPrefix.SOLAR_CIRCUIT: [
-        SolarCircuit.OPERATING_MODE,
-        SolarCircuit.SOURCE_TEMPERATURE,
-        SolarCircuit.PUMP_1,
-        SolarCircuit.PUMP_2,
-        SolarCircuit.CURRENT_TEMPERATURE,
-        SolarCircuit.TARGET_TEMPERATURE,
-        SolarCircuit.HEAT_REQUEST,
-        SolarCircuit.HEATING_ENERGY,
-        SolarCircuit.DAILY_ENERGY,
-        SolarCircuit.ACTUAL_POWER,
-        SolarCircuit.PRIORITY_1_BEFORE_2,
-    ],
-    SectionPrefix.HEAT_PUMP: [
-        HeatPump.CONSUMING_EXCESS_ENERGY,
-        HeatPump.EXCESS_ENERGY_OPERATING_TIME,
-        HeatPump.EXCESS_ENERGY_MAX_RUNTIME,
-        HeatPump.EXCESS_ENERGY_ACTIVATION_COUNTER,
-        HeatPump.CIRCULATION_PUMP_SPEED,
-        HeatPump.SOURCE_PUMP_SPEED,
-        HeatPump.COMPRESSOR,
-        HeatPump.COMPRESSOR_NIGHT_SPEED,
-        HeatPump.COMPRESSOR_INPUT_TEMPERATURE,
-        HeatPump.COMPRESSOR_OUTPUT_TEMPERATURE,
-        HeatPump.COMPRESSOR_USE_NIGHT_SPEED,
-        HeatPump.CONDENSER_TEMPERATURE,
-        HeatPump.VAPORIZER_TEMPERATURE,
-        HeatPump.TARGET_OVERHEATING,
-        HeatPump.CURRENT_OVERHEATING,
-        HeatPump.EXPANSION_VALVE_POSITION,
-        HeatPump.HEAT_REQUEST,
-        HeatPump.HIGH_PRESSURE,
-        HeatPump.FLOW_TEMPERATURE,
-        HeatPump.LOW_PRESSURE,
-        HeatPump.NAME,
-        HeatPump.RETURN_FLOW_TEMPERATURE,
-        HeatPump.SOURCE_INPUT_TEMPERATURE,
-        HeatPump.SOURCE_OUTPUT_TEMPERATURE,
-        HeatPump.STATE,
-        HeatPump.SUBSTATE,
-        HeatPump.COMPRESSOR_POWER,
-        HeatPump.HEATING_POWER,
-        HeatPump.HOT_WATER_POWER,
-        HeatPump.COP,
-        HeatPump.HEATING_ENERGY,
-        HeatPump.HEATING_ENERGY_CONSUMPTION,
-        HeatPump.HEATING_SPF,
-        HeatPump.COOLING_ENERGY,
-        HeatPump.COOLING_ENERGY_CONSUMPTION,
-        HeatPump.COOLING_SPF,
-        HeatPump.HOT_WATER_ENERGY,
-        HeatPump.HOT_WATER_ENERGY_CONSUMPTION,
-        HeatPump.HOT_WATER_SPF,
-        HeatPump.TOTAL_THERMAL_ENERGY,
-        HeatPump.TOTAL_ENERGY_CONSUMPTION,
-        HeatPump.TOTAL_SPF,
-        HeatPump.EXCESS_ENERGY_CONSUMPTION,
-        HeatPump.HEATING_EXCESS_ENERGY_CONSUMPTION,
-        HeatPump.COOLING_EXCESS_ENERGY_CONSUMPTION,
-        HeatPump.HOT_WATER_EXCESS_ENERGY_CONSUMPTION,
-        HeatPump.OPERATING_TIME,
-        HeatPump.MAX_RUNTIME,
-        HeatPump.ACTIVATION_COUNTER,
-        HeatPump.HAS_COMPRESSOR_FAILURE,
-        HeatPump.HAS_SOURCE_FAILURE,
-        HeatPump.HAS_SOURCE_ACTUATOR_FAILURE,
-        HeatPump.HAS_THREE_PHASE_FAILURE,
-        HeatPump.HAS_SOURCE_PRESSURE_FAILURE,
-        HeatPump.HAS_VFD_FAILURE,
-        # Passive cooling has no own group for the ticks, it is always a part of the heat pumps.
-        PassiveCooling.TEMPERATURE,
-        PassiveCooling.SWITCH_VALVE_POSITION,
-        PassiveCooling.CIRCULATION_PUMP_SPEED,
-        PassiveCooling.MIXER_FLOW_TEMPERATURE,
-        PassiveCooling.MIXER_TARGET_TEMPERATURE,
-        PassiveCooling.MIXER_POSITION,
-    ],
-    SectionPrefix.BUFFER_TANK: [
-        BufferTank.CURRENT_TOP_TEMPERATURE,
-        BufferTank.CURRENT_BOTTOM_TEMPERATURE,
-        BufferTank.EXCESS_ENERGY_TARGET_TEMPERATURE,
-        BufferTank.EXCESS_ENERGY_TARGET_TEMPERATURE_HYSTERESIS,
-        BufferTank.EXCESS_ENERGY_MODE,
-        BufferTank.OPERATING_MODE,
-        BufferTank.STANDBY_TEMPERATURE,
-        BufferTank.TARGET_TEMPERATURE,
-        BufferTank.HEAT_REQUEST,
-        BufferTank.COOL_REQUEST,
-        BufferTank.USE_EXCESS_ENERGY,
-        BufferTank.OUTDOOR_TEMPERATURE_EXCESS_ENERGY_LIMIT,
-    ],
-    SectionPrefix.HOT_WATER_TANK: [
-        HotWaterTank.USE_EXCESS_ENERGY,
-        HotWaterTank.EXCESS_ENERGY_TARGET_TEMPERATURE,
-        HotWaterTank.EXCESS_ENERGY_TARGET_TEMPERATURE_HYSTERESIS,
-        HotWaterTank.EXCESS_ENERGY_MODE,
-        HotWaterTank.HEAT_REQUEST,
-        HotWaterTank.FRESH_WATER_FLOW,
-        HotWaterTank.FRESH_WATER_MODULE_TEMPERATURE,
-        HotWaterTank.TARGET_TEMPERATURE,
-        HotWaterTank.STANDBY_TEMPERATURE,
-        HotWaterTank.OPERATING_MODE,
-        HotWaterTank.CURRENT_TEMPERATURE,
-        HotWaterTank.CIRCULATION_RETURN_TEMPERATURE,
-        HotWaterTank.CIRCULATION_PUMP_STATE,
-    ],
-    SectionPrefix.SWITCH_VALVE: [
-        SwitchValve.POSITION,
-    ],
-    SectionPrefix.PHOTOVOLTAICS: [
-        Photovoltaics.EXCESS_ENERGY_ACTIVE,
-        Photovoltaics.EXCESS_POWER,
-        Photovoltaics.DAILY_ENERGY,
-        Photovoltaics.TOTAL_ENERGY,
-    ],
-    SectionPrefix.SYSTEM: [
-        System.OUTDOOR_TEMPERATURE,
-        System.OPERATING_MODE,
-        System.CPU_USAGE,
-        System.WEBVIEW_CPU_USAGE,
-        System.WEBSERVER_CPU_USAGE,
-        System.CONTROL_CPU_USAGE,
-        System.RAM_USAGE,
-        System.FREE_RAM,
-        System.FLASH_ERASE_COUNTER,
-    ],
+# The configuration of the control unit per device type (e.g. the installed meters), read once on setup.
+CONFIGURATION_ENDPOINTS: Final[Mapping[SectionPrefix, Mapping[str, Endpoint]]] = {
+    SectionPrefix.SYSTEM: {
+        "has_photovoltaics": System.HAS_PHOTOVOLTAICS,
+    },
+    SectionPrefix.HEATING_CIRCUIT: {
+        "mode": HeatingCircuit.TYPE,
+    },
+    SectionPrefix.HEAT_PUMP: {
+        "has_active_cooling": HeatPump.HAS_ACTIVE_COOLING,
+        "has_passive_cooling": HeatPump.HAS_PASSIVE_COOLING,
+        "electrical_energy_meter_type": HeatPump.ELECTRICAL_ENERGY_METER_TYPE,
+        "heat_meter_type": HeatPump.HEAT_METER_TYPE,
+    },
+    SectionPrefix.EXTERNAL_HEAT_SOURCE: {
+        "has_emissions": ExternalHeatSource.HAS_EMISSIONS,
+    },
 }
 
-TO_REDACT: Final[set[str]] = {
-    CONF_HOST,
-    CONF_PASSWORD,
-    CONF_USERNAME,
-    "serial_number",
-    "title",
-    "unique_id",
+# The option of the scan interval multiplier per device type, in the order of the options flow.
+SCAN_INTERVAL_TICK_OPTIONS: Final[Mapping[SectionPrefix, str]] = {
+    SectionPrefix.SYSTEM: CONF_SYSTEM_TICK,
+    SectionPrefix.HEAT_PUMP: CONF_HEAT_PUMP_TICK,
+    SectionPrefix.HEATING_CIRCUIT: CONF_HEATING_CIRCUIT_TICK,
+    SectionPrefix.SOLAR_CIRCUIT: CONF_SOLAR_CIRCUIT_TICK,
+    SectionPrefix.DHW_TANK: CONF_DHW_TANK_TICK,
+    SectionPrefix.BUFFER_TANK: CONF_BUFFER_TANK_TICK,
+    SectionPrefix.SWITCH_VALVE: CONF_SWITCH_VALVE_TICK,
+    SectionPrefix.EXTERNAL_HEAT_SOURCE: CONF_EXTERNAL_HEAT_SOURCE_TICK,
+    SectionPrefix.PHOTOVOLTAICS: CONF_PHOTOVOLTAICS_TICK,
 }
 
-DEVICE_TRANSLATION_KEYS: Final[dict[str, str]] = {
+# Passive cooling is a part of the heat pumps and uses their scan interval.
+SCAN_INTERVAL_DEVICE_TYPES: Final[Mapping[SectionPrefix, SectionPrefix]] = {
+    SectionPrefix.PASSIVE_COOLING: SectionPrefix.HEAT_PUMP,
+}
+
+# Device types of the API whose number of devices `get_device_counts()` returns, the others have no device number.
+DEVICE_TYPES: Final[Mapping[SectionPrefix, DeviceType]] = {
+    SectionPrefix.BUFFER_TANK: DeviceType.BUFFER_TANK,
+    SectionPrefix.DHW_TANK: DeviceType.DHW_TANK,
+    SectionPrefix.HEAT_PUMP: DeviceType.HEAT_PUMP,
+    SectionPrefix.HEATING_CIRCUIT: DeviceType.HEATING_CIRCUIT,
+    SectionPrefix.SOLAR_CIRCUIT: DeviceType.SOLAR_CIRCUIT,
+    SectionPrefix.EXTERNAL_HEAT_SOURCE: DeviceType.EXTERNAL_HEAT_SOURCE,
+    SectionPrefix.SWITCH_VALVE: DeviceType.SWITCH_VALVE,
+    SectionPrefix.PASSIVE_COOLING: DeviceType.PASSIVE_COOLING,
+}
+
+# Keys of the heating and cooling curve in use, their sensors show the points of the curve.
+CURVE_KEYS: Final[frozenset[str]] = frozenset({"cooling_curve", "heating_curve"})
+
+TO_REDACT: Final[frozenset[str]] = frozenset(
+    {
+        CONF_HOST,
+        CONF_PASSWORD,
+        CONF_USERNAME,
+        "serial_number",
+        "title",
+        "unique_id",
+    }
+)
+
+DEVICE_TRANSLATION_KEYS: Final[Mapping[SectionPrefix, str]] = {
     SectionPrefix.SYSTEM: "control_unit",
-    SectionPrefix.HEAT_CIRCUIT: "heat_circuit",
+    SectionPrefix.HEATING_CIRCUIT: "heating_circuit",
     SectionPrefix.SOLAR_CIRCUIT: "solar_circuit",
     SectionPrefix.HEAT_PUMP: "heat_pump",
     SectionPrefix.BUFFER_TANK: "buffer_tank",
-    SectionPrefix.HOT_WATER_TANK: "hot_water_tank",
+    SectionPrefix.DHW_TANK: "dhw_tank",
     SectionPrefix.EXTERNAL_HEAT_SOURCE: "external_heat_source",
     SectionPrefix.SWITCH_VALVE: "switch_valve",
     SectionPrefix.PASSIVE_COOLING: "passive_cooling",
     SectionPrefix.PHOTOVOLTAICS: "photovoltaics",
 }
 
-SECTIONS: Final[dict[str, type[Section]]] = {
-    SectionPrefix.SYSTEM: System,
-    SectionPrefix.HEAT_CIRCUIT: HeatCircuit,
-    SectionPrefix.SOLAR_CIRCUIT: SolarCircuit,
-    SectionPrefix.HEAT_PUMP: HeatPump,
-    SectionPrefix.BUFFER_TANK: BufferTank,
-    SectionPrefix.HOT_WATER_TANK: HotWaterTank,
-    SectionPrefix.EXTERNAL_HEAT_SOURCE: ExternalHeatSource,
+DHW_TANK_OPERATING_MODE_TO_HA: Final[Mapping[DHWTankOperatingMode, str]] = {
+    DHWTankOperatingMode.AUTO: STATE_ECO,
+    DHWTankOperatingMode.MANUAL_CHARGE: STATE_PERFORMANCE,
+    DHWTankOperatingMode.OFF: STATE_OFF,
+    DHWTankOperatingMode.ON: STATE_HEAT_PUMP,
 }
 
-SECTION_PREFIXES: Final[dict[type[Section], str]] = {section: prefix for prefix, section in SECTIONS.items()}
-
-HOT_WATER_TANK_STATE_TO_HA: Final[dict[int, str]] = {
-    HotWaterTankOperatingMode.AUTO.value: STATE_ECO,
-    HotWaterTankOperatingMode.HEAT_UP.value: STATE_PERFORMANCE,
-    HotWaterTankOperatingMode.OFF.value: STATE_OFF,
-    HotWaterTankOperatingMode.ON.value: STATE_HEAT_PUMP,
-}
-
-BUFFER_TANK_STATE_TO_HA: Final[dict[int, str]] = {
-    BufferTankOperatingMode.HEAT_UP.value: STATE_PERFORMANCE,
-    BufferTankOperatingMode.OFF.value: STATE_OFF,
-    BufferTankOperatingMode.ON.value: STATE_HEAT_PUMP,
-}
-
-HOT_WATER_TANK_OPERATING_MODE_TO_HA: Final[dict[str, str]] = {
-    HotWaterTankOperatingMode(key).name.lower(): value for key, value in HOT_WATER_TANK_STATE_TO_HA.items()
-}
-
-BUFFER_TANK_OPERATING_MODE_TO_HA: Final[dict[str, str]] = {
-    BufferTankOperatingMode(key).name.lower(): value for key, value in BUFFER_TANK_STATE_TO_HA.items()
+BUFFER_TANK_OPERATING_MODE_TO_HA: Final[Mapping[BufferTankOperatingMode, str]] = {
+    BufferTankOperatingMode.MANUAL_CHARGE: STATE_PERFORMANCE,
+    BufferTankOperatingMode.OFF: STATE_OFF,
+    BufferTankOperatingMode.ON: STATE_HEAT_PUMP,
 }
 
 ATTR_START_DATE: Final[str] = "start_date"
@@ -376,7 +263,7 @@ ATTR_OUTDOOR: Final[str] = "outdoor"
 ATTR_FLOW: Final[str] = "flow"
 ATTR_HEATING_CURVE: Final[str] = "heating_curve"
 
-HEATING_CURVE_POINT_SCHEMA: Final = probatio.Schema(
+HEATING_CURVE_POINT_SCHEMA: Final[probatio.Schema] = probatio.Schema(
     {
         probatio.Required(ATTR_OUTDOOR): probatio.All(
             probatio.Coerce(float),
@@ -403,7 +290,7 @@ HEATING_CURVE_POINTS_SCHEMA: Final[probatio.Schema] = probatio.Schema(
         ),
         probatio.Required(ATTR_POINTS): probatio.All(
             cv.ensure_list,
-            probatio.Length(min=1, max=MAX_HEATING_CURVE_POINTS),
+            probatio.Length(min=1, max=MAX_CURVE_TABLE_POINTS),
             [HEATING_CURVE_POINT_SCHEMA],
         ),
     },
