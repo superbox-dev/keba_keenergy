@@ -1429,6 +1429,10 @@ HMI_RESPONSE: Final[dict[str, str]] = {
     "name": "KeEnergy.WebHmi_2.2.0.0",
 }
 
+# The default block of the week timers of the fake Web HMI, 06:00 to 22:00 as seconds since midnight.
+WEEK_TIMER_DAY_START_SECONDS: Final[int] = 21600
+WEEK_TIMER_DAY_STOP_SECONDS: Final[int] = 79200
+
 TIMEZONE_RESPONSE: Final[dict[str, str]] = {
     "timezone": "Europe/Vienna",
 }

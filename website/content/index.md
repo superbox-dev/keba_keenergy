@@ -128,7 +128,9 @@ provide are not created. Changes are written to the control unit, see [Known lim
   night, party and, for heating circuits, away
   - auto follows the schedule, day, night and party set the HVAC mode heat, party heats with the day temperature
   - away sets the away date range of all heating circuits and the HVAC mode heat, the away temperature applies
-  - the target room temperature is the one of the operating mode, a change of the preset shows it right away
+  - the target room temperature is the one of the operating mode, a change of the preset shows it right away, auto
+    uses the day or night temperature of the week timer of the heating or cooling circuit, a heating circuit that heats
+    and cools shows the new temperature after the next update
 - **Numbers**: target room temperatures (day, night, away, offset, PV surplus), heating and cooling limits,
   heating and cooling curve offset and slope
 - **Selects**: operating mode, heating curve, cooling curve

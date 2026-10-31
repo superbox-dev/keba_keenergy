@@ -16,6 +16,8 @@ from tests.api_data import HEAT_CIRCUIT_COOL_REQUEST
 from tests.api_data import HEAT_CIRCUIT_HEAT_REQUEST
 from tests.api_data import HEAT_CIRCUIT_MODE
 from tests.api_data import HEAT_CIRCUIT_OPERATION_MODE
+from tests.api_data import HEAT_CIRCUIT_TARGET_COOLING_TEMPERATURE_DAY
+from tests.api_data import HEAT_CIRCUIT_TARGET_COOLING_TEMPERATURE_NIGHT
 from tests.api_data import MULTIPLE_DEVICES_DATA_RESPONSE
 from tests.api_data import SINGLE_DEVICE_DATA_RESPONSE
 from tests.api_data import SINGLE_DEVICE_FIXED_DATA_RESPONSE
@@ -29,6 +31,8 @@ from tests.api_data import update_response
 # The heating circuit of the setup with one device of each type and the first one of the setup with several.
 HEAT_CIRCUIT_ENTITY_ID: Final[str] = "climate.keba_keenergy_12345678"
 HEAT_CIRCUIT_1_ENTITY_ID: Final[str] = "climate.keba_keenergy_12345678_1"
+# The selected target temperature of the control unit, without the offset.
+SELECTED_TARGET_TEMPERATURE: Final[float] = 20.0
 # The selected target temperature 20.0 plus the offset 1.5.
 TARGET_TEMPERATURE_WITH_OFFSET: Final[float] = 21.5
 
@@ -74,6 +78,8 @@ def get_hvac_action_data_response(
 
 # The time of the action calls, 2026-01-24 13:00 in the time zone of the Web HMI.
 NOW: Final[datetime] = datetime(2026, 1, 24, 12, 0, tzinfo=UTC)
+# 2026-01-24 23:00 in the time zone of the Web HMI, outside of the day block of the week timers.
+NIGHT: Final[datetime] = datetime(2026, 1, 24, 22, 0, tzinfo=UTC)
 # The away date range of one year from today.
 AWAY_PRESET_WRITE: Final[str] = (
     '[{"name": "APPL.CtrlAppl.sParam.heatCircuit[0].param.holiday.start", "value": "1769209200"}, '
@@ -93,6 +99,25 @@ AWAY_DATE_RANGE_RESET_WRITE: Final[str] = (
 def get_operating_mode_write(operating_mode: HeatingCircuitOperatingMode, /) -> str:
     """Return the write request of the operating mode of the first heating circuit."""
     return f'[{{"name": "APPL.CtrlAppl.sParam.heatCircuit[0].param.operatingMode", "value": "{operating_mode.value}"}}]'
+
+
+def get_cooling_schedule_responses() -> list[ReadResponse]:
+    """Return the responses of a heating circuit that only cools in the operating mode `AUTO`.
+
+    The cooling temperatures are 25.0 (day) and 24.0 (night), the heating temperatures 20.5 and 20.0.
+    """
+    responses: list[ReadResponse] = get_circuit_type_responses(HeatingCircuitType.COOLING, operating_mode="1")
+    data_response: ReadResponse = responses[-1]
+    assert isinstance(data_response, list)
+
+    return [
+        *responses[:-1],
+        replace_values(
+            data_response,
+            HEAT_CIRCUIT_TARGET_COOLING_TEMPERATURE_DAY.read("25"),
+            HEAT_CIRCUIT_TARGET_COOLING_TEMPERATURE_NIGHT.read("24"),
+        ),
+    ]
 
 
 def get_circuit_type_responses(

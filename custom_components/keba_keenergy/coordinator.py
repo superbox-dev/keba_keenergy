@@ -7,6 +7,7 @@ from __future__ import annotations
 import logging
 from asyncio import Lock
 from dataclasses import replace
+from datetime import datetime
 from datetime import timedelta
 from typing import TYPE_CHECKING
 from typing import Final
@@ -24,12 +25,16 @@ from homeassistant.exceptions import HomeAssistantError
 from homeassistant.helpers.debounce import Debouncer
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator
 from homeassistant.helpers.update_coordinator import UpdateFailed
+from homeassistant.util import dt as dt_util
 from keba_keenergy_api.client import KebaKeEnergyAPI
 from keba_keenergy_api.enums import ElectricalEnergyMeterType
+from keba_keenergy_api.enums import HeatingCircuitOperatingMode
 from keba_keenergy_api.enums import HeatingCircuitType
 from keba_keenergy_api.enums import HeatMeterType
 from keba_keenergy_api.enums import HeatPumpState
 from keba_keenergy_api.enums import MessageIdKind
+from keba_keenergy_api.enums import WeekDay
+from keba_keenergy_api.enums import WeekTimerType
 from keba_keenergy_api.exceptions import APIError
 from keba_keenergy_api.exceptions import AuthenticationError
 from keba_keenergy_api.models import CurveTable
@@ -64,6 +69,7 @@ if TYPE_CHECKING:
     from keba_keenergy_api.models import Readings
     from keba_keenergy_api.models import SystemInfo
     from keba_keenergy_api.models import Value
+    from keba_keenergy_api.models import WeekTimer
     from keba_keenergy_api.models import WriteValue
 
 _LOGGER: Final = logging.getLogger(__name__)
@@ -127,6 +133,11 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[CoordinatorData]):
         self.curve_names: tuple[str, ...] = ()
         self.curve_tables: dict[str, CurveTable] = {}
 
+        # The time zone of the control unit, read once on setup (None if it is invalid), and the week timers of the
+        # heating circuits by device number, read with every update of the heating circuits.
+        self.timezone: ZoneInfo | None = None
+        self.week_timers: dict[WeekTimerType, dict[int, WeekTimer]] = {}
+
         super().__init__(
             hass,
             _LOGGER,
@@ -187,6 +198,11 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[CoordinatorData]):
         self.device_name = system_info["name"]
         self.device_hmi_sw_version = hmi_info["name"].replace("KeEnergy.WebHmi_", "")
         self.device_counts = await self._api.get_device_counts()
+
+        try:
+            self.timezone = ZoneInfo(await self._api.get_timezone())
+        except ValueError, ZoneInfoNotFoundError:
+            _LOGGER.warning("The control unit has an invalid time zone, the week timers are not used")
 
         # One check for the polled values and the configuration, each unknown value costs one more request.
         supported: set[Endpoint] = set(
@@ -274,7 +290,60 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[CoordinatorData]):
         if any(key in CURVE_KEYS for _, key in request.values()):
             await self._async_read_curves(data)
 
+        if any(device_type is SectionPrefix.HEATING_CIRCUIT for device_type, _ in request.values()):
+            await self._async_read_week_timers()
+
         return data
+
+    async def _async_read_week_timers(self) -> None:
+        # The week timers tell if a heating circuit is currently in day or night operation.
+        week_timers: dict[WeekTimerType, dict[int, WeekTimer]] = {}
+
+        for timer_type, is_supported in (
+            (WeekTimerType.HEATING_CIRCUIT_HEATING, self.is_heating_circuit),
+            (WeekTimerType.HEATING_CIRCUIT_COOLING, self.is_cooling_circuit),
+        ):
+            device_numbers: list[int] = [
+                index + 1
+                for index in range(self.device_count(SectionPrefix.HEATING_CIRCUIT))
+                if is_supported(index=index)
+            ]
+
+            if device_numbers:
+                week_timers[timer_type] = await self._api_call_for_update(
+                    self._api.get_week_timers(timer_type, device_numbers),
+                )
+
+        self.week_timers = week_timers
+
+    def get_scheduled_operating_mode(
+        self,
+        *,
+        index: int | None,
+        cooling: bool,
+    ) -> HeatingCircuitOperatingMode | None:
+        """Return normal (day) or reduced (night) operation of the week timer of a heating circuit right now.
+
+        None if there is no week timer or time zone, e.g. an invalid time zone or an older software version.
+        """
+        timer_type: WeekTimerType = (
+            WeekTimerType.HEATING_CIRCUIT_COOLING if cooling else WeekTimerType.HEATING_CIRCUIT_HEATING
+        )
+        timer: WeekTimer | None = self.week_timers.get(timer_type, {}).get((index or 0) + 1)
+
+        if timer is None or self.timezone is None:
+            return None
+
+        now: datetime = dt_util.now(self.timezone)
+        # The week of the Web HMI starts with Sunday, Python with Monday.
+        day: WeekDay = WeekDay((now.weekday() + 1) % 7)
+        seconds_of_day: int = now.hour * 3600 + now.minute * 60 + now.second
+
+        return (
+            HeatingCircuitOperatingMode.NORMAL
+            if any(block.start <= seconds_of_day < block.stop for block in timer.days[day].blocks)
+            else HeatingCircuitOperatingMode.REDUCED
+        )
 
     async def _async_read_curves(self, data: CoordinatorData, /) -> None:
         # The selects show the names of all curves, the sensors the points of the curves in use.

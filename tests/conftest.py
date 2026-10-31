@@ -28,6 +28,8 @@ from tests.api_data import HMI_RESPONSE
 from tests.api_data import MESSAGE_ID_SUFFIX
 from tests.api_data import SYSTEM_RESPONSE
 from tests.api_data import TIMEZONE_RESPONSE
+from tests.api_data import WEEK_TIMER_DAY_START_SECONDS
+from tests.api_data import WEEK_TIMER_DAY_STOP_SECONDS
 from tests.api_data import ReadResponse
 from tests.api_data import ReadValue
 from tests.api_data import Response
@@ -123,10 +125,13 @@ class FakeKebaKeEnergyAPI:
         self.timezone: str = TIMEZONE_RESPONSE["timezone"]
         self.write_status: HTTPStatus = HTTPStatus.OK
         self.unsupported_variables: set[str] = set()
+        # The week timer variables that have no day block, e.g. of the cooling timer.
+        self.week_timer_without_day_block: str | None = None
         self.message_ids: dict[str, int] = {}
         self.during_read: Callable[[], Awaitable[None]] | None = None
         self._values: dict[str, ReadValue] = {}
         self._read_requests: list[str] = []
+        self._setup_time_zone_request_count: int = 0
 
     def register_auth_request(self, host: str, /, *, status: int = 200, exc: Exception | None = None) -> None:
         """Register the request that checks if the Web HMI requires authentication."""
@@ -220,6 +225,8 @@ class FakeKebaKeEnergyAPI:
 
         if all(".linTabPool[" in name for name in names):
             response = self._curve_response(payload)
+        elif all(".weekTimer" in name for name in names):
+            response = self._week_timer_response(names)
         else:
             if self._takes_next_response(names):
                 self._read_requests.append(str(data))
@@ -326,6 +333,24 @@ class FakeKebaKeEnergyAPI:
         values: dict[str, ReadValue] = {value["name"]: value for value in (names if is_names_request else points)}
         return [values[item["name"]] for item in payload]
 
+    def _week_timer_response(self, names: list[str], /) -> Response:
+        """Return the seconds of the requested week timer variables, one block from 06:00 to 22:00 every day."""
+        return [
+            {
+                "name": name,
+                "value": str(
+                    0
+                    if self.week_timer_without_day_block and self.week_timer_without_day_block in name
+                    else WEEK_TIMER_DAY_STOP_SECONDS
+                    if name.endswith(".enableTime[0].stop")
+                    else WEEK_TIMER_DAY_START_SECONDS
+                    if name.endswith(".enableTime[0].start")
+                    else 0,
+                ),
+            }
+            for name in names
+        ]
+
     async def setup_integration(self) -> None:
         """Register all requests for the host of the config entry and set up the integration.
 
@@ -338,13 +363,17 @@ class FakeKebaKeEnergyAPI:
 
         assert await self.hass.config_entries.async_setup(self.config_entry.entry_id)
         await self.hass.async_block_till_done()
+        self._setup_time_zone_request_count = self._time_zone_requests()
 
     def read_requests(self) -> list[str]:
         """Return the bodies of the read requests that took one of the `responses`, in order."""
         return list(self._read_requests)
 
     def time_zone_request_count(self) -> int:
-        """Return the number of requests of the time zone."""
+        """Return the number of requests of the time zone after the setup, it reads the time zone once."""
+        return self._time_zone_requests() - self._setup_time_zone_request_count
+
+    def _time_zone_requests(self) -> int:
         return len([url for _, url, *_ in self.aioclient_mock.mock_calls if url.path == "/dateTime"])
 
     def write_requests(self) -> list[str]:

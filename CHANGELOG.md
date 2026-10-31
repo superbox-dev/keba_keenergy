@@ -41,8 +41,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Changed the preset `away` of a heating circuit to also set the HVAC mode `heat`, a heating circuit that is off or
   follows the schedule heats with the day operating mode after the end of away.
 - Changed the target temperature of a heating circuit to the target temperature of the operating mode (day, night,
-  party with the day temperature, away), shown right away after a change of the preset or the HVAC mode. A heating
-  circuit that heats and cools and the schedule keep the selected target temperature of the control unit.
+  party with the day temperature, away), shown right away after a change of the preset or the HVAC mode. In the
+  operating mode `auto` it is the day or night temperature of the week timer of the heating or cooling circuit. A
+  heating circuit that heats and cools, or a control unit without week timers, keeps the selected target
+  temperature of the control unit, it is shown after the next update.
 
 ### Removed
 

@@ -61,16 +61,22 @@ from tests.test_climate_data import AWAY_DATE_RANGE_RESET_WRITE
 from tests.test_climate_data import AWAY_PRESET_WRITE
 from tests.test_climate_data import HEAT_CIRCUIT_1_ENTITY_ID
 from tests.test_climate_data import HEAT_CIRCUIT_ENTITY_ID
+from tests.test_climate_data import NIGHT
 from tests.test_climate_data import NOW
 from tests.test_climate_data import OFF_DATA_RESPONSE
 from tests.test_climate_data import PARTY_DATA_RESPONSE
 from tests.test_climate_data import REDUCED_DATA_RESPONSE
+from tests.test_climate_data import SELECTED_TARGET_TEMPERATURE
 from tests.test_climate_data import TARGET_TEMPERATURE_WITH_OFFSET
 from tests.test_climate_data import get_circuit_type_responses
+from tests.test_climate_data import get_cooling_schedule_responses
 from tests.test_climate_data import get_hvac_action_data_response
 from tests.test_climate_data import get_operating_mode_write
 
 if TYPE_CHECKING:
+    from datetime import datetime
+
+    from freezegun.api import FrozenDateTimeFactory
     from homeassistant.core import HomeAssistant
     from homeassistant.core import State
     from syrupy.assertion import SnapshotAssertion
@@ -78,6 +84,7 @@ if TYPE_CHECKING:
     from tests.conftest import FakeKebaKeEnergyAPI
 
 
+@pytest.mark.freeze_time(NOW)
 @pytest.mark.usefixtures("entity_registry_enabled_by_default", "language")
 async def test_climate(
     hass: HomeAssistant,
@@ -294,7 +301,8 @@ async def test_set_temperature_without_target_temperature(
     hass: HomeAssistant,
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
-    """Test that no offset is written if the schedule has no selected target temperature."""
+    """Test that no offset is written if the schedule has no time zone and no selected target temperature."""
+    fake_api.timezone = "Invalid/Zone"
     fake_api.unsupported_variables = {"APPL.CtrlAppl.sParam.heatCircuit[0].values.selectedSetTemp"}
     fake_api.responses = get_multiple_devices_responses(AUTO_DATA_RESPONSE)
     await fake_api.setup_integration()
@@ -307,16 +315,79 @@ async def test_set_temperature_without_target_temperature(
     assert fake_api.write_requests() == []
 
 
-async def test_target_temperature_of_schedule_is_selected_target_temperature(
+@pytest.mark.parametrize(
+    ("now", "expected_temperature"),
+    [(NOW, 22.0), (NIGHT, 21.5)],
+    ids=["day", "night"],
+)
+async def test_target_temperature_of_schedule(
+    hass: HomeAssistant,
+    fake_api: FakeKebaKeEnergyAPI,
+    freezer: FrozenDateTimeFactory,
+    now: datetime,
+    expected_temperature: float,
+) -> None:
+    """Test that the schedule uses the day temperature 20.5 or the night temperature 20.0 plus the offset 1.5."""
+    freezer.move_to(now)
+    fake_api.responses = get_multiple_devices_responses(AUTO_DATA_RESPONSE)
+    await fake_api.setup_integration()
+
+    state: State = get_state(hass, HEAT_CIRCUIT_1_ENTITY_ID)
+    assert state.attributes[ATTR_TEMPERATURE] == expected_temperature
+
+
+@pytest.mark.freeze_time(NOW)
+async def test_target_temperature_of_schedule_with_invalid_time_zone(
     hass: HomeAssistant,
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
-    """Test that the schedule uses the selected target temperature 20.0 of the control unit plus the offset 1.5."""
+    """Test that the schedule uses the selected target temperature 20.0 plus the offset 1.5 without a time zone."""
+    fake_api.timezone = "Invalid/Zone"
     fake_api.responses = get_multiple_devices_responses(AUTO_DATA_RESPONSE)
     await fake_api.setup_integration()
 
     state: State = get_state(hass, HEAT_CIRCUIT_1_ENTITY_ID)
     assert state.attributes[ATTR_TEMPERATURE] == TARGET_TEMPERATURE_WITH_OFFSET
+
+
+@pytest.mark.parametrize(
+    ("week_timer_without_day_block", "expected_temperature"),
+    [(None, 25.0), ("weekTimerCool", 24.0)],
+    ids=["day", "night"],
+)
+@pytest.mark.freeze_time(NOW)
+async def test_target_temperature_of_schedule_of_cooling_circuit(
+    hass: HomeAssistant,
+    fake_api: FakeKebaKeEnergyAPI,
+    week_timer_without_day_block: str | None,
+    expected_temperature: float,
+) -> None:
+    """Test that a heating circuit that only cools uses the cooling timer and the cooling temperatures 25.0 and 24.0.
+
+    The heating timer has day, so the cooling timer without a day block is night.
+    """
+    fake_api.week_timer_without_day_block = week_timer_without_day_block
+    fake_api.responses = get_cooling_schedule_responses()
+    await fake_api.setup_integration()
+
+    state: State = get_state(hass, HEAT_CIRCUIT_ENTITY_ID)
+    assert state.attributes[ATTR_TEMPERATURE] == expected_temperature
+
+
+@pytest.mark.freeze_time(NOW)
+async def test_target_temperature_of_schedule_of_heating_and_cooling_circuit(
+    hass: HomeAssistant,
+    fake_api: FakeKebaKeEnergyAPI,
+) -> None:
+    """Test that a heating circuit that heats and cools keeps the selected target temperature 20.0 of the control unit.
+
+    Only the control unit knows if it is the season of heating or cooling.
+    """
+    fake_api.responses = get_circuit_type_responses(HeatingCircuitType.HEATING_AND_COOLING, operating_mode="1")
+    await fake_api.setup_integration()
+
+    state: State = get_state(hass, HEAT_CIRCUIT_ENTITY_ID)
+    assert state.attributes[ATTR_TEMPERATURE] == SELECTED_TARGET_TEMPERATURE
 
 
 @pytest.mark.freeze_time(NOW)

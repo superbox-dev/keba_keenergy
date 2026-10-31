@@ -137,23 +137,27 @@ class KebaKeEnergyClimateEntity(KebaKeEnergyDebouncedEntity, ClimateEntity):
     def _target_temperature_key(self) -> str | None:
         operating_mode: HeatingCircuitOperatingMode | None = self._operating_mode
 
-        if operating_mode is HeatingCircuitOperatingMode.AUTO:
-            operating_mode = self._scheduled_operating_mode
+        if operating_mode is HeatingCircuitOperatingMode.VACATION:
+            return HEATING_CIRCUIT_TARGET_TEMPERATURE_KEYS[operating_mode]
 
-        if operating_mode is None:
+        # A heating circuit that heats and cools may be in the season of heating or cooling, only the control unit
+        # knows it.
+        if operating_mode is None or not (self._is_heating_only or self._is_cooling_only):
             return None
 
-        # The away temperature applies to every circuit that heats, the other temperatures of a circuit that heats
-        # and cools depend on the season, only the control unit knows which one is selected.
-        if operating_mode is HeatingCircuitOperatingMode.VACATION or self._is_heating_only:
-            return HEATING_CIRCUIT_TARGET_TEMPERATURE_KEYS.get(operating_mode)
+        if operating_mode is HeatingCircuitOperatingMode.AUTO:
+            operating_mode = self.coordinator.get_scheduled_operating_mode(
+                index=self.index,
+                cooling=self._is_cooling_only,
+            )
 
-        return COOLING_CIRCUIT_TARGET_TEMPERATURE_KEYS.get(operating_mode) if self._is_cooling_only else None
+        target_temperature_keys: Mapping[HeatingCircuitOperatingMode, str] = (
+            COOLING_CIRCUIT_TARGET_TEMPERATURE_KEYS
+            if self._is_cooling_only
+            else HEATING_CIRCUIT_TARGET_TEMPERATURE_KEYS
+        )
 
-    @property
-    def _scheduled_operating_mode(self) -> HeatingCircuitOperatingMode | None:
-        # TODO: Resolve the current section of the schedule to normal or reduced as soon as the API provides it.
-        return None
+        return None if operating_mode is None else target_temperature_keys.get(operating_mode)
 
     @property
     def target_temperature(self) -> float | None:

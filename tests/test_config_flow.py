@@ -222,6 +222,9 @@ async def test_reconfigure_flow_authentication(
     assert result["type"] is FlowResultType.ABORT
     assert result["reason"] == "reconfigure_successful"
 
+    # The config entry reloads in the background and reads the responses.
+    await hass.async_block_till_done()
+
 
 @pytest.mark.parametrize(
     "config_entry",
@@ -250,6 +253,9 @@ async def test_reauth_flow(
     assert result["type"] is FlowResultType.ABORT
     assert result["reason"] == "reauth_successful"
     assert config_entry.data == {CONF_HOST: HOST, CONF_SSL: True, **CREDENTIALS}
+
+    # The config entry reloads in the background and reads the responses.
+    await hass.async_block_till_done()
 
 
 @pytest.mark.parametrize(
