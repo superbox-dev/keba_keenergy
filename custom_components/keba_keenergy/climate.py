@@ -67,6 +67,14 @@ class KebaKeEnergyClimateEntity(KebaKeEnergyDebouncedEntity, ClimateEntity):
     _attr_name = None
     _platform_domain: str = CLIMATE_DOMAIN
 
+    # The HVAC mode for on, the presets and the target temperatures depend on whether the heating circuit heats
+    # and/or cools, the subclasses override them.
+    _hvac_mode_on: HVACMode
+    _preset_to_ha: Mapping[HeatingCircuitOperatingMode, str] = HEATING_CIRCUIT_PRESET_TO_HA
+    _target_temperature_keys: Mapping[HeatingCircuitOperatingMode, str] | None = None
+    _is_cooling: bool = False
+    _has_away: bool = True
+
     def __init__(
         self,
         coordinator: KebaKeEnergyDataUpdateCoordinator,
@@ -90,33 +98,9 @@ class KebaKeEnergyClimateEntity(KebaKeEnergyDebouncedEntity, ClimateEntity):
         return [HVACMode.AUTO, self._hvac_mode_on, HVACMode.OFF]
 
     @cached_property
-    def _hvac_mode_on(self) -> HVACMode:
-        # A heating circuit that supports heating and cooling uses HEAT_COOL, this is untested with a real device.
-        return (
-            HVACMode.HEAT if self._is_heating_only else HVACMode.COOL if self._is_cooling_only else HVACMode.HEAT_COOL
-        )
-
-    @cached_property
-    def _is_heating_only(self) -> bool:
-        return self.coordinator.is_heating_circuit(index=self.index) and not self.coordinator.is_cooling_circuit(
-            index=self.index,
-        )
-
-    @cached_property
-    def _is_cooling_only(self) -> bool:
-        return self.coordinator.is_cooling_circuit(index=self.index) and not self.coordinator.is_heating_circuit(
-            index=self.index,
-        )
-
-    @cached_property
     def preset_modes(self) -> list[str]:
         """Return the preset modes, a heating circuit that only cools has no away preset."""
-        preset_to_ha: Mapping[HeatingCircuitOperatingMode, str] = HEATING_CIRCUIT_PRESET_TO_HA
-
-        if self._is_cooling_only:
-            preset_to_ha = COOLING_CIRCUIT_PRESET_TO_HA
-
-        return list(preset_to_ha.values())
+        return list(self._preset_to_ha.values())
 
     @property
     def current_temperature(self) -> float | None:
@@ -142,22 +126,16 @@ class KebaKeEnergyClimateEntity(KebaKeEnergyDebouncedEntity, ClimateEntity):
 
         # A heating circuit that heats and cools may be in the season of heating or cooling, only the control unit
         # knows it.
-        if operating_mode is None or not (self._is_heating_only or self._is_cooling_only):
+        if operating_mode is None or self._target_temperature_keys is None:
             return None
 
         if operating_mode is HeatingCircuitOperatingMode.AUTO:
             operating_mode = self.coordinator.get_scheduled_operating_mode(
                 index=self.index,
-                cooling=self._is_cooling_only,
+                cooling=self._is_cooling,
             )
 
-        target_temperature_keys: Mapping[HeatingCircuitOperatingMode, str] = (
-            COOLING_CIRCUIT_TARGET_TEMPERATURE_KEYS
-            if self._is_cooling_only
-            else HEATING_CIRCUIT_TARGET_TEMPERATURE_KEYS
-        )
-
-        return None if operating_mode is None else target_temperature_keys.get(operating_mode)
+        return None if operating_mode is None else self._target_temperature_keys.get(operating_mode)
 
     @property
     def target_temperature(self) -> float | None:
@@ -219,12 +197,7 @@ class KebaKeEnergyClimateEntity(KebaKeEnergyDebouncedEntity, ClimateEntity):
         start: int | None = self.get_typed_value("away_start_date", int)
         end: int | None = self.get_typed_value("away_end_date", int)
 
-        return (
-            not self._is_cooling_only
-            and start is not None
-            and end is not None
-            and start <= dt_util.utcnow().timestamp() <= end
-        )
+        return self._has_away and start is not None and end is not None and start <= dt_util.utcnow().timestamp() <= end
 
     def _operating_mode_to_hvac_mode(self, operating_mode: HeatingCircuitOperatingMode, /) -> HVACMode:
         if operating_mode is HeatingCircuitOperatingMode.AUTO:
@@ -375,6 +348,48 @@ class KebaKeEnergyClimateEntity(KebaKeEnergyDebouncedEntity, ClimateEntity):
         )
 
 
+class KebaKeEnergyHeatingClimateEntity(KebaKeEnergyClimateEntity):
+    """KEBA KeEnergy climate entity of a heating circuit that only heats."""
+
+    _hvac_mode_on = HVACMode.HEAT
+    _target_temperature_keys = HEATING_CIRCUIT_TARGET_TEMPERATURE_KEYS
+
+
+class KebaKeEnergyCoolingClimateEntity(KebaKeEnergyClimateEntity):
+    """KEBA KeEnergy climate entity of a heating circuit that only cools, it has no away."""
+
+    _hvac_mode_on = HVACMode.COOL
+    _preset_to_ha = COOLING_CIRCUIT_PRESET_TO_HA
+    _target_temperature_keys = COOLING_CIRCUIT_TARGET_TEMPERATURE_KEYS
+    _is_cooling = True
+    _has_away = False
+
+
+class KebaKeEnergyHeatingCoolingClimateEntity(KebaKeEnergyClimateEntity):
+    """KEBA KeEnergy climate entity of a heating circuit that heats and cools."""
+
+    # This is untested with a real device.
+    _hvac_mode_on = HVACMode.HEAT_COOL
+
+
+def _climate_entity_class(
+    coordinator: KebaKeEnergyDataUpdateCoordinator,
+    /,
+    *,
+    index: int,
+) -> type[KebaKeEnergyClimateEntity]:
+    is_heating: bool = coordinator.is_heating_circuit(index=index)
+    is_cooling: bool = coordinator.is_cooling_circuit(index=index)
+
+    if is_heating and not is_cooling:
+        return KebaKeEnergyHeatingClimateEntity
+
+    if is_cooling and not is_heating:
+        return KebaKeEnergyCoolingClimateEntity
+
+    return KebaKeEnergyHeatingCoolingClimateEntity
+
+
 async def async_setup_entry(
     hass: HomeAssistant,  # noqa: ARG001
     entry: KebaKeEnergyConfigEntry,
@@ -384,7 +399,7 @@ async def async_setup_entry(
     coordinator: KebaKeEnergyDataUpdateCoordinator = entry.runtime_data
     heating_circuit_count: int = coordinator.device_count(SectionPrefix.HEATING_CIRCUIT)
     climates: list[KebaKeEnergyClimateEntity] = [
-        KebaKeEnergyClimateEntity(
+        _climate_entity_class(coordinator, index=index)(
             coordinator,
             ClimateEntityDescription(
                 key="heating_circuit",
