@@ -118,6 +118,32 @@ Before finishing a change, run `ruff format`, `lint.sh` and `pytest`, in this or
   grouped by topic, helpers directly below their first caller
   - applies to new methods, existing ones only moved when asked
 
+## Domain
+
+- Heating circuit operating modes of the Web HMI map to Home Assistant (`HEATING_CIRCUIT_PRESET_TO_HA`)
+  - off: HVAC `off`, no preset
+  - schedule (`AUTO`): HVAC `auto`, preset `home`
+  - day (`NORMAL`), night (`REDUCED`), party: HVAC `heat` (`cool` or `heat_cool` by circuit type), presets `comfort`,
+    `sleep`, `boost`
+  - `EXTERNAL`, `ROOM_CONTROL`: HVAC `off`, no preset
+- Away is a date range, not an operating mode
+  - global for all heating circuits, set by the preset `away`, the action `set_away_date_range` or the blueprint
+  - the preset writes the range (today until +365 days, time zone of the control unit) and `NORMAL` unless a manual
+    mode is active, every other HVAC mode or preset ends it (range of yesterday)
+  - shown at once while the range is active, the control unit takes it over later
+  - circuits that only cool have no away
+- Target temperature is the value of the effective operating mode, shown at once after a change
+  - day and party `target_temperature_day`, night `target_temperature_night`, away `target_temperature_away`,
+    circuits that only cool use the cooling variants
+  - schedule: day or night of the week timer now (`coordinator.get_scheduled_operating_mode()`)
+  - circuits that heat and cool: `selected_target_temperature` of the control unit, the season is unknown, so it is
+    shown after the next update
+  - the user changes only the offset (`target_temperature_offset`, debounced), a pending offset is discarded if the
+    mode changes
+- Week timers: blocks are day, outside of them night, the week starts with Sunday, read with the heating circuits,
+  the time zone once on setup
+- `_async_write_value()` sets the local value at once, new writes keep that, otherwise the UI flickers
+
 ## Quality scale
 
 - Goal: every applicable rule of the [integration quality scale](https://contributors.home-assistant.io/core/quality-scale/),
