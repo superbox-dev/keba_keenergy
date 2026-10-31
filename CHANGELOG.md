@@ -11,40 +11,36 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Added the HVAC actions `defrosting` and `preheating` to the climate entities of the heating circuits, shown while
-  a heat pump defrosts or is in the pre-run of a heating cycle. ([Issue #84][issue-84])
+- Added the HVAC actions `defrosting` and `preheating` to the heating circuits, shown while a heat pump defrosts or
+  preheats. ([Issue #84][issue-84])
 
 ### Changed
 
-- Changed the requirement to `keba_keenergy_api` 3.0, all values of an update are read with one request, the curves
-  of the heating circuits separately. ([Issue #77][issue-77])
+- Changed the requirement to `keba_keenergy_api` 3.0, an update reads all values with one request, the curves of
+  the heating circuits separately and only those in use. ([Issue #77][issue-77])
 - Changed the attributes `lower_limit` and `upper_limit` to numbers, only writable values have them.
   ([Issue #77][issue-77])
-- Changed more sensors and binary sensors to use the message ID of the control unit (e.g. the heat pump temperatures
-  and powers, the meters of the solar circuits and photovoltaics), they are unknown or not created if the control
-  unit does not use them. The sensors of optional components (e.g. room temperature and humidity, mixer, pump, fresh
-  water module) are created by their message ID instead of the options of the control unit. ([Issue #77][issue-77])
-- Changed the states of the sensors to the values of the control unit without rounding, Home Assistant rounds them
-  for the display (e.g. temperatures to one decimal). ([Issue #77][issue-77])
-- Changed the energies of the solar circuits and photovoltaics to `J` and the operating times and maximum runtimes of
-  the heat pumps and external heat sources to `s`, the units of the control unit. Home Assistant shows them in `kWh`
-  and `h` with its default display precision, the unit can be changed in the entity settings. Existing sensors keep
+- Changed more sensors and binary sensors to use the message IDs of the control unit, unused values are unknown or
+  not created. Optional components (e.g. room sensor, mixer, pump, fresh water module) are detected by their message
+  ID instead of the options of the control unit. ([Issue #77][issue-77])
+- Changed the sensor states to the unrounded values of the control unit, Home Assistant rounds them for the display.
+  ([Issue #77][issue-77])
+- Changed the unit of the energies of the solar circuits and photovoltaics to `J` and of the operating times and
+  maximum runtimes of the heat pumps and external heat sources to `s`, shown in `kWh` and `h`. Existing sensors keep
   their unit. ([Issue #77][issue-77])
 - Changed the display precision of the pump speeds, the room humidity and the fresh water module temperature to two
   decimals, of the CPU usage to one and of the RAM usage and the flash erase counter to none. ([Issue #77][issue-77])
-- Changed the options of the heating and cooling curve selects to the curves of the control unit after every update,
-  a new or renamed curve is shown without reloading the integration.
-- Changed the update of the heating circuits to read only the points of the curves in use, not of all curves.
-- Changed the name and the texts of the action `set_heating_curve_points` to `Set curve points`, it also sets the
-  points of cooling curves. ([Issue #85][issue-85])
+- Changed the options of the curve selects to follow the curves of the control unit after every update, without a
+  reload.
+- Changed the name of the action `set_heating_curve_points` to `Set curve points`, it also sets cooling curves.
+  ([Issue #85][issue-85])
 - Changed the sensor `weekly_write_count` to reset at midnight of a new week, also without an update or a write.
-- Changed the preset `away` of a heating circuit to also set the HVAC mode `heat`, a heating circuit that is off or
-  follows the schedule heats with the day operating mode after the end of away.
-- Changed the target temperature of a heating circuit to the target temperature of the operating mode (day, night,
-  party with the day temperature, away), shown right away after a change of the preset or the HVAC mode. In the
-  operating mode `auto` it is the day or night temperature of the week timer of the heating or cooling circuit. A
-  heating circuit that heats and cools, or a control unit without week timers, keeps the selected target
-  temperature of the control unit, it is shown after the next update.
+- Changed the preset `away` to switch a heating circuit that is off or follows the schedule to the day operating
+  mode, it heats after the end of away. A manual operating mode is kept.
+- Changed the target temperature of a heating circuit to the one of the operating mode (day, night, party, away, in
+  `auto` from the week timer), shown right away after a change of the preset or the HVAC mode. Circuits that heat
+  and cool, or `auto` without week timers, show the selected target temperature of the control unit after the next
+  update.
 
 ### Removed
 
@@ -53,36 +49,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- Showed the HVAC action `heating` of a heating circuit only while a heat pump heats. The heat request of the
-  heating circuit stays on during the whole heating period on newer software versions, so `heating` was also shown
-  while the heat pump was in standby. ([Issue #84][issue-84])
-- Added the attribute `points` to the sensor `cooling_curve` of the heating circuits, like the sensor
-  `heating_curve`.
-- Showed the points written with the action `set_heating_curve_points` in the sensors `heating_curve` and
-  `cooling_curve` right away, not only after the next update of the heating circuits.
-- Offered the cooling modes in the select `operating_mode` of the control unit if any heat pump supports active or
-  passive cooling, not only the first one.
-- Rejected the config entry of another integration in the actions with a translated error, instead of an unexpected
-  error.
-- Wrote the same away date range only once, also if it is set again before the next update (flash writes).
-- Stored the scan interval and the update multipliers of the options as integers, they were stored as decimal numbers
-  if the multipliers had no common divisor.
-- Showed the repair issue for frequent write operations again after a restart of Home Assistant, if the limit of the
-  week is still exceeded.
-- Ended the away date range of the heating circuits also with the HVAC modes `heat` and `off` (and `turn_off`), not
-  only with `auto` and the presets. The date range stayed active with the new operating mode.
-- Wrote the HVAC mode `heat` of a heating circuit only if it changes, a heating circuit with the preset `sleep` or
-  `boost` kept the mode `heat` but was switched to `comfort` (flash writes).
-- Counted only successful writes in the sensor `weekly_write_count`, a failed write was counted as well.
-- Raised a translated error if the control unit has an invalid time zone, instead of an unexpected error of the away
-  preset and the action `set_away_date_range`.
-- Showed the preset `away` of a heating circuit right away and read the target temperature again after a change of
-  the preset or the HVAC mode, the climate entity showed the previous preset or target temperature until the next
-  update.
-- Showed no preset for a heating circuit that is off or in an operating mode without a preset (external or room
-  control), instead of the preset `home`.
-- Discarded a pending target temperature of a heating circuit if the preset or the HVAC mode changes, it was
-  written as offset to the target temperature of the new operating mode.
+- Showed the HVAC action `heating` only while a heat pump heats, newer software versions keep the heat request on
+  during the whole heating period. ([Issue #84][issue-84])
+- Showed the preset `away` right away, not only after the next update.
+- Showed no preset for a heating circuit that is off or in external or room control mode, instead of `home`.
+- Ended the away date range also with the HVAC modes `heat` and `off`, not only with `auto` and the presets.
+- Wrote the HVAC mode `heat` only if it changes, it switched the presets `sleep` and `boost` to `comfort`.
+- Discarded a pending target temperature if the preset or the HVAC mode changes, it was written as offset to the
+  new operating mode.
+- Wrote the same away date range only once, also if it is set again before the next update.
+- Added the attribute `points` to the sensor `cooling_curve`, like `heating_curve`.
+- Showed the points written with `set_heating_curve_points` in `heating_curve` and `cooling_curve` right away.
+- Offered the cooling modes in the select `operating_mode` of the control unit if any heat pump can cool, not only
+  the first one.
+- Rejected config entries of other integrations in the actions with a translated error.
+- Raised a translated error for an invalid time zone of the control unit in the preset `away` and the action
+  `set_away_date_range`.
+- Stored the scan interval and the update multipliers of the options as integers, not as decimal numbers.
+- Counted only successful writes in the sensor `weekly_write_count`.
+- Showed the repair issue for frequent writes again after a restart if the weekly limit is still exceeded.
 
 [issue-77]: https://github.com/superbox-dev/keba_keenergy/issues/77
 [issue-84]: https://github.com/superbox-dev/keba_keenergy/issues/84
