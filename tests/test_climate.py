@@ -47,6 +47,7 @@ from tests import get_state
 from tests import set_target_temperature
 from tests.api_data import HEAT_CIRCUIT_AWAY_END_DATE
 from tests.api_data import HEAT_CIRCUIT_AWAY_START_DATE
+from tests.api_data import HEAT_CIRCUIT_TARGET_TEMPERATURE_NIGHT
 from tests.api_data import MULTIPLE_DEVICES_DATA_RESPONSE
 from tests.api_data import MULTIPLE_DEVICES_OTHER_MODES_DATA_RESPONSE
 from tests.api_data import Response
@@ -55,11 +56,13 @@ from tests.api_data import get_single_device_data_response
 from tests.api_data import get_single_device_responses
 from tests.api_data import replace_values
 from tests.api_data import update_response
+from tests.test_climate_data import AUTO_DATA_RESPONSE
 from tests.test_climate_data import AWAY_DATE_RANGE_RESET_WRITE
 from tests.test_climate_data import AWAY_PRESET_WRITE
 from tests.test_climate_data import HEAT_CIRCUIT_1_ENTITY_ID
 from tests.test_climate_data import HEAT_CIRCUIT_ENTITY_ID
 from tests.test_climate_data import NOW
+from tests.test_climate_data import OFF_DATA_RESPONSE
 from tests.test_climate_data import PARTY_DATA_RESPONSE
 from tests.test_climate_data import REDUCED_DATA_RESPONSE
 from tests.test_climate_data import TARGET_TEMPERATURE_WITH_OFFSET
@@ -267,21 +270,179 @@ async def test_set_temperature_debounced(
     ]
 
 
-async def test_set_temperature_without_selected_target_temperature(
+async def test_target_temperature_without_selected_target_temperature(
     hass: HomeAssistant,
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
-    """Test that no offset is written if the Web HMI does not provide the selected target temperature."""
+    """Test that the day temperature 20.5 of the operating mode is the base if there is no selected temperature."""
     fake_api.unsupported_variables = {"APPL.CtrlAppl.sParam.heatCircuit[0].values.selectedSetTemp"}
-    fake_api.responses = get_single_device_responses(get_single_device_data_response())
+    fake_api.responses = get_multiple_devices_responses(MULTIPLE_DEVICES_DATA_RESPONSE)
     await fake_api.setup_integration()
 
-    await set_target_temperature(hass, HEAT_CIRCUIT_ENTITY_ID, 21.0)
+    temperature: float = 21.0
+    await set_target_temperature(hass, HEAT_CIRCUIT_1_ENTITY_ID, temperature)
 
     await fire_debounced_writes(hass)
 
-    state: State = get_state(hass, HEAT_CIRCUIT_ENTITY_ID)
-    assert state.attributes[ATTR_TEMPERATURE] is None
+    assert get_state(hass, HEAT_CIRCUIT_1_ENTITY_ID).attributes[ATTR_TEMPERATURE] == temperature
+    assert fake_api.write_requests() == [
+        '[{"name": "APPL.CtrlAppl.sParam.heatCircuit[0].param.offsetRoomTemp", "value": "0.5"}]',
+    ]
+
+
+async def test_set_temperature_without_target_temperature(
+    hass: HomeAssistant,
+    fake_api: FakeKebaKeEnergyAPI,
+) -> None:
+    """Test that no offset is written if the schedule has no selected target temperature."""
+    fake_api.unsupported_variables = {"APPL.CtrlAppl.sParam.heatCircuit[0].values.selectedSetTemp"}
+    fake_api.responses = get_multiple_devices_responses(AUTO_DATA_RESPONSE)
+    await fake_api.setup_integration()
+
+    await set_target_temperature(hass, HEAT_CIRCUIT_1_ENTITY_ID, 21.0)
+
+    await fire_debounced_writes(hass)
+
+    assert get_state(hass, HEAT_CIRCUIT_1_ENTITY_ID).attributes[ATTR_TEMPERATURE] is None
+    assert fake_api.write_requests() == []
+
+
+async def test_target_temperature_of_schedule_is_selected_target_temperature(
+    hass: HomeAssistant,
+    fake_api: FakeKebaKeEnergyAPI,
+) -> None:
+    """Test that the schedule uses the selected target temperature 20.0 of the control unit plus the offset 1.5."""
+    fake_api.responses = get_multiple_devices_responses(AUTO_DATA_RESPONSE)
+    await fake_api.setup_integration()
+
+    state: State = get_state(hass, HEAT_CIRCUIT_1_ENTITY_ID)
+    assert state.attributes[ATTR_TEMPERATURE] == TARGET_TEMPERATURE_WITH_OFFSET
+
+
+@pytest.mark.freeze_time(NOW)
+async def test_set_preset_mode_shows_target_temperature_of_mode(
+    hass: HomeAssistant,
+    fake_api: FakeKebaKeEnergyAPI,
+) -> None:
+    """Test that the night temperature 19.5 plus the offset 1.5 is shown, not the selected target temperature 20.0."""
+    night_data_response: Response = replace_values(
+        REDUCED_DATA_RESPONSE,
+        *HEAT_CIRCUIT_TARGET_TEMPERATURE_NIGHT.read_all("19.5", "19.5"),
+    )
+    fake_api.responses = get_multiple_devices_responses(
+        replace_values(MULTIPLE_DEVICES_DATA_RESPONSE, *HEAT_CIRCUIT_TARGET_TEMPERATURE_NIGHT.read_all("19.5", "19.5")),
+        night_data_response,
+    )
+    await fake_api.setup_integration()
+
+    await hass.services.async_call(
+        domain=CLIMATE_DOMAIN,
+        service=SERVICE_SET_PRESET_MODE,
+        service_data={ATTR_ENTITY_ID: HEAT_CIRCUIT_1_ENTITY_ID, ATTR_PRESET_MODE: PRESET_SLEEP},
+        blocking=True,
+    )
+
+    expected: tuple[str, float] = (PRESET_SLEEP, 21.0)
+    state: State = get_state(hass, HEAT_CIRCUIT_1_ENTITY_ID)
+    assert (state.attributes[ATTR_PRESET_MODE], state.attributes[ATTR_TEMPERATURE]) == expected
+    await hass.async_block_till_done()
+    assert get_state(hass, HEAT_CIRCUIT_1_ENTITY_ID).attributes[ATTR_TEMPERATURE] == expected[1]
+
+
+@pytest.mark.freeze_time(NOW)
+async def test_set_preset_mode_discards_pending_temperature(
+    hass: HomeAssistant,
+    fake_api: FakeKebaKeEnergyAPI,
+) -> None:
+    """Test that a pending offset of the previous mode is not written after a preset change."""
+    fake_api.responses = get_multiple_devices_responses(MULTIPLE_DEVICES_DATA_RESPONSE, REDUCED_DATA_RESPONSE)
+    await fake_api.setup_integration()
+
+    await set_target_temperature(hass, HEAT_CIRCUIT_1_ENTITY_ID, 22.0)
+    await hass.services.async_call(
+        domain=CLIMATE_DOMAIN,
+        service=SERVICE_SET_PRESET_MODE,
+        service_data={ATTR_ENTITY_ID: HEAT_CIRCUIT_1_ENTITY_ID, ATTR_PRESET_MODE: PRESET_SLEEP},
+        blocking=True,
+    )
+    await fire_debounced_writes(hass)
+
+    assert fake_api.write_requests() == [get_operating_mode_write(HeatingCircuitOperatingMode.REDUCED)]
+
+
+@pytest.mark.parametrize(
+    ("response", "expected_writes"),
+    [
+        (AUTO_DATA_RESPONSE, [AWAY_PRESET_WRITE, get_operating_mode_write(HeatingCircuitOperatingMode.NORMAL)]),
+        (OFF_DATA_RESPONSE, [AWAY_PRESET_WRITE, get_operating_mode_write(HeatingCircuitOperatingMode.NORMAL)]),
+        (REDUCED_DATA_RESPONSE, [AWAY_PRESET_WRITE]),
+        (PARTY_DATA_RESPONSE, [AWAY_PRESET_WRITE]),
+    ],
+    ids=["auto", "off", "reduced", "party"],
+)
+@pytest.mark.freeze_time(NOW)
+async def test_set_preset_mode_away_heats(
+    hass: HomeAssistant,
+    fake_api: FakeKebaKeEnergyAPI,
+    response: Response,
+    expected_writes: list[str],
+) -> None:
+    """Test that away sets the HVAC mode heat, a circuit that is not in a manual operating mode gets day."""
+    fake_api.responses = get_multiple_devices_responses(response)
+    await fake_api.setup_integration()
+
+    await hass.services.async_call(
+        domain=CLIMATE_DOMAIN,
+        service=SERVICE_SET_PRESET_MODE,
+        service_data={ATTR_ENTITY_ID: HEAT_CIRCUIT_1_ENTITY_ID, ATTR_PRESET_MODE: PRESET_AWAY},
+        blocking=True,
+    )
+
+    state: State = get_state(hass, HEAT_CIRCUIT_1_ENTITY_ID)
+    assert (state.state, state.attributes[ATTR_PRESET_MODE]) == (HVACMode.HEAT, PRESET_AWAY)
+    assert fake_api.write_requests() == expected_writes
+
+
+@pytest.mark.freeze_time(NOW)
+async def test_set_preset_mode_ends_away_with_unchanged_operating_mode(
+    hass: HomeAssistant,
+    fake_api: FakeKebaKeEnergyAPI,
+) -> None:
+    """Test that the end of away only resets the date range if the operating mode below it is the new one."""
+    away_data_response: Response = replace_values(
+        MULTIPLE_DEVICES_DATA_RESPONSE,
+        *HEAT_CIRCUIT_AWAY_START_DATE.read_all("1769209200", "1769209200"),
+        *HEAT_CIRCUIT_AWAY_END_DATE.read_all("1800831599", "1800831599"),
+    )
+    fake_api.responses = get_multiple_devices_responses(away_data_response)
+    await fake_api.setup_integration()
+
+    await hass.services.async_call(
+        domain=CLIMATE_DOMAIN,
+        service=SERVICE_SET_PRESET_MODE,
+        service_data={ATTR_ENTITY_ID: HEAT_CIRCUIT_1_ENTITY_ID, ATTR_PRESET_MODE: PRESET_COMFORT},
+        blocking=True,
+    )
+
+    assert fake_api.write_requests() == [AWAY_DATE_RANGE_RESET_WRITE]
+
+
+@pytest.mark.freeze_time(NOW)
+async def test_set_preset_mode_away_while_away(
+    hass: HomeAssistant,
+    fake_api: FakeKebaKeEnergyAPI,
+) -> None:
+    """Test that the away preset is not written again while it is active."""
+    fake_api.responses = get_multiple_devices_responses(MULTIPLE_DEVICES_OTHER_MODES_DATA_RESPONSE)
+    await fake_api.setup_integration()
+
+    await hass.services.async_call(
+        domain=CLIMATE_DOMAIN,
+        service=SERVICE_SET_PRESET_MODE,
+        service_data={ATTR_ENTITY_ID: HEAT_CIRCUIT_1_ENTITY_ID, ATTR_PRESET_MODE: PRESET_AWAY},
+        blocking=True,
+    )
+
     assert fake_api.write_requests() == []
 
 
@@ -522,7 +683,7 @@ async def test_set_temperature(
     await fire_debounced_writes(hass)
 
     assert fake_api.write_requests() == [
-        '[{"name": "APPL.CtrlAppl.sParam.heatCircuit[0].param.offsetRoomTemp", "value": "-0.5"}]'
+        '[{"name": "APPL.CtrlAppl.sParam.heatCircuit[0].param.offsetRoomTemp", "value": "-1.0"}]'
     ]
 
 
@@ -536,7 +697,7 @@ async def test_operating_mode_without_preset(
     fake_api: FakeKebaKeEnergyAPI,
     operating_mode: HeatingCircuitOperatingMode,
 ) -> None:
-    """Test that a heating circuit in an operating mode without a preset has the home preset."""
+    """Test that a heating circuit in an operating mode without a preset has no preset."""
     fake_api.responses = get_single_device_responses(
         update_response(
             get_single_device_data_response(),
@@ -548,7 +709,7 @@ async def test_operating_mode_without_preset(
 
     state: State = get_state(hass, HEAT_CIRCUIT_ENTITY_ID)
     assert state.state == HVACMode.OFF
-    assert state.attributes[ATTR_PRESET_MODE] == PRESET_HOME
+    assert state.attributes[ATTR_PRESET_MODE] is None
 
 
 async def test_room_sensor_not_in_use(

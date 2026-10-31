@@ -17,7 +17,6 @@ from homeassistant.components.climate import ClimateEntity
 from homeassistant.components.climate import ClimateEntityDescription
 from homeassistant.components.climate.const import DOMAIN as CLIMATE_DOMAIN
 from homeassistant.components.climate.const import PRESET_AWAY
-from homeassistant.components.climate.const import PRESET_HOME
 from homeassistant.components.climate.const import ClimateEntityFeature
 from homeassistant.components.climate.const import HVACAction
 from homeassistant.components.climate.const import HVACMode
@@ -28,8 +27,12 @@ from keba_keenergy_api.enums import HeatingCircuitOperatingMode
 from keba_keenergy_api.enums import HeatingCircuitRequest
 
 from .const import COOLING_CIRCUIT_PRESET_TO_HA
+from .const import COOLING_CIRCUIT_TARGET_TEMPERATURE_KEYS
+from .const import HA_PRESET_TO_HEATING_CIRCUIT_MODE
 from .const import HEAT_PUMP_STATE_TO_HVAC_ACTION
 from .const import HEATING_CIRCUIT_PRESET_TO_HA
+from .const import HEATING_CIRCUIT_TARGET_TEMPERATURE_KEYS
+from .const import MANUAL_HEATING_CIRCUIT_MODES
 from .const import SectionPrefix
 from .entity import KebaKeEnergyDebouncedEntity
 
@@ -122,13 +125,35 @@ class KebaKeEnergyClimateEntity(KebaKeEnergyDebouncedEntity, ClimateEntity):
 
     @property
     def _selected_target_temperature(self) -> float | None:
-        # The control unit selects the away temperature only some time after the write, like the operating mode.
-        away_temperature: float | None = self.get_float("target_temperature_away")
+        # The control unit selects the temperature of a new operating mode only some time after the write.
+        target_temperature_key: str | None = self._target_temperature_key
+        target_temperature: float | None = (
+            None if target_temperature_key is None else self.get_float(target_temperature_key)
+        )
 
-        if self._is_away_date_range_active and away_temperature is not None:
-            return away_temperature
+        return self.get_float("selected_target_temperature") if target_temperature is None else target_temperature
 
-        return self.get_float("selected_target_temperature")
+    @property
+    def _target_temperature_key(self) -> str | None:
+        operating_mode: HeatingCircuitOperatingMode | None = self._operating_mode
+
+        if operating_mode is HeatingCircuitOperatingMode.AUTO:
+            operating_mode = self._scheduled_operating_mode
+
+        if operating_mode is None:
+            return None
+
+        # The away temperature applies to every circuit that heats, the other temperatures of a circuit that heats
+        # and cools depend on the season, only the control unit knows which one is selected.
+        if operating_mode is HeatingCircuitOperatingMode.VACATION or self._is_heating_only:
+            return HEATING_CIRCUIT_TARGET_TEMPERATURE_KEYS.get(operating_mode)
+
+        return COOLING_CIRCUIT_TARGET_TEMPERATURE_KEYS.get(operating_mode) if self._is_cooling_only else None
+
+    @property
+    def _scheduled_operating_mode(self) -> HeatingCircuitOperatingMode | None:
+        # TODO: Resolve the current section of the schedule to normal or reduced as soon as the API provides it.
+        return None
 
     @property
     def target_temperature(self) -> float | None:
@@ -241,12 +266,10 @@ class KebaKeEnergyClimateEntity(KebaKeEnergyDebouncedEntity, ClimateEntity):
         )
 
     @property
-    def preset_mode(self) -> str:
-        """Return the preset mode of the operating mode."""
+    def preset_mode(self) -> str | None:
+        """Return the preset mode of the operating mode, None if the operating mode has no preset (e.g. off)."""
         operating_mode: HeatingCircuitOperatingMode | None = self._operating_mode
-
-        # Off and the modes without a preset (e.g. external or room control) return the home preset.
-        return PRESET_HOME if operating_mode is None else HEATING_CIRCUIT_PRESET_TO_HA.get(operating_mode, PRESET_HOME)
+        return None if operating_mode is None else HEATING_CIRCUIT_PRESET_TO_HA.get(operating_mode)
 
     async def async_turn_off(self) -> None:
         """Turn off the heating circuit."""
@@ -270,24 +293,54 @@ class KebaKeEnergyClimateEntity(KebaKeEnergyDebouncedEntity, ClimateEntity):
             else HeatingCircuitOperatingMode.NORMAL
         )
 
+        await self._async_set_operating_mode(operating_mode)
+
+    async def async_set_preset_mode(self, preset_mode: str) -> None:
+        """Set the preset mode of the heating circuit, the away preset sets an away date range of one year."""
+        if preset_mode == PRESET_AWAY:
+            await self._async_set_away()
+        elif preset_mode == self.preset_mode:
+            await self._async_refresh_target_temperature()
+        else:
+            await self._async_set_operating_mode(HA_PRESET_TO_HEATING_CIRCUIT_MODE[preset_mode])
+
+    async def _async_set_operating_mode(self, operating_mode: HeatingCircuitOperatingMode, /) -> None:
+        # The temperature offset belongs to the temperature of the previous mode.
+        self._discard_debounced_write()
         # Otherwise the away date range would stay active with the new operating mode.
-        await self._async_set_away_date_range(PRESET_HOME)
-        # The operating mode always changes here, a new HVAC mode or the end of away has another operating mode.
-        await self._async_write_value(
-            operating_mode,
-            key="operating_mode",
-        )
-        await self.coordinator.async_request_refresh()
+        await self._async_set_away_date_range(away=False)
+
+        # A new operating mode, or the end of away that already has the operating mode below it, is written only once.
+        if self.get_typed_value("operating_mode", HeatingCircuitOperatingMode) is not operating_mode:
+            await self._async_write_value(
+                operating_mode,
+                key="operating_mode",
+            )
+
+        await self._async_refresh_target_temperature()
+
+    async def _async_set_away(self) -> None:
+        if self.preset_mode == PRESET_AWAY:
+            return
+
+        self._discard_debounced_write()
+        # The control unit applies the away date range later, until then it is shown from the written date range.
+        await self._async_set_away_date_range(away=True)
+
+        # Away keeps a manual operating mode, otherwise the circuit heats (HVAC mode heat) after the end of away.
+        if self.get_typed_value("operating_mode", HeatingCircuitOperatingMode) not in MANUAL_HEATING_CIRCUIT_MODES:
+            await self._async_write_value(
+                HeatingCircuitOperatingMode.NORMAL,
+                key="operating_mode",
+            )
 
     async def _async_refresh_target_temperature(self) -> None:
-        # The target temperature of the new operating mode is only known to the control unit.
+        # The target temperature of a schedule is only known to the control unit.
         await self.coordinator.async_request_refresh()
 
-    async def _async_set_away_date_range(self, preset_mode: str, /) -> None:
-        is_away: bool = preset_mode == PRESET_AWAY
-
+    async def _async_set_away_date_range(self, *, away: bool) -> None:
         # The time zone is only requested if the away date range changes.
-        if not is_away and self.preset_mode != PRESET_AWAY:
+        if not away and self.preset_mode != PRESET_AWAY:
             return
 
         tz: ZoneInfo = await self.coordinator.async_get_timezone()
@@ -295,7 +348,7 @@ class KebaKeEnergyClimateEntity(KebaKeEnergyDebouncedEntity, ClimateEntity):
         start_date_tz: datetime = datetime.combine(today, time.min, tzinfo=tz)
         end_date_tz: datetime = datetime.combine(today, time.max, tzinfo=tz)
 
-        if is_away:
+        if away:
             await self.coordinator.async_set_away_date_range(
                 start_timestamp=start_date_tz.timestamp(),
                 end_timestamp=(end_date_tz + timedelta(days=365)).timestamp(),
@@ -305,21 +358,6 @@ class KebaKeEnergyClimateEntity(KebaKeEnergyDebouncedEntity, ClimateEntity):
                 start_timestamp=(start_date_tz - timedelta(days=1)).timestamp(),
                 end_timestamp=(end_date_tz - timedelta(days=1)).timestamp(),
             )
-
-    async def async_set_preset_mode(self, preset_mode: str) -> None:
-        """Set the preset mode of the heating circuit, the away preset sets an away date range of one year."""
-        await self._async_set_away_date_range(preset_mode)
-
-        for operating_mode, preset in HEATING_CIRCUIT_PRESET_TO_HA.items():
-            if preset == preset_mode and preset_mode not in (self.preset_mode, PRESET_AWAY):
-                await self._async_write_value(
-                    operating_mode,
-                    key="operating_mode",
-                )
-
-        # The control unit applies the away date range later, an immediate read would still return the old mode.
-        if preset_mode != PRESET_AWAY:
-            await self._async_refresh_target_temperature()
 
     async def async_set_temperature(self, **kwargs: object) -> None:
         """Set the target temperature, written debounced as offset to the target temperature of the mode."""

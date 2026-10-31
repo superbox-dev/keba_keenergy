@@ -41,6 +41,15 @@ PARTY_DATA_RESPONSE: Final[Response] = replace_values(
     MULTIPLE_DEVICES_DATA_RESPONSE,
     HEAT_CIRCUIT_OPERATION_MODE.read(str(HeatingCircuitOperatingMode.PARTY.value)),
 )
+# The first heating circuit follows the schedule or is off.
+AUTO_DATA_RESPONSE: Final[Response] = replace_values(
+    MULTIPLE_DEVICES_DATA_RESPONSE,
+    HEAT_CIRCUIT_OPERATION_MODE.read(str(HeatingCircuitOperatingMode.AUTO.value)),
+)
+OFF_DATA_RESPONSE: Final[Response] = replace_values(
+    MULTIPLE_DEVICES_DATA_RESPONSE,
+    HEAT_CIRCUIT_OPERATION_MODE.read(str(HeatingCircuitOperatingMode.OFF.value)),
+)
 
 
 def get_hvac_action_data_response(

@@ -38,6 +38,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Changed the name and the texts of the action `set_heating_curve_points` to `Set curve points`, it also sets the
   points of cooling curves. ([Issue #85][issue-85])
 - Changed the sensor `weekly_write_count` to reset at midnight of a new week, also without an update or a write.
+- Changed the preset `away` of a heating circuit to also set the HVAC mode `heat`, a heating circuit that is off or
+  follows the schedule heats with the day operating mode after the end of away.
+- Changed the target temperature of a heating circuit to the target temperature of the operating mode (day, night,
+  party with the day temperature, away), shown right away after a change of the preset or the HVAC mode. A heating
+  circuit that heats and cools and the schedule keep the selected target temperature of the control unit.
 
 ### Removed
 
@@ -72,6 +77,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Showed the preset `away` of a heating circuit right away and read the target temperature again after a change of
   the preset or the HVAC mode, the climate entity showed the previous preset or target temperature until the next
   update.
+- Showed no preset for a heating circuit that is off or in an operating mode without a preset (external or room
+  control), instead of the preset `home`.
+- Discarded a pending target temperature of a heating circuit if the preset or the HVAC mode changes, it was
+  written as offset to the target temperature of the new operating mode.
 
 [issue-77]: https://github.com/superbox-dev/keba_keenergy/issues/77
 [issue-84]: https://github.com/superbox-dev/keba_keenergy/issues/84

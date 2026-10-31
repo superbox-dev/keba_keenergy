@@ -122,6 +122,32 @@ COOLING_CIRCUIT_PRESET_TO_HA: Final[Mapping[HeatingCircuitOperatingMode, str]] =
     HeatingCircuitOperatingMode.PARTY: PRESET_BOOST,
 }
 
+HA_PRESET_TO_HEATING_CIRCUIT_MODE: Final[Mapping[str, HeatingCircuitOperatingMode]] = {
+    preset: operating_mode for operating_mode, preset in HEATING_CIRCUIT_PRESET_TO_HA.items()
+}
+
+# Operating modes with a fixed temperature, party heats with the day temperature.
+MANUAL_HEATING_CIRCUIT_MODES: Final[frozenset[HeatingCircuitOperatingMode]] = frozenset(
+    {
+        HeatingCircuitOperatingMode.NORMAL,
+        HeatingCircuitOperatingMode.REDUCED,
+        HeatingCircuitOperatingMode.PARTY,
+    },
+)
+
+HEATING_CIRCUIT_TARGET_TEMPERATURE_KEYS: Final[Mapping[HeatingCircuitOperatingMode, str]] = {
+    HeatingCircuitOperatingMode.NORMAL: "target_temperature_day",
+    HeatingCircuitOperatingMode.PARTY: "target_temperature_day",
+    HeatingCircuitOperatingMode.REDUCED: "target_temperature_night",
+    HeatingCircuitOperatingMode.VACATION: "target_temperature_away",
+}
+
+COOLING_CIRCUIT_TARGET_TEMPERATURE_KEYS: Final[Mapping[HeatingCircuitOperatingMode, str]] = {
+    HeatingCircuitOperatingMode.NORMAL: "target_cooling_temperature_day",
+    HeatingCircuitOperatingMode.PARTY: "target_cooling_temperature_day",
+    HeatingCircuitOperatingMode.REDUCED: "target_cooling_temperature_night",
+}
+
 # The order is the priority with several heat pumps, e.g. one heat pump heats while another one defrosts.
 # All other heat pump states are idle.
 HEAT_PUMP_STATE_TO_HVAC_ACTION: Final[Mapping[HeatPumpState, HVACAction]] = {

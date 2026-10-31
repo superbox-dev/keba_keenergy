@@ -279,11 +279,17 @@ class KebaKeEnergyDebouncedEntity(KebaKeEnergyBaseEntity):
 
     async def async_will_remove_from_hass(self) -> None:
         """Cancel a pending debounced write when the entity is removed."""
+        self._discard_debounced_write()
+
+        await super().async_will_remove_from_hass()
+
+    def _discard_debounced_write(self) -> None:
+        """Discard a pending debounced write, e.g. if the value it belongs to changed."""
         if self._cancel_debounced_write:
             self._cancel_debounced_write()
             self._cancel_debounced_write = None
 
-        await super().async_will_remove_from_hass()
+        self._pending_value = None
 
     def _schedule_debounced_write(self, value: float | None, /) -> None:
         """Write the value after `FLASH_WRITE_DELAY`, a new value restarts the delay.

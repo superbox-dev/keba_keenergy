@@ -137,7 +137,7 @@
               "away": "Away",
               "boost": "Party",
               "comfort": "Day",
-              "eco": "Auto",
+              "home": "Schedule",
               "sleep": "Night"
             }
           }
