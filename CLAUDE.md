@@ -171,6 +171,7 @@ Before finishing a change, run `ruff format`, `lint.sh` and `pytest`, in this or
 
 - Every change users notice gets an entry under `## [Unreleased]` in `CHANGELOG.md` (not refactorings, tests, CI,
   `CLAUDE.md` or skills), use the `changelog` skill
+- Tickets: create and update them with the `issue` skill
 - Version: only change it when asked, use the `release` skill
 - `keba_keenergy_api` requirement is in `pyproject.toml` and `manifest.json`, run `uv lock` after changing it
 - Work on `develop`

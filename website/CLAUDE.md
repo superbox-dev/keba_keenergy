@@ -1,5 +1,6 @@
 # Website
 
+- Texts: short sentences, few adjectives and adverbs, no filler and no digressions
 - Never edit `website/docs/`, `scripts/generate-docs.py` generates it from `website/content/` and the markers in
   `README.md`, `CONTRIBUTING.md` and `CHANGELOG.md`
 - Pages in `website/content/`: `sidebar_position` but no `title` in the front matter, the title comes from the `#`
