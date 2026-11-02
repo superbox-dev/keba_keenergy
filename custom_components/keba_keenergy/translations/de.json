@@ -86,44 +86,59 @@
   },
   "entity": {
     "binary_sensor": {
-      "circulation_pump_state": {
-        "name": "Zirkulationspumpe"
-      },
-      "compressor_failure": {
-        "name": "Kompressor"
-      },
-      "consuming_excess_energy": {
-        "name": "Nutzt PV-Überschuss"
-      },
-      "cool_request": {
+      "buffer_tank_cool_request": {
         "name": "Kühlanforderung"
       },
-      "excess_energy": {
-        "name": "PV-Überschuss"
-      },
-      "heat_request": {
+      "buffer_tank_heat_request": {
         "name": "Heizanforderung{counter}"
       },
-      "hot_water_flow": {
-        "name": "Warmwasser läuft"
+      "dhw_tank_circulation_pump_state": {
+        "name": "Zirkulationspumpe"
       },
-      "pump_state": {
-        "name": "Pumpe"
+      "dhw_tank_heat_request": {
+        "name": "Heizanforderung{counter}"
       },
-      "source_actuator_failure": {
+      "dhw_tank_hot_water_flow": {
+        "name": "Frischwasser-Durchfluss"
+      },
+      "external_heat_source_consuming_excess_energy": {
+        "name": "PV-Überschuss"
+      },
+      "external_heat_source_heat_request": {
+        "name": "Heizanforderung{counter}"
+      },
+      "heat_pump_compressor_failure": {
+        "name": "Kompressor"
+      },
+      "heat_pump_consuming_excess_energy": {
+        "name": "PV-Überschuss"
+      },
+      "heat_pump_request": {
+        "name": "Anforderung{counter}"
+      },
+      "heat_pump_source_actuator_failure": {
         "name": "Quellenaktor"
       },
-      "source_failure": {
+      "heat_pump_source_failure": {
         "name": "Quelle"
       },
-      "source_pressure_failure": {
+      "heat_pump_source_pressure_failure": {
         "name": "Quellendruck"
       },
-      "three_phase_failure": {
+      "heat_pump_three_phase_failure": {
         "name": "3-Phasen"
       },
-      "vfd_failure": {
+      "heat_pump_vfd_failure": {
         "name": "Frequenzumrichter"
+      },
+      "heating_circuit_pump_state": {
+        "name": "Pumpe"
+      },
+      "photovoltaics_excess_energy": {
+        "name": "PV-Überschuss"
+      },
+      "solar_circuit_heat_request": {
+        "name": "Heizanforderung{counter}"
       }
     },
     "climate": {
@@ -145,94 +160,103 @@
       }
     },
     "number": {
-      "compressor_night_speed": {
-        "name": "Kompressor-Leistungsbegrenzung (Nacht)"
-      },
-      "cooling_curve_offset": {
-        "name": "Kühlkurven-Offset"
-      },
-      "cooling_curve_slope": {
-        "name": "Kühlkurven-Steigung"
-      },
-      "cooling_limit_day": {
-        "name": "Kühlgrenze (Tag)"
-      },
-      "cooling_limit_night": {
-        "name": "Kühlgrenze (Nacht)"
-      },
-      "excess_energy_cooling_limit_day": {
-        "name": "Kühlgrenze (PV-Überschuss, Tag)"
-      },
-      "excess_energy_cooling_limit_night": {
-        "name": "Kühlgrenze (PV-Überschuss, Nacht)"
-      },
-      "excess_energy_heating_limit_day": {
-        "name": "Heizgrenze (PV-Überschuss, Tag)"
-      },
-      "excess_energy_heating_limit_night": {
-        "name": "Heizgrenze (PV-Überschuss, Nacht)"
-      },
-      "excess_energy_target_room_cooling_temperature": {
-        "name": "Soll-Raumtemperatur Kühlen (PV-Überschuss)"
-      },
-      "excess_energy_target_room_cooling_temperature_hysteresis": {
-        "name": "Soll-Raumtemperatur-Hysterese Kühlen (PV-Überschuss)"
-      },
-      "excess_energy_target_room_temperature": {
-        "name": "Soll-Raumtemperatur (PV-Überschuss)"
-      },
-      "excess_energy_target_room_temperature_hysteresis": {
-        "name": "Soll-Raumtemperatur-Hysterese (PV-Überschuss)"
-      },
-      "excess_energy_target_temperature": {
+      "buffer_tank_excess_energy_target_temperature": {
         "name": "Soll-Temperatur (PV-Überschuss)"
       },
-      "excess_energy_target_temperature_hysteresis": {
-        "name": "Soll-Temperatur-Hysterese (PV-Überschuss)"
+      "buffer_tank_excess_energy_target_temperature_hysteresis": {
+        "name": "Hysterese Soll-Temperatur (PV-Überschuss)"
       },
-      "heating_curve_offset": {
-        "name": "Heizkurven-Offset"
+      "buffer_tank_outdoor_temperature_excess_energy_limit": {
+        "name": "Grenze Außentemperatur (PV-Überschuss)"
       },
-      "heating_curve_slope": {
-        "name": "Heizkurven-Steigung"
-      },
-      "heating_limit_day": {
-        "name": "Heizgrenze (Tag)"
-      },
-      "heating_limit_night": {
-        "name": "Heizgrenze (Nacht)"
-      },
-      "min_runtime_excess_energy": {
-        "name": "Mindestlaufzeit (PV-Überschuss)"
-      },
-      "outdoor_temperature_excess_energy_limit": {
-        "name": "Außentemperatur-Grenze (PV-Überschuss)"
-      },
-      "standby_temperature": {
+      "buffer_tank_standby_temperature": {
         "name": "Stütztemperatur"
       },
-      "target_room_cooling_temperature_day": {
-        "name": "Soll-Raumtemperatur Kühlen (Tag)"
+      "dhw_tank_excess_energy_target_temperature": {
+        "name": "Soll-Temperatur (PV-Überschuss)"
       },
-      "target_room_cooling_temperature_night": {
-        "name": "Soll-Raumtemperatur Kühlen (Nacht)"
+      "dhw_tank_excess_energy_target_temperature_hysteresis": {
+        "name": "Hysterese Soll-Temperatur (PV-Überschuss)"
       },
-      "target_room_temperature": {
-        "name": "Soll-Raumtemperatur"
+      "dhw_tank_standby_temperature": {
+        "name": "Stütztemperatur"
       },
-      "target_room_temperature_away": {
+      "dhw_tank_target_temperature": {
+        "name": "Soll-Temperatur{counter}"
+      },
+      "external_heat_source_min_runtime_excess_energy": {
+        "name": "Mindestlaufzeit (PV-Überschuss)"
+      },
+      "heat_pump_compressor_night_speed": {
+        "name": "Kompressor-Leistungsbegrenzung (Nacht)"
+      },
+      "heating_circuit_cooling_curve_offset": {
+        "name": "Kühlkurven-Offset"
+      },
+      "heating_circuit_cooling_curve_slope": {
+        "name": "Kühlkurven-Steigung"
+      },
+      "heating_circuit_cooling_limit_day": {
+        "name": "Kühlgrenze (Normal)"
+      },
+      "heating_circuit_cooling_limit_night": {
+        "name": "Kühlgrenze (Abgesenkt)"
+      },
+      "heating_circuit_excess_energy_cooling_limit_day": {
+        "name": "Kühlgrenze (PV-Überschuss, Normal)"
+      },
+      "heating_circuit_excess_energy_cooling_limit_night": {
+        "name": "Kühlgrenze (PV-Überschuss, Abgesenkt)"
+      },
+      "heating_circuit_excess_energy_heating_limit_day": {
+        "name": "Heizgrenze (PV-Überschuss, Normal)"
+      },
+      "heating_circuit_excess_energy_heating_limit_night": {
+        "name": "Heizgrenze (PV-Überschuss, Abgesenkt)"
+      },
+      "heating_circuit_excess_energy_target_room_cooling_temperature": {
+        "name": "Soll-Raumtemperatur Kühlen (PV-Überschuss)"
+      },
+      "heating_circuit_excess_energy_target_room_cooling_temperature_hysteresis": {
+        "name": "Hysterese Soll-Raumtemperatur Kühlen (PV-Überschuss)"
+      },
+      "heating_circuit_excess_energy_target_room_temperature": {
+        "name": "Soll-Raumtemperatur (PV-Überschuss)"
+      },
+      "heating_circuit_excess_energy_target_room_temperature_hysteresis": {
+        "name": "Hysterese Soll-Raumtemperatur (PV-Überschuss)"
+      },
+      "heating_circuit_heating_curve_offset": {
+        "name": "Heizkurven-Offset"
+      },
+      "heating_circuit_heating_curve_slope": {
+        "name": "Heizkurven-Steigung"
+      },
+      "heating_circuit_heating_limit_day": {
+        "name": "Heizgrenze (Normal)"
+      },
+      "heating_circuit_heating_limit_night": {
+        "name": "Heizgrenze (Abgesenkt)"
+      },
+      "heating_circuit_target_room_cooling_temperature_day": {
+        "name": "Soll-Raumtemperatur Kühlen (Normal)"
+      },
+      "heating_circuit_target_room_cooling_temperature_night": {
+        "name": "Soll-Raumtemperatur Kühlen (Abgesenkt)"
+      },
+      "heating_circuit_target_room_temperature_away": {
         "name": "Soll-Raumtemperatur (Urlaub)"
       },
-      "target_room_temperature_day": {
-        "name": "Soll-Raumtemperatur (Tag)"
+      "heating_circuit_target_room_temperature_day": {
+        "name": "Soll-Raumtemperatur (Normal)"
       },
-      "target_room_temperature_night": {
-        "name": "Soll-Raumtemperatur (Nacht)"
+      "heating_circuit_target_room_temperature_night": {
+        "name": "Soll-Raumtemperatur (Abgesenkt)"
       },
-      "target_room_temperature_offset": {
-        "name": "Soll-Raumtemperatur (Offset)"
+      "heating_circuit_target_room_temperature_offset": {
+        "name": "Raumtemperatur-Offset"
       },
-      "target_temperature": {
+      "solar_circuit_target_temperature": {
         "name": "Soll-Temperatur{counter}"
       }
     },
@@ -244,9 +268,6 @@
           "off": "Aus",
           "on": "Ein"
         }
-      },
-      "cooling_curve": {
-        "name": "Kühlkurve"
       },
       "dhw_tank_operating_mode": {
         "name": "Betriebsart",
@@ -265,6 +286,12 @@
           "on": "Ein"
         }
       },
+      "heating_circuit_cooling_curve": {
+        "name": "Kühlkurve"
+      },
+      "heating_circuit_heating_curve": {
+        "name": "Heizkurve"
+      },
       "heating_circuit_operating_mode": {
         "name": "Betriebsart",
         "state": {
@@ -275,9 +302,6 @@
           "off": "Aus",
           "party": "Party"
         }
-      },
-      "heating_curve": {
-        "name": "Heizkurve"
       },
       "solar_circuit_operating_mode": {
         "name": "Betriebsart",
@@ -299,11 +323,22 @@
       }
     },
     "sensor": {
-      "activation_counter": {
-        "name": "Einschaltvorgänge"
+      "buffer_tank_current_bottom_temperature": {
+        "name": "Temperatur unten"
       },
-      "actual_power": {
-        "name": "Leistung"
+      "buffer_tank_current_top_temperature": {
+        "name": "Temperatur oben"
+      },
+      "buffer_tank_excess_energy_mode": {
+        "name": "PV-Überschuss-Status",
+        "state": {
+          "cooling": "Kühlen",
+          "heating": "Heizen",
+          "off": "Aus"
+        }
+      },
+      "buffer_tank_excess_energy_target_temperature": {
+        "name": "Soll-Temperatur (PV-Überschuss)"
       },
       "buffer_tank_operating_mode": {
         "name": "Betriebsart",
@@ -313,89 +348,31 @@
           "on": "Ein"
         }
       },
-      "circulation_pump_speed": {
-        "name": "Umwälzpumpendrehzahl"
+      "buffer_tank_standby_temperature": {
+        "name": "Stütztemperatur"
       },
-      "circulation_return_temperature": {
-        "name": "Zirkulations-Rücklauftemperatur"
+      "buffer_tank_target_temperature": {
+        "name": "Soll-Temperatur{counter}"
       },
-      "compressor": {
-        "name": "Kompressordrehzahl"
+      "dhw_tank_circulation_return_temperature": {
+        "name": "Rücklauftemperatur Zirkulation"
       },
-      "compressor_input_temperature": {
-        "name": "Kompressor Eintrittstemperatur"
+      "dhw_tank_current_temperature": {
+        "name": "Temperatur oben"
       },
-      "compressor_output_temperature": {
-        "name": "Kompressor Austrittstemperatur"
-      },
-      "compressor_power": {
-        "name": "Elektrische Leistung"
-      },
-      "condenser_temperature": {
-        "name": "Kondensationstemperatur"
-      },
-      "consumer_temperature": {
-        "name": "Verbrauchertemperatur{counter}"
-      },
-      "control_cpu_usage": {
-        "name": "CPU-Auslastung Steuerung"
-      },
-      "cool_request": {
-        "name": "Kühlanforderung",
+      "dhw_tank_excess_energy_mode": {
+        "name": "PV-Überschuss-Status",
         "state": {
-          "flow_off": "Aus (Rücklauftemperatur)",
-          "inflow_off": "Aus (Vorlauftemperatur)",
-          "off": "Aus",
-          "on": "Ein",
-          "outdoor_off": "Aus (Außentemperatur)",
-          "room_off": "Aus (Raumtemperatur)",
-          "temporary_off": "Aus (Vorrang)"
+          "cooling": "Kühlen",
+          "heating": "Heizen",
+          "off": "Aus"
         }
       },
-      "cooling_curve": {
-        "name": "Kühlkurve"
+      "dhw_tank_excess_energy_target_temperature": {
+        "name": "Soll-Temperatur (PV-Überschuss)"
       },
-      "cooling_energy": {
-        "name": "Kältemenge"
-      },
-      "cooling_energy_consumption": {
-        "name": "Stromverbrauch Kühlen"
-      },
-      "cooling_excess_energy_consumption": {
-        "name": "Stromverbrauch Kühlen (PV-Überschuss)"
-      },
-      "cooling_limit_day": {
-        "name": "Kühlgrenze (Tag)"
-      },
-      "cooling_limit_night": {
-        "name": "Kühlgrenze (Nacht)"
-      },
-      "cooling_spf": {
-        "name": "JAZ Kühlen"
-      },
-      "cop": {
-        "name": "Leistungszahl"
-      },
-      "cpu_usage": {
-        "name": "CPU-Auslastung"
-      },
-      "current_bottom_temperature": {
-        "name": "Ist-Temperatur (unten)"
-      },
-      "current_overheating": {
-        "name": "Ist-Überhitzung"
-      },
-      "current_temperature": {
-        "name": "Ist-Temperatur{counter}"
-      },
-      "current_top_temperature": {
-        "name": "Ist-Temperatur (oben)"
-      },
-      "daily_energy": {
-        "name": "Tagesenergie"
-      },
-      "dew_point": {
-        "name": "Taupunkt"
+      "dhw_tank_fresh_water_module_temperature": {
+        "name": "Frischwassertemperatur"
       },
       "dhw_tank_operating_mode": {
         "name": "Betriebsart",
@@ -406,52 +383,26 @@
           "on": "Ein"
         }
       },
-      "excess_energy_activation_counter": {
+      "dhw_tank_standby_temperature": {
+        "name": "Stütztemperatur"
+      },
+      "dhw_tank_target_temperature": {
+        "name": "Soll-Temperatur{counter}"
+      },
+      "external_heat_source_activation_counter": {
+        "name": "Einschaltvorgänge"
+      },
+      "external_heat_source_excess_energy_activation_counter": {
         "name": "Einschaltvorgänge (PV-Überschuss)"
       },
-      "excess_energy_consumption": {
-        "name": "Stromverbrauch (PV-Überschuss)"
-      },
-      "excess_energy_cooling_limit_day": {
-        "name": "Kühlgrenze (PV-Überschuss, Tag)"
-      },
-      "excess_energy_cooling_limit_night": {
-        "name": "Kühlgrenze (PV-Überschuss, Nacht)"
-      },
-      "excess_energy_heating_limit_day": {
-        "name": "Heizgrenze (PV-Überschuss, Tag)"
-      },
-      "excess_energy_heating_limit_night": {
-        "name": "Heizgrenze (PV-Überschuss, Nacht)"
-      },
-      "excess_energy_max_runtime": {
+      "external_heat_source_excess_energy_max_runtime": {
         "name": "Maximale Laufzeit (PV-Überschuss)"
       },
-      "excess_energy_mode": {
-        "name": "PV-Überschuss-Status",
-        "state": {
-          "cooling": "Kühlen",
-          "heating": "Heizen",
-          "off": "Aus"
-        }
-      },
-      "excess_energy_operating_time": {
+      "external_heat_source_excess_energy_operating_time": {
         "name": "Betriebsstunden (PV-Überschuss)"
       },
-      "excess_energy_target_room_cooling_temperature": {
-        "name": "Soll-Raumtemperatur Kühlen (PV-Überschuss)"
-      },
-      "excess_energy_target_room_temperature": {
-        "name": "Soll-Raumtemperatur (PV-Überschuss)"
-      },
-      "excess_energy_target_temperature": {
-        "name": "Soll-Temperatur (PV-Überschuss)"
-      },
-      "excess_power": {
-        "name": "Überschussleistung"
-      },
-      "expansion_valve_position": {
-        "name": "Expansionsventilposition"
+      "external_heat_source_max_runtime": {
+        "name": "Maximale Laufzeit"
       },
       "external_heat_source_operating_mode": {
         "name": "Betriebsart",
@@ -461,172 +412,124 @@
           "on": "Ein"
         }
       },
-      "flash_erase_counter": {
-        "name": "Flash-Löschzähler"
-      },
-      "flow_temperature": {
-        "name": "Vorlauftemperatur"
-      },
-      "flow_temperature_setpoint": {
-        "name": "Soll-Vorlauftemperatur"
-      },
-      "free_ram": {
-        "name": "Freier RAM"
-      },
-      "fresh_water_module_temperature": {
-        "name": "Frischwassermodul-Temperatur"
-      },
-      "heat_request": {
-        "name": "Heizanforderung",
-        "state": {
-          "flow_off": "Aus (Rücklauftemperatur)",
-          "inflow_off": "Aus (Vorlauftemperatur)",
-          "off": "Aus",
-          "on": "Ein",
-          "outdoor_off": "Aus (Außentemperatur)",
-          "room_off": "Aus (Raumtemperatur)",
-          "temporary_off": "Aus (Vorrang)"
-        }
-      },
-      "heating_circuit_operating_mode": {
-        "name": "Betriebsart",
-        "state": {
-          "auto": "Auto",
-          "day": "Tag",
-          "external": "Extern",
-          "holiday": "Urlaub",
-          "night": "Nacht",
-          "off": "Aus",
-          "party": "Party",
-          "room_control": "Raumregelung"
-        }
-      },
-      "heating_curve": {
-        "name": "Heizkurve"
-      },
-      "heating_energy": {
-        "name": "Wärmemenge"
-      },
-      "heating_energy_consumption": {
-        "name": "Stromverbrauch Heizen"
-      },
-      "heating_excess_energy_consumption": {
-        "name": "Stromverbrauch Heizen (PV-Überschuss)"
-      },
-      "heating_limit_day": {
-        "name": "Heizgrenze (Tag)"
-      },
-      "heating_limit_night": {
-        "name": "Heizgrenze (Nacht)"
-      },
-      "heating_power": {
-        "name": "Leistung Heizen"
-      },
-      "heating_spf": {
-        "name": "JAZ Heizen"
-      },
-      "high_pressure": {
-        "name": "Hochdruck"
-      },
-      "hot_water_energy": {
-        "name": "Warmwasserwärmemenge"
-      },
-      "hot_water_energy_consumption": {
-        "name": "Stromverbrauch Warmwasser"
-      },
-      "hot_water_excess_energy_consumption": {
-        "name": "Stromverbrauch Warmwasser (PV-Überschuss)"
-      },
-      "hot_water_power": {
-        "name": "Leistung Warmwasser"
-      },
-      "hot_water_spf": {
-        "name": "JAZ Warmwasser"
-      },
-      "low_pressure": {
-        "name": "Niederdruck"
-      },
-      "max_runtime": {
-        "name": "Maximale Laufzeit"
-      },
-      "mixer_flow_temperature": {
-        "name": "Vorlauftemperatur (Mischer)"
-      },
-      "mixer_position": {
-        "name": "Mischer",
-        "state": {
-          "closed": "Geschlossen",
-          "off": "Aus",
-          "open": "Offen"
-        }
-      },
-      "mixer_return_flow_temperature": {
-        "name": "Rücklauftemperatur (Mischer)"
-      },
-      "mixer_target_temperature": {
-        "name": "Soll-Temperatur (Mischer)"
-      },
-      "operating_time": {
+      "external_heat_source_operating_time": {
         "name": "Betriebsstunden"
       },
-      "outdoor_temperature": {
-        "name": "Außentemperatur"
+      "external_heat_source_target_temperature": {
+        "name": "Soll-Temperatur{counter}"
       },
-      "passive_cooling_valve_position": {
-        "name": "Umschaltventilposition",
-        "state": {
-          "closed": "Position 2",
-          "neutral": "Neutral",
-          "open": "Position 1"
-        }
+      "heat_pump_activation_counter": {
+        "name": "Einschaltvorgänge"
       },
-      "pump_speed": {
-        "name": "Pumpendrehzahl"
+      "heat_pump_circulation_pump_speed": {
+        "name": "Drehzahl Umwälzpumpe"
       },
-      "ram_usage": {
-        "name": "Temporär genutzter Speicher"
+      "heat_pump_compressor": {
+        "name": "Kompressordrehzahl"
       },
-      "return_flow_temperature": {
+      "heat_pump_compressor_input_temperature": {
+        "name": "Eintrittstemperatur Kompressor"
+      },
+      "heat_pump_compressor_output_temperature": {
+        "name": "Austrittstemperatur Kompressor"
+      },
+      "heat_pump_compressor_power": {
+        "name": "Elektrische Leistung"
+      },
+      "heat_pump_condenser_temperature": {
+        "name": "Kondensationstemperatur"
+      },
+      "heat_pump_cooling_energy": {
+        "name": "Kältemenge"
+      },
+      "heat_pump_cooling_energy_consumption": {
+        "name": "Elektrische Energie Kühlen"
+      },
+      "heat_pump_cooling_excess_energy_consumption": {
+        "name": "Elektrische Energie Kühlen (PV-Überschuss)"
+      },
+      "heat_pump_cooling_spf": {
+        "name": "JAZ Kühlen"
+      },
+      "heat_pump_cop": {
+        "name": "Leistungszahl"
+      },
+      "heat_pump_current_overheating": {
+        "name": "Überhitzung"
+      },
+      "heat_pump_excess_energy_activation_counter": {
+        "name": "Einschaltvorgänge (PV-Überschuss)"
+      },
+      "heat_pump_excess_energy_consumption": {
+        "name": "Elektrische Energie gesamt (PV-Überschuss)"
+      },
+      "heat_pump_excess_energy_max_runtime": {
+        "name": "Maximale Laufzeit (PV-Überschuss)"
+      },
+      "heat_pump_excess_energy_operating_time": {
+        "name": "Betriebsstunden (PV-Überschuss)"
+      },
+      "heat_pump_expansion_valve_position": {
+        "name": "Position Expansionsventil"
+      },
+      "heat_pump_flow_temperature": {
+        "name": "Vorlauftemperatur"
+      },
+      "heat_pump_heating_energy": {
+        "name": "Wärmemenge Heizen"
+      },
+      "heat_pump_heating_energy_consumption": {
+        "name": "Elektrische Energie Heizen"
+      },
+      "heat_pump_heating_excess_energy_consumption": {
+        "name": "Elektrische Energie Heizen (PV-Überschuss)"
+      },
+      "heat_pump_heating_power": {
+        "name": "Leistung Heizen"
+      },
+      "heat_pump_heating_spf": {
+        "name": "JAZ Heizen"
+      },
+      "heat_pump_high_pressure": {
+        "name": "Hochdruck"
+      },
+      "heat_pump_hot_water_energy": {
+        "name": "Wärmemenge Warmwasser"
+      },
+      "heat_pump_hot_water_energy_consumption": {
+        "name": "Elektrische Energie Warmwasser"
+      },
+      "heat_pump_hot_water_excess_energy_consumption": {
+        "name": "Elektrische Energie Warmwasser (PV-Überschuss)"
+      },
+      "heat_pump_hot_water_power": {
+        "name": "Leistung Warmwasser"
+      },
+      "heat_pump_hot_water_spf": {
+        "name": "JAZ Warmwasser"
+      },
+      "heat_pump_low_pressure": {
+        "name": "Niederdruck"
+      },
+      "heat_pump_max_runtime": {
+        "name": "Maximale Laufzeit"
+      },
+      "heat_pump_operating_time": {
+        "name": "Betriebsstunden"
+      },
+      "heat_pump_return_flow_temperature": {
         "name": "Rücklauftemperatur"
       },
-      "room_humidity": {
-        "name": "Raumluftfeuchtigkeit"
+      "heat_pump_source_input_temperature": {
+        "name": "Eintrittstemperatur Quelle"
       },
-      "room_temperature": {
-        "name": "Raumtemperatur"
+      "heat_pump_source_output_temperature": {
+        "name": "Austrittstemperatur Quelle"
       },
-      "selected_target_room_temperature": {
-        "name": "Soll-Raumtemperatur (ausgewählt)"
-      },
-      "solar_circuit_operating_mode": {
-        "name": "Betriebsart",
-        "state": {
-          "off": "Aus",
-          "on": "Ein"
-        }
-      },
-      "solar_circuit_pump_1": {
-        "name": "Pumpe 1 Drehzahl"
-      },
-      "solar_circuit_pump_2": {
-        "name": "Pumpe 2 Drehzahl"
-      },
-      "source_input_temperature": {
-        "name": "Quelle Eintrittstemperatur"
-      },
-      "source_output_temperature": {
-        "name": "Quelle Austrittstemperatur"
-      },
-      "source_pump_speed": {
+      "heat_pump_source_pump_speed": {
         "name": "Drehzahl Lüfter/Quellenpumpe"
       },
-      "source_temperature": {
-        "name": "Kollektortemperatur"
-      },
-      "standby_temperature": {
-        "name": "Stütztemperatur"
-      },
-      "state": {
+      "heat_pump_state": {
         "name": "Status",
         "state": {
           "auto_cool": "Kühlen",
@@ -641,7 +544,7 @@
           "standby": "Standby"
         }
       },
-      "substate": {
+      "heat_pump_substate": {
         "name": "Unterstatus",
         "state": {
           "bivalent_lock": "Bivalente Sperre",
@@ -677,6 +580,226 @@
           "zone_valve": "Zonenventil"
         }
       },
+      "heat_pump_target_overheating": {
+        "name": "Soll-Überhitzung"
+      },
+      "heat_pump_total_energy_consumption": {
+        "name": "Elektrische Energie gesamt"
+      },
+      "heat_pump_total_spf": {
+        "name": "JAZ gesamt"
+      },
+      "heat_pump_total_thermal_energy": {
+        "name": "Wärmemenge gesamt"
+      },
+      "heat_pump_vaporizer_temperature": {
+        "name": "Verdampfungstemperatur"
+      },
+      "heating_circuit_cool_request": {
+        "name": "Kühlanforderung",
+        "state": {
+          "flow_off": "Aus (Rücklauftemperatur)",
+          "inflow_off": "Aus (Vorlauftemperatur)",
+          "off": "Aus",
+          "on": "Ein",
+          "outdoor_off": "Aus (Außentemperatur)",
+          "room_off": "Aus (Raumtemperatur)",
+          "temporary_off": "Aus (Vorrang)"
+        }
+      },
+      "heating_circuit_cooling_curve": {
+        "name": "Kühlkurve"
+      },
+      "heating_circuit_cooling_limit_day": {
+        "name": "Kühlgrenze (Normal)"
+      },
+      "heating_circuit_cooling_limit_night": {
+        "name": "Kühlgrenze (Abgesenkt)"
+      },
+      "heating_circuit_dew_point": {
+        "name": "Taupunkt"
+      },
+      "heating_circuit_excess_energy_cooling_limit_day": {
+        "name": "Kühlgrenze (PV-Überschuss, Normal)"
+      },
+      "heating_circuit_excess_energy_cooling_limit_night": {
+        "name": "Kühlgrenze (PV-Überschuss, Abgesenkt)"
+      },
+      "heating_circuit_excess_energy_heating_limit_day": {
+        "name": "Heizgrenze (PV-Überschuss, Normal)"
+      },
+      "heating_circuit_excess_energy_heating_limit_night": {
+        "name": "Heizgrenze (PV-Überschuss, Abgesenkt)"
+      },
+      "heating_circuit_excess_energy_mode": {
+        "name": "PV-Überschuss-Status",
+        "state": {
+          "cooling": "Kühlen",
+          "heating": "Heizen",
+          "off": "Aus"
+        }
+      },
+      "heating_circuit_excess_energy_target_room_cooling_temperature": {
+        "name": "Soll-Raumtemperatur Kühlen (PV-Überschuss)"
+      },
+      "heating_circuit_excess_energy_target_room_temperature": {
+        "name": "Soll-Raumtemperatur (PV-Überschuss)"
+      },
+      "heating_circuit_flow_temperature_setpoint": {
+        "name": "Soll-Vorlauftemperatur"
+      },
+      "heating_circuit_heat_request": {
+        "name": "Heizanforderung",
+        "state": {
+          "flow_off": "Aus (Rücklauftemperatur)",
+          "inflow_off": "Aus (Vorlauftemperatur)",
+          "off": "Aus",
+          "on": "Ein",
+          "outdoor_off": "Aus (Außentemperatur)",
+          "room_off": "Aus (Raumtemperatur)",
+          "temporary_off": "Aus (Vorrang)"
+        }
+      },
+      "heating_circuit_heating_curve": {
+        "name": "Heizkurve"
+      },
+      "heating_circuit_heating_limit_day": {
+        "name": "Heizgrenze (Normal)"
+      },
+      "heating_circuit_heating_limit_night": {
+        "name": "Heizgrenze (Abgesenkt)"
+      },
+      "heating_circuit_mixer_flow_temperature": {
+        "name": "Vorlauftemperatur (Mischer)"
+      },
+      "heating_circuit_mixer_position": {
+        "name": "Mischer",
+        "state": {
+          "closed": "Geschlossen",
+          "off": "Aus",
+          "open": "Offen"
+        }
+      },
+      "heating_circuit_mixer_return_flow_temperature": {
+        "name": "Rücklauftemperatur (Mischer)"
+      },
+      "heating_circuit_operating_mode": {
+        "name": "Betriebsart",
+        "state": {
+          "auto": "Auto",
+          "day": "Tag",
+          "external": "Extern",
+          "holiday": "Urlaub",
+          "night": "Nacht",
+          "off": "Aus",
+          "party": "Party",
+          "room_control": "Raumregelung"
+        }
+      },
+      "heating_circuit_pump_speed": {
+        "name": "Pumpendrehzahl"
+      },
+      "heating_circuit_return_flow_temperature": {
+        "name": "Rücklauftemperatur"
+      },
+      "heating_circuit_room_humidity": {
+        "name": "Raumluftfeuchtigkeit"
+      },
+      "heating_circuit_room_temperature": {
+        "name": "Raumtemperatur"
+      },
+      "heating_circuit_selected_target_room_temperature": {
+        "name": "Soll-Raumtemperatur (ausgewählt)"
+      },
+      "heating_circuit_target_room_cooling_temperature_day": {
+        "name": "Soll-Raumtemperatur Kühlen (Normal)"
+      },
+      "heating_circuit_target_room_cooling_temperature_night": {
+        "name": "Soll-Raumtemperatur Kühlen (Abgesenkt)"
+      },
+      "heating_circuit_target_room_temperature": {
+        "name": "Soll-Raumtemperatur"
+      },
+      "heating_circuit_target_room_temperature_away": {
+        "name": "Soll-Raumtemperatur (Urlaub)"
+      },
+      "heating_circuit_target_room_temperature_day": {
+        "name": "Soll-Raumtemperatur (Normal)"
+      },
+      "heating_circuit_target_room_temperature_night": {
+        "name": "Soll-Raumtemperatur (Abgesenkt)"
+      },
+      "heating_circuit_target_room_temperature_offset": {
+        "name": "Raumtemperatur-Offset"
+      },
+      "passive_cooling_circulation_pump_speed": {
+        "name": "Drehzahl Umwälzpumpe"
+      },
+      "passive_cooling_mixer_flow_temperature": {
+        "name": "Vorlauftemperatur (Mischer)"
+      },
+      "passive_cooling_mixer_position": {
+        "name": "Mischer",
+        "state": {
+          "closed": "Geschlossen",
+          "off": "Aus",
+          "open": "Offen"
+        }
+      },
+      "passive_cooling_mixer_target_temperature": {
+        "name": "Soll-Temperatur (Mischer)"
+      },
+      "passive_cooling_temperature": {
+        "name": "Temperatur"
+      },
+      "passive_cooling_valve_position": {
+        "name": "Position Umschaltventil",
+        "state": {
+          "closed": "Position 2",
+          "neutral": "Neutral",
+          "open": "Position 1"
+        }
+      },
+      "photovoltaics_daily_energy": {
+        "name": "Überschussenergie (heute)"
+      },
+      "photovoltaics_excess_power": {
+        "name": "Überschussleistung"
+      },
+      "photovoltaics_total_energy": {
+        "name": "Überschussenergie"
+      },
+      "solar_circuit_actual_power": {
+        "name": "Leistung"
+      },
+      "solar_circuit_consumer_temperature": {
+        "name": "Verbrauchertemperatur{counter}"
+      },
+      "solar_circuit_daily_energy": {
+        "name": "Wärmemenge (heute)"
+      },
+      "solar_circuit_energy": {
+        "name": "Wärmemenge"
+      },
+      "solar_circuit_operating_mode": {
+        "name": "Betriebsart",
+        "state": {
+          "off": "Aus",
+          "on": "Ein"
+        }
+      },
+      "solar_circuit_pump_1": {
+        "name": "Drehzahl Pumpe 1"
+      },
+      "solar_circuit_pump_2": {
+        "name": "Drehzahl Pumpe 2"
+      },
+      "solar_circuit_source_temperature": {
+        "name": "Kollektortemperatur"
+      },
+      "solar_circuit_target_temperature": {
+        "name": "Soll-Temperatur{counter}"
+      },
       "switch_valve_position": {
         "name": "Position",
         "state": {
@@ -684,6 +807,18 @@
           "neutral": "Neutral",
           "open": "Position 1"
         }
+      },
+      "system_control_cpu_usage": {
+        "name": "CPU-Auslastung Steuerung"
+      },
+      "system_cpu_usage": {
+        "name": "CPU-Auslastung"
+      },
+      "system_flash_erase_counter": {
+        "name": "Löschzähler Flashspeicher"
+      },
+      "system_free_ram": {
+        "name": "Freier RAM"
       },
       "system_operating_mode": {
         "name": "Betriebsart",
@@ -696,55 +831,16 @@
           "summer": "nur Warmwasser"
         }
       },
-      "target_overheating": {
-        "name": "Sollüberhitzung"
+      "system_outdoor_temperature": {
+        "name": "Außentemperatur"
       },
-      "target_room_cooling_temperature_day": {
-        "name": "Soll-Raumtemperatur Kühlen (Tag)"
+      "system_ram_usage": {
+        "name": "Temporär genutzter Speicher"
       },
-      "target_room_cooling_temperature_night": {
-        "name": "Soll-Raumtemperatur Kühlen (Nacht)"
-      },
-      "target_room_temperature": {
-        "name": "Soll-Raumtemperatur"
-      },
-      "target_room_temperature_away": {
-        "name": "Soll-Raumtemperatur (Urlaub)"
-      },
-      "target_room_temperature_day": {
-        "name": "Soll-Raumtemperatur (Tag)"
-      },
-      "target_room_temperature_night": {
-        "name": "Soll-Raumtemperatur (Nacht)"
-      },
-      "target_room_temperature_offset": {
-        "name": "Soll-Raumtemperatur (Offset)"
-      },
-      "target_temperature": {
-        "name": "Soll-Temperatur{counter}"
-      },
-      "temperature": {
-        "name": "Temperatur"
-      },
-      "total_energy": {
-        "name": "Gesamtenergie"
-      },
-      "total_energy_consumption": {
-        "name": "Stromverbrauch gesamt"
-      },
-      "total_spf": {
-        "name": "JAZ gesamt"
-      },
-      "total_thermal_energy": {
-        "name": "Gesamtwärmemenge"
-      },
-      "vaporizer_temperature": {
-        "name": "Verdampfungstemperatur"
-      },
-      "webserver_cpu_usage": {
+      "system_webserver_cpu_usage": {
         "name": "CPU-Auslastung WebServer"
       },
-      "webview_cpu_usage": {
+      "system_webview_cpu_usage": {
         "name": "CPU-Auslastung WebView"
       },
       "weekly_write_count": {
@@ -757,20 +853,29 @@
       }
     },
     "switch": {
-      "compressor_use_night_speed": {
-        "name": "Kompressor-Leistungsbegrenzung (Nacht) verwenden"
-      },
-      "priority_1_before_2": {
-        "name": "Vorrang 1 vor 2"
-      },
-      "use_cooling_curve": {
-        "name": "Kühlkurventabelle verwenden"
-      },
-      "use_excess_energy": {
+      "buffer_tank_use_excess_energy": {
         "name": "PV-Überschuss verwenden"
       },
-      "use_heating_curve": {
+      "dhw_tank_use_excess_energy": {
+        "name": "PV-Überschuss verwenden"
+      },
+      "external_heat_source_use_excess_energy": {
+        "name": "PV-Überschuss verwenden"
+      },
+      "heat_pump_compressor_use_night_speed": {
+        "name": "Kompressor-Leistungsbegrenzung (Nacht) verwenden"
+      },
+      "heating_circuit_use_cooling_curve": {
+        "name": "Kühlkurventabelle verwenden"
+      },
+      "heating_circuit_use_excess_energy": {
+        "name": "PV-Überschuss verwenden"
+      },
+      "heating_circuit_use_heating_curve": {
         "name": "Heizkurventabelle verwenden"
+      },
+      "solar_circuit_priority_1_before_2": {
+        "name": "Vorrang 1 vor 2"
       }
     },
     "water_heater": {

@@ -54,7 +54,7 @@
 # name: test_binary_sensors[de][binary_sensor.keba_keenergy_12345678_external_heat_source_consuming_excess_energy_1]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Externe Wärmequelle 1 Nutzt PV-Überschuss',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Externe Wärmequelle 1 PV-Überschuss',
       <EntityStateAttribute.ICON: 'icon'>: 'mdi:solar-power',
     }),
     'context': <ANY>,
@@ -68,7 +68,7 @@
 # name: test_binary_sensors[de][binary_sensor.keba_keenergy_12345678_external_heat_source_consuming_excess_energy_2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Externe Wärmequelle 2 Nutzt PV-Überschuss',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Externe Wärmequelle 2 PV-Überschuss',
       <EntityStateAttribute.ICON: 'icon'>: 'mdi:solar-power',
     }),
     'context': <ANY>,
@@ -122,7 +122,7 @@
 # name: test_binary_sensors[de][binary_sensor.keba_keenergy_12345678_heat_pump_consuming_excess_energy]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Wärmepumpe Nutzt PV-Überschuss',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Wärmepumpe PV-Überschuss',
       <EntityStateAttribute.ICON: 'icon'>: 'mdi:solar-power',
     }),
     'context': <ANY>,
@@ -220,7 +220,7 @@
 # name: test_binary_sensors[de][binary_sensor.keba_keenergy_12345678_heat_pump_heat_request]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Wärmepumpe Heizanforderung',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Wärmepumpe Anforderung',
     }),
     'context': <ANY>,
     'entity_id': 'binary_sensor.keba_keenergy_12345678_heat_pump_heat_request',
@@ -287,7 +287,7 @@
 # name: test_binary_sensors[de][binary_sensor.keba_keenergy_12345678_hot_water_tank_hot_water_flow_1]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Warmwasserspeicher 1 Warmwasser läuft',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Warmwasserspeicher 1 Frischwasser-Durchfluss',
     }),
     'context': <ANY>,
     'entity_id': 'binary_sensor.keba_keenergy_12345678_hot_water_tank_hot_water_flow_1',
@@ -365,7 +365,7 @@
 # name: test_binary_sensors[en][binary_sensor.keba_keenergy_12345678_buffer_tank_cool_request_1]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Buffer tank 1 Cool request',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Buffer tank 1 Cooling request',
     }),
     'context': <ANY>,
     'entity_id': 'binary_sensor.keba_keenergy_12345678_buffer_tank_cool_request_1',
@@ -378,7 +378,7 @@
 # name: test_binary_sensors[en][binary_sensor.keba_keenergy_12345678_buffer_tank_cool_request_2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Buffer tank 2 Cool request',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Buffer tank 2 Cooling request',
     }),
     'context': <ANY>,
     'entity_id': 'binary_sensor.keba_keenergy_12345678_buffer_tank_cool_request_2',
@@ -391,7 +391,7 @@
 # name: test_binary_sensors[en][binary_sensor.keba_keenergy_12345678_buffer_tank_heat_request_1]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Buffer tank 1 Heat request',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Buffer tank 1 Heating request',
     }),
     'context': <ANY>,
     'entity_id': 'binary_sensor.keba_keenergy_12345678_buffer_tank_heat_request_1',
@@ -404,7 +404,7 @@
 # name: test_binary_sensors[en][binary_sensor.keba_keenergy_12345678_buffer_tank_heat_request_2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Buffer tank 2 Heat request',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Buffer tank 2 Heating request',
     }),
     'context': <ANY>,
     'entity_id': 'binary_sensor.keba_keenergy_12345678_buffer_tank_heat_request_2',
@@ -417,7 +417,7 @@
 # name: test_binary_sensors[en][binary_sensor.keba_keenergy_12345678_external_heat_source_consuming_excess_energy_1]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'External heat source 1 Using PV surplus',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'External heat source 1 PV surplus',
       <EntityStateAttribute.ICON: 'icon'>: 'mdi:solar-power',
     }),
     'context': <ANY>,
@@ -431,7 +431,7 @@
 # name: test_binary_sensors[en][binary_sensor.keba_keenergy_12345678_external_heat_source_consuming_excess_energy_2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'External heat source 2 Using PV surplus',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'External heat source 2 PV surplus',
       <EntityStateAttribute.ICON: 'icon'>: 'mdi:solar-power',
     }),
     'context': <ANY>,
@@ -445,7 +445,7 @@
 # name: test_binary_sensors[en][binary_sensor.keba_keenergy_12345678_external_heat_source_heat_request_1]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'External heat source 1 Heat request',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'External heat source 1 Heating request',
     }),
     'context': <ANY>,
     'entity_id': 'binary_sensor.keba_keenergy_12345678_external_heat_source_heat_request_1',
@@ -458,7 +458,7 @@
 # name: test_binary_sensors[en][binary_sensor.keba_keenergy_12345678_external_heat_source_heat_request_2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'External heat source 2 Heat request',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'External heat source 2 Heating request',
     }),
     'context': <ANY>,
     'entity_id': 'binary_sensor.keba_keenergy_12345678_external_heat_source_heat_request_2',
@@ -485,7 +485,7 @@
 # name: test_binary_sensors[en][binary_sensor.keba_keenergy_12345678_heat_pump_consuming_excess_energy]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Heat pump Using PV surplus',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Heat pump PV surplus',
       <EntityStateAttribute.ICON: 'icon'>: 'mdi:solar-power',
     }),
     'context': <ANY>,
@@ -583,7 +583,7 @@
 # name: test_binary_sensors[en][binary_sensor.keba_keenergy_12345678_heat_pump_heat_request]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Heat pump Heat request',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Heat pump Request',
     }),
     'context': <ANY>,
     'entity_id': 'binary_sensor.keba_keenergy_12345678_heat_pump_heat_request',
@@ -624,7 +624,7 @@
 # name: test_binary_sensors[en][binary_sensor.keba_keenergy_12345678_hot_water_tank_heat_request_1]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Hot water tank 1 Heat request',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Hot water tank 1 Heating request',
     }),
     'context': <ANY>,
     'entity_id': 'binary_sensor.keba_keenergy_12345678_hot_water_tank_heat_request_1',
@@ -637,7 +637,7 @@
 # name: test_binary_sensors[en][binary_sensor.keba_keenergy_12345678_hot_water_tank_heat_request_2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Hot water tank 2 Heat request',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Hot water tank 2 Heating request',
     }),
     'context': <ANY>,
     'entity_id': 'binary_sensor.keba_keenergy_12345678_hot_water_tank_heat_request_2',
@@ -650,7 +650,7 @@
 # name: test_binary_sensors[en][binary_sensor.keba_keenergy_12345678_hot_water_tank_hot_water_flow_1]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Hot water tank 1 Hot water flow',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Hot water tank 1 Fresh water flow',
     }),
     'context': <ANY>,
     'entity_id': 'binary_sensor.keba_keenergy_12345678_hot_water_tank_hot_water_flow_1',
@@ -676,7 +676,7 @@
 # name: test_binary_sensors[en][binary_sensor.keba_keenergy_12345678_solar_circuit_heat_request_1_1]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Solar circuit 1 Heat request 1',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Solar circuit 1 Heating request 1',
     }),
     'context': <ANY>,
     'entity_id': 'binary_sensor.keba_keenergy_12345678_solar_circuit_heat_request_1_1',
@@ -689,7 +689,7 @@
 # name: test_binary_sensors[en][binary_sensor.keba_keenergy_12345678_solar_circuit_heat_request_1_2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Solar circuit 2 Heat request 1',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Solar circuit 2 Heating request 1',
     }),
     'context': <ANY>,
     'entity_id': 'binary_sensor.keba_keenergy_12345678_solar_circuit_heat_request_1_2',
@@ -702,7 +702,7 @@
 # name: test_binary_sensors[en][binary_sensor.keba_keenergy_12345678_solar_circuit_heat_request_2_1]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Solar circuit 1 Heat request 2',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Solar circuit 1 Heating request 2',
     }),
     'context': <ANY>,
     'entity_id': 'binary_sensor.keba_keenergy_12345678_solar_circuit_heat_request_2_1',
@@ -715,7 +715,7 @@
 # name: test_binary_sensors[en][binary_sensor.keba_keenergy_12345678_solar_circuit_heat_request_2_2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Solar circuit 2 Heat request 2',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Solar circuit 2 Heating request 2',
     }),
     'context': <ANY>,
     'entity_id': 'binary_sensor.keba_keenergy_12345678_solar_circuit_heat_request_2_2',

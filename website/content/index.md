@@ -115,11 +115,11 @@ provide are not created. Changes are written to the control unit, see [Known lim
   outlet, compressor inlet and outlet, condensation and evaporation, superheat, expansion valve position, pressures,
   pump, fan and compressor speeds
 - **Energy sensors**: electrical, heating and hot water power, coefficient of performance, thermal energy and
-  electricity consumption of heating, cooling and hot water, seasonal performance factor (SPF), consumption from
+  electrical energy of heating, cooling and hot water, seasonal performance factor (SPF), electrical energy from
   PV surplus
 - **Statistics**: operating hours, maximum runtime and activation counter, also for PV surplus
-- **Binary sensors**: compressor, heat request, source, source actuator, source pressure, three-phase, frequency
-  inverter, using PV surplus
+- **Binary sensors**: compressor, request, source, source actuator, source pressure, three-phase, frequency
+  inverter, PV surplus
 - **Number and switch**: compressor power limit at night
 
 ### Heating circuit
@@ -142,7 +142,7 @@ provide are not created. Changes are written to the control unit, see [Known lim
 ### Hot water tank and buffer tank
 
 - **Water heater**: operating mode and target temperature
-- **Numbers**: target and standby temperatures, PV surplus target temperature and hysteresis
+- **Numbers**: target and backup temperatures, PV surplus target temperature and hysteresis
 - **Select and switch**: operating mode, use PV surplus
 - **Sensors**: current temperatures, fresh water module and circulation return temperature
 - **Binary sensors**: heat request, cool request, hot water flow, circulation pump

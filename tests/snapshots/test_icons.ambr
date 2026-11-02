@@ -79,8 +79,8 @@
     }),
     'binary_sensor.keba_keenergy_12345678_heat_pump_heat_request': dict({
       'state': dict({
-        'off': 'mdi:power-off',
-        'on': 'mdi:fire',
+        'off': 'mdi:heat-pump-outline',
+        'on': 'mdi:heat-pump',
       }),
     }),
     'binary_sensor.keba_keenergy_12345678_hot_water_tank_circulation_pump_state_1': dict({
@@ -368,8 +368,13 @@
     'sensor.keba_keenergy_12345678_heat_circuit_cool_request_2': dict({
       'default': 'mdi:snowflake',
       'state': dict({
+        'flow_off': 'mdi:snowflake-off',
+        'inflow_off': 'mdi:snowflake-off',
         'off': 'mdi:snowflake-off',
         'on': 'mdi:snowflake',
+        'outdoor_off': 'mdi:snowflake-off',
+        'room_off': 'mdi:snowflake-off',
+        'temporary_off': 'mdi:snowflake-off',
       }),
     }),
     'sensor.keba_keenergy_12345678_heat_circuit_cooling_curve_2': dict({
@@ -378,7 +383,7 @@
     'sensor.keba_keenergy_12345678_heat_circuit_cooling_limit_day_2': None,
     'sensor.keba_keenergy_12345678_heat_circuit_cooling_limit_night_2': None,
     'sensor.keba_keenergy_12345678_heat_circuit_dew_point_1': dict({
-      'default': 'mdi:home-thermometer',
+      'default': 'mdi:water-thermometer',
     }),
     'sensor.keba_keenergy_12345678_heat_circuit_excess_energy_cooling_limit_day_2': None,
     'sensor.keba_keenergy_12345678_heat_circuit_excess_energy_cooling_limit_night_2': None,
@@ -412,8 +417,13 @@
     'sensor.keba_keenergy_12345678_heat_circuit_heat_request_1': dict({
       'default': 'mdi:fire',
       'state': dict({
+        'flow_off': 'mdi:fire-off',
+        'inflow_off': 'mdi:fire-off',
         'off': 'mdi:fire-off',
         'on': 'mdi:fire',
+        'outdoor_off': 'mdi:fire-off',
+        'room_off': 'mdi:fire-off',
+        'temporary_off': 'mdi:fire-off',
       }),
     }),
     'sensor.keba_keenergy_12345678_heat_circuit_heating_curve_1': dict({
@@ -427,20 +437,24 @@
       'state': dict({
         'auto': 'mdi:clock-outline',
         'day': 'mdi:weather-sunny',
+        'external': 'mdi:import',
         'holiday': 'mdi:bag-checked',
         'night': 'mdi:weather-night',
         'off': 'mdi:power-standby',
         'party': 'mdi:glass-cocktail',
+        'room_control': 'mdi:home-thermometer',
       }),
     }),
     'sensor.keba_keenergy_12345678_heat_circuit_operating_mode_2': dict({
       'state': dict({
         'auto': 'mdi:clock-outline',
         'day': 'mdi:weather-sunny',
+        'external': 'mdi:import',
         'holiday': 'mdi:bag-checked',
         'night': 'mdi:weather-night',
         'off': 'mdi:power-standby',
         'party': 'mdi:glass-cocktail',
+        'room_control': 'mdi:home-thermometer',
       }),
     }),
     'sensor.keba_keenergy_12345678_heat_circuit_pump_speed_1': dict({
@@ -473,7 +487,7 @@
       'range': dict({
         '0': 'mdi:speedometer-slow',
         '50': 'mdi:speedometer-medium',
-        '75': 'mdi:sun-thermometer',
+        '75': 'mdi:speedometer',
       }),
     }),
     'sensor.keba_keenergy_12345678_heat_pump_compressor': dict({
@@ -481,7 +495,7 @@
       'range': dict({
         '0': 'mdi:speedometer-slow',
         '50': 'mdi:speedometer-medium',
-        '75': 'mdi:sun-thermometer',
+        '75': 'mdi:speedometer',
       }),
     }),
     'sensor.keba_keenergy_12345678_heat_pump_compressor_input_temperature': None,
@@ -599,6 +613,7 @@
         'auto': 'mdi:thermometer-auto',
         'auto_cool': 'mdi:snowflake',
         'auto_heat': 'mdi:fire',
+        'setup': 'mdi:wrench',
         'standby': 'mdi:power-standby',
         'summer': 'mdi:water-thermometer',
       }),
@@ -615,7 +630,7 @@
       'range': dict({
         '0': 'mdi:speedometer-slow',
         '50': 'mdi:speedometer-medium',
-        '75': 'mdi:sun-thermometer',
+        '75': 'mdi:speedometer',
       }),
     }),
     'sensor.keba_keenergy_12345678_passive_cooling_mixer_flow_temperature': 'mdi:snowflake-thermometer',

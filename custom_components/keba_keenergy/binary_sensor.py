@@ -58,7 +58,7 @@ BINARY_SENSOR_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergyBinarySensorEnt
         KebaKeEnergyBinarySensorEntityDescription(
             key="heat_request",
             value_index=0,
-            translation_key="heat_request",
+            translation_key="solar_circuit_heat_request",
             translation_placeholders={
                 "counter": " 1",
             },
@@ -66,7 +66,7 @@ BINARY_SENSOR_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergyBinarySensorEnt
         KebaKeEnergyBinarySensorEntityDescription(
             key="heat_request",
             value_index=1,
-            translation_key="heat_request",
+            translation_key="solar_circuit_heat_request",
             translation_placeholders={
                 "counter": " 2",
             },
@@ -77,19 +77,19 @@ BINARY_SENSOR_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergyBinarySensorEnt
             device_class=BinarySensorDeviceClass.RUNNING,
             entity_registry_enabled_default=False,
             key="pump_state",
-            translation_key="pump_state",
+            translation_key="heating_circuit_pump_state",
         ),
     ),
     SectionPrefix.HEAT_PUMP: (
         KebaKeEnergyBinarySensorEntityDescription(
             condition=has_photovoltaics,
             key="consuming_excess_energy",
-            translation_key="consuming_excess_energy",
+            translation_key="heat_pump_consuming_excess_energy",
             icon="mdi:solar-power",
         ),
         KebaKeEnergyBinarySensorEntityDescription(
             key="heat_request",
-            translation_key="heat_request",
+            translation_key="heat_pump_request",
             translation_placeholders={
                 "counter": "",
             },
@@ -98,43 +98,43 @@ BINARY_SENSOR_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergyBinarySensorEnt
             device_class=BinarySensorDeviceClass.PROBLEM,
             entity_category=EntityCategory.DIAGNOSTIC,
             key="has_compressor_failure",
-            translation_key="compressor_failure",
+            translation_key="heat_pump_compressor_failure",
         ),
         KebaKeEnergyBinarySensorEntityDescription(
             device_class=BinarySensorDeviceClass.PROBLEM,
             entity_category=EntityCategory.DIAGNOSTIC,
             key="has_source_failure",
-            translation_key="source_failure",
+            translation_key="heat_pump_source_failure",
         ),
         KebaKeEnergyBinarySensorEntityDescription(
             device_class=BinarySensorDeviceClass.PROBLEM,
             entity_category=EntityCategory.DIAGNOSTIC,
             key="has_source_actuator_failure",
-            translation_key="source_actuator_failure",
+            translation_key="heat_pump_source_actuator_failure",
         ),
         KebaKeEnergyBinarySensorEntityDescription(
             device_class=BinarySensorDeviceClass.PROBLEM,
             entity_category=EntityCategory.DIAGNOSTIC,
             key="has_three_phase_failure",
-            translation_key="three_phase_failure",
+            translation_key="heat_pump_three_phase_failure",
         ),
         KebaKeEnergyBinarySensorEntityDescription(
             device_class=BinarySensorDeviceClass.PROBLEM,
             entity_category=EntityCategory.DIAGNOSTIC,
             key="has_source_pressure_failure",
-            translation_key="source_pressure_failure",
+            translation_key="heat_pump_source_pressure_failure",
         ),
         KebaKeEnergyBinarySensorEntityDescription(
             device_class=BinarySensorDeviceClass.PROBLEM,
             entity_category=EntityCategory.DIAGNOSTIC,
             key="has_vfd_failure",
-            translation_key="vfd_failure",
+            translation_key="heat_pump_vfd_failure",
         ),
     ),
     SectionPrefix.BUFFER_TANK: (
         KebaKeEnergyBinarySensorEntityDescription(
             key="heat_request",
-            translation_key="heat_request",
+            translation_key="buffer_tank_heat_request",
             translation_placeholders={
                 "counter": "",
             },
@@ -142,7 +142,7 @@ BINARY_SENSOR_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergyBinarySensorEnt
         KebaKeEnergyBinarySensorEntityDescription(
             entity_registry_enabled_default=False,
             key="cool_request",
-            translation_key="cool_request",
+            translation_key="buffer_tank_cool_request",
             translation_placeholders={
                 "counter": "",
             },
@@ -151,7 +151,7 @@ BINARY_SENSOR_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergyBinarySensorEnt
     SectionPrefix.DHW_TANK: (
         KebaKeEnergyBinarySensorEntityDescription(
             key="heat_request",
-            translation_key="heat_request",
+            translation_key="dhw_tank_heat_request",
             translation_placeholders={
                 "counter": "",
             },
@@ -160,25 +160,25 @@ BINARY_SENSOR_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergyBinarySensorEnt
             entity_registry_enabled_default=False,
             key="hot_water_flow",
             new_key="fresh_water_flow",
-            translation_key="hot_water_flow",
+            translation_key="dhw_tank_hot_water_flow",
         ),
         KebaKeEnergyBinarySensorEntityDescription(
             device_class=BinarySensorDeviceClass.RUNNING,
             entity_registry_enabled_default=False,
             key="circulation_pump_state",
-            translation_key="circulation_pump_state",
+            translation_key="dhw_tank_circulation_pump_state",
         ),
     ),
     SectionPrefix.EXTERNAL_HEAT_SOURCE: (
         KebaKeEnergyBinarySensorEntityDescription(
             condition=has_photovoltaics,
             key="consuming_excess_energy",
-            translation_key="consuming_excess_energy",
+            translation_key="external_heat_source_consuming_excess_energy",
             icon="mdi:solar-power",
         ),
         KebaKeEnergyBinarySensorEntityDescription(
             key="heat_request",
-            translation_key="heat_request",
+            translation_key="external_heat_source_heat_request",
             translation_placeholders={
                 "counter": "",
             },
@@ -187,7 +187,7 @@ BINARY_SENSOR_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergyBinarySensorEnt
     SectionPrefix.PHOTOVOLTAICS: (
         KebaKeEnergyBinarySensorEntityDescription(
             key="excess_energy_active",
-            translation_key="excess_energy",
+            translation_key="photovoltaics_excess_energy",
         ),
     ),
 }

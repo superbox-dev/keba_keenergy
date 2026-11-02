@@ -96,7 +96,7 @@ NUMBER_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergyNumberEntityDescriptio
             key="target_temperature_day",
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             native_step=0.5,
-            translation_key="target_room_temperature_day",
+            translation_key="heating_circuit_target_room_temperature_day",
         ),
         KebaKeEnergyNumberEntityDescription(
             condition=is_cooling_circuit,
@@ -106,7 +106,7 @@ NUMBER_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergyNumberEntityDescriptio
             key="target_cooling_temperature_day",
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             native_step=0.5,
-            translation_key="target_room_cooling_temperature_day",
+            translation_key="heating_circuit_target_room_cooling_temperature_day",
         ),
         KebaKeEnergyNumberEntityDescription(
             condition=is_heating_circuit,
@@ -116,7 +116,7 @@ NUMBER_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergyNumberEntityDescriptio
             key="heating_limit_day",
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             native_step=0.5,
-            translation_key="heating_limit_day",
+            translation_key="heating_circuit_heating_limit_day",
         ),
         KebaKeEnergyNumberEntityDescription(
             condition=is_cooling_circuit,
@@ -126,7 +126,7 @@ NUMBER_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergyNumberEntityDescriptio
             key="cooling_limit_day",
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             native_step=0.5,
-            translation_key="cooling_limit_day",
+            translation_key="heating_circuit_cooling_limit_day",
         ),
         KebaKeEnergyNumberEntityDescription(
             condition=is_heating_circuit_with_photovoltaics,
@@ -136,7 +136,7 @@ NUMBER_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergyNumberEntityDescriptio
             key="excess_energy_heating_limit_day",
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             native_step=0.5,
-            translation_key="excess_energy_heating_limit_day",
+            translation_key="heating_circuit_excess_energy_heating_limit_day",
         ),
         KebaKeEnergyNumberEntityDescription(
             condition=is_cooling_circuit_with_photovoltaics,
@@ -146,7 +146,7 @@ NUMBER_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergyNumberEntityDescriptio
             key="excess_energy_cooling_limit_day",
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             native_step=0.5,
-            translation_key="excess_energy_cooling_limit_day",
+            translation_key="heating_circuit_excess_energy_cooling_limit_day",
         ),
         KebaKeEnergyNumberEntityDescription(
             condition=is_heating_circuit,
@@ -156,7 +156,7 @@ NUMBER_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergyNumberEntityDescriptio
             key="target_temperature_night",
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             native_step=0.5,
-            translation_key="target_room_temperature_night",
+            translation_key="heating_circuit_target_room_temperature_night",
         ),
         KebaKeEnergyNumberEntityDescription(
             condition=is_cooling_circuit,
@@ -166,7 +166,7 @@ NUMBER_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergyNumberEntityDescriptio
             key="target_cooling_temperature_night",
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             native_step=0.5,
-            translation_key="target_room_cooling_temperature_night",
+            translation_key="heating_circuit_target_room_cooling_temperature_night",
         ),
         KebaKeEnergyNumberEntityDescription(
             condition=is_heating_circuit,
@@ -176,7 +176,7 @@ NUMBER_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergyNumberEntityDescriptio
             key="heating_limit_night",
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             native_step=0.5,
-            translation_key="heating_limit_night",
+            translation_key="heating_circuit_heating_limit_night",
         ),
         KebaKeEnergyNumberEntityDescription(
             condition=is_cooling_circuit,
@@ -186,7 +186,7 @@ NUMBER_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergyNumberEntityDescriptio
             key="cooling_limit_night",
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             native_step=0.5,
-            translation_key="cooling_limit_night",
+            translation_key="heating_circuit_cooling_limit_night",
         ),
         KebaKeEnergyNumberEntityDescription(
             condition=is_heating_circuit_with_photovoltaics,
@@ -196,7 +196,7 @@ NUMBER_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergyNumberEntityDescriptio
             key="excess_energy_heating_limit_night",
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             native_step=0.5,
-            translation_key="excess_energy_heating_limit_night",
+            translation_key="heating_circuit_excess_energy_heating_limit_night",
         ),
         KebaKeEnergyNumberEntityDescription(
             condition=is_cooling_circuit_with_photovoltaics,
@@ -206,7 +206,7 @@ NUMBER_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergyNumberEntityDescriptio
             key="excess_energy_cooling_limit_night",
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             native_step=0.5,
-            translation_key="excess_energy_cooling_limit_night",
+            translation_key="heating_circuit_excess_energy_cooling_limit_night",
         ),
         KebaKeEnergyNumberEntityDescription(
             condition=is_heating_circuit,
@@ -216,7 +216,7 @@ NUMBER_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergyNumberEntityDescriptio
             key="target_temperature_away",
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             native_step=0.5,
-            translation_key="target_room_temperature_away",
+            translation_key="heating_circuit_target_room_temperature_away",
         ),
         KebaKeEnergyNumberEntityDescription(
             device_class=NumberDeviceClass.TEMPERATURE,
@@ -224,7 +224,7 @@ NUMBER_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergyNumberEntityDescriptio
             key="target_temperature_offset",
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             native_step=0.5,
-            translation_key="target_room_temperature_offset",
+            translation_key="heating_circuit_target_room_temperature_offset",
         ),
         KebaKeEnergyNumberEntityDescription(
             condition=is_heating_circuit_with_photovoltaics,
@@ -234,7 +234,7 @@ NUMBER_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergyNumberEntityDescriptio
             key="excess_energy_target_temperature",
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             native_step=0.5,
-            translation_key="excess_energy_target_room_temperature",
+            translation_key="heating_circuit_excess_energy_target_room_temperature",
         ),
         KebaKeEnergyNumberEntityDescription(
             condition=is_heating_circuit_with_photovoltaics,
@@ -244,7 +244,7 @@ NUMBER_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergyNumberEntityDescriptio
             key="excess_energy_target_temperature_hysteresis",
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             native_step=0.1,
-            translation_key="excess_energy_target_room_temperature_hysteresis",
+            translation_key="heating_circuit_excess_energy_target_room_temperature_hysteresis",
         ),
         KebaKeEnergyNumberEntityDescription(
             condition=is_cooling_circuit_with_photovoltaics,
@@ -254,7 +254,7 @@ NUMBER_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergyNumberEntityDescriptio
             key="excess_energy_target_cooling_temperature",
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             native_step=0.5,
-            translation_key="excess_energy_target_room_cooling_temperature",
+            translation_key="heating_circuit_excess_energy_target_room_cooling_temperature",
         ),
         KebaKeEnergyNumberEntityDescription(
             condition=is_cooling_circuit_with_photovoltaics,
@@ -264,7 +264,7 @@ NUMBER_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergyNumberEntityDescriptio
             key="excess_energy_target_cooling_temperature_hysteresis",
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             native_step=0.1,
-            translation_key="excess_energy_target_room_cooling_temperature_hysteresis",
+            translation_key="heating_circuit_excess_energy_target_room_cooling_temperature_hysteresis",
         ),
         KebaKeEnergyNumberEntityDescription(
             condition=is_heating_circuit,
@@ -274,7 +274,7 @@ NUMBER_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergyNumberEntityDescriptio
             key="heating_curve_offset",
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             native_step=0.1,
-            translation_key="heating_curve_offset",
+            translation_key="heating_circuit_heating_curve_offset",
         ),
         KebaKeEnergyNumberEntityDescription(
             condition=is_cooling_circuit,
@@ -284,7 +284,7 @@ NUMBER_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergyNumberEntityDescriptio
             key="cooling_curve_offset",
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             native_step=0.1,
-            translation_key="cooling_curve_offset",
+            translation_key="heating_circuit_cooling_curve_offset",
         ),
         KebaKeEnergyNumberEntityDescription(
             condition=is_heating_circuit,
@@ -292,7 +292,7 @@ NUMBER_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergyNumberEntityDescriptio
             entity_registry_enabled_default=False,
             key="heating_curve_slope",
             native_step=0.01,
-            translation_key="heating_curve_slope",
+            translation_key="heating_circuit_heating_curve_slope",
         ),
         KebaKeEnergyNumberEntityDescription(
             condition=is_cooling_circuit,
@@ -300,7 +300,7 @@ NUMBER_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergyNumberEntityDescriptio
             entity_registry_enabled_default=False,
             key="cooling_curve_slope",
             native_step=0.01,
-            translation_key="cooling_curve_slope",
+            translation_key="heating_circuit_cooling_curve_slope",
         ),
     ),
     SectionPrefix.SOLAR_CIRCUIT: (
@@ -311,7 +311,7 @@ NUMBER_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergyNumberEntityDescriptio
             value_index=0,
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             native_step=0.5,
-            translation_key="target_temperature",
+            translation_key="solar_circuit_target_temperature",
             translation_placeholders={
                 "counter": " 1",
             },
@@ -324,7 +324,7 @@ NUMBER_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergyNumberEntityDescriptio
             value_index=1,
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             native_step=0.5,
-            translation_key="target_temperature",
+            translation_key="solar_circuit_target_temperature",
             translation_placeholders={
                 "counter": " 2",
             },
@@ -339,7 +339,7 @@ NUMBER_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergyNumberEntityDescriptio
             key="compressor_night_speed",
             native_unit_of_measurement=PERCENTAGE,
             native_step=1,
-            translation_key="compressor_night_speed",
+            translation_key="heat_pump_compressor_night_speed",
             scale=100,
         ),
     ),
@@ -352,7 +352,7 @@ NUMBER_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergyNumberEntityDescriptio
             key="excess_energy_target_temperature",
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             native_step=0.5,
-            translation_key="excess_energy_target_temperature",
+            translation_key="buffer_tank_excess_energy_target_temperature",
         ),
         KebaKeEnergyNumberEntityDescription(
             condition=has_photovoltaics,
@@ -362,7 +362,7 @@ NUMBER_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergyNumberEntityDescriptio
             key="excess_energy_target_temperature_hysteresis",
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             native_step=0.1,
-            translation_key="excess_energy_target_temperature_hysteresis",
+            translation_key="buffer_tank_excess_energy_target_temperature_hysteresis",
         ),
         KebaKeEnergyNumberEntityDescription(
             entity_category=EntityCategory.CONFIG,
@@ -370,7 +370,7 @@ NUMBER_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergyNumberEntityDescriptio
             key="standby_temperature",
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             native_step=0.5,
-            translation_key="standby_temperature",
+            translation_key="buffer_tank_standby_temperature",
         ),
         KebaKeEnergyNumberEntityDescription(
             condition=has_photovoltaics,
@@ -380,7 +380,7 @@ NUMBER_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergyNumberEntityDescriptio
             key="outdoor_temperature_excess_energy_limit",
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             native_step=0.5,
-            translation_key="outdoor_temperature_excess_energy_limit",
+            translation_key="buffer_tank_outdoor_temperature_excess_energy_limit",
         ),
     ),
     SectionPrefix.DHW_TANK: (
@@ -390,7 +390,7 @@ NUMBER_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergyNumberEntityDescriptio
             key="standby_temperature",
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             native_step=0.5,
-            translation_key="standby_temperature",
+            translation_key="dhw_tank_standby_temperature",
         ),
         KebaKeEnergyNumberEntityDescription(
             entity_category=EntityCategory.CONFIG,
@@ -398,7 +398,7 @@ NUMBER_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergyNumberEntityDescriptio
             key="target_temperature",
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             native_step=0.5,
-            translation_key="target_temperature",
+            translation_key="dhw_tank_target_temperature",
             translation_placeholders={
                 "counter": "",
             },
@@ -412,7 +412,7 @@ NUMBER_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergyNumberEntityDescriptio
             key="excess_energy_target_temperature",
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             native_step=0.5,
-            translation_key="excess_energy_target_temperature",
+            translation_key="dhw_tank_excess_energy_target_temperature",
         ),
         KebaKeEnergyNumberEntityDescription(
             condition=has_photovoltaics,
@@ -422,7 +422,7 @@ NUMBER_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergyNumberEntityDescriptio
             key="excess_energy_target_temperature_hysteresis",
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             native_step=0.1,
-            translation_key="excess_energy_target_temperature_hysteresis",
+            translation_key="dhw_tank_excess_energy_target_temperature_hysteresis",
         ),
     ),
     SectionPrefix.EXTERNAL_HEAT_SOURCE: (
@@ -432,7 +432,7 @@ NUMBER_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergyNumberEntityDescriptio
             key="min_runtime_excess_energy",
             native_unit_of_measurement=UnitOfTime.MINUTES,
             native_step=1,
-            translation_key="min_runtime_excess_energy",
+            translation_key="external_heat_source_min_runtime_excess_energy",
             scale=1 / 60,
         ),
     ),

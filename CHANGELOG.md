@@ -23,6 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Changed more sensors and binary sensors to use the message IDs of the control unit, unused values are unknown or
   not created. Optional components (e.g. room sensor, mixer, pump, fresh water module) are detected by their message
   ID instead of the options of the control unit. ([Issue #77][issue-77])
+- Changed the names and display precision of the sensors, binary sensors and numbers. ([Issue #87][issue-87])
 - Changed the sensor states to the unrounded values of the control unit, Home Assistant rounds them for the display.
   ([Issue #77][issue-77])
 - Changed the unit of the energies of the solar circuits and photovoltaics to `J` and of the operating times and
@@ -72,6 +73,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [issue-77]: https://github.com/superbox-dev/keba_keenergy/issues/77
 [issue-84]: https://github.com/superbox-dev/keba_keenergy/issues/84
 [issue-85]: https://github.com/superbox-dev/keba_keenergy/issues/85
+[issue-87]: https://github.com/superbox-dev/keba_keenergy/issues/87
 
 ## [1.11.0] - 2026-10-28
 

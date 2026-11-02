@@ -74,7 +74,7 @@ SWITCH_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergySwitchEntityDescriptio
             entity_category=EntityCategory.CONFIG,
             entity_registry_enabled_default=False,
             key="use_excess_energy",
-            translation_key="use_excess_energy",
+            translation_key="heating_circuit_use_excess_energy",
         ),
         KebaKeEnergySwitchEntityDescription(
             condition=is_heating_circuit,
@@ -82,7 +82,7 @@ SWITCH_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergySwitchEntityDescriptio
             entity_category=EntityCategory.CONFIG,
             entity_registry_enabled_default=False,
             key="use_heating_curve",
-            translation_key="use_heating_curve",
+            translation_key="heating_circuit_use_heating_curve",
         ),
         # Heating and cooling circuits have one curve setting, so only cooling circuits get the cooling curve switch.
         # TODO: Use the key `use_curve_table` without `ref_key` when the unique IDs are migrated to the keys of
@@ -94,7 +94,7 @@ SWITCH_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergySwitchEntityDescriptio
             entity_registry_enabled_default=False,
             key="use_heating_curve",
             ref_key="use_cooling_curve",
-            translation_key="use_cooling_curve",
+            translation_key="heating_circuit_use_cooling_curve",
         ),
     ),
     SectionPrefix.SOLAR_CIRCUIT: (
@@ -102,7 +102,7 @@ SWITCH_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergySwitchEntityDescriptio
             device_class=SwitchDeviceClass.SWITCH,
             entity_category=EntityCategory.CONFIG,
             key="priority_1_before_2",
-            translation_key="priority_1_before_2",
+            translation_key="solar_circuit_priority_1_before_2",
         ),
     ),
     SectionPrefix.HEAT_PUMP: (
@@ -111,7 +111,7 @@ SWITCH_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergySwitchEntityDescriptio
             entity_category=EntityCategory.CONFIG,
             entity_registry_enabled_default=False,
             key="compressor_use_night_speed",
-            translation_key="compressor_use_night_speed",
+            translation_key="heat_pump_compressor_use_night_speed",
         ),
     ),
     SectionPrefix.BUFFER_TANK: (
@@ -121,7 +121,7 @@ SWITCH_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergySwitchEntityDescriptio
             entity_category=EntityCategory.CONFIG,
             entity_registry_enabled_default=False,
             key="use_excess_energy",
-            translation_key="use_excess_energy",
+            translation_key="buffer_tank_use_excess_energy",
         ),
     ),
     SectionPrefix.DHW_TANK: (
@@ -131,7 +131,7 @@ SWITCH_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergySwitchEntityDescriptio
             entity_category=EntityCategory.CONFIG,
             entity_registry_enabled_default=False,
             key="use_excess_energy",
-            translation_key="use_excess_energy",
+            translation_key="dhw_tank_use_excess_energy",
         ),
     ),
     SectionPrefix.EXTERNAL_HEAT_SOURCE: (
@@ -141,7 +141,7 @@ SWITCH_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergySwitchEntityDescriptio
             entity_category=EntityCategory.CONFIG,
             entity_registry_enabled_default=False,
             key="use_excess_energy",
-            translation_key="use_excess_energy",
+            translation_key="external_heat_source_use_excess_energy",
         ),
     ),
 }

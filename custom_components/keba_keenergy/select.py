@@ -184,7 +184,7 @@ SELECT_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergySelectEntityDescriptio
             entity_category=EntityCategory.CONFIG,
             entity_registry_enabled_default=False,
             key="heating_curve",
-            translation_key="heating_curve",
+            translation_key="heating_circuit_heating_curve",
         ),
         KebaKeEnergySelectEntityDescription(
             condition=is_cooling_circuit,
@@ -192,7 +192,7 @@ SELECT_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergySelectEntityDescriptio
             entity_category=EntityCategory.CONFIG,
             entity_registry_enabled_default=False,
             key="cooling_curve",
-            translation_key="cooling_curve",
+            translation_key="heating_circuit_cooling_curve",
         ),
     ),
     SectionPrefix.SOLAR_CIRCUIT: (
