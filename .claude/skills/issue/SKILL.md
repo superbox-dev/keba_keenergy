@@ -16,6 +16,7 @@ description: Rules for creating and updating GitHub issues (tickets). Use when a
 - Changes to a ticket go into the description, never into a new comment
   - outdated text is struck through (`~~old text~~`) and the new text follows, so the change stays traceable
   - done steps in the TODO list are checked (`- [x]`), dropped steps are struck through
+- Tables are collapsed: `<details><summary>Name</summary>`, blank line, table, blank line, `</details>`
 - US English
 - Identifiers in backticks
 - No credentials, serial numbers or public IP addresses, no unredacted logs
