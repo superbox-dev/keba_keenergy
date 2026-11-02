@@ -1219,7 +1219,7 @@ SENSOR_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergySensorEntityDescriptio
             key="fresh_water_module_temperature",
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             state_class=SensorStateClass.MEASUREMENT,
-            suggested_display_precision=2,
+            suggested_display_precision=1,
             translation_key="dhw_tank_fresh_water_module_temperature",
         ),
         KebaKeEnergySensorEntityDescription[float](
