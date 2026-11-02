@@ -157,7 +157,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'switch',
-      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Bedieneinheit Modbus TCP',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Bedieneinheit Modbus-Server',
     }),
     'context': <ANY>,
     'entity_id': 'switch.keba_keenergy_12345678_modbus_active',
@@ -367,7 +367,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'switch',
-      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Control unit Modbus TCP',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Control unit Modbus server',
     }),
     'context': <ANY>,
     'entity_id': 'switch.keba_keenergy_12345678_modbus_active',

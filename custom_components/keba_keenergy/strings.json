@@ -884,7 +884,7 @@
         "name": "Priority 1 before 2"
       },
       "system_modbus_active": {
-        "name": "Modbus TCP"
+        "name": "Modbus server"
       },
       "system_remote_maintenance_active": {
         "name": "Remote maintenance"

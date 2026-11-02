@@ -13,7 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Added the HVAC actions `defrosting` and `preheating` to the heating circuits, shown while a heat pump defrosts or
   preheats. ([Issue #84][issue-84])
-- Added switches for remote maintenance and Modbus TCP and remote maintenance connectivity sensors.
+- Added switches for remote maintenance and the Modbus server, and remote maintenance connectivity sensors.
   ([Issue #76][issue-76])
 
 ### Changed

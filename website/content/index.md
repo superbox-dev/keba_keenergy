@@ -108,13 +108,13 @@ provide are not created. Changes are written to the control unit, see [Known lim
 - **Select**: operating mode
 - **Sensors**: outdoor temperature, operating mode, CPU and temporary memory usage (diagnostic), write operations
   this week (diagnostic), flash erase counter (diagnostic)
-- **Switches**: remote maintenance, Modbus TCP (disabled by default)
+- **Switches**: remote maintenance, Modbus server (disabled by default)
 - **Binary sensors**: remote maintenance connection and remote maintenance server (diagnostic, disabled by default)
 
 #### Remote access
 
 The switch **Remote maintenance** grants KEBA or your installer remote access to the control unit, also when an
-automation enables it. Only enable it when you want remote support. The switch **Modbus TCP** enables or disables the
+automation enables it. Only enable it when you want remote support. The switch **Modbus server** enables or disables the
 Modbus TCP server of the control unit, disabling it disconnects other Modbus clients (e.g. an energy manager) at once.
 
 The binary sensor **Remote maintenance connection** shows whether the control unit is connected to the remote
