@@ -2714,7 +2714,7 @@
   })
 # ---
 # name: test_sensors[de][sensor.keba_keenergy_12345678_hot_water_tank_fresh_water_module_temperature_1_displayed]
-  '51.20 °C'
+  '51.2 °C'
 # ---
 # name: test_sensors[de][sensor.keba_keenergy_12345678_hot_water_tank_operating_mode_1]
   StateSnapshot({
@@ -6335,7 +6335,7 @@
   })
 # ---
 # name: test_sensors[en][sensor.keba_keenergy_12345678_hot_water_tank_fresh_water_module_temperature_1_displayed]
-  '51.20 °C'
+  '51.2 °C'
 # ---
 # name: test_sensors[en][sensor.keba_keenergy_12345678_hot_water_tank_operating_mode_1]
   StateSnapshot({
