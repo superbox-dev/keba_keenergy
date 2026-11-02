@@ -1,7 +1,7 @@
 # CLAUDE.md
 
-Home Assistant custom integration (HACS) for heat pumps with a KEBA KeEnergy control unit (Web HMI, local polling),
-with all device access going through the separate PyPI library `keba_keenergy_api`.
+Home Assistant custom integration (HACS) for KEBA KeEnergy heat pumps (Web HMI, local polling), device access only
+via the PyPI library `keba_keenergy_api`.
 
 ## Commands
 
@@ -50,7 +50,7 @@ Before finishing a change, run `ruff format`, `lint.sh` and `pytest`, in this or
   redacted (`async_redact_data(data, TO_REDACT)`)
 - New texts in `strings.json`, `translations/en.json` and `translations/de.json`, keys sorted
 - Entity names (EN / DE), Home Assistant adds the device name
-  - readable form of the `keba_keenergy_api` 3.0 endpoint name, no device name, unit or state
+  - readable `keba_keenergy_api` 3.0 endpoint name, no device name, unit or state
     (`RETURN_TEMPERATURE`: `Return temperature` / `Rücklauftemperatur`)
   - mode before the quantity in EN, after it in DE (`Heating power` / `Leistung Heizen`), sum of all modes
     `Total …` / `… gesamt`
@@ -65,9 +65,9 @@ Before finishing a change, run `ruff format`, `lint.sh` and `pytest`, in this or
   - binary sensors only the component or condition, the device class shows the state (`Compressor` / `Kompressor`,
     `PV surplus` / `PV-Überschuss`)
   - DHW as `Hot water` / `Warmwasser`, abbreviations only when common (`COP`, `SPF` / `JAZ`, `PF` / `AZ`, `PV`),
-    never those of the Web HMI
+    not those of the Web HMI
   - DE compounds of at most two parts, longer ones as `<quantity> <component>` (`Drehzahl Umwälzpumpe`,
-    `Eintrittstemperatur Kompressor`), established terms stay one word (`Vorlauftemperatur`, `Hochdruckschalter`)
+    `Eintrittstemperatur Kompressor`), established terms one word (`Vorlauftemperatur`, `Hochdruckschalter`)
 - Energy entities like the energy monitor of the Web HMI: accumulated energies from `sStatisticalData`, meters
   (`*_METER_*`) only for power, daily energy and mass flow
   - exception: meters without a usable statistic (`HeatPump` source, `SolarCircuit`, `Photovoltaics`)
@@ -93,7 +93,7 @@ Before finishing a change, run `ruff format`, `lint.sh` and `pytest`, in this or
 - Missing device endpoints or values belong in `keba_keenergy_api`, stop and ask how to proceed
   - values calculated from existing ones are fine in the integration
 - Limited flash writes: write only changed values, only via `coordinator.async_write_data()`, debounce
-  fast-changing values (e.g. temperatures set with a slider) with `KebaKeEnergyDebouncedEntity`
+  fast-changing values (e.g. sliders) with `KebaKeEnergyDebouncedEntity`
 - No new dependencies (`pyproject.toml`, `manifest.json`, also dev dependencies) without asking first
 - `git add` new files, the pre-commit hooks only check tracked files
 - Never edit generated files (`coverage-badge.svg`, `website/docs/`) or `config/` (except
@@ -130,7 +130,7 @@ Before finishing a change, run `ruff format`, `lint.sh` and `pytest`, in this or
   - global for all heating circuits, set by the preset `away`, the action `set_away_date_range` or the blueprint
   - the preset writes the range (today until +365 days, time zone of the control unit) and `NORMAL` unless a manual
     mode is active, every other HVAC mode or preset ends it (range of yesterday)
-  - shown at once while the range is active, the control unit takes it over later
+  - shown at once while active, the control unit takes it over later
   - circuits that only cool have no away
 - Target temperature is the value of the effective operating mode, shown at once after a change
   - day and party `target_temperature_day`, night `target_temperature_night`, away `target_temperature_away`,

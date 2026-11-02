@@ -39,6 +39,7 @@ Always this order. Omit empty sections, never reorder or rename them.
 - Prefer enforcing a rule via linter/config over writing it down
 - Bullets, max. 2 nesting levels, exceptions nested under their rule
 - Fragments, not sentences, no trailing periods, no filler
+- As short as possible, few adjectives and adverbs, no digressions
 - General rules over single cases
 - Short reason only if a rule seems arbitrary
 - **never**, **always**, **only** for strength, bold only for critical rules
