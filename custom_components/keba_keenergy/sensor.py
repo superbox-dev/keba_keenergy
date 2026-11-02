@@ -247,6 +247,7 @@ WRITE_COUNT_SENSOR_TYPE: Final[SensorEntityDescription] = SensorEntityDescriptio
 )
 
 PENDING_ALARMS_SENSOR_TYPE: Final[SensorEntityDescription] = SensorEntityDescription(
+    entity_category=EntityCategory.DIAGNOSTIC,
     key="pending_alarms",
     state_class=SensorStateClass.MEASUREMENT,
     translation_key="pending_alarms",
