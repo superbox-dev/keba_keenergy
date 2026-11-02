@@ -139,6 +139,12 @@
       },
       "solar_circuit_heat_request": {
         "name": "Heizanforderung{counter}"
+      },
+      "system_remote_maintenance_connected": {
+        "name": "Verbindung Fernwartung"
+      },
+      "system_remote_maintenance_server_reachable": {
+        "name": "Server Fernwartung"
       }
     },
     "climate": {
@@ -876,6 +882,12 @@
       },
       "solar_circuit_priority_1_before_2": {
         "name": "Vorrang 1 vor 2"
+      },
+      "system_modbus_active": {
+        "name": "Modbus TCP"
+      },
+      "system_remote_maintenance_active": {
+        "name": "Fernwartung"
       }
     },
     "water_heater": {

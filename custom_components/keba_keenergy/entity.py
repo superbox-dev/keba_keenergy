@@ -9,6 +9,7 @@ from abc import abstractmethod
 from dataclasses import dataclass
 from functools import cached_property
 from typing import TYPE_CHECKING
+from typing import Any
 from typing import Final
 from typing import Literal
 
@@ -20,6 +21,7 @@ from homeassistant.helpers.device_registry import DeviceInfo
 from homeassistant.helpers.entity import EntityDescription
 from homeassistant.helpers.event import async_call_later
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
+from homeassistant.helpers.update_coordinator import DataUpdateCoordinator
 
 from .const import DEVICE_TRANSLATION_KEYS
 from .const import DOMAIN
@@ -28,9 +30,11 @@ from .const import FLOAT32_SIGNIFICANT_DIGITS
 from .const import MANUFACTURER
 from .const import MANUFACTURER_INO
 from .const import MANUFACTURER_MTEC
+from .const import RemoteAccessValue
 from .const import SectionPrefix
 from .coordinator import KebaKeEnergyConfigEntry
 from .coordinator import KebaKeEnergyDataUpdateCoordinator
+from .coordinator import KebaKeEnergyRemoteAccessCoordinator
 from .legacy import get_data_key
 from .legacy import get_data_keys
 
@@ -63,14 +67,21 @@ class KebaKeEnergyEntityDescription(EntityDescription):
     entity_class: type[KebaKeEnergyEntity] | None = None  # Entity class instead of the default class of the platform.
 
 
-class KebaKeEnergyBaseEntity(
-    CoordinatorEntity[KebaKeEnergyDataUpdateCoordinator],
-):
-    """KEBA KeEnergy base entity."""
+class KebaKeEnergyCoordinatorEntity[CoordinatorT: DataUpdateCoordinator[Any]](CoordinatorEntity[CoordinatorT]):
+    """KEBA KeEnergy entity of a coordinator, shared by the entities of all coordinators."""
 
     _attr_has_entity_name: bool = True
     # Domain of the platform, the entity ID is `<platform domain>.<domain>_<unique ID>`.
     _platform_domain: str
+
+    def _set_unique_id(self, unique_id: str, /) -> None:
+        """Set the unique ID and the entity ID `<platform domain>.<domain>_<unique ID>`."""
+        self._attr_unique_id: str | None = unique_id
+        self.entity_id: str = f"{self._platform_domain}.{DOMAIN}_{unique_id}"
+
+
+class KebaKeEnergyBaseEntity(KebaKeEnergyCoordinatorEntity[KebaKeEnergyDataUpdateCoordinator]):
+    """KEBA KeEnergy base entity."""
 
     def __init__(
         self,
@@ -87,8 +98,7 @@ class KebaKeEnergyBaseEntity(
         self.index: int | None = index
         self.value_index: int | None = value_index
 
-        self._attr_unique_id: str | None = self._build_unique_id(*self._unique_id_parts)
-        self.entity_id: str = f"{self._platform_domain}.{DOMAIN}_{self._attr_unique_id}"
+        self._set_unique_id(self._build_unique_id(*self._unique_id_parts))
 
     @property
     def _unique_id_parts(self) -> tuple[str, ...]:
@@ -370,8 +380,50 @@ class KebaKeEnergyEntity(KebaKeEnergyBaseEntity):
         return get_data_key(self.entity_description)
 
 
+class KebaKeEnergyRemoteAccessEntity(KebaKeEnergyCoordinatorEntity[KebaKeEnergyRemoteAccessCoordinator]):
+    """KEBA KeEnergy entity of the remote access of the control unit."""
+
+    def __init__(
+        self,
+        coordinator: KebaKeEnergyRemoteAccessCoordinator,
+        description: EntityDescription,
+        /,
+        *,
+        device_identifier: str,
+    ) -> None:
+        """Initialize the entity of the device, the coordinator only reads the values of the enabled entities."""
+        self.entity_description = description
+        self.value: RemoteAccessValue = RemoteAccessValue(description.key)
+
+        super().__init__(coordinator, context=self.value)
+
+        self._set_unique_id(f"{coordinator.config_entry.unique_id}_{description.key}")
+        # The control unit is registered on setup, the entity is only linked to it.
+        self._attr_device_info: DeviceInfo | None = DeviceInfo(identifiers={(DOMAIN, device_identifier)})
+
+    @property
+    def is_on(self) -> bool | None:
+        """Return True if the value is on, None if it was not read yet."""
+        return self.coordinator.data.get(self.value)
+
+
 @callback
-def async_setup_entities(
+def async_setup_remote_access_entities(
+    entry: KebaKeEnergyConfigEntry,
+    async_add_entities: AddEntitiesCallback,
+    descriptions: tuple[EntityDescription, ...],
+    entity_class: type[KebaKeEnergyRemoteAccessEntity],
+) -> None:
+    """Set up the remote access entities of a platform."""
+    coordinator: KebaKeEnergyRemoteAccessCoordinator = entry.runtime_data.remote_access_coordinator
+    device_identifier: str = entry.runtime_data.data_coordinator.device_identifier(SectionPrefix.SYSTEM, None)
+    async_add_entities(
+        entity_class(coordinator, description, device_identifier=device_identifier) for description in descriptions
+    )
+
+
+@callback
+def async_setup_data_entities(
     entry: KebaKeEnergyConfigEntry,
     async_add_entities: AddEntitiesCallback,
     entity_types: Mapping[SectionPrefix, tuple[KebaKeEnergyEntityDescription, ...]],
@@ -379,7 +431,7 @@ def async_setup_entities(
     platform_name: str,
 ) -> None:
     """Set up the entities of a platform, `platform_name` is only used in the logs."""
-    coordinator: KebaKeEnergyDataUpdateCoordinator = entry.runtime_data
+    coordinator: KebaKeEnergyDataUpdateCoordinator = entry.runtime_data.data_coordinator
     entities: list[KebaKeEnergyEntity] = []
     deactivated_unique_ids: set[str | None] = set()
 
@@ -437,7 +489,7 @@ def async_setup_entities(
 @callback
 def _async_remove_deactivated_entities(entry: KebaKeEnergyConfigEntry, unique_ids: set[str | None], /) -> None:
     """Remove the entities of deactivated sensors that were created before from the entity registry."""
-    entity_registry: er.EntityRegistry = er.async_get(entry.runtime_data.hass)
+    entity_registry: er.EntityRegistry = er.async_get(entry.runtime_data.data_coordinator.hass)
 
     for registry_entry in er.async_entries_for_config_entry(entity_registry, entry.entry_id):
         if registry_entry.unique_id in unique_ids:

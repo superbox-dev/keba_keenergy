@@ -70,7 +70,7 @@ async def test_failure_input_in_use_again(
     await fake_api.setup_integration()
 
     fake_api.message_ids = {}
-    await config_entry.runtime_data.async_refresh()
+    await config_entry.runtime_data.data_coordinator.async_refresh()
 
     state: State = get_state(hass, COMPRESSOR_FAILURE_ENTITY_ID)
     assert state.state == STATE_OFF

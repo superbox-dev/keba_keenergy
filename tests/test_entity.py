@@ -21,6 +21,7 @@ from tests import select_option
 from tests.api_data import ENTITY_UPDATED_DATA_RESPONSE
 from tests.api_data import MULTIPLE_DEVICES_DATA_RESPONSE
 from tests.api_data import get_multiple_devices_responses
+from tests.test_entity_data import REMOTE_MAINTENANCE_CONNECTED_ENTITY_ID
 from tests.test_issues_data import WRITE_COUNT_ENTITY_ID
 
 if TYPE_CHECKING:
@@ -141,3 +142,28 @@ async def test_entities_keep_their_state_if_queued_writes_failed(
         '[{"name": "APPL.CtrlAppl.sParam.bufferTank[1].param.operatingMode", "value": "2"}]',
     ]
     assert (buffer_tank_1_state.state, buffer_tank_2_state.state) == ("off", "on")
+
+
+@pytest.mark.usefixtures("entity_registry_enabled_by_default")
+async def test_update_remote_access_entity(
+    hass: HomeAssistant,
+    fake_api: FakeKebaKeEnergyAPI,
+) -> None:
+    """Test that updating a remote access entity with the action only reads the remote access."""
+    fake_api.responses = get_multiple_devices_responses(MULTIPLE_DEVICES_DATA_RESPONSE)
+    await async_setup_component(hass, HA_DOMAIN, {})
+    await fake_api.setup_integration()
+    read_requests: list[str] = fake_api.read_requests()
+    fake_api.remote_access["isRemoteMConnectionAlive"] = True
+
+    await hass.services.async_call(
+        domain=HA_DOMAIN,
+        service=SERVICE_UPDATE_ENTITY,
+        service_data={
+            ATTR_ENTITY_ID: REMOTE_MAINTENANCE_CONNECTED_ENTITY_ID,
+        },
+        blocking=True,
+    )
+
+    assert get_state(hass, REMOTE_MAINTENANCE_CONNECTED_ENTITY_ID).state == "on"
+    assert fake_api.read_requests() == read_requests

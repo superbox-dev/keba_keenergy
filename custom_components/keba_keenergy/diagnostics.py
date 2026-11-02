@@ -19,6 +19,7 @@ if TYPE_CHECKING:
     from .coordinator import CoordinatorData
     from .coordinator import KebaKeEnergyConfigEntry
     from .coordinator import KebaKeEnergyDataUpdateCoordinator
+    from .coordinator import KebaKeEnergyRemoteAccessCoordinator
 
 # The readings per device type and key as JSON data.
 type ReadingsDump = dict[str, dict[str, list[dict[str, Any]]]]
@@ -29,7 +30,8 @@ async def async_get_config_entry_diagnostics(
     entry: KebaKeEnergyConfigEntry,
 ) -> dict[str, Any]:
     """Return the diagnostics of a config entry."""
-    coordinator: KebaKeEnergyDataUpdateCoordinator = entry.runtime_data
+    data_coordinator: KebaKeEnergyDataUpdateCoordinator = entry.runtime_data.data_coordinator
+    remote_access_coordinator: KebaKeEnergyRemoteAccessCoordinator = entry.runtime_data.remote_access_coordinator
 
     return async_redact_data(
         {
@@ -40,17 +42,18 @@ async def async_get_config_entry_diagnostics(
                 "options": dict(entry.options),
             },
             "device": {
-                "model": coordinator.device_model,
-                "name": coordinator.device_name,
-                "hmi_sw_version": coordinator.device_hmi_sw_version,
-                "serial_number": coordinator.device_serial_number,
+                "model": data_coordinator.device_model,
+                "name": data_coordinator.device_name,
+                "hmi_sw_version": data_coordinator.device_hmi_sw_version,
+                "serial_number": data_coordinator.device_serial_number,
             },
-            "device_counts": asdict(coordinator.device_counts) if coordinator.device_counts else None,
-            "curve_names": coordinator.curve_names,
-            "weekly_write_count": coordinator.write_counter.weekly_count,
-            "weekly_writes": coordinator.write_counter.weekly_writes,
-            "configuration": _dump(coordinator.configuration),
-            "data": _dump(coordinator.data),
+            "device_counts": asdict(data_coordinator.device_counts) if data_coordinator.device_counts else None,
+            "curve_names": data_coordinator.curve_names,
+            "weekly_write_count": data_coordinator.write_counter.weekly_count,
+            "weekly_writes": data_coordinator.write_counter.weekly_writes,
+            "configuration": _dump(data_coordinator.configuration),
+            "data": _dump(data_coordinator.data),
+            "remote_access": remote_access_coordinator.data,
         },
         TO_REDACT,
     )

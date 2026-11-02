@@ -396,7 +396,7 @@ async def async_setup_entry(
     async_add_entities: AddEntitiesCallback,
 ) -> None:
     """Set up KEBA KeEnergy climates from a config entry."""
-    coordinator: KebaKeEnergyDataUpdateCoordinator = entry.runtime_data
+    coordinator: KebaKeEnergyDataUpdateCoordinator = entry.runtime_data.data_coordinator
     heating_circuit_count: int = coordinator.device_count(SectionPrefix.HEATING_CIRCUIT)
     climates: list[KebaKeEnergyClimateEntity] = [
         _climate_entity_class(coordinator, index=index)(

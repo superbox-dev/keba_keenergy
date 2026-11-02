@@ -13,6 +13,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Added the HVAC actions `defrosting` and `preheating` to the heating circuits, shown while a heat pump defrosts or
   preheats. ([Issue #84][issue-84])
+- Added switches for remote maintenance and Modbus TCP and remote maintenance connectivity sensors.
+  ([Issue #76][issue-76])
 
 ### Changed
 
@@ -70,6 +72,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Counted only successful writes in the sensor `weekly_write_count`.
 - Showed the repair issue for frequent writes again after a restart if the weekly limit is still exceeded.
 
+[issue-76]: https://github.com/superbox-dev/keba_keenergy/issues/76
 [issue-77]: https://github.com/superbox-dev/keba_keenergy/issues/77
 [issue-84]: https://github.com/superbox-dev/keba_keenergy/issues/84
 [issue-85]: https://github.com/superbox-dev/keba_keenergy/issues/85

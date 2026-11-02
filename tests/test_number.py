@@ -370,7 +370,7 @@ async def test_limits_after_update(
     state: State = get_state(hass, TARGET_TEMPERATURE_OFFSET_ENTITY_ID)
     assert (state.attributes[ATTR_MIN], state.attributes[ATTR_MAX]) == (DEFAULT_MIN_VALUE, DEFAULT_MAX_VALUE)
 
-    await config_entry.runtime_data.async_refresh()
+    await config_entry.runtime_data.data_coordinator.async_refresh()
 
     state = get_state(hass, TARGET_TEMPERATURE_OFFSET_ENTITY_ID)
     assert (state.attributes[ATTR_MIN], state.attributes[ATTR_MAX]) == (-2.5, 2.5)
@@ -443,7 +443,7 @@ async def test_debounced_write_during_update(
         async_fire_time_changed(hass, dt_util.utcnow() + timedelta(seconds=FLASH_WRITE_DELAY))
 
     fake_api.during_read = set_value_during_read
-    await config_entry.runtime_data.async_refresh()
+    await config_entry.runtime_data.data_coordinator.async_refresh()
     await hass.async_block_till_done()
 
     state: State = get_state(hass, TARGET_TEMPERATURE_OFFSET_ENTITY_ID)

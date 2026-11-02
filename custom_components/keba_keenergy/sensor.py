@@ -42,7 +42,7 @@ from .const import SectionPrefix
 from .entity import KebaKeEnergyBaseEntity
 from .entity import KebaKeEnergyEntity
 from .entity import KebaKeEnergyEntityDescription
-from .entity import async_setup_entities
+from .entity import async_setup_data_entities
 from .entity import has_both_meters
 from .entity import has_electrical_energy_meter
 from .entity import has_electrical_energy_meter_and_cooling
@@ -1386,7 +1386,7 @@ async def async_setup_entry(
     async_add_entities: AddEntitiesCallback,
 ) -> None:
     """Set up KEBA KeEnergy sensors from a config entry."""
-    async_setup_entities(
+    async_setup_data_entities(
         entry,
         async_add_entities,
         SENSOR_TYPES,
@@ -1394,5 +1394,5 @@ async def async_setup_entry(
         "sensor",
     )
     async_add_entities(
-        [KebaKeEnergyWriteCountSensorEntity(entry.runtime_data, WRITE_COUNT_SENSOR_TYPE)],
+        [KebaKeEnergyWriteCountSensorEntity(entry.runtime_data.data_coordinator, WRITE_COUNT_SENSOR_TYPE)],
     )

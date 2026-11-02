@@ -114,6 +114,8 @@
       }),
     }),
     'binary_sensor.keba_keenergy_12345678_photovoltaics_excess_energy_active': None,
+    'binary_sensor.keba_keenergy_12345678_remote_maintenance_connected': None,
+    'binary_sensor.keba_keenergy_12345678_remote_maintenance_server_reachable': None,
     'binary_sensor.keba_keenergy_12345678_solar_circuit_heat_request_1_1': dict({
       'state': dict({
         'off': 'mdi:power-off',
@@ -726,6 +728,15 @@
     'switch.keba_keenergy_12345678_heat_pump_compressor_use_night_speed': None,
     'switch.keba_keenergy_12345678_hot_water_tank_use_excess_energy_1': None,
     'switch.keba_keenergy_12345678_hot_water_tank_use_excess_energy_2': None,
+    'switch.keba_keenergy_12345678_modbus_active': dict({
+      'state': dict({
+        'off': 'mdi:lan-disconnect',
+        'on': 'mdi:lan-connect',
+      }),
+    }),
+    'switch.keba_keenergy_12345678_remote_maintenance_active': dict({
+      'default': 'mdi:remote-desktop',
+    }),
     'switch.keba_keenergy_12345678_solar_circuit_priority_1_before_2_1': None,
     'switch.keba_keenergy_12345678_solar_circuit_priority_1_before_2_2': None,
     'water_heater.keba_keenergy_12345678_1': None,

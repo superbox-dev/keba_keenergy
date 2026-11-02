@@ -22,7 +22,7 @@ from .const import SectionPrefix
 from .entity import KebaKeEnergyDebouncedEntity
 from .entity import KebaKeEnergyEntity
 from .entity import KebaKeEnergyEntityDescription
-from .entity import async_setup_entities
+from .entity import async_setup_data_entities
 from .entity import has_photovoltaics
 from .entity import is_cooling_circuit
 from .entity import is_cooling_circuit_with_photovoltaics
@@ -445,7 +445,7 @@ async def async_setup_entry(
     async_add_entities: AddEntitiesCallback,
 ) -> None:
     """Set up KEBA KeEnergy numbers from a config entry."""
-    async_setup_entities(
+    async_setup_data_entities(
         entry,
         async_add_entities,
         NUMBER_TYPES,

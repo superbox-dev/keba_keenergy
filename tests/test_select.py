@@ -238,7 +238,7 @@ async def test_heating_curve_options_after_update(
     assert "HC1" in state.attributes[ATTR_OPTIONS]
 
     fake_api.curves = CURVES_RENAMED_RESPONSE
-    await config_entry.runtime_data.async_refresh()
+    await config_entry.runtime_data.data_coordinator.async_refresh()
 
     state = get_state(hass, HEATING_CURVE_ENTITY_ID)
 

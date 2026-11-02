@@ -89,7 +89,7 @@ def _get_coordinator(call: ServiceCall) -> KebaKeEnergyDataUpdateCoordinator:
             },
         )
 
-    coordinator: KebaKeEnergyDataUpdateCoordinator = entry.runtime_data
+    coordinator: KebaKeEnergyDataUpdateCoordinator = entry.runtime_data.data_coordinator
 
     return coordinator
 

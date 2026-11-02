@@ -9,9 +9,14 @@ import socket
 from typing import TYPE_CHECKING
 from typing import Final
 
+from homeassistant.const import CONF_HOST
+from homeassistant.const import CONF_PASSWORD
+from homeassistant.const import CONF_SSL
+from homeassistant.const import CONF_USERNAME
 from homeassistant.helpers import config_validation as cv
 from homeassistant.helpers import device_registry as dr
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
+from keba_keenergy_api.client import KebaKeEnergyAPI
 
 from .const import DOMAIN
 from .const import MANUFACTURER
@@ -19,6 +24,8 @@ from .const import PLATFORMS
 from .const import SectionPrefix
 from .coordinator import KebaKeEnergyConfigEntry
 from .coordinator import KebaKeEnergyDataUpdateCoordinator
+from .coordinator import KebaKeEnergyRemoteAccessCoordinator
+from .coordinator import KebaKeEnergyRuntimeData
 from .services import async_setup_services
 from .write_counter import FlashWriteCounter
 
@@ -45,15 +52,27 @@ async def async_setup_entry(hass: HomeAssistant, entry: KebaKeEnergyConfigEntry)
     # Newer software versions of the Web HMI comes with self-signed SSL certificates.
     session: ClientSession = async_get_clientsession(hass, verify_ssl=False, family=socket.AF_INET)
 
-    coordinator: KebaKeEnergyDataUpdateCoordinator = KebaKeEnergyDataUpdateCoordinator(
-        hass,
-        entry,
+    api: KebaKeEnergyAPI = KebaKeEnergyAPI(
+        entry.data[CONF_HOST],
+        username=entry.data.get(CONF_USERNAME),
+        password=entry.data.get(CONF_PASSWORD),
+        ssl=entry.data[CONF_SSL],
+        verify_ssl=False,
         session=session,
     )
 
+    coordinator: KebaKeEnergyDataUpdateCoordinator = KebaKeEnergyDataUpdateCoordinator(hass, entry, api=api)
+
     await coordinator.async_config_entry_first_refresh()
 
-    entry.runtime_data = coordinator
+    remote_access: KebaKeEnergyRemoteAccessCoordinator = KebaKeEnergyRemoteAccessCoordinator(
+        hass,
+        entry,
+        api=api,
+        write_counter=coordinator.write_counter,
+    )
+
+    entry.runtime_data = KebaKeEnergyRuntimeData(data_coordinator=coordinator, remote_access_coordinator=remote_access)
 
     # Register the control unit before other devices use it as `via_device`.
     device_registry: dr.DeviceRegistry = dr.async_get(hass)
@@ -79,6 +98,13 @@ async def async_setup_entry(hass: HomeAssistant, entry: KebaKeEnergyConfigEntry)
             device_registry.async_remove_device(device.id)
 
     await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
+
+    # The remote access is read without delaying the setup, the check of the remote maintenance server takes seconds.
+    entry.async_create_background_task(
+        hass,
+        remote_access.async_refresh(),
+        f"{DOMAIN} remote access refresh",
+    )
 
     return True
 

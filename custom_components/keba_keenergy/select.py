@@ -25,7 +25,7 @@ from keba_keenergy_api.enums import SystemOperatingMode
 from .const import SectionPrefix
 from .entity import KebaKeEnergyEntity
 from .entity import KebaKeEnergyEntityDescription
-from .entity import async_setup_entities
+from .entity import async_setup_data_entities
 from .entity import is_cooling_circuit
 from .entity import is_heating_circuit
 from .legacy import get_member
@@ -248,7 +248,7 @@ async def async_setup_entry(
     async_add_entities: AddEntitiesCallback,
 ) -> None:
     """Set up KEBA KeEnergy selects from a config entry."""
-    async_setup_entities(
+    async_setup_data_entities(
         entry,
         async_add_entities,
         SELECT_TYPES,

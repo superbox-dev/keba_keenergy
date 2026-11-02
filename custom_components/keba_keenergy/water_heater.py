@@ -191,7 +191,7 @@ async def async_setup_entry(
     async_add_entities: AddEntitiesCallback,
 ) -> None:
     """Set up KEBA KeEnergy water heaters from a config entry."""
-    coordinator: KebaKeEnergyDataUpdateCoordinator = entry.runtime_data
+    coordinator: KebaKeEnergyDataUpdateCoordinator = entry.runtime_data.data_coordinator
     water_heaters: list[KebaKeEnergyBufferTankEntity | KebaKeEnergyDHWTankEntity] = []
     dhw_tank_count: int = coordinator.device_count(SectionPrefix.DHW_TANK)
     buffer_tank_count: int = coordinator.device_count(SectionPrefix.BUFFER_TANK)

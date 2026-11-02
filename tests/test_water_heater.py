@@ -269,7 +269,7 @@ async def test_limits_after_update(
     state: State = get_state(hass, HOT_WATER_TANK_ENTITY_ID)
     assert (state.attributes[ATTR_MIN_TEMP], state.attributes[ATTR_MAX_TEMP]) == DEFAULT_LIMITS
 
-    await config_entry.runtime_data.async_refresh()
+    await config_entry.runtime_data.data_coordinator.async_refresh()
 
     state = get_state(hass, HOT_WATER_TANK_ENTITY_ID)
     assert (state.attributes[ATTR_MIN_TEMP], state.attributes[ATTR_MAX_TEMP]) == (0, 52)

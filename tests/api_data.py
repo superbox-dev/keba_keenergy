@@ -1433,6 +1433,28 @@ HMI_RESPONSE: Final[dict[str, str]] = {
 WEEK_TIMER_DAY_START_SECONDS: Final[int] = 21600
 WEEK_TIMER_DAY_STOP_SECONDS: Final[int] = 79200
 
+# The remote access of the Web HMI by the action that reads it.
+REMOTE_ACCESS: Final[dict[str, bool]] = {
+    "isModbusActive": True,
+    "isRemoteMActive": False,
+    "isRemoteMConnectionAlive": False,
+    "isRemoteMServerReachable": True,
+}
+
+# The key of the value in the response of the actions that read the remote access.
+REMOTE_ACCESS_RESPONSE_KEYS: Final[dict[str, str]] = {
+    "isModbusActive": "active",
+    "isRemoteMActive": "active",
+    "isRemoteMConnectionAlive": "connected",
+    "isRemoteMServerReachable": "reachable",
+}
+
+# The actions that enable or disable the remote access, with the action that reads it.
+REMOTE_ACCESS_ACTIVATIONS: Final[dict[str, str]] = {
+    "activateModbus": "isModbusActive",
+    "activateRemoteM": "isRemoteMActive",
+}
+
 TIMEZONE_RESPONSE: Final[dict[str, str]] = {
     "timezone": "Europe/Vienna",
 }

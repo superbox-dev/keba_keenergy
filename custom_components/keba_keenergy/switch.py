@@ -15,10 +15,13 @@ from homeassistant.components.switch import SwitchEntityDescription
 from homeassistant.components.switch.const import DOMAIN as SWITCH_DOMAIN
 from homeassistant.const import EntityCategory
 
+from .const import RemoteAccessValue
 from .const import SectionPrefix
 from .entity import KebaKeEnergyEntity
 from .entity import KebaKeEnergyEntityDescription
-from .entity import async_setup_entities
+from .entity import KebaKeEnergyRemoteAccessEntity
+from .entity import async_setup_data_entities
+from .entity import async_setup_remote_access_entities
 from .entity import has_photovoltaics
 from .entity import is_cooling_only_circuit
 from .entity import is_heating_circuit
@@ -64,6 +67,22 @@ class KebaKeEnergySwitchEntity(KebaKeEnergyEntity, SwitchEntity):
         if not self.is_on:
             value: bool = True
             await self._async_write_value(value, key=self._data_key)
+
+
+class KebaKeEnergyRemoteAccessSwitchEntity(KebaKeEnergyRemoteAccessEntity, SwitchEntity):
+    """KEBA KeEnergy switch of the remote access (remote maintenance, Modbus TCP)."""
+
+    _platform_domain: str = SWITCH_DOMAIN
+
+    async def async_turn_off(self, **kwargs: object) -> None:  # noqa: ARG002
+        """Turn the switch off, written only if it is not off."""
+        if self.is_on is not False:
+            await self.coordinator.async_set_active(self.value, active=False)
+
+    async def async_turn_on(self, **kwargs: object) -> None:  # noqa: ARG002
+        """Turn the switch on, written only if it is not on."""
+        if not self.is_on:
+            await self.coordinator.async_set_active(self.value, active=True)
 
 
 SWITCH_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergySwitchEntityDescription, ...]]] = {
@@ -146,6 +165,23 @@ SWITCH_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergySwitchEntityDescriptio
     ),
 }
 
+REMOTE_ACCESS_SWITCH_TYPES: Final[tuple[SwitchEntityDescription, ...]] = (
+    SwitchEntityDescription(
+        device_class=SwitchDeviceClass.SWITCH,
+        entity_category=EntityCategory.CONFIG,
+        entity_registry_enabled_default=False,
+        key=RemoteAccessValue.MODBUS_ACTIVE,
+        translation_key="system_modbus_active",
+    ),
+    SwitchEntityDescription(
+        device_class=SwitchDeviceClass.SWITCH,
+        entity_category=EntityCategory.CONFIG,
+        entity_registry_enabled_default=False,
+        key=RemoteAccessValue.REMOTE_MAINTENANCE_ACTIVE,
+        translation_key="system_remote_maintenance_active",
+    ),
+)
+
 
 async def async_setup_entry(
     hass: HomeAssistant,  # noqa: ARG001
@@ -153,10 +189,16 @@ async def async_setup_entry(
     async_add_entities: AddEntitiesCallback,
 ) -> None:
     """Set up KEBA KeEnergy switches from a config entry."""
-    async_setup_entities(
+    async_setup_data_entities(
         entry,
         async_add_entities,
         SWITCH_TYPES,
         KebaKeEnergySwitchEntity,
         "switch",
+    )
+    async_setup_remote_access_entities(
+        entry,
+        async_add_entities,
+        REMOTE_ACCESS_SWITCH_TYPES,
+        KebaKeEnergyRemoteAccessSwitchEntity,
     )

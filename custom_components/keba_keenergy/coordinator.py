@@ -6,6 +6,7 @@ from __future__ import annotations
 
 import logging
 from asyncio import Lock
+from dataclasses import dataclass
 from dataclasses import replace
 from datetime import datetime
 from datetime import timedelta
@@ -15,18 +16,13 @@ from zoneinfo import ZoneInfo
 from zoneinfo import ZoneInfoNotFoundError
 
 from homeassistant.config_entries import ConfigEntry
-from homeassistant.const import CONF_HOST
-from homeassistant.const import CONF_PASSWORD
 from homeassistant.const import CONF_SCAN_INTERVAL
-from homeassistant.const import CONF_SSL
-from homeassistant.const import CONF_USERNAME
 from homeassistant.exceptions import ConfigEntryAuthFailed
 from homeassistant.exceptions import HomeAssistantError
 from homeassistant.helpers.debounce import Debouncer
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator
 from homeassistant.helpers.update_coordinator import UpdateFailed
 from homeassistant.util import dt as dt_util
-from keba_keenergy_api.client import KebaKeEnergyAPI
 from keba_keenergy_api.enums import ElectricalEnergyMeterType
 from keba_keenergy_api.enums import HeatingCircuitOperatingMode
 from keba_keenergy_api.enums import HeatingCircuitType
@@ -44,9 +40,11 @@ from .const import CURVE_KEYS
 from .const import DEFAULT_SCAN_INTERVAL
 from .const import DEVICE_TYPES
 from .const import DOMAIN
+from .const import REMOTE_ACCESS_SCAN_INTERVAL
 from .const import REQUEST_REFRESH_COOLDOWN
 from .const import SCAN_INTERVAL_DEVICE_TYPES
 from .const import SCAN_INTERVAL_TICK_OPTIONS
+from .const import RemoteAccessValue
 from .const import SectionPrefix
 from .legacy import ENDPOINTS
 from .write_counter import FlashWriteCounter
@@ -58,8 +56,8 @@ if TYPE_CHECKING:
     from collections.abc import Mapping
     from collections.abc import Sequence
 
-    from aiohttp import ClientSession
     from homeassistant.core import HomeAssistant
+    from keba_keenergy_api.client import KebaKeEnergyAPI
     from keba_keenergy_api.endpoints import Endpoint
     from keba_keenergy_api.models import CurvePoint
     from keba_keenergy_api.models import DeviceCounts
@@ -74,13 +72,48 @@ if TYPE_CHECKING:
 
 _LOGGER: Final = logging.getLogger(__name__)
 
-type KebaKeEnergyConfigEntry = ConfigEntry[KebaKeEnergyDataUpdateCoordinator]
+type KebaKeEnergyConfigEntry = ConfigEntry[KebaKeEnergyRuntimeData]
 # The readings per device type and key, one reading per device (and consumer).
 type CoordinatorData = dict[SectionPrefix, dict[str, list[Reading]]]
 # The endpoints of a read with the device type and the key of their readings.
 type ReadRequest = dict[Endpoint, tuple[SectionPrefix, str]]
 # The values of a write per key, one value per device (and consumer), None skips it.
 type WriteValues = Mapping[str, Sequence[WriteValue | None]]
+# The values of the remote access, only of the enabled entities.
+type RemoteAccessData = dict[RemoteAccessValue, bool]
+
+
+async def _api_call_for_update[R](coro: Awaitable[R], /) -> R:
+    """Return the result of an API call of an update, errors as errors of the update."""
+    try:
+        return await coro
+    except AuthenticationError as error:
+        raise ConfigEntryAuthFailed(
+            translation_domain=DOMAIN,
+            translation_key="authentication_error",
+        ) from error
+    except APIError as error:
+        raise UpdateFailed(
+            translation_domain=DOMAIN,
+            translation_key="communication_error",
+            translation_placeholders={
+                "error": str(error),
+            },
+        ) from error
+
+
+async def _api_call_for_user[R](coro: Awaitable[R], /) -> R:
+    """Return the result of an API call of a user action, errors as errors of the action."""
+    try:
+        return await coro
+    except APIError as error:
+        raise HomeAssistantError(
+            translation_domain=DOMAIN,
+            translation_key="communication_error",
+            translation_placeholders={
+                "error": str(error),
+            },
+        ) from error
 
 
 class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[CoordinatorData]):
@@ -92,9 +125,9 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[CoordinatorData]):
         entry: KebaKeEnergyConfigEntry,
         /,
         *,
-        session: ClientSession,
+        api: KebaKeEnergyAPI,
     ) -> None:
-        """Initialize the coordinator of the config entry, `session` is the HTTP session for the Web HMI."""
+        """Initialize the coordinator of the config entry, `api` is the client of the Web HMI."""
         self.config_entry: KebaKeEnergyConfigEntry = entry
         self.control_unit_device_id: str = ""
 
@@ -102,14 +135,7 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[CoordinatorData]):
         self._write_lock: Lock = Lock()
         self._local_change_count: int = 0
 
-        self._api: KebaKeEnergyAPI = KebaKeEnergyAPI(
-            entry.data[CONF_HOST],
-            username=entry.data.get(CONF_USERNAME),
-            password=entry.data.get(CONF_PASSWORD),
-            ssl=entry.data[CONF_SSL],
-            verify_ssl=False,
-            session=session,
-        )
+        self._api: KebaKeEnergyAPI = api
         self.configuration_url: str = str(self._api.device_url)
 
         # The device information, read once on setup.
@@ -169,25 +195,7 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[CoordinatorData]):
     async def _async_setup(self) -> None:
         """Set up the coordinator."""
         await self.write_counter.async_setup()
-        await self._api_call_for_update(self._async_read_setup_data())
-
-    @staticmethod
-    async def _api_call_for_update[R](coro: Awaitable[R]) -> R:
-        try:
-            return await coro
-        except AuthenticationError as error:
-            raise ConfigEntryAuthFailed(
-                translation_domain=DOMAIN,
-                translation_key="authentication_error",
-            ) from error
-        except APIError as error:
-            raise UpdateFailed(
-                translation_domain=DOMAIN,
-                translation_key="communication_error",
-                translation_placeholders={
-                    "error": str(error),
-                },
-            ) from error
+        await _api_call_for_update(self._async_read_setup_data())
 
     async def _async_read_setup_data(self) -> None:
         device_info: DeviceInfo = await self._api.get_device_info()
@@ -310,7 +318,7 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[CoordinatorData]):
             ]
 
             if device_numbers:
-                week_timers[timer_type] = await self._api_call_for_update(
+                week_timers[timer_type] = await _api_call_for_update(
                     self._api.get_week_timers(timer_type, device_numbers),
                 )
 
@@ -347,7 +355,7 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[CoordinatorData]):
 
     async def _async_read_curves(self, data: CoordinatorData, /) -> None:
         # The selects show the names of all curves, the sensors the points of the curves in use.
-        self.curve_names = await self._api_call_for_update(self._api.get_curve_table_names())
+        self.curve_names = await _api_call_for_update(self._api.get_curve_table_names())
         in_use: list[str] = [
             reading.value
             for readings_by_key in data.values()
@@ -356,12 +364,12 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[CoordinatorData]):
             for reading in readings
             if isinstance(reading.value, str) and reading.value in self.curve_names
         ]
-        self.curve_tables = await self._api_call_for_update(self._api.get_curve_tables(in_use)) if in_use else {}
+        self.curve_tables = await _api_call_for_update(self._api.get_curve_tables(in_use)) if in_use else {}
 
     async def _async_read(self, request: Iterable[Endpoint], /) -> Readings:
         # The read waits for a running write, so it gets the written value.
         async with self._write_lock:
-            return await self._api_call_for_update(
+            return await _api_call_for_update(
                 self._api.read(request, counts=self.device_counts, limits="writable", message_ids=True),
             )
 
@@ -448,23 +456,10 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[CoordinatorData]):
             _LOGGER.debug("API write request %s", names)
 
             # A failed write raises here and is not counted, it does not change the flash memory.
-            await self._api_call_for_user(write_fn())
+            await _api_call_for_user(write_fn())
 
             if not ignore_weekly_write_count:
                 await self.write_counter.async_add_write(names)
-
-    @staticmethod
-    async def _api_call_for_user[R](coro: Awaitable[R]) -> R:
-        try:
-            return await coro
-        except APIError as error:
-            raise HomeAssistantError(
-                translation_domain=DOMAIN,
-                translation_key="communication_error",
-                translation_placeholders={
-                    "error": str(error),
-                },
-            ) from error
 
     @staticmethod
     def _write_names(
@@ -541,7 +536,7 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[CoordinatorData]):
 
     async def async_get_timezone(self) -> ZoneInfo:
         """Read the time zone from the Web HMI."""
-        timezone: str = await self._api_call_for_user(self._api.get_timezone())
+        timezone: str = await _api_call_for_user(self._api.get_timezone())
 
         try:
             return ZoneInfo(timezone)
@@ -556,10 +551,10 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[CoordinatorData]):
 
     async def async_read_curve_table(self, name: str, /) -> CurveTable | None:
         """Read a heating or cooling curve from the Web HMI, None if there is no curve with the name."""
-        if name not in await self._api_call_for_user(self._api.get_curve_table_names()):
+        if name not in await _api_call_for_user(self._api.get_curve_table_names()):
             return None
 
-        curve_tables: dict[str, CurveTable] = await self._api_call_for_user(self._api.get_curve_tables([name]))
+        curve_tables: dict[str, CurveTable] = await _api_call_for_user(self._api.get_curve_tables([name]))
         return curve_tables[name]
 
     def device_identifier(self, device_type: SectionPrefix, device_number: int | None, /) -> str:
@@ -705,3 +700,97 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[CoordinatorData]):
             self._get_message_id_kind(device_type, key, index=index, value_index=value_index)
             is MessageIdKind.DEACTIVATED
         )
+
+
+class KebaKeEnergyRemoteAccessCoordinator(DataUpdateCoordinator[RemoteAccessData]):
+    """Read the remote access of a KEBA KeEnergy control unit, only the values of the enabled entities.
+
+    The entities pass their value as context of the coordinator, so it reads nothing while all of them are disabled.
+    """
+
+    def __init__(
+        self,
+        hass: HomeAssistant,
+        entry: KebaKeEnergyConfigEntry,
+        /,
+        *,
+        api: KebaKeEnergyAPI,
+        write_counter: FlashWriteCounter,
+    ) -> None:
+        """Initialize the coordinator of the remote access, `api` is the client of the Web HMI.
+
+        The switching is counted with the `write_counter` of the other values.
+        """
+        self.config_entry: KebaKeEnergyConfigEntry = entry
+        self._api: KebaKeEnergyAPI = api
+        self._write_counter: FlashWriteCounter = write_counter
+        self._reads: Mapping[RemoteAccessValue, Callable[[], Awaitable[bool]]] = {
+            RemoteAccessValue.MODBUS_ACTIVE: api.is_modbus_active,
+            RemoteAccessValue.REMOTE_MAINTENANCE_ACTIVE: api.is_remote_maintenance_active,
+            RemoteAccessValue.REMOTE_MAINTENANCE_CONNECTED: api.is_remote_maintenance_connected,
+            RemoteAccessValue.REMOTE_MAINTENANCE_SERVER_REACHABLE: api.is_remote_maintenance_server_reachable,
+        }
+
+        super().__init__(
+            hass,
+            _LOGGER,
+            config_entry=entry,
+            name=f"{DOMAIN}_remote_access",
+            update_interval=timedelta(seconds=REMOTE_ACCESS_SCAN_INTERVAL),
+        )
+
+        self.data: RemoteAccessData = {}
+
+    async def _async_update_data(self) -> RemoteAccessData:
+        """Read the values of the enabled entities, one request per value."""
+        return {value: await _api_call_for_update(self._reads[value]()) for value in sorted(set(self.async_contexts()))}
+
+    async def async_set_active(self, value: RemoteAccessValue, /, *, active: bool) -> None:
+        """Enable or disable remote maintenance or the Modbus TCP server, the entity shows it at once.
+
+        Setting the data restarts the update interval, so the next update does not read Modbus TCP as disabled, which
+        the control unit reports for a few seconds after enabling it.
+        """
+        previous_data: RemoteAccessData = self.data
+        self.async_set_updated_data({**self.data, value: active})
+
+        try:
+            await self._async_write(value, active=active)
+        except HomeAssistantError:
+            # Only this value is reset, an update may have changed the other values in the meantime.
+            self.async_set_updated_data(
+                {key: item for key, item in self.data.items() if key != value}
+                | {key: item for key, item in previous_data.items() if key == value},
+            )
+            raise
+
+        # The connection to the remote maintenance server changes with it.
+        if value is RemoteAccessValue.REMOTE_MAINTENANCE_ACTIVE:
+            await self.async_request_refresh()
+
+    async def _async_write(self, value: RemoteAccessValue, /, *, active: bool) -> None:
+        """Write the value, counted like the other writes.
+
+        It is unknown whether the control unit stores it in the flash memory.
+        """
+        name: str = f"{SectionPrefix.SYSTEM}.{value}"
+        _LOGGER.debug("API write request %s", name)
+
+        # A failed write raises here and is not counted.
+        await _api_call_for_user(
+            self._api.set_modbus_active(active=active)
+            if value is RemoteAccessValue.MODBUS_ACTIVE
+            else self._api.set_remote_maintenance_active(active=active),
+        )
+        await self._write_counter.async_add_write((name,))
+
+
+@dataclass(frozen=True, kw_only=True)
+class KebaKeEnergyRuntimeData:
+    """The coordinators of a config entry.
+
+    The remote access has its own coordinator, its slow requests never delay the update of the other values.
+    """
+
+    data_coordinator: KebaKeEnergyDataUpdateCoordinator
+    remote_access_coordinator: KebaKeEnergyRemoteAccessCoordinator

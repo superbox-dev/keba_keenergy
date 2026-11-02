@@ -4,16 +4,22 @@
 
 from __future__ import annotations
 
+from datetime import timedelta
 from http import HTTPStatus
 from typing import TYPE_CHECKING
 
 import pytest
+from homeassistant.components.switch.const import DOMAIN as SWITCH_DOMAIN
 from homeassistant.config_entries import SOURCE_REAUTH
 from homeassistant.const import STATE_UNAVAILABLE
 from homeassistant.const import STATE_UNKNOWN
 from homeassistant.exceptions import ConfigEntryAuthFailed
+from homeassistant.helpers import entity_registry as er
 from homeassistant.helpers.update_coordinator import UpdateFailed
+from homeassistant.util import dt as dt_util
+from pytest_homeassistant_custom_component.common import async_fire_time_changed
 
+from custom_components.keba_keenergy.const import DOMAIN
 from tests import get_state
 from tests.api_data import MULTIPLE_DEVICES_DATA_RESPONSE
 from tests.api_data import MULTIPLE_DEVICES_RESPONSE
@@ -25,13 +31,19 @@ from tests.api_data import get_multiple_devices_responses
 from tests.api_data import replace_values
 from tests.test_coordinator_data import HEAT_CIRCUIT_ENTITY_ID
 from tests.test_coordinator_data import HEAT_CIRCUIT_VALUE
+from tests.test_coordinator_data import REMOTE_MAINTENANCE_SERVER_ENTITY_ID
+from tests.test_switch_data import MODBUS_ENTITY_ID
+from tests.test_switch_data import REMOTE_ACCESS_UPDATE_REQUESTS
+from tests.test_switch_data import REMOTE_MAINTENANCE_ENTITY_ID
 
 if TYPE_CHECKING:
+    from freezegun.api import FrozenDateTimeFactory
     from homeassistant.core import HomeAssistant
     from homeassistant.core import State
     from pytest_homeassistant_custom_component.common import MockConfigEntry
 
     from custom_components.keba_keenergy.coordinator import KebaKeEnergyDataUpdateCoordinator
+    from custom_components.keba_keenergy.coordinator import KebaKeEnergyRemoteAccessCoordinator
     from tests.conftest import FakeKebaKeEnergyAPI
 
 
@@ -45,7 +57,7 @@ async def test_update_authentication_error(
     fake_api.responses = get_multiple_devices_responses(MULTIPLE_DEVICES_DATA_RESPONSE)
     await fake_api.setup_integration()
 
-    coordinator: KebaKeEnergyDataUpdateCoordinator = config_entry.runtime_data
+    coordinator: KebaKeEnergyDataUpdateCoordinator = config_entry.runtime_data.data_coordinator
     fake_api.responses = [HTTPStatus.UNAUTHORIZED]
 
     await coordinator.async_refresh()
@@ -70,7 +82,7 @@ async def test_update_api_error(
     fake_api.responses = get_multiple_devices_responses(MULTIPLE_DEVICES_DATA_RESPONSE)
     await fake_api.setup_integration()
 
-    coordinator: KebaKeEnergyDataUpdateCoordinator = config_entry.runtime_data
+    coordinator: KebaKeEnergyDataUpdateCoordinator = config_entry.runtime_data.data_coordinator
     fake_api.responses = [error]
 
     await coordinator.async_refresh()
@@ -93,7 +105,7 @@ async def test_update_curves_error(
     fake_api.responses = get_multiple_devices_responses(MULTIPLE_DEVICES_DATA_RESPONSE, MULTIPLE_DEVICES_DATA_RESPONSE)
     await fake_api.setup_integration()
 
-    coordinator: KebaKeEnergyDataUpdateCoordinator = config_entry.runtime_data
+    coordinator: KebaKeEnergyDataUpdateCoordinator = config_entry.runtime_data.data_coordinator
     fake_api.curves = HTTPStatus.BAD_REQUEST
 
     await coordinator.async_refresh()
@@ -130,7 +142,7 @@ async def test_update_interval_ticks(
     ]
     await fake_api.setup_integration()
 
-    coordinator: KebaKeEnergyDataUpdateCoordinator = config_entry.runtime_data
+    coordinator: KebaKeEnergyDataUpdateCoordinator = config_entry.runtime_data.data_coordinator
     heat_circuit_state: str = get_state(hass, HEAT_CIRCUIT_ENTITY_ID).state
 
     assert HEAT_CIRCUIT_VALUE in fake_api.read_requests()[-1]
@@ -176,7 +188,7 @@ async def test_update_interval_ticks_keep_message_ids(
     ]
     await fake_api.setup_integration()
 
-    coordinator: KebaKeEnergyDataUpdateCoordinator = config_entry.runtime_data
+    coordinator: KebaKeEnergyDataUpdateCoordinator = config_entry.runtime_data.data_coordinator
 
     # The heating circuits are requested on the first and the third refresh.
     await coordinator.async_refresh()
@@ -191,3 +203,89 @@ async def test_update_interval_ticks_keep_message_ids(
     await coordinator.async_refresh()
 
     assert get_state(hass, entity_id).state == "22.418831"
+
+
+async def test_remote_access_not_read_while_disabled(
+    hass: HomeAssistant,
+    fake_api: FakeKebaKeEnergyAPI,
+    freezer: FrozenDateTimeFactory,
+) -> None:
+    """Test that the remote access is not read while all of its entities are disabled."""
+    fake_api.responses = get_multiple_devices_responses(MULTIPLE_DEVICES_DATA_RESPONSE, MULTIPLE_DEVICES_DATA_RESPONSE)
+    await fake_api.setup_integration()
+
+    freezer.tick(timedelta(minutes=1))
+    async_fire_time_changed(hass, dt_util.utcnow())
+    await hass.async_block_till_done()
+
+    assert fake_api.remote_access_requests() == []
+
+
+@pytest.mark.usefixtures("entity_registry_enabled_by_default")
+async def test_remote_access_read_every_minute(
+    hass: HomeAssistant,
+    fake_api: FakeKebaKeEnergyAPI,
+    freezer: FrozenDateTimeFactory,
+) -> None:
+    """Test that the values of the enabled remote access entities are read after the setup and every minute."""
+    fake_api.responses = get_multiple_devices_responses(
+        MULTIPLE_DEVICES_DATA_RESPONSE,
+        MULTIPLE_DEVICES_DATA_RESPONSE,
+        MULTIPLE_DEVICES_DATA_RESPONSE,
+        MULTIPLE_DEVICES_DATA_RESPONSE,
+    )
+    await fake_api.setup_integration()
+
+    # The other values are updated every 20 seconds.
+    for _ in range(3):
+        freezer.tick(timedelta(seconds=20))
+        async_fire_time_changed(hass, dt_util.utcnow())
+        await hass.async_block_till_done(wait_background_tasks=True)
+
+    assert fake_api.remote_access_requests() == [
+        *REMOTE_ACCESS_UPDATE_REQUESTS,
+        *REMOTE_ACCESS_UPDATE_REQUESTS,
+    ]
+
+
+async def test_remote_access_read_only_enabled_values(
+    hass: HomeAssistant,
+    config_entry: MockConfigEntry,
+    fake_api: FakeKebaKeEnergyAPI,
+) -> None:
+    """Test that only the values of the enabled remote access entities are read."""
+    config_entry.add_to_hass(hass)
+    er.async_get(hass).async_get_or_create(
+        SWITCH_DOMAIN,
+        DOMAIN,
+        "12345678_modbus_active",
+        config_entry=config_entry,
+    )
+    fake_api.responses = get_multiple_devices_responses(MULTIPLE_DEVICES_DATA_RESPONSE)
+    await fake_api.setup_integration()
+
+    assert fake_api.remote_access_requests() == ["isModbusActive"]
+    assert get_state(hass, MODBUS_ENTITY_ID).state == "on"
+
+
+@pytest.mark.no_fail_on_keba_errors
+@pytest.mark.usefixtures("entity_registry_enabled_by_default")
+async def test_remote_access_update_failed(
+    hass: HomeAssistant,
+    config_entry: MockConfigEntry,
+    fake_api: FakeKebaKeEnergyAPI,
+) -> None:
+    """Test that only the remote access entities are unavailable if reading the remote access fails."""
+    fake_api.responses = get_multiple_devices_responses(MULTIPLE_DEVICES_DATA_RESPONSE)
+    await fake_api.setup_integration()
+
+    remote_access: KebaKeEnergyRemoteAccessCoordinator = config_entry.runtime_data.remote_access_coordinator
+    fake_api.remote_access["isRemoteMServerReachable"] = HTTPStatus.BAD_REQUEST
+
+    await remote_access.async_refresh()
+
+    assert isinstance(remote_access.last_exception, UpdateFailed)
+    assert remote_access.last_exception.translation_key == "communication_error"
+    assert get_state(hass, REMOTE_MAINTENANCE_SERVER_ENTITY_ID).state == STATE_UNAVAILABLE
+    assert get_state(hass, REMOTE_MAINTENANCE_ENTITY_ID).state == STATE_UNAVAILABLE
+    assert get_state(hass, "sensor.keba_keenergy_12345678_outdoor_temperature").state != STATE_UNAVAILABLE

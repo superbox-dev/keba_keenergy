@@ -15,10 +15,13 @@ from homeassistant.components.binary_sensor import BinarySensorEntity
 from homeassistant.components.binary_sensor import BinarySensorEntityDescription
 from homeassistant.const import EntityCategory
 
+from .const import RemoteAccessValue
 from .const import SectionPrefix
 from .entity import KebaKeEnergyEntity
 from .entity import KebaKeEnergyEntityDescription
-from .entity import async_setup_entities
+from .entity import KebaKeEnergyRemoteAccessEntity
+from .entity import async_setup_data_entities
+from .entity import async_setup_remote_access_entities
 from .entity import has_photovoltaics
 
 if TYPE_CHECKING:
@@ -51,6 +54,12 @@ class KebaKeEnergyBinarySensorEntity(KebaKeEnergyEntity, BinarySensorEntity):
     def is_on(self) -> bool | None:
         """Return True if the binary sensor is on, None if the value is missing."""
         return self.get_typed_value(self._data_key, bool)
+
+
+class KebaKeEnergyRemoteAccessBinarySensorEntity(KebaKeEnergyRemoteAccessEntity, BinarySensorEntity):
+    """KEBA KeEnergy binary sensor of the remote access (remote maintenance)."""
+
+    _platform_domain: str = BINARY_SENSOR_DOMAIN
 
 
 BINARY_SENSOR_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergyBinarySensorEntityDescription, ...]]] = {
@@ -192,6 +201,23 @@ BINARY_SENSOR_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergyBinarySensorEnt
     ),
 }
 
+REMOTE_ACCESS_BINARY_SENSOR_TYPES: Final[tuple[BinarySensorEntityDescription, ...]] = (
+    BinarySensorEntityDescription(
+        device_class=BinarySensorDeviceClass.CONNECTIVITY,
+        entity_category=EntityCategory.DIAGNOSTIC,
+        entity_registry_enabled_default=False,
+        key=RemoteAccessValue.REMOTE_MAINTENANCE_CONNECTED,
+        translation_key="system_remote_maintenance_connected",
+    ),
+    BinarySensorEntityDescription(
+        device_class=BinarySensorDeviceClass.CONNECTIVITY,
+        entity_category=EntityCategory.DIAGNOSTIC,
+        entity_registry_enabled_default=False,
+        key=RemoteAccessValue.REMOTE_MAINTENANCE_SERVER_REACHABLE,
+        translation_key="system_remote_maintenance_server_reachable",
+    ),
+)
+
 
 async def async_setup_entry(
     hass: HomeAssistant,  # noqa: ARG001
@@ -199,10 +225,16 @@ async def async_setup_entry(
     async_add_entities: AddEntitiesCallback,
 ) -> None:
     """Set up KEBA KeEnergy binary sensors from a config entry."""
-    async_setup_entities(
+    async_setup_data_entities(
         entry,
         async_add_entities,
         BINARY_SENSOR_TYPES,
         KebaKeEnergyBinarySensorEntity,
         "binary sensor",
+    )
+    async_setup_remote_access_entities(
+        entry,
+        async_add_entities,
+        REMOTE_ACCESS_BINARY_SENSOR_TYPES,
+        KebaKeEnergyRemoteAccessBinarySensorEntity,
     )

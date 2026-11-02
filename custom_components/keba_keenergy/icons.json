@@ -388,6 +388,15 @@
       },
       "heating_circuit_use_heating_curve": {
         "default": "mdi:chart-bell-curve-cumulative"
+      },
+      "system_modbus_active": {
+        "state": {
+          "off": "mdi:lan-disconnect",
+          "on": "mdi:lan-connect"
+        }
+      },
+      "system_remote_maintenance_active": {
+        "default": "mdi:remote-desktop"
       }
     }
   }

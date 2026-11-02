@@ -60,6 +60,15 @@ class SectionPrefix(StrEnum):
     PHOTOVOLTAICS = "photovoltaics"
 
 
+class RemoteAccessValue(StrEnum):
+    """Values of the remote access of the control unit, the keys of their entities."""
+
+    MODBUS_ACTIVE = "modbus_active"
+    REMOTE_MAINTENANCE_ACTIVE = "remote_maintenance_active"
+    REMOTE_MAINTENANCE_CONNECTED = "remote_maintenance_connected"
+    REMOTE_MAINTENANCE_SERVER_REACHABLE = "remote_maintenance_server_reachable"
+
+
 class MixerPosition(Enum):
     """Positions of a mixer, derived from its setpoint (`-1..1`)."""
 
@@ -92,6 +101,7 @@ MANUFACTURER_MTEC: Final[str] = "M-TEC"
 MANUFACTURER_INO: Final[str] = "ino"
 MIN_SCAN_INTERVAL: Final[int] = 20
 NAME: Final[str] = "KeEnergy"
+REMOTE_ACCESS_SCAN_INTERVAL: Final[int] = 60
 REQUEST_REFRESH_COOLDOWN: Final[float] = 0.5
 
 SERVICE_SET_AWAY_DATE_RANGE: Final[str] = "set_away_date_range"

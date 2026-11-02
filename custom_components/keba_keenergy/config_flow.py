@@ -313,7 +313,7 @@ class KebaKeEnergyOptionsFlow(OptionsFlowWithReload):
         if self.config_entry.state is not ConfigEntryState.LOADED:
             return self.async_abort(reason="options_not_ready")
 
-        coordinator: KebaKeEnergyDataUpdateCoordinator = self.config_entry.runtime_data
+        coordinator: KebaKeEnergyDataUpdateCoordinator = self.config_entry.runtime_data.data_coordinator
 
         schema_fields: dict[probatio.Required, object] = {}
 

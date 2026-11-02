@@ -26,6 +26,9 @@ from tests.api_data import DEACTIVATED_MESSAGE_IDS
 from tests.api_data import DEVICE_INFO_RESPONSE
 from tests.api_data import HMI_RESPONSE
 from tests.api_data import MESSAGE_ID_SUFFIX
+from tests.api_data import REMOTE_ACCESS
+from tests.api_data import REMOTE_ACCESS_ACTIVATIONS
+from tests.api_data import REMOTE_ACCESS_RESPONSE_KEYS
 from tests.api_data import SYSTEM_RESPONSE
 from tests.api_data import TIMEZONE_RESPONSE
 from tests.api_data import WEEK_TIMER_DAY_START_SECONDS
@@ -128,6 +131,9 @@ class FakeKebaKeEnergyAPI:
         # The week timer variables that have no day block, e.g. of the cooling timer.
         self.week_timer_without_day_block: str | None = None
         self.message_ids: dict[str, int] = {}
+        # The remote access of the Web HMI by the action that reads it, an `HTTPStatus` fails the action (also of an
+        # activation, e.g. `activateModbus`).
+        self.remote_access: dict[str, bool | HTTPStatus] = dict(REMOTE_ACCESS)
         self.during_read: Callable[[], Awaitable[None]] | None = None
         self._values: dict[str, ReadValue] = {}
         self._read_requests: list[str] = []
@@ -195,6 +201,12 @@ class FakeKebaKeEnergyAPI:
             headers={"Content-Type": "application/json;charset=utf-8"},
         )
 
+        for action in (*REMOTE_ACCESS_RESPONSE_KEYS, *REMOTE_ACCESS_ACTIVATIONS):
+            self.aioclient_mock.post(
+                f"{schema}://{host}/deviceControl?action={action}",
+                side_effect=self._remote_access_side_effect,
+            )
+
         self.aioclient_mock.post(
             f"{schema}://{host}/var/readWriteVars",
             params={"action": "set"},
@@ -204,6 +216,37 @@ class FakeKebaKeEnergyAPI:
         self.aioclient_mock.post(
             f"{schema}://{host}/var/readWriteVars",
             side_effect=self._read_side_effect,
+        )
+
+    async def _remote_access_side_effect(
+        self,
+        method: str,
+        url: URL,
+        data: object,
+        *_: object,
+    ) -> AiohttpClientMockResponse:
+        """Return the remote access of the read action, an activation sets the value it reads.
+
+        An `HTTPStatus` in `remote_access` fails the action, also an activation.
+        """
+        action: str = url.query["action"]
+        value: bool | HTTPStatus | None = self.remote_access.get(action)
+
+        if isinstance(value, HTTPStatus):
+            return self._error_response(method, url, value)
+
+        response: dict[str, bool | str] = {"ret": "OK"}
+
+        if action in REMOTE_ACCESS_ACTIVATIONS:
+            self.remote_access[REMOTE_ACCESS_ACTIVATIONS[action]] = bool(json.loads(str(data))["activate"])
+        else:
+            response[REMOTE_ACCESS_RESPONSE_KEYS[action]] = bool(value)
+
+        return AiohttpClientMockResponse(
+            method,
+            url=url,
+            text=json.dumps(response),
+            headers={"Content-Type": "application/json;charset=utf-8"},
         )
 
     async def _write_side_effect(self, method: str, url: URL, *_: object) -> AiohttpClientMockResponse:
@@ -362,7 +405,8 @@ class FakeKebaKeEnergyAPI:
             self.config_entry.add_to_hass(self.hass)
 
         assert await self.hass.config_entries.async_setup(self.config_entry.entry_id)
-        await self.hass.async_block_till_done()
+        # The remote access is read in the background after the setup.
+        await self.hass.async_block_till_done(wait_background_tasks=True)
         self._setup_time_zone_request_count = self._time_zone_requests()
 
     def read_requests(self) -> list[str]:
@@ -375,6 +419,14 @@ class FakeKebaKeEnergyAPI:
 
     def _time_zone_requests(self) -> int:
         return len([url for _, url, *_ in self.aioclient_mock.mock_calls if url.path == "/dateTime"])
+
+    def remote_access_requests(self) -> list[str]:
+        """Return the actions and bodies of all requests of the remote access, in order."""
+        return [
+            f"{url.query['action']} {data}" if data else url.query["action"]
+            for method, url, data, _ in self.aioclient_mock.mock_calls
+            if method == "POST" and url.path == "/deviceControl" and url.query["action"] != "getDeviceInfo"
+        ]
 
     def write_requests(self) -> list[str]:
         """Return the bodies of all write requests, in order."""

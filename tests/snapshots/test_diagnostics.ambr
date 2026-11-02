@@ -2906,6 +2906,8 @@
       'title': '**REDACTED**',
       'unique_id': '**REDACTED**',
     }),
+    'remote_access': dict({
+    }),
     'weekly_write_count': 0,
     'weekly_writes': dict({
     }),

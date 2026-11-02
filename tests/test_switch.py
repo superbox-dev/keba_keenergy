@@ -4,6 +4,7 @@
 
 from __future__ import annotations
 
+from http import HTTPStatus
 from typing import TYPE_CHECKING
 
 import pytest
@@ -11,11 +12,15 @@ from homeassistant.components.switch.const import DOMAIN as SWITCH_DOMAIN
 from homeassistant.const import ATTR_ENTITY_ID
 from homeassistant.const import SERVICE_TURN_OFF
 from homeassistant.const import SERVICE_TURN_ON
+from homeassistant.const import STATE_OFF
+from homeassistant.const import STATE_ON
 from homeassistant.const import Platform
+from homeassistant.exceptions import HomeAssistantError
 from homeassistant.helpers import entity_registry as er
 from keba_keenergy_api.enums import HeatingCircuitType
 
 from tests import get_platform_states
+from tests import get_state
 from tests.api_data import ENTITY_UPDATED_DATA_RESPONSE
 from tests.api_data import HEAT_CIRCUIT_MODE
 from tests.api_data import MULTIPLE_DEVICES_DATA_RESPONSE
@@ -25,7 +30,11 @@ from tests.api_data import Response
 from tests.api_data import get_multiple_devices_fixed_data_response
 from tests.api_data import get_multiple_devices_responses
 from tests.api_data import replace_values
+from tests.test_issues_data import WRITE_COUNT_ENTITY_ID
 from tests.test_switch_data import COMPRESSOR_USE_NIGHT_SPEED_ENTITY_ID
+from tests.test_switch_data import MODBUS_ENTITY_ID
+from tests.test_switch_data import REMOTE_ACCESS_UPDATE_REQUESTS
+from tests.test_switch_data import REMOTE_MAINTENANCE_ENTITY_ID
 from tests.test_switch_data import SOLAR_PRIORITY_ENTITY_ID
 from tests.test_switch_data import USE_COOLING_CURVE_ENTITY_ID
 from tests.test_switch_data import USE_HEATING_CURVE_ENTITY_ID
@@ -159,3 +168,80 @@ async def test_heating_and_cooling_circuit_has_one_curve_switch(
         "12345678_heat_circuit_use_heating_curve_1",
         "12345678_heat_circuit_use_heating_curve_2",
     ]
+
+
+@pytest.mark.parametrize(
+    ("service_call", "expected_requests", "expected_state_and_write_count"),
+    [
+        (
+            (SERVICE_TURN_OFF, MODBUS_ENTITY_ID),
+            ['activateModbus {"activate": false}'],
+            (STATE_OFF, "1"),
+        ),
+        (
+            (SERVICE_TURN_ON, REMOTE_MAINTENANCE_ENTITY_ID),
+            ['activateRemoteM {"activate": true}', *REMOTE_ACCESS_UPDATE_REQUESTS],
+            (STATE_ON, "1"),
+        ),
+        ((SERVICE_TURN_ON, MODBUS_ENTITY_ID), [], (STATE_ON, "0")),
+        ((SERVICE_TURN_OFF, REMOTE_MAINTENANCE_ENTITY_ID), [], (STATE_OFF, "0")),
+    ],
+    ids=[
+        "modbus_turn_off",
+        "remote_maintenance_turn_on_and_refresh",
+        "modbus_turn_on_unchanged",
+        "remote_maintenance_turn_off_unchanged",
+    ],
+)
+@pytest.mark.usefixtures("entity_registry_enabled_by_default")
+async def test_remote_access_turn_on_off(
+    hass: HomeAssistant,
+    fake_api: FakeKebaKeEnergyAPI,
+    service_call: tuple[str, str],
+    expected_requests: list[str],
+    expected_state_and_write_count: tuple[str, str],
+) -> None:
+    """Test switching the remote access, only changes are written and remote maintenance reads the values again."""
+    fake_api.responses = get_multiple_devices_responses(MULTIPLE_DEVICES_DATA_RESPONSE)
+    await fake_api.setup_integration()
+    setup_request_count: int = len(fake_api.remote_access_requests())
+
+    service, entity_id = service_call
+    await hass.services.async_call(
+        domain=SWITCH_DOMAIN,
+        service=service,
+        service_data={
+            ATTR_ENTITY_ID: entity_id,
+        },
+        blocking=True,
+    )
+
+    assert fake_api.remote_access_requests()[setup_request_count:] == expected_requests
+    assert (get_state(hass, entity_id).state, get_state(hass, WRITE_COUNT_ENTITY_ID).state) == (
+        expected_state_and_write_count
+    )
+
+
+@pytest.mark.usefixtures("entity_registry_enabled_by_default")
+async def test_remote_access_turn_on_failed(
+    hass: HomeAssistant,
+    fake_api: FakeKebaKeEnergyAPI,
+) -> None:
+    """Test that a remote access switch shows its previous state again if switching fails, uncounted."""
+    fake_api.responses = get_multiple_devices_responses(MULTIPLE_DEVICES_DATA_RESPONSE)
+    fake_api.remote_access["activateRemoteM"] = HTTPStatus.BAD_REQUEST
+    await fake_api.setup_integration()
+
+    with pytest.raises(HomeAssistantError, match="An error occurred while communicating with the API: ") as error:
+        await hass.services.async_call(
+            domain=SWITCH_DOMAIN,
+            service=SERVICE_TURN_ON,
+            service_data={
+                ATTR_ENTITY_ID: REMOTE_MAINTENANCE_ENTITY_ID,
+            },
+            blocking=True,
+        )
+
+    assert error.value.translation_key == "communication_error"
+    assert get_state(hass, REMOTE_MAINTENANCE_ENTITY_ID).state == STATE_OFF
+    assert get_state(hass, WRITE_COUNT_ENTITY_ID).state == "0"
