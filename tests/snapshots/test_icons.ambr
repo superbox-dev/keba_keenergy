@@ -152,6 +152,9 @@
         'off': 'mdi:hvac-off',
       }),
     }),
+    'event.keba_keenergy_12345678_alarm': dict({
+      'default': 'mdi:alarm-light-outline',
+    }),
     'number.keba_keenergy_12345678_buffer_tank_excess_energy_target_temperature_1': dict({
       'default': 'mdi:sun-thermometer',
     }),
@@ -641,6 +644,9 @@
     'sensor.keba_keenergy_12345678_passive_cooling_switch_valve_position': None,
     'sensor.keba_keenergy_12345678_passive_cooling_temperature': dict({
       'default': 'mdi:snowflake-thermometer',
+    }),
+    'sensor.keba_keenergy_12345678_pending_alarms': dict({
+      'default': 'mdi:alarm-light',
     }),
     'sensor.keba_keenergy_12345678_photovoltaics_daily_energy': None,
     'sensor.keba_keenergy_12345678_photovoltaics_excess_power': None,

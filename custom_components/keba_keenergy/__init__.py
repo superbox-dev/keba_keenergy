@@ -18,6 +18,7 @@ from homeassistant.helpers import device_registry as dr
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 from keba_keenergy_api.client import KebaKeEnergyAPI
 
+from .alarms import AlarmMonitor
 from .const import DOMAIN
 from .const import MANUFACTURER
 from .const import PLATFORMS
@@ -115,5 +116,6 @@ async def async_unload_entry(hass: HomeAssistant, entry: KebaKeEnergyConfigEntry
 
 
 async def async_remove_entry(hass: HomeAssistant, entry: KebaKeEnergyConfigEntry) -> None:
-    """Remove the write counter of a removed config entry."""
+    """Remove the write counter and the reported alarms of a removed config entry."""
     await FlashWriteCounter.async_remove(hass, entry.entry_id)
+    await AlarmMonitor.async_remove(hass, entry.entry_id)

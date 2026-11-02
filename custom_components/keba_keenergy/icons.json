@@ -94,6 +94,11 @@
         }
       }
     },
+    "event": {
+      "alarm": {
+        "default": "mdi:alarm-light-outline"
+      }
+    },
     "number": {
       "buffer_tank_excess_energy_target_temperature": {
         "default": "mdi:sun-thermometer"
@@ -334,6 +339,9 @@
       },
       "passive_cooling_temperature": {
         "default": "mdi:snowflake-thermometer"
+      },
+      "pending_alarms": {
+        "default": "mdi:alarm-light"
       },
       "solar_circuit_consumer_temperature": {
         "default": "mdi:thermometer-water"

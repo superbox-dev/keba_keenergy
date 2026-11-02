@@ -3048,6 +3048,25 @@
 # name: test_sensors[de][sensor.keba_keenergy_12345678_passive_cooling_temperature_displayed]
   '22.3 °C'
 # ---
+# name: test_sensors[de][sensor.keba_keenergy_12345678_pending_alarms]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'alarms': list([
+      ]),
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Bedieneinheit Anstehende Alarme',
+      <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.MEASUREMENT: 'measurement'>,
+    }),
+    'context': <ANY>,
+    'entity_id': 'sensor.keba_keenergy_12345678_pending_alarms',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': '0',
+  })
+# ---
+# name: test_sensors[de][sensor.keba_keenergy_12345678_pending_alarms_displayed]
+  '0'
+# ---
 # name: test_sensors[de][sensor.keba_keenergy_12345678_photovoltaics_daily_energy]
   StateSnapshot({
     'attributes': ReadOnlyDict({
@@ -6668,6 +6687,25 @@
 # ---
 # name: test_sensors[en][sensor.keba_keenergy_12345678_passive_cooling_temperature_displayed]
   '22.3 °C'
+# ---
+# name: test_sensors[en][sensor.keba_keenergy_12345678_pending_alarms]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'alarms': list([
+      ]),
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Control unit Pending alarms',
+      <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.MEASUREMENT: 'measurement'>,
+    }),
+    'context': <ANY>,
+    'entity_id': 'sensor.keba_keenergy_12345678_pending_alarms',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': '0',
+  })
+# ---
+# name: test_sensors[en][sensor.keba_keenergy_12345678_pending_alarms_displayed]
+  '0'
 # ---
 # name: test_sensors[en][sensor.keba_keenergy_12345678_photovoltaics_daily_energy]
   StateSnapshot({

@@ -165,6 +165,20 @@
         }
       }
     },
+    "event": {
+      "alarm": {
+        "name": "Alarm",
+        "state_attributes": {
+          "event_type": {
+            "name": "Event type",
+            "state": {
+              "cleared": "Cleared",
+              "raised": "Raised"
+            }
+          }
+        }
+      }
+    },
     "number": {
       "buffer_tank_excess_energy_target_temperature": {
         "name": "Target temperature (PV surplus)"
@@ -766,6 +780,14 @@
           "open": "Position 1"
         }
       },
+      "pending_alarms": {
+        "name": "Pending alarms",
+        "state_attributes": {
+          "alarms": {
+            "name": "Alarms"
+          }
+        }
+      },
       "photovoltaics_daily_energy": {
         "name": "Excess energy (today)"
       },
@@ -935,6 +957,14 @@
     }
   },
   "issues": {
+    "alarm": {
+      "description": "Alarm {number} has been pending on {name} since {time}:\n\n> {long_text}\n\nThe text of the alarm comes from the control unit. This issue is removed as soon as the alarm is no longer pending.",
+      "title": "{name}: {short_text}"
+    },
+    "alarm_acknowledgeable": {
+      "description": "Alarm {number} has been pending on {name} since {time}:\n\n> {long_text}\n\nThe text of the alarm comes from the control unit. This issue is removed as soon as the alarm is no longer pending.\n\nAcknowledge the alarm on the control unit (display or Web HMI).",
+      "title": "{name}: {short_text}"
+    },
     "frequent_flash_writes": {
       "description": "More than {limit} write operations were performed on {name} this week.\n\nVery frequent write operations (for example caused by automations) may reduce the lifetime of the device's flash memory. The sensor \"Write operations this week\" shows which values were written how often.",
       "title": "Frequent write operations detected"

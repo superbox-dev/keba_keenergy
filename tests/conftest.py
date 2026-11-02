@@ -33,6 +33,7 @@ from tests.api_data import SYSTEM_RESPONSE
 from tests.api_data import TIMEZONE_RESPONSE
 from tests.api_data import WEEK_TIMER_DAY_START_SECONDS
 from tests.api_data import WEEK_TIMER_DAY_STOP_SECONDS
+from tests.api_data import AlarmValue
 from tests.api_data import ReadResponse
 from tests.api_data import ReadValue
 from tests.api_data import Response
@@ -134,6 +135,8 @@ class FakeKebaKeEnergyAPI:
         # The remote access of the Web HMI by the action that reads it, an `HTTPStatus` fails the action (also of an
         # activation, e.g. `activateModbus`).
         self.remote_access: dict[str, bool | HTTPStatus] = dict(REMOTE_ACCESS)
+        # The pending alarms of the control unit, an `HTTPStatus` fails the requests of the alarms.
+        self.alarms: HTTPStatus | list[AlarmValue] = []
         self.during_read: Callable[[], Awaitable[None]] | None = None
         self._values: dict[str, ReadValue] = {}
         self._read_requests: list[str] = []
@@ -177,7 +180,7 @@ class FakeKebaKeEnergyAPI:
         A read of an unknown value or of one of the `unsupported_variables` fails like the Web HMI rejects it. The
         values of the curves come from `curves` (an `HTTPStatus` fails them). The system name and the
         status of the write requests can be changed with `system_name` and `write_status`, the time zone with
-        `timezone` (before the setup).
+        `timezone` (before the setup). The pending alarms come from `alarms`.
         """
         schema: str = "https" if ssl else "http"
 
@@ -206,6 +209,11 @@ class FakeKebaKeEnergyAPI:
                 f"{schema}://{host}/deviceControl?action={action}",
                 side_effect=self._remote_access_side_effect,
             )
+
+        self.aioclient_mock.post(
+            f"{schema}://{host}/alarm",
+            side_effect=self._alarm_side_effect,
+        )
 
         self.aioclient_mock.post(
             f"{schema}://{host}/var/readWriteVars",
@@ -241,6 +249,22 @@ class FakeKebaKeEnergyAPI:
             self.remote_access[REMOTE_ACCESS_ACTIVATIONS[action]] = bool(json.loads(str(data))["activate"])
         else:
             response[REMOTE_ACCESS_RESPONSE_KEYS[action]] = bool(value)
+
+        return AiohttpClientMockResponse(
+            method,
+            url=url,
+            text=json.dumps(response),
+            headers={"Content-Type": "application/json;charset=utf-8"},
+        )
+
+    async def _alarm_side_effect(self, method: str, url: URL, *_: object) -> AiohttpClientMockResponse:
+        """Return the number of the pending `alarms` or the alarms, an `HTTPStatus` fails the request."""
+        if isinstance(self.alarms, HTTPStatus):
+            return self._error_response(method, url, self.alarms)
+
+        response: dict[str, int | list[AlarmValue]] = (
+            {"value": len(self.alarms)} if url.query["action"] == "getCount" else {"alarms": self.alarms}
+        )
 
         return AiohttpClientMockResponse(
             method,
@@ -426,6 +450,14 @@ class FakeKebaKeEnergyAPI:
             f"{url.query['action']} {data}" if data else url.query["action"]
             for method, url, data, _ in self.aioclient_mock.mock_calls
             if method == "POST" and url.path == "/deviceControl" and url.query["action"] != "getDeviceInfo"
+        ]
+
+    def alarm_requests(self) -> list[str]:
+        """Return the actions of all requests of the alarms with their query, in order."""
+        return [
+            str(url.relative().query_string)
+            for method, url, *_ in self.aioclient_mock.mock_calls
+            if method == "POST" and url.path == "/alarm"
         ]
 
     def write_requests(self) -> list[str]:

@@ -35,6 +35,7 @@ from keba_keenergy_api.enums import HeatPumpSubState
 from keba_keenergy_api.enums import SwitchValvePosition
 from keba_keenergy_api.enums import SystemOperatingMode
 
+from .const import ATTR_ALARMS
 from .const import ATTR_WRITES
 from .const import CURVE_KEYS
 from .const import MixerPosition
@@ -181,6 +182,50 @@ class KebaKeEnergyWriteCountSensorEntity(KebaKeEnergyBaseEntity, SensorEntity):
         return {ATTR_WRITES: self.coordinator.write_counter.weekly_writes}
 
 
+class KebaKeEnergyPendingAlarmsSensorEntity(KebaKeEnergyBaseEntity, SensorEntity):
+    """KEBA KeEnergy sensor of the number of pending alarms of the control unit, with the alarms as attribute."""
+
+    # The alarms are shown by the repair issues and the alarm events, they are not needed in the history.
+    _unrecorded_attributes: frozenset[str] = frozenset({ATTR_ALARMS})
+    _platform_domain: str = SENSOR_DOMAIN
+
+    def __init__(
+        self,
+        coordinator: KebaKeEnergyDataUpdateCoordinator,
+        description: SensorEntityDescription,
+        /,
+    ) -> None:
+        """Initialize the pending alarms sensor of the control unit."""
+        self.entity_description: SensorEntityDescription = description
+
+        super().__init__(coordinator, device_type=SectionPrefix.SYSTEM, index=None)
+
+    @property
+    def _unique_id_parts(self) -> tuple[str, ...]:
+        """Return the key of the entity description."""
+        return (self.entity_description.key,)
+
+    @property
+    def native_value(self) -> int:
+        """Return the number of pending alarms."""
+        return len(self.coordinator.alarms.pending_alarms)
+
+    @property
+    def extra_state_attributes(self) -> Attributes:
+        """Return the number, text, priority and time of every pending alarm."""
+        return {
+            ATTR_ALARMS: [
+                {
+                    "number": alarm.number,
+                    "text": alarm.long_text,
+                    "priority": alarm.priority.name.lower(),
+                    "time": alarm.timestamp.isoformat(),
+                }
+                for alarm in self.coordinator.alarms.pending_alarms
+            ],
+        }
+
+
 def get_mixer_position(setpoint: float, /) -> str:
     """Return the position of a mixer from its setpoint (`-1..1`), open or closed only if it is fully open or closed."""
     return get_state(MixerPosition((setpoint >= 1) - (setpoint <= -1)))
@@ -199,6 +244,12 @@ WRITE_COUNT_SENSOR_TYPE: Final[SensorEntityDescription] = SensorEntityDescriptio
     key="weekly_write_count",
     state_class=SensorStateClass.TOTAL_INCREASING,
     translation_key="weekly_write_count",
+)
+
+PENDING_ALARMS_SENSOR_TYPE: Final[SensorEntityDescription] = SensorEntityDescription(
+    key="pending_alarms",
+    state_class=SensorStateClass.MEASUREMENT,
+    translation_key="pending_alarms",
 )
 
 SENSOR_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergySensorEntityDescription[Any], ...]]] = {
@@ -1394,5 +1445,8 @@ async def async_setup_entry(
         "sensor",
     )
     async_add_entities(
-        [KebaKeEnergyWriteCountSensorEntity(entry.runtime_data.data_coordinator, WRITE_COUNT_SENSOR_TYPE)],
+        [
+            KebaKeEnergyWriteCountSensorEntity(entry.runtime_data.data_coordinator, WRITE_COUNT_SENSOR_TYPE),
+            KebaKeEnergyPendingAlarmsSensorEntity(entry.runtime_data.data_coordinator, PENDING_ALARMS_SENSOR_TYPE),
+        ],
     )

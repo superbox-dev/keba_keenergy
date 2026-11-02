@@ -33,6 +33,32 @@ class ReadValue(TypedDict):
 
 
 type Response = list[ReadValue]
+
+
+class AlarmTimeStamp(TypedDict):
+    """Time of an alarm of the Web HMI, the local time of the control unit."""
+
+    year: int
+    month: int
+    day: int
+    hours: int
+    minutes: int
+    seconds: int
+
+
+class AlarmValue(TypedDict):
+    """Pending alarm in the response of `/alarm?action=getAll` of the Web HMI."""
+
+    alarmNr: int
+    compNr: int
+    instanceNr: int
+    prio: int
+    quittable: bool
+    shortText: str
+    longText: str
+    timeStamp: AlarmTimeStamp
+
+
 # A response of a read request, an `HTTPStatus` fails it with an empty response and an exception is raised.
 type ReadResponse = Exception | HTTPStatus | Response
 
@@ -1453,6 +1479,30 @@ REMOTE_ACCESS_RESPONSE_KEYS: Final[dict[str, str]] = {
 REMOTE_ACCESS_ACTIVATIONS: Final[dict[str, str]] = {
     "activateModbus": "isModbusActive",
     "activateRemoteM": "isRemoteMActive",
+}
+
+# A sensor break, an error that is not acknowledged.
+SENSOR_BREAK_ALARM: Final[AlarmValue] = {
+    "alarmNr": 700,
+    "compNr": 100,
+    "instanceNr": 1,
+    "prio": 1,
+    "quittable": False,
+    "shortText": "Sensor source temperature",
+    "longText": "Differential control 1 Diff. Regler 1: Sensor source temperature broken (53 - Sensor break)",
+    "timeStamp": {"year": 2026, "month": 10, "day": 28, "hours": 16, "minutes": 53, "seconds": 51},
+}
+
+# A tripped high pressure switch, an emergency that must be acknowledged on the control unit.
+HIGH_PRESSURE_ALARM: Final[AlarmValue] = {
+    "alarmNr": 12,
+    "compNr": 200,
+    "instanceNr": 2,
+    "prio": 0,
+    "quittable": True,
+    "shortText": "High pressure switch",
+    "longText": "Heat pump 2 Wärmepumpe 2: High pressure switch tripped",
+    "timeStamp": {"year": 2026, "month": 10, "day": 29, "hours": 7, "minutes": 5, "seconds": 0},
 }
 
 TIMEZONE_RESPONSE: Final[dict[str, str]] = {

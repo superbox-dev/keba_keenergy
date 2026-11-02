@@ -165,6 +165,20 @@
         }
       }
     },
+    "event": {
+      "alarm": {
+        "name": "Alarm",
+        "state_attributes": {
+          "event_type": {
+            "name": "Ereignistyp",
+            "state": {
+              "cleared": "Behoben",
+              "raised": "Ausgelöst"
+            }
+          }
+        }
+      }
+    },
     "number": {
       "buffer_tank_excess_energy_target_temperature": {
         "name": "Soll-Temperatur (PV-Überschuss)"
@@ -766,6 +780,14 @@
           "open": "Position 1"
         }
       },
+      "pending_alarms": {
+        "name": "Anstehende Alarme",
+        "state_attributes": {
+          "alarms": {
+            "name": "Alarme"
+          }
+        }
+      },
       "photovoltaics_daily_energy": {
         "name": "Überschussenergie (heute)"
       },
@@ -935,6 +957,14 @@
     }
   },
   "issues": {
+    "alarm": {
+      "description": "Alarm {number} steht seit {time} an {name} an:\n\n> {long_text}\n\nDer Text des Alarms kommt von der Steuerung. Dieser Hinweis verschwindet, sobald der Alarm nicht mehr ansteht.",
+      "title": "{name}: {short_text}"
+    },
+    "alarm_acknowledgeable": {
+      "description": "Alarm {number} steht seit {time} an {name} an:\n\n> {long_text}\n\nDer Text des Alarms kommt von der Steuerung. Dieser Hinweis verschwindet, sobald der Alarm nicht mehr ansteht.\n\nQuittiere den Alarm an der Steuerung (Display oder Web HMI).",
+      "title": "{name}: {short_text}"
+    },
     "frequent_flash_writes": {
       "description": "In dieser Woche wurden mehr als {limit} Schreibzugriffe auf {name} durchgeführt.\n\nSehr häufige Schreibzugriffe (zum Beispiel durch Automationen) können die Lebensdauer des Flash-Speichers des Geräts reduzieren. Der Sensor „Schreibzugriffe diese Woche“ zeigt, welche Werte wie oft geschrieben wurden.",
       "title": "Viele Schreibzugriffe erkannt"

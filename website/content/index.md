@@ -106,8 +106,9 @@ provide are not created. Changes are written to the control unit, see [Known lim
 ### Control unit
 
 - **Select**: operating mode
-- **Sensors**: outdoor temperature, operating mode, CPU and temporary memory usage (diagnostic), write operations
-  this week (diagnostic), flash erase counter (diagnostic)
+- **Sensors**: outdoor temperature, operating mode, pending alarms, CPU and temporary memory usage (diagnostic),
+  write operations this week (diagnostic), flash erase counter (diagnostic)
+- **Event**: alarm, see [Alarms](#alarms)
 - **Switches**: remote maintenance, Modbus server (disabled by default)
 - **Binary sensors**: remote maintenance connection and remote maintenance server (diagnostic, disabled by default)
 
@@ -123,6 +124,23 @@ shows an open remote session is not known yet.
 
 These entities are updated every minute, independent of the scan interval, and only while at least one of them is
 enabled. Switching them counts as a write operation.
+
+#### Alarms
+
+The integration shows the pending alarms of the control unit, the same list as on its display and in the Web HMI:
+
+- **Repair issues**: one per pending alarm, with the number, the time and the text of the control unit in the language
+  of Home Assistant, if the control unit provides it. Emergencies and errors are errors, warnings and infos are
+  warnings. An issue disappears as soon as the alarm is no longer pending. Alarms that must be acknowledged are
+  acknowledged on the control unit.
+- **Pending alarms** sensor: the number of pending alarms, the attribute `alarms` lists them with `number`, `text`,
+  `priority` and `time`.
+- **Alarm** event: the event types `raised` and `cleared` with the attributes `number`, `component`, `instance`,
+  `priority` (`emergency`, `error`, `warning` or `info`), `acknowledgeable`, `short_text`, `long_text` and
+  `timestamp`. Alarms raised or cleared while Home Assistant was not running are reported once after the start.
+
+The time of an alarm is the local time of the control unit. The alarms are read with every update, their texts only
+while alarms are pending.
 
 ### Heat pump
 
@@ -256,6 +274,26 @@ template:
         unit_of_measurement: °C
         device_class: temperature
         state_class: measurement
+```
+
+### Notify about alarms
+
+A notification for every raised alarm of the control unit:
+
+```yaml
+automation:
+  - alias: Notify about heat pump alarms
+    triggers:
+      - trigger: event.received
+        target:
+          entity_id: event.keba_keenergy_12345678_alarm
+        options:
+          event_type: raised
+    actions:
+      - action: notify.notify
+        data:
+          title: "Heat pump alarm {{ trigger.to_state.attributes.number }}"
+          message: "{{ trigger.to_state.attributes.long_text }}"
 ```
 
 ### Outdoor temperature chart

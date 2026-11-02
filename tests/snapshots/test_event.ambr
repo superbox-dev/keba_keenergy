@@ -1,0 +1,37 @@
+# serializer version: 1
+# name: test_events[de][event.keba_keenergy_12345678_alarm]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      <EventEntityStateAttribute.EVENT_TYPE: 'event_type'>: None,
+      <EventEntityCapabilityAttribute.EVENT_TYPES: 'event_types'>: list([
+        'cleared',
+        'raised',
+      ]),
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Bedieneinheit Alarm',
+    }),
+    'context': <ANY>,
+    'entity_id': 'event.keba_keenergy_12345678_alarm',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': 'unknown',
+  })
+# ---
+# name: test_events[en][event.keba_keenergy_12345678_alarm]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      <EventEntityStateAttribute.EVENT_TYPE: 'event_type'>: None,
+      <EventEntityCapabilityAttribute.EVENT_TYPES: 'event_types'>: list([
+        'cleared',
+        'raised',
+      ]),
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Control unit Alarm',
+    }),
+    'context': <ANY>,
+    'entity_id': 'event.keba_keenergy_12345678_alarm',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': 'unknown',
+  })
+# ---

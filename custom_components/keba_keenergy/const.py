@@ -25,12 +25,14 @@ from homeassistant.const import CONF_USERNAME
 from homeassistant.const import STATE_OFF
 from homeassistant.const import Platform
 from homeassistant.helpers import config_validation as cv
+from homeassistant.helpers import issue_registry as ir
 from homeassistant.helpers import selector
 from keba_keenergy_api.constants import MAX_CURVE_TABLE_POINTS
 from keba_keenergy_api.endpoints import ExternalHeatSource
 from keba_keenergy_api.endpoints import HeatingCircuit
 from keba_keenergy_api.endpoints import HeatPump
 from keba_keenergy_api.endpoints import System
+from keba_keenergy_api.enums import AlarmPriority
 from keba_keenergy_api.enums import BufferTankOperatingMode
 from keba_keenergy_api.enums import DeviceType
 from keba_keenergy_api.enums import DHWTankOperatingMode
@@ -69,6 +71,13 @@ class RemoteAccessValue(StrEnum):
     REMOTE_MAINTENANCE_SERVER_REACHABLE = "remote_maintenance_server_reachable"
 
 
+class AlarmEventType(StrEnum):
+    """Event types of the alarm event entity."""
+
+    CLEARED = "cleared"
+    RAISED = "raised"
+
+
 class MixerPosition(Enum):
     """Positions of a mixer, derived from its setpoint (`-1..1`)."""
 
@@ -77,6 +86,10 @@ class MixerPosition(Enum):
     OPEN = 1
 
 
+ALARM_ISSUE_ID: Final = "alarm"
+# The time of an alarm in its repair issue, the local time of the control unit.
+ALARM_TIME_FORMAT: Final = "%Y-%m-%d %H:%M"
+ATTR_ALARMS: Final = "alarms"
 ATTR_CONFIG_ENTRY: Final[str] = "config_entry"
 ATTR_WRITES: Final[str] = "writes"
 CONF_EXTERNAL_HEAT_SOURCE_TICK: Final[str] = "scan_interval_tick_external_heat_source"
@@ -110,12 +123,21 @@ SERVICE_SET_HEATING_CURVE_POINTS: Final[str] = "set_heating_curve_points"
 PLATFORMS: Final[list[Platform]] = [
     Platform.BINARY_SENSOR,
     Platform.CLIMATE,
+    Platform.EVENT,
     Platform.NUMBER,
     Platform.SELECT,
     Platform.SENSOR,
     Platform.SWITCH,
     Platform.WATER_HEATER,
 ]
+
+# The severity of the repair issue of an alarm, like the Web HMI shows emergencies and errors as error.
+ALARM_PRIORITY_TO_SEVERITY: Final[Mapping[AlarmPriority, ir.IssueSeverity]] = {
+    AlarmPriority.EMERGENCY: ir.IssueSeverity.ERROR,
+    AlarmPriority.ERROR: ir.IssueSeverity.ERROR,
+    AlarmPriority.WARNING: ir.IssueSeverity.WARNING,
+    AlarmPriority.INFO: ir.IssueSeverity.WARNING,
+}
 
 HEATING_CIRCUIT_PRESET_TO_HA: Final[Mapping[HeatingCircuitOperatingMode, str]] = {
     HeatingCircuitOperatingMode.AUTO: PRESET_HOME,

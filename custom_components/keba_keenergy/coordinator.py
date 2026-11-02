@@ -35,6 +35,7 @@ from keba_keenergy_api.exceptions import APIError
 from keba_keenergy_api.exceptions import AuthenticationError
 from keba_keenergy_api.models import CurveTable
 
+from .alarms import AlarmMonitor
 from .const import CONFIGURATION_ENDPOINTS
 from .const import CURVE_KEYS
 from .const import DEFAULT_SCAN_INTERVAL
@@ -59,6 +60,7 @@ if TYPE_CHECKING:
     from homeassistant.core import HomeAssistant
     from keba_keenergy_api.client import KebaKeEnergyAPI
     from keba_keenergy_api.endpoints import Endpoint
+    from keba_keenergy_api.models import Alarm
     from keba_keenergy_api.models import CurvePoint
     from keba_keenergy_api.models import DeviceCounts
     from keba_keenergy_api.models import DeviceInfo
@@ -132,6 +134,7 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[CoordinatorData]):
         self.control_unit_device_id: str = ""
 
         self.write_counter: FlashWriteCounter = FlashWriteCounter(hass, entry, on_change=self.async_update_listeners)
+        self.alarms: AlarmMonitor = AlarmMonitor(hass, entry)
         self._write_lock: Lock = Lock()
         self._local_change_count: int = 0
 
@@ -195,6 +198,7 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[CoordinatorData]):
     async def _async_setup(self) -> None:
         """Set up the coordinator."""
         await self.write_counter.async_setup()
+        await self.alarms.async_setup()
         await _api_call_for_update(self._async_read_setup_data())
 
     async def _async_read_setup_data(self) -> None:
@@ -301,7 +305,18 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[CoordinatorData]):
         if any(device_type is SectionPrefix.HEATING_CIRCUIT for device_type, _ in request.values()):
             await self._async_read_week_timers()
 
+        await self._async_read_alarms()
+
         return data
+
+    async def _async_read_alarms(self) -> None:
+        # The count is a cheap request, the alarms are only read while there are any.
+        count: int = await _api_call_for_update(self._api.get_alarm_count())
+        # The texts of the alarms are in the language of Home Assistant, e.g. `de` for `de-CH`.
+        language: str = self.hass.config.language.split("-", maxsplit=1)[0]
+        alarms: list[Alarm] = await _api_call_for_update(self._api.get_alarms(language=language)) if count else []
+
+        await self.alarms.async_update(alarms, timezone=self.timezone or dt_util.get_default_time_zone())
 
     async def _async_read_week_timers(self) -> None:
         # The week timers tell if a heating circuit is currently in day or night operation.
