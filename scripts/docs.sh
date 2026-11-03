@@ -18,4 +18,9 @@ if [[ "$mode" == "build" ]]; then
   npm --prefix website run typecheck
 fi
 
+# Docusaurus copies all globals into its SSG sandbox, Node >= 25 then warns about the unused localStorage.
+if node --no-experimental-webstorage -e "" 2>/dev/null; then
+  export NODE_OPTIONS="${NODE_OPTIONS:+$NODE_OPTIONS }--no-experimental-webstorage"
+fi
+
 npm --prefix website run docusaurus -- "$mode"
