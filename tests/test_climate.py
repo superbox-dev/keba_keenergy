@@ -90,6 +90,7 @@ async def test_climate(
     hass: HomeAssistant,
     fake_api: FakeKebaKeEnergyAPI,
     snapshot: SnapshotAssertion,
+    caplog: pytest.LogCaptureFixture,
 ) -> None:
     """Test the states of all climate entities."""
     fake_api.responses = get_multiple_devices_responses(MULTIPLE_DEVICES_DATA_RESPONSE)
@@ -97,6 +98,8 @@ async def test_climate(
 
     for state in get_platform_states(hass, fake_api.config_entry, Platform.CLIMATE):
         assert state == snapshot(name=state.entity_id)
+
+    assert "provides the deprecated" not in caplog.text
 
 
 @pytest.mark.parametrize(

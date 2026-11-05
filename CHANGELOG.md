@@ -53,6 +53,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Fixed temperature API deprecation warnings on climate and water heater entities. ([Issue #90][issue-90])
 - Showed the HVAC action `heating` only while a heat pump heats, newer software versions keep the heat request on
   during the whole heating period. ([Issue #84][issue-84])
 - Showed the preset `away` right away, not only after the next update.

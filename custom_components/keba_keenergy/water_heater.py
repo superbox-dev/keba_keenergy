@@ -35,6 +35,7 @@ if TYPE_CHECKING:
     from .coordinator import KebaKeEnergyDataUpdateCoordinator
 
 PARALLEL_UPDATES: Final[int] = 0
+_HAS_NATIVE_TEMPERATURE: Final = hasattr(WaterHeaterEntity, "native_current_temperature")
 
 
 class KebaKeEnergyWaterHeaterEntity[M: BufferTankOperatingMode | DHWTankOperatingMode](
@@ -43,7 +44,10 @@ class KebaKeEnergyWaterHeaterEntity[M: BufferTankOperatingMode | DHWTankOperatin
 ):
     """KEBA KeEnergy water heater entity of a tank."""
 
-    _attr_temperature_unit: str = UnitOfTemperature.CELSIUS
+    if _HAS_NATIVE_TEMPERATURE:
+        _attr_native_temperature_unit: str = UnitOfTemperature.CELSIUS
+    else:
+        _attr_temperature_unit: str = UnitOfTemperature.CELSIUS
     _attr_name = None
     _platform_domain: str = WATER_HEATER_DOMAIN
 
@@ -67,15 +71,29 @@ class KebaKeEnergyWaterHeaterEntity[M: BufferTankOperatingMode | DHWTankOperatin
         super().__init__(coordinator, device_type=device_type, index=index)
         self._attr_operation_list: list[str] = list(self._operating_mode_to_ha.values())
 
-    @property
-    def target_temperature_low(self) -> float | None:
-        """Return the standby temperature, the lower bound of the target temperature."""
-        return self.get_float("standby_temperature")
+    if _HAS_NATIVE_TEMPERATURE:
 
-    @property
-    def target_temperature_high(self) -> float | None:
-        """Return the target temperature, the upper bound of the target temperature."""
-        return self.get_float("target_temperature")
+        @property
+        def native_target_temperature_low(self) -> float | None:
+            """Return the standby temperature, the lower bound of the target temperature."""
+            return self.get_float("standby_temperature")
+
+        @property
+        def native_target_temperature_high(self) -> float | None:
+            """Return the target temperature, the upper bound of the target temperature."""
+            return self.get_float("target_temperature")
+
+    else:
+
+        @property
+        def target_temperature_low(self) -> float | None:
+            """Return the standby temperature, the lower bound of the target temperature."""
+            return self.get_float("standby_temperature")
+
+        @property
+        def target_temperature_high(self) -> float | None:
+            """Return the target temperature, the upper bound of the target temperature."""
+            return self.get_float("target_temperature")
 
     @property
     def current_operation(self) -> str | None:
@@ -123,15 +141,29 @@ class KebaKeEnergyDHWTankEntity(
     def _debounced_key(self) -> str:
         return "target_temperature"
 
-    @property
-    def current_temperature(self) -> float | None:
-        """Return the temperature at the top of the tank."""
-        return self.get_float("current_temperature")
+    if _HAS_NATIVE_TEMPERATURE:
 
-    @property
-    def target_temperature(self) -> float | None:
-        """Return the target temperature, a value that waits for its debounced write before the current value."""
-        return self._get_debounced_value()
+        @property
+        def native_current_temperature(self) -> float | None:
+            """Return the temperature at the top of the tank."""
+            return self.get_float("current_temperature")
+
+        @property
+        def native_target_temperature(self) -> float | None:
+            """Return the target temperature, a value that waits for its debounced write before the current value."""
+            return self._get_debounced_value()
+
+    else:
+
+        @property
+        def current_temperature(self) -> float | None:
+            """Return the temperature at the top of the tank."""
+            return self.get_float("current_temperature")
+
+        @property
+        def target_temperature(self) -> float | None:
+            """Return the target temperature, a value that waits for its debounced write before the current value."""
+            return self._get_debounced_value()
 
     @property
     def min_temp(self) -> float:
@@ -165,24 +197,47 @@ class KebaKeEnergyBufferTankEntity(KebaKeEnergyWaterHeaterEntity[BufferTankOpera
         """Return the device type, the buffer tank has it in its unique ID unlike the DHW tank."""
         return (self.device_type,)
 
-    @property
-    def current_temperature(self) -> float | None:
-        """Return the higher one of the top and bottom temperatures."""
-        values: list[float] = [
-            value
-            for value in (
-                self.get_float("current_top_temperature"),
-                self.get_float("current_bottom_temperature"),
-            )
-            if value is not None
-        ]
+    if _HAS_NATIVE_TEMPERATURE:
 
-        return max(values) if values else None
+        @property
+        def native_current_temperature(self) -> float | None:
+            """Return the higher one of the top and bottom temperatures."""
+            values: list[float] = [
+                value
+                for value in (
+                    self.get_float("current_top_temperature"),
+                    self.get_float("current_bottom_temperature"),
+                )
+                if value is not None
+            ]
 
-    @property
-    def target_temperature(self) -> float | None:
-        """Return the target temperature."""
-        return self.get_float("target_temperature")
+            return max(values) if values else None
+
+        @property
+        def native_target_temperature(self) -> float | None:
+            """Return the target temperature."""
+            return self.get_float("target_temperature")
+
+    else:
+
+        @property
+        def current_temperature(self) -> float | None:
+            """Return the higher one of the top and bottom temperatures."""
+            values: list[float] = [
+                value
+                for value in (
+                    self.get_float("current_top_temperature"),
+                    self.get_float("current_bottom_temperature"),
+                )
+                if value is not None
+            ]
+
+            return max(values) if values else None
+
+        @property
+        def target_temperature(self) -> float | None:
+            """Return the target temperature."""
+            return self.get_float("target_temperature")
 
 
 async def async_setup_entry(
