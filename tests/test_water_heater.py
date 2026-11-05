@@ -58,6 +58,7 @@ async def test_water_heater(
     hass: HomeAssistant,
     fake_api: FakeKebaKeEnergyAPI,
     snapshot: SnapshotAssertion,
+    caplog: pytest.LogCaptureFixture,
 ) -> None:
     """Test the states of all water heater entities."""
     fake_api.responses = get_multiple_devices_responses(MULTIPLE_DEVICES_DATA_RESPONSE)
@@ -65,6 +66,8 @@ async def test_water_heater(
 
     for state in get_platform_states(hass, fake_api.config_entry, Platform.WATER_HEATER):
         assert state == snapshot(name=state.entity_id)
+
+    assert "provides the deprecated" not in caplog.text
 
 
 @pytest.mark.parametrize(

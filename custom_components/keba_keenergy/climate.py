@@ -50,6 +50,7 @@ if TYPE_CHECKING:
 _LOGGER: Final = logging.getLogger(__name__)
 
 PARALLEL_UPDATES: Final[int] = 0
+_HAS_NATIVE_TEMPERATURE: Final = hasattr(ClimateEntity, "native_current_temperature")
 
 
 class KebaKeEnergyClimateEntity(KebaKeEnergyDebouncedEntity, ClimateEntity):
@@ -63,7 +64,10 @@ class KebaKeEnergyClimateEntity(KebaKeEnergyDebouncedEntity, ClimateEntity):
     )
 
     _attr_target_temperature_step: float = 0.5
-    _attr_temperature_unit: str = UnitOfTemperature.CELSIUS
+    if _HAS_NATIVE_TEMPERATURE:
+        _attr_native_temperature_unit: str = UnitOfTemperature.CELSIUS
+    else:
+        _attr_temperature_unit: str = UnitOfTemperature.CELSIUS
     _attr_name = None
     _platform_domain: str = CLIMATE_DOMAIN
 
@@ -102,10 +106,19 @@ class KebaKeEnergyClimateEntity(KebaKeEnergyDebouncedEntity, ClimateEntity):
         """Return the preset modes, a heating circuit that only cools has no away preset."""
         return list(self._preset_to_ha.values())
 
-    @property
-    def current_temperature(self) -> float | None:
-        """Return the room temperature."""
-        return self.get_float("room_temperature")
+    if _HAS_NATIVE_TEMPERATURE:
+
+        @property
+        def native_current_temperature(self) -> float | None:
+            """Return the room temperature."""
+            return self.get_float("room_temperature")
+
+    else:
+
+        @property
+        def current_temperature(self) -> float | None:
+            """Return the room temperature."""
+            return self.get_float("room_temperature")
 
     @property
     def _selected_target_temperature(self) -> float | None:
@@ -137,17 +150,33 @@ class KebaKeEnergyClimateEntity(KebaKeEnergyDebouncedEntity, ClimateEntity):
 
         return None if operating_mode is None else self._target_temperature_keys.get(operating_mode)
 
-    @property
-    def target_temperature(self) -> float | None:
-        """Return the target room temperature of the current mode including the offset."""
-        selected_target_temperature: float | None = self._selected_target_temperature
-        target_temperature_offset: float | None = self._get_debounced_value()
+    if _HAS_NATIVE_TEMPERATURE:
 
-        return (
-            None
-            if selected_target_temperature is None or target_temperature_offset is None
-            else selected_target_temperature + target_temperature_offset
-        )
+        @property
+        def native_target_temperature(self) -> float | None:
+            """Return the target room temperature of the current mode including the offset."""
+            selected_target_temperature: float | None = self._selected_target_temperature
+            target_temperature_offset: float | None = self._get_debounced_value()
+
+            return (
+                None
+                if selected_target_temperature is None or target_temperature_offset is None
+                else selected_target_temperature + target_temperature_offset
+            )
+
+    else:
+
+        @property
+        def target_temperature(self) -> float | None:
+            """Return the target room temperature of the current mode including the offset."""
+            selected_target_temperature: float | None = self._selected_target_temperature
+            target_temperature_offset: float | None = self._get_debounced_value()
+
+            return (
+                None
+                if selected_target_temperature is None or target_temperature_offset is None
+                else selected_target_temperature + target_temperature_offset
+            )
 
     @property
     def min_temp(self) -> float:
