@@ -16,6 +16,7 @@ import pytest
 from homeassistant.const import CONF_HOST
 from homeassistant.const import CONF_SSL
 from pytest_homeassistant_custom_component.common import MockConfigEntry
+from pytest_homeassistant_custom_component.syrupy import HomeAssistantSnapshotExtension
 from pytest_homeassistant_custom_component.test_util.aiohttp import AiohttpClientMocker
 from pytest_homeassistant_custom_component.test_util.aiohttp import AiohttpClientMockResponse
 
@@ -46,12 +47,19 @@ if TYPE_CHECKING:
 
     from _pytest.fixtures import SubRequest
     from homeassistant.core import HomeAssistant
+    from syrupy.assertion import SnapshotAssertion
     from yarl import URL
 
 
 @pytest.fixture(autouse=True)
 def auto_enable_custom_integrations(enable_custom_integrations: None) -> None:
     """Enable the custom integrations in Home Assistant."""
+
+
+@pytest.fixture
+def snapshot(snapshot: SnapshotAssertion) -> SnapshotAssertion:
+    """Return the snapshot assertion with the extension of Home Assistant, independent of the plugin order."""
+    return snapshot.use_extension(HomeAssistantSnapshotExtension)
 
 
 @pytest.fixture(autouse=True)
