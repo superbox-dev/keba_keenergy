@@ -2,9 +2,11 @@
 sidebar_position: 0
 sidebar_label: Integration
 slug: /
+title: Home Assistant integration for KEBA KeEnergy heat pumps
+description: >-
+  Connect heat pumps with a KEBA KeEnergy control unit (M-TEC, ino, Windhager) to Home Assistant. Monitor and control
+  heating circuits, hot water, buffer tanks and photovoltaics locally via the Web HMI.
 ---
-
-# KEBA KeEnergy
 
 The **KEBA KeEnergy** integration connects Home Assistant to heat pumps with a KEBA KeEnergy control unit. It reads
 the values of the control unit, the heat pumps, heating circuits, hot water tanks, buffer tanks, solar circuits,
@@ -31,7 +33,7 @@ your heat pump. For support, open an [issue](https://github.com/superbox-dev/keb
 ## Supported devices
 
 The integration works with heat pumps that provide a KEBA KeEnergy Web HMI. It is used with these manufacturers and
-devices:
+devices. Windhager biomass boilers with an InfoWIN control unit are not supported.
 
 | Manufacturer                            | Tested control unit | Tested heat pump               |
 |-----------------------------------------|---------------------|--------------------------------|
