@@ -21,7 +21,7 @@
     "@fontsource-variable/figtree": "^5.3.0",
     "@mdx-js/react": "^3.1.1",
     "clsx": "^2.1.1",
-    "lucide-react": "^1.61.0",
+    "lucide-react": "^1.66.0",
     "prism-react-renderer": "^2.4.1",
     "react": "^19.3.1",
     "react-dom": "^19.3.1"
@@ -46,6 +46,15 @@
     ]
   },
   "engines": {
-    "node": ">=20.0"
+    "node": ">=24.0"
+  },
+  "overrides": {
+    "serialize-javascript": "^7.1.4",
+    "tinypool": "^2.2.0"
+  },
+  "allowScripts": {
+    "core-js": false,
+    "@swc/core": false,
+    "fsevents": false
   }
 }

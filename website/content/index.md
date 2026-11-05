@@ -49,19 +49,21 @@ setup. All devices are linked to the control unit.
 
 ## Prerequisites
 
-- Home Assistant 2026.9.4 or newer with [HACS](https://hacs.xyz/) installed.
+- Home Assistant 2026.9.4 or newer.
 - Network access from Home Assistant to the Web HMI of the control unit.
 - The username and password of the Web HMI, if the Web HMI requires a login (newer software versions).
 
 ## Installation
 
-[![Open HACS repository on my Home Assistant](https://my.home-assistant.io/badges/hacs_repository.svg)][redirect-hacs]
+[![Open the repository in the Marketplace of your Home Assistant](https://my.home-assistant.io/badges/hacs_repository.svg)][redirect-hacs]
 
-1. Install the integration with HACS (search for "KEBA KeEnergy"). For a manual installation, copy the
-   `custom_components/keba_keenergy` directory of the
-   [latest release](https://github.com/superbox-dev/keba_keenergy/releases/latest) into the `custom_components`
-   directory of your Home Assistant configuration.
-2. Restart Home Assistant.
+1. Go to **Settings** → **Marketplace**, search for **KEBA KeEnergy** and select **Install**.
+2. Follow the setup that starts after the installation.
+
+For a manual installation, copy the `custom_components/keba_keenergy` directory of the
+[latest release](https://github.com/superbox-dev/keba_keenergy/releases/latest) into the `custom_components`
+directory of your Home Assistant configuration, restart Home Assistant and add the integration under
+**Settings** → **Devices & services** → **+ Add integration**.
 
 [redirect-hacs]: https://my.home-assistant.io/redirect/hacs_repository/?owner=superbox-dev&repository=keba_keenergy&category=integration
 
@@ -351,4 +353,4 @@ This integration follows standard integration removal.
 
 1. Go to **Settings** → **Devices & services** and select **KEBA KeEnergy**.
 2. Select the three dots ⋮ of the entry and select **Delete**.
-3. To remove the files as well, remove the integration in HACS and restart Home Assistant.
+3. To remove the files as well, remove the integration in the Marketplace and restart Home Assistant.
