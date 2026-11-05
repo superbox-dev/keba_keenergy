@@ -59,13 +59,9 @@ setup. All devices are linked to the control unit.
 
 [![Open the repository in the Marketplace of your Home Assistant](https://my.home-assistant.io/badges/hacs_repository.svg)][redirect-hacs]
 
-1. Go to **Settings** → **Marketplace**, search for **KEBA KeEnergy** and select **Install**.
-2. Follow the setup that starts after the installation.
-
-For a manual installation, copy the `custom_components/keba_keenergy` directory of the
-[latest release](https://github.com/superbox-dev/keba_keenergy/releases/latest) into the `custom_components`
-directory of your Home Assistant configuration, restart Home Assistant and add the integration under
-**Settings** → **Devices & services** → **+ Add integration**.
+1. Go to **Settings** → **Marketplace**.
+2. Search for **KEBA KeEnergy** and select **Install**.
+3. Follow the setup that starts after the installation.
 
 [redirect-hacs]: https://my.home-assistant.io/redirect/hacs_repository/?owner=superbox-dev&repository=keba_keenergy&category=integration
 
@@ -109,12 +105,14 @@ provide are not created. Changes are written to the control unit, see [Known lim
 
 ### Control unit
 
-- **Select**: operating mode
-- **Sensors**: outdoor temperature, operating mode, pending alarms, CPU and temporary memory usage (diagnostic),
-  write operations this week (diagnostic), flash erase counter (diagnostic)
-- **Event**: alarm, see [Alarms](#alarms)
-- **Switches**: remote maintenance, Modbus server (disabled by default)
-- **Binary sensors**: remote maintenance connection and remote maintenance server (diagnostic, disabled by default)
+| Type                        | Entities                                                                        |
+|-----------------------------|---------------------------------------------------------------------------------|
+| Select                      | Operating mode                                                                  |
+| Sensors                     | Outdoor temperature, operating mode, pending alarms                             |
+| Sensors (diagnostic)        | CPU and temporary memory usage, write operations this week, flash erase counter |
+| Event                       | Alarm, see [Alarms](#alarms)                                                    |
+| Switches                    | Remote maintenance, Modbus server (disabled by default)                         |
+| Binary sensors (diagnostic) | Remote maintenance connection, remote maintenance server (disabled by default)  |
 
 #### Remote access
 
@@ -148,50 +146,56 @@ while alarms are pending.
 
 ### Heat pump
 
-- **Sensors**: state and substate, temperatures of flow, return flow, source inlet and
-  outlet, compressor inlet and outlet, condensation and evaporation, superheat, expansion valve position, pressures,
-  pump, fan and compressor speeds
-- **Energy sensors**: electrical, heating and hot water power, coefficient of performance, thermal energy and
-  electrical energy of heating, cooling and hot water, seasonal performance factor (SPF), electrical energy from
-  PV surplus
-- **Statistics**: operating hours, maximum runtime and activation counter, also for PV surplus
-- **Binary sensors**: compressor, request, source, source actuator, source pressure, three-phase, frequency
-  inverter, PV surplus
-- **Number and switch**: compressor power limit at night
+| Type                | Entities                                                                                                                              |
+|---------------------|---------------------------------------------------------------------------------------------------------------------------------------|
+| Sensors             | State and substate, expansion valve position, pressures, pump, fan and compressor speeds                                              |
+| Temperature sensors | Flow, return flow, source inlet and outlet, compressor inlet and outlet, condensation and evaporation, superheat                      |
+| Power sensors       | Electrical, heating and hot water power, coefficient of performance (COP)                                                             |
+| Energy sensors      | Thermal and electrical energy of heating, cooling and hot water, seasonal performance factor (SPF), electrical energy from PV surplus |
+| Statistics          | Operating hours, maximum runtime and activation counter, also for PV surplus                                                          |
+| Binary sensors      | Compressor, request, source, source actuator, source pressure, three-phase, frequency inverter, PV surplus                            |
+| Number and switch   | Compressor power limit at night                                                                                                       |
 
 ### Heating circuit
 
-- **Climate**: HVAC mode (auto, heat or cool, off), target room temperature, HVAC action and the presets auto, day,
-  night, party and, for heating circuits, away
-  - auto follows the schedule, day, night and party set the HVAC mode heat, party heats with the day temperature
-  - away sets the away date range of all heating circuits and the HVAC mode heat, the away temperature applies
-  - the target room temperature is the one of the operating mode, a change of the preset shows it right away, auto
-    uses the day or night temperature of the week timer of the heating or cooling circuit, a heating circuit that heats
-    and cools shows the new temperature after the next update
-- **Numbers**: target room temperatures (day, night, away, offset, PV surplus), heating and cooling limits,
-  heating and cooling curve offset and slope
-- **Selects**: operating mode, heating curve, cooling curve
-- **Switches**: use PV surplus, use heating and cooling curve table
-- **Sensors**: room temperature and humidity, dew point, flow and return flow temperatures, mixer, pump speed,
-  heat and cool request, the current setpoints, heating and cooling curve in use with its points
-- **Binary sensor**: pump
+| Type                | Entities                                                                                                                                |
+|---------------------|-----------------------------------------------------------------------------------------------------------------------------------------|
+| Climate             | HVAC mode (auto, heat or cool, off), target room temperature, HVAC action, presets, see [Climate](#climate)                             |
+| Numbers             | Target room temperatures (day, night, away, offset, PV surplus), heating and cooling limits, heating and cooling curve offset and slope |
+| Selects             | Operating mode, heating curve, cooling curve                                                                                            |
+| Switches            | Use PV surplus, use heating and cooling curve table                                                                                     |
+| Temperature sensors | Room temperature, dew point, flow and return flow temperatures, current setpoints                                                       |
+| Sensors             | Room humidity, mixer, pump speed, heat and cool request, heating and cooling curve in use with its points                               |
+| Binary sensor       | Pump                                                                                                                                    |
+
+#### Climate
+
+- The presets are auto, day, night, party and, for heating circuits, away.
+- Auto follows the schedule. Day, night and party set the HVAC mode heat, party heats with the day temperature.
+- Away sets the away date range of all heating circuits and the HVAC mode heat, the away temperature applies.
+- The target room temperature is the one of the operating mode, a change of the preset shows it right away. Auto uses
+  the day or night temperature of the week timer of the heating or cooling circuit. A heating circuit that heats and
+  cools shows the new temperature after the next update.
 
 ### Hot water tank and buffer tank
 
-- **Water heater**: operating mode and target temperature
-- **Numbers**: target and backup temperatures, PV surplus target temperature and hysteresis
-- **Select and switch**: operating mode, use PV surplus
-- **Sensors**: current temperatures, fresh water module and circulation return temperature
-- **Binary sensors**: heat request, cool request, hot water flow, circulation pump
+| Type              | Entities                                                                     |
+|-------------------|------------------------------------------------------------------------------|
+| Water heater      | Operating mode, target temperature                                           |
+| Numbers           | Target and backup temperatures, PV surplus target temperature and hysteresis |
+| Select and switch | Operating mode, use PV surplus                                               |
+| Sensors           | Current temperatures, fresh water module and circulation return temperature  |
+| Binary sensors    | Heat request, cool request, hot water flow, circulation pump                 |
 
 ### Solar circuit, external heat source, passive cooling, switch valve and photovoltaics
 
-- **Solar circuit**: collector and consumer temperatures, pump speeds, power and energy, target temperatures,
-  operating mode, priority switch
-- **External heat source**: operating mode, target temperature, statistics, use PV surplus and minimum runtime
-- **Passive cooling**: temperature, switch valve position, mixer and circulation pump
-- **Switch valve**: position
-- **Photovoltaics**: excess power, daily and total energy, PV surplus
+| Component            | Entities                                                                                                                 |
+|----------------------|--------------------------------------------------------------------------------------------------------------------------|
+| Solar circuit        | Collector and consumer temperatures, pump speeds, power and energy, target temperatures, operating mode, priority switch |
+| External heat source | Operating mode, target temperature, statistics, use PV surplus and minimum runtime                                       |
+| Passive cooling      | Temperature, switch valve position, mixer and circulation pump                                                           |
+| Switch valve         | Position                                                                                                                 |
+| Photovoltaics        | Excess power, daily and total energy, PV surplus                                                                         |
 
 ## Actions
 

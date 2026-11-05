@@ -17,9 +17,7 @@ circuits, external heat sources and photovoltaics. It is used with heat pumps fr
 2. Follow the setup that starts after the installation.
 
 Requires network access to the Web HMI of the control unit. See the
-[installation](https://superbox-dev.github.io/keba_keenergy/#installation) and
-[configuration](https://superbox-dev.github.io/keba_keenergy/#configuration) sections for a manual
-installation and all parameters.
+[configuration](https://superbox-dev.github.io/keba_keenergy/#configuration) section for all parameters.
 
 [redirect-hacs]: https://my.home-assistant.io/redirect/hacs_repository/?owner=superbox-dev&repository=keba_keenergy&category=integration
 
