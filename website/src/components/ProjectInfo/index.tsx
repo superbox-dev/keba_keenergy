@@ -55,8 +55,9 @@ export default function ProjectInfo(): ReactNode {
                     </Link>
                 </div>
                 <p className={styles.section}>
-                    A custom integration, installed with <Link href="https://hacs.xyz">HACS</Link>. It requires Home
-                    Assistant {hacs.homeassistant} or newer.
+                    A custom integration from the{' '}
+                    <Link href="https://www.home-assistant.io/integrations/marketplace/">Marketplace</Link>. It requires
+                    Home Assistant {hacs.homeassistant} or newer.
                 </p>
                 <p className={styles.section}>
                     A community project, not affiliated with or endorsed by KEBA. KEBA and KeEnergy are trademarks
