@@ -13,7 +13,9 @@ description: Rules for creating and updating GitHub issues (tickets). Use when a
   - a few words or one sentence per section, steps to reproduce as short numbered items
 - Every ticket ends with the section `## TODO`, a task list of the steps to close it (`- [ ] ...`)
   - short steps in the order of the work, e.g. fix, tests, docs, changelog
-- Changes to a ticket go into the description, never into a new comment
+- Only edit our own descriptions and comments, never those of others (issues, pull requests)
+  - on a ticket of someone else, plans and changes go into a new comment
+- Changes to our own ticket go into the description, never into a new comment
   - outdated text is struck through (`~~old text~~`) and the new text follows, so the change stays traceable
   - done steps in the TODO list are checked (`- [x]`), dropped steps are struck through
 - Tables are collapsed: `<details><summary>Name</summary>`, blank line, table, blank line, `</details>`
