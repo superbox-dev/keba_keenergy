@@ -977,6 +977,7 @@
     "step": {
       "init": {
         "data": {
+          "mixer_position_percent": "Mischerposition in Prozent",
           "scan_interval": "Scan-Intervall",
           "scan_interval_tick_buffer_tank": "Update-Multiplikator für den Pufferspeicher",
           "scan_interval_tick_external_heat_source": "Update-Multiplikator für die externe Wärmequelle",
@@ -989,6 +990,7 @@
           "scan_interval_tick_system": "Update-Multiplikator für die Bedieneinheit"
         },
         "data_description": {
+          "mixer_position_percent": "Zeigt die Mischerposition in Prozent statt Offen, Aus oder Geschlossen",
           "scan_interval": "Zeit in Sekunden zwischen den Updates",
           "scan_interval_tick_buffer_tank": "Aktualisierung alle X Scan-Intervalle",
           "scan_interval_tick_external_heat_source": "Aktualisierung alle X Scan-Intervalle",

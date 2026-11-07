@@ -53,6 +53,8 @@ from .entity import is_cooling_circuit
 from .entity import is_cooling_circuit_with_photovoltaics
 from .entity import is_heating_circuit
 from .entity import is_heating_circuit_with_photovoltaics
+from .entity import is_mixer_position_percent
+from .entity import is_mixer_position_state
 from .legacy import get_state
 from .legacy import get_states
 
@@ -231,6 +233,11 @@ def get_mixer_position(setpoint: float, /) -> str:
     return get_state(MixerPosition((setpoint >= 1) - (setpoint <= -1)))
 
 
+def get_mixer_position_percent(setpoint: float, /) -> float:
+    """Return the position of a mixer as percentage from its setpoint (`-1..1`)."""
+    return setpoint * 100
+
+
 def get_mixer_attributes(attributes: Attributes, /) -> Attributes:
     """Return the attributes of a mixer position with the setpoint as percentage, unchanged without a setpoint."""
     if "raw_value" not in attributes:
@@ -398,6 +405,7 @@ SENSOR_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergySensorEntityDescriptio
             translation_key="heating_circuit_mixer_return_flow_temperature",
         ),
         KebaKeEnergySensorEntityDescription[float](
+            condition=is_mixer_position_state,
             device_class=SensorDeviceClass.ENUM,
             entity_registry_enabled_default=False,
             key="mixer_position",
@@ -406,6 +414,17 @@ SENSOR_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergySensorEntityDescriptio
             translation_key="heating_circuit_mixer_position",
             value_fn=get_mixer_position,
             attributes_fn=get_mixer_attributes,
+        ),
+        # The same entity as percentage if the option is set, the unique ID stays the same.
+        KebaKeEnergySensorEntityDescription[float](
+            condition=is_mixer_position_percent,
+            entity_registry_enabled_default=False,
+            key="mixer_position",
+            native_unit_of_measurement=PERCENTAGE,
+            state_class=SensorStateClass.MEASUREMENT,
+            suggested_display_precision=2,
+            translation_key="heating_circuit_mixer_position",
+            value_fn=get_mixer_position_percent,
         ),
         KebaKeEnergySensorEntityDescription[float](
             device_class=SensorDeviceClass.TEMPERATURE,
@@ -1173,6 +1192,7 @@ SENSOR_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergySensorEntityDescriptio
             translation_key="passive_cooling_mixer_target_temperature",
         ),
         KebaKeEnergySensorEntityDescription[float](
+            condition=is_mixer_position_state,
             device_class=SensorDeviceClass.ENUM,
             key="mixer_position",
             options=get_states(MixerPosition),
@@ -1180,6 +1200,16 @@ SENSOR_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergySensorEntityDescriptio
             translation_key="passive_cooling_mixer_position",
             value_fn=get_mixer_position,
             attributes_fn=get_mixer_attributes,
+        ),
+        # The same entity as percentage if the option is set, the unique ID stays the same.
+        KebaKeEnergySensorEntityDescription[float](
+            condition=is_mixer_position_percent,
+            key="mixer_position",
+            native_unit_of_measurement=PERCENTAGE,
+            state_class=SensorStateClass.MEASUREMENT,
+            suggested_display_precision=2,
+            translation_key="passive_cooling_mixer_position",
+            value_fn=get_mixer_position_percent,
         ),
     ),
     SectionPrefix.BUFFER_TANK: (

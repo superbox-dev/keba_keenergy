@@ -977,6 +977,7 @@
     "step": {
       "init": {
         "data": {
+          "mixer_position_percent": "Mixer position as percentage",
           "scan_interval": "Scan interval",
           "scan_interval_tick_buffer_tank": "Buffer tank update multiplier",
           "scan_interval_tick_external_heat_source": "External heat source update multiplier",
@@ -989,6 +990,7 @@
           "scan_interval_tick_system": "Control unit update multiplier"
         },
         "data_description": {
+          "mixer_position_percent": "Shows the mixer position as percentage instead of open, off or closed",
           "scan_interval": "Time in seconds between updates",
           "scan_interval_tick_buffer_tank": "Update every X scan intervals",
           "scan_interval_tick_external_heat_source": "Update every X scan intervals",

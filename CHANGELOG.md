@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added switches for remote maintenance and the Modbus server, and remote maintenance connectivity sensors.
   ([Issue #76][issue-76])
 - Added repair issues, a sensor and an event for the pending alarms of the control unit. ([Issue #74][issue-74])
+- Added an option to show the mixer positions as percentage. ([Issue #89][issue-89])
 
 ### Changed
 
@@ -79,6 +80,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [issue-84]: https://github.com/superbox-dev/keba_keenergy/issues/84
 [issue-85]: https://github.com/superbox-dev/keba_keenergy/issues/85
 [issue-87]: https://github.com/superbox-dev/keba_keenergy/issues/87
+[issue-89]: https://github.com/superbox-dev/keba_keenergy/issues/89
 
 ## [1.11.0] - 2026-10-28
 

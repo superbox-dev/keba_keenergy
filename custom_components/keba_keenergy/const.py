@@ -96,12 +96,15 @@ CONF_EXTERNAL_HEAT_SOURCE_TICK: Final[str] = "scan_interval_tick_external_heat_s
 CONF_BUFFER_TANK_TICK: Final[str] = "scan_interval_tick_buffer_tank"
 CONF_HEATING_CIRCUIT_TICK: Final[str] = "scan_interval_tick_heat_circuit"
 CONF_HEAT_PUMP_TICK: Final[str] = "scan_interval_tick_heat_pump"
+# Shows the mixer positions as percentage instead of their state.
+CONF_MIXER_POSITION_PERCENT: Final[str] = "mixer_position_percent"
 CONF_DHW_TANK_TICK: Final[str] = "scan_interval_tick_hot_water_tank"
 CONF_PHOTOVOLTAICS_TICK: Final[str] = "scan_interval_tick_photovoltaics"
 CONF_SOLAR_CIRCUIT_TICK: Final[str] = "scan_interval_tick_solar_circuit"
 CONF_SWITCH_VALVE_TICK: Final[str] = "scan_interval_tick_switch_valve"
 CONF_SYSTEM_TICK: Final[str] = "scan_interval_tick_system"
 CONFIG_ENTRY_VERSION: Final[int] = 1
+DEFAULT_MIXER_POSITION_PERCENT: Final[bool] = False
 DEFAULT_SCAN_INTERVAL: Final[int] = 20
 DOMAIN: Final[str] = "keba_keenergy"
 FLASH_WRITE_ISSUE_ID: Final[str] = "frequent_flash_writes"

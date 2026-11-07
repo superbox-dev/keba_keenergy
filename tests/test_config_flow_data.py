@@ -59,4 +59,5 @@ OPTION_KEYS: Final[list[str]] = [
     "scan_interval_tick_switch_valve",
     "scan_interval_tick_external_heat_source",
     "scan_interval_tick_photovoltaics",
+    "mixer_position_percent",
 ]

@@ -95,8 +95,15 @@ To change the options, go to **Settings** → **Devices & services** → **KEBA 
 | Scan interval                     | 20      | Time in seconds between two updates, at least 20.                                   |
 | Control unit update multiplier    | 1       | Update the values of the control unit only every n-th scan interval (1 to 180).     |
 | `<Device>` update multiplier      | 1       | Same for each device type of your setup, e.g. heat pump or hot water tank.          |
+| Mixer position as percentage      | Off     | Show the mixers of the heating circuits and passive cooling as percentage.          |
 
 The update multipliers are only shown for the device types of your setup.
+
+The mixer sensors show `Open`, `Off` or `Closed` by default, and the position in percent as attribute
+`position_percent`. With the option **Mixer position as percentage**, the same sensors show the position from
+`-100` to `100` % as state, so that Home Assistant draws a graph and keeps long-term statistics. After a change of
+the option, adapt your automations to the new states. When you turn it off again, Home Assistant reports the
+missing state class under **Developer tools** → **Statistics**, where you can delete or keep the old statistics.
 
 ## Supported functionality
 

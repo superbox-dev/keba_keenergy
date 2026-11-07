@@ -471,6 +471,7 @@ async def test_zeroconf_flow_keeps_ip_address_for_ipv6(
                 "scan_interval_tick_switch_valve": 2,
                 "scan_interval_tick_external_heat_source": 4,
                 "scan_interval_tick_photovoltaics": 2,
+                "mixer_position_percent": True,
             },
             {
                 "scan_interval": 120,
@@ -483,6 +484,7 @@ async def test_zeroconf_flow_keeps_ip_address_for_ipv6(
                 "scan_interval_tick_switch_valve": 1,
                 "scan_interval_tick_external_heat_source": 2,
                 "scan_interval_tick_photovoltaics": 1,
+                "mixer_position_percent": True,
             },
         ),
         (
@@ -497,6 +499,7 @@ async def test_zeroconf_flow_keeps_ip_address_for_ipv6(
                 "scan_interval_tick_switch_valve": 1,
                 "scan_interval_tick_external_heat_source": 1,
                 "scan_interval_tick_photovoltaics": 1,
+                "mixer_position_percent": True,
             },
             {
                 "scan_interval": 60,
@@ -509,6 +512,7 @@ async def test_zeroconf_flow_keeps_ip_address_for_ipv6(
                 "scan_interval_tick_switch_valve": 1,
                 "scan_interval_tick_external_heat_source": 1,
                 "scan_interval_tick_photovoltaics": 1,
+                "mixer_position_percent": True,
             },
         ),
     ],
@@ -518,8 +522,8 @@ async def test_options_flow(
     hass: HomeAssistant,
     config_entry: MockConfigEntry,
     fake_api: FakeKebaKeEnergyAPI,
-    user_input: dict[str, int],
-    expected: dict[str, int],
+    user_input: dict[str, bool | int],
+    expected: dict[str, bool | int],
 ) -> None:
     """Test the options flow and the normalization of the update multipliers."""
     fake_api.responses = [
@@ -542,7 +546,7 @@ async def test_options_flow(
     assert result["type"] is FlowResultType.CREATE_ENTRY
     assert result["data"] == expected
     # The number selectors return floats, the options are stored as integers.
-    assert {type(value) for value in result["data"].values()} == {int}
+    assert {type(value) for value in result["data"].values()} == {bool, int}
 
 
 async def test_options_flow_without_photovoltaics(

@@ -7,10 +7,14 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 import pytest
+from homeassistant.components.sensor import ATTR_STATE_CLASS
 from homeassistant.components.sensor import DOMAIN as SENSOR_DOMAIN
+from homeassistant.components.sensor import SensorStateClass
 from homeassistant.components.sensor import async_rounded_state
 from homeassistant.components.sensor.const import ATTR_OPTIONS
+from homeassistant.const import ATTR_DEVICE_CLASS
 from homeassistant.const import ATTR_UNIT_OF_MEASUREMENT
+from homeassistant.const import PERCENTAGE
 from homeassistant.const import STATE_UNKNOWN
 from homeassistant.const import Platform
 from homeassistant.helpers import entity_registry as er
@@ -263,6 +267,48 @@ async def test_sensor_raw_value(
     expected_state, expected_attributes = expected
     assert state.state == expected_state
     assert {key: state.attributes.get(key) for key in expected_attributes} == expected_attributes
+
+
+@pytest.mark.parametrize(
+    ("config_entry", "value", "entity_id", "expected"),
+    [
+        (
+            {"options": {"mixer_position_percent": True}},
+            ("APPL.CtrlAppl.sParam.heatCircuit[0].heatCircuitMixer.mixer.values.setValueScaled", "0.37"),
+            "sensor.keba_keenergy_12345678_heat_circuit_mixer_position_1",
+            "37.0",
+        ),
+        (
+            {"options": {"mixer_position_percent": True}},
+            ("APPL.CtrlAppl.sParam.passivecooling[0].Mixer.mixer.values.setValueScaled", "-0.5"),
+            "sensor.keba_keenergy_12345678_passive_cooling_mixer_position",
+            "-50.0",
+        ),
+    ],
+    indirect=["config_entry"],
+    ids=["heat_circuit_mixer", "passive_cooling_mixer"],
+)
+@pytest.mark.usefixtures("config_entry", "entity_registry_enabled_by_default")
+async def test_sensor_mixer_position_percent(
+    hass: HomeAssistant,
+    fake_api: FakeKebaKeEnergyAPI,
+    value: tuple[str, str],
+    entity_id: str,
+    expected: str,
+) -> None:
+    """Test that the option shows the mixer position as percentage in the same entity instead of its state."""
+    name, raw_value = value
+    fake_api.responses = get_multiple_devices_responses(
+        update_response(MULTIPLE_DEVICES_DATA_RESPONSE, name, value=raw_value),
+    )
+    await fake_api.setup_integration()
+
+    state: State = get_state(hass, entity_id)
+    assert state.state == expected
+    assert state.attributes[ATTR_UNIT_OF_MEASUREMENT] == PERCENTAGE
+    assert state.attributes[ATTR_STATE_CLASS] == SensorStateClass.MEASUREMENT
+    assert ATTR_DEVICE_CLASS not in state.attributes
+    assert ATTR_OPTIONS not in state.attributes
 
 
 async def test_curve_sensor_without_curve(

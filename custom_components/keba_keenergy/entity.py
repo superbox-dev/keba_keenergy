@@ -23,6 +23,8 @@ from homeassistant.helpers.event import async_call_later
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator
 
+from .const import CONF_MIXER_POSITION_PERCENT
+from .const import DEFAULT_MIXER_POSITION_PERCENT
 from .const import DEVICE_TRANSLATION_KEYS
 from .const import DOMAIN
 from .const import FLASH_WRITE_DELAY
@@ -520,6 +522,18 @@ def has_both_meters(coordinator: KebaKeEnergyDataUpdateCoordinator, index: int) 
 def has_electrical_energy_meter_and_cooling(coordinator: KebaKeEnergyDataUpdateCoordinator, index: int) -> bool:
     """Return True if the heat pump has an electrical energy meter and cools, condition of an entity description."""
     return coordinator.has_electrical_energy_meter(index=index) and coordinator.has_cooling(index=index)
+
+
+def is_mixer_position_percent(coordinator: KebaKeEnergyDataUpdateCoordinator, _: int) -> bool:
+    """Return True if the option shows the mixer positions as percentage, condition of an entity description."""
+    return bool(
+        coordinator.config_entry.options.get(CONF_MIXER_POSITION_PERCENT, DEFAULT_MIXER_POSITION_PERCENT),
+    )
+
+
+def is_mixer_position_state(coordinator: KebaKeEnergyDataUpdateCoordinator, index: int) -> bool:
+    """Return True if the mixer positions show open, off or closed, condition of an entity description."""
+    return not is_mixer_position_percent(coordinator, index)
 
 
 def is_heating_circuit(coordinator: KebaKeEnergyDataUpdateCoordinator, index: int) -> bool:

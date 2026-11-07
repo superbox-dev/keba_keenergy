@@ -26,6 +26,7 @@ from homeassistant.const import CONF_USERNAME
 from homeassistant.core import callback
 from homeassistant.exceptions import HomeAssistantError
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
+from homeassistant.helpers.selector import BooleanSelector
 from homeassistant.helpers.selector import NumberSelector
 from homeassistant.helpers.selector import NumberSelectorConfig
 from homeassistant.helpers.selector import NumberSelectorMode
@@ -33,7 +34,9 @@ from homeassistant.util.network import is_ip_address
 from keba_keenergy_api.client import KebaKeEnergyAPI
 from keba_keenergy_api.exceptions import APIError
 
+from .const import CONF_MIXER_POSITION_PERCENT
 from .const import CONFIG_ENTRY_VERSION
+from .const import DEFAULT_MIXER_POSITION_PERCENT
 from .const import DEFAULT_SCAN_INTERVAL
 from .const import DOMAIN
 from .const import MANUFACTURER
@@ -306,7 +309,7 @@ class KebaKeEnergyOptionsFlow(OptionsFlowWithReload):
     """Options flow for KEBA KeEnergy."""
 
     async def async_step_init(self, user_input: dict[str, Any] | None = None) -> ConfigFlowResult:
-        """Handle the options of the scan interval and the multipliers of the installed device types."""
+        """Handle the options of the scan interval, the device type multipliers and the mixer position."""
         if user_input is not None:
             return self.async_create_entry(data=self._normalize_user_input(user_input))
 
@@ -346,6 +349,13 @@ class KebaKeEnergyOptionsFlow(OptionsFlowWithReload):
                         mode=NumberSelectorMode.BOX,
                     ),
                 )
+
+        schema_fields[
+            probatio.Required(
+                CONF_MIXER_POSITION_PERCENT,
+                default=self.config_entry.options.get(CONF_MIXER_POSITION_PERCENT, DEFAULT_MIXER_POSITION_PERCENT),
+            )
+        ] = BooleanSelector()
 
         return self.async_show_form(
             step_id="init",
