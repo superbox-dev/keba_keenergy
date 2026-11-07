@@ -48,8 +48,8 @@ ZERO_CONF_IPV6_SERVICE_INFO: Final[ZeroconfServiceInfo] = ZeroconfServiceInfo(
     },
 )
 
-OPTION_KEYS: Final[list[str]] = [
-    "scan_interval",
+OPTION_KEYS: Final[list[str]] = ["scan_interval", "update_multipliers", "display"]
+UPDATE_MULTIPLIER_KEYS: Final[list[str]] = [
     "scan_interval_tick_system",
     "scan_interval_tick_heat_pump",
     "scan_interval_tick_heat_circuit",
@@ -59,5 +59,4 @@ OPTION_KEYS: Final[list[str]] = [
     "scan_interval_tick_switch_valve",
     "scan_interval_tick_external_heat_source",
     "scan_interval_tick_photovoltaics",
-    "mixer_position_percent",
 ]

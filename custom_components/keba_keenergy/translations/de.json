@@ -977,30 +977,36 @@
     "step": {
       "init": {
         "data": {
-          "mixer_position_percent": "Mischerposition in Prozent",
-          "scan_interval": "Scan-Intervall",
-          "scan_interval_tick_buffer_tank": "Update-Multiplikator für den Pufferspeicher",
-          "scan_interval_tick_external_heat_source": "Update-Multiplikator für die externe Wärmequelle",
-          "scan_interval_tick_heat_circuit": "Update-Multiplikator für den Heizkreis",
-          "scan_interval_tick_heat_pump": "Update-Multiplikator für die Wärmepumpe",
-          "scan_interval_tick_hot_water_tank": "Update-Multiplikator für den Warmwasserspeicher",
-          "scan_interval_tick_photovoltaics": "Update-Multiplikator für die Photovoltaik",
-          "scan_interval_tick_solar_circuit": "Update-Multiplikator für den Solarkreis",
-          "scan_interval_tick_switch_valve": "Update-Multiplikator für das Umschaltventil",
-          "scan_interval_tick_system": "Update-Multiplikator für die Bedieneinheit"
+          "scan_interval": "Scan-Intervall"
         },
         "data_description": {
-          "mixer_position_percent": "Zeigt die Mischerposition in Prozent statt Offen, Aus oder Geschlossen",
-          "scan_interval": "Zeit in Sekunden zwischen den Updates",
-          "scan_interval_tick_buffer_tank": "Aktualisierung alle X Scan-Intervalle",
-          "scan_interval_tick_external_heat_source": "Aktualisierung alle X Scan-Intervalle",
-          "scan_interval_tick_heat_circuit": "Aktualisierung alle X Scan-Intervalle",
-          "scan_interval_tick_heat_pump": "Aktualisierung alle X Scan-Intervalle",
-          "scan_interval_tick_hot_water_tank": "Aktualisierung alle X Scan-Intervalle",
-          "scan_interval_tick_photovoltaics": "Aktualisierung alle X Scan-Intervalle",
-          "scan_interval_tick_solar_circuit": "Aktualisierung alle X Scan-Intervalle",
-          "scan_interval_tick_switch_valve": "Aktualisierung alle X Scan-Intervalle",
-          "scan_interval_tick_system": "Aktualisierung alle X Scan-Intervalle"
+          "scan_interval": "Zeit zwischen zwei Updates"
+        },
+        "sections": {
+          "display": {
+            "data": {
+              "mixer_position_percent": "Mischerposition in Prozent"
+            },
+            "data_description": {
+              "mixer_position_percent": "Zeigt die Mischerposition in Prozent statt Offen, Aus oder Geschlossen"
+            },
+            "name": "Anzeige"
+          },
+          "update_multipliers": {
+            "data": {
+              "scan_interval_tick_buffer_tank": "Pufferspeicher",
+              "scan_interval_tick_external_heat_source": "Externe Wärmequelle",
+              "scan_interval_tick_heat_circuit": "Heizkreis",
+              "scan_interval_tick_heat_pump": "Wärmepumpe",
+              "scan_interval_tick_hot_water_tank": "Warmwasserspeicher",
+              "scan_interval_tick_photovoltaics": "Photovoltaik",
+              "scan_interval_tick_solar_circuit": "Solarkreis",
+              "scan_interval_tick_switch_valve": "Umschaltventil",
+              "scan_interval_tick_system": "Bedieneinheit"
+            },
+            "description": "Aktualisiert die Werte eines Gerätetyps nur bei jedem n-ten Scan-Intervall",
+            "name": "Update-Multiplikatoren"
+          }
         }
       }
     }

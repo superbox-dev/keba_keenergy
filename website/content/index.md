@@ -92,12 +92,16 @@ To change the options, go to **Settings** → **Devices & services** → **KEBA 
 
 | Option                            | Default | Description                                                                         |
 |-----------------------------------|---------|-------------------------------------------------------------------------------------|
-| Scan interval                     | 20      | Time in seconds between two updates, at least 20.                                   |
-| Control unit update multiplier    | 1       | Update the values of the control unit only every n-th scan interval (1 to 180).     |
-| `<Device>` update multiplier      | 1       | Same for each device type of your setup, e.g. heat pump or hot water tank.          |
-| Mixer position as percentage      | Off     | Show the mixers of the heating circuits and passive cooling as percentage.          |
+| Scan interval                     | 20 s    | Time between two updates, at least 20 seconds.                                      |
 
-The update multipliers are only shown for the device types of your setup.
+**Update multipliers** (collapsed): one multiplier per device type of your setup, e.g. control unit, heat pump or
+hot water tank. A device type with the multiplier n is only updated every n-th scan interval (1 to 180, default 1).
+
+**Display**:
+
+| Option                            | Default | Description                                                                         |
+|-----------------------------------|---------|-------------------------------------------------------------------------------------|
+| Mixer position as percentage      | Off     | Show the mixers of the heating circuits and passive cooling as percentage.          |
 
 The mixer sensors show `Open`, `Off` or `Closed` by default, and the position in percent as attribute
 `position_percent`. With the option **Mixer position as percentage**, the same sensors show the position from

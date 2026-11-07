@@ -23,7 +23,9 @@ from homeassistant.const import CONF_PASSWORD
 from homeassistant.const import CONF_SCAN_INTERVAL
 from homeassistant.const import CONF_SSL
 from homeassistant.const import CONF_USERNAME
+from homeassistant.const import UnitOfTime
 from homeassistant.core import callback
+from homeassistant.data_entry_flow import section
 from homeassistant.exceptions import HomeAssistantError
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 from homeassistant.helpers.selector import BooleanSelector
@@ -42,6 +44,8 @@ from .const import DOMAIN
 from .const import MANUFACTURER
 from .const import MIN_SCAN_INTERVAL
 from .const import NAME
+from .const import OPTIONS_SECTION_DISPLAY
+from .const import OPTIONS_SECTION_UPDATE_MULTIPLIERS
 from .const import SCAN_INTERVAL_TICK_OPTIONS
 from .const import STEP_AUTH_DATA_SCHEMA
 
@@ -318,70 +322,84 @@ class KebaKeEnergyOptionsFlow(OptionsFlowWithReload):
 
         coordinator: KebaKeEnergyDataUpdateCoordinator = self.config_entry.runtime_data.data_coordinator
 
-        schema_fields: dict[probatio.Required, object] = {}
-
-        schema_fields[
-            probatio.Required(
-                CONF_SCAN_INTERVAL,
-                default=self.config_entry.options.get(CONF_SCAN_INTERVAL, DEFAULT_SCAN_INTERVAL),
-            )
-        ] = NumberSelector(
-            NumberSelectorConfig(
-                min=MIN_SCAN_INTERVAL,
-                step=1,
-                mode=NumberSelectorMode.BOX,
-            ),
-        )
-
         # The control unit is always installed, so the system multiplier is always shown.
-        for device_type, conf_key in SCAN_INTERVAL_TICK_OPTIONS.items():
-            if coordinator.has_device(device_type):
-                schema_fields[
-                    probatio.Required(
-                        conf_key,
-                        default=self.config_entry.options.get(conf_key, 1),
-                    )
-                ] = NumberSelector(
-                    NumberSelectorConfig(
-                        min=1,
-                        max=180,
-                        step=1,
-                        mode=NumberSelectorMode.BOX,
-                    ),
-                )
-
-        schema_fields[
+        multiplier_fields: dict[probatio.Required, object] = {
             probatio.Required(
-                CONF_MIXER_POSITION_PERCENT,
-                default=self.config_entry.options.get(CONF_MIXER_POSITION_PERCENT, DEFAULT_MIXER_POSITION_PERCENT),
+                conf_key,
+                default=self.config_entry.options.get(conf_key, 1),
+            ): NumberSelector(
+                NumberSelectorConfig(
+                    min=1,
+                    max=180,
+                    step=1,
+                    mode=NumberSelectorMode.BOX,
+                ),
             )
-        ] = BooleanSelector()
+            for device_type, conf_key in SCAN_INTERVAL_TICK_OPTIONS.items()
+            if coordinator.has_device(device_type)
+        }
 
         return self.async_show_form(
             step_id="init",
-            data_schema=probatio.Schema(schema_fields),
+            data_schema=probatio.Schema(
+                {
+                    probatio.Required(
+                        CONF_SCAN_INTERVAL,
+                        default=self.config_entry.options.get(CONF_SCAN_INTERVAL, DEFAULT_SCAN_INTERVAL),
+                    ): NumberSelector(
+                        NumberSelectorConfig(
+                            min=MIN_SCAN_INTERVAL,
+                            step=1,
+                            mode=NumberSelectorMode.BOX,
+                            unit_of_measurement=UnitOfTime.SECONDS,
+                        ),
+                    ),
+                    probatio.Required(OPTIONS_SECTION_UPDATE_MULTIPLIERS): section(
+                        probatio.Schema(multiplier_fields),
+                        {"collapsed": True},
+                    ),
+                    probatio.Required(OPTIONS_SECTION_DISPLAY): section(
+                        probatio.Schema(
+                            {
+                                probatio.Required(
+                                    CONF_MIXER_POSITION_PERCENT,
+                                    default=self.config_entry.options.get(
+                                        CONF_MIXER_POSITION_PERCENT,
+                                        DEFAULT_MIXER_POSITION_PERCENT,
+                                    ),
+                                ): BooleanSelector(),
+                            },
+                        ),
+                    ),
+                },
+            ),
         )
 
     @staticmethod
     def _normalize_user_input(user_input: dict[str, Any], /) -> dict[str, Any]:
-        """Return the user input with the greatest common divisor of the multipliers moved into the scan interval.
+        """Return the options without sections and the greatest common divisor of the multipliers in the scan interval.
 
-        E.g. a scan interval of 20 s with the multipliers 2 and 4 becomes 40 s with the multipliers 1 and 2. The number
-        selectors return floats, the options are stored as integers.
+        The options are stored without the sections of the form. E.g. a scan interval of 20 s with the multipliers 2 and
+        4 becomes 40 s with the multipliers 1 and 2. The number selectors return floats, the options are stored as
+        integers.
         """
-        scan_interval: int = int(user_input[CONF_SCAN_INTERVAL])
-        ticks: dict[str, int] = {
-            key: int(user_input[key]) for key in SCAN_INTERVAL_TICK_OPTIONS.values() if key in user_input
+        multipliers: dict[str, float] = user_input[OPTIONS_SECTION_UPDATE_MULTIPLIERS]
+        options: dict[str, Any] = {
+            CONF_SCAN_INTERVAL: user_input[CONF_SCAN_INTERVAL],
+            **multipliers,
+            **user_input[OPTIONS_SECTION_DISPLAY],
         }
+        scan_interval: int = int(options[CONF_SCAN_INTERVAL])
+        ticks: dict[str, int] = {key: int(tick) for key, tick in multipliers.items()}
         # The system multiplier is always in the user input, so the divisor is at least 1.
         gcd: int = math.gcd(*ticks.values())
 
-        user_input[CONF_SCAN_INTERVAL] = scan_interval * gcd
-        user_input.update({key: tick // gcd for key, tick in ticks.items()})
+        options[CONF_SCAN_INTERVAL] = scan_interval * gcd
+        options.update({key: tick // gcd for key, tick in ticks.items()})
 
-        _LOGGER.debug("Tick normalization: %s -> gcd=%s", user_input, gcd)
+        _LOGGER.debug("Tick normalization: %s -> gcd=%s", options, gcd)
 
-        return user_input
+        return options
 
 
 class CannotConnectError(HomeAssistantError):

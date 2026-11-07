@@ -6,6 +6,7 @@ from __future__ import annotations
 
 from http import HTTPStatus
 from typing import TYPE_CHECKING
+from typing import Any
 
 import pytest
 from aiohttp import ClientError
@@ -24,6 +25,7 @@ from tests.test_config_flow_data import CREDENTIALS
 from tests.test_config_flow_data import HOST
 from tests.test_config_flow_data import OPTION_KEYS
 from tests.test_config_flow_data import RECONFIGURED_HOST
+from tests.test_config_flow_data import UPDATE_MULTIPLIER_KEYS
 from tests.test_config_flow_data import ZERO_CONF_IPV6_SERVICE_INFO
 from tests.test_config_flow_data import ZERO_CONF_SERVICE_INFO
 from tests.test_config_flow_data import ZEROCONF_HOST
@@ -462,16 +464,20 @@ async def test_zeroconf_flow_keeps_ip_address_for_ipv6(
         (
             {
                 "scan_interval": 60,
-                "scan_interval_tick_system": 4,
-                "scan_interval_tick_heat_pump": 4,
-                "scan_interval_tick_heat_circuit": 8,
-                "scan_interval_tick_solar_circuit": 2,
-                "scan_interval_tick_hot_water_tank": 2,
-                "scan_interval_tick_buffer_tank": 16,
-                "scan_interval_tick_switch_valve": 2,
-                "scan_interval_tick_external_heat_source": 4,
-                "scan_interval_tick_photovoltaics": 2,
-                "mixer_position_percent": True,
+                "update_multipliers": {
+                    "scan_interval_tick_system": 4,
+                    "scan_interval_tick_heat_pump": 4,
+                    "scan_interval_tick_heat_circuit": 8,
+                    "scan_interval_tick_solar_circuit": 2,
+                    "scan_interval_tick_hot_water_tank": 2,
+                    "scan_interval_tick_buffer_tank": 16,
+                    "scan_interval_tick_switch_valve": 2,
+                    "scan_interval_tick_external_heat_source": 4,
+                    "scan_interval_tick_photovoltaics": 2,
+                },
+                "display": {
+                    "mixer_position_percent": True,
+                },
             },
             {
                 "scan_interval": 120,
@@ -490,16 +496,20 @@ async def test_zeroconf_flow_keeps_ip_address_for_ipv6(
         (
             {
                 "scan_interval": 60,
-                "scan_interval_tick_system": 1,
-                "scan_interval_tick_heat_pump": 2,
-                "scan_interval_tick_heat_circuit": 3,
-                "scan_interval_tick_solar_circuit": 1,
-                "scan_interval_tick_hot_water_tank": 1,
-                "scan_interval_tick_buffer_tank": 1,
-                "scan_interval_tick_switch_valve": 1,
-                "scan_interval_tick_external_heat_source": 1,
-                "scan_interval_tick_photovoltaics": 1,
-                "mixer_position_percent": True,
+                "update_multipliers": {
+                    "scan_interval_tick_system": 1,
+                    "scan_interval_tick_heat_pump": 2,
+                    "scan_interval_tick_heat_circuit": 3,
+                    "scan_interval_tick_solar_circuit": 1,
+                    "scan_interval_tick_hot_water_tank": 1,
+                    "scan_interval_tick_buffer_tank": 1,
+                    "scan_interval_tick_switch_valve": 1,
+                    "scan_interval_tick_external_heat_source": 1,
+                    "scan_interval_tick_photovoltaics": 1,
+                },
+                "display": {
+                    "mixer_position_percent": True,
+                },
             },
             {
                 "scan_interval": 60,
@@ -522,10 +532,10 @@ async def test_options_flow(
     hass: HomeAssistant,
     config_entry: MockConfigEntry,
     fake_api: FakeKebaKeEnergyAPI,
-    user_input: dict[str, bool | int],
+    user_input: dict[str, Any],
     expected: dict[str, bool | int],
 ) -> None:
-    """Test the options flow and the normalization of the update multipliers."""
+    """Test the options flow, the options without sections and the normalization of the update multipliers."""
     fake_api.responses = [
         # The first setup of the coordinator.
         *get_multiple_devices_responses(MULTIPLE_DEVICES_DATA_RESPONSE),
@@ -540,6 +550,7 @@ async def test_options_flow(
     assert result["step_id"] == "init"
     assert result["data_schema"]
     assert list(result["data_schema"].schema.keys()) == OPTION_KEYS
+    assert list(result["data_schema"].schema["update_multipliers"].schema.schema.keys()) == UPDATE_MULTIPLIER_KEYS
 
     result = await hass.config_entries.options.async_configure(result["flow_id"], user_input=user_input)
 
@@ -554,7 +565,7 @@ async def test_options_flow_without_photovoltaics(
     config_entry: MockConfigEntry,
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
-    """Test that the options flow hides the photovoltaics option without photovoltaics."""
+    """Test that the options flow hides the photovoltaics multiplier without photovoltaics."""
     fake_api.responses = get_multiple_devices_responses(
         [value for value in MULTIPLE_DEVICES_DATA_RESPONSE if ".photovoltaics." not in value["name"]],
         has_photovoltaics="false",
@@ -566,8 +577,8 @@ async def test_options_flow_without_photovoltaics(
     assert result["type"] is FlowResultType.FORM
     assert result["step_id"] == "init"
     assert result["data_schema"]
-    assert list(result["data_schema"].schema.keys()) == [
-        key for key in OPTION_KEYS if key != "scan_interval_tick_photovoltaics"
+    assert list(result["data_schema"].schema["update_multipliers"].schema.schema.keys()) == [
+        key for key in UPDATE_MULTIPLIER_KEYS if key != "scan_interval_tick_photovoltaics"
     ]
 
 

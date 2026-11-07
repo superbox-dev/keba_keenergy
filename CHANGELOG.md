@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Grouped the options into the sections update multipliers and display.
 - Changed the requirement to `keba_keenergy_api` 3.0, an update reads all values with one request, the curves of
   the heating circuits separately and only those in use. ([Issue #77][issue-77])
 - Changed the attributes `lower_limit` and `upper_limit` to numbers, only writable values have them.

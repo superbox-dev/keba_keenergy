@@ -117,6 +117,9 @@ MANUFACTURER_MTEC: Final[str] = "M-TEC"
 MANUFACTURER_INO: Final[str] = "ino"
 MIN_SCAN_INTERVAL: Final[int] = 20
 NAME: Final[str] = "KeEnergy"
+# Sections of the options form, the options are stored without them.
+OPTIONS_SECTION_DISPLAY: Final[str] = "display"
+OPTIONS_SECTION_UPDATE_MULTIPLIERS: Final[str] = "update_multipliers"
 REMOTE_ACCESS_SCAN_INTERVAL: Final[int] = 60
 REQUEST_REFRESH_COOLDOWN: Final[float] = 0.5
 
