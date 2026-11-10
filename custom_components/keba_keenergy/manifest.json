@@ -1,6 +1,7 @@
 {
   "domain": "keba_keenergy",
   "name": "KEBA KeEnergy",
+  "categories": ["climate.heat_pumps_air_conditioning"],
   "codeowners": ["@mh-superbox"],
   "config_flow": true,
   "documentation": "https://superbox-dev.github.io/keba_keenergy/",
