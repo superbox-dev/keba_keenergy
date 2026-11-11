@@ -27,7 +27,6 @@ from tests.test_issues_data import WRITE_COUNT_ENTITY_ID
 if TYPE_CHECKING:
     from homeassistant.core import HomeAssistant
     from homeassistant.core import State
-    from pytest_homeassistant.common import MockConfigEntry
 
     from tests.conftest import FakeKebaKeEnergyAPI
 
@@ -98,7 +97,6 @@ async def test_entity_update_failed(
 )
 async def test_heat_pump_manufacturer(
     hass: HomeAssistant,
-    config_entry: MockConfigEntry,
     fake_api: FakeKebaKeEnergyAPI,
     system_name: str,
     expected_manufacturer: str | None,
@@ -110,7 +108,7 @@ async def test_heat_pump_manufacturer(
 
     manufacturers: list[str | None] = [
         device.manufacturer
-        for device in dr.async_entries_for_config_entry(dr.async_get(hass), config_entry.entry_id)
+        for device in dr.async_entries_for_config_entry(dr.async_get(hass), fake_api.config_entry.entry_id)
         if (DOMAIN, "12345678_heat_pump") in device.identifiers
     ]
     assert manufacturers == [expected_manufacturer]
@@ -127,11 +125,13 @@ async def test_entities_keep_their_state_if_queued_writes_failed(
     fake_api.write_status = HTTPStatus.BAD_REQUEST
     await fake_api.setup_integration()
 
-    with pytest.raises(HomeAssistantError, match="400 Bad Request"):
+    with pytest.raises(HomeAssistantError, match="400 Bad Request") as error:
         # The entities write at the same time, so the second write waits for the first one.
         await select_option(hass, [buffer_tank_1_entity_id, buffer_tank_2_entity_id], "heat_up")
 
     await hass.async_block_till_done()
+
+    assert error.value.translation_key == "communication_error"
 
     buffer_tank_1_state: State = get_state(hass, buffer_tank_1_entity_id)
     buffer_tank_2_state: State = get_state(hass, buffer_tank_2_entity_id)

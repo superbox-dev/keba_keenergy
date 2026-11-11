@@ -47,7 +47,6 @@ from tests.test_water_heater_data import get_operating_mode_write
 if TYPE_CHECKING:
     from homeassistant.core import HomeAssistant
     from homeassistant.core import State
-    from pytest_homeassistant.common import MockConfigEntry
     from syrupy.assertion import SnapshotAssertion
 
     from tests.conftest import FakeKebaKeEnergyAPI
@@ -252,7 +251,6 @@ async def test_set_unchanged_target_temperature(
 
 async def test_limits_after_update(
     hass: HomeAssistant,
-    config_entry: MockConfigEntry,
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
     """Test that a hot water tank uses the limits from the API once an update provides them."""
@@ -269,7 +267,7 @@ async def test_limits_after_update(
     state: State = get_state(hass, HOT_WATER_TANK_ENTITY_ID)
     assert (state.attributes[ATTR_MIN_TEMP], state.attributes[ATTR_MAX_TEMP]) == DEFAULT_LIMITS
 
-    await config_entry.runtime_data.data_coordinator.async_refresh()
+    await fake_api.config_entry.runtime_data.data_coordinator.async_refresh()
 
     state = get_state(hass, HOT_WATER_TANK_ENTITY_ID)
     assert (state.attributes[ATTR_MIN_TEMP], state.attributes[ATTR_MAX_TEMP]) == (0, 52)

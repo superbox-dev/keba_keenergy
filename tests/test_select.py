@@ -33,7 +33,6 @@ from tests.test_select_data import TWO_HEAT_PUMPS_SECOND_PASSIVE_COOLING_FIXED_D
 if TYPE_CHECKING:
     from homeassistant.core import HomeAssistant
     from homeassistant.core import State
-    from pytest_homeassistant.common import MockConfigEntry
     from syrupy.assertion import SnapshotAssertion
 
     from tests.conftest import FakeKebaKeEnergyAPI
@@ -188,8 +187,10 @@ async def test_select_invalid_option(
             "Option auto_cool is not valid for entity select.keba_keenergy_12345678_operating_mode, "
             "valid options are: standby, summer, auto_heat",
         ),
-    ):
+    ) as error:
         await select_option(hass, "select.keba_keenergy_12345678_operating_mode", "auto_cool")
+
+    assert error.value.translation_key == "not_valid_option"
 
     assert fake_api.write_requests() == []
 
@@ -227,7 +228,6 @@ async def test_select_unchanged_option(
 @pytest.mark.usefixtures("entity_registry_enabled_by_default")
 async def test_heating_curve_options_after_update(
     hass: HomeAssistant,
-    config_entry: MockConfigEntry,
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
     """Test that the heating curve select drops a heating curve renamed on the control unit with the next update."""
@@ -238,7 +238,7 @@ async def test_heating_curve_options_after_update(
     assert "HC1" in state.attributes[ATTR_OPTIONS]
 
     fake_api.curves = CURVES_RENAMED_RESPONSE
-    await config_entry.runtime_data.data_coordinator.async_refresh()
+    await fake_api.config_entry.runtime_data.data_coordinator.async_refresh()
 
     state = get_state(hass, HEATING_CURVE_ENTITY_ID)
 

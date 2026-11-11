@@ -32,7 +32,6 @@ from tests.api_data import update_response
 if TYPE_CHECKING:
     from homeassistant.core import HomeAssistant
     from homeassistant.core import State
-    from pytest_homeassistant.common import MockConfigEntry
     from syrupy.assertion import SnapshotAssertion
 
     from tests.conftest import FakeKebaKeEnergyAPI
@@ -81,18 +80,17 @@ async def test_sensors(
 @pytest.mark.usefixtures("entity_registry_enabled_by_default")
 async def test_converted_sensor_keeps_registered_unit(
     hass: HomeAssistant,
-    config_entry: MockConfigEntry,
     fake_api: FakeKebaKeEnergyAPI,
     unique_id: str,
     expected: tuple[str, str],
 ) -> None:
     """Test that an existing sensor keeps the unit it was registered with before the unit came from the endpoint."""
-    config_entry.add_to_hass(hass)
+    fake_api.config_entry.add_to_hass(hass)
     entry: er.RegistryEntry = er.async_get(hass).async_get_or_create(
         SENSOR_DOMAIN,
         DOMAIN,
         unique_id,
-        config_entry=config_entry,
+        config_entry=fake_api.config_entry,
         suggested_object_id=f"{DOMAIN}_{unique_id}",
         unit_of_measurement=expected[1],
     )
@@ -174,7 +172,6 @@ async def test_sensor_not_in_use(
 @pytest.mark.usefixtures("entity_registry_enabled_by_default")
 async def test_sensor_deactivated(
     hass: HomeAssistant,
-    config_entry: MockConfigEntry,
     fake_api: FakeKebaKeEnergyAPI,
     message_id: str,
     entity_id: str,
@@ -188,7 +185,7 @@ async def test_sensor_deactivated(
 
     fake_api.message_ids = {message_id: 10}
     fake_api.responses = get_multiple_devices_responses(MULTIPLE_DEVICES_DATA_RESPONSE)
-    await hass.config_entries.async_reload(config_entry.entry_id)
+    await hass.config_entries.async_reload(fake_api.config_entry.entry_id)
     await hass.async_block_till_done()
 
     assert entity_registry.async_get(entity_id) is None

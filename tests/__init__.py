@@ -32,6 +32,16 @@ if TYPE_CHECKING:
     from homeassistant.core import HomeAssistant
     from pytest_homeassistant.common import MockConfigEntry
 
+type FlowInProgress = tuple[str, str, str | None, str | None]
+
+
+def get_flows_in_progress(hass: HomeAssistant, /) -> list[FlowInProgress]:
+    """Return the step, handler, source and config entry ID of the config flows in progress."""
+    return [
+        (flow["step_id"], flow["handler"], flow["context"].get("source"), flow["context"].get("entry_id"))
+        for flow in hass.config_entries.flow.async_progress()
+    ]
+
 
 async def init_translations(hass: HomeAssistant, /, *, category: str) -> dict[str, str]:
     """Return the translations of the integration for the given category."""

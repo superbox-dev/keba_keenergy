@@ -21,7 +21,6 @@ from tests.test_binary_sensor_data import COMPRESSOR_FAILURE_MESSAGE_ID
 if TYPE_CHECKING:
     from homeassistant.core import HomeAssistant
     from homeassistant.core import State
-    from pytest_homeassistant.common import MockConfigEntry
     from syrupy.assertion import SnapshotAssertion
 
     from tests.conftest import FakeKebaKeEnergyAPI
@@ -61,7 +60,6 @@ async def test_failure_input_not_in_use(
 
 async def test_failure_input_in_use_again(
     hass: HomeAssistant,
-    config_entry: MockConfigEntry,
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
     """Test that a failure input has a state again after the next update, once the control unit reports it in use."""
@@ -70,7 +68,7 @@ async def test_failure_input_in_use_again(
     await fake_api.setup_integration()
 
     fake_api.message_ids = {}
-    await config_entry.runtime_data.data_coordinator.async_refresh()
+    await fake_api.config_entry.runtime_data.data_coordinator.async_refresh()
 
     state: State = get_state(hass, COMPRESSOR_FAILURE_ENTITY_ID)
     assert state.state == STATE_OFF

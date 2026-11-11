@@ -49,7 +49,6 @@ if TYPE_CHECKING:
 )
 async def test_set_away_date_range(
     hass: HomeAssistant,
-    config_entry: MockConfigEntry,
     fake_api: FakeKebaKeEnergyAPI,
     start_date: str,
     end_date: str,
@@ -62,7 +61,7 @@ async def test_set_away_date_range(
         domain=DOMAIN,
         service=SERVICE_SET_AWAY_DATE_RANGE,
         service_data={
-            ATTR_CONFIG_ENTRY: config_entry.entry_id,
+            ATTR_CONFIG_ENTRY: fake_api.config_entry.entry_id,
             ATTR_START_DATE: start_date,
             ATTR_END_DATE: end_date,
         },
@@ -74,7 +73,6 @@ async def test_set_away_date_range(
 
 async def test_set_unchanged_away_date_range(
     hass: HomeAssistant,
-    config_entry: MockConfigEntry,
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
     """Test that the away date range is not written if the heating circuits already have it."""
@@ -85,7 +83,7 @@ async def test_set_unchanged_away_date_range(
         domain=DOMAIN,
         service=SERVICE_SET_AWAY_DATE_RANGE,
         service_data={
-            ATTR_CONFIG_ENTRY: config_entry.entry_id,
+            ATTR_CONFIG_ENTRY: fake_api.config_entry.entry_id,
             ATTR_START_DATE: "2026-01-22",
             ATTR_END_DATE: "2026-01-22",
         },
@@ -97,7 +95,6 @@ async def test_set_unchanged_away_date_range(
 
 async def test_set_same_away_date_range_twice(
     hass: HomeAssistant,
-    config_entry: MockConfigEntry,
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
     """Test that the same away date range is written once, also before the next update."""
@@ -108,7 +105,7 @@ async def test_set_same_away_date_range_twice(
         domain=DOMAIN,
         service=SERVICE_SET_AWAY_DATE_RANGE,
         service_data={
-            ATTR_CONFIG_ENTRY: config_entry.entry_id,
+            ATTR_CONFIG_ENTRY: fake_api.config_entry.entry_id,
             ATTR_START_DATE: "2025-01-01",
             ATTR_END_DATE: "2025-01-14",
         },
@@ -118,7 +115,7 @@ async def test_set_same_away_date_range_twice(
         domain=DOMAIN,
         service=SERVICE_SET_AWAY_DATE_RANGE,
         service_data={
-            ATTR_CONFIG_ENTRY: config_entry.entry_id,
+            ATTR_CONFIG_ENTRY: fake_api.config_entry.entry_id,
             ATTR_START_DATE: "2025-01-01",
             ATTR_END_DATE: "2025-01-14",
         },
@@ -144,7 +141,6 @@ async def test_set_same_away_date_range_twice(
 )
 async def test_set_away_date_range_invalid(
     hass: HomeAssistant,
-    config_entry: MockConfigEntry,
     fake_api: FakeKebaKeEnergyAPI,
     service_data: dict[str, str],
     expected_translation_key: str,
@@ -157,7 +153,7 @@ async def test_set_away_date_range_invalid(
         await hass.services.async_call(
             domain=DOMAIN,
             service=SERVICE_SET_AWAY_DATE_RANGE,
-            service_data={ATTR_CONFIG_ENTRY: config_entry.entry_id, **service_data},
+            service_data={ATTR_CONFIG_ENTRY: fake_api.config_entry.entry_id, **service_data},
             blocking=True,
         )
 
@@ -167,13 +163,12 @@ async def test_set_away_date_range_invalid(
 
 async def test_set_away_date_range_with_unloaded_config_entry(
     hass: HomeAssistant,
-    config_entry: MockConfigEntry,
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
     """Test the action to set the away date range with an unloaded config entry."""
     fake_api.responses = get_multiple_devices_responses(MULTIPLE_DEVICES_DATA_RESPONSE)
     await fake_api.setup_integration()
-    await hass.config_entries.async_unload(config_entry.entry_id)
+    await hass.config_entries.async_unload(fake_api.config_entry.entry_id)
     await hass.async_block_till_done()
 
     with pytest.raises(ServiceValidationError) as error:
@@ -181,7 +176,7 @@ async def test_set_away_date_range_with_unloaded_config_entry(
             domain=DOMAIN,
             service=SERVICE_SET_AWAY_DATE_RANGE,
             service_data={
-                ATTR_CONFIG_ENTRY: config_entry.entry_id,
+                ATTR_CONFIG_ENTRY: fake_api.config_entry.entry_id,
                 ATTR_START_DATE: "2025-01-01",
                 ATTR_END_DATE: "2025-01-14",
             },
@@ -230,7 +225,6 @@ async def test_set_away_date_range_with_config_entry_of_other_integration(
 )
 async def test_set_away_date_range_invalid_data(
     hass: HomeAssistant,
-    config_entry: MockConfigEntry,
     fake_api: FakeKebaKeEnergyAPI,
     service_data: dict[str, str],
     expected: str,
@@ -243,14 +237,13 @@ async def test_set_away_date_range_invalid_data(
         await hass.services.async_call(
             domain=DOMAIN,
             service=SERVICE_SET_AWAY_DATE_RANGE,
-            service_data={ATTR_CONFIG_ENTRY: config_entry.entry_id, **service_data},
+            service_data={ATTR_CONFIG_ENTRY: fake_api.config_entry.entry_id, **service_data},
             blocking=True,
         )
 
 
 async def test_set_heating_curve_points(
     hass: HomeAssistant,
-    config_entry: MockConfigEntry,
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
     """Test the action to set the points of a heating curve, the points are written sorted."""
@@ -261,7 +254,7 @@ async def test_set_heating_curve_points(
         domain=DOMAIN,
         service=SERVICE_SET_HEATING_CURVE_POINTS,
         service_data={
-            ATTR_CONFIG_ENTRY: config_entry.entry_id,
+            ATTR_CONFIG_ENTRY: fake_api.config_entry.entry_id,
             ATTR_HEATING_CURVE: "HC1",
             ATTR_POINTS: HEATING_CURVE_POINTS,
         },
@@ -289,7 +282,6 @@ async def test_set_heating_curve_points(
 )
 async def test_set_heating_curve_points_invalid(
     hass: HomeAssistant,
-    config_entry: MockConfigEntry,
     fake_api: FakeKebaKeEnergyAPI,
     curves_and_points: tuple[list[Response], list[dict[str, float]]],
     expected_translation_key: str,
@@ -305,7 +297,7 @@ async def test_set_heating_curve_points_invalid(
             domain=DOMAIN,
             service=SERVICE_SET_HEATING_CURVE_POINTS,
             service_data={
-                ATTR_CONFIG_ENTRY: config_entry.entry_id,
+                ATTR_CONFIG_ENTRY: fake_api.config_entry.entry_id,
                 ATTR_HEATING_CURVE: "HC1",
                 ATTR_POINTS: points,
             },
@@ -357,7 +349,6 @@ async def test_set_heating_curve_points_invalid(
 )
 async def test_set_heating_curve_points_invalid_data(
     hass: HomeAssistant,
-    config_entry: MockConfigEntry,
     fake_api: FakeKebaKeEnergyAPI,
     service_data: dict[str, object],
     expected: str,
@@ -370,14 +361,13 @@ async def test_set_heating_curve_points_invalid_data(
         await hass.services.async_call(
             domain=DOMAIN,
             service=SERVICE_SET_HEATING_CURVE_POINTS,
-            service_data={ATTR_CONFIG_ENTRY: config_entry.entry_id, **service_data},
+            service_data={ATTR_CONFIG_ENTRY: fake_api.config_entry.entry_id, **service_data},
             blocking=True,
         )
 
 
 async def test_set_heating_curve_points_with_communication_error(
     hass: HomeAssistant,
-    config_entry: MockConfigEntry,
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
     """Test that a communication error while reading the heating curves raises a translated error."""
@@ -390,7 +380,7 @@ async def test_set_heating_curve_points_with_communication_error(
             domain=DOMAIN,
             service=SERVICE_SET_HEATING_CURVE_POINTS,
             service_data={
-                ATTR_CONFIG_ENTRY: config_entry.entry_id,
+                ATTR_CONFIG_ENTRY: fake_api.config_entry.entry_id,
                 ATTR_HEATING_CURVE: "HC1",
                 ATTR_POINTS: [{"outdoor": 0, "flow": 30}],
             },
@@ -403,7 +393,6 @@ async def test_set_heating_curve_points_with_communication_error(
 
 async def test_set_unchanged_heating_curve_points(
     hass: HomeAssistant,
-    config_entry: MockConfigEntry,
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
     """Test that the action does not write the points if the heating curve already has them (flash writes)."""
@@ -418,7 +407,7 @@ async def test_set_unchanged_heating_curve_points(
         domain=DOMAIN,
         service=SERVICE_SET_HEATING_CURVE_POINTS,
         service_data={
-            ATTR_CONFIG_ENTRY: config_entry.entry_id,
+            ATTR_CONFIG_ENTRY: fake_api.config_entry.entry_id,
             ATTR_HEATING_CURVE: "HC1",
             ATTR_POINTS: [
                 {"outdoor": 20, "flow": 23.9},
@@ -434,7 +423,6 @@ async def test_set_unchanged_heating_curve_points(
 
 async def test_set_heating_curve_points_updates_sensor(
     hass: HomeAssistant,
-    config_entry: MockConfigEntry,
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
     """Test that the sensor of the heating curve in use shows the written points without another update."""
@@ -445,7 +433,7 @@ async def test_set_heating_curve_points_updates_sensor(
         domain=DOMAIN,
         service=SERVICE_SET_HEATING_CURVE_POINTS,
         service_data={
-            ATTR_CONFIG_ENTRY: config_entry.entry_id,
+            ATTR_CONFIG_ENTRY: fake_api.config_entry.entry_id,
             ATTR_HEATING_CURVE: "HC6",
             ATTR_POINTS: [
                 {"outdoor": 20, "flow": 23.9},

@@ -20,7 +20,6 @@ from tests.api_data import get_multiple_devices_responses
 
 if TYPE_CHECKING:
     from homeassistant.core import HomeAssistant
-    from pytest_homeassistant.common import MockConfigEntry
     from pytest_homeassistant.typing import ClientSessionGenerator
     from syrupy.assertion import SnapshotAssertion
 
@@ -36,7 +35,6 @@ if TYPE_CHECKING:
 async def test_diagnostics(
     hass: HomeAssistant,
     hass_client: ClientSessionGenerator,
-    config_entry: MockConfigEntry,
     fake_api: FakeKebaKeEnergyAPI,
     snapshot: SnapshotAssertion,
 ) -> None:
@@ -44,7 +42,7 @@ async def test_diagnostics(
     fake_api.responses = get_multiple_devices_responses(MULTIPLE_DEVICES_DATA_RESPONSE)
     await fake_api.setup_integration()
 
-    diagnostics: dict[str, Any] = await get_diagnostics_for_config_entry(hass, hass_client, config_entry)
+    diagnostics: dict[str, Any] = await get_diagnostics_for_config_entry(hass, hass_client, fake_api.config_entry)
 
     assert diagnostics == snapshot
     # Also a value added to the diagnostics later must not contain the serial number or the host.

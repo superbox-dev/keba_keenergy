@@ -38,7 +38,6 @@ from tests.test_number_data import TARGET_TEMPERATURE_OFFSET_WRITE
 if TYPE_CHECKING:
     from homeassistant.core import HomeAssistant
     from homeassistant.core import State
-    from pytest_homeassistant.common import MockConfigEntry
     from syrupy.assertion import SnapshotAssertion
 
     from tests.conftest import FakeKebaKeEnergyAPI
@@ -229,8 +228,10 @@ async def test_set_value_out_of_range(
     fake_api.responses = get_multiple_devices_responses(MULTIPLE_DEVICES_DATA_RESPONSE)
     await fake_api.setup_integration()
 
-    with pytest.raises(ServiceValidationError, match=expected):
+    with pytest.raises(ServiceValidationError, match=expected) as error:
         await set_number_value(hass, entity_id, value)
+
+    assert error.value.translation_key == "out_of_range"
 
 
 @pytest.mark.parametrize(
@@ -353,7 +354,6 @@ async def test_set_value_back_before_write(
 
 async def test_limits_after_update(
     hass: HomeAssistant,
-    config_entry: MockConfigEntry,
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
     """Test that a number entity uses the default limits until an update provides the limits of the API."""
@@ -370,7 +370,7 @@ async def test_limits_after_update(
     state: State = get_state(hass, TARGET_TEMPERATURE_OFFSET_ENTITY_ID)
     assert (state.attributes[ATTR_MIN], state.attributes[ATTR_MAX]) == (DEFAULT_MIN_VALUE, DEFAULT_MAX_VALUE)
 
-    await config_entry.runtime_data.data_coordinator.async_refresh()
+    await fake_api.config_entry.runtime_data.data_coordinator.async_refresh()
 
     state = get_state(hass, TARGET_TEMPERATURE_OFFSET_ENTITY_ID)
     assert (state.attributes[ATTR_MIN], state.attributes[ATTR_MAX]) == (-2.5, 2.5)
@@ -378,7 +378,6 @@ async def test_limits_after_update(
 
 async def test_debounced_value_not_written_after_unload(
     hass: HomeAssistant,
-    config_entry: MockConfigEntry,
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
     """Test that a pending debounced value is not written after the integration was unloaded."""
@@ -389,7 +388,7 @@ async def test_debounced_value_not_written_after_unload(
 
     await set_number_value(hass, TARGET_TEMPERATURE_OFFSET_ENTITY_ID, 0.5)
 
-    await hass.config_entries.async_unload(config_entry.entry_id)
+    await hass.config_entries.async_unload(fake_api.config_entry.entry_id)
 
     await fire_debounced_writes(hass)
 
@@ -424,7 +423,6 @@ async def test_debounced_write_failed(
 
 async def test_debounced_write_during_update(
     hass: HomeAssistant,
-    config_entry: MockConfigEntry,
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
     """Test that a value written during an update is not replaced by the previous value of the update."""
@@ -443,7 +441,7 @@ async def test_debounced_write_during_update(
         async_fire_time_changed(hass, dt_util.utcnow() + timedelta(seconds=FLASH_WRITE_DELAY))
 
     fake_api.during_read = set_value_during_read
-    await config_entry.runtime_data.data_coordinator.async_refresh()
+    await fake_api.config_entry.runtime_data.data_coordinator.async_refresh()
     await hass.async_block_till_done()
 
     state: State = get_state(hass, TARGET_TEMPERATURE_OFFSET_ENTITY_ID)
