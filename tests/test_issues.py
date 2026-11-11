@@ -31,14 +31,13 @@ from custom_components.keba_keenergy.const import FLASH_WRITE_LIMIT_PER_WEEK
 from custom_components.keba_keenergy.const import SERVICE_SET_AWAY_DATE_RANGE
 from custom_components.keba_keenergy.const import SERVICE_SET_HEATING_CURVE_POINTS
 from tests import fire_debounced_writes
-from tests import get_multiple_devices_responses
 from tests import get_state
 from tests import init_translations
+from tests import replace_values
 from tests import select_option
 from tests import set_number_value
-from tests.const import MULTIPLE_DEVICES_DATA_RESPONSE
-from tests.const import MULTIPLE_DEVICES_OTHER_MODES_DATA_RESPONSE
 from tests.const import NOW
+from tests.const import OTHER_MODES_VALUES
 from tests.test_issues_data import STORED_WRITES
 from tests.test_issues_data import WRITE_COUNT_ENTITY_ID
 from tests.test_issues_data import WRITES_PER_VALUE
@@ -73,7 +72,7 @@ async def test_flash_write_issue(
 ) -> None:
     """Test the repair issue for frequent write operations of a control unit, with its translated texts."""
     hass.config.language = language
-    fake_api.responses = get_multiple_devices_responses(MULTIPLE_DEVICES_DATA_RESPONSE)
+    fake_api.load_device("multiple_devices")
     key: str = get_store_key(mock_config_entry.entry_id)
     hass_storage[key] = get_store(key, {"week": get_week(dt_util.now().date()), "count": FLASH_WRITE_LIMIT_PER_WEEK})
     await fake_api.setup_integration()
@@ -106,7 +105,7 @@ async def test_issue_after_restart(
 
     Home Assistant does not restore the issue after a restart, because it is not persistent.
     """
-    fake_api.responses = get_multiple_devices_responses(MULTIPLE_DEVICES_DATA_RESPONSE)
+    fake_api.load_device("multiple_devices")
     key: str = get_store_key(mock_config_entry.entry_id)
     hass_storage[key] = get_store(
         key,
@@ -127,7 +126,8 @@ async def test_ignored_write_is_not_counted(
     hass_storage: dict[str, Any],
 ) -> None:
     """Test that a write that is not counted (heat up the hot water tank) keeps the weekly write counter."""
-    fake_api.responses = get_multiple_devices_responses(MULTIPLE_DEVICES_OTHER_MODES_DATA_RESPONSE)
+    fake_api.load_device("multiple_devices")
+    fake_api.data = replace_values(fake_api.data, OTHER_MODES_VALUES)
     key: str = get_store_key(mock_config_entry.entry_id)
     counter: dict[str, Any] = {
         "week": get_week(dt_util.now().date()),
@@ -166,10 +166,11 @@ async def test_write_counter_reset_at_midnight_of_new_week(
     freezer: FrozenDateTimeFactory,
 ) -> None:
     """Test that the write counter resets at midnight of a new week, without an update or a write."""
-    fake_api.responses = get_multiple_devices_responses(
-        MULTIPLE_DEVICES_DATA_RESPONSE,
+    fake_api.load_device("multiple_devices")
+    fake_api.responses = fake_api.setup_responses(
+        fake_api.data,
         # The polling at midnight.
-        MULTIPLE_DEVICES_DATA_RESPONSE,
+        fake_api.data,
     )
     key: str = get_store_key(mock_config_entry.entry_id)
     hass_storage[key] = get_store(key, {"week": get_week(date(2026, 3, 8)), "count": 5, "writes": STORED_WRITES})
@@ -201,10 +202,11 @@ async def test_write_counter_kept_at_midnight_of_same_week(
     freezer: FrozenDateTimeFactory,
 ) -> None:
     """Test that the write counter is kept at midnight within the same week."""
-    fake_api.responses = get_multiple_devices_responses(
-        MULTIPLE_DEVICES_DATA_RESPONSE,
+    fake_api.load_device("multiple_devices")
+    fake_api.responses = fake_api.setup_responses(
+        fake_api.data,
         # The polling at midnight.
-        MULTIPLE_DEVICES_DATA_RESPONSE,
+        fake_api.data,
     )
     key: str = get_store_key(mock_config_entry.entry_id)
     hass_storage[key] = get_store(key, {"week": get_week(date(2026, 3, 9)), "count": 5, "writes": STORED_WRITES})
@@ -239,7 +241,7 @@ async def test_write_in_new_year_week_resets_write_counter(
 
     Sunday, 2027-01-03, is in the ISO week 53 of 2026, Monday, 2027-01-04, in the week 1 of 2027.
     """
-    fake_api.responses = get_multiple_devices_responses(MULTIPLE_DEVICES_DATA_RESPONSE)
+    fake_api.load_device("multiple_devices")
     key: str = get_store_key(mock_config_entry.entry_id)
     hass_storage[key] = get_store(key, {"week": [2026, 53], "count": 5, "writes": STORED_WRITES})
     await fake_api.setup_integration()
@@ -264,7 +266,7 @@ async def test_write_counter_after_unload(
     freezer: FrozenDateTimeFactory,
 ) -> None:
     """Test that the write counter no longer resets at midnight after the integration is unloaded."""
-    fake_api.responses = get_multiple_devices_responses(MULTIPLE_DEVICES_DATA_RESPONSE)
+    fake_api.load_device("multiple_devices")
     key: str = get_store_key(mock_config_entry.entry_id)
     counter: dict[str, Any] = {"week": get_week(date(2026, 3, 8)), "count": 5, "writes": STORED_WRITES}
     hass_storage[key] = get_store(key, counter)
@@ -296,7 +298,7 @@ async def test_new_week_resets_write_counter(
 
     A stored week in the future, e.g. after the clock was set back, is another week as well.
     """
-    fake_api.responses = get_multiple_devices_responses(MULTIPLE_DEVICES_DATA_RESPONSE)
+    fake_api.load_device("multiple_devices")
     today: date = dt_util.now().date()
     key: str = get_store_key(mock_config_entry.entry_id)
     hass_storage[key] = get_store(
@@ -333,7 +335,7 @@ async def test_shared_write_counter_is_removed(
     issue_registry: ir.IssueRegistry,
 ) -> None:
     """Test that the write counter and the repair issue shared by all control units in older versions are removed."""
-    fake_api.responses = get_multiple_devices_responses(MULTIPLE_DEVICES_DATA_RESPONSE)
+    fake_api.load_device("multiple_devices")
     hass_storage[DOMAIN] = get_store(DOMAIN, {"week": get_week(dt_util.now().date()), "count": 7})
     ir.async_create_issue(
         hass,
@@ -406,7 +408,7 @@ async def test_remove_entry_removes_write_counter(
     hass_storage: dict[str, Any],
 ) -> None:
     """Test that removing a config entry removes its write counter."""
-    fake_api.responses = get_multiple_devices_responses(MULTIPLE_DEVICES_DATA_RESPONSE)
+    fake_api.load_device("multiple_devices")
     key: str = get_store_key(mock_config_entry.entry_id)
     hass_storage[key] = get_store(key, {"week": get_week(dt_util.now().date()), "count": 1})
     await fake_api.setup_integration()

@@ -16,11 +16,10 @@ from homeassistant.helpers import device_registry as dr
 from homeassistant.setup import async_setup_component
 
 from custom_components.keba_keenergy.const import DOMAIN
-from tests import get_multiple_devices_responses
 from tests import get_state
+from tests import replace_values
 from tests import select_option
-from tests.const import ENTITY_UPDATED_DATA_RESPONSE
-from tests.const import MULTIPLE_DEVICES_DATA_RESPONSE
+from tests.const import ENTITY_UPDATED_VALUES
 from tests.const import NOW
 from tests.test_entity_data import REMOTE_MAINTENANCE_CONNECTED_ENTITY_ID
 from tests.test_issues_data import WRITE_COUNT_ENTITY_ID
@@ -40,10 +39,11 @@ async def test_update_entity(
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
     """Test that updating one entity with the action updates all entities of the coordinator."""
-    fake_api.responses = get_multiple_devices_responses(
-        MULTIPLE_DEVICES_DATA_RESPONSE,
+    fake_api.load_device("multiple_devices")
+    fake_api.responses = fake_api.setup_responses(
+        fake_api.data,
         # Read the API after the action call.
-        ENTITY_UPDATED_DATA_RESPONSE,
+        replace_values(fake_api.data, ENTITY_UPDATED_VALUES),
     )
     await async_setup_component(hass, HA_DOMAIN, {})
     await fake_api.setup_integration()
@@ -71,8 +71,8 @@ async def test_entity_update_failed(
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
     """Test that an entity keeps its state and raises a translated error if writing a value fails, uncounted."""
+    fake_api.load_device("multiple_devices")
     entity_id: str = "select.keba_keenergy_12345678_buffer_tank_operating_mode_1"
-    fake_api.responses = get_multiple_devices_responses(MULTIPLE_DEVICES_DATA_RESPONSE)
     fake_api.write_status = HTTPStatus.BAD_REQUEST
     await fake_api.setup_integration()
 
@@ -107,8 +107,8 @@ async def test_heat_pump_manufacturer(
     expected_manufacturer: str | None,
 ) -> None:
     """Test the manufacturer of the heat pump device, detected from the system name."""
-    fake_api.responses = get_multiple_devices_responses(MULTIPLE_DEVICES_DATA_RESPONSE)
-    fake_api.system_name = system_name
+    fake_api.load_device("multiple_devices")
+    fake_api.system["name"] = system_name
     await fake_api.setup_integration()
 
     manufacturers: list[str | None] = [
@@ -124,9 +124,9 @@ async def test_entities_keep_their_state_if_queued_writes_failed(
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
     """Test that entities keep their states if writes fail, which waited for each other."""
+    fake_api.load_device("multiple_devices")
     buffer_tank_1_entity_id: str = "select.keba_keenergy_12345678_buffer_tank_operating_mode_1"
     buffer_tank_2_entity_id: str = "select.keba_keenergy_12345678_buffer_tank_operating_mode_2"
-    fake_api.responses = get_multiple_devices_responses(MULTIPLE_DEVICES_DATA_RESPONSE)
     fake_api.write_status = HTTPStatus.BAD_REQUEST
     await fake_api.setup_integration()
 
@@ -155,7 +155,7 @@ async def test_update_remote_access_entity(
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
     """Test that updating a remote access entity with the action only reads the remote access."""
-    fake_api.responses = get_multiple_devices_responses(MULTIPLE_DEVICES_DATA_RESPONSE)
+    fake_api.load_device("multiple_devices")
     await async_setup_component(hass, HA_DOMAIN, {})
     await fake_api.setup_integration()
     read_requests: list[str] = fake_api.read_requests()

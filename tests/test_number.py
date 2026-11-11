@@ -22,18 +22,14 @@ from pytest_homeassistant.common import snapshot_platform
 
 from custom_components.keba_keenergy.const import FLASH_WRITE_DELAY
 from tests import fire_debounced_writes
-from tests import get_multiple_devices_responses
-from tests import get_single_device_responses
 from tests import get_state
 from tests import next_update
+from tests import replace_attributes
+from tests import replace_values
 from tests import set_number_value
-from tests import update_response
 from tests.const import HEAT_CIRCUIT_TARGET_TEMPERATURE_OFFSET
-from tests.const import MULTIPLE_DEVICES_DATA_RESPONSE
-from tests.const import MULTIPLE_DEVICES_PASSIVE_COOLING_FIXED_DATA_RESPONSE
 from tests.const import NOW
-from tests.const import SINGLE_DEVICE_DEFAULT_DATA_RESPONSE
-from tests.const import Response
+from tests.const import PASSIVE_COOLING_VALUES
 from tests.test_number_data import HEATING_CURVE_SLOPE_ENTITY_ID
 from tests.test_number_data import TARGET_TEMPERATURE_OFFSET_ENTITY_ID
 from tests.test_number_data import TARGET_TEMPERATURE_OFFSET_WRITE
@@ -63,10 +59,9 @@ async def test_numbers(
 ) -> None:
     """Test the states of all number entities."""
     hass.config.language = language
+    fake_api.load_device("multiple_devices")
     fake_api.platforms = [Platform.NUMBER]
-    fake_api.responses = get_multiple_devices_responses(
-        MULTIPLE_DEVICES_DATA_RESPONSE, fixed_data=MULTIPLE_DEVICES_PASSIVE_COOLING_FIXED_DATA_RESPONSE
-    )
+    fake_api.fixed_data = replace_values(fake_api.fixed_data, PASSIVE_COOLING_VALUES)
     await fake_api.setup_integration()
 
     await snapshot_platform(hass, entity_registry, snapshot, mock_config_entry.entry_id)
@@ -277,10 +272,11 @@ async def test_set_value_debounced(
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
     """Test that quick value changes are shown at once and written once, with the last value."""
-    fake_api.responses = get_single_device_responses(
-        update_response(SINGLE_DEVICE_DEFAULT_DATA_RESPONSE, HEAT_CIRCUIT_TARGET_TEMPERATURE_OFFSET, value="1.5"),
+    fake_api.load_device("single_device")
+    fake_api.responses = fake_api.setup_responses(
+        replace_values(fake_api.data, {HEAT_CIRCUIT_TARGET_TEMPERATURE_OFFSET: "1.5"}),
         # Read the API after the update of the entity.
-        update_response(SINGLE_DEVICE_DEFAULT_DATA_RESPONSE, HEAT_CIRCUIT_TARGET_TEMPERATURE_OFFSET, value="1.5"),
+        replace_values(fake_api.data, {HEAT_CIRCUIT_TARGET_TEMPERATURE_OFFSET: "1.5"}),
     )
     await fake_api.setup_integration()
 
@@ -301,21 +297,13 @@ async def test_set_value_debounced(
 
 
 @pytest.mark.parametrize(
-    ("entity_id", "response", "value"),
+    ("entity_id", "values", "value"),
     [
-        (
-            TARGET_TEMPERATURE_OFFSET_ENTITY_ID,
-            update_response(SINGLE_DEVICE_DEFAULT_DATA_RESPONSE, HEAT_CIRCUIT_TARGET_TEMPERATURE_OFFSET, value="1.5"),
-            1.5,
-        ),
+        (TARGET_TEMPERATURE_OFFSET_ENTITY_ID, {HEAT_CIRCUIT_TARGET_TEMPERATURE_OFFSET: "1.5"}, 1.5),
         # The Web HMI returns `0.8` as Float32 (`0.80000001`).
         (
             HEATING_CURVE_SLOPE_ENTITY_ID,
-            update_response(
-                SINGLE_DEVICE_DEFAULT_DATA_RESPONSE,
-                "APPL.CtrlAppl.sParam.heatCircuit[0].param.heatCurveGradient",
-                value="0.80000001",
-            ),
+            {"APPL.CtrlAppl.sParam.heatCircuit[0].param.heatCurveGradient": "0.80000001"},
             0.8,
         ),
     ],
@@ -327,11 +315,12 @@ async def test_set_unchanged_value(
     freezer: FrozenDateTimeFactory,
     fake_api: FakeKebaKeEnergyAPI,
     entity_id: str,
-    response: Response,
+    values: dict[str, str],
     value: float,
 ) -> None:
     """Test that the current value of a number entity is not written again."""
-    fake_api.responses = get_single_device_responses(response)
+    fake_api.load_device("single_device")
+    fake_api.data = replace_values(fake_api.data, values)
     await fake_api.setup_integration()
 
     await set_number_value(hass, entity_id, value)
@@ -347,9 +336,8 @@ async def test_set_value_back_before_write(
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
     """Test that a value set back to the current value before the debounced write is not written."""
-    fake_api.responses = get_single_device_responses(
-        update_response(SINGLE_DEVICE_DEFAULT_DATA_RESPONSE, HEAT_CIRCUIT_TARGET_TEMPERATURE_OFFSET, value="1.5"),
-    )
+    fake_api.load_device("single_device")
+    fake_api.data = replace_values(fake_api.data, {HEAT_CIRCUIT_TARGET_TEMPERATURE_OFFSET: "1.5"})
     await fake_api.setup_integration()
 
     await set_number_value(hass, TARGET_TEMPERATURE_OFFSET_ENTITY_ID, 0.5)
@@ -367,13 +355,10 @@ async def test_limits_after_update(
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
     """Test that a number entity uses the default limits until an update provides the limits of the API."""
-    fake_api.responses = get_single_device_responses(
-        update_response(
-            SINGLE_DEVICE_DEFAULT_DATA_RESPONSE,
-            "APPL.CtrlAppl.sParam.heatCircuit[0].param.offsetRoomTemp",
-            attributes={},
-        ),
-        SINGLE_DEVICE_DEFAULT_DATA_RESPONSE,
+    fake_api.load_device("single_device")
+    fake_api.responses = fake_api.setup_responses(
+        replace_attributes(fake_api.data, "APPL.CtrlAppl.sParam.heatCircuit[0].param.offsetRoomTemp", {}),
+        fake_api.data,
     )
     await fake_api.setup_integration()
 
@@ -393,9 +378,8 @@ async def test_debounced_value_not_written_after_unload(
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
     """Test that a pending debounced value is not written after the integration was unloaded."""
-    fake_api.responses = get_single_device_responses(
-        update_response(SINGLE_DEVICE_DEFAULT_DATA_RESPONSE, HEAT_CIRCUIT_TARGET_TEMPERATURE_OFFSET, value="1.5"),
-    )
+    fake_api.load_device("single_device")
+    fake_api.data = replace_values(fake_api.data, {HEAT_CIRCUIT_TARGET_TEMPERATURE_OFFSET: "1.5"})
     await fake_api.setup_integration()
 
     await set_number_value(hass, TARGET_TEMPERATURE_OFFSET_ENTITY_ID, 0.5)
@@ -414,9 +398,8 @@ async def test_debounced_write_failed(
     caplog: pytest.LogCaptureFixture,
 ) -> None:
     """Test that a failed debounced write shows the previous value again and logs a warning, not an error."""
-    fake_api.responses = get_single_device_responses(
-        update_response(SINGLE_DEVICE_DEFAULT_DATA_RESPONSE, HEAT_CIRCUIT_TARGET_TEMPERATURE_OFFSET, value="1.5"),
-    )
+    fake_api.load_device("single_device")
+    fake_api.data = replace_values(fake_api.data, {HEAT_CIRCUIT_TARGET_TEMPERATURE_OFFSET: "1.5"})
     await fake_api.setup_integration()
     fake_api.write_status = HTTPStatus.BAD_REQUEST
 
@@ -440,12 +423,13 @@ async def test_debounced_write_during_update(
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
     """Test that a value written during an update is not replaced by the previous value of the update."""
-    fake_api.responses = get_single_device_responses(
-        update_response(SINGLE_DEVICE_DEFAULT_DATA_RESPONSE, HEAT_CIRCUIT_TARGET_TEMPERATURE_OFFSET, value="1.5"),
+    fake_api.load_device("single_device")
+    fake_api.responses = fake_api.setup_responses(
+        replace_values(fake_api.data, {HEAT_CIRCUIT_TARGET_TEMPERATURE_OFFSET: "1.5"}),
         # The update reads the previous value while the value is written.
-        update_response(SINGLE_DEVICE_DEFAULT_DATA_RESPONSE, HEAT_CIRCUIT_TARGET_TEMPERATURE_OFFSET, value="1.5"),
+        replace_values(fake_api.data, {HEAT_CIRCUIT_TARGET_TEMPERATURE_OFFSET: "1.5"}),
         # The update reads the values again after the write.
-        update_response(SINGLE_DEVICE_DEFAULT_DATA_RESPONSE, HEAT_CIRCUIT_TARGET_TEMPERATURE_OFFSET, value="0.5"),
+        replace_values(fake_api.data, {HEAT_CIRCUIT_TARGET_TEMPERATURE_OFFSET: "0.5"}),
     )
     await fake_api.setup_integration()
 

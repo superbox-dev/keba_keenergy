@@ -21,15 +21,12 @@ from pytest_homeassistant.common import snapshot_platform
 
 from custom_components.keba_keenergy.const import ATTR_POINTS
 from custom_components.keba_keenergy.const import DOMAIN
-from tests import get_multiple_devices_responses
 from tests import get_option_translations
 from tests import get_platform_states
 from tests import get_state
-from tests import update_response
-from tests.const import MULTIPLE_DEVICES_DATA_RESPONSE
-from tests.const import MULTIPLE_DEVICES_PASSIVE_COOLING_FIXED_DATA_RESPONSE
+from tests import replace_values
 from tests.const import NOW
-from tests.test_sensor_data import CURVES_WITHOUT_NAMES_RESPONSE
+from tests.const import PASSIVE_COOLING_VALUES
 
 if TYPE_CHECKING:
     from homeassistant.core import HomeAssistant
@@ -55,10 +52,9 @@ async def test_sensors(
 ) -> None:
     """Test the states of all sensors, their displayed values and the translated options of the enum sensors."""
     hass.config.language = language
+    fake_api.load_device("multiple_devices")
     fake_api.platforms = [Platform.SENSOR]
-    fake_api.responses = get_multiple_devices_responses(
-        MULTIPLE_DEVICES_DATA_RESPONSE, fixed_data=MULTIPLE_DEVICES_PASSIVE_COOLING_FIXED_DATA_RESPONSE
-    )
+    fake_api.fixed_data = replace_values(fake_api.fixed_data, PASSIVE_COOLING_VALUES)
     await fake_api.setup_integration()
 
     await snapshot_platform(hass, entity_registry, snapshot, mock_config_entry.entry_id)
@@ -102,6 +98,7 @@ async def test_converted_sensor_keeps_registered_unit(
     expected: tuple[str, str],
 ) -> None:
     """Test that an existing sensor keeps the unit it was registered with before the unit came from the endpoint."""
+    fake_api.load_device("multiple_devices")
     mock_config_entry.add_to_hass(hass)
     entry: er.RegistryEntry = entity_registry.async_get_or_create(
         SENSOR_DOMAIN,
@@ -111,7 +108,6 @@ async def test_converted_sensor_keeps_registered_unit(
         suggested_object_id=f"{DOMAIN}_{unique_id}",
         unit_of_measurement=expected[1],
     )
-    fake_api.responses = get_multiple_devices_responses(MULTIPLE_DEVICES_DATA_RESPONSE)
     await fake_api.setup_integration()
 
     state: State = get_state(hass, entry.entity_id)
@@ -161,8 +157,8 @@ async def test_sensor_not_in_use(
     expected: dict[str, str],
 ) -> None:
     """Test that a sensor is unknown if the control unit reports it as not in use."""
+    fake_api.load_device("multiple_devices")
     fake_api.message_ids = {message_id: 50}
-    fake_api.responses = get_multiple_devices_responses(MULTIPLE_DEVICES_DATA_RESPONSE)
     await fake_api.setup_integration()
 
     states: dict[str, str] = {}
@@ -199,7 +195,6 @@ async def test_sensor_deactivated(
     assert entity_registry.async_get(entity_id) is not None
 
     fake_api.message_ids = {message_id: 10}
-    fake_api.responses = get_multiple_devices_responses(MULTIPLE_DEVICES_DATA_RESPONSE)
     await hass.config_entries.async_reload(init_integration.entry_id)
     await hass.async_block_till_done()
 
@@ -233,10 +228,9 @@ async def test_sensor_enum_state(
     expected: str,
 ) -> None:
     """Test the enum sensor states that are only reported in rare situations."""
+    fake_api.load_device("multiple_devices")
     name, raw_value = value
-    fake_api.responses = get_multiple_devices_responses(
-        update_response(MULTIPLE_DEVICES_DATA_RESPONSE, name, value=raw_value),
-    )
+    fake_api.data = replace_values(fake_api.data, {name: raw_value})
     await fake_api.setup_integration()
 
     state: State = get_state(hass, entity_id)
@@ -269,10 +263,9 @@ async def test_sensor_raw_value(
     expected: tuple[str, dict[str, float]],
 ) -> None:
     """Test that `raw_value` is the value read, also for enum members with several values and mixer positions."""
+    fake_api.load_device("multiple_devices")
     name, raw_value = value
-    fake_api.responses = get_multiple_devices_responses(
-        update_response(MULTIPLE_DEVICES_DATA_RESPONSE, name, value=raw_value),
-    )
+    fake_api.data = replace_values(fake_api.data, {name: raw_value})
     await fake_api.setup_integration()
 
     state: State = get_state(hass, entity_id)
@@ -308,10 +301,9 @@ async def test_sensor_mixer_position_percent(
     expected: str,
 ) -> None:
     """Test that the option shows the mixer position as percentage in the same entity instead of its state."""
+    fake_api.load_device("multiple_devices")
     name, raw_value = value
-    fake_api.responses = get_multiple_devices_responses(
-        update_response(MULTIPLE_DEVICES_DATA_RESPONSE, name, value=raw_value),
-    )
+    fake_api.data = replace_values(fake_api.data, {name: raw_value})
     await fake_api.setup_integration()
 
     state: State = get_state(hass, entity_id)
@@ -327,9 +319,11 @@ async def test_curve_sensor_without_curve(
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
     """Test that a curve sensor has no points if its curve is no longer on the control unit."""
-    fake_api.responses = get_multiple_devices_responses(MULTIPLE_DEVICES_DATA_RESPONSE)
     # The control unit has no curves, so the curves in use (e.g. `HC6`) do not exist.
-    fake_api.curves = CURVES_WITHOUT_NAMES_RESPONSE
+    fake_api.load_device("multiple_devices")
+    fake_api.curve_names = replace_values(
+        fake_api.curve_names, dict.fromkeys((value["name"] for value in fake_api.curve_names), "")
+    )
     await fake_api.setup_integration()
 
     state: State = get_state(hass, "sensor.keba_keenergy_12345678_heat_circuit_heating_curve_1")

@@ -24,15 +24,13 @@ from custom_components.keba_keenergy.const import DOMAIN
 from custom_components.keba_keenergy.const import SERVICE_SET_AWAY_DATE_RANGE
 from custom_components.keba_keenergy.const import SERVICE_SET_HEATING_CURVE_POINTS
 from tests import get_state
-from tests.const import CURVE_NAMES_RESPONSE
-from tests.const import CURVES_RENAMED_RESPONSE
-from tests.const import CURVES_RESPONSE
+from tests import replace_values
+from tests.const import CURVE_RENAMED_VALUES
 from tests.const import NOW
-from tests.const import Response
 from tests.test_services_data import AWAY_DATE_RANGE_WRITE
 from tests.test_services_data import HEATING_CURVE_POINTS
 from tests.test_services_data import HEATING_CURVE_POINTS_WRITE
-from tests.test_services_data import THREE_POINTS_CURVE_POINTS_RESPONSE
+from tests.test_services_data import THREE_POINTS_VALUES
 
 if TYPE_CHECKING:
     from homeassistant.core import HomeAssistant
@@ -252,14 +250,14 @@ async def test_set_heating_curve_points(
 @pytest.mark.parametrize(
     ("curves_and_points", "expected_translation_key"),
     [
-        ((CURVES_RENAMED_RESPONSE, HEATING_CURVE_POINTS), "cannot_find_curve"),
+        ((CURVE_RENAMED_VALUES, HEATING_CURVE_POINTS), "cannot_find_curve"),
         (
-            (CURVES_RESPONSE, [{"outdoor": 20, "flow": 35.3}, *HEATING_CURVE_POINTS[1:]]),
+            ({}, [{"outdoor": 20, "flow": 35.3}, *HEATING_CURVE_POINTS[1:]]),
             "duplicate_outdoor_temperature_values",
         ),
         # The outdoor temperatures are rounded to two decimals.
         (
-            (CURVES_RESPONSE, [{"outdoor": -20.001, "flow": 35.3}, {"outdoor": -20.004, "flow": 30}]),
+            ({}, [{"outdoor": -20.001, "flow": 35.3}, {"outdoor": -20.004, "flow": 30}]),
             "duplicate_outdoor_temperature_values",
         ),
     ],
@@ -269,12 +267,17 @@ async def test_set_heating_curve_points_invalid(
     hass: HomeAssistant,
     init_integration: MockConfigEntry,
     fake_api: FakeKebaKeEnergyAPI,
-    curves_and_points: tuple[list[Response], list[dict[str, float]]],
+    curves_and_points: tuple[dict[str, str], list[dict[str, float]]],
     expected_translation_key: str,
 ) -> None:
-    """Test that the action to set the points of a heating curve rejects invalid points or curves."""
+    """Test that the action to set the points of a heating curve rejects invalid points or curves.
+
+    `curves_and_points` are the changed values of the curves and the points of the action.
+    """
+    curve_values, points = curves_and_points
     # E.g. the heating curve HC1 was renamed on the control unit after the setup.
-    fake_api.curves, points = curves_and_points
+    fake_api.curve_names = replace_values(fake_api.curve_names, curve_values)
+    fake_api.curve_points = replace_values(fake_api.curve_points, curve_values)
 
     with pytest.raises(ServiceValidationError) as error:
         await hass.services.async_call(
@@ -353,7 +356,7 @@ async def test_set_heating_curve_points_with_communication_error(
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
     """Test that a communication error while reading the heating curves raises a translated error."""
-    fake_api.curves = HTTPStatus.BAD_REQUEST
+    fake_api.curve_error = HTTPStatus.BAD_REQUEST
 
     with pytest.raises(HomeAssistantError) as error:
         await hass.services.async_call(
@@ -377,10 +380,7 @@ async def test_set_unchanged_heating_curve_points(
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
     """Test that the action does not write the points if the heating curve already has them (flash writes)."""
-    fake_api.curves = [
-        CURVE_NAMES_RESPONSE,
-        THREE_POINTS_CURVE_POINTS_RESPONSE,
-    ]
+    fake_api.curve_points = replace_values(fake_api.curve_points, THREE_POINTS_VALUES)
 
     await hass.services.async_call(
         domain=DOMAIN,

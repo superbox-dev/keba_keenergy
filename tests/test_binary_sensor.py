@@ -12,12 +12,11 @@ from homeassistant.const import STATE_UNKNOWN
 from homeassistant.const import Platform
 from pytest_homeassistant.common import snapshot_platform
 
-from tests import get_multiple_devices_responses
 from tests import get_state
 from tests import next_update
-from tests.const import MULTIPLE_DEVICES_DATA_RESPONSE
-from tests.const import MULTIPLE_DEVICES_PASSIVE_COOLING_FIXED_DATA_RESPONSE
+from tests import replace_values
 from tests.const import NOW
+from tests.const import PASSIVE_COOLING_VALUES
 from tests.test_binary_sensor_data import COMPRESSOR_FAILURE_ENTITY_ID
 from tests.test_binary_sensor_data import COMPRESSOR_FAILURE_MESSAGE_ID
 
@@ -46,10 +45,9 @@ async def test_binary_sensors(
 ) -> None:
     """Test the states of all binary sensors."""
     hass.config.language = language
+    fake_api.load_device("multiple_devices")
     fake_api.platforms = [Platform.BINARY_SENSOR]
-    fake_api.responses = get_multiple_devices_responses(
-        MULTIPLE_DEVICES_DATA_RESPONSE, fixed_data=MULTIPLE_DEVICES_PASSIVE_COOLING_FIXED_DATA_RESPONSE
-    )
+    fake_api.fixed_data = replace_values(fake_api.fixed_data, PASSIVE_COOLING_VALUES)
     await fake_api.setup_integration()
 
     await snapshot_platform(hass, entity_registry, snapshot, mock_config_entry.entry_id)
@@ -65,8 +63,8 @@ async def test_failure_input_not_in_use(
     expected: str,
 ) -> None:
     """Test that a failure input is unknown if the control unit reports it as not in use (message id not 0)."""
+    fake_api.load_device("multiple_devices")
     fake_api.message_ids = {COMPRESSOR_FAILURE_MESSAGE_ID: message_id}
-    fake_api.responses = get_multiple_devices_responses(MULTIPLE_DEVICES_DATA_RESPONSE)
     await fake_api.setup_integration()
 
     state: State = get_state(hass, COMPRESSOR_FAILURE_ENTITY_ID)
@@ -79,8 +77,9 @@ async def test_failure_input_in_use_again(
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
     """Test that a failure input has a state again after the next update, once the control unit reports it in use."""
+    fake_api.load_device("multiple_devices")
     fake_api.message_ids = {COMPRESSOR_FAILURE_MESSAGE_ID: 50}
-    fake_api.responses = get_multiple_devices_responses(MULTIPLE_DEVICES_DATA_RESPONSE, MULTIPLE_DEVICES_DATA_RESPONSE)
+    fake_api.responses = fake_api.setup_responses(fake_api.data, fake_api.data)
     await fake_api.setup_integration()
 
     fake_api.message_ids = {}

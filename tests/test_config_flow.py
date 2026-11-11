@@ -19,10 +19,7 @@ from homeassistant.const import CONF_SSL
 from homeassistant.data_entry_flow import FlowResultType
 
 from custom_components.keba_keenergy.const import DOMAIN
-from tests import get_multiple_devices_responses
 from tests import replace_values
-from tests.const import MULTIPLE_DEVICES_DATA_RESPONSE
-from tests.const import MULTIPLE_DEVICES_FIXED_DATA_RESPONSE
 from tests.const import NOW
 from tests.test_config_flow_data import CREDENTIALS
 from tests.test_config_flow_data import HOST
@@ -546,11 +543,12 @@ async def test_options_flow(
     expected: dict[str, bool | int],
 ) -> None:
     """Test the options flow, the options without sections and the normalization of the update multipliers."""
+    fake_api.load_device("multiple_devices")
     fake_api.responses = [
         # The first setup of the coordinator.
-        *get_multiple_devices_responses(MULTIPLE_DEVICES_DATA_RESPONSE),
+        *fake_api.setup_responses(fake_api.data),
         # The second setup of the coordinator after the reload.
-        *get_multiple_devices_responses(MULTIPLE_DEVICES_DATA_RESPONSE),
+        *fake_api.setup_responses(fake_api.data),
     ]
     await fake_api.setup_integration()
 
@@ -576,13 +574,12 @@ async def test_options_flow_without_photovoltaics(
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
     """Test that the options flow hides the photovoltaics multiplier without photovoltaics."""
-    fake_api.responses = get_multiple_devices_responses(
-        [value for value in MULTIPLE_DEVICES_DATA_RESPONSE if ".photovoltaics." not in value["name"]],
-        fixed_data=replace_values(
-            MULTIPLE_DEVICES_FIXED_DATA_RESPONSE,
-            {"APPL.CtrlAppl.sParam.options.hasPhotovoltaics": "false"},
-        ),
+    fake_api.load_device("multiple_devices")
+    fake_api.fixed_data = replace_values(
+        fake_api.fixed_data,
+        {"APPL.CtrlAppl.sParam.options.hasPhotovoltaics": "false"},
     )
+    fake_api.data = [value for value in fake_api.data if ".photovoltaics." not in value["name"]]
     await fake_api.setup_integration()
 
     result: ConfigFlowResult = await hass.config_entries.options.async_init(mock_config_entry.entry_id)
@@ -616,8 +613,9 @@ async def test_options_flow_when_integration_reload_failed(
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
     """Test that the options flow aborts if a reload of the integration failed."""
+    fake_api.load_device("multiple_devices")
     fake_api.responses = [
-        *get_multiple_devices_responses(MULTIPLE_DEVICES_DATA_RESPONSE),
+        *fake_api.setup_responses(fake_api.data),
         # The reload fails.
         HTTPStatus.BAD_REQUEST,
     ]

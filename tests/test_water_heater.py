@@ -26,17 +26,13 @@ from homeassistant.helpers.entity_component import async_update_entity
 from pytest_homeassistant.common import snapshot_platform
 
 from tests import fire_debounced_writes
-from tests import get_multiple_devices_responses
-from tests import get_single_device_responses
 from tests import get_state
 from tests import next_update
+from tests import replace_attributes
+from tests import replace_values
 from tests import set_target_temperature
-from tests import update_response
-from tests.const import MULTIPLE_DEVICES_DATA_RESPONSE
-from tests.const import MULTIPLE_DEVICES_OTHER_MODES_DATA_RESPONSE
 from tests.const import NOW
-from tests.const import SINGLE_DEVICE_DEFAULT_DATA_RESPONSE
-from tests.const import Response
+from tests.const import OTHER_MODES_VALUES
 from tests.test_water_heater_data import BUFFER_TANK
 from tests.test_water_heater_data import BUFFER_TANK_1_ENTITY_ID
 from tests.test_water_heater_data import DEFAULT_LIMITS
@@ -71,47 +67,47 @@ async def test_water_heater(
 ) -> None:
     """Test the states of all water heater entities."""
     hass.config.language = language
+    fake_api.load_device("multiple_devices")
     fake_api.platforms = [Platform.WATER_HEATER]
-    fake_api.responses = get_multiple_devices_responses(MULTIPLE_DEVICES_DATA_RESPONSE)
     await fake_api.setup_integration()
 
     await snapshot_platform(hass, entity_registry, snapshot, mock_config_entry.entry_id)
 
 
 @pytest.mark.parametrize(
-    ("service_call", "response", "expected_writes"),
+    ("service_call", "values", "expected_writes"),
     [
         (
             (SERVICE_TURN_OFF, {ATTR_ENTITY_ID: HOT_WATER_TANK_1_ENTITY_ID}),
-            MULTIPLE_DEVICES_OTHER_MODES_DATA_RESPONSE,
+            OTHER_MODES_VALUES,
             [get_operating_mode_write(HOT_WATER_TANK, 0)],
         ),
-        ((SERVICE_TURN_OFF, {ATTR_ENTITY_ID: HOT_WATER_TANK_2_ENTITY_ID}), MULTIPLE_DEVICES_DATA_RESPONSE, []),
+        ((SERVICE_TURN_OFF, {ATTR_ENTITY_ID: HOT_WATER_TANK_2_ENTITY_ID}), {}, []),
         (
             (SERVICE_TURN_OFF, {ATTR_ENTITY_ID: BUFFER_TANK_1_ENTITY_ID}),
-            MULTIPLE_DEVICES_OTHER_MODES_DATA_RESPONSE,
+            OTHER_MODES_VALUES,
             [get_operating_mode_write(BUFFER_TANK, 0)],
         ),
-        ((SERVICE_TURN_OFF, {ATTR_ENTITY_ID: BUFFER_TANK_1_ENTITY_ID}), MULTIPLE_DEVICES_DATA_RESPONSE, []),
+        ((SERVICE_TURN_OFF, {ATTR_ENTITY_ID: BUFFER_TANK_1_ENTITY_ID}), {}, []),
         (
             (SERVICE_TURN_ON, {ATTR_ENTITY_ID: HOT_WATER_TANK_1_ENTITY_ID}),
-            MULTIPLE_DEVICES_DATA_RESPONSE,
+            {},
             [get_operating_mode_write(HOT_WATER_TANK, 2)],
         ),
         (
             (SERVICE_TURN_ON, {ATTR_ENTITY_ID: HOT_WATER_TANK_1_ENTITY_ID}),
-            MULTIPLE_DEVICES_OTHER_MODES_DATA_RESPONSE,
+            OTHER_MODES_VALUES,
             [],
         ),
         (
             (SERVICE_TURN_ON, {ATTR_ENTITY_ID: BUFFER_TANK_1_ENTITY_ID}),
-            MULTIPLE_DEVICES_DATA_RESPONSE,
+            {},
             [get_operating_mode_write(BUFFER_TANK, 1)],
         ),
-        ((SERVICE_TURN_ON, {ATTR_ENTITY_ID: BUFFER_TANK_1_ENTITY_ID}), MULTIPLE_DEVICES_OTHER_MODES_DATA_RESPONSE, []),
+        ((SERVICE_TURN_ON, {ATTR_ENTITY_ID: BUFFER_TANK_1_ENTITY_ID}), OTHER_MODES_VALUES, []),
         (
             (SERVICE_SET_OPERATION_MODE, {ATTR_ENTITY_ID: HOT_WATER_TANK_1_ENTITY_ID, ATTR_OPERATION_MODE: STATE_ECO}),
-            MULTIPLE_DEVICES_DATA_RESPONSE,
+            {},
             [get_operating_mode_write(HOT_WATER_TANK, 1)],
         ),
         (
@@ -119,12 +115,12 @@ async def test_water_heater(
                 SERVICE_SET_OPERATION_MODE,
                 {ATTR_ENTITY_ID: HOT_WATER_TANK_1_ENTITY_ID, ATTR_OPERATION_MODE: STATE_PERFORMANCE},
             ),
-            MULTIPLE_DEVICES_OTHER_MODES_DATA_RESPONSE,
+            OTHER_MODES_VALUES,
             [get_operating_mode_write(HOT_WATER_TANK, 3)],
         ),
         (
             (SERVICE_SET_OPERATION_MODE, {ATTR_ENTITY_ID: HOT_WATER_TANK_1_ENTITY_ID, ATTR_OPERATION_MODE: STATE_OFF}),
-            MULTIPLE_DEVICES_DATA_RESPONSE,
+            {},
             [get_operating_mode_write(HOT_WATER_TANK, 0)],
         ),
         (
@@ -132,7 +128,7 @@ async def test_water_heater(
                 SERVICE_SET_OPERATION_MODE,
                 {ATTR_ENTITY_ID: HOT_WATER_TANK_1_ENTITY_ID, ATTR_OPERATION_MODE: STATE_HEAT_PUMP},
             ),
-            MULTIPLE_DEVICES_DATA_RESPONSE,
+            {},
             [get_operating_mode_write(HOT_WATER_TANK, 2)],
         ),
         (
@@ -140,12 +136,12 @@ async def test_water_heater(
                 SERVICE_SET_OPERATION_MODE,
                 {ATTR_ENTITY_ID: BUFFER_TANK_1_ENTITY_ID, ATTR_OPERATION_MODE: STATE_PERFORMANCE},
             ),
-            MULTIPLE_DEVICES_DATA_RESPONSE,
+            {},
             [get_operating_mode_write(BUFFER_TANK, 2)],
         ),
         (
             (SERVICE_SET_OPERATION_MODE, {ATTR_ENTITY_ID: BUFFER_TANK_1_ENTITY_ID, ATTR_OPERATION_MODE: STATE_OFF}),
-            MULTIPLE_DEVICES_OTHER_MODES_DATA_RESPONSE,
+            OTHER_MODES_VALUES,
             [get_operating_mode_write(BUFFER_TANK, 0)],
         ),
         (
@@ -153,7 +149,7 @@ async def test_water_heater(
                 SERVICE_SET_OPERATION_MODE,
                 {ATTR_ENTITY_ID: BUFFER_TANK_1_ENTITY_ID, ATTR_OPERATION_MODE: STATE_HEAT_PUMP},
             ),
-            MULTIPLE_DEVICES_DATA_RESPONSE,
+            {},
             [get_operating_mode_write(BUFFER_TANK, 1)],
         ),
     ],
@@ -179,11 +175,12 @@ async def test_set_operation_mode(
     hass: HomeAssistant,
     fake_api: FakeKebaKeEnergyAPI,
     service_call: tuple[str, dict[str, str]],
-    response: Response,
+    values: dict[str, str],
     expected_writes: list[str],
 ) -> None:
     """Test turning on and off and setting the operation mode of a tank, the current mode is not written again."""
-    fake_api.responses = get_multiple_devices_responses(response)
+    fake_api.load_device("multiple_devices")
+    fake_api.data = replace_values(fake_api.data, values)
     await fake_api.setup_integration()
 
     service, service_data = service_call
@@ -219,10 +216,11 @@ async def test_set_temperature_debounced(
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
     """Test that quick target temperature changes are shown at once and written once, with the last value."""
-    fake_api.responses = get_single_device_responses(
-        SINGLE_DEVICE_DEFAULT_DATA_RESPONSE,
+    fake_api.load_device("single_device")
+    fake_api.responses = fake_api.setup_responses(
+        fake_api.data,
         # Read the API after the update of the entity.
-        SINGLE_DEVICE_DEFAULT_DATA_RESPONSE,
+        fake_api.data,
     )
     await fake_api.setup_integration()
 
@@ -250,9 +248,7 @@ async def test_set_unchanged_target_temperature(
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
     """Test that the current target temperature of a hot water tank is not written again."""
-    fake_api.responses = get_single_device_responses(
-        SINGLE_DEVICE_DEFAULT_DATA_RESPONSE,
-    )
+    fake_api.load_device("single_device")
     await fake_api.setup_integration()
 
     await set_target_temperature(hass, HOT_WATER_TANK_ENTITY_ID, 51)
@@ -268,13 +264,10 @@ async def test_limits_after_update(
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
     """Test that a hot water tank uses the limits from the API once an update provides them."""
-    fake_api.responses = get_single_device_responses(
-        update_response(
-            SINGLE_DEVICE_DEFAULT_DATA_RESPONSE,
-            "APPL.CtrlAppl.sParam.hotWaterTank[0].param.normalSetTempMax.value",
-            attributes={},
-        ),
-        SINGLE_DEVICE_DEFAULT_DATA_RESPONSE,
+    fake_api.load_device("single_device")
+    fake_api.responses = fake_api.setup_responses(
+        replace_attributes(fake_api.data, "APPL.CtrlAppl.sParam.hotWaterTank[0].param.normalSetTempMax.value", {}),
+        fake_api.data,
     )
     await fake_api.setup_integration()
 
@@ -292,8 +285,8 @@ async def test_buffer_tank_sensor_not_in_use(
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
     """Test that a buffer tank uses the other temperature if the control unit reports the top sensor as not in use."""
+    fake_api.load_device("multiple_devices")
     fake_api.message_ids = {"APPL.CtrlAppl.sParam.bufferTank[0].topTemp.state.msgId": 10}
-    fake_api.responses = get_multiple_devices_responses(MULTIPLE_DEVICES_DATA_RESPONSE)
     await fake_api.setup_integration()
 
     state: State = get_state(hass, BUFFER_TANK_1_ENTITY_ID)

@@ -2,12 +2,17 @@
 
 - Every new code path needs a test
 - Mock HTTP with the `fake_api` fixture (`tests/conftest.py`)
-  - responses in `tests/fixtures/` as JSON, exactly as the Web HMI returns them, loaded in `tests/const.py`
-    - `common/` for every setup, `single_device/` and `multiple_devices/` per setup
-    - variants derived in the tests with `replace_values()` / `update_response()`, never as another JSON file
-  - set `fake_api.responses` (`get_single_device_responses()`, `get_multiple_devices_responses()`), then
-    `fake_api.setup_integration()`, every response must be read
-  - `init_integration` for the setup with `get_multiple_devices_responses(MULTIPLE_DEVICES_DATA_RESPONSE)`
+  - responses in `tests/fixtures/` as JSON, exactly as the Web HMI returns them
+    - `common/` for every setup, `single_device/` and `multiple_devices/` per device
+    - only `fake_api` loads them, never on import
+    - every test loads its device first: `fake_api.load_device("multiple_devices")` or `"single_device"`,
+      `init_integration` loads `multiple_devices`
+    - variants derived in the tests from `fake_api.data` / `fake_api.fixed_data` with `replace_values()` /
+      `replace_attributes()`, never as another JSON file, their values as `dict` in `tests/const.py` or `_data.py`
+  - `fake_api.setup_integration()` sets up the device with its `data`, or with own `fake_api.responses`
+    (`fake_api.setup_responses(...)` for the setup and the updates), every response must be read
+  - other values read on setup with `fake_api.fixed_data`
+  - `init_integration` for the setup of the device without own responses
 - Config entry and its ID from `mock_config_entry`, or from `init_integration` after its setup
 - Variants as fixtures with a default value, overridden by `parametrize` (`entry_data`, `entry_options`)
 - Assert entities, devices and issues with snapshots in `tests/snapshots/`

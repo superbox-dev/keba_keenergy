@@ -20,14 +20,14 @@ from pytest_homeassistant.common import async_capture_events
 
 from custom_components.keba_keenergy.const import ATTR_ALARMS
 from custom_components.keba_keenergy.const import DOMAIN
-from tests import get_single_device_responses
 from tests import get_state
 from tests import init_translations
 from tests import next_update
+from tests import replace_values
 from tests.const import HIGH_PRESSURE_ALARM
 from tests.const import NOW
 from tests.const import SENSOR_BREAK_ALARM
-from tests.const import SINGLE_DEVICE_DATA_RESPONSE
+from tests.const import SINGLE_DEVICE_VALUES
 from tests.const import AlarmValue
 from tests.test_alarms_data import ALARM_ENTITY_ID
 from tests.test_alarms_data import HIGH_PRESSURE_ATTRIBUTES
@@ -87,7 +87,7 @@ async def test_alarm_issue(
 ) -> None:
     """Test the repair issue of a pending alarm, with its translated texts."""
     hass.config.language = language
-    fake_api.responses = get_single_device_responses()
+    fake_api.load_device("single_device")
     fake_api.alarms = [alarm]
     await fake_api.setup_integration()
     translations: dict[str, str] = await init_translations(hass, category="issues")
@@ -127,7 +127,7 @@ async def test_alarm_issue_severity(
     severity: ir.IssueSeverity,
 ) -> None:
     """Test that emergencies and errors are errors and all other priorities are warnings, like the Web HMI."""
-    fake_api.responses = get_single_device_responses()
+    fake_api.load_device("single_device")
     fake_api.alarms = [{**SENSOR_BREAK_ALARM, "prio": priority}]
     await fake_api.setup_integration()
 
@@ -148,7 +148,10 @@ async def test_alarm_raised_and_cleared(
     issue_registry: ir.IssueRegistry,
 ) -> None:
     """Test the events, the repair issues, the sensor and the store when alarms are raised and cleared."""
-    fake_api.responses = get_single_device_responses(SINGLE_DEVICE_DATA_RESPONSE, SINGLE_DEVICE_DATA_RESPONSE)
+    fake_api.load_device("single_device")
+    fake_api.responses = fake_api.setup_responses(
+        replace_values(fake_api.data, SINGLE_DEVICE_VALUES), replace_values(fake_api.data, SINGLE_DEVICE_VALUES)
+    )
     await fake_api.setup_integration()
     entry_id: str = mock_config_entry.entry_id
     key: str = get_alarm_store_key(entry_id)
@@ -211,9 +214,9 @@ async def test_alarm_events_after_restart(
     expected_events: list[tuple[str, AlarmAttributes]],
 ) -> None:
     """Test that the alarms raised or cleared while Home Assistant was not running are reported once after the start."""
+    fake_api.load_device("single_device")
     key: str = get_alarm_store_key(mock_config_entry.entry_id)
     hass_storage[key] = get_alarm_store(key, stored)
-    fake_api.responses = get_single_device_responses()
     fake_api.alarms = alarms
     events: list[Event[EventStateChangedData]] = async_capture_events(fake_api.hass, EVENT_STATE_CHANGED)
     await fake_api.setup_integration()
@@ -239,7 +242,7 @@ async def test_alarm_requests(
 ) -> None:
     """Test that the alarms are only read while there are any, in the language of Home Assistant."""
     hass.config.language = language
-    fake_api.responses = get_single_device_responses()
+    fake_api.load_device("single_device")
     fake_api.alarms = alarms
     await fake_api.setup_integration()
 
@@ -251,8 +254,8 @@ async def test_alarm_invalid_time_zone(
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
     """Test that the time of an alarm is in the time zone of Home Assistant if the control unit has an invalid one."""
-    fake_api.responses = get_single_device_responses()
-    fake_api.timezone = "Invalid/Zone"
+    fake_api.load_device("single_device")
+    fake_api.timezone["timezone"] = "Invalid/Zone"
     fake_api.alarms = [SENSOR_BREAK_ALARM]
     await fake_api.setup_integration()
 
@@ -266,7 +269,8 @@ async def test_alarm_update_error(
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
     """Test that the entities are unavailable if the alarms cannot be read."""
-    fake_api.responses = get_single_device_responses(SINGLE_DEVICE_DATA_RESPONSE)
+    fake_api.load_device("single_device")
+    fake_api.data = replace_values(fake_api.data, SINGLE_DEVICE_VALUES)
     await fake_api.setup_integration()
     fake_api.alarms = HTTPStatus.BAD_REQUEST
     await next_update(hass, freezer)
@@ -282,7 +286,7 @@ async def test_unload_entry_deletes_alarm_issues(
     issue_registry: ir.IssueRegistry,
 ) -> None:
     """Test that unloading a config entry deletes the repair issues of its alarms."""
-    fake_api.responses = get_single_device_responses()
+    fake_api.load_device("single_device")
     fake_api.alarms = [SENSOR_BREAK_ALARM]
     await fake_api.setup_integration()
 
@@ -302,9 +306,9 @@ async def test_remove_entry_removes_alarms(
     hass_storage: dict[str, Any],
 ) -> None:
     """Test that removing a config entry removes its stored alarms."""
+    fake_api.load_device("single_device")
     key: str = get_alarm_store_key(mock_config_entry.entry_id)
     hass_storage[key] = get_alarm_store(key, [SENSOR_BREAK_ATTRIBUTES])
-    fake_api.responses = get_single_device_responses()
     fake_api.alarms = [SENSOR_BREAK_ALARM]
     await fake_api.setup_integration()
 

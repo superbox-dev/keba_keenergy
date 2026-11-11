@@ -10,6 +10,8 @@ import logging
 from http import HTTPStatus
 from typing import TYPE_CHECKING
 from typing import Any
+from typing import Literal
+from typing import TypeIs
 from unittest.mock import AsyncMock
 from unittest.mock import patch
 
@@ -17,23 +19,18 @@ import pytest
 from homeassistant.const import CONF_HOST
 from homeassistant.const import CONF_SSL
 from pytest_homeassistant.common import MockConfigEntry
+from pytest_homeassistant.common import load_json_array_fixture
+from pytest_homeassistant.common import load_json_object_fixture
 from pytest_homeassistant.test_util.aiohttp import AiohttpClientMocker
 from pytest_homeassistant.test_util.aiohttp import AiohttpClientMockResponse
 
 from custom_components.keba_keenergy.const import DOMAIN
 from custom_components.keba_keenergy.const import PLATFORMS
-from tests import get_multiple_devices_responses
-from tests.const import CURVES_RESPONSE
 from tests.const import DEACTIVATED_MESSAGE_IDS
-from tests.const import DEVICE_INFO_RESPONSE
-from tests.const import HMI_RESPONSE
 from tests.const import MESSAGE_ID_SUFFIX
-from tests.const import MULTIPLE_DEVICES_DATA_RESPONSE
 from tests.const import REMOTE_ACCESS
 from tests.const import REMOTE_ACCESS_ACTIVATIONS
 from tests.const import REMOTE_ACCESS_RESPONSE_KEYS
-from tests.const import SYSTEM_RESPONSE
-from tests.const import TIMEZONE_RESPONSE
 from tests.const import WEEK_TIMER_DAY_START_SECONDS
 from tests.const import WEEK_TIMER_DAY_STOP_SECONDS
 from tests.const import AlarmValue
@@ -123,10 +120,22 @@ class FakeKebaKeEnergyAPI:
         self.config_entry: MockConfigEntry = config_entry
         # The platforms that `setup_integration()` sets up, one for `snapshot_platform()`.
         self.platforms: list[Platform] = list(PLATFORMS)
+        # The responses of the device of `load_device()`, read on setup, `setup_integration()` uses them without own
+        # `responses`.
+        self.device_numbers: Response = []
+        self.fixed_data: Response = []
+        self.data: Response = []
         self.responses: list[ReadResponse] = []
-        self.curves: HTTPStatus | list[Response] = CURVES_RESPONSE
-        self.system_name: str = SYSTEM_RESPONSE["name"]
-        self.timezone: str = TIMEZONE_RESPONSE["timezone"]
+        # The responses that are the same for every setup, the time zone is read once on setup.
+        self.device_info: dict[str, Any] = load_json_object_fixture("common/device_info.json", DOMAIN)
+        self.system: dict[str, Any] = load_json_object_fixture("common/system.json", DOMAIN)
+        self.hmi: dict[str, Any] = load_json_object_fixture("common/hmi.json", DOMAIN)
+        self.timezone: dict[str, Any] = load_json_object_fixture("common/timezone.json", DOMAIN)
+        # `get_curve_tables()` reads the names alone, then the points with the name of their curve, like the Web HMI
+        # may return different names. An `HTTPStatus` in `curve_error` fails both.
+        self.curve_names: Response = self._load_response("common/curve_names.json")
+        self.curve_points: Response = self._load_response("common/curve_points.json")
+        self.curve_error: HTTPStatus | None = None
         self.write_status: HTTPStatus = HTTPStatus.OK
         self.unsupported_variables: set[str] = set()
         # The week timer variables that have no day block, e.g. of the cooling timer.
@@ -141,6 +150,20 @@ class FakeKebaKeEnergyAPI:
         self._values: dict[str, ReadValue] = {}
         self._read_requests: list[str] = []
         self._setup_time_zone_request_count: int = 0
+
+    @staticmethod
+    def _load_response(filename: str, /) -> Response:
+        """Load a read response of the Web HMI from `tests/fixtures/`."""
+        data: object = load_json_array_fixture(filename, DOMAIN)
+        assert FakeKebaKeEnergyAPI._is_response(data), f"{filename} is a read response"
+        return data
+
+    @staticmethod
+    def _is_response(data: object, /) -> TypeIs[Response]:
+        return isinstance(data, list) and all(
+            isinstance(value, dict) and isinstance(value.get("name"), str) and isinstance(value.get("value"), str)
+            for value in data
+        )
 
     def register_auth_request(self, host: str, /, *, status: int = 200, exc: Exception | None = None) -> None:
         """Register the request that checks if the Web HMI requires authentication."""
@@ -160,7 +183,7 @@ class FakeKebaKeEnergyAPI:
 
         self.aioclient_mock.post(
             f"{schema}://{host}/deviceControl?action=getDeviceInfo",
-            text=json.dumps(DEVICE_INFO_RESPONSE),
+            text=json.dumps(self.device_info),
             headers={"Content-Type": "application/json;charset=utf-8"},
             status=status,
             exc=exc,
@@ -178,9 +201,9 @@ class FakeKebaKeEnergyAPI:
         The next read of the `responses` awaits `during_read` once before it responds, e.g. to set a value during an
         update.
         A read of an unknown value or of one of the `unsupported_variables` fails like the Web HMI rejects it. The
-        values of the curves come from `curves` (an `HTTPStatus` fails them). The system name and the
-        status of the write requests can be changed with `system_name` and `write_status`, the time zone with
-        `timezone` (before the setup). The pending alarms come from `alarms`.
+        values of the curves come from `curve_names` and `curve_points`, `curve_error` fails them. The responses of
+        `system`, `hmi` and `timezone` (before the setup) and the status of the write requests (`write_status`) can be
+        changed. The pending alarms come from `alarms`.
         """
         schema: str = "https" if ssl else "http"
 
@@ -188,19 +211,19 @@ class FakeKebaKeEnergyAPI:
 
         self.aioclient_mock.post(
             f"{schema}://{host}/swupdate?action=getSystemInstalled",
-            text=json.dumps({**SYSTEM_RESPONSE, "name": self.system_name}),
+            text=json.dumps(self.system),
             headers={"Content-Type": "application/json;charset=utf-8"},
         )
 
         self.aioclient_mock.post(
             f"{schema}://{host}/swupdate?action=getHmiInstalled",
-            text=json.dumps(HMI_RESPONSE),
+            text=json.dumps(self.hmi),
             headers={"Content-Type": "application/json;charset=utf-8"},
         )
 
         self.aioclient_mock.post(
             f"{schema}://{host}/dateTime?action=getTimeZone",
-            text=json.dumps({**TIMEZONE_RESPONSE, "timezone": self.timezone}),
+            text=json.dumps(self.timezone),
             headers={"Content-Type": "application/json;charset=utf-8"},
         )
 
@@ -387,17 +410,14 @@ class FakeKebaKeEnergyAPI:
         return AiohttpClientMockResponse(method, url=url, status=error)
 
     def _curve_response(self, payload: list[dict[str, str]], /) -> HTTPStatus | Response:
-        """Return the requested values of the curves.
+        """Return the requested names or points of the curves, or the `curve_error`."""
+        if self.curve_error:
+            return self.curve_error
 
-        `get_curve_tables()` reads the names alone, then the points with the name of their curve,
-        so `curves` holds the names and the points separately, like the Web HMI may return different names.
-        """
-        if isinstance(self.curves, HTTPStatus):
-            return self.curves
-
-        names, points = self.curves
         is_names_request: bool = all(item["name"].endswith(".name") for item in payload)
-        values: dict[str, ReadValue] = {value["name"]: value for value in (names if is_names_request else points)}
+        values: dict[str, ReadValue] = {
+            value["name"]: value for value in (self.curve_names if is_names_request else self.curve_points)
+        }
         return [values[item["name"]] for item in payload]
 
     def _week_timer_response(self, names: list[str], /) -> Response:
@@ -418,11 +438,29 @@ class FakeKebaKeEnergyAPI:
             for name in names
         ]
 
+    def load_device(self, device: Literal["multiple_devices", "single_device"], /) -> None:
+        """Load the responses of the device from its folder in `tests/fixtures/`, every test does it before the setup.
+
+        `multiple_devices` has several devices of each type, `single_device` one.
+        """
+        self.device_numbers = self._load_response(f"{device}/device_numbers.json")
+        self.fixed_data = self._load_response(f"{device}/fixed_data.json")
+        self.data = self._load_response(f"{device}/data.json")
+
+    def setup_responses(self, *responses: ReadResponse) -> list[ReadResponse]:
+        """Return the responses of the setup of the device, followed by the responses of the updates."""
+        assert self.device_numbers, "the test loads its device with `load_device()`"
+        return [self.device_numbers, self.fixed_data, *responses]
+
     async def setup_integration(self) -> None:
         """Register all requests for the host of the config entry and set up the integration.
 
-        The config entry is added to Home Assistant if a test has not added it yet, e.g. to register entities before.
+        Without own `responses`, the device is set up with its `data`. The config entry is added to Home Assistant if
+        a test has not added it yet, e.g. to register entities before.
         """
+        if not self.responses:
+            self.responses = self.setup_responses(self.data)
+
         self.register_requests(self.config_entry.data[CONF_HOST], ssl=self.config_entry.data[CONF_SSL])
 
         if self.hass.config_entries.async_get_entry(self.config_entry.entry_id) is None:
@@ -525,7 +563,7 @@ def mock_config_entry(entry_data: dict[str, Any], entry_options: dict[str, Any])
 @pytest.fixture
 async def init_integration(mock_config_entry: MockConfigEntry, fake_api: FakeKebaKeEnergyAPI) -> MockConfigEntry:
     """Set up the integration with several devices of each type and return its config entry."""
-    fake_api.responses = get_multiple_devices_responses(MULTIPLE_DEVICES_DATA_RESPONSE)
+    fake_api.load_device("multiple_devices")
     await fake_api.setup_integration()
 
     return mock_config_entry

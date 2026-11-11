@@ -17,18 +17,18 @@ from homeassistant.const import STATE_UNKNOWN
 from custom_components.keba_keenergy.const import DOMAIN
 from custom_components.keba_keenergy.const import REMOTE_ACCESS_SCAN_INTERVAL
 from tests import get_flows_in_progress
-from tests import get_multiple_devices_responses
 from tests import get_state
 from tests import next_update
-from tests.const import MULTIPLE_DEVICES_DATA_RESPONSE
-from tests.const import MULTIPLE_DEVICES_FIXED_DATA_RESPONSE
+from tests import remove_values
+from tests import replace_values
 from tests.const import NOW
 from tests.test_coordinator_data import HEAT_CIRCUIT_ENTITY_ID
 from tests.test_coordinator_data import HEAT_CIRCUIT_VALUE
 from tests.test_coordinator_data import REMOTE_MAINTENANCE_SERVER_ENTITY_ID
-from tests.test_coordinator_data import WITHOUT_SOLAR_AND_HEATING_CIRCUITS_DATA_RESPONSE
-from tests.test_coordinator_data import WITHOUT_SOLAR_CIRCUITS_DATA_RESPONSE
-from tests.test_coordinator_data import WITHOUT_SOLAR_CIRCUITS_RESPONSE
+from tests.test_coordinator_data import SOLAR_CIRCUIT_SECTIONS
+from tests.test_coordinator_data import WITHOUT_SOLAR_AND_HEATING_CIRCUITS_VALUES
+from tests.test_coordinator_data import WITHOUT_SOLAR_CIRCUITS_DEVICE_NUMBERS_VALUES
+from tests.test_coordinator_data import WITHOUT_SOLAR_CIRCUITS_VALUES
 from tests.test_switch_data import MODBUS_ENTITY_ID
 from tests.test_switch_data import REMOTE_ACCESS_UPDATE_REQUESTS
 from tests.test_switch_data import REMOTE_MAINTENANCE_ENTITY_ID
@@ -41,6 +41,7 @@ if TYPE_CHECKING:
     from pytest_homeassistant.common import MockConfigEntry
 
     from tests.conftest import FakeKebaKeEnergyAPI
+    from tests.const import Response
 
 pytestmark = pytest.mark.freeze_time(NOW)
 
@@ -86,10 +87,11 @@ async def test_update_curves_error(
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
     """Test that the update fails if the curves cannot be read after the values."""
-    fake_api.responses = get_multiple_devices_responses(MULTIPLE_DEVICES_DATA_RESPONSE, MULTIPLE_DEVICES_DATA_RESPONSE)
+    fake_api.load_device("multiple_devices")
+    fake_api.responses = fake_api.setup_responses(fake_api.data, fake_api.data)
     await fake_api.setup_integration()
 
-    fake_api.curves = HTTPStatus.BAD_REQUEST
+    fake_api.curve_error = HTTPStatus.BAD_REQUEST
 
     await next_update(hass, freezer)
 
@@ -110,14 +112,21 @@ async def test_update_interval_ticks(
 
     A skipped endpoint keeps its values, the other endpoints are updated.
     """
-    fake_api.responses = [
-        WITHOUT_SOLAR_CIRCUITS_RESPONSE,
-        MULTIPLE_DEVICES_FIXED_DATA_RESPONSE,
-        WITHOUT_SOLAR_CIRCUITS_DATA_RESPONSE,
-        WITHOUT_SOLAR_CIRCUITS_DATA_RESPONSE,
+    fake_api.load_device("multiple_devices")
+    without_solar_circuits: Response = replace_values(
+        remove_values(fake_api.data, *SOLAR_CIRCUIT_SECTIONS),
+        WITHOUT_SOLAR_CIRCUITS_VALUES,
+    )
+    fake_api.device_numbers = replace_values(fake_api.device_numbers, WITHOUT_SOLAR_CIRCUITS_DEVICE_NUMBERS_VALUES)
+    fake_api.responses = fake_api.setup_responses(
+        without_solar_circuits,
+        without_solar_circuits,
         # The values of the heating circuits are skipped on this refresh.
-        WITHOUT_SOLAR_AND_HEATING_CIRCUITS_DATA_RESPONSE,
-    ]
+        replace_values(
+            remove_values(fake_api.data, *SOLAR_CIRCUIT_SECTIONS, ".heatCircuit["),
+            WITHOUT_SOLAR_AND_HEATING_CIRCUITS_VALUES,
+        ),
+    )
     await fake_api.setup_integration()
 
     heat_circuit_state: str = get_state(hass, HEAT_CIRCUIT_ENTITY_ID).state
@@ -149,17 +158,24 @@ async def test_update_interval_ticks_keep_message_ids(
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
     """Test that a skipped device type keeps its message ids until it is requested again."""
+    fake_api.load_device("multiple_devices")
     entity_id: str = "sensor.keba_keenergy_12345678_heat_circuit_room_temperature_1"
     fake_api.message_ids = {"APPL.CtrlAppl.sParam.heatCircuit[0].tempRoom.state.msgId": 50}
-    fake_api.responses = [
-        WITHOUT_SOLAR_CIRCUITS_RESPONSE,
-        MULTIPLE_DEVICES_FIXED_DATA_RESPONSE,
-        WITHOUT_SOLAR_CIRCUITS_DATA_RESPONSE,
-        WITHOUT_SOLAR_CIRCUITS_DATA_RESPONSE,
+    without_solar_circuits: Response = replace_values(
+        remove_values(fake_api.data, *SOLAR_CIRCUIT_SECTIONS),
+        WITHOUT_SOLAR_CIRCUITS_VALUES,
+    )
+    fake_api.device_numbers = replace_values(fake_api.device_numbers, WITHOUT_SOLAR_CIRCUITS_DEVICE_NUMBERS_VALUES)
+    fake_api.responses = fake_api.setup_responses(
+        without_solar_circuits,
+        without_solar_circuits,
         # The values of the heating circuits are skipped on this refresh.
-        WITHOUT_SOLAR_AND_HEATING_CIRCUITS_DATA_RESPONSE,
-        WITHOUT_SOLAR_CIRCUITS_DATA_RESPONSE,
-    ]
+        replace_values(
+            remove_values(fake_api.data, *SOLAR_CIRCUIT_SECTIONS, ".heatCircuit["),
+            WITHOUT_SOLAR_AND_HEATING_CIRCUITS_VALUES,
+        ),
+        without_solar_circuits,
+    )
     await fake_api.setup_integration()
 
     # The heating circuits are requested on the first and the third refresh.
@@ -183,7 +199,8 @@ async def test_remote_access_not_read_while_disabled(
     freezer: FrozenDateTimeFactory,
 ) -> None:
     """Test that the remote access is not read while all of its entities are disabled."""
-    fake_api.responses = get_multiple_devices_responses(MULTIPLE_DEVICES_DATA_RESPONSE, MULTIPLE_DEVICES_DATA_RESPONSE)
+    fake_api.load_device("multiple_devices")
+    fake_api.responses = fake_api.setup_responses(fake_api.data, fake_api.data)
     await fake_api.setup_integration()
 
     await next_update(hass, freezer, interval=timedelta(seconds=REMOTE_ACCESS_SCAN_INTERVAL))
@@ -198,11 +215,12 @@ async def test_remote_access_read_every_minute(
     freezer: FrozenDateTimeFactory,
 ) -> None:
     """Test that the values of the enabled remote access entities are read after the setup and every minute."""
-    fake_api.responses = get_multiple_devices_responses(
-        MULTIPLE_DEVICES_DATA_RESPONSE,
-        MULTIPLE_DEVICES_DATA_RESPONSE,
-        MULTIPLE_DEVICES_DATA_RESPONSE,
-        MULTIPLE_DEVICES_DATA_RESPONSE,
+    fake_api.load_device("multiple_devices")
+    fake_api.responses = fake_api.setup_responses(
+        fake_api.data,
+        fake_api.data,
+        fake_api.data,
+        fake_api.data,
     )
     await fake_api.setup_integration()
 
@@ -223,6 +241,7 @@ async def test_remote_access_read_only_enabled_values(
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
     """Test that only the values of the enabled remote access entities are read."""
+    fake_api.load_device("multiple_devices")
     mock_config_entry.add_to_hass(hass)
     entity_registry.async_get_or_create(
         SWITCH_DOMAIN,
@@ -230,7 +249,6 @@ async def test_remote_access_read_only_enabled_values(
         "12345678_modbus_active",
         config_entry=mock_config_entry,
     )
-    fake_api.responses = get_multiple_devices_responses(MULTIPLE_DEVICES_DATA_RESPONSE)
     await fake_api.setup_integration()
 
     assert fake_api.remote_access_requests() == ["isModbusActive"]
@@ -247,7 +265,7 @@ async def test_remote_access_update_failed(
     """Test that only the remote access entities are unavailable if reading the remote access fails."""
     fake_api.remote_access["isRemoteMServerReachable"] = HTTPStatus.BAD_REQUEST
     # The values are updated as well.
-    fake_api.responses = [MULTIPLE_DEVICES_DATA_RESPONSE]
+    fake_api.responses = [fake_api.data]
 
     await next_update(hass, freezer, interval=timedelta(seconds=REMOTE_ACCESS_SCAN_INTERVAL))
 

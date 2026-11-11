@@ -6,6 +6,7 @@ from __future__ import annotations
 
 from http import HTTPStatus
 from typing import TYPE_CHECKING
+from typing import Literal
 
 import pytest
 from homeassistant.components.sensor import DOMAIN as SENSOR_DOMAIN
@@ -18,13 +19,10 @@ from homeassistant.helpers import entity_registry as er
 
 from custom_components.keba_keenergy.const import DOMAIN
 from tests import get_flows_in_progress
-from tests import get_multiple_devices_responses
-from tests import get_single_device_responses
-from tests.const import MULTIPLE_DEVICES_DATA_RESPONSE
-from tests.const import MULTIPLE_DEVICES_PASSIVE_COOLING_FIXED_DATA_RESPONSE
+from tests import replace_values
 from tests.const import NOW
-from tests.const import SINGLE_DEVICE_DATA_RESPONSE
-from tests.const import ReadResponse
+from tests.const import PASSIVE_COOLING_VALUES
+from tests.const import SINGLE_DEVICE_VALUES
 
 if TYPE_CHECKING:
     from homeassistant.core import HomeAssistant
@@ -44,9 +42,8 @@ async def test_load_entry(
     snapshot: SnapshotAssertion,
 ) -> None:
     """Test setting up the integration."""
-    fake_api.responses = get_multiple_devices_responses(
-        MULTIPLE_DEVICES_DATA_RESPONSE, fixed_data=MULTIPLE_DEVICES_PASSIVE_COOLING_FIXED_DATA_RESPONSE
-    )
+    fake_api.load_device("multiple_devices")
+    fake_api.fixed_data = replace_values(fake_api.fixed_data, PASSIVE_COOLING_VALUES)
     await fake_api.setup_integration()
 
     assert mock_config_entry.state is ConfigEntryState.LOADED
@@ -75,9 +72,8 @@ async def test_entities_disabled_by_default(
     snapshot: SnapshotAssertion,
 ) -> None:
     """Test the entities that the integration disables by default, they have no state."""
-    fake_api.responses = get_multiple_devices_responses(
-        MULTIPLE_DEVICES_DATA_RESPONSE, fixed_data=MULTIPLE_DEVICES_PASSIVE_COOLING_FIXED_DATA_RESPONSE
-    )
+    fake_api.load_device("multiple_devices")
+    fake_api.fixed_data = replace_values(fake_api.fixed_data, PASSIVE_COOLING_VALUES)
     await fake_api.setup_integration()
 
     disabled_entity_ids: list[str] = sorted(
@@ -91,12 +87,10 @@ async def test_entities_disabled_by_default(
 
 
 @pytest.mark.parametrize(
-    "responses",
+    ("device_folder", "fixed_values", "values"),
     [
-        get_multiple_devices_responses(
-            MULTIPLE_DEVICES_DATA_RESPONSE, fixed_data=MULTIPLE_DEVICES_PASSIVE_COOLING_FIXED_DATA_RESPONSE
-        ),
-        get_single_device_responses(SINGLE_DEVICE_DATA_RESPONSE),
+        ("multiple_devices", PASSIVE_COOLING_VALUES, {}),
+        ("single_device", {}, SINGLE_DEVICE_VALUES),
     ],
     ids=["multiple_devices", "single_device"],
 )
@@ -108,7 +102,9 @@ async def test_devices(
     device_registry: dr.DeviceRegistry,
     entity_registry: er.EntityRegistry,
     fake_api: FakeKebaKeEnergyAPI,
-    responses: list[ReadResponse],
+    device_folder: Literal["multiple_devices", "single_device"],
+    fixed_values: dict[str, str],
+    values: dict[str, str],
     snapshot: SnapshotAssertion,
     language: str,
 ) -> None:
@@ -117,7 +113,9 @@ async def test_devices(
     The devices are compared with their translated names and the device they belong to.
     """
     hass.config.language = language
-    fake_api.responses = list(responses)
+    fake_api.load_device(device_folder)
+    fake_api.fixed_data = replace_values(fake_api.fixed_data, fixed_values)
+    fake_api.data = replace_values(fake_api.data, values)
     await fake_api.setup_integration()
 
     devices: dict[str, dr.DeviceEntry] = {
@@ -151,6 +149,7 @@ async def test_remove_stale_devices(
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
     """Test that devices which the control unit no longer provides are removed, with their entities."""
+    fake_api.load_device("multiple_devices")
     mock_config_entry.add_to_hass(hass)
     stale_device: dr.DeviceEntry = device_registry.async_get_or_create(
         config_entry_id=mock_config_entry.entry_id,
@@ -163,7 +162,6 @@ async def test_remove_stale_devices(
         config_entry=mock_config_entry,
         device_id=stale_device.id,
     )
-    fake_api.responses = get_multiple_devices_responses(MULTIPLE_DEVICES_DATA_RESPONSE)
     await fake_api.setup_integration()
 
     assert device_registry.async_get(stale_device.id) is None

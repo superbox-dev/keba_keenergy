@@ -10,7 +10,6 @@ import pytest
 from homeassistant.const import Platform
 from pytest_homeassistant.common import snapshot_platform
 
-from tests import get_single_device_responses
 from tests.const import NOW
 
 if TYPE_CHECKING:
@@ -36,8 +35,8 @@ async def test_events(
 ) -> None:
     """Test the states of all event entities."""
     hass.config.language = language
+    fake_api.load_device("single_device")
     fake_api.platforms = [Platform.EVENT]
-    fake_api.responses = get_single_device_responses()
     await fake_api.setup_integration()
 
     await snapshot_platform(hass, entity_registry, snapshot, mock_config_entry.entry_id)

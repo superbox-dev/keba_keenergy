@@ -15,25 +15,21 @@ from homeassistant.exceptions import ServiceValidationError
 from keba_keenergy_api.enums import HeatingCircuitOperatingMode
 from pytest_homeassistant.common import snapshot_platform
 
-from tests import get_multiple_devices_responses
+from tests import copy_values
 from tests import get_option_translations
 from tests import get_platform_states
-from tests import get_single_device_responses
 from tests import get_state
 from tests import next_update
+from tests import replace_values
 from tests import select_option
-from tests import update_response
-from tests.const import CURVES_RENAMED_RESPONSE
-from tests.const import MULTIPLE_DEVICES_DATA_RESPONSE
-from tests.const import MULTIPLE_DEVICES_PASSIVE_COOLING_FIXED_DATA_RESPONSE
+from tests.const import CURVE_RENAMED_VALUES
 from tests.const import NOW
-from tests.const import SINGLE_DEVICE_DEFAULT_DATA_RESPONSE
+from tests.const import PASSIVE_COOLING_VALUES
 from tests.test_select_data import CURVE_SELECTS
 from tests.test_select_data import HEATING_CURVE_ENTITY_ID
-from tests.test_select_data import TWO_HEAT_PUMPS_DATA_RESPONSE
-from tests.test_select_data import TWO_HEAT_PUMPS_RESPONSE
-from tests.test_select_data import TWO_HEAT_PUMPS_SECOND_PASSIVE_COOLING_FIXED_DATA_RESPONSE
-from tests.test_select_data import WITHOUT_COOLING_FIXED_DATA_RESPONSE
+from tests.test_select_data import SECOND_HEAT_PUMP_PASSIVE_COOLING_VALUES
+from tests.test_select_data import TWO_HEAT_PUMPS_VALUES
+from tests.test_select_data import WITHOUT_COOLING_VALUES
 
 if TYPE_CHECKING:
     from freezegun.api import FrozenDateTimeFactory
@@ -44,6 +40,7 @@ if TYPE_CHECKING:
     from syrupy.assertion import SnapshotAssertion
 
     from tests.conftest import FakeKebaKeEnergyAPI
+    from tests.const import Response
 
 pytestmark = pytest.mark.freeze_time(NOW)
 
@@ -60,10 +57,9 @@ async def test_selects(
 ) -> None:
     """Test the states and the translated options of all select entities, with cooling."""
     hass.config.language = language
+    fake_api.load_device("multiple_devices")
     fake_api.platforms = [Platform.SELECT]
-    fake_api.responses = get_multiple_devices_responses(
-        MULTIPLE_DEVICES_DATA_RESPONSE, fixed_data=MULTIPLE_DEVICES_PASSIVE_COOLING_FIXED_DATA_RESPONSE
-    )
+    fake_api.fixed_data = replace_values(fake_api.fixed_data, PASSIVE_COOLING_VALUES)
     await fake_api.setup_integration()
 
     await snapshot_platform(hass, entity_registry, snapshot, mock_config_entry.entry_id)
@@ -97,10 +93,8 @@ async def test_selects_without_cooling(
 ) -> None:
     """Test the operating mode selects of a setup without cooling."""
     hass.config.language = language
-    fake_api.responses = get_multiple_devices_responses(
-        MULTIPLE_DEVICES_DATA_RESPONSE,
-        fixed_data=WITHOUT_COOLING_FIXED_DATA_RESPONSE,
-    )
+    fake_api.load_device("multiple_devices")
+    fake_api.fixed_data = replace_values(fake_api.fixed_data, WITHOUT_COOLING_VALUES)
     await fake_api.setup_integration()
 
     state: State = get_state(hass, entity_id)
@@ -113,11 +107,18 @@ async def test_system_operating_mode_cooling_of_second_heat_pump(
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
     """Test that the system operating mode offers the cooling modes if only the second heat pump can cool."""
-    fake_api.responses = [
-        TWO_HEAT_PUMPS_RESPONSE,
-        TWO_HEAT_PUMPS_SECOND_PASSIVE_COOLING_FIXED_DATA_RESPONSE,
-        TWO_HEAT_PUMPS_DATA_RESPONSE,
+    fake_api.load_device("multiple_devices")
+    fixed_data: Response = replace_values(fake_api.fixed_data, WITHOUT_COOLING_VALUES)
+    fake_api.device_numbers = replace_values(fake_api.device_numbers, TWO_HEAT_PUMPS_VALUES)
+    # The second heat pump has the values of the first one.
+    fake_api.fixed_data = [
+        *fixed_data,
+        *replace_values(
+            copy_values(fixed_data, ".heatpump[0]", ".heatpump[1]"),
+            SECOND_HEAT_PUMP_PASSIVE_COOLING_VALUES,
+        ),
     ]
+    fake_api.data = [*fake_api.data, *copy_values(fake_api.data, ".heatpump[0]", ".heatpump[1]")]
     await fake_api.setup_integration()
 
     state: State = get_state(hass, "select.keba_keenergy_12345678_operating_mode")
@@ -182,9 +183,8 @@ async def test_select_option(
     expected: str,
 ) -> None:
     """Test selecting an option of a select entity."""
-    fake_api.responses = get_multiple_devices_responses(
-        MULTIPLE_DEVICES_DATA_RESPONSE, fixed_data=MULTIPLE_DEVICES_PASSIVE_COOLING_FIXED_DATA_RESPONSE
-    )
+    fake_api.load_device("multiple_devices")
+    fake_api.fixed_data = replace_values(fake_api.fixed_data, PASSIVE_COOLING_VALUES)
     await fake_api.setup_integration()
 
     await select_option(hass, entity_id, option)
@@ -197,10 +197,8 @@ async def test_select_invalid_option(
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
     """Test that the system operating mode rejects a cooling mode without a device that can cool."""
-    fake_api.responses = get_multiple_devices_responses(
-        MULTIPLE_DEVICES_DATA_RESPONSE,
-        fixed_data=WITHOUT_COOLING_FIXED_DATA_RESPONSE,
-    )
+    fake_api.load_device("multiple_devices")
+    fake_api.fixed_data = replace_values(fake_api.fixed_data, WITHOUT_COOLING_VALUES)
     await fake_api.setup_integration()
 
     with pytest.raises(
@@ -222,12 +220,10 @@ async def test_select_current_option_not_offered(
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
     """Test that a select is unknown if the control unit is in a mode that the select does not offer."""
-    fake_api.responses = get_single_device_responses(
-        update_response(
-            SINGLE_DEVICE_DEFAULT_DATA_RESPONSE,
-            "APPL.CtrlAppl.sParam.heatCircuit[0].param.operatingMode",
-            value=str(HeatingCircuitOperatingMode.EXTERNAL.value),
-        ),
+    fake_api.load_device("single_device")
+    fake_api.data = replace_values(
+        fake_api.data,
+        {"APPL.CtrlAppl.sParam.heatCircuit[0].param.operatingMode": str(HeatingCircuitOperatingMode.EXTERNAL.value)},
     )
     await fake_api.setup_integration()
 
@@ -252,13 +248,15 @@ async def test_heating_curve_options_after_update(
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
     """Test that the heating curve select drops a heating curve renamed on the control unit with the next update."""
-    fake_api.responses = get_multiple_devices_responses(MULTIPLE_DEVICES_DATA_RESPONSE, MULTIPLE_DEVICES_DATA_RESPONSE)
+    fake_api.load_device("multiple_devices")
+    fake_api.responses = fake_api.setup_responses(fake_api.data, fake_api.data)
     await fake_api.setup_integration()
 
     state: State = get_state(hass, HEATING_CURVE_ENTITY_ID)
     assert "HC1" in state.attributes[ATTR_OPTIONS]
 
-    fake_api.curves = CURVES_RENAMED_RESPONSE
+    fake_api.curve_names = replace_values(fake_api.curve_names, CURVE_RENAMED_VALUES)
+    fake_api.curve_points = replace_values(fake_api.curve_points, CURVE_RENAMED_VALUES)
     await next_update(hass, freezer)
 
     state = get_state(hass, HEATING_CURVE_ENTITY_ID)

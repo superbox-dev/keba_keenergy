@@ -20,17 +20,12 @@ from homeassistant.helpers import entity_registry as er
 from keba_keenergy_api.enums import HeatingCircuitType
 from pytest_homeassistant.common import snapshot_platform
 
-from tests import get_multiple_devices_responses
 from tests import get_state
 from tests import replace_values
-from tests.const import ENTITY_UPDATED_DATA_RESPONSE
-from tests.const import MULTIPLE_DEVICES_DATA_RESPONSE
-from tests.const import MULTIPLE_DEVICES_FIXED_DATA_RESPONSE
-from tests.const import MULTIPLE_DEVICES_OTHER_MODES_DATA_RESPONSE
-from tests.const import MULTIPLE_DEVICES_PASSIVE_COOLING_FIXED_DATA_RESPONSE
-from tests.const import MULTIPLE_DEVICES_RESPONSE
+from tests.const import ENTITY_UPDATED_VALUES
 from tests.const import NOW
-from tests.const import Response
+from tests.const import OTHER_MODES_VALUES
+from tests.const import PASSIVE_COOLING_VALUES
 from tests.test_issues_data import WRITE_COUNT_ENTITY_ID
 from tests.test_switch_data import COMPRESSOR_USE_NIGHT_SPEED_ENTITY_ID
 from tests.test_switch_data import MODBUS_ENTITY_ID
@@ -62,31 +57,30 @@ async def test_switches(
 ) -> None:
     """Test the states of all switch entities."""
     hass.config.language = language
+    fake_api.load_device("multiple_devices")
     fake_api.platforms = [Platform.SWITCH]
-    fake_api.responses = get_multiple_devices_responses(
-        MULTIPLE_DEVICES_DATA_RESPONSE, fixed_data=MULTIPLE_DEVICES_PASSIVE_COOLING_FIXED_DATA_RESPONSE
-    )
+    fake_api.fixed_data = replace_values(fake_api.fixed_data, PASSIVE_COOLING_VALUES)
     await fake_api.setup_integration()
 
     await snapshot_platform(hass, entity_registry, snapshot, mock_config_entry.entry_id)
 
 
 @pytest.mark.parametrize(
-    ("service_call", "response", "expected_writes"),
+    ("service_call", "values", "expected_writes"),
     [
         (
             (SERVICE_TURN_ON, COMPRESSOR_USE_NIGHT_SPEED_ENTITY_ID),
-            MULTIPLE_DEVICES_OTHER_MODES_DATA_RESPONSE,
+            OTHER_MODES_VALUES,
             ['[{"name": "APPL.CtrlAppl.sParam.heatpump[0].HeatPumpPowerCtrl.param.useDayNightSpeed", "value": "1"}]'],
         ),
         (
             (SERVICE_TURN_OFF, COMPRESSOR_USE_NIGHT_SPEED_ENTITY_ID),
-            MULTIPLE_DEVICES_DATA_RESPONSE,
+            {},
             ['[{"name": "APPL.CtrlAppl.sParam.heatpump[0].HeatPumpPowerCtrl.param.useDayNightSpeed", "value": "0"}]'],
         ),
         (
             (SERVICE_TURN_ON, SOLAR_PRIORITY_ENTITY_ID),
-            MULTIPLE_DEVICES_OTHER_MODES_DATA_RESPONSE,
+            OTHER_MODES_VALUES,
             [
                 (
                     '[{"name": "APPL.CtrlAppl.sParam.hmiRetainData.consumer1PrioritySolar[1]", "value": "1"}, '
@@ -96,7 +90,7 @@ async def test_switches(
         ),
         (
             (SERVICE_TURN_OFF, SOLAR_PRIORITY_ENTITY_ID),
-            MULTIPLE_DEVICES_DATA_RESPONSE,
+            {},
             [
                 (
                     '[{"name": "APPL.CtrlAppl.sParam.hmiRetainData.consumer1PrioritySolar[1]", "value": "0"}, '
@@ -104,16 +98,16 @@ async def test_switches(
                 ),
             ],
         ),
-        ((SERVICE_TURN_ON, SOLAR_PRIORITY_ENTITY_ID), MULTIPLE_DEVICES_DATA_RESPONSE, []),
-        ((SERVICE_TURN_OFF, SOLAR_PRIORITY_ENTITY_ID), MULTIPLE_DEVICES_OTHER_MODES_DATA_RESPONSE, []),
+        ((SERVICE_TURN_ON, SOLAR_PRIORITY_ENTITY_ID), {}, []),
+        ((SERVICE_TURN_OFF, SOLAR_PRIORITY_ENTITY_ID), OTHER_MODES_VALUES, []),
         (
             (SERVICE_TURN_ON, USE_HEATING_CURVE_ENTITY_ID),
-            MULTIPLE_DEVICES_DATA_RESPONSE,
+            {},
             ['[{"name": "APPL.CtrlAppl.sParam.heatCircuit[0].param.enableHeatCurveLinTab", "value": "1"}]'],
         ),
         (
             (SERVICE_TURN_ON, USE_COOLING_CURVE_ENTITY_ID),
-            ENTITY_UPDATED_DATA_RESPONSE,
+            ENTITY_UPDATED_VALUES,
             ['[{"name": "APPL.CtrlAppl.sParam.heatCircuit[1].param.enableHeatCurveLinTab", "value": "1"}]'],
         ),
     ],
@@ -133,11 +127,12 @@ async def test_turn_on_off(
     hass: HomeAssistant,
     fake_api: FakeKebaKeEnergyAPI,
     service_call: tuple[str, str],
-    response: Response,
+    values: dict[str, str],
     expected_writes: list[str],
 ) -> None:
     """Test turning on and off a switch, a switch that already has the state is not written."""
-    fake_api.responses = get_multiple_devices_responses(response)
+    fake_api.load_device("multiple_devices")
+    fake_api.data = replace_values(fake_api.data, values)
     await fake_api.setup_integration()
 
     service, entity_id = service_call
@@ -160,14 +155,11 @@ async def test_heating_and_cooling_circuit_has_one_curve_switch(
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
     """Test that a heating and cooling circuit only has the heating curve switch, because both use one setting."""
-    fake_api.responses = [
-        MULTIPLE_DEVICES_RESPONSE,
-        replace_values(
-            MULTIPLE_DEVICES_FIXED_DATA_RESPONSE,
-            {"APPL.CtrlAppl.sParam.options.heatCircuit[1].type": str(HeatingCircuitType.HEATING_AND_COOLING.value)},
-        ),
-        MULTIPLE_DEVICES_DATA_RESPONSE,
-    ]
+    fake_api.load_device("multiple_devices")
+    fake_api.fixed_data = replace_values(
+        fake_api.fixed_data,
+        {"APPL.CtrlAppl.sParam.options.heatCircuit[1].type": str(HeatingCircuitType.HEATING_AND_COOLING.value)},
+    )
     await fake_api.setup_integration()
 
     assert sorted(
@@ -236,7 +228,7 @@ async def test_remote_access_turn_on_failed(
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
     """Test that a remote access switch shows its previous state again if switching fails, uncounted."""
-    fake_api.responses = get_multiple_devices_responses(MULTIPLE_DEVICES_DATA_RESPONSE)
+    fake_api.load_device("multiple_devices")
     fake_api.remote_access["activateRemoteM"] = HTTPStatus.BAD_REQUEST
     await fake_api.setup_integration()
 
