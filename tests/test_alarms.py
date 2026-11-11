@@ -16,14 +16,16 @@ from homeassistant.const import EVENT_STATE_CHANGED
 from homeassistant.const import STATE_UNAVAILABLE
 from homeassistant.const import STATE_UNKNOWN
 from homeassistant.helpers import issue_registry as ir
-from homeassistant.helpers.update_coordinator import UpdateFailed
 from pytest_homeassistant.common import async_capture_events
 
 from custom_components.keba_keenergy.const import ATTR_ALARMS
 from custom_components.keba_keenergy.const import DOMAIN
 from tests import get_state
 from tests import init_translations
+from tests import next_update
+from tests.api_data import ENTRY_ID
 from tests.api_data import HIGH_PRESSURE_ALARM
+from tests.api_data import NOW
 from tests.api_data import SENSOR_BREAK_ALARM
 from tests.api_data import SINGLE_DEVICE_DATA_RESPONSE
 from tests.api_data import AlarmValue
@@ -39,14 +41,16 @@ from tests.test_alarms_data import get_alarm_store
 from tests.test_alarms_data import get_alarm_store_key
 
 if TYPE_CHECKING:
+    from freezegun.api import FrozenDateTimeFactory
     from homeassistant.core import Event
     from homeassistant.core import EventStateChangedData
     from homeassistant.core import HomeAssistant
     from homeassistant.core import State
     from syrupy.assertion import SnapshotAssertion
 
-    from custom_components.keba_keenergy.coordinator import KebaKeEnergyDataUpdateCoordinator
     from tests.conftest import FakeKebaKeEnergyAPI
+
+pytestmark = pytest.mark.freeze_time(NOW)
 
 
 def get_alarm_events(events: list[Event[EventStateChangedData]], /) -> list[tuple[str, AlarmAttributes]]:
@@ -85,9 +89,7 @@ async def test_alarm_issue(
     await fake_api.setup_integration()
     translations: dict[str, str] = await init_translations(hass, category="issues")
 
-    issue: ir.IssueEntry | None = issue_registry.async_get_issue(
-        DOMAIN, get_alarm_issue_id(fake_api.config_entry.entry_id, alarm)
-    )
+    issue: ir.IssueEntry | None = issue_registry.async_get_issue(DOMAIN, get_alarm_issue_id(ENTRY_ID, alarm))
     assert issue is not None
 
     translation_key: str = f"component.keba_keenergy.issues.{issue.translation_key}"
@@ -124,7 +126,7 @@ async def test_alarm_issue_severity(
     await fake_api.setup_integration()
 
     issue: ir.IssueEntry | None = issue_registry.async_get_issue(
-        DOMAIN, get_alarm_issue_id(fake_api.config_entry.entry_id, SENSOR_BREAK_ALARM)
+        DOMAIN, get_alarm_issue_id(ENTRY_ID, SENSOR_BREAK_ALARM)
     )
 
     assert issue is not None
@@ -133,6 +135,7 @@ async def test_alarm_issue_severity(
 
 async def test_alarm_raised_and_cleared(
     hass: HomeAssistant,
+    freezer: FrozenDateTimeFactory,
     fake_api: FakeKebaKeEnergyAPI,
     hass_storage: dict[str, Any],
     issue_registry: ir.IssueRegistry,
@@ -140,8 +143,7 @@ async def test_alarm_raised_and_cleared(
     """Test the events, the repair issues, the sensor and the store when alarms are raised and cleared."""
     fake_api.responses = get_single_device_responses(SINGLE_DEVICE_DATA_RESPONSE, SINGLE_DEVICE_DATA_RESPONSE)
     await fake_api.setup_integration()
-    coordinator: KebaKeEnergyDataUpdateCoordinator = fake_api.config_entry.runtime_data.data_coordinator
-    entry_id: str = fake_api.config_entry.entry_id
+    entry_id: str = ENTRY_ID
     key: str = get_alarm_store_key(entry_id)
     events: list[Event[EventStateChangedData]] = async_capture_events(hass, EVENT_STATE_CHANGED)
 
@@ -149,8 +151,7 @@ async def test_alarm_raised_and_cleared(
     assert get_state(hass, PENDING_ALARMS_ENTITY_ID).state == "0"
 
     fake_api.alarms = [HIGH_PRESSURE_ALARM, SENSOR_BREAK_ALARM]
-    await coordinator.async_refresh()
-    await hass.async_block_till_done()
+    await next_update(hass, freezer)
 
     sensor: State = get_state(hass, PENDING_ALARMS_ENTITY_ID)
 
@@ -162,8 +163,7 @@ async def test_alarm_raised_and_cleared(
 
     events.clear()
     fake_api.alarms = [HIGH_PRESSURE_ALARM]
-    await coordinator.async_refresh()
-    await hass.async_block_till_done()
+    await next_update(hass, freezer)
 
     assert get_alarm_events(events) == [("cleared", SENSOR_BREAK_ATTRIBUTES)]
     assert get_state(hass, PENDING_ALARMS_ENTITY_ID).state == "1"
@@ -203,7 +203,7 @@ async def test_alarm_events_after_restart(
     expected_events: list[tuple[str, AlarmAttributes]],
 ) -> None:
     """Test that the alarms raised or cleared while Home Assistant was not running are reported once after the start."""
-    key: str = get_alarm_store_key(fake_api.config_entry.entry_id)
+    key: str = get_alarm_store_key(ENTRY_ID)
     hass_storage[key] = get_alarm_store(key, stored)
     fake_api.responses = get_single_device_responses()
     fake_api.alarms = alarms
@@ -223,9 +223,9 @@ async def test_alarm_events_after_restart(
     ids=["without_alarms", "with_alarms", "language_with_region"],
     indirect=["language"],
 )
+@pytest.mark.usefixtures("language")
 async def test_alarm_requests(
     fake_api: FakeKebaKeEnergyAPI,
-    language: str,  # noqa: ARG001
     alarms: list[AlarmValue],
     expected_requests: list[str],
 ) -> None:
@@ -253,19 +253,15 @@ async def test_alarm_invalid_time_zone(
 @pytest.mark.no_fail_on_keba_errors
 async def test_alarm_update_error(
     hass: HomeAssistant,
+    freezer: FrozenDateTimeFactory,
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
     """Test that the entities are unavailable if the alarms cannot be read."""
     fake_api.responses = get_single_device_responses(SINGLE_DEVICE_DATA_RESPONSE)
     await fake_api.setup_integration()
-    coordinator: KebaKeEnergyDataUpdateCoordinator = fake_api.config_entry.runtime_data.data_coordinator
-
     fake_api.alarms = HTTPStatus.BAD_REQUEST
-    await coordinator.async_refresh()
-    await hass.async_block_till_done()
+    await next_update(hass, freezer)
 
-    assert isinstance(coordinator.last_exception, UpdateFailed)
-    assert coordinator.last_exception.translation_key == "communication_error"
     assert get_state(hass, PENDING_ALARMS_ENTITY_ID).state == STATE_UNAVAILABLE
     assert get_state(hass, ALARM_ENTITY_ID).state == STATE_UNAVAILABLE
 
@@ -280,13 +276,10 @@ async def test_unload_entry_deletes_alarm_issues(
     fake_api.alarms = [SENSOR_BREAK_ALARM]
     await fake_api.setup_integration()
 
-    assert await hass.config_entries.async_unload(fake_api.config_entry.entry_id)
+    assert await hass.config_entries.async_unload(ENTRY_ID)
     await hass.async_block_till_done()
 
-    assert (
-        issue_registry.async_get_issue(DOMAIN, get_alarm_issue_id(fake_api.config_entry.entry_id, SENSOR_BREAK_ALARM))
-        is None
-    )
+    assert issue_registry.async_get_issue(DOMAIN, get_alarm_issue_id(ENTRY_ID, SENSOR_BREAK_ALARM)) is None
 
 
 async def test_remove_entry_removes_alarms(
@@ -295,13 +288,13 @@ async def test_remove_entry_removes_alarms(
     hass_storage: dict[str, Any],
 ) -> None:
     """Test that removing a config entry removes its stored alarms."""
-    key: str = get_alarm_store_key(fake_api.config_entry.entry_id)
+    key: str = get_alarm_store_key(ENTRY_ID)
     hass_storage[key] = get_alarm_store(key, [SENSOR_BREAK_ATTRIBUTES])
     fake_api.responses = get_single_device_responses()
     fake_api.alarms = [SENSOR_BREAK_ALARM]
     await fake_api.setup_integration()
 
-    await hass.config_entries.async_remove(fake_api.config_entry.entry_id)
+    await hass.config_entries.async_remove(ENTRY_ID)
     await hass.async_block_till_done()
 
     assert key not in hass_storage

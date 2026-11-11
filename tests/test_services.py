@@ -27,10 +27,10 @@ from tests import get_state
 from tests.api_data import CURVE_NAMES_RESPONSE
 from tests.api_data import CURVES_RENAMED_RESPONSE
 from tests.api_data import CURVES_RESPONSE
-from tests.api_data import MULTIPLE_DEVICES_DATA_RESPONSE
+from tests.api_data import ENTRY_ID
+from tests.api_data import NOW
 from tests.api_data import Response
 from tests.api_data import get_curve_points_response
-from tests.api_data import get_multiple_devices_responses
 from tests.test_services_data import AWAY_DATE_RANGE_WRITE
 from tests.test_services_data import HEATING_CURVE_POINTS
 from tests.test_services_data import HEATING_CURVE_POINTS_WRITE
@@ -41,12 +41,15 @@ if TYPE_CHECKING:
 
     from tests.conftest import FakeKebaKeEnergyAPI
 
+pytestmark = pytest.mark.freeze_time(NOW)
+
 
 @pytest.mark.parametrize(
     ("start_date", "end_date"),
     [("2025-01-01", "2025-01-14"), ("2025-01-01T08:00:00", "2025-01-14T20:00:00+00:00")],
     ids=["date", "date_and_time"],
 )
+@pytest.mark.usefixtures("init_integration")
 async def test_set_away_date_range(
     hass: HomeAssistant,
     fake_api: FakeKebaKeEnergyAPI,
@@ -54,14 +57,11 @@ async def test_set_away_date_range(
     end_date: str,
 ) -> None:
     """Test the action to set the away date range, which only uses the date of a date with time."""
-    fake_api.responses = get_multiple_devices_responses(MULTIPLE_DEVICES_DATA_RESPONSE)
-    await fake_api.setup_integration()
-
     await hass.services.async_call(
         domain=DOMAIN,
         service=SERVICE_SET_AWAY_DATE_RANGE,
         service_data={
-            ATTR_CONFIG_ENTRY: fake_api.config_entry.entry_id,
+            ATTR_CONFIG_ENTRY: ENTRY_ID,
             ATTR_START_DATE: start_date,
             ATTR_END_DATE: end_date,
         },
@@ -71,19 +71,17 @@ async def test_set_away_date_range(
     assert fake_api.write_requests() == [AWAY_DATE_RANGE_WRITE]
 
 
+@pytest.mark.usefixtures("init_integration")
 async def test_set_unchanged_away_date_range(
     hass: HomeAssistant,
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
     """Test that the away date range is not written if the heating circuits already have it."""
-    fake_api.responses = get_multiple_devices_responses(MULTIPLE_DEVICES_DATA_RESPONSE)
-    await fake_api.setup_integration()
-
     await hass.services.async_call(
         domain=DOMAIN,
         service=SERVICE_SET_AWAY_DATE_RANGE,
         service_data={
-            ATTR_CONFIG_ENTRY: fake_api.config_entry.entry_id,
+            ATTR_CONFIG_ENTRY: ENTRY_ID,
             ATTR_START_DATE: "2026-01-22",
             ATTR_END_DATE: "2026-01-22",
         },
@@ -93,19 +91,17 @@ async def test_set_unchanged_away_date_range(
     assert fake_api.write_requests() == []
 
 
+@pytest.mark.usefixtures("init_integration")
 async def test_set_same_away_date_range_twice(
     hass: HomeAssistant,
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
     """Test that the same away date range is written once, also before the next update."""
-    fake_api.responses = get_multiple_devices_responses(MULTIPLE_DEVICES_DATA_RESPONSE)
-    await fake_api.setup_integration()
-
     await hass.services.async_call(
         domain=DOMAIN,
         service=SERVICE_SET_AWAY_DATE_RANGE,
         service_data={
-            ATTR_CONFIG_ENTRY: fake_api.config_entry.entry_id,
+            ATTR_CONFIG_ENTRY: ENTRY_ID,
             ATTR_START_DATE: "2025-01-01",
             ATTR_END_DATE: "2025-01-14",
         },
@@ -115,7 +111,7 @@ async def test_set_same_away_date_range_twice(
         domain=DOMAIN,
         service=SERVICE_SET_AWAY_DATE_RANGE,
         service_data={
-            ATTR_CONFIG_ENTRY: fake_api.config_entry.entry_id,
+            ATTR_CONFIG_ENTRY: ENTRY_ID,
             ATTR_START_DATE: "2025-01-01",
             ATTR_END_DATE: "2025-01-14",
         },
@@ -139,6 +135,7 @@ async def test_set_same_away_date_range_twice(
     ],
     ids=["end_date_before_start_date", "invalid_config_entry"],
 )
+@pytest.mark.usefixtures("init_integration")
 async def test_set_away_date_range_invalid(
     hass: HomeAssistant,
     fake_api: FakeKebaKeEnergyAPI,
@@ -146,14 +143,11 @@ async def test_set_away_date_range_invalid(
     expected_translation_key: str,
 ) -> None:
     """Test that the action to set the away date range rejects invalid data with a translated error."""
-    fake_api.responses = get_multiple_devices_responses(MULTIPLE_DEVICES_DATA_RESPONSE)
-    await fake_api.setup_integration()
-
     with pytest.raises(ServiceValidationError) as error:
         await hass.services.async_call(
             domain=DOMAIN,
             service=SERVICE_SET_AWAY_DATE_RANGE,
-            service_data={ATTR_CONFIG_ENTRY: fake_api.config_entry.entry_id, **service_data},
+            service_data={ATTR_CONFIG_ENTRY: ENTRY_ID, **service_data},
             blocking=True,
         )
 
@@ -161,14 +155,12 @@ async def test_set_away_date_range_invalid(
     assert fake_api.write_requests() == []
 
 
+@pytest.mark.usefixtures("init_integration")
 async def test_set_away_date_range_with_unloaded_config_entry(
     hass: HomeAssistant,
-    fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
     """Test the action to set the away date range with an unloaded config entry."""
-    fake_api.responses = get_multiple_devices_responses(MULTIPLE_DEVICES_DATA_RESPONSE)
-    await fake_api.setup_integration()
-    await hass.config_entries.async_unload(fake_api.config_entry.entry_id)
+    await hass.config_entries.async_unload(ENTRY_ID)
     await hass.async_block_till_done()
 
     with pytest.raises(ServiceValidationError) as error:
@@ -176,7 +168,7 @@ async def test_set_away_date_range_with_unloaded_config_entry(
             domain=DOMAIN,
             service=SERVICE_SET_AWAY_DATE_RANGE,
             service_data={
-                ATTR_CONFIG_ENTRY: fake_api.config_entry.entry_id,
+                ATTR_CONFIG_ENTRY: ENTRY_ID,
                 ATTR_START_DATE: "2025-01-01",
                 ATTR_END_DATE: "2025-01-14",
             },
@@ -186,13 +178,12 @@ async def test_set_away_date_range_with_unloaded_config_entry(
     assert error.value.translation_key == "unloaded_config_entry"
 
 
+@pytest.mark.usefixtures("init_integration")
 async def test_set_away_date_range_with_config_entry_of_other_integration(
     hass: HomeAssistant,
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
     """Test that the action rejects a loaded config entry of another integration."""
-    fake_api.responses = get_multiple_devices_responses(MULTIPLE_DEVICES_DATA_RESPONSE)
-    await fake_api.setup_integration()
     other_entry: MockConfigEntry = MockConfigEntry(domain="other", state=ConfigEntryState.LOADED)
     other_entry.add_to_hass(hass)
 
@@ -223,38 +214,33 @@ async def test_set_away_date_range_with_config_entry_of_other_integration(
     ],
     ids=["missing_start_date", "invalid_date"],
 )
+@pytest.mark.usefixtures("init_integration")
 async def test_set_away_date_range_invalid_data(
     hass: HomeAssistant,
-    fake_api: FakeKebaKeEnergyAPI,
     service_data: dict[str, str],
     expected: str,
 ) -> None:
     """Test that the schema of the action to set the away date range rejects invalid data."""
-    fake_api.responses = get_multiple_devices_responses(MULTIPLE_DEVICES_DATA_RESPONSE)
-    await fake_api.setup_integration()
-
     with pytest.raises(probatio.Invalid, match=re.escape(expected)):
         await hass.services.async_call(
             domain=DOMAIN,
             service=SERVICE_SET_AWAY_DATE_RANGE,
-            service_data={ATTR_CONFIG_ENTRY: fake_api.config_entry.entry_id, **service_data},
+            service_data={ATTR_CONFIG_ENTRY: ENTRY_ID, **service_data},
             blocking=True,
         )
 
 
+@pytest.mark.usefixtures("init_integration")
 async def test_set_heating_curve_points(
     hass: HomeAssistant,
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
     """Test the action to set the points of a heating curve, the points are written sorted."""
-    fake_api.responses = get_multiple_devices_responses(MULTIPLE_DEVICES_DATA_RESPONSE)
-    await fake_api.setup_integration()
-
     await hass.services.async_call(
         domain=DOMAIN,
         service=SERVICE_SET_HEATING_CURVE_POINTS,
         service_data={
-            ATTR_CONFIG_ENTRY: fake_api.config_entry.entry_id,
+            ATTR_CONFIG_ENTRY: ENTRY_ID,
             ATTR_HEATING_CURVE: "HC1",
             ATTR_POINTS: HEATING_CURVE_POINTS,
         },
@@ -280,6 +266,7 @@ async def test_set_heating_curve_points(
     ],
     ids=["renamed_curve", "duplicate_outdoor_temperatures", "duplicate_outdoor_temperatures_after_rounding"],
 )
+@pytest.mark.usefixtures("init_integration")
 async def test_set_heating_curve_points_invalid(
     hass: HomeAssistant,
     fake_api: FakeKebaKeEnergyAPI,
@@ -287,8 +274,6 @@ async def test_set_heating_curve_points_invalid(
     expected_translation_key: str,
 ) -> None:
     """Test that the action to set the points of a heating curve rejects invalid points or curves."""
-    fake_api.responses = get_multiple_devices_responses(MULTIPLE_DEVICES_DATA_RESPONSE)
-    await fake_api.setup_integration()
     # E.g. the heating curve HC1 was renamed on the control unit after the setup.
     fake_api.curves, points = curves_and_points
 
@@ -297,7 +282,7 @@ async def test_set_heating_curve_points_invalid(
             domain=DOMAIN,
             service=SERVICE_SET_HEATING_CURVE_POINTS,
             service_data={
-                ATTR_CONFIG_ENTRY: fake_api.config_entry.entry_id,
+                ATTR_CONFIG_ENTRY: ENTRY_ID,
                 ATTR_HEATING_CURVE: "HC1",
                 ATTR_POINTS: points,
             },
@@ -347,32 +332,28 @@ async def test_set_heating_curve_points_invalid(
         "flow_too_high",
     ],
 )
+@pytest.mark.usefixtures("init_integration")
 async def test_set_heating_curve_points_invalid_data(
     hass: HomeAssistant,
-    fake_api: FakeKebaKeEnergyAPI,
     service_data: dict[str, object],
     expected: str,
 ) -> None:
     """Test that the schema of the action to set the points of a heating curve rejects invalid data."""
-    fake_api.responses = get_multiple_devices_responses(MULTIPLE_DEVICES_DATA_RESPONSE)
-    await fake_api.setup_integration()
-
     with pytest.raises(probatio.Invalid, match=re.escape(expected)):
         await hass.services.async_call(
             domain=DOMAIN,
             service=SERVICE_SET_HEATING_CURVE_POINTS,
-            service_data={ATTR_CONFIG_ENTRY: fake_api.config_entry.entry_id, **service_data},
+            service_data={ATTR_CONFIG_ENTRY: ENTRY_ID, **service_data},
             blocking=True,
         )
 
 
+@pytest.mark.usefixtures("init_integration")
 async def test_set_heating_curve_points_with_communication_error(
     hass: HomeAssistant,
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
     """Test that a communication error while reading the heating curves raises a translated error."""
-    fake_api.responses = get_multiple_devices_responses(MULTIPLE_DEVICES_DATA_RESPONSE)
-    await fake_api.setup_integration()
     fake_api.curves = HTTPStatus.BAD_REQUEST
 
     with pytest.raises(HomeAssistantError) as error:
@@ -380,7 +361,7 @@ async def test_set_heating_curve_points_with_communication_error(
             domain=DOMAIN,
             service=SERVICE_SET_HEATING_CURVE_POINTS,
             service_data={
-                ATTR_CONFIG_ENTRY: fake_api.config_entry.entry_id,
+                ATTR_CONFIG_ENTRY: ENTRY_ID,
                 ATTR_HEATING_CURVE: "HC1",
                 ATTR_POINTS: [{"outdoor": 0, "flow": 30}],
             },
@@ -391,13 +372,12 @@ async def test_set_heating_curve_points_with_communication_error(
     assert fake_api.write_requests() == []
 
 
+@pytest.mark.usefixtures("init_integration")
 async def test_set_unchanged_heating_curve_points(
     hass: HomeAssistant,
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
     """Test that the action does not write the points if the heating curve already has them (flash writes)."""
-    fake_api.responses = get_multiple_devices_responses(MULTIPLE_DEVICES_DATA_RESPONSE)
-    await fake_api.setup_integration()
     fake_api.curves = [
         CURVE_NAMES_RESPONSE,
         get_curve_points_response(points=(("-20", "35.299999"), ("0", "29.5"), ("20", "23.9"))),
@@ -407,7 +387,7 @@ async def test_set_unchanged_heating_curve_points(
         domain=DOMAIN,
         service=SERVICE_SET_HEATING_CURVE_POINTS,
         service_data={
-            ATTR_CONFIG_ENTRY: fake_api.config_entry.entry_id,
+            ATTR_CONFIG_ENTRY: ENTRY_ID,
             ATTR_HEATING_CURVE: "HC1",
             ATTR_POINTS: [
                 {"outdoor": 20, "flow": 23.9},
@@ -421,19 +401,16 @@ async def test_set_unchanged_heating_curve_points(
     assert fake_api.write_requests() == []
 
 
+@pytest.mark.usefixtures("init_integration")
 async def test_set_heating_curve_points_updates_sensor(
     hass: HomeAssistant,
-    fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
     """Test that the sensor of the heating curve in use shows the written points without another update."""
-    fake_api.responses = get_multiple_devices_responses(MULTIPLE_DEVICES_DATA_RESPONSE)
-    await fake_api.setup_integration()
-
     await hass.services.async_call(
         domain=DOMAIN,
         service=SERVICE_SET_HEATING_CURVE_POINTS,
         service_data={
-            ATTR_CONFIG_ENTRY: fake_api.config_entry.entry_id,
+            ATTR_CONFIG_ENTRY: ENTRY_ID,
             ATTR_HEATING_CURVE: "HC6",
             ATTR_POINTS: [
                 {"outdoor": 20, "flow": 23.9},

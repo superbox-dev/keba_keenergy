@@ -21,16 +21,17 @@ from homeassistant.core import State
 from homeassistant.core import split_entity_id
 from homeassistant.helpers import entity_registry as er
 from homeassistant.helpers.translation import async_get_translations
-from homeassistant.util import dt as dt_util
 from pytest_homeassistant.common import async_fire_time_changed
 
+from custom_components.keba_keenergy.const import DEFAULT_SCAN_INTERVAL
 from custom_components.keba_keenergy.const import DOMAIN
 from custom_components.keba_keenergy.const import FLASH_WRITE_DELAY
+from tests.api_data import ENTRY_ID
 
 if TYPE_CHECKING:
+    from freezegun.api import FrozenDateTimeFactory
     from homeassistant.const import Platform
     from homeassistant.core import HomeAssistant
-    from pytest_homeassistant.common import MockConfigEntry
 
 type FlowInProgress = tuple[str, str, str | None, str | None]
 
@@ -55,9 +56,9 @@ async def init_translations(hass: HomeAssistant, /, *, category: str) -> dict[st
     return translations
 
 
-def get_platform_states(hass: HomeAssistant, config_entry: MockConfigEntry, platform: Platform, /) -> list[State]:
+def get_platform_states(hass: HomeAssistant, entity_registry: er.EntityRegistry, platform: Platform, /) -> list[State]:
     """Return the states of all entities of the platform of the config entry, sorted by entity ID."""
-    entries: list[er.RegistryEntry] = er.async_entries_for_config_entry(er.async_get(hass), config_entry.entry_id)
+    entries: list[er.RegistryEntry] = er.async_entries_for_config_entry(entity_registry, ENTRY_ID)
     states: list[State | None] = [
         hass.states.get(entry.entity_id)
         for entry in sorted(entries, key=lambda entry: entry.entity_id)
@@ -76,9 +77,14 @@ def get_state(hass: HomeAssistant, entity_id: str, /) -> State:
     return state
 
 
-async def get_option_translations(hass: HomeAssistant, state: State, /) -> dict[str, str]:
+async def get_option_translations(
+    hass: HomeAssistant,
+    entity_registry: er.EntityRegistry,
+    state: State,
+    /,
+) -> dict[str, str]:
     """Return the translated options of an entity with options (an enum sensor or a select)."""
-    entry: er.RegistryEntry | None = er.async_get(hass).async_get(state.entity_id)
+    entry: er.RegistryEntry | None = entity_registry.async_get(state.entity_id)
     assert entry is not None
     translations: dict[str, str] = await init_translations(hass, category="entity")
 
@@ -132,7 +138,21 @@ async def set_target_temperature(hass: HomeAssistant, entity_id: str, temperatur
     )
 
 
-async def fire_debounced_writes(hass: HomeAssistant, /) -> None:
+async def fire_debounced_writes(hass: HomeAssistant, freezer: FrozenDateTimeFactory, /) -> None:
     """Advance the time by the delay of the debounced writes and wait until they are written."""
-    async_fire_time_changed(hass, dt_util.utcnow() + timedelta(seconds=FLASH_WRITE_DELAY))
+    freezer.tick(timedelta(seconds=FLASH_WRITE_DELAY))
+    async_fire_time_changed(hass)
     await hass.async_block_till_done()
+
+
+async def next_update(
+    hass: HomeAssistant,
+    freezer: FrozenDateTimeFactory,
+    /,
+    *,
+    interval: timedelta = timedelta(seconds=DEFAULT_SCAN_INTERVAL),
+) -> None:
+    """Advance the time by the update interval and run the scheduled updates."""
+    freezer.tick(interval)
+    async_fire_time_changed(hass)
+    await hass.async_block_till_done(wait_background_tasks=True)

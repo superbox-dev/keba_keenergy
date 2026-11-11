@@ -76,8 +76,6 @@ def get_hvac_action_data_response(
     )
 
 
-# The time of the action calls, 2026-01-24 13:00 in the time zone of the Web HMI.
-NOW: Final[datetime] = datetime(2026, 1, 24, 12, 0, tzinfo=UTC)
 # 2026-01-24 23:00 in the time zone of the Web HMI, outside of the day block of the week timers.
 NIGHT: Final[datetime] = datetime(2026, 1, 24, 22, 0, tzinfo=UTC)
 # The away date range of one year from today.

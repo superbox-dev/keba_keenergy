@@ -18,7 +18,9 @@ from homeassistant.helpers import entity_registry as er
 
 from custom_components.keba_keenergy.const import DOMAIN
 from tests import get_flows_in_progress
+from tests.api_data import ENTRY_ID
 from tests.api_data import MULTIPLE_DEVICES_DATA_RESPONSE
+from tests.api_data import NOW
 from tests.api_data import SINGLE_DEVICE_DATA_RESPONSE
 from tests.api_data import ReadResponse
 from tests.api_data import get_multiple_devices_responses
@@ -26,15 +28,19 @@ from tests.api_data import get_single_device_responses
 
 if TYPE_CHECKING:
     from homeassistant.core import HomeAssistant
+    from pytest_homeassistant.common import MockConfigEntry
     from syrupy.assertion import SnapshotAssertion
 
     from tests import FlowInProgress
     from tests.conftest import FakeKebaKeEnergyAPI
 
+pytestmark = pytest.mark.freeze_time(NOW)
+
 
 @pytest.mark.usefixtures("entity_registry_enabled_by_default")
 async def test_load_entry(
     hass: HomeAssistant,
+    mock_config_entry: MockConfigEntry,
     fake_api: FakeKebaKeEnergyAPI,
     snapshot: SnapshotAssertion,
 ) -> None:
@@ -42,25 +48,22 @@ async def test_load_entry(
     fake_api.responses = get_multiple_devices_responses(MULTIPLE_DEVICES_DATA_RESPONSE, has_passive_cooling="true")
     await fake_api.setup_integration()
 
-    assert fake_api.config_entry.state is ConfigEntryState.LOADED
+    assert mock_config_entry.state is ConfigEntryState.LOADED
 
     assert set(hass.states.async_entity_ids()) == snapshot
 
 
 async def test_load_unload_config_entry(
     hass: HomeAssistant,
-    fake_api: FakeKebaKeEnergyAPI,
+    init_integration: MockConfigEntry,
 ) -> None:
     """Test that the config entry is loaded and unloaded."""
-    fake_api.responses = get_multiple_devices_responses(MULTIPLE_DEVICES_DATA_RESPONSE)
-    await fake_api.setup_integration()
+    assert init_integration.state is ConfigEntryState.LOADED
 
-    assert fake_api.config_entry.state is ConfigEntryState.LOADED
-
-    assert await hass.config_entries.async_unload(fake_api.config_entry.entry_id)
+    assert await hass.config_entries.async_unload(ENTRY_ID)
     await hass.async_block_till_done()
 
-    assert fake_api.config_entry.state is ConfigEntryState.NOT_LOADED
+    assert init_integration.state is ConfigEntryState.NOT_LOADED
 
 
 async def test_entities_disabled_by_default(
@@ -75,7 +78,7 @@ async def test_entities_disabled_by_default(
 
     disabled_entity_ids: list[str] = sorted(
         entry.entity_id
-        for entry in er.async_entries_for_config_entry(entity_registry, fake_api.config_entry.entry_id)
+        for entry in er.async_entries_for_config_entry(entity_registry, ENTRY_ID)
         if entry.disabled_by is er.RegistryEntryDisabler.INTEGRATION
     )
 
@@ -108,7 +111,7 @@ async def test_devices(
 
     devices: dict[str, dr.DeviceEntry] = {
         identifier: device
-        for device in dr.async_entries_for_config_entry(device_registry, fake_api.config_entry.entry_id)
+        for device in dr.async_entries_for_config_entry(device_registry, ENTRY_ID)
         for _, identifier in device.identifiers
     }
     # The snapshot of a device replaces the ID of the device it belongs to, so its identifier is compared as well.
@@ -123,29 +126,30 @@ async def test_devices(
     for identifier, device in sorted(devices.items()):
         assert device == snapshot(name=identifier)
 
-    assert {
-        entry.device_id for entry in er.async_entries_for_config_entry(entity_registry, fake_api.config_entry.entry_id)
-    } == {device.id for device in devices.values()}
+    assert {entry.device_id for entry in er.async_entries_for_config_entry(entity_registry, ENTRY_ID)} == {
+        device.id for device in devices.values()
+    }
 
 
 @pytest.mark.usefixtures("entity_registry_enabled_by_default")
 async def test_remove_stale_devices(
     hass: HomeAssistant,
+    device_registry: dr.DeviceRegistry,
+    entity_registry: er.EntityRegistry,
+    mock_config_entry: MockConfigEntry,
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
     """Test that devices which the control unit no longer provides are removed, with their entities."""
-    fake_api.config_entry.add_to_hass(hass)
-    device_registry: dr.DeviceRegistry = dr.async_get(hass)
-    entity_registry: er.EntityRegistry = er.async_get(hass)
+    mock_config_entry.add_to_hass(hass)
     stale_device: dr.DeviceEntry = device_registry.async_get_or_create(
-        config_entry_id=fake_api.config_entry.entry_id,
+        config_entry_id=ENTRY_ID,
         identifiers={(DOMAIN, "12345678_buffer_tank_3")},
     )
     stale_entity: er.RegistryEntry = entity_registry.async_get_or_create(
         SENSOR_DOMAIN,
         DOMAIN,
         "12345678_buffer_tank_current_top_temperature_3",
-        config_entry=fake_api.config_entry,
+        config_entry=mock_config_entry,
         device_id=stale_device.id,
     )
     fake_api.responses = get_multiple_devices_responses(MULTIPLE_DEVICES_DATA_RESPONSE)
@@ -156,7 +160,7 @@ async def test_remove_stale_devices(
 
     assert "12345678_buffer_tank_1" in {
         identifier
-        for device in dr.async_entries_for_config_entry(device_registry, fake_api.config_entry.entry_id)
+        for device in dr.async_entries_for_config_entry(device_registry, ENTRY_ID)
         for _, identifier in device.identifiers
     }
 
@@ -171,7 +175,7 @@ async def test_remove_stale_devices(
             (
                 ConfigEntryState.SETUP_ERROR,
                 "authentication_error",
-                [("reauth_confirm", DOMAIN, SOURCE_REAUTH, "01KEBAKEENERGY0000000000000")],
+                [("reauth_confirm", DOMAIN, SOURCE_REAUTH, ENTRY_ID)],
             ),
         ),
     ],
@@ -180,20 +184,21 @@ async def test_remove_stale_devices(
 @pytest.mark.no_fail_on_keba_errors
 async def test_setup_failed(
     hass: HomeAssistant,
+    mock_config_entry: MockConfigEntry,
     fake_api: FakeKebaKeEnergyAPI,
     error: Exception | HTTPStatus,
     expected: tuple[ConfigEntryState, str, list[FlowInProgress]],
 ) -> None:
     """Test that a failed setup is retried, or starts the reauthentication for rejected credentials."""
     fake_api.responses = [error]
-    fake_api.register_requests(fake_api.config_entry.data[CONF_HOST], ssl=fake_api.config_entry.data[CONF_SSL])
-    fake_api.config_entry.add_to_hass(hass)
+    fake_api.register_requests(mock_config_entry.data[CONF_HOST], ssl=mock_config_entry.data[CONF_SSL])
+    mock_config_entry.add_to_hass(hass)
 
-    assert not await hass.config_entries.async_setup(fake_api.config_entry.entry_id)
+    assert not await hass.config_entries.async_setup(ENTRY_ID)
     await hass.async_block_till_done()
 
     assert (
-        fake_api.config_entry.state,
-        fake_api.config_entry.error_reason_translation_key,
+        mock_config_entry.state,
+        mock_config_entry.error_reason_translation_key,
         get_flows_in_progress(hass),
     ) == expected

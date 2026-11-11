@@ -1,5 +1,42 @@
 # serializer version: 1
-# name: test_binary_sensors[de][binary_sensor.keba_keenergy_12345678_buffer_tank_cool_request_1]
+# name: test_binary_sensors[de][binary_sensor.keba_keenergy_12345678_buffer_tank_cool_request_1-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'device_class': None,
+    'device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_buffer_tank_1')]>,
+    'disabled_by': None,
+    'domain': 'binary_sensor',
+    'entity_category': None,
+    'entity_id': 'binary_sensor.keba_keenergy_12345678_buffer_tank_cool_request_1',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': None,
+    'options': dict({
+    }),
+    'original_device_class': None,
+    'original_icon': None,
+    'original_name': 'Kühlanforderung',
+    'platform': 'keba_keenergy',
+    'previous_unique_id': None,
+    'suggested_object_id': 'keba_keenergy_12345678_buffer_tank_cool_request_1',
+    'supported_features': 0,
+    'translation_key': 'buffer_tank_cool_request',
+    'unique_id': '12345678_buffer_tank_cool_request_1',
+    'unit_of_measurement': None,
+  })
+# ---
+# name: test_binary_sensors[de][binary_sensor.keba_keenergy_12345678_buffer_tank_cool_request_1-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Pufferspeicher 1 Kühlanforderung',
@@ -12,7 +49,44 @@
     'state': 'on',
   })
 # ---
-# name: test_binary_sensors[de][binary_sensor.keba_keenergy_12345678_buffer_tank_cool_request_2]
+# name: test_binary_sensors[de][binary_sensor.keba_keenergy_12345678_buffer_tank_cool_request_2-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'device_class': None,
+    'device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_buffer_tank_2')]>,
+    'disabled_by': None,
+    'domain': 'binary_sensor',
+    'entity_category': None,
+    'entity_id': 'binary_sensor.keba_keenergy_12345678_buffer_tank_cool_request_2',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': None,
+    'options': dict({
+    }),
+    'original_device_class': None,
+    'original_icon': None,
+    'original_name': 'Kühlanforderung',
+    'platform': 'keba_keenergy',
+    'previous_unique_id': None,
+    'suggested_object_id': 'keba_keenergy_12345678_buffer_tank_cool_request_2',
+    'supported_features': 0,
+    'translation_key': 'buffer_tank_cool_request',
+    'unique_id': '12345678_buffer_tank_cool_request_2',
+    'unit_of_measurement': None,
+  })
+# ---
+# name: test_binary_sensors[de][binary_sensor.keba_keenergy_12345678_buffer_tank_cool_request_2-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Pufferspeicher 2 Kühlanforderung',
@@ -25,7 +99,44 @@
     'state': 'off',
   })
 # ---
-# name: test_binary_sensors[de][binary_sensor.keba_keenergy_12345678_buffer_tank_heat_request_1]
+# name: test_binary_sensors[de][binary_sensor.keba_keenergy_12345678_buffer_tank_heat_request_1-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'device_class': None,
+    'device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_buffer_tank_1')]>,
+    'disabled_by': None,
+    'domain': 'binary_sensor',
+    'entity_category': None,
+    'entity_id': 'binary_sensor.keba_keenergy_12345678_buffer_tank_heat_request_1',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': None,
+    'options': dict({
+    }),
+    'original_device_class': None,
+    'original_icon': None,
+    'original_name': 'Heizanforderung',
+    'platform': 'keba_keenergy',
+    'previous_unique_id': None,
+    'suggested_object_id': 'keba_keenergy_12345678_buffer_tank_heat_request_1',
+    'supported_features': 0,
+    'translation_key': 'buffer_tank_heat_request',
+    'unique_id': '12345678_buffer_tank_heat_request_1',
+    'unit_of_measurement': None,
+  })
+# ---
+# name: test_binary_sensors[de][binary_sensor.keba_keenergy_12345678_buffer_tank_heat_request_1-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Pufferspeicher 1 Heizanforderung',
@@ -38,7 +149,44 @@
     'state': 'off',
   })
 # ---
-# name: test_binary_sensors[de][binary_sensor.keba_keenergy_12345678_buffer_tank_heat_request_2]
+# name: test_binary_sensors[de][binary_sensor.keba_keenergy_12345678_buffer_tank_heat_request_2-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'device_class': None,
+    'device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_buffer_tank_2')]>,
+    'disabled_by': None,
+    'domain': 'binary_sensor',
+    'entity_category': None,
+    'entity_id': 'binary_sensor.keba_keenergy_12345678_buffer_tank_heat_request_2',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': None,
+    'options': dict({
+    }),
+    'original_device_class': None,
+    'original_icon': None,
+    'original_name': 'Heizanforderung',
+    'platform': 'keba_keenergy',
+    'previous_unique_id': None,
+    'suggested_object_id': 'keba_keenergy_12345678_buffer_tank_heat_request_2',
+    'supported_features': 0,
+    'translation_key': 'buffer_tank_heat_request',
+    'unique_id': '12345678_buffer_tank_heat_request_2',
+    'unit_of_measurement': None,
+  })
+# ---
+# name: test_binary_sensors[de][binary_sensor.keba_keenergy_12345678_buffer_tank_heat_request_2-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Pufferspeicher 2 Heizanforderung',
@@ -51,7 +199,44 @@
     'state': 'on',
   })
 # ---
-# name: test_binary_sensors[de][binary_sensor.keba_keenergy_12345678_external_heat_source_consuming_excess_energy_1]
+# name: test_binary_sensors[de][binary_sensor.keba_keenergy_12345678_external_heat_source_consuming_excess_energy_1-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'device_class': None,
+    'device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_external_heat_source_1')]>,
+    'disabled_by': None,
+    'domain': 'binary_sensor',
+    'entity_category': None,
+    'entity_id': 'binary_sensor.keba_keenergy_12345678_external_heat_source_consuming_excess_energy_1',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': None,
+    'options': dict({
+    }),
+    'original_device_class': None,
+    'original_icon': 'mdi:solar-power',
+    'original_name': 'PV-Überschuss',
+    'platform': 'keba_keenergy',
+    'previous_unique_id': None,
+    'suggested_object_id': 'keba_keenergy_12345678_external_heat_source_consuming_excess_energy_1',
+    'supported_features': 0,
+    'translation_key': 'external_heat_source_consuming_excess_energy',
+    'unique_id': '12345678_external_heat_source_consuming_excess_energy_1',
+    'unit_of_measurement': None,
+  })
+# ---
+# name: test_binary_sensors[de][binary_sensor.keba_keenergy_12345678_external_heat_source_consuming_excess_energy_1-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Externe Wärmequelle 1 PV-Überschuss',
@@ -65,7 +250,44 @@
     'state': 'on',
   })
 # ---
-# name: test_binary_sensors[de][binary_sensor.keba_keenergy_12345678_external_heat_source_consuming_excess_energy_2]
+# name: test_binary_sensors[de][binary_sensor.keba_keenergy_12345678_external_heat_source_consuming_excess_energy_2-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'device_class': None,
+    'device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_external_heat_source_2')]>,
+    'disabled_by': None,
+    'domain': 'binary_sensor',
+    'entity_category': None,
+    'entity_id': 'binary_sensor.keba_keenergy_12345678_external_heat_source_consuming_excess_energy_2',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': None,
+    'options': dict({
+    }),
+    'original_device_class': None,
+    'original_icon': 'mdi:solar-power',
+    'original_name': 'PV-Überschuss',
+    'platform': 'keba_keenergy',
+    'previous_unique_id': None,
+    'suggested_object_id': 'keba_keenergy_12345678_external_heat_source_consuming_excess_energy_2',
+    'supported_features': 0,
+    'translation_key': 'external_heat_source_consuming_excess_energy',
+    'unique_id': '12345678_external_heat_source_consuming_excess_energy_2',
+    'unit_of_measurement': None,
+  })
+# ---
+# name: test_binary_sensors[de][binary_sensor.keba_keenergy_12345678_external_heat_source_consuming_excess_energy_2-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Externe Wärmequelle 2 PV-Überschuss',
@@ -79,7 +301,44 @@
     'state': 'on',
   })
 # ---
-# name: test_binary_sensors[de][binary_sensor.keba_keenergy_12345678_external_heat_source_heat_request_1]
+# name: test_binary_sensors[de][binary_sensor.keba_keenergy_12345678_external_heat_source_heat_request_1-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'device_class': None,
+    'device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_external_heat_source_1')]>,
+    'disabled_by': None,
+    'domain': 'binary_sensor',
+    'entity_category': None,
+    'entity_id': 'binary_sensor.keba_keenergy_12345678_external_heat_source_heat_request_1',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': None,
+    'options': dict({
+    }),
+    'original_device_class': None,
+    'original_icon': None,
+    'original_name': 'Heizanforderung',
+    'platform': 'keba_keenergy',
+    'previous_unique_id': None,
+    'suggested_object_id': 'keba_keenergy_12345678_external_heat_source_heat_request_1',
+    'supported_features': 0,
+    'translation_key': 'external_heat_source_heat_request',
+    'unique_id': '12345678_external_heat_source_heat_request_1',
+    'unit_of_measurement': None,
+  })
+# ---
+# name: test_binary_sensors[de][binary_sensor.keba_keenergy_12345678_external_heat_source_heat_request_1-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Externe Wärmequelle 1 Heizanforderung',
@@ -92,7 +351,44 @@
     'state': 'on',
   })
 # ---
-# name: test_binary_sensors[de][binary_sensor.keba_keenergy_12345678_external_heat_source_heat_request_2]
+# name: test_binary_sensors[de][binary_sensor.keba_keenergy_12345678_external_heat_source_heat_request_2-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'device_class': None,
+    'device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_external_heat_source_2')]>,
+    'disabled_by': None,
+    'domain': 'binary_sensor',
+    'entity_category': None,
+    'entity_id': 'binary_sensor.keba_keenergy_12345678_external_heat_source_heat_request_2',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': None,
+    'options': dict({
+    }),
+    'original_device_class': None,
+    'original_icon': None,
+    'original_name': 'Heizanforderung',
+    'platform': 'keba_keenergy',
+    'previous_unique_id': None,
+    'suggested_object_id': 'keba_keenergy_12345678_external_heat_source_heat_request_2',
+    'supported_features': 0,
+    'translation_key': 'external_heat_source_heat_request',
+    'unique_id': '12345678_external_heat_source_heat_request_2',
+    'unit_of_measurement': None,
+  })
+# ---
+# name: test_binary_sensors[de][binary_sensor.keba_keenergy_12345678_external_heat_source_heat_request_2-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Externe Wärmequelle 2 Heizanforderung',
@@ -105,7 +401,44 @@
     'state': 'on',
   })
 # ---
-# name: test_binary_sensors[de][binary_sensor.keba_keenergy_12345678_heat_circuit_pump_state_1]
+# name: test_binary_sensors[de][binary_sensor.keba_keenergy_12345678_heat_circuit_pump_state_1-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'device_class': None,
+    'device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_heat_circuit_1')]>,
+    'disabled_by': None,
+    'domain': 'binary_sensor',
+    'entity_category': None,
+    'entity_id': 'binary_sensor.keba_keenergy_12345678_heat_circuit_pump_state_1',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': None,
+    'options': dict({
+    }),
+    'original_device_class': <BinarySensorDeviceClass.RUNNING: 'running'>,
+    'original_icon': None,
+    'original_name': 'Pumpe',
+    'platform': 'keba_keenergy',
+    'previous_unique_id': None,
+    'suggested_object_id': 'keba_keenergy_12345678_heat_circuit_pump_state_1',
+    'supported_features': 0,
+    'translation_key': 'heating_circuit_pump_state',
+    'unique_id': '12345678_heat_circuit_pump_state_1',
+    'unit_of_measurement': None,
+  })
+# ---
+# name: test_binary_sensors[de][binary_sensor.keba_keenergy_12345678_heat_circuit_pump_state_1-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'running',
@@ -119,7 +452,44 @@
     'state': 'on',
   })
 # ---
-# name: test_binary_sensors[de][binary_sensor.keba_keenergy_12345678_heat_pump_consuming_excess_energy]
+# name: test_binary_sensors[de][binary_sensor.keba_keenergy_12345678_heat_pump_consuming_excess_energy-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'device_class': None,
+    'device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_heat_pump')]>,
+    'disabled_by': None,
+    'domain': 'binary_sensor',
+    'entity_category': None,
+    'entity_id': 'binary_sensor.keba_keenergy_12345678_heat_pump_consuming_excess_energy',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': None,
+    'options': dict({
+    }),
+    'original_device_class': None,
+    'original_icon': 'mdi:solar-power',
+    'original_name': 'PV-Überschuss',
+    'platform': 'keba_keenergy',
+    'previous_unique_id': None,
+    'suggested_object_id': 'keba_keenergy_12345678_heat_pump_consuming_excess_energy',
+    'supported_features': 0,
+    'translation_key': 'heat_pump_consuming_excess_energy',
+    'unique_id': '12345678_heat_pump_consuming_excess_energy',
+    'unit_of_measurement': None,
+  })
+# ---
+# name: test_binary_sensors[de][binary_sensor.keba_keenergy_12345678_heat_pump_consuming_excess_energy-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Wärmepumpe PV-Überschuss',
@@ -133,7 +503,44 @@
     'state': 'on',
   })
 # ---
-# name: test_binary_sensors[de][binary_sensor.keba_keenergy_12345678_heat_pump_has_compressor_failure]
+# name: test_binary_sensors[de][binary_sensor.keba_keenergy_12345678_heat_pump_has_compressor_failure-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'device_class': None,
+    'device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_heat_pump')]>,
+    'disabled_by': None,
+    'domain': 'binary_sensor',
+    'entity_category': <EntityCategory.DIAGNOSTIC: 'diagnostic'>,
+    'entity_id': 'binary_sensor.keba_keenergy_12345678_heat_pump_has_compressor_failure',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': None,
+    'options': dict({
+    }),
+    'original_device_class': <BinarySensorDeviceClass.PROBLEM: 'problem'>,
+    'original_icon': None,
+    'original_name': 'Kompressor',
+    'platform': 'keba_keenergy',
+    'previous_unique_id': None,
+    'suggested_object_id': 'keba_keenergy_12345678_heat_pump_has_compressor_failure',
+    'supported_features': 0,
+    'translation_key': 'heat_pump_compressor_failure',
+    'unique_id': '12345678_heat_pump_has_compressor_failure',
+    'unit_of_measurement': None,
+  })
+# ---
+# name: test_binary_sensors[de][binary_sensor.keba_keenergy_12345678_heat_pump_has_compressor_failure-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'problem',
@@ -147,7 +554,44 @@
     'state': 'off',
   })
 # ---
-# name: test_binary_sensors[de][binary_sensor.keba_keenergy_12345678_heat_pump_has_source_actuator_failure]
+# name: test_binary_sensors[de][binary_sensor.keba_keenergy_12345678_heat_pump_has_source_actuator_failure-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'device_class': None,
+    'device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_heat_pump')]>,
+    'disabled_by': None,
+    'domain': 'binary_sensor',
+    'entity_category': <EntityCategory.DIAGNOSTIC: 'diagnostic'>,
+    'entity_id': 'binary_sensor.keba_keenergy_12345678_heat_pump_has_source_actuator_failure',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': None,
+    'options': dict({
+    }),
+    'original_device_class': <BinarySensorDeviceClass.PROBLEM: 'problem'>,
+    'original_icon': None,
+    'original_name': 'Quellenaktor',
+    'platform': 'keba_keenergy',
+    'previous_unique_id': None,
+    'suggested_object_id': 'keba_keenergy_12345678_heat_pump_has_source_actuator_failure',
+    'supported_features': 0,
+    'translation_key': 'heat_pump_source_actuator_failure',
+    'unique_id': '12345678_heat_pump_has_source_actuator_failure',
+    'unit_of_measurement': None,
+  })
+# ---
+# name: test_binary_sensors[de][binary_sensor.keba_keenergy_12345678_heat_pump_has_source_actuator_failure-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'problem',
@@ -161,7 +605,44 @@
     'state': 'off',
   })
 # ---
-# name: test_binary_sensors[de][binary_sensor.keba_keenergy_12345678_heat_pump_has_source_failure]
+# name: test_binary_sensors[de][binary_sensor.keba_keenergy_12345678_heat_pump_has_source_failure-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'device_class': None,
+    'device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_heat_pump')]>,
+    'disabled_by': None,
+    'domain': 'binary_sensor',
+    'entity_category': <EntityCategory.DIAGNOSTIC: 'diagnostic'>,
+    'entity_id': 'binary_sensor.keba_keenergy_12345678_heat_pump_has_source_failure',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': None,
+    'options': dict({
+    }),
+    'original_device_class': <BinarySensorDeviceClass.PROBLEM: 'problem'>,
+    'original_icon': None,
+    'original_name': 'Quelle',
+    'platform': 'keba_keenergy',
+    'previous_unique_id': None,
+    'suggested_object_id': 'keba_keenergy_12345678_heat_pump_has_source_failure',
+    'supported_features': 0,
+    'translation_key': 'heat_pump_source_failure',
+    'unique_id': '12345678_heat_pump_has_source_failure',
+    'unit_of_measurement': None,
+  })
+# ---
+# name: test_binary_sensors[de][binary_sensor.keba_keenergy_12345678_heat_pump_has_source_failure-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'problem',
@@ -175,7 +656,44 @@
     'state': 'off',
   })
 # ---
-# name: test_binary_sensors[de][binary_sensor.keba_keenergy_12345678_heat_pump_has_source_pressure_failure]
+# name: test_binary_sensors[de][binary_sensor.keba_keenergy_12345678_heat_pump_has_source_pressure_failure-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'device_class': None,
+    'device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_heat_pump')]>,
+    'disabled_by': None,
+    'domain': 'binary_sensor',
+    'entity_category': <EntityCategory.DIAGNOSTIC: 'diagnostic'>,
+    'entity_id': 'binary_sensor.keba_keenergy_12345678_heat_pump_has_source_pressure_failure',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': None,
+    'options': dict({
+    }),
+    'original_device_class': <BinarySensorDeviceClass.PROBLEM: 'problem'>,
+    'original_icon': None,
+    'original_name': 'Quellendruck',
+    'platform': 'keba_keenergy',
+    'previous_unique_id': None,
+    'suggested_object_id': 'keba_keenergy_12345678_heat_pump_has_source_pressure_failure',
+    'supported_features': 0,
+    'translation_key': 'heat_pump_source_pressure_failure',
+    'unique_id': '12345678_heat_pump_has_source_pressure_failure',
+    'unit_of_measurement': None,
+  })
+# ---
+# name: test_binary_sensors[de][binary_sensor.keba_keenergy_12345678_heat_pump_has_source_pressure_failure-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'problem',
@@ -189,7 +707,44 @@
     'state': 'off',
   })
 # ---
-# name: test_binary_sensors[de][binary_sensor.keba_keenergy_12345678_heat_pump_has_three_phase_failure]
+# name: test_binary_sensors[de][binary_sensor.keba_keenergy_12345678_heat_pump_has_three_phase_failure-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'device_class': None,
+    'device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_heat_pump')]>,
+    'disabled_by': None,
+    'domain': 'binary_sensor',
+    'entity_category': <EntityCategory.DIAGNOSTIC: 'diagnostic'>,
+    'entity_id': 'binary_sensor.keba_keenergy_12345678_heat_pump_has_three_phase_failure',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': None,
+    'options': dict({
+    }),
+    'original_device_class': <BinarySensorDeviceClass.PROBLEM: 'problem'>,
+    'original_icon': None,
+    'original_name': '3-Phasen',
+    'platform': 'keba_keenergy',
+    'previous_unique_id': None,
+    'suggested_object_id': 'keba_keenergy_12345678_heat_pump_has_three_phase_failure',
+    'supported_features': 0,
+    'translation_key': 'heat_pump_three_phase_failure',
+    'unique_id': '12345678_heat_pump_has_three_phase_failure',
+    'unit_of_measurement': None,
+  })
+# ---
+# name: test_binary_sensors[de][binary_sensor.keba_keenergy_12345678_heat_pump_has_three_phase_failure-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'problem',
@@ -203,7 +758,44 @@
     'state': 'off',
   })
 # ---
-# name: test_binary_sensors[de][binary_sensor.keba_keenergy_12345678_heat_pump_has_vfd_failure]
+# name: test_binary_sensors[de][binary_sensor.keba_keenergy_12345678_heat_pump_has_vfd_failure-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'device_class': None,
+    'device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_heat_pump')]>,
+    'disabled_by': None,
+    'domain': 'binary_sensor',
+    'entity_category': <EntityCategory.DIAGNOSTIC: 'diagnostic'>,
+    'entity_id': 'binary_sensor.keba_keenergy_12345678_heat_pump_has_vfd_failure',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': None,
+    'options': dict({
+    }),
+    'original_device_class': <BinarySensorDeviceClass.PROBLEM: 'problem'>,
+    'original_icon': None,
+    'original_name': 'Frequenzumrichter',
+    'platform': 'keba_keenergy',
+    'previous_unique_id': None,
+    'suggested_object_id': 'keba_keenergy_12345678_heat_pump_has_vfd_failure',
+    'supported_features': 0,
+    'translation_key': 'heat_pump_vfd_failure',
+    'unique_id': '12345678_heat_pump_has_vfd_failure',
+    'unit_of_measurement': None,
+  })
+# ---
+# name: test_binary_sensors[de][binary_sensor.keba_keenergy_12345678_heat_pump_has_vfd_failure-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'problem',
@@ -217,7 +809,44 @@
     'state': 'off',
   })
 # ---
-# name: test_binary_sensors[de][binary_sensor.keba_keenergy_12345678_heat_pump_heat_request]
+# name: test_binary_sensors[de][binary_sensor.keba_keenergy_12345678_heat_pump_heat_request-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'device_class': None,
+    'device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_heat_pump')]>,
+    'disabled_by': None,
+    'domain': 'binary_sensor',
+    'entity_category': None,
+    'entity_id': 'binary_sensor.keba_keenergy_12345678_heat_pump_heat_request',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': None,
+    'options': dict({
+    }),
+    'original_device_class': None,
+    'original_icon': None,
+    'original_name': 'Anforderung',
+    'platform': 'keba_keenergy',
+    'previous_unique_id': None,
+    'suggested_object_id': 'keba_keenergy_12345678_heat_pump_heat_request',
+    'supported_features': 0,
+    'translation_key': 'heat_pump_request',
+    'unique_id': '12345678_heat_pump_heat_request',
+    'unit_of_measurement': None,
+  })
+# ---
+# name: test_binary_sensors[de][binary_sensor.keba_keenergy_12345678_heat_pump_heat_request-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Wärmepumpe Anforderung',
@@ -230,7 +859,44 @@
     'state': 'off',
   })
 # ---
-# name: test_binary_sensors[de][binary_sensor.keba_keenergy_12345678_hot_water_tank_circulation_pump_state_1]
+# name: test_binary_sensors[de][binary_sensor.keba_keenergy_12345678_hot_water_tank_circulation_pump_state_1-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'device_class': None,
+    'device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_hot_water_tank_1')]>,
+    'disabled_by': None,
+    'domain': 'binary_sensor',
+    'entity_category': None,
+    'entity_id': 'binary_sensor.keba_keenergy_12345678_hot_water_tank_circulation_pump_state_1',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': None,
+    'options': dict({
+    }),
+    'original_device_class': <BinarySensorDeviceClass.RUNNING: 'running'>,
+    'original_icon': None,
+    'original_name': 'Zirkulationspumpe',
+    'platform': 'keba_keenergy',
+    'previous_unique_id': None,
+    'suggested_object_id': 'keba_keenergy_12345678_hot_water_tank_circulation_pump_state_1',
+    'supported_features': 0,
+    'translation_key': 'dhw_tank_circulation_pump_state',
+    'unique_id': '12345678_hot_water_tank_circulation_pump_state_1',
+    'unit_of_measurement': None,
+  })
+# ---
+# name: test_binary_sensors[de][binary_sensor.keba_keenergy_12345678_hot_water_tank_circulation_pump_state_1-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'running',
@@ -244,7 +910,44 @@
     'state': 'on',
   })
 # ---
-# name: test_binary_sensors[de][binary_sensor.keba_keenergy_12345678_hot_water_tank_circulation_pump_state_2]
+# name: test_binary_sensors[de][binary_sensor.keba_keenergy_12345678_hot_water_tank_circulation_pump_state_2-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'device_class': None,
+    'device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_hot_water_tank_2')]>,
+    'disabled_by': None,
+    'domain': 'binary_sensor',
+    'entity_category': None,
+    'entity_id': 'binary_sensor.keba_keenergy_12345678_hot_water_tank_circulation_pump_state_2',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': None,
+    'options': dict({
+    }),
+    'original_device_class': <BinarySensorDeviceClass.RUNNING: 'running'>,
+    'original_icon': None,
+    'original_name': 'Zirkulationspumpe',
+    'platform': 'keba_keenergy',
+    'previous_unique_id': None,
+    'suggested_object_id': 'keba_keenergy_12345678_hot_water_tank_circulation_pump_state_2',
+    'supported_features': 0,
+    'translation_key': 'dhw_tank_circulation_pump_state',
+    'unique_id': '12345678_hot_water_tank_circulation_pump_state_2',
+    'unit_of_measurement': None,
+  })
+# ---
+# name: test_binary_sensors[de][binary_sensor.keba_keenergy_12345678_hot_water_tank_circulation_pump_state_2-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'running',
@@ -258,7 +961,44 @@
     'state': 'off',
   })
 # ---
-# name: test_binary_sensors[de][binary_sensor.keba_keenergy_12345678_hot_water_tank_heat_request_1]
+# name: test_binary_sensors[de][binary_sensor.keba_keenergy_12345678_hot_water_tank_heat_request_1-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'device_class': None,
+    'device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_hot_water_tank_1')]>,
+    'disabled_by': None,
+    'domain': 'binary_sensor',
+    'entity_category': None,
+    'entity_id': 'binary_sensor.keba_keenergy_12345678_hot_water_tank_heat_request_1',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': None,
+    'options': dict({
+    }),
+    'original_device_class': None,
+    'original_icon': None,
+    'original_name': 'Heizanforderung',
+    'platform': 'keba_keenergy',
+    'previous_unique_id': None,
+    'suggested_object_id': 'keba_keenergy_12345678_hot_water_tank_heat_request_1',
+    'supported_features': 0,
+    'translation_key': 'dhw_tank_heat_request',
+    'unique_id': '12345678_hot_water_tank_heat_request_1',
+    'unit_of_measurement': None,
+  })
+# ---
+# name: test_binary_sensors[de][binary_sensor.keba_keenergy_12345678_hot_water_tank_heat_request_1-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Warmwasserspeicher 1 Heizanforderung',
@@ -271,7 +1011,44 @@
     'state': 'off',
   })
 # ---
-# name: test_binary_sensors[de][binary_sensor.keba_keenergy_12345678_hot_water_tank_heat_request_2]
+# name: test_binary_sensors[de][binary_sensor.keba_keenergy_12345678_hot_water_tank_heat_request_2-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'device_class': None,
+    'device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_hot_water_tank_2')]>,
+    'disabled_by': None,
+    'domain': 'binary_sensor',
+    'entity_category': None,
+    'entity_id': 'binary_sensor.keba_keenergy_12345678_hot_water_tank_heat_request_2',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': None,
+    'options': dict({
+    }),
+    'original_device_class': None,
+    'original_icon': None,
+    'original_name': 'Heizanforderung',
+    'platform': 'keba_keenergy',
+    'previous_unique_id': None,
+    'suggested_object_id': 'keba_keenergy_12345678_hot_water_tank_heat_request_2',
+    'supported_features': 0,
+    'translation_key': 'dhw_tank_heat_request',
+    'unique_id': '12345678_hot_water_tank_heat_request_2',
+    'unit_of_measurement': None,
+  })
+# ---
+# name: test_binary_sensors[de][binary_sensor.keba_keenergy_12345678_hot_water_tank_heat_request_2-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Warmwasserspeicher 2 Heizanforderung',
@@ -284,7 +1061,44 @@
     'state': 'on',
   })
 # ---
-# name: test_binary_sensors[de][binary_sensor.keba_keenergy_12345678_hot_water_tank_hot_water_flow_1]
+# name: test_binary_sensors[de][binary_sensor.keba_keenergy_12345678_hot_water_tank_hot_water_flow_1-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'device_class': None,
+    'device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_hot_water_tank_1')]>,
+    'disabled_by': None,
+    'domain': 'binary_sensor',
+    'entity_category': None,
+    'entity_id': 'binary_sensor.keba_keenergy_12345678_hot_water_tank_hot_water_flow_1',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': None,
+    'options': dict({
+    }),
+    'original_device_class': None,
+    'original_icon': None,
+    'original_name': 'Frischwasser-Durchfluss',
+    'platform': 'keba_keenergy',
+    'previous_unique_id': None,
+    'suggested_object_id': 'keba_keenergy_12345678_hot_water_tank_hot_water_flow_1',
+    'supported_features': 0,
+    'translation_key': 'dhw_tank_hot_water_flow',
+    'unique_id': '12345678_hot_water_tank_hot_water_flow_1',
+    'unit_of_measurement': None,
+  })
+# ---
+# name: test_binary_sensors[de][binary_sensor.keba_keenergy_12345678_hot_water_tank_hot_water_flow_1-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Warmwasserspeicher 1 Frischwasser-Durchfluss',
@@ -297,7 +1111,44 @@
     'state': 'off',
   })
 # ---
-# name: test_binary_sensors[de][binary_sensor.keba_keenergy_12345678_photovoltaics_excess_energy_active]
+# name: test_binary_sensors[de][binary_sensor.keba_keenergy_12345678_photovoltaics_excess_energy_active-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'device_class': None,
+    'device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_photovoltaics')]>,
+    'disabled_by': None,
+    'domain': 'binary_sensor',
+    'entity_category': None,
+    'entity_id': 'binary_sensor.keba_keenergy_12345678_photovoltaics_excess_energy_active',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': None,
+    'options': dict({
+    }),
+    'original_device_class': None,
+    'original_icon': None,
+    'original_name': 'PV-Überschuss',
+    'platform': 'keba_keenergy',
+    'previous_unique_id': None,
+    'suggested_object_id': 'keba_keenergy_12345678_photovoltaics_excess_energy_active',
+    'supported_features': 0,
+    'translation_key': 'photovoltaics_excess_energy',
+    'unique_id': '12345678_photovoltaics_excess_energy_active',
+    'unit_of_measurement': None,
+  })
+# ---
+# name: test_binary_sensors[de][binary_sensor.keba_keenergy_12345678_photovoltaics_excess_energy_active-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Photovoltaik PV-Überschuss',
@@ -310,11 +1161,48 @@
     'state': 'on',
   })
 # ---
-# name: test_binary_sensors[de][binary_sensor.keba_keenergy_12345678_remote_maintenance_connected]
+# name: test_binary_sensors[de][binary_sensor.keba_keenergy_12345678_remote_maintenance_connected-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'device_class': None,
+    'device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_keba_keenergy')]>,
+    'disabled_by': None,
+    'domain': 'binary_sensor',
+    'entity_category': <EntityCategory.DIAGNOSTIC: 'diagnostic'>,
+    'entity_id': 'binary_sensor.keba_keenergy_12345678_remote_maintenance_connected',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': None,
+    'options': dict({
+    }),
+    'original_device_class': <BinarySensorDeviceClass.CONNECTIVITY: 'connectivity'>,
+    'original_icon': None,
+    'original_name': 'Verbindung Fernwartung',
+    'platform': 'keba_keenergy',
+    'previous_unique_id': None,
+    'suggested_object_id': 'keba_keenergy_12345678_remote_maintenance_connected',
+    'supported_features': 0,
+    'translation_key': 'system_remote_maintenance_connected',
+    'unique_id': '12345678_remote_maintenance_connected',
+    'unit_of_measurement': None,
+  })
+# ---
+# name: test_binary_sensors[de][binary_sensor.keba_keenergy_12345678_remote_maintenance_connected-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'connectivity',
-      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Bedieneinheit Verbindung Fernwartung',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'keba_keenergy Verbindung Fernwartung',
     }),
     'context': <ANY>,
     'entity_id': 'binary_sensor.keba_keenergy_12345678_remote_maintenance_connected',
@@ -324,11 +1212,48 @@
     'state': 'off',
   })
 # ---
-# name: test_binary_sensors[de][binary_sensor.keba_keenergy_12345678_remote_maintenance_server_reachable]
+# name: test_binary_sensors[de][binary_sensor.keba_keenergy_12345678_remote_maintenance_server_reachable-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'device_class': None,
+    'device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_keba_keenergy')]>,
+    'disabled_by': None,
+    'domain': 'binary_sensor',
+    'entity_category': <EntityCategory.DIAGNOSTIC: 'diagnostic'>,
+    'entity_id': 'binary_sensor.keba_keenergy_12345678_remote_maintenance_server_reachable',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': None,
+    'options': dict({
+    }),
+    'original_device_class': <BinarySensorDeviceClass.CONNECTIVITY: 'connectivity'>,
+    'original_icon': None,
+    'original_name': 'Server Fernwartung',
+    'platform': 'keba_keenergy',
+    'previous_unique_id': None,
+    'suggested_object_id': 'keba_keenergy_12345678_remote_maintenance_server_reachable',
+    'supported_features': 0,
+    'translation_key': 'system_remote_maintenance_server_reachable',
+    'unique_id': '12345678_remote_maintenance_server_reachable',
+    'unit_of_measurement': None,
+  })
+# ---
+# name: test_binary_sensors[de][binary_sensor.keba_keenergy_12345678_remote_maintenance_server_reachable-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'connectivity',
-      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Bedieneinheit Server Fernwartung',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'keba_keenergy Server Fernwartung',
     }),
     'context': <ANY>,
     'entity_id': 'binary_sensor.keba_keenergy_12345678_remote_maintenance_server_reachable',
@@ -338,7 +1263,44 @@
     'state': 'on',
   })
 # ---
-# name: test_binary_sensors[de][binary_sensor.keba_keenergy_12345678_solar_circuit_heat_request_1_1]
+# name: test_binary_sensors[de][binary_sensor.keba_keenergy_12345678_solar_circuit_heat_request_1_1-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'device_class': None,
+    'device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_solar_circuit_1')]>,
+    'disabled_by': None,
+    'domain': 'binary_sensor',
+    'entity_category': None,
+    'entity_id': 'binary_sensor.keba_keenergy_12345678_solar_circuit_heat_request_1_1',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': None,
+    'options': dict({
+    }),
+    'original_device_class': None,
+    'original_icon': None,
+    'original_name': 'Heizanforderung 1',
+    'platform': 'keba_keenergy',
+    'previous_unique_id': None,
+    'suggested_object_id': 'keba_keenergy_12345678_solar_circuit_heat_request_1_1',
+    'supported_features': 0,
+    'translation_key': 'solar_circuit_heat_request',
+    'unique_id': '12345678_solar_circuit_heat_request_1_1',
+    'unit_of_measurement': None,
+  })
+# ---
+# name: test_binary_sensors[de][binary_sensor.keba_keenergy_12345678_solar_circuit_heat_request_1_1-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Solarkreis 1 Heizanforderung 1',
@@ -351,7 +1313,44 @@
     'state': 'on',
   })
 # ---
-# name: test_binary_sensors[de][binary_sensor.keba_keenergy_12345678_solar_circuit_heat_request_1_2]
+# name: test_binary_sensors[de][binary_sensor.keba_keenergy_12345678_solar_circuit_heat_request_1_2-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'device_class': None,
+    'device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_solar_circuit_2')]>,
+    'disabled_by': None,
+    'domain': 'binary_sensor',
+    'entity_category': None,
+    'entity_id': 'binary_sensor.keba_keenergy_12345678_solar_circuit_heat_request_1_2',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': None,
+    'options': dict({
+    }),
+    'original_device_class': None,
+    'original_icon': None,
+    'original_name': 'Heizanforderung 1',
+    'platform': 'keba_keenergy',
+    'previous_unique_id': None,
+    'suggested_object_id': 'keba_keenergy_12345678_solar_circuit_heat_request_1_2',
+    'supported_features': 0,
+    'translation_key': 'solar_circuit_heat_request',
+    'unique_id': '12345678_solar_circuit_heat_request_1_2',
+    'unit_of_measurement': None,
+  })
+# ---
+# name: test_binary_sensors[de][binary_sensor.keba_keenergy_12345678_solar_circuit_heat_request_1_2-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Solarkreis 2 Heizanforderung 1',
@@ -364,7 +1363,44 @@
     'state': 'off',
   })
 # ---
-# name: test_binary_sensors[de][binary_sensor.keba_keenergy_12345678_solar_circuit_heat_request_2_1]
+# name: test_binary_sensors[de][binary_sensor.keba_keenergy_12345678_solar_circuit_heat_request_2_1-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'device_class': None,
+    'device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_solar_circuit_1')]>,
+    'disabled_by': None,
+    'domain': 'binary_sensor',
+    'entity_category': None,
+    'entity_id': 'binary_sensor.keba_keenergy_12345678_solar_circuit_heat_request_2_1',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': None,
+    'options': dict({
+    }),
+    'original_device_class': None,
+    'original_icon': None,
+    'original_name': 'Heizanforderung 2',
+    'platform': 'keba_keenergy',
+    'previous_unique_id': None,
+    'suggested_object_id': 'keba_keenergy_12345678_solar_circuit_heat_request_2_1',
+    'supported_features': 0,
+    'translation_key': 'solar_circuit_heat_request',
+    'unique_id': '12345678_solar_circuit_heat_request_2_1',
+    'unit_of_measurement': None,
+  })
+# ---
+# name: test_binary_sensors[de][binary_sensor.keba_keenergy_12345678_solar_circuit_heat_request_2_1-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Solarkreis 1 Heizanforderung 2',
@@ -377,7 +1413,44 @@
     'state': 'off',
   })
 # ---
-# name: test_binary_sensors[de][binary_sensor.keba_keenergy_12345678_solar_circuit_heat_request_2_2]
+# name: test_binary_sensors[de][binary_sensor.keba_keenergy_12345678_solar_circuit_heat_request_2_2-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'device_class': None,
+    'device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_solar_circuit_2')]>,
+    'disabled_by': None,
+    'domain': 'binary_sensor',
+    'entity_category': None,
+    'entity_id': 'binary_sensor.keba_keenergy_12345678_solar_circuit_heat_request_2_2',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': None,
+    'options': dict({
+    }),
+    'original_device_class': None,
+    'original_icon': None,
+    'original_name': 'Heizanforderung 2',
+    'platform': 'keba_keenergy',
+    'previous_unique_id': None,
+    'suggested_object_id': 'keba_keenergy_12345678_solar_circuit_heat_request_2_2',
+    'supported_features': 0,
+    'translation_key': 'solar_circuit_heat_request',
+    'unique_id': '12345678_solar_circuit_heat_request_2_2',
+    'unit_of_measurement': None,
+  })
+# ---
+# name: test_binary_sensors[de][binary_sensor.keba_keenergy_12345678_solar_circuit_heat_request_2_2-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Solarkreis 2 Heizanforderung 2',
@@ -390,7 +1463,44 @@
     'state': 'on',
   })
 # ---
-# name: test_binary_sensors[en][binary_sensor.keba_keenergy_12345678_buffer_tank_cool_request_1]
+# name: test_binary_sensors[en][binary_sensor.keba_keenergy_12345678_buffer_tank_cool_request_1-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'device_class': None,
+    'device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_buffer_tank_1')]>,
+    'disabled_by': None,
+    'domain': 'binary_sensor',
+    'entity_category': None,
+    'entity_id': 'binary_sensor.keba_keenergy_12345678_buffer_tank_cool_request_1',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': None,
+    'options': dict({
+    }),
+    'original_device_class': None,
+    'original_icon': None,
+    'original_name': 'Cooling request',
+    'platform': 'keba_keenergy',
+    'previous_unique_id': None,
+    'suggested_object_id': 'keba_keenergy_12345678_buffer_tank_cool_request_1',
+    'supported_features': 0,
+    'translation_key': 'buffer_tank_cool_request',
+    'unique_id': '12345678_buffer_tank_cool_request_1',
+    'unit_of_measurement': None,
+  })
+# ---
+# name: test_binary_sensors[en][binary_sensor.keba_keenergy_12345678_buffer_tank_cool_request_1-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Buffer tank 1 Cooling request',
@@ -403,7 +1513,44 @@
     'state': 'on',
   })
 # ---
-# name: test_binary_sensors[en][binary_sensor.keba_keenergy_12345678_buffer_tank_cool_request_2]
+# name: test_binary_sensors[en][binary_sensor.keba_keenergy_12345678_buffer_tank_cool_request_2-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'device_class': None,
+    'device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_buffer_tank_2')]>,
+    'disabled_by': None,
+    'domain': 'binary_sensor',
+    'entity_category': None,
+    'entity_id': 'binary_sensor.keba_keenergy_12345678_buffer_tank_cool_request_2',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': None,
+    'options': dict({
+    }),
+    'original_device_class': None,
+    'original_icon': None,
+    'original_name': 'Cooling request',
+    'platform': 'keba_keenergy',
+    'previous_unique_id': None,
+    'suggested_object_id': 'keba_keenergy_12345678_buffer_tank_cool_request_2',
+    'supported_features': 0,
+    'translation_key': 'buffer_tank_cool_request',
+    'unique_id': '12345678_buffer_tank_cool_request_2',
+    'unit_of_measurement': None,
+  })
+# ---
+# name: test_binary_sensors[en][binary_sensor.keba_keenergy_12345678_buffer_tank_cool_request_2-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Buffer tank 2 Cooling request',
@@ -416,7 +1563,44 @@
     'state': 'off',
   })
 # ---
-# name: test_binary_sensors[en][binary_sensor.keba_keenergy_12345678_buffer_tank_heat_request_1]
+# name: test_binary_sensors[en][binary_sensor.keba_keenergy_12345678_buffer_tank_heat_request_1-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'device_class': None,
+    'device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_buffer_tank_1')]>,
+    'disabled_by': None,
+    'domain': 'binary_sensor',
+    'entity_category': None,
+    'entity_id': 'binary_sensor.keba_keenergy_12345678_buffer_tank_heat_request_1',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': None,
+    'options': dict({
+    }),
+    'original_device_class': None,
+    'original_icon': None,
+    'original_name': 'Heating request',
+    'platform': 'keba_keenergy',
+    'previous_unique_id': None,
+    'suggested_object_id': 'keba_keenergy_12345678_buffer_tank_heat_request_1',
+    'supported_features': 0,
+    'translation_key': 'buffer_tank_heat_request',
+    'unique_id': '12345678_buffer_tank_heat_request_1',
+    'unit_of_measurement': None,
+  })
+# ---
+# name: test_binary_sensors[en][binary_sensor.keba_keenergy_12345678_buffer_tank_heat_request_1-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Buffer tank 1 Heating request',
@@ -429,7 +1613,44 @@
     'state': 'off',
   })
 # ---
-# name: test_binary_sensors[en][binary_sensor.keba_keenergy_12345678_buffer_tank_heat_request_2]
+# name: test_binary_sensors[en][binary_sensor.keba_keenergy_12345678_buffer_tank_heat_request_2-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'device_class': None,
+    'device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_buffer_tank_2')]>,
+    'disabled_by': None,
+    'domain': 'binary_sensor',
+    'entity_category': None,
+    'entity_id': 'binary_sensor.keba_keenergy_12345678_buffer_tank_heat_request_2',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': None,
+    'options': dict({
+    }),
+    'original_device_class': None,
+    'original_icon': None,
+    'original_name': 'Heating request',
+    'platform': 'keba_keenergy',
+    'previous_unique_id': None,
+    'suggested_object_id': 'keba_keenergy_12345678_buffer_tank_heat_request_2',
+    'supported_features': 0,
+    'translation_key': 'buffer_tank_heat_request',
+    'unique_id': '12345678_buffer_tank_heat_request_2',
+    'unit_of_measurement': None,
+  })
+# ---
+# name: test_binary_sensors[en][binary_sensor.keba_keenergy_12345678_buffer_tank_heat_request_2-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Buffer tank 2 Heating request',
@@ -442,7 +1663,44 @@
     'state': 'on',
   })
 # ---
-# name: test_binary_sensors[en][binary_sensor.keba_keenergy_12345678_external_heat_source_consuming_excess_energy_1]
+# name: test_binary_sensors[en][binary_sensor.keba_keenergy_12345678_external_heat_source_consuming_excess_energy_1-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'device_class': None,
+    'device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_external_heat_source_1')]>,
+    'disabled_by': None,
+    'domain': 'binary_sensor',
+    'entity_category': None,
+    'entity_id': 'binary_sensor.keba_keenergy_12345678_external_heat_source_consuming_excess_energy_1',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': None,
+    'options': dict({
+    }),
+    'original_device_class': None,
+    'original_icon': 'mdi:solar-power',
+    'original_name': 'PV surplus',
+    'platform': 'keba_keenergy',
+    'previous_unique_id': None,
+    'suggested_object_id': 'keba_keenergy_12345678_external_heat_source_consuming_excess_energy_1',
+    'supported_features': 0,
+    'translation_key': 'external_heat_source_consuming_excess_energy',
+    'unique_id': '12345678_external_heat_source_consuming_excess_energy_1',
+    'unit_of_measurement': None,
+  })
+# ---
+# name: test_binary_sensors[en][binary_sensor.keba_keenergy_12345678_external_heat_source_consuming_excess_energy_1-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'External heat source 1 PV surplus',
@@ -456,7 +1714,44 @@
     'state': 'on',
   })
 # ---
-# name: test_binary_sensors[en][binary_sensor.keba_keenergy_12345678_external_heat_source_consuming_excess_energy_2]
+# name: test_binary_sensors[en][binary_sensor.keba_keenergy_12345678_external_heat_source_consuming_excess_energy_2-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'device_class': None,
+    'device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_external_heat_source_2')]>,
+    'disabled_by': None,
+    'domain': 'binary_sensor',
+    'entity_category': None,
+    'entity_id': 'binary_sensor.keba_keenergy_12345678_external_heat_source_consuming_excess_energy_2',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': None,
+    'options': dict({
+    }),
+    'original_device_class': None,
+    'original_icon': 'mdi:solar-power',
+    'original_name': 'PV surplus',
+    'platform': 'keba_keenergy',
+    'previous_unique_id': None,
+    'suggested_object_id': 'keba_keenergy_12345678_external_heat_source_consuming_excess_energy_2',
+    'supported_features': 0,
+    'translation_key': 'external_heat_source_consuming_excess_energy',
+    'unique_id': '12345678_external_heat_source_consuming_excess_energy_2',
+    'unit_of_measurement': None,
+  })
+# ---
+# name: test_binary_sensors[en][binary_sensor.keba_keenergy_12345678_external_heat_source_consuming_excess_energy_2-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'External heat source 2 PV surplus',
@@ -470,7 +1765,44 @@
     'state': 'on',
   })
 # ---
-# name: test_binary_sensors[en][binary_sensor.keba_keenergy_12345678_external_heat_source_heat_request_1]
+# name: test_binary_sensors[en][binary_sensor.keba_keenergy_12345678_external_heat_source_heat_request_1-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'device_class': None,
+    'device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_external_heat_source_1')]>,
+    'disabled_by': None,
+    'domain': 'binary_sensor',
+    'entity_category': None,
+    'entity_id': 'binary_sensor.keba_keenergy_12345678_external_heat_source_heat_request_1',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': None,
+    'options': dict({
+    }),
+    'original_device_class': None,
+    'original_icon': None,
+    'original_name': 'Heating request',
+    'platform': 'keba_keenergy',
+    'previous_unique_id': None,
+    'suggested_object_id': 'keba_keenergy_12345678_external_heat_source_heat_request_1',
+    'supported_features': 0,
+    'translation_key': 'external_heat_source_heat_request',
+    'unique_id': '12345678_external_heat_source_heat_request_1',
+    'unit_of_measurement': None,
+  })
+# ---
+# name: test_binary_sensors[en][binary_sensor.keba_keenergy_12345678_external_heat_source_heat_request_1-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'External heat source 1 Heating request',
@@ -483,7 +1815,44 @@
     'state': 'on',
   })
 # ---
-# name: test_binary_sensors[en][binary_sensor.keba_keenergy_12345678_external_heat_source_heat_request_2]
+# name: test_binary_sensors[en][binary_sensor.keba_keenergy_12345678_external_heat_source_heat_request_2-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'device_class': None,
+    'device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_external_heat_source_2')]>,
+    'disabled_by': None,
+    'domain': 'binary_sensor',
+    'entity_category': None,
+    'entity_id': 'binary_sensor.keba_keenergy_12345678_external_heat_source_heat_request_2',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': None,
+    'options': dict({
+    }),
+    'original_device_class': None,
+    'original_icon': None,
+    'original_name': 'Heating request',
+    'platform': 'keba_keenergy',
+    'previous_unique_id': None,
+    'suggested_object_id': 'keba_keenergy_12345678_external_heat_source_heat_request_2',
+    'supported_features': 0,
+    'translation_key': 'external_heat_source_heat_request',
+    'unique_id': '12345678_external_heat_source_heat_request_2',
+    'unit_of_measurement': None,
+  })
+# ---
+# name: test_binary_sensors[en][binary_sensor.keba_keenergy_12345678_external_heat_source_heat_request_2-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'External heat source 2 Heating request',
@@ -496,7 +1865,44 @@
     'state': 'on',
   })
 # ---
-# name: test_binary_sensors[en][binary_sensor.keba_keenergy_12345678_heat_circuit_pump_state_1]
+# name: test_binary_sensors[en][binary_sensor.keba_keenergy_12345678_heat_circuit_pump_state_1-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'device_class': None,
+    'device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_heat_circuit_1')]>,
+    'disabled_by': None,
+    'domain': 'binary_sensor',
+    'entity_category': None,
+    'entity_id': 'binary_sensor.keba_keenergy_12345678_heat_circuit_pump_state_1',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': None,
+    'options': dict({
+    }),
+    'original_device_class': <BinarySensorDeviceClass.RUNNING: 'running'>,
+    'original_icon': None,
+    'original_name': 'Pump',
+    'platform': 'keba_keenergy',
+    'previous_unique_id': None,
+    'suggested_object_id': 'keba_keenergy_12345678_heat_circuit_pump_state_1',
+    'supported_features': 0,
+    'translation_key': 'heating_circuit_pump_state',
+    'unique_id': '12345678_heat_circuit_pump_state_1',
+    'unit_of_measurement': None,
+  })
+# ---
+# name: test_binary_sensors[en][binary_sensor.keba_keenergy_12345678_heat_circuit_pump_state_1-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'running',
@@ -510,7 +1916,44 @@
     'state': 'on',
   })
 # ---
-# name: test_binary_sensors[en][binary_sensor.keba_keenergy_12345678_heat_pump_consuming_excess_energy]
+# name: test_binary_sensors[en][binary_sensor.keba_keenergy_12345678_heat_pump_consuming_excess_energy-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'device_class': None,
+    'device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_heat_pump')]>,
+    'disabled_by': None,
+    'domain': 'binary_sensor',
+    'entity_category': None,
+    'entity_id': 'binary_sensor.keba_keenergy_12345678_heat_pump_consuming_excess_energy',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': None,
+    'options': dict({
+    }),
+    'original_device_class': None,
+    'original_icon': 'mdi:solar-power',
+    'original_name': 'PV surplus',
+    'platform': 'keba_keenergy',
+    'previous_unique_id': None,
+    'suggested_object_id': 'keba_keenergy_12345678_heat_pump_consuming_excess_energy',
+    'supported_features': 0,
+    'translation_key': 'heat_pump_consuming_excess_energy',
+    'unique_id': '12345678_heat_pump_consuming_excess_energy',
+    'unit_of_measurement': None,
+  })
+# ---
+# name: test_binary_sensors[en][binary_sensor.keba_keenergy_12345678_heat_pump_consuming_excess_energy-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Heat pump PV surplus',
@@ -524,7 +1967,44 @@
     'state': 'on',
   })
 # ---
-# name: test_binary_sensors[en][binary_sensor.keba_keenergy_12345678_heat_pump_has_compressor_failure]
+# name: test_binary_sensors[en][binary_sensor.keba_keenergy_12345678_heat_pump_has_compressor_failure-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'device_class': None,
+    'device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_heat_pump')]>,
+    'disabled_by': None,
+    'domain': 'binary_sensor',
+    'entity_category': <EntityCategory.DIAGNOSTIC: 'diagnostic'>,
+    'entity_id': 'binary_sensor.keba_keenergy_12345678_heat_pump_has_compressor_failure',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': None,
+    'options': dict({
+    }),
+    'original_device_class': <BinarySensorDeviceClass.PROBLEM: 'problem'>,
+    'original_icon': None,
+    'original_name': 'Compressor',
+    'platform': 'keba_keenergy',
+    'previous_unique_id': None,
+    'suggested_object_id': 'keba_keenergy_12345678_heat_pump_has_compressor_failure',
+    'supported_features': 0,
+    'translation_key': 'heat_pump_compressor_failure',
+    'unique_id': '12345678_heat_pump_has_compressor_failure',
+    'unit_of_measurement': None,
+  })
+# ---
+# name: test_binary_sensors[en][binary_sensor.keba_keenergy_12345678_heat_pump_has_compressor_failure-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'problem',
@@ -538,7 +2018,44 @@
     'state': 'off',
   })
 # ---
-# name: test_binary_sensors[en][binary_sensor.keba_keenergy_12345678_heat_pump_has_source_actuator_failure]
+# name: test_binary_sensors[en][binary_sensor.keba_keenergy_12345678_heat_pump_has_source_actuator_failure-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'device_class': None,
+    'device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_heat_pump')]>,
+    'disabled_by': None,
+    'domain': 'binary_sensor',
+    'entity_category': <EntityCategory.DIAGNOSTIC: 'diagnostic'>,
+    'entity_id': 'binary_sensor.keba_keenergy_12345678_heat_pump_has_source_actuator_failure',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': None,
+    'options': dict({
+    }),
+    'original_device_class': <BinarySensorDeviceClass.PROBLEM: 'problem'>,
+    'original_icon': None,
+    'original_name': 'Source actuator',
+    'platform': 'keba_keenergy',
+    'previous_unique_id': None,
+    'suggested_object_id': 'keba_keenergy_12345678_heat_pump_has_source_actuator_failure',
+    'supported_features': 0,
+    'translation_key': 'heat_pump_source_actuator_failure',
+    'unique_id': '12345678_heat_pump_has_source_actuator_failure',
+    'unit_of_measurement': None,
+  })
+# ---
+# name: test_binary_sensors[en][binary_sensor.keba_keenergy_12345678_heat_pump_has_source_actuator_failure-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'problem',
@@ -552,7 +2069,44 @@
     'state': 'off',
   })
 # ---
-# name: test_binary_sensors[en][binary_sensor.keba_keenergy_12345678_heat_pump_has_source_failure]
+# name: test_binary_sensors[en][binary_sensor.keba_keenergy_12345678_heat_pump_has_source_failure-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'device_class': None,
+    'device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_heat_pump')]>,
+    'disabled_by': None,
+    'domain': 'binary_sensor',
+    'entity_category': <EntityCategory.DIAGNOSTIC: 'diagnostic'>,
+    'entity_id': 'binary_sensor.keba_keenergy_12345678_heat_pump_has_source_failure',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': None,
+    'options': dict({
+    }),
+    'original_device_class': <BinarySensorDeviceClass.PROBLEM: 'problem'>,
+    'original_icon': None,
+    'original_name': 'Source',
+    'platform': 'keba_keenergy',
+    'previous_unique_id': None,
+    'suggested_object_id': 'keba_keenergy_12345678_heat_pump_has_source_failure',
+    'supported_features': 0,
+    'translation_key': 'heat_pump_source_failure',
+    'unique_id': '12345678_heat_pump_has_source_failure',
+    'unit_of_measurement': None,
+  })
+# ---
+# name: test_binary_sensors[en][binary_sensor.keba_keenergy_12345678_heat_pump_has_source_failure-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'problem',
@@ -566,7 +2120,44 @@
     'state': 'off',
   })
 # ---
-# name: test_binary_sensors[en][binary_sensor.keba_keenergy_12345678_heat_pump_has_source_pressure_failure]
+# name: test_binary_sensors[en][binary_sensor.keba_keenergy_12345678_heat_pump_has_source_pressure_failure-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'device_class': None,
+    'device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_heat_pump')]>,
+    'disabled_by': None,
+    'domain': 'binary_sensor',
+    'entity_category': <EntityCategory.DIAGNOSTIC: 'diagnostic'>,
+    'entity_id': 'binary_sensor.keba_keenergy_12345678_heat_pump_has_source_pressure_failure',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': None,
+    'options': dict({
+    }),
+    'original_device_class': <BinarySensorDeviceClass.PROBLEM: 'problem'>,
+    'original_icon': None,
+    'original_name': 'Source pressure',
+    'platform': 'keba_keenergy',
+    'previous_unique_id': None,
+    'suggested_object_id': 'keba_keenergy_12345678_heat_pump_has_source_pressure_failure',
+    'supported_features': 0,
+    'translation_key': 'heat_pump_source_pressure_failure',
+    'unique_id': '12345678_heat_pump_has_source_pressure_failure',
+    'unit_of_measurement': None,
+  })
+# ---
+# name: test_binary_sensors[en][binary_sensor.keba_keenergy_12345678_heat_pump_has_source_pressure_failure-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'problem',
@@ -580,7 +2171,44 @@
     'state': 'off',
   })
 # ---
-# name: test_binary_sensors[en][binary_sensor.keba_keenergy_12345678_heat_pump_has_three_phase_failure]
+# name: test_binary_sensors[en][binary_sensor.keba_keenergy_12345678_heat_pump_has_three_phase_failure-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'device_class': None,
+    'device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_heat_pump')]>,
+    'disabled_by': None,
+    'domain': 'binary_sensor',
+    'entity_category': <EntityCategory.DIAGNOSTIC: 'diagnostic'>,
+    'entity_id': 'binary_sensor.keba_keenergy_12345678_heat_pump_has_three_phase_failure',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': None,
+    'options': dict({
+    }),
+    'original_device_class': <BinarySensorDeviceClass.PROBLEM: 'problem'>,
+    'original_icon': None,
+    'original_name': 'Three-phase',
+    'platform': 'keba_keenergy',
+    'previous_unique_id': None,
+    'suggested_object_id': 'keba_keenergy_12345678_heat_pump_has_three_phase_failure',
+    'supported_features': 0,
+    'translation_key': 'heat_pump_three_phase_failure',
+    'unique_id': '12345678_heat_pump_has_three_phase_failure',
+    'unit_of_measurement': None,
+  })
+# ---
+# name: test_binary_sensors[en][binary_sensor.keba_keenergy_12345678_heat_pump_has_three_phase_failure-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'problem',
@@ -594,7 +2222,44 @@
     'state': 'off',
   })
 # ---
-# name: test_binary_sensors[en][binary_sensor.keba_keenergy_12345678_heat_pump_has_vfd_failure]
+# name: test_binary_sensors[en][binary_sensor.keba_keenergy_12345678_heat_pump_has_vfd_failure-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'device_class': None,
+    'device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_heat_pump')]>,
+    'disabled_by': None,
+    'domain': 'binary_sensor',
+    'entity_category': <EntityCategory.DIAGNOSTIC: 'diagnostic'>,
+    'entity_id': 'binary_sensor.keba_keenergy_12345678_heat_pump_has_vfd_failure',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': None,
+    'options': dict({
+    }),
+    'original_device_class': <BinarySensorDeviceClass.PROBLEM: 'problem'>,
+    'original_icon': None,
+    'original_name': 'Frequency inverter',
+    'platform': 'keba_keenergy',
+    'previous_unique_id': None,
+    'suggested_object_id': 'keba_keenergy_12345678_heat_pump_has_vfd_failure',
+    'supported_features': 0,
+    'translation_key': 'heat_pump_vfd_failure',
+    'unique_id': '12345678_heat_pump_has_vfd_failure',
+    'unit_of_measurement': None,
+  })
+# ---
+# name: test_binary_sensors[en][binary_sensor.keba_keenergy_12345678_heat_pump_has_vfd_failure-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'problem',
@@ -608,7 +2273,44 @@
     'state': 'off',
   })
 # ---
-# name: test_binary_sensors[en][binary_sensor.keba_keenergy_12345678_heat_pump_heat_request]
+# name: test_binary_sensors[en][binary_sensor.keba_keenergy_12345678_heat_pump_heat_request-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'device_class': None,
+    'device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_heat_pump')]>,
+    'disabled_by': None,
+    'domain': 'binary_sensor',
+    'entity_category': None,
+    'entity_id': 'binary_sensor.keba_keenergy_12345678_heat_pump_heat_request',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': None,
+    'options': dict({
+    }),
+    'original_device_class': None,
+    'original_icon': None,
+    'original_name': 'Request',
+    'platform': 'keba_keenergy',
+    'previous_unique_id': None,
+    'suggested_object_id': 'keba_keenergy_12345678_heat_pump_heat_request',
+    'supported_features': 0,
+    'translation_key': 'heat_pump_request',
+    'unique_id': '12345678_heat_pump_heat_request',
+    'unit_of_measurement': None,
+  })
+# ---
+# name: test_binary_sensors[en][binary_sensor.keba_keenergy_12345678_heat_pump_heat_request-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Heat pump Request',
@@ -621,7 +2323,44 @@
     'state': 'off',
   })
 # ---
-# name: test_binary_sensors[en][binary_sensor.keba_keenergy_12345678_hot_water_tank_circulation_pump_state_1]
+# name: test_binary_sensors[en][binary_sensor.keba_keenergy_12345678_hot_water_tank_circulation_pump_state_1-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'device_class': None,
+    'device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_hot_water_tank_1')]>,
+    'disabled_by': None,
+    'domain': 'binary_sensor',
+    'entity_category': None,
+    'entity_id': 'binary_sensor.keba_keenergy_12345678_hot_water_tank_circulation_pump_state_1',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': None,
+    'options': dict({
+    }),
+    'original_device_class': <BinarySensorDeviceClass.RUNNING: 'running'>,
+    'original_icon': None,
+    'original_name': 'Circulation pump',
+    'platform': 'keba_keenergy',
+    'previous_unique_id': None,
+    'suggested_object_id': 'keba_keenergy_12345678_hot_water_tank_circulation_pump_state_1',
+    'supported_features': 0,
+    'translation_key': 'dhw_tank_circulation_pump_state',
+    'unique_id': '12345678_hot_water_tank_circulation_pump_state_1',
+    'unit_of_measurement': None,
+  })
+# ---
+# name: test_binary_sensors[en][binary_sensor.keba_keenergy_12345678_hot_water_tank_circulation_pump_state_1-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'running',
@@ -635,7 +2374,44 @@
     'state': 'on',
   })
 # ---
-# name: test_binary_sensors[en][binary_sensor.keba_keenergy_12345678_hot_water_tank_circulation_pump_state_2]
+# name: test_binary_sensors[en][binary_sensor.keba_keenergy_12345678_hot_water_tank_circulation_pump_state_2-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'device_class': None,
+    'device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_hot_water_tank_2')]>,
+    'disabled_by': None,
+    'domain': 'binary_sensor',
+    'entity_category': None,
+    'entity_id': 'binary_sensor.keba_keenergy_12345678_hot_water_tank_circulation_pump_state_2',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': None,
+    'options': dict({
+    }),
+    'original_device_class': <BinarySensorDeviceClass.RUNNING: 'running'>,
+    'original_icon': None,
+    'original_name': 'Circulation pump',
+    'platform': 'keba_keenergy',
+    'previous_unique_id': None,
+    'suggested_object_id': 'keba_keenergy_12345678_hot_water_tank_circulation_pump_state_2',
+    'supported_features': 0,
+    'translation_key': 'dhw_tank_circulation_pump_state',
+    'unique_id': '12345678_hot_water_tank_circulation_pump_state_2',
+    'unit_of_measurement': None,
+  })
+# ---
+# name: test_binary_sensors[en][binary_sensor.keba_keenergy_12345678_hot_water_tank_circulation_pump_state_2-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'running',
@@ -649,7 +2425,44 @@
     'state': 'off',
   })
 # ---
-# name: test_binary_sensors[en][binary_sensor.keba_keenergy_12345678_hot_water_tank_heat_request_1]
+# name: test_binary_sensors[en][binary_sensor.keba_keenergy_12345678_hot_water_tank_heat_request_1-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'device_class': None,
+    'device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_hot_water_tank_1')]>,
+    'disabled_by': None,
+    'domain': 'binary_sensor',
+    'entity_category': None,
+    'entity_id': 'binary_sensor.keba_keenergy_12345678_hot_water_tank_heat_request_1',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': None,
+    'options': dict({
+    }),
+    'original_device_class': None,
+    'original_icon': None,
+    'original_name': 'Heating request',
+    'platform': 'keba_keenergy',
+    'previous_unique_id': None,
+    'suggested_object_id': 'keba_keenergy_12345678_hot_water_tank_heat_request_1',
+    'supported_features': 0,
+    'translation_key': 'dhw_tank_heat_request',
+    'unique_id': '12345678_hot_water_tank_heat_request_1',
+    'unit_of_measurement': None,
+  })
+# ---
+# name: test_binary_sensors[en][binary_sensor.keba_keenergy_12345678_hot_water_tank_heat_request_1-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Hot water tank 1 Heating request',
@@ -662,7 +2475,44 @@
     'state': 'off',
   })
 # ---
-# name: test_binary_sensors[en][binary_sensor.keba_keenergy_12345678_hot_water_tank_heat_request_2]
+# name: test_binary_sensors[en][binary_sensor.keba_keenergy_12345678_hot_water_tank_heat_request_2-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'device_class': None,
+    'device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_hot_water_tank_2')]>,
+    'disabled_by': None,
+    'domain': 'binary_sensor',
+    'entity_category': None,
+    'entity_id': 'binary_sensor.keba_keenergy_12345678_hot_water_tank_heat_request_2',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': None,
+    'options': dict({
+    }),
+    'original_device_class': None,
+    'original_icon': None,
+    'original_name': 'Heating request',
+    'platform': 'keba_keenergy',
+    'previous_unique_id': None,
+    'suggested_object_id': 'keba_keenergy_12345678_hot_water_tank_heat_request_2',
+    'supported_features': 0,
+    'translation_key': 'dhw_tank_heat_request',
+    'unique_id': '12345678_hot_water_tank_heat_request_2',
+    'unit_of_measurement': None,
+  })
+# ---
+# name: test_binary_sensors[en][binary_sensor.keba_keenergy_12345678_hot_water_tank_heat_request_2-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Hot water tank 2 Heating request',
@@ -675,7 +2525,44 @@
     'state': 'on',
   })
 # ---
-# name: test_binary_sensors[en][binary_sensor.keba_keenergy_12345678_hot_water_tank_hot_water_flow_1]
+# name: test_binary_sensors[en][binary_sensor.keba_keenergy_12345678_hot_water_tank_hot_water_flow_1-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'device_class': None,
+    'device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_hot_water_tank_1')]>,
+    'disabled_by': None,
+    'domain': 'binary_sensor',
+    'entity_category': None,
+    'entity_id': 'binary_sensor.keba_keenergy_12345678_hot_water_tank_hot_water_flow_1',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': None,
+    'options': dict({
+    }),
+    'original_device_class': None,
+    'original_icon': None,
+    'original_name': 'Fresh water flow',
+    'platform': 'keba_keenergy',
+    'previous_unique_id': None,
+    'suggested_object_id': 'keba_keenergy_12345678_hot_water_tank_hot_water_flow_1',
+    'supported_features': 0,
+    'translation_key': 'dhw_tank_hot_water_flow',
+    'unique_id': '12345678_hot_water_tank_hot_water_flow_1',
+    'unit_of_measurement': None,
+  })
+# ---
+# name: test_binary_sensors[en][binary_sensor.keba_keenergy_12345678_hot_water_tank_hot_water_flow_1-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Hot water tank 1 Fresh water flow',
@@ -688,7 +2575,44 @@
     'state': 'off',
   })
 # ---
-# name: test_binary_sensors[en][binary_sensor.keba_keenergy_12345678_photovoltaics_excess_energy_active]
+# name: test_binary_sensors[en][binary_sensor.keba_keenergy_12345678_photovoltaics_excess_energy_active-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'device_class': None,
+    'device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_photovoltaics')]>,
+    'disabled_by': None,
+    'domain': 'binary_sensor',
+    'entity_category': None,
+    'entity_id': 'binary_sensor.keba_keenergy_12345678_photovoltaics_excess_energy_active',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': None,
+    'options': dict({
+    }),
+    'original_device_class': None,
+    'original_icon': None,
+    'original_name': 'PV surplus',
+    'platform': 'keba_keenergy',
+    'previous_unique_id': None,
+    'suggested_object_id': 'keba_keenergy_12345678_photovoltaics_excess_energy_active',
+    'supported_features': 0,
+    'translation_key': 'photovoltaics_excess_energy',
+    'unique_id': '12345678_photovoltaics_excess_energy_active',
+    'unit_of_measurement': None,
+  })
+# ---
+# name: test_binary_sensors[en][binary_sensor.keba_keenergy_12345678_photovoltaics_excess_energy_active-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Photovoltaics PV surplus',
@@ -701,11 +2625,48 @@
     'state': 'on',
   })
 # ---
-# name: test_binary_sensors[en][binary_sensor.keba_keenergy_12345678_remote_maintenance_connected]
+# name: test_binary_sensors[en][binary_sensor.keba_keenergy_12345678_remote_maintenance_connected-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'device_class': None,
+    'device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_keba_keenergy')]>,
+    'disabled_by': None,
+    'domain': 'binary_sensor',
+    'entity_category': <EntityCategory.DIAGNOSTIC: 'diagnostic'>,
+    'entity_id': 'binary_sensor.keba_keenergy_12345678_remote_maintenance_connected',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': None,
+    'options': dict({
+    }),
+    'original_device_class': <BinarySensorDeviceClass.CONNECTIVITY: 'connectivity'>,
+    'original_icon': None,
+    'original_name': 'Remote maintenance connection',
+    'platform': 'keba_keenergy',
+    'previous_unique_id': None,
+    'suggested_object_id': 'keba_keenergy_12345678_remote_maintenance_connected',
+    'supported_features': 0,
+    'translation_key': 'system_remote_maintenance_connected',
+    'unique_id': '12345678_remote_maintenance_connected',
+    'unit_of_measurement': None,
+  })
+# ---
+# name: test_binary_sensors[en][binary_sensor.keba_keenergy_12345678_remote_maintenance_connected-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'connectivity',
-      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Control unit Remote maintenance connection',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'keba_keenergy Remote maintenance connection',
     }),
     'context': <ANY>,
     'entity_id': 'binary_sensor.keba_keenergy_12345678_remote_maintenance_connected',
@@ -715,11 +2676,48 @@
     'state': 'off',
   })
 # ---
-# name: test_binary_sensors[en][binary_sensor.keba_keenergy_12345678_remote_maintenance_server_reachable]
+# name: test_binary_sensors[en][binary_sensor.keba_keenergy_12345678_remote_maintenance_server_reachable-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'device_class': None,
+    'device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_keba_keenergy')]>,
+    'disabled_by': None,
+    'domain': 'binary_sensor',
+    'entity_category': <EntityCategory.DIAGNOSTIC: 'diagnostic'>,
+    'entity_id': 'binary_sensor.keba_keenergy_12345678_remote_maintenance_server_reachable',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': None,
+    'options': dict({
+    }),
+    'original_device_class': <BinarySensorDeviceClass.CONNECTIVITY: 'connectivity'>,
+    'original_icon': None,
+    'original_name': 'Remote maintenance server',
+    'platform': 'keba_keenergy',
+    'previous_unique_id': None,
+    'suggested_object_id': 'keba_keenergy_12345678_remote_maintenance_server_reachable',
+    'supported_features': 0,
+    'translation_key': 'system_remote_maintenance_server_reachable',
+    'unique_id': '12345678_remote_maintenance_server_reachable',
+    'unit_of_measurement': None,
+  })
+# ---
+# name: test_binary_sensors[en][binary_sensor.keba_keenergy_12345678_remote_maintenance_server_reachable-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'connectivity',
-      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Control unit Remote maintenance server',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'keba_keenergy Remote maintenance server',
     }),
     'context': <ANY>,
     'entity_id': 'binary_sensor.keba_keenergy_12345678_remote_maintenance_server_reachable',
@@ -729,7 +2727,44 @@
     'state': 'on',
   })
 # ---
-# name: test_binary_sensors[en][binary_sensor.keba_keenergy_12345678_solar_circuit_heat_request_1_1]
+# name: test_binary_sensors[en][binary_sensor.keba_keenergy_12345678_solar_circuit_heat_request_1_1-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'device_class': None,
+    'device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_solar_circuit_1')]>,
+    'disabled_by': None,
+    'domain': 'binary_sensor',
+    'entity_category': None,
+    'entity_id': 'binary_sensor.keba_keenergy_12345678_solar_circuit_heat_request_1_1',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': None,
+    'options': dict({
+    }),
+    'original_device_class': None,
+    'original_icon': None,
+    'original_name': 'Heating request 1',
+    'platform': 'keba_keenergy',
+    'previous_unique_id': None,
+    'suggested_object_id': 'keba_keenergy_12345678_solar_circuit_heat_request_1_1',
+    'supported_features': 0,
+    'translation_key': 'solar_circuit_heat_request',
+    'unique_id': '12345678_solar_circuit_heat_request_1_1',
+    'unit_of_measurement': None,
+  })
+# ---
+# name: test_binary_sensors[en][binary_sensor.keba_keenergy_12345678_solar_circuit_heat_request_1_1-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Solar circuit 1 Heating request 1',
@@ -742,7 +2777,44 @@
     'state': 'on',
   })
 # ---
-# name: test_binary_sensors[en][binary_sensor.keba_keenergy_12345678_solar_circuit_heat_request_1_2]
+# name: test_binary_sensors[en][binary_sensor.keba_keenergy_12345678_solar_circuit_heat_request_1_2-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'device_class': None,
+    'device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_solar_circuit_2')]>,
+    'disabled_by': None,
+    'domain': 'binary_sensor',
+    'entity_category': None,
+    'entity_id': 'binary_sensor.keba_keenergy_12345678_solar_circuit_heat_request_1_2',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': None,
+    'options': dict({
+    }),
+    'original_device_class': None,
+    'original_icon': None,
+    'original_name': 'Heating request 1',
+    'platform': 'keba_keenergy',
+    'previous_unique_id': None,
+    'suggested_object_id': 'keba_keenergy_12345678_solar_circuit_heat_request_1_2',
+    'supported_features': 0,
+    'translation_key': 'solar_circuit_heat_request',
+    'unique_id': '12345678_solar_circuit_heat_request_1_2',
+    'unit_of_measurement': None,
+  })
+# ---
+# name: test_binary_sensors[en][binary_sensor.keba_keenergy_12345678_solar_circuit_heat_request_1_2-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Solar circuit 2 Heating request 1',
@@ -755,7 +2827,44 @@
     'state': 'off',
   })
 # ---
-# name: test_binary_sensors[en][binary_sensor.keba_keenergy_12345678_solar_circuit_heat_request_2_1]
+# name: test_binary_sensors[en][binary_sensor.keba_keenergy_12345678_solar_circuit_heat_request_2_1-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'device_class': None,
+    'device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_solar_circuit_1')]>,
+    'disabled_by': None,
+    'domain': 'binary_sensor',
+    'entity_category': None,
+    'entity_id': 'binary_sensor.keba_keenergy_12345678_solar_circuit_heat_request_2_1',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': None,
+    'options': dict({
+    }),
+    'original_device_class': None,
+    'original_icon': None,
+    'original_name': 'Heating request 2',
+    'platform': 'keba_keenergy',
+    'previous_unique_id': None,
+    'suggested_object_id': 'keba_keenergy_12345678_solar_circuit_heat_request_2_1',
+    'supported_features': 0,
+    'translation_key': 'solar_circuit_heat_request',
+    'unique_id': '12345678_solar_circuit_heat_request_2_1',
+    'unit_of_measurement': None,
+  })
+# ---
+# name: test_binary_sensors[en][binary_sensor.keba_keenergy_12345678_solar_circuit_heat_request_2_1-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Solar circuit 1 Heating request 2',
@@ -768,7 +2877,44 @@
     'state': 'off',
   })
 # ---
-# name: test_binary_sensors[en][binary_sensor.keba_keenergy_12345678_solar_circuit_heat_request_2_2]
+# name: test_binary_sensors[en][binary_sensor.keba_keenergy_12345678_solar_circuit_heat_request_2_2-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'device_class': None,
+    'device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_solar_circuit_2')]>,
+    'disabled_by': None,
+    'domain': 'binary_sensor',
+    'entity_category': None,
+    'entity_id': 'binary_sensor.keba_keenergy_12345678_solar_circuit_heat_request_2_2',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': None,
+    'options': dict({
+    }),
+    'original_device_class': None,
+    'original_icon': None,
+    'original_name': 'Heating request 2',
+    'platform': 'keba_keenergy',
+    'previous_unique_id': None,
+    'suggested_object_id': 'keba_keenergy_12345678_solar_circuit_heat_request_2_2',
+    'supported_features': 0,
+    'translation_key': 'solar_circuit_heat_request',
+    'unique_id': '12345678_solar_circuit_heat_request_2_2',
+    'unit_of_measurement': None,
+  })
+# ---
+# name: test_binary_sensors[en][binary_sensor.keba_keenergy_12345678_solar_circuit_heat_request_2_2-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Solar circuit 2 Heating request 2',

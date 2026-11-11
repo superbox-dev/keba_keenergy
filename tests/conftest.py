@@ -10,6 +10,7 @@ import logging
 from http import HTTPStatus
 from typing import TYPE_CHECKING
 from typing import Any
+from unittest.mock import AsyncMock
 from unittest.mock import patch
 
 import pytest
@@ -24,8 +25,10 @@ from custom_components.keba_keenergy.const import PLATFORMS
 from tests.api_data import CURVES_RESPONSE
 from tests.api_data import DEACTIVATED_MESSAGE_IDS
 from tests.api_data import DEVICE_INFO_RESPONSE
+from tests.api_data import ENTRY_ID
 from tests.api_data import HMI_RESPONSE
 from tests.api_data import MESSAGE_ID_SUFFIX
+from tests.api_data import MULTIPLE_DEVICES_DATA_RESPONSE
 from tests.api_data import REMOTE_ACCESS
 from tests.api_data import REMOTE_ACCESS_ACTIVATIONS
 from tests.api_data import REMOTE_ACCESS_RESPONSE_KEYS
@@ -37,6 +40,7 @@ from tests.api_data import AlarmValue
 from tests.api_data import ReadResponse
 from tests.api_data import ReadValue
 from tests.api_data import Response
+from tests.api_data import get_multiple_devices_responses
 
 if TYPE_CHECKING:
     from collections.abc import AsyncGenerator
@@ -45,6 +49,7 @@ if TYPE_CHECKING:
     from collections.abc import Generator
 
     from _pytest.fixtures import SubRequest
+    from homeassistant.const import Platform
     from homeassistant.core import HomeAssistant
     from yarl import URL
 
@@ -118,6 +123,8 @@ class FakeKebaKeEnergyAPI:
         self.hass: HomeAssistant = hass
         self.aioclient_mock: AiohttpClientMocker = aioclient_mock
         self.config_entry: MockConfigEntry = config_entry
+        # The platforms that `setup_integration()` sets up, one for `snapshot_platform()`.
+        self.platforms: list[Platform] = list(PLATFORMS)
         self.responses: list[ReadResponse] = []
         self.curves: HTTPStatus | list[Response] = CURVES_RESPONSE
         self.system_name: str = SYSTEM_RESPONSE["name"]
@@ -423,7 +430,8 @@ class FakeKebaKeEnergyAPI:
         if self.hass.config_entries.async_get_entry(self.config_entry.entry_id) is None:
             self.config_entry.add_to_hass(self.hass)
 
-        assert await self.hass.config_entries.async_setup(self.config_entry.entry_id)
+        with patch("custom_components.keba_keenergy.PLATFORMS", self.platforms):
+            assert await self.hass.config_entries.async_setup(self.config_entry.entry_id)
         # The remote access is read in the background after the setup.
         await self.hass.async_block_till_done(wait_background_tasks=True)
         self._setup_time_zone_request_count = self._time_zone_requests()
@@ -468,10 +476,10 @@ class FakeKebaKeEnergyAPI:
 def fake_api(
     hass: HomeAssistant,
     aioclient_mock: AiohttpClientMocker,
-    config_entry: MockConfigEntry,
+    mock_config_entry: MockConfigEntry,
 ) -> Generator[FakeKebaKeEnergyAPI]:
     """Return the fake Web HMI, every response of a test must be read."""
-    api: FakeKebaKeEnergyAPI = FakeKebaKeEnergyAPI(hass, aioclient_mock, config_entry)
+    api: FakeKebaKeEnergyAPI = FakeKebaKeEnergyAPI(hass, aioclient_mock, mock_config_entry)
     yield api
     assert not api.responses, "every response is read"
 
@@ -484,53 +492,56 @@ def language(hass: HomeAssistant, request: SubRequest) -> str:
 
 
 @pytest.fixture
-def config_entry(request: SubRequest) -> MockConfigEntry:
-    """Return the config entry, parametrized indirectly with `data` and `options` to update.
-
-    The `options` are merged with the default options.
-    """
-    mock_config_entry_data: dict[str, Any] = {
-        "title": "KEBA KeEnergy (ap4400.local)",
-        "data": {
-            CONF_HOST: "10.0.0.100",
-            CONF_SSL: False,
-        },
-        "entry_id": "01KEBAKEENERGY0000000000000",
-        "unique_id": "12345678",
-        "options": {
-            "scan_interval": 20,
-            "scan_interval_tick_system": 1,
-            "scan_interval_tick_heat_pump": 1,
-            "scan_interval_tick_heat_circuit": 1,
-            "scan_interval_tick_solar_circuit": 1,
-            "scan_interval_tick_hot_water_tank": 1,
-            "scan_interval_tick_buffer_tank": 1,
-            "scan_interval_tick_switch_valve": 1,
-            "scan_interval_tick_passive_cooling": 1,
-            "scan_interval_tick_external_heat_source": 1,
-            "scan_interval_tick_photovoltaics": 1,
-        },
+def entry_data() -> dict[str, Any]:
+    """Return the data of the config entry, overridden by `parametrize`."""
+    return {
+        CONF_HOST: "10.0.0.100",
+        CONF_SSL: False,
     }
 
-    if hasattr(request, "param"):
-        param: dict[str, Any] = request.param
-        mock_config_entry_data.update(
-            {**param, "options": {**mock_config_entry_data["options"], **param.get("options", {})}},
-        )
 
+@pytest.fixture
+def entry_options() -> dict[str, Any]:
+    """Return the options of the config entry, overridden by `parametrize`, missing ones keep their defaults."""
+    return {
+        "scan_interval": 20,
+        "scan_interval_tick_system": 1,
+        "scan_interval_tick_heat_pump": 1,
+        "scan_interval_tick_heat_circuit": 1,
+        "scan_interval_tick_solar_circuit": 1,
+        "scan_interval_tick_hot_water_tank": 1,
+        "scan_interval_tick_buffer_tank": 1,
+        "scan_interval_tick_switch_valve": 1,
+        "scan_interval_tick_passive_cooling": 1,
+        "scan_interval_tick_external_heat_source": 1,
+        "scan_interval_tick_photovoltaics": 1,
+    }
+
+
+@pytest.fixture
+def mock_config_entry(entry_data: dict[str, Any], entry_options: dict[str, Any]) -> MockConfigEntry:
+    """Return the config entry with the data and the options."""
     return MockConfigEntry(
         domain=DOMAIN,
-        **mock_config_entry_data,
+        title="KEBA KeEnergy (ap4400.local)",
+        data=entry_data,
+        entry_id=ENTRY_ID,
+        unique_id="12345678",
+        options=entry_options,
     )
 
 
 @pytest.fixture
-def entity_registry_enabled_by_default() -> Generator[None]:
-    """Test fixture that ensures all entities are enabled in the registry."""
-    with (
-        patch(
-            "homeassistant.helpers.entity.Entity.entity_registry_enabled_default",
-            return_value=True,
-        ),
-    ):
-        yield
+async def init_integration(mock_config_entry: MockConfigEntry, fake_api: FakeKebaKeEnergyAPI) -> MockConfigEntry:
+    """Set up the integration with several devices of each type and return its config entry."""
+    fake_api.responses = get_multiple_devices_responses(MULTIPLE_DEVICES_DATA_RESPONSE)
+    await fake_api.setup_integration()
+
+    return mock_config_entry
+
+
+@pytest.fixture
+def mock_setup_entry() -> Generator[AsyncMock]:
+    """Replace the setup of the config entry, the config flow tests only test the flow."""
+    with patch("custom_components.keba_keenergy.async_setup_entry", return_value=True) as setup_entry:
+        yield setup_entry

@@ -10,34 +10,42 @@ import pytest
 from homeassistant.const import STATE_OFF
 from homeassistant.const import STATE_UNKNOWN
 from homeassistant.const import Platform
+from pytest_homeassistant.common import snapshot_platform
 
-from tests import get_platform_states
 from tests import get_state
+from tests import next_update
+from tests.api_data import ENTRY_ID
 from tests.api_data import MULTIPLE_DEVICES_DATA_RESPONSE
+from tests.api_data import NOW
 from tests.api_data import get_multiple_devices_responses
 from tests.test_binary_sensor_data import COMPRESSOR_FAILURE_ENTITY_ID
 from tests.test_binary_sensor_data import COMPRESSOR_FAILURE_MESSAGE_ID
 
 if TYPE_CHECKING:
+    from freezegun.api import FrozenDateTimeFactory
     from homeassistant.core import HomeAssistant
     from homeassistant.core import State
+    from homeassistant.helpers import entity_registry as er
     from syrupy.assertion import SnapshotAssertion
 
     from tests.conftest import FakeKebaKeEnergyAPI
+
+pytestmark = pytest.mark.freeze_time(NOW)
 
 
 @pytest.mark.usefixtures("entity_registry_enabled_by_default", "language")
 async def test_binary_sensors(
     hass: HomeAssistant,
+    entity_registry: er.EntityRegistry,
     fake_api: FakeKebaKeEnergyAPI,
     snapshot: SnapshotAssertion,
 ) -> None:
     """Test the states of all binary sensors."""
+    fake_api.platforms = [Platform.BINARY_SENSOR]
     fake_api.responses = get_multiple_devices_responses(MULTIPLE_DEVICES_DATA_RESPONSE, has_passive_cooling="true")
     await fake_api.setup_integration()
 
-    for state in get_platform_states(hass, fake_api.config_entry, Platform.BINARY_SENSOR):
-        assert state == snapshot(name=state.entity_id)
+    await snapshot_platform(hass, entity_registry, snapshot, ENTRY_ID)
 
 
 @pytest.mark.parametrize(
@@ -60,6 +68,7 @@ async def test_failure_input_not_in_use(
 
 async def test_failure_input_in_use_again(
     hass: HomeAssistant,
+    freezer: FrozenDateTimeFactory,
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
     """Test that a failure input has a state again after the next update, once the control unit reports it in use."""
@@ -68,7 +77,7 @@ async def test_failure_input_in_use_again(
     await fake_api.setup_integration()
 
     fake_api.message_ids = {}
-    await fake_api.config_entry.runtime_data.data_coordinator.async_refresh()
+    await next_update(hass, freezer)
 
     state: State = get_state(hass, COMPRESSOR_FAILURE_ENTITY_ID)
     assert state.state == STATE_OFF

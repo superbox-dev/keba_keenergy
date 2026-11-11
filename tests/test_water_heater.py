@@ -23,13 +23,16 @@ from homeassistant.const import SERVICE_TURN_ON
 from homeassistant.const import STATE_OFF
 from homeassistant.const import Platform
 from homeassistant.helpers.entity_component import async_update_entity
+from pytest_homeassistant.common import snapshot_platform
 
 from tests import fire_debounced_writes
-from tests import get_platform_states
 from tests import get_state
+from tests import next_update
 from tests import set_target_temperature
+from tests.api_data import ENTRY_ID
 from tests.api_data import MULTIPLE_DEVICES_DATA_RESPONSE
 from tests.api_data import MULTIPLE_DEVICES_OTHER_MODES_DATA_RESPONSE
+from tests.api_data import NOW
 from tests.api_data import Response
 from tests.api_data import get_multiple_devices_responses
 from tests.api_data import get_single_device_data_response
@@ -45,25 +48,30 @@ from tests.test_water_heater_data import HOT_WATER_TANK_ENTITY_ID
 from tests.test_water_heater_data import get_operating_mode_write
 
 if TYPE_CHECKING:
+    from freezegun.api import FrozenDateTimeFactory
     from homeassistant.core import HomeAssistant
     from homeassistant.core import State
+    from homeassistant.helpers import entity_registry as er
     from syrupy.assertion import SnapshotAssertion
 
     from tests.conftest import FakeKebaKeEnergyAPI
+
+pytestmark = pytest.mark.freeze_time(NOW)
 
 
 @pytest.mark.usefixtures("entity_registry_enabled_by_default", "language")
 async def test_water_heater(
     hass: HomeAssistant,
+    entity_registry: er.EntityRegistry,
     fake_api: FakeKebaKeEnergyAPI,
     snapshot: SnapshotAssertion,
 ) -> None:
     """Test the states of all water heater entities."""
+    fake_api.platforms = [Platform.WATER_HEATER]
     fake_api.responses = get_multiple_devices_responses(MULTIPLE_DEVICES_DATA_RESPONSE)
     await fake_api.setup_integration()
 
-    for state in get_platform_states(hass, fake_api.config_entry, Platform.WATER_HEATER):
-        assert state == snapshot(name=state.entity_id)
+    await snapshot_platform(hass, entity_registry, snapshot, ENTRY_ID)
 
 
 @pytest.mark.parametrize(
@@ -185,17 +193,16 @@ async def test_set_operation_mode(
     assert fake_api.write_requests() == expected_writes
 
 
+@pytest.mark.usefixtures("init_integration")
 async def test_set_temperature(
     hass: HomeAssistant,
+    freezer: FrozenDateTimeFactory,
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
     """Test setting the target temperature of a hot water tank."""
-    fake_api.responses = get_multiple_devices_responses(MULTIPLE_DEVICES_DATA_RESPONSE)
-    await fake_api.setup_integration()
-
     await set_target_temperature(hass, HOT_WATER_TANK_1_ENTITY_ID, 45)
 
-    await fire_debounced_writes(hass)
+    await fire_debounced_writes(hass, freezer)
 
     assert fake_api.write_requests() == [
         '[{"name": "APPL.CtrlAppl.sParam.hotWaterTank[0].param.normalSetTempMax.value", "value": "45.0"}]',
@@ -204,6 +211,7 @@ async def test_set_temperature(
 
 async def test_set_temperature_debounced(
     hass: HomeAssistant,
+    freezer: FrozenDateTimeFactory,
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
     """Test that quick target temperature changes are shown at once and written once, with the last value."""
@@ -225,7 +233,7 @@ async def test_set_temperature_debounced(
     assert state.attributes[ATTR_TEMPERATURE] == temperatures[-1]
     assert fake_api.write_requests() == []
 
-    await fire_debounced_writes(hass)
+    await fire_debounced_writes(hass, freezer)
 
     assert fake_api.write_requests() == [
         '[{"name": "APPL.CtrlAppl.sParam.hotWaterTank[0].param.normalSetTempMax.value", "value": "44.0"}]',
@@ -234,6 +242,7 @@ async def test_set_temperature_debounced(
 
 async def test_set_unchanged_target_temperature(
     hass: HomeAssistant,
+    freezer: FrozenDateTimeFactory,
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
     """Test that the current target temperature of a hot water tank is not written again."""
@@ -244,13 +253,14 @@ async def test_set_unchanged_target_temperature(
 
     await set_target_temperature(hass, HOT_WATER_TANK_ENTITY_ID, 51)
 
-    await fire_debounced_writes(hass)
+    await fire_debounced_writes(hass, freezer)
 
     assert fake_api.write_requests() == []
 
 
 async def test_limits_after_update(
     hass: HomeAssistant,
+    freezer: FrozenDateTimeFactory,
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
     """Test that a hot water tank uses the limits from the API once an update provides them."""
@@ -267,7 +277,7 @@ async def test_limits_after_update(
     state: State = get_state(hass, HOT_WATER_TANK_ENTITY_ID)
     assert (state.attributes[ATTR_MIN_TEMP], state.attributes[ATTR_MAX_TEMP]) == DEFAULT_LIMITS
 
-    await fake_api.config_entry.runtime_data.data_coordinator.async_refresh()
+    await next_update(hass, freezer)
 
     state = get_state(hass, HOT_WATER_TANK_ENTITY_ID)
     assert (state.attributes[ATTR_MIN_TEMP], state.attributes[ATTR_MAX_TEMP]) == (0, 52)

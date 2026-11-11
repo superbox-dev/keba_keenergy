@@ -17,7 +17,7 @@ from homeassistant.const import ATTR_UNIT_OF_MEASUREMENT
 from homeassistant.const import PERCENTAGE
 from homeassistant.const import STATE_UNKNOWN
 from homeassistant.const import Platform
-from homeassistant.helpers import entity_registry as er
+from pytest_homeassistant.common import snapshot_platform
 
 from custom_components.keba_keenergy.const import ATTR_POINTS
 from custom_components.keba_keenergy.const import DOMAIN
@@ -25,37 +25,46 @@ from tests import get_option_translations
 from tests import get_platform_states
 from tests import get_state
 from tests.api_data import CURVES_WITHOUT_NAMES_RESPONSE
+from tests.api_data import ENTRY_ID
 from tests.api_data import MULTIPLE_DEVICES_DATA_RESPONSE
+from tests.api_data import NOW
 from tests.api_data import get_multiple_devices_responses
 from tests.api_data import update_response
 
 if TYPE_CHECKING:
     from homeassistant.core import HomeAssistant
     from homeassistant.core import State
+    from homeassistant.helpers import entity_registry as er
+    from pytest_homeassistant.common import MockConfigEntry
     from syrupy.assertion import SnapshotAssertion
 
     from tests.conftest import FakeKebaKeEnergyAPI
+
+pytestmark = pytest.mark.freeze_time(NOW)
 
 
 @pytest.mark.usefixtures("entity_registry_enabled_by_default", "language")
 async def test_sensors(
     hass: HomeAssistant,
+    entity_registry: er.EntityRegistry,
     fake_api: FakeKebaKeEnergyAPI,
     snapshot: SnapshotAssertion,
 ) -> None:
     """Test the states of all sensors, their displayed values and the translated options of the enum sensors."""
+    fake_api.platforms = [Platform.SENSOR]
     fake_api.responses = get_multiple_devices_responses(MULTIPLE_DEVICES_DATA_RESPONSE, has_passive_cooling="true")
     await fake_api.setup_integration()
 
-    states: list[State] = get_platform_states(hass, fake_api.config_entry, Platform.SENSOR)
+    await snapshot_platform(hass, entity_registry, snapshot, ENTRY_ID)
+
+    states: list[State] = get_platform_states(hass, entity_registry, Platform.SENSOR)
     enum_states: list[State] = [state for state in states if ATTR_OPTIONS in state.attributes]
     value_states: list[State] = [state for state in states if ATTR_OPTIONS not in state.attributes]
 
-    for state in states:
-        assert state == snapshot(name=state.entity_id)
-
     for state in enum_states:
-        assert await get_option_translations(hass, state) == snapshot(name=f"{state.entity_id}_options")
+        assert await get_option_translations(hass, entity_registry, state) == snapshot(
+            name=f"{state.entity_id}_options"
+        )
 
     for state in value_states:
         # The value as Home Assistant shows it, rounded to the display precision of the entity, with its unit.
@@ -69,36 +78,41 @@ async def test_sensors(
 
 
 @pytest.mark.parametrize(
-    ("unique_id", "expected"),
+    "sensor",
     [
-        ("12345678_heat_pump_operating_time", ("1058.06333333333", "h")),
-        ("12345678_photovoltaics_daily_energy", ("437.699972222222", "kWh")),
-        ("12345678_heat_pump_heating_power", ("3.2187521", "W")),
+        ("12345678_heat_pump_operating_time", "1058.06333333333", "h"),
+        ("12345678_photovoltaics_daily_energy", "437.699972222222", "kWh"),
+        ("12345678_heat_pump_heating_power", "3.2187521", "W"),
     ],
     ids=["heat_pump_operating_time", "photovoltaics_daily_energy", "heat_pump_heating_power"],
 )
 @pytest.mark.usefixtures("entity_registry_enabled_by_default")
 async def test_converted_sensor_keeps_registered_unit(
     hass: HomeAssistant,
+    entity_registry: er.EntityRegistry,
+    mock_config_entry: MockConfigEntry,
     fake_api: FakeKebaKeEnergyAPI,
-    unique_id: str,
-    expected: tuple[str, str],
+    sensor: tuple[str, str, str],
 ) -> None:
-    """Test that an existing sensor keeps the unit it was registered with before the unit came from the endpoint."""
-    fake_api.config_entry.add_to_hass(hass)
-    entry: er.RegistryEntry = er.async_get(hass).async_get_or_create(
+    """Test that an existing sensor keeps the unit it was registered with before the unit came from the endpoint.
+
+    `sensor` is the unique ID, the expected state and the registered unit.
+    """
+    unique_id, expected_state, unit = sensor
+    mock_config_entry.add_to_hass(hass)
+    entry: er.RegistryEntry = entity_registry.async_get_or_create(
         SENSOR_DOMAIN,
         DOMAIN,
         unique_id,
-        config_entry=fake_api.config_entry,
+        config_entry=mock_config_entry,
         suggested_object_id=f"{DOMAIN}_{unique_id}",
-        unit_of_measurement=expected[1],
+        unit_of_measurement=unit,
     )
     fake_api.responses = get_multiple_devices_responses(MULTIPLE_DEVICES_DATA_RESPONSE)
     await fake_api.setup_integration()
 
     state: State = get_state(hass, entry.entity_id)
-    assert (state.state, state.attributes[ATTR_UNIT_OF_MEASUREMENT]) == expected
+    assert (state.state, state.attributes[ATTR_UNIT_OF_MEASUREMENT]) == (expected_state, unit)
 
 
 @pytest.mark.parametrize(
@@ -169,23 +183,20 @@ async def test_sensor_not_in_use(
     ],
     ids=["outdoor_temperature", "solar_circuit_current_temperature"],
 )
-@pytest.mark.usefixtures("entity_registry_enabled_by_default")
+@pytest.mark.usefixtures("entity_registry_enabled_by_default", "init_integration")
 async def test_sensor_deactivated(
     hass: HomeAssistant,
+    entity_registry: er.EntityRegistry,
     fake_api: FakeKebaKeEnergyAPI,
     message_id: str,
     entity_id: str,
 ) -> None:
     """Test that the entity of a deactivated sensor is removed and no longer created."""
-    fake_api.responses = get_multiple_devices_responses(MULTIPLE_DEVICES_DATA_RESPONSE)
-    await fake_api.setup_integration()
-
-    entity_registry: er.EntityRegistry = er.async_get(hass)
     assert entity_registry.async_get(entity_id) is not None
 
     fake_api.message_ids = {message_id: 10}
     fake_api.responses = get_multiple_devices_responses(MULTIPLE_DEVICES_DATA_RESPONSE)
-    await hass.config_entries.async_reload(fake_api.config_entry.entry_id)
+    await hass.config_entries.async_reload(ENTRY_ID)
     await hass.async_block_till_done()
 
     assert entity_registry.async_get(entity_id) is None
@@ -267,25 +278,24 @@ async def test_sensor_raw_value(
 
 
 @pytest.mark.parametrize(
-    ("config_entry", "value", "entity_id", "expected"),
+    ("entry_options", "value", "entity_id", "expected"),
     [
         (
-            {"options": {"mixer_position_percent": True}},
+            {"mixer_position_percent": True},
             ("APPL.CtrlAppl.sParam.heatCircuit[0].heatCircuitMixer.mixer.values.setValueScaled", "0.37"),
             "sensor.keba_keenergy_12345678_heat_circuit_mixer_position_1",
             "37.0",
         ),
         (
-            {"options": {"mixer_position_percent": True}},
+            {"mixer_position_percent": True},
             ("APPL.CtrlAppl.sParam.passivecooling[0].Mixer.mixer.values.setValueScaled", "-0.5"),
             "sensor.keba_keenergy_12345678_passive_cooling_mixer_position",
             "-50.0",
         ),
     ],
-    indirect=["config_entry"],
     ids=["heat_circuit_mixer", "passive_cooling_mixer"],
 )
-@pytest.mark.usefixtures("config_entry", "entity_registry_enabled_by_default")
+@pytest.mark.usefixtures("entity_registry_enabled_by_default")
 async def test_sensor_mixer_position_percent(
     hass: HomeAssistant,
     fake_api: FakeKebaKeEnergyAPI,

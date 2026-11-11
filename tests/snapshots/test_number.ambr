@@ -1,5 +1,47 @@
 # serializer version: 1
-# name: test_numbers[de][number.keba_keenergy_12345678_buffer_tank_excess_energy_target_temperature_1]
+# name: test_numbers[de][number.keba_keenergy_12345678_buffer_tank_excess_energy_target_temperature_1-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': dict({
+      <NumberEntityCapabilityAttribute.MAX: 'max'>: 95.0,
+      <NumberEntityCapabilityAttribute.MIN: 'min'>: 0.0,
+      <NumberEntityCapabilityAttribute.MODE: 'mode'>: <NumberMode.AUTO: 'auto'>,
+      <NumberEntityCapabilityAttribute.STEP: 'step'>: 0.5,
+    }),
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'device_class': None,
+    'device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_buffer_tank_1')]>,
+    'disabled_by': None,
+    'domain': 'number',
+    'entity_category': <EntityCategory.CONFIG: 'config'>,
+    'entity_id': 'number.keba_keenergy_12345678_buffer_tank_excess_energy_target_temperature_1',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': None,
+    'options': dict({
+    }),
+    'original_device_class': <NumberDeviceClass.TEMPERATURE: 'temperature'>,
+    'original_icon': None,
+    'original_name': 'Soll-Temperatur (PV-Überschuss)',
+    'platform': 'keba_keenergy',
+    'previous_unique_id': None,
+    'suggested_object_id': 'keba_keenergy_12345678_buffer_tank_excess_energy_target_temperature_1',
+    'supported_features': 0,
+    'translation_key': 'buffer_tank_excess_energy_target_temperature',
+    'unique_id': '12345678_buffer_tank_excess_energy_target_temperature_1',
+    'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
+  })
+# ---
+# name: test_numbers[de][number.keba_keenergy_12345678_buffer_tank_excess_energy_target_temperature_1-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
@@ -18,7 +60,49 @@
     'state': '75.0',
   })
 # ---
-# name: test_numbers[de][number.keba_keenergy_12345678_buffer_tank_excess_energy_target_temperature_2]
+# name: test_numbers[de][number.keba_keenergy_12345678_buffer_tank_excess_energy_target_temperature_2-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': dict({
+      <NumberEntityCapabilityAttribute.MAX: 'max'>: 95.0,
+      <NumberEntityCapabilityAttribute.MIN: 'min'>: 0.0,
+      <NumberEntityCapabilityAttribute.MODE: 'mode'>: <NumberMode.AUTO: 'auto'>,
+      <NumberEntityCapabilityAttribute.STEP: 'step'>: 0.5,
+    }),
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'device_class': None,
+    'device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_buffer_tank_2')]>,
+    'disabled_by': None,
+    'domain': 'number',
+    'entity_category': <EntityCategory.CONFIG: 'config'>,
+    'entity_id': 'number.keba_keenergy_12345678_buffer_tank_excess_energy_target_temperature_2',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': None,
+    'options': dict({
+    }),
+    'original_device_class': <NumberDeviceClass.TEMPERATURE: 'temperature'>,
+    'original_icon': None,
+    'original_name': 'Soll-Temperatur (PV-Überschuss)',
+    'platform': 'keba_keenergy',
+    'previous_unique_id': None,
+    'suggested_object_id': 'keba_keenergy_12345678_buffer_tank_excess_energy_target_temperature_2',
+    'supported_features': 0,
+    'translation_key': 'buffer_tank_excess_energy_target_temperature',
+    'unique_id': '12345678_buffer_tank_excess_energy_target_temperature_2',
+    'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
+  })
+# ---
+# name: test_numbers[de][number.keba_keenergy_12345678_buffer_tank_excess_energy_target_temperature_2-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
@@ -37,7 +121,49 @@
     'state': '75.0',
   })
 # ---
-# name: test_numbers[de][number.keba_keenergy_12345678_buffer_tank_excess_energy_target_temperature_hysteresis_1]
+# name: test_numbers[de][number.keba_keenergy_12345678_buffer_tank_excess_energy_target_temperature_hysteresis_1-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': dict({
+      <NumberEntityCapabilityAttribute.MAX: 'max'>: 5.0,
+      <NumberEntityCapabilityAttribute.MIN: 'min'>: 0.0,
+      <NumberEntityCapabilityAttribute.MODE: 'mode'>: <NumberMode.AUTO: 'auto'>,
+      <NumberEntityCapabilityAttribute.STEP: 'step'>: 0.1,
+    }),
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'device_class': None,
+    'device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_buffer_tank_1')]>,
+    'disabled_by': None,
+    'domain': 'number',
+    'entity_category': <EntityCategory.CONFIG: 'config'>,
+    'entity_id': 'number.keba_keenergy_12345678_buffer_tank_excess_energy_target_temperature_hysteresis_1',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': None,
+    'options': dict({
+    }),
+    'original_device_class': <NumberDeviceClass.TEMPERATURE: 'temperature'>,
+    'original_icon': None,
+    'original_name': 'Hysterese Soll-Temperatur (PV-Überschuss)',
+    'platform': 'keba_keenergy',
+    'previous_unique_id': None,
+    'suggested_object_id': 'keba_keenergy_12345678_buffer_tank_excess_energy_target_temperature_hysteresis_1',
+    'supported_features': 0,
+    'translation_key': 'buffer_tank_excess_energy_target_temperature_hysteresis',
+    'unique_id': '12345678_buffer_tank_excess_energy_target_temperature_hysteresis_1',
+    'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
+  })
+# ---
+# name: test_numbers[de][number.keba_keenergy_12345678_buffer_tank_excess_energy_target_temperature_hysteresis_1-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
@@ -56,7 +182,49 @@
     'state': '2.0',
   })
 # ---
-# name: test_numbers[de][number.keba_keenergy_12345678_buffer_tank_excess_energy_target_temperature_hysteresis_2]
+# name: test_numbers[de][number.keba_keenergy_12345678_buffer_tank_excess_energy_target_temperature_hysteresis_2-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': dict({
+      <NumberEntityCapabilityAttribute.MAX: 'max'>: 5.0,
+      <NumberEntityCapabilityAttribute.MIN: 'min'>: 0.0,
+      <NumberEntityCapabilityAttribute.MODE: 'mode'>: <NumberMode.AUTO: 'auto'>,
+      <NumberEntityCapabilityAttribute.STEP: 'step'>: 0.1,
+    }),
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'device_class': None,
+    'device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_buffer_tank_2')]>,
+    'disabled_by': None,
+    'domain': 'number',
+    'entity_category': <EntityCategory.CONFIG: 'config'>,
+    'entity_id': 'number.keba_keenergy_12345678_buffer_tank_excess_energy_target_temperature_hysteresis_2',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': None,
+    'options': dict({
+    }),
+    'original_device_class': <NumberDeviceClass.TEMPERATURE: 'temperature'>,
+    'original_icon': None,
+    'original_name': 'Hysterese Soll-Temperatur (PV-Überschuss)',
+    'platform': 'keba_keenergy',
+    'previous_unique_id': None,
+    'suggested_object_id': 'keba_keenergy_12345678_buffer_tank_excess_energy_target_temperature_hysteresis_2',
+    'supported_features': 0,
+    'translation_key': 'buffer_tank_excess_energy_target_temperature_hysteresis',
+    'unique_id': '12345678_buffer_tank_excess_energy_target_temperature_hysteresis_2',
+    'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
+  })
+# ---
+# name: test_numbers[de][number.keba_keenergy_12345678_buffer_tank_excess_energy_target_temperature_hysteresis_2-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
@@ -75,7 +243,49 @@
     'state': '2.0',
   })
 # ---
-# name: test_numbers[de][number.keba_keenergy_12345678_buffer_tank_outdoor_temperature_excess_energy_limit_1]
+# name: test_numbers[de][number.keba_keenergy_12345678_buffer_tank_outdoor_temperature_excess_energy_limit_1-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': dict({
+      <NumberEntityCapabilityAttribute.MAX: 'max'>: 50.0,
+      <NumberEntityCapabilityAttribute.MIN: 'min'>: 0.0,
+      <NumberEntityCapabilityAttribute.MODE: 'mode'>: <NumberMode.AUTO: 'auto'>,
+      <NumberEntityCapabilityAttribute.STEP: 'step'>: 0.5,
+    }),
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'device_class': None,
+    'device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_buffer_tank_1')]>,
+    'disabled_by': None,
+    'domain': 'number',
+    'entity_category': <EntityCategory.CONFIG: 'config'>,
+    'entity_id': 'number.keba_keenergy_12345678_buffer_tank_outdoor_temperature_excess_energy_limit_1',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': None,
+    'options': dict({
+    }),
+    'original_device_class': <NumberDeviceClass.TEMPERATURE: 'temperature'>,
+    'original_icon': None,
+    'original_name': 'Grenze Außentemperatur (PV-Überschuss)',
+    'platform': 'keba_keenergy',
+    'previous_unique_id': None,
+    'suggested_object_id': 'keba_keenergy_12345678_buffer_tank_outdoor_temperature_excess_energy_limit_1',
+    'supported_features': 0,
+    'translation_key': 'buffer_tank_outdoor_temperature_excess_energy_limit',
+    'unique_id': '12345678_buffer_tank_outdoor_temperature_excess_energy_limit_1',
+    'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
+  })
+# ---
+# name: test_numbers[de][number.keba_keenergy_12345678_buffer_tank_outdoor_temperature_excess_energy_limit_1-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
@@ -94,7 +304,49 @@
     'state': '25.0',
   })
 # ---
-# name: test_numbers[de][number.keba_keenergy_12345678_buffer_tank_outdoor_temperature_excess_energy_limit_2]
+# name: test_numbers[de][number.keba_keenergy_12345678_buffer_tank_outdoor_temperature_excess_energy_limit_2-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': dict({
+      <NumberEntityCapabilityAttribute.MAX: 'max'>: 50.0,
+      <NumberEntityCapabilityAttribute.MIN: 'min'>: 0.0,
+      <NumberEntityCapabilityAttribute.MODE: 'mode'>: <NumberMode.AUTO: 'auto'>,
+      <NumberEntityCapabilityAttribute.STEP: 'step'>: 0.5,
+    }),
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'device_class': None,
+    'device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_buffer_tank_2')]>,
+    'disabled_by': None,
+    'domain': 'number',
+    'entity_category': <EntityCategory.CONFIG: 'config'>,
+    'entity_id': 'number.keba_keenergy_12345678_buffer_tank_outdoor_temperature_excess_energy_limit_2',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': None,
+    'options': dict({
+    }),
+    'original_device_class': <NumberDeviceClass.TEMPERATURE: 'temperature'>,
+    'original_icon': None,
+    'original_name': 'Grenze Außentemperatur (PV-Überschuss)',
+    'platform': 'keba_keenergy',
+    'previous_unique_id': None,
+    'suggested_object_id': 'keba_keenergy_12345678_buffer_tank_outdoor_temperature_excess_energy_limit_2',
+    'supported_features': 0,
+    'translation_key': 'buffer_tank_outdoor_temperature_excess_energy_limit',
+    'unique_id': '12345678_buffer_tank_outdoor_temperature_excess_energy_limit_2',
+    'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
+  })
+# ---
+# name: test_numbers[de][number.keba_keenergy_12345678_buffer_tank_outdoor_temperature_excess_energy_limit_2-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
@@ -113,7 +365,49 @@
     'state': '25.0',
   })
 # ---
-# name: test_numbers[de][number.keba_keenergy_12345678_buffer_tank_standby_temperature_1]
+# name: test_numbers[de][number.keba_keenergy_12345678_buffer_tank_standby_temperature_1-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': dict({
+      <NumberEntityCapabilityAttribute.MAX: 'max'>: 90.0,
+      <NumberEntityCapabilityAttribute.MIN: 'min'>: 0.0,
+      <NumberEntityCapabilityAttribute.MODE: 'mode'>: <NumberMode.AUTO: 'auto'>,
+      <NumberEntityCapabilityAttribute.STEP: 'step'>: 0.5,
+    }),
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'device_class': None,
+    'device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_buffer_tank_1')]>,
+    'disabled_by': None,
+    'domain': 'number',
+    'entity_category': <EntityCategory.CONFIG: 'config'>,
+    'entity_id': 'number.keba_keenergy_12345678_buffer_tank_standby_temperature_1',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': None,
+    'options': dict({
+    }),
+    'original_device_class': <NumberDeviceClass.TEMPERATURE: 'temperature'>,
+    'original_icon': None,
+    'original_name': 'Stütztemperatur',
+    'platform': 'keba_keenergy',
+    'previous_unique_id': None,
+    'suggested_object_id': 'keba_keenergy_12345678_buffer_tank_standby_temperature_1',
+    'supported_features': 0,
+    'translation_key': 'buffer_tank_standby_temperature',
+    'unique_id': '12345678_buffer_tank_standby_temperature_1',
+    'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
+  })
+# ---
+# name: test_numbers[de][number.keba_keenergy_12345678_buffer_tank_standby_temperature_1-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
@@ -132,7 +426,49 @@
     'state': '10.0',
   })
 # ---
-# name: test_numbers[de][number.keba_keenergy_12345678_buffer_tank_standby_temperature_2]
+# name: test_numbers[de][number.keba_keenergy_12345678_buffer_tank_standby_temperature_2-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': dict({
+      <NumberEntityCapabilityAttribute.MAX: 'max'>: 90.0,
+      <NumberEntityCapabilityAttribute.MIN: 'min'>: 0.0,
+      <NumberEntityCapabilityAttribute.MODE: 'mode'>: <NumberMode.AUTO: 'auto'>,
+      <NumberEntityCapabilityAttribute.STEP: 'step'>: 0.5,
+    }),
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'device_class': None,
+    'device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_buffer_tank_2')]>,
+    'disabled_by': None,
+    'domain': 'number',
+    'entity_category': <EntityCategory.CONFIG: 'config'>,
+    'entity_id': 'number.keba_keenergy_12345678_buffer_tank_standby_temperature_2',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': None,
+    'options': dict({
+    }),
+    'original_device_class': <NumberDeviceClass.TEMPERATURE: 'temperature'>,
+    'original_icon': None,
+    'original_name': 'Stütztemperatur',
+    'platform': 'keba_keenergy',
+    'previous_unique_id': None,
+    'suggested_object_id': 'keba_keenergy_12345678_buffer_tank_standby_temperature_2',
+    'supported_features': 0,
+    'translation_key': 'buffer_tank_standby_temperature',
+    'unique_id': '12345678_buffer_tank_standby_temperature_2',
+    'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
+  })
+# ---
+# name: test_numbers[de][number.keba_keenergy_12345678_buffer_tank_standby_temperature_2-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
@@ -151,7 +487,49 @@
     'state': '11.0',
   })
 # ---
-# name: test_numbers[de][number.keba_keenergy_12345678_external_heat_source_min_runtime_excess_energy_1]
+# name: test_numbers[de][number.keba_keenergy_12345678_external_heat_source_min_runtime_excess_energy_1-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': dict({
+      <NumberEntityCapabilityAttribute.MAX: 'max'>: 180.0,
+      <NumberEntityCapabilityAttribute.MIN: 'min'>: 0.0,
+      <NumberEntityCapabilityAttribute.MODE: 'mode'>: <NumberMode.AUTO: 'auto'>,
+      <NumberEntityCapabilityAttribute.STEP: 'step'>: 1,
+    }),
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'device_class': None,
+    'device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_external_heat_source_1')]>,
+    'disabled_by': None,
+    'domain': 'number',
+    'entity_category': <EntityCategory.CONFIG: 'config'>,
+    'entity_id': 'number.keba_keenergy_12345678_external_heat_source_min_runtime_excess_energy_1',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': None,
+    'options': dict({
+    }),
+    'original_device_class': <NumberDeviceClass.DURATION: 'duration'>,
+    'original_icon': None,
+    'original_name': 'Mindestlaufzeit (PV-Überschuss)',
+    'platform': 'keba_keenergy',
+    'previous_unique_id': None,
+    'suggested_object_id': 'keba_keenergy_12345678_external_heat_source_min_runtime_excess_energy_1',
+    'supported_features': 0,
+    'translation_key': 'external_heat_source_min_runtime_excess_energy',
+    'unique_id': '12345678_external_heat_source_min_runtime_excess_energy_1',
+    'unit_of_measurement': <UnitOfTime.MINUTES: 'min'>,
+  })
+# ---
+# name: test_numbers[de][number.keba_keenergy_12345678_external_heat_source_min_runtime_excess_energy_1-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'duration',
@@ -170,7 +548,49 @@
     'state': '5.0',
   })
 # ---
-# name: test_numbers[de][number.keba_keenergy_12345678_external_heat_source_min_runtime_excess_energy_2]
+# name: test_numbers[de][number.keba_keenergy_12345678_external_heat_source_min_runtime_excess_energy_2-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': dict({
+      <NumberEntityCapabilityAttribute.MAX: 'max'>: 180.0,
+      <NumberEntityCapabilityAttribute.MIN: 'min'>: 0.0,
+      <NumberEntityCapabilityAttribute.MODE: 'mode'>: <NumberMode.AUTO: 'auto'>,
+      <NumberEntityCapabilityAttribute.STEP: 'step'>: 1,
+    }),
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'device_class': None,
+    'device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_external_heat_source_2')]>,
+    'disabled_by': None,
+    'domain': 'number',
+    'entity_category': <EntityCategory.CONFIG: 'config'>,
+    'entity_id': 'number.keba_keenergy_12345678_external_heat_source_min_runtime_excess_energy_2',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': None,
+    'options': dict({
+    }),
+    'original_device_class': <NumberDeviceClass.DURATION: 'duration'>,
+    'original_icon': None,
+    'original_name': 'Mindestlaufzeit (PV-Überschuss)',
+    'platform': 'keba_keenergy',
+    'previous_unique_id': None,
+    'suggested_object_id': 'keba_keenergy_12345678_external_heat_source_min_runtime_excess_energy_2',
+    'supported_features': 0,
+    'translation_key': 'external_heat_source_min_runtime_excess_energy',
+    'unique_id': '12345678_external_heat_source_min_runtime_excess_energy_2',
+    'unit_of_measurement': <UnitOfTime.MINUTES: 'min'>,
+  })
+# ---
+# name: test_numbers[de][number.keba_keenergy_12345678_external_heat_source_min_runtime_excess_energy_2-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'duration',
@@ -189,7 +609,49 @@
     'state': '5.0',
   })
 # ---
-# name: test_numbers[de][number.keba_keenergy_12345678_heat_circuit_cooling_curve_offset_2]
+# name: test_numbers[de][number.keba_keenergy_12345678_heat_circuit_cooling_curve_offset_2-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': dict({
+      <NumberEntityCapabilityAttribute.MAX: 'max'>: 10.0,
+      <NumberEntityCapabilityAttribute.MIN: 'min'>: -10.0,
+      <NumberEntityCapabilityAttribute.MODE: 'mode'>: <NumberMode.AUTO: 'auto'>,
+      <NumberEntityCapabilityAttribute.STEP: 'step'>: 0.1,
+    }),
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'device_class': None,
+    'device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_heat_circuit_2')]>,
+    'disabled_by': None,
+    'domain': 'number',
+    'entity_category': <EntityCategory.CONFIG: 'config'>,
+    'entity_id': 'number.keba_keenergy_12345678_heat_circuit_cooling_curve_offset_2',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': None,
+    'options': dict({
+    }),
+    'original_device_class': <NumberDeviceClass.TEMPERATURE: 'temperature'>,
+    'original_icon': None,
+    'original_name': 'Kühlkurven-Offset',
+    'platform': 'keba_keenergy',
+    'previous_unique_id': None,
+    'suggested_object_id': 'keba_keenergy_12345678_heat_circuit_cooling_curve_offset_2',
+    'supported_features': 0,
+    'translation_key': 'heating_circuit_cooling_curve_offset',
+    'unique_id': '12345678_heat_circuit_cooling_curve_offset_2',
+    'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
+  })
+# ---
+# name: test_numbers[de][number.keba_keenergy_12345678_heat_circuit_cooling_curve_offset_2-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
@@ -208,7 +670,49 @@
     'state': '-1.5',
   })
 # ---
-# name: test_numbers[de][number.keba_keenergy_12345678_heat_circuit_cooling_curve_slope_2]
+# name: test_numbers[de][number.keba_keenergy_12345678_heat_circuit_cooling_curve_slope_2-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': dict({
+      <NumberEntityCapabilityAttribute.MAX: 'max'>: 5.0,
+      <NumberEntityCapabilityAttribute.MIN: 'min'>: 0.0,
+      <NumberEntityCapabilityAttribute.MODE: 'mode'>: <NumberMode.AUTO: 'auto'>,
+      <NumberEntityCapabilityAttribute.STEP: 'step'>: 0.01,
+    }),
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'device_class': None,
+    'device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_heat_circuit_2')]>,
+    'disabled_by': None,
+    'domain': 'number',
+    'entity_category': <EntityCategory.CONFIG: 'config'>,
+    'entity_id': 'number.keba_keenergy_12345678_heat_circuit_cooling_curve_slope_2',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': None,
+    'options': dict({
+    }),
+    'original_device_class': None,
+    'original_icon': None,
+    'original_name': 'Kühlkurven-Steigung',
+    'platform': 'keba_keenergy',
+    'previous_unique_id': None,
+    'suggested_object_id': 'keba_keenergy_12345678_heat_circuit_cooling_curve_slope_2',
+    'supported_features': 0,
+    'translation_key': 'heating_circuit_cooling_curve_slope',
+    'unique_id': '12345678_heat_circuit_cooling_curve_slope_2',
+    'unit_of_measurement': None,
+  })
+# ---
+# name: test_numbers[de][number.keba_keenergy_12345678_heat_circuit_cooling_curve_slope_2-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Heizkreis 2 Kühlkurven-Steigung',
@@ -225,7 +729,49 @@
     'state': '0.6',
   })
 # ---
-# name: test_numbers[de][number.keba_keenergy_12345678_heat_circuit_cooling_limit_day_2]
+# name: test_numbers[de][number.keba_keenergy_12345678_heat_circuit_cooling_limit_day_2-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': dict({
+      <NumberEntityCapabilityAttribute.MAX: 'max'>: 100.0,
+      <NumberEntityCapabilityAttribute.MIN: 'min'>: -20.0,
+      <NumberEntityCapabilityAttribute.MODE: 'mode'>: <NumberMode.AUTO: 'auto'>,
+      <NumberEntityCapabilityAttribute.STEP: 'step'>: 0.5,
+    }),
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'device_class': None,
+    'device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_heat_circuit_2')]>,
+    'disabled_by': None,
+    'domain': 'number',
+    'entity_category': <EntityCategory.CONFIG: 'config'>,
+    'entity_id': 'number.keba_keenergy_12345678_heat_circuit_cooling_limit_day_2',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': None,
+    'options': dict({
+    }),
+    'original_device_class': <NumberDeviceClass.TEMPERATURE: 'temperature'>,
+    'original_icon': None,
+    'original_name': 'Kühlgrenze (Normal)',
+    'platform': 'keba_keenergy',
+    'previous_unique_id': None,
+    'suggested_object_id': 'keba_keenergy_12345678_heat_circuit_cooling_limit_day_2',
+    'supported_features': 0,
+    'translation_key': 'heating_circuit_cooling_limit_day',
+    'unique_id': '12345678_heat_circuit_cooling_limit_day_2',
+    'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
+  })
+# ---
+# name: test_numbers[de][number.keba_keenergy_12345678_heat_circuit_cooling_limit_day_2-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
@@ -244,7 +790,49 @@
     'state': '20.0',
   })
 # ---
-# name: test_numbers[de][number.keba_keenergy_12345678_heat_circuit_cooling_limit_night_2]
+# name: test_numbers[de][number.keba_keenergy_12345678_heat_circuit_cooling_limit_night_2-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': dict({
+      <NumberEntityCapabilityAttribute.MAX: 'max'>: 40.0,
+      <NumberEntityCapabilityAttribute.MIN: 'min'>: -20.0,
+      <NumberEntityCapabilityAttribute.MODE: 'mode'>: <NumberMode.AUTO: 'auto'>,
+      <NumberEntityCapabilityAttribute.STEP: 'step'>: 0.5,
+    }),
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'device_class': None,
+    'device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_heat_circuit_2')]>,
+    'disabled_by': None,
+    'domain': 'number',
+    'entity_category': <EntityCategory.CONFIG: 'config'>,
+    'entity_id': 'number.keba_keenergy_12345678_heat_circuit_cooling_limit_night_2',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': None,
+    'options': dict({
+    }),
+    'original_device_class': <NumberDeviceClass.TEMPERATURE: 'temperature'>,
+    'original_icon': None,
+    'original_name': 'Kühlgrenze (Abgesenkt)',
+    'platform': 'keba_keenergy',
+    'previous_unique_id': None,
+    'suggested_object_id': 'keba_keenergy_12345678_heat_circuit_cooling_limit_night_2',
+    'supported_features': 0,
+    'translation_key': 'heating_circuit_cooling_limit_night',
+    'unique_id': '12345678_heat_circuit_cooling_limit_night_2',
+    'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
+  })
+# ---
+# name: test_numbers[de][number.keba_keenergy_12345678_heat_circuit_cooling_limit_night_2-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
@@ -263,7 +851,49 @@
     'state': '18.0',
   })
 # ---
-# name: test_numbers[de][number.keba_keenergy_12345678_heat_circuit_excess_energy_cooling_limit_day_2]
+# name: test_numbers[de][number.keba_keenergy_12345678_heat_circuit_excess_energy_cooling_limit_day_2-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': dict({
+      <NumberEntityCapabilityAttribute.MAX: 'max'>: 100.0,
+      <NumberEntityCapabilityAttribute.MIN: 'min'>: -20.0,
+      <NumberEntityCapabilityAttribute.MODE: 'mode'>: <NumberMode.AUTO: 'auto'>,
+      <NumberEntityCapabilityAttribute.STEP: 'step'>: 0.5,
+    }),
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'device_class': None,
+    'device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_heat_circuit_2')]>,
+    'disabled_by': None,
+    'domain': 'number',
+    'entity_category': <EntityCategory.CONFIG: 'config'>,
+    'entity_id': 'number.keba_keenergy_12345678_heat_circuit_excess_energy_cooling_limit_day_2',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': None,
+    'options': dict({
+    }),
+    'original_device_class': <NumberDeviceClass.TEMPERATURE: 'temperature'>,
+    'original_icon': None,
+    'original_name': 'Kühlgrenze (PV-Überschuss, Normal)',
+    'platform': 'keba_keenergy',
+    'previous_unique_id': None,
+    'suggested_object_id': 'keba_keenergy_12345678_heat_circuit_excess_energy_cooling_limit_day_2',
+    'supported_features': 0,
+    'translation_key': 'heating_circuit_excess_energy_cooling_limit_day',
+    'unique_id': '12345678_heat_circuit_excess_energy_cooling_limit_day_2',
+    'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
+  })
+# ---
+# name: test_numbers[de][number.keba_keenergy_12345678_heat_circuit_excess_energy_cooling_limit_day_2-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
@@ -282,7 +912,49 @@
     'state': '10.0',
   })
 # ---
-# name: test_numbers[de][number.keba_keenergy_12345678_heat_circuit_excess_energy_cooling_limit_night_2]
+# name: test_numbers[de][number.keba_keenergy_12345678_heat_circuit_excess_energy_cooling_limit_night_2-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': dict({
+      <NumberEntityCapabilityAttribute.MAX: 'max'>: 100.0,
+      <NumberEntityCapabilityAttribute.MIN: 'min'>: -20.0,
+      <NumberEntityCapabilityAttribute.MODE: 'mode'>: <NumberMode.AUTO: 'auto'>,
+      <NumberEntityCapabilityAttribute.STEP: 'step'>: 0.5,
+    }),
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'device_class': None,
+    'device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_heat_circuit_2')]>,
+    'disabled_by': None,
+    'domain': 'number',
+    'entity_category': <EntityCategory.CONFIG: 'config'>,
+    'entity_id': 'number.keba_keenergy_12345678_heat_circuit_excess_energy_cooling_limit_night_2',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': None,
+    'options': dict({
+    }),
+    'original_device_class': <NumberDeviceClass.TEMPERATURE: 'temperature'>,
+    'original_icon': None,
+    'original_name': 'Kühlgrenze (PV-Überschuss, Abgesenkt)',
+    'platform': 'keba_keenergy',
+    'previous_unique_id': None,
+    'suggested_object_id': 'keba_keenergy_12345678_heat_circuit_excess_energy_cooling_limit_night_2',
+    'supported_features': 0,
+    'translation_key': 'heating_circuit_excess_energy_cooling_limit_night',
+    'unique_id': '12345678_heat_circuit_excess_energy_cooling_limit_night_2',
+    'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
+  })
+# ---
+# name: test_numbers[de][number.keba_keenergy_12345678_heat_circuit_excess_energy_cooling_limit_night_2-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
@@ -301,7 +973,49 @@
     'state': '28.0',
   })
 # ---
-# name: test_numbers[de][number.keba_keenergy_12345678_heat_circuit_excess_energy_heating_limit_day_1]
+# name: test_numbers[de][number.keba_keenergy_12345678_heat_circuit_excess_energy_heating_limit_day_1-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': dict({
+      <NumberEntityCapabilityAttribute.MAX: 'max'>: 100.0,
+      <NumberEntityCapabilityAttribute.MIN: 'min'>: -20.0,
+      <NumberEntityCapabilityAttribute.MODE: 'mode'>: <NumberMode.AUTO: 'auto'>,
+      <NumberEntityCapabilityAttribute.STEP: 'step'>: 0.5,
+    }),
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'device_class': None,
+    'device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_heat_circuit_1')]>,
+    'disabled_by': None,
+    'domain': 'number',
+    'entity_category': <EntityCategory.CONFIG: 'config'>,
+    'entity_id': 'number.keba_keenergy_12345678_heat_circuit_excess_energy_heating_limit_day_1',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': None,
+    'options': dict({
+    }),
+    'original_device_class': <NumberDeviceClass.TEMPERATURE: 'temperature'>,
+    'original_icon': None,
+    'original_name': 'Heizgrenze (PV-Überschuss, Normal)',
+    'platform': 'keba_keenergy',
+    'previous_unique_id': None,
+    'suggested_object_id': 'keba_keenergy_12345678_heat_circuit_excess_energy_heating_limit_day_1',
+    'supported_features': 0,
+    'translation_key': 'heating_circuit_excess_energy_heating_limit_day',
+    'unique_id': '12345678_heat_circuit_excess_energy_heating_limit_day_1',
+    'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
+  })
+# ---
+# name: test_numbers[de][number.keba_keenergy_12345678_heat_circuit_excess_energy_heating_limit_day_1-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
@@ -320,7 +1034,49 @@
     'state': '30.0',
   })
 # ---
-# name: test_numbers[de][number.keba_keenergy_12345678_heat_circuit_excess_energy_heating_limit_night_1]
+# name: test_numbers[de][number.keba_keenergy_12345678_heat_circuit_excess_energy_heating_limit_night_1-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': dict({
+      <NumberEntityCapabilityAttribute.MAX: 'max'>: 100.0,
+      <NumberEntityCapabilityAttribute.MIN: 'min'>: -20.0,
+      <NumberEntityCapabilityAttribute.MODE: 'mode'>: <NumberMode.AUTO: 'auto'>,
+      <NumberEntityCapabilityAttribute.STEP: 'step'>: 0.5,
+    }),
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'device_class': None,
+    'device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_heat_circuit_1')]>,
+    'disabled_by': None,
+    'domain': 'number',
+    'entity_category': <EntityCategory.CONFIG: 'config'>,
+    'entity_id': 'number.keba_keenergy_12345678_heat_circuit_excess_energy_heating_limit_night_1',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': None,
+    'options': dict({
+    }),
+    'original_device_class': <NumberDeviceClass.TEMPERATURE: 'temperature'>,
+    'original_icon': None,
+    'original_name': 'Heizgrenze (PV-Überschuss, Abgesenkt)',
+    'platform': 'keba_keenergy',
+    'previous_unique_id': None,
+    'suggested_object_id': 'keba_keenergy_12345678_heat_circuit_excess_energy_heating_limit_night_1',
+    'supported_features': 0,
+    'translation_key': 'heating_circuit_excess_energy_heating_limit_night',
+    'unique_id': '12345678_heat_circuit_excess_energy_heating_limit_night_1',
+    'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
+  })
+# ---
+# name: test_numbers[de][number.keba_keenergy_12345678_heat_circuit_excess_energy_heating_limit_night_1-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
@@ -339,7 +1095,49 @@
     'state': '28.0',
   })
 # ---
-# name: test_numbers[de][number.keba_keenergy_12345678_heat_circuit_excess_energy_target_cooling_temperature_2]
+# name: test_numbers[de][number.keba_keenergy_12345678_heat_circuit_excess_energy_target_cooling_temperature_2-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': dict({
+      <NumberEntityCapabilityAttribute.MAX: 'max'>: 30.0,
+      <NumberEntityCapabilityAttribute.MIN: 'min'>: 10.0,
+      <NumberEntityCapabilityAttribute.MODE: 'mode'>: <NumberMode.AUTO: 'auto'>,
+      <NumberEntityCapabilityAttribute.STEP: 'step'>: 0.5,
+    }),
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'device_class': None,
+    'device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_heat_circuit_2')]>,
+    'disabled_by': None,
+    'domain': 'number',
+    'entity_category': <EntityCategory.CONFIG: 'config'>,
+    'entity_id': 'number.keba_keenergy_12345678_heat_circuit_excess_energy_target_cooling_temperature_2',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': None,
+    'options': dict({
+    }),
+    'original_device_class': <NumberDeviceClass.TEMPERATURE: 'temperature'>,
+    'original_icon': None,
+    'original_name': 'Soll-Raumtemperatur Kühlen (PV-Überschuss)',
+    'platform': 'keba_keenergy',
+    'previous_unique_id': None,
+    'suggested_object_id': 'keba_keenergy_12345678_heat_circuit_excess_energy_target_cooling_temperature_2',
+    'supported_features': 0,
+    'translation_key': 'heating_circuit_excess_energy_target_room_cooling_temperature',
+    'unique_id': '12345678_heat_circuit_excess_energy_target_cooling_temperature_2',
+    'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
+  })
+# ---
+# name: test_numbers[de][number.keba_keenergy_12345678_heat_circuit_excess_energy_target_cooling_temperature_2-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
@@ -358,7 +1156,49 @@
     'state': '10.0',
   })
 # ---
-# name: test_numbers[de][number.keba_keenergy_12345678_heat_circuit_excess_energy_target_cooling_temperature_hysteresis_2]
+# name: test_numbers[de][number.keba_keenergy_12345678_heat_circuit_excess_energy_target_cooling_temperature_hysteresis_2-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': dict({
+      <NumberEntityCapabilityAttribute.MAX: 'max'>: 2.0,
+      <NumberEntityCapabilityAttribute.MIN: 'min'>: 0.0,
+      <NumberEntityCapabilityAttribute.MODE: 'mode'>: <NumberMode.AUTO: 'auto'>,
+      <NumberEntityCapabilityAttribute.STEP: 'step'>: 0.1,
+    }),
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'device_class': None,
+    'device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_heat_circuit_2')]>,
+    'disabled_by': None,
+    'domain': 'number',
+    'entity_category': <EntityCategory.CONFIG: 'config'>,
+    'entity_id': 'number.keba_keenergy_12345678_heat_circuit_excess_energy_target_cooling_temperature_hysteresis_2',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': None,
+    'options': dict({
+    }),
+    'original_device_class': <NumberDeviceClass.TEMPERATURE: 'temperature'>,
+    'original_icon': None,
+    'original_name': 'Hysterese Soll-Raumtemperatur Kühlen (PV-Überschuss)',
+    'platform': 'keba_keenergy',
+    'previous_unique_id': None,
+    'suggested_object_id': 'keba_keenergy_12345678_heat_circuit_excess_energy_target_cooling_temperature_hysteresis_2',
+    'supported_features': 0,
+    'translation_key': 'heating_circuit_excess_energy_target_room_cooling_temperature_hysteresis',
+    'unique_id': '12345678_heat_circuit_excess_energy_target_cooling_temperature_hysteresis_2',
+    'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
+  })
+# ---
+# name: test_numbers[de][number.keba_keenergy_12345678_heat_circuit_excess_energy_target_cooling_temperature_hysteresis_2-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
@@ -377,7 +1217,49 @@
     'state': '0.7',
   })
 # ---
-# name: test_numbers[de][number.keba_keenergy_12345678_heat_circuit_excess_energy_target_temperature_1]
+# name: test_numbers[de][number.keba_keenergy_12345678_heat_circuit_excess_energy_target_temperature_1-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': dict({
+      <NumberEntityCapabilityAttribute.MAX: 'max'>: 30.0,
+      <NumberEntityCapabilityAttribute.MIN: 'min'>: 10.0,
+      <NumberEntityCapabilityAttribute.MODE: 'mode'>: <NumberMode.AUTO: 'auto'>,
+      <NumberEntityCapabilityAttribute.STEP: 'step'>: 0.5,
+    }),
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'device_class': None,
+    'device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_heat_circuit_1')]>,
+    'disabled_by': None,
+    'domain': 'number',
+    'entity_category': <EntityCategory.CONFIG: 'config'>,
+    'entity_id': 'number.keba_keenergy_12345678_heat_circuit_excess_energy_target_temperature_1',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': None,
+    'options': dict({
+    }),
+    'original_device_class': <NumberDeviceClass.TEMPERATURE: 'temperature'>,
+    'original_icon': None,
+    'original_name': 'Soll-Raumtemperatur (PV-Überschuss)',
+    'platform': 'keba_keenergy',
+    'previous_unique_id': None,
+    'suggested_object_id': 'keba_keenergy_12345678_heat_circuit_excess_energy_target_temperature_1',
+    'supported_features': 0,
+    'translation_key': 'heating_circuit_excess_energy_target_room_temperature',
+    'unique_id': '12345678_heat_circuit_excess_energy_target_temperature_1',
+    'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
+  })
+# ---
+# name: test_numbers[de][number.keba_keenergy_12345678_heat_circuit_excess_energy_target_temperature_1-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
@@ -396,7 +1278,49 @@
     'state': '30.0',
   })
 # ---
-# name: test_numbers[de][number.keba_keenergy_12345678_heat_circuit_excess_energy_target_temperature_hysteresis_1]
+# name: test_numbers[de][number.keba_keenergy_12345678_heat_circuit_excess_energy_target_temperature_hysteresis_1-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': dict({
+      <NumberEntityCapabilityAttribute.MAX: 'max'>: 2.0,
+      <NumberEntityCapabilityAttribute.MIN: 'min'>: 0.0,
+      <NumberEntityCapabilityAttribute.MODE: 'mode'>: <NumberMode.AUTO: 'auto'>,
+      <NumberEntityCapabilityAttribute.STEP: 'step'>: 0.1,
+    }),
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'device_class': None,
+    'device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_heat_circuit_1')]>,
+    'disabled_by': None,
+    'domain': 'number',
+    'entity_category': <EntityCategory.CONFIG: 'config'>,
+    'entity_id': 'number.keba_keenergy_12345678_heat_circuit_excess_energy_target_temperature_hysteresis_1',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': None,
+    'options': dict({
+    }),
+    'original_device_class': <NumberDeviceClass.TEMPERATURE: 'temperature'>,
+    'original_icon': None,
+    'original_name': 'Hysterese Soll-Raumtemperatur (PV-Überschuss)',
+    'platform': 'keba_keenergy',
+    'previous_unique_id': None,
+    'suggested_object_id': 'keba_keenergy_12345678_heat_circuit_excess_energy_target_temperature_hysteresis_1',
+    'supported_features': 0,
+    'translation_key': 'heating_circuit_excess_energy_target_room_temperature_hysteresis',
+    'unique_id': '12345678_heat_circuit_excess_energy_target_temperature_hysteresis_1',
+    'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
+  })
+# ---
+# name: test_numbers[de][number.keba_keenergy_12345678_heat_circuit_excess_energy_target_temperature_hysteresis_1-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
@@ -415,7 +1339,49 @@
     'state': '0.7',
   })
 # ---
-# name: test_numbers[de][number.keba_keenergy_12345678_heat_circuit_heating_curve_offset_1]
+# name: test_numbers[de][number.keba_keenergy_12345678_heat_circuit_heating_curve_offset_1-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': dict({
+      <NumberEntityCapabilityAttribute.MAX: 'max'>: 10.0,
+      <NumberEntityCapabilityAttribute.MIN: 'min'>: -10.0,
+      <NumberEntityCapabilityAttribute.MODE: 'mode'>: <NumberMode.AUTO: 'auto'>,
+      <NumberEntityCapabilityAttribute.STEP: 'step'>: 0.1,
+    }),
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'device_class': None,
+    'device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_heat_circuit_1')]>,
+    'disabled_by': None,
+    'domain': 'number',
+    'entity_category': <EntityCategory.CONFIG: 'config'>,
+    'entity_id': 'number.keba_keenergy_12345678_heat_circuit_heating_curve_offset_1',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': None,
+    'options': dict({
+    }),
+    'original_device_class': <NumberDeviceClass.TEMPERATURE: 'temperature'>,
+    'original_icon': None,
+    'original_name': 'Heizkurven-Offset',
+    'platform': 'keba_keenergy',
+    'previous_unique_id': None,
+    'suggested_object_id': 'keba_keenergy_12345678_heat_circuit_heating_curve_offset_1',
+    'supported_features': 0,
+    'translation_key': 'heating_circuit_heating_curve_offset',
+    'unique_id': '12345678_heat_circuit_heating_curve_offset_1',
+    'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
+  })
+# ---
+# name: test_numbers[de][number.keba_keenergy_12345678_heat_circuit_heating_curve_offset_1-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
@@ -434,7 +1400,49 @@
     'state': '1.5',
   })
 # ---
-# name: test_numbers[de][number.keba_keenergy_12345678_heat_circuit_heating_curve_slope_1]
+# name: test_numbers[de][number.keba_keenergy_12345678_heat_circuit_heating_curve_slope_1-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': dict({
+      <NumberEntityCapabilityAttribute.MAX: 'max'>: 5.0,
+      <NumberEntityCapabilityAttribute.MIN: 'min'>: 0.0,
+      <NumberEntityCapabilityAttribute.MODE: 'mode'>: <NumberMode.AUTO: 'auto'>,
+      <NumberEntityCapabilityAttribute.STEP: 'step'>: 0.01,
+    }),
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'device_class': None,
+    'device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_heat_circuit_1')]>,
+    'disabled_by': None,
+    'domain': 'number',
+    'entity_category': <EntityCategory.CONFIG: 'config'>,
+    'entity_id': 'number.keba_keenergy_12345678_heat_circuit_heating_curve_slope_1',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': None,
+    'options': dict({
+    }),
+    'original_device_class': None,
+    'original_icon': None,
+    'original_name': 'Heizkurven-Steigung',
+    'platform': 'keba_keenergy',
+    'previous_unique_id': None,
+    'suggested_object_id': 'keba_keenergy_12345678_heat_circuit_heating_curve_slope_1',
+    'supported_features': 0,
+    'translation_key': 'heating_circuit_heating_curve_slope',
+    'unique_id': '12345678_heat_circuit_heating_curve_slope_1',
+    'unit_of_measurement': None,
+  })
+# ---
+# name: test_numbers[de][number.keba_keenergy_12345678_heat_circuit_heating_curve_slope_1-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Heizkreis 1 Heizkurven-Steigung',
@@ -451,7 +1459,49 @@
     'state': '0.5',
   })
 # ---
-# name: test_numbers[de][number.keba_keenergy_12345678_heat_circuit_heating_limit_day_1]
+# name: test_numbers[de][number.keba_keenergy_12345678_heat_circuit_heating_limit_day_1-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': dict({
+      <NumberEntityCapabilityAttribute.MAX: 'max'>: 100.0,
+      <NumberEntityCapabilityAttribute.MIN: 'min'>: -20.0,
+      <NumberEntityCapabilityAttribute.MODE: 'mode'>: <NumberMode.AUTO: 'auto'>,
+      <NumberEntityCapabilityAttribute.STEP: 'step'>: 0.5,
+    }),
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'device_class': None,
+    'device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_heat_circuit_1')]>,
+    'disabled_by': None,
+    'domain': 'number',
+    'entity_category': <EntityCategory.CONFIG: 'config'>,
+    'entity_id': 'number.keba_keenergy_12345678_heat_circuit_heating_limit_day_1',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': None,
+    'options': dict({
+    }),
+    'original_device_class': <NumberDeviceClass.TEMPERATURE: 'temperature'>,
+    'original_icon': None,
+    'original_name': 'Heizgrenze (Normal)',
+    'platform': 'keba_keenergy',
+    'previous_unique_id': None,
+    'suggested_object_id': 'keba_keenergy_12345678_heat_circuit_heating_limit_day_1',
+    'supported_features': 0,
+    'translation_key': 'heating_circuit_heating_limit_day',
+    'unique_id': '12345678_heat_circuit_heating_limit_day_1',
+    'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
+  })
+# ---
+# name: test_numbers[de][number.keba_keenergy_12345678_heat_circuit_heating_limit_day_1-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
@@ -470,7 +1520,49 @@
     'state': '20.0',
   })
 # ---
-# name: test_numbers[de][number.keba_keenergy_12345678_heat_circuit_heating_limit_night_1]
+# name: test_numbers[de][number.keba_keenergy_12345678_heat_circuit_heating_limit_night_1-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': dict({
+      <NumberEntityCapabilityAttribute.MAX: 'max'>: 100.0,
+      <NumberEntityCapabilityAttribute.MIN: 'min'>: -20.0,
+      <NumberEntityCapabilityAttribute.MODE: 'mode'>: <NumberMode.AUTO: 'auto'>,
+      <NumberEntityCapabilityAttribute.STEP: 'step'>: 0.5,
+    }),
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'device_class': None,
+    'device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_heat_circuit_1')]>,
+    'disabled_by': None,
+    'domain': 'number',
+    'entity_category': <EntityCategory.CONFIG: 'config'>,
+    'entity_id': 'number.keba_keenergy_12345678_heat_circuit_heating_limit_night_1',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': None,
+    'options': dict({
+    }),
+    'original_device_class': <NumberDeviceClass.TEMPERATURE: 'temperature'>,
+    'original_icon': None,
+    'original_name': 'Heizgrenze (Abgesenkt)',
+    'platform': 'keba_keenergy',
+    'previous_unique_id': None,
+    'suggested_object_id': 'keba_keenergy_12345678_heat_circuit_heating_limit_night_1',
+    'supported_features': 0,
+    'translation_key': 'heating_circuit_heating_limit_night',
+    'unique_id': '12345678_heat_circuit_heating_limit_night_1',
+    'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
+  })
+# ---
+# name: test_numbers[de][number.keba_keenergy_12345678_heat_circuit_heating_limit_night_1-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
@@ -489,7 +1581,49 @@
     'state': '18.0',
   })
 # ---
-# name: test_numbers[de][number.keba_keenergy_12345678_heat_circuit_target_cooling_temperature_day_2]
+# name: test_numbers[de][number.keba_keenergy_12345678_heat_circuit_target_cooling_temperature_day_2-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': dict({
+      <NumberEntityCapabilityAttribute.MAX: 'max'>: 30.0,
+      <NumberEntityCapabilityAttribute.MIN: 'min'>: 10.0,
+      <NumberEntityCapabilityAttribute.MODE: 'mode'>: <NumberMode.AUTO: 'auto'>,
+      <NumberEntityCapabilityAttribute.STEP: 'step'>: 0.5,
+    }),
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'device_class': None,
+    'device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_heat_circuit_2')]>,
+    'disabled_by': None,
+    'domain': 'number',
+    'entity_category': <EntityCategory.CONFIG: 'config'>,
+    'entity_id': 'number.keba_keenergy_12345678_heat_circuit_target_cooling_temperature_day_2',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': None,
+    'options': dict({
+    }),
+    'original_device_class': <NumberDeviceClass.TEMPERATURE: 'temperature'>,
+    'original_icon': None,
+    'original_name': 'Soll-Raumtemperatur Kühlen (Normal)',
+    'platform': 'keba_keenergy',
+    'previous_unique_id': None,
+    'suggested_object_id': 'keba_keenergy_12345678_heat_circuit_target_cooling_temperature_day_2',
+    'supported_features': 0,
+    'translation_key': 'heating_circuit_target_room_cooling_temperature_day',
+    'unique_id': '12345678_heat_circuit_target_cooling_temperature_day_2',
+    'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
+  })
+# ---
+# name: test_numbers[de][number.keba_keenergy_12345678_heat_circuit_target_cooling_temperature_day_2-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
@@ -508,7 +1642,49 @@
     'state': '20.5',
   })
 # ---
-# name: test_numbers[de][number.keba_keenergy_12345678_heat_circuit_target_cooling_temperature_night_2]
+# name: test_numbers[de][number.keba_keenergy_12345678_heat_circuit_target_cooling_temperature_night_2-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': dict({
+      <NumberEntityCapabilityAttribute.MAX: 'max'>: 30.0,
+      <NumberEntityCapabilityAttribute.MIN: 'min'>: 10.0,
+      <NumberEntityCapabilityAttribute.MODE: 'mode'>: <NumberMode.AUTO: 'auto'>,
+      <NumberEntityCapabilityAttribute.STEP: 'step'>: 0.5,
+    }),
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'device_class': None,
+    'device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_heat_circuit_2')]>,
+    'disabled_by': None,
+    'domain': 'number',
+    'entity_category': <EntityCategory.CONFIG: 'config'>,
+    'entity_id': 'number.keba_keenergy_12345678_heat_circuit_target_cooling_temperature_night_2',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': None,
+    'options': dict({
+    }),
+    'original_device_class': <NumberDeviceClass.TEMPERATURE: 'temperature'>,
+    'original_icon': None,
+    'original_name': 'Soll-Raumtemperatur Kühlen (Abgesenkt)',
+    'platform': 'keba_keenergy',
+    'previous_unique_id': None,
+    'suggested_object_id': 'keba_keenergy_12345678_heat_circuit_target_cooling_temperature_night_2',
+    'supported_features': 0,
+    'translation_key': 'heating_circuit_target_room_cooling_temperature_night',
+    'unique_id': '12345678_heat_circuit_target_cooling_temperature_night_2',
+    'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
+  })
+# ---
+# name: test_numbers[de][number.keba_keenergy_12345678_heat_circuit_target_cooling_temperature_night_2-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
@@ -527,7 +1703,49 @@
     'state': '20.0',
   })
 # ---
-# name: test_numbers[de][number.keba_keenergy_12345678_heat_circuit_target_temperature_away_1]
+# name: test_numbers[de][number.keba_keenergy_12345678_heat_circuit_target_temperature_away_1-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': dict({
+      <NumberEntityCapabilityAttribute.MAX: 'max'>: 30.0,
+      <NumberEntityCapabilityAttribute.MIN: 'min'>: 10.0,
+      <NumberEntityCapabilityAttribute.MODE: 'mode'>: <NumberMode.AUTO: 'auto'>,
+      <NumberEntityCapabilityAttribute.STEP: 'step'>: 0.5,
+    }),
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'device_class': None,
+    'device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_heat_circuit_1')]>,
+    'disabled_by': None,
+    'domain': 'number',
+    'entity_category': <EntityCategory.CONFIG: 'config'>,
+    'entity_id': 'number.keba_keenergy_12345678_heat_circuit_target_temperature_away_1',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': None,
+    'options': dict({
+    }),
+    'original_device_class': <NumberDeviceClass.TEMPERATURE: 'temperature'>,
+    'original_icon': None,
+    'original_name': 'Soll-Raumtemperatur (Urlaub)',
+    'platform': 'keba_keenergy',
+    'previous_unique_id': None,
+    'suggested_object_id': 'keba_keenergy_12345678_heat_circuit_target_temperature_away_1',
+    'supported_features': 0,
+    'translation_key': 'heating_circuit_target_room_temperature_away',
+    'unique_id': '12345678_heat_circuit_target_temperature_away_1',
+    'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
+  })
+# ---
+# name: test_numbers[de][number.keba_keenergy_12345678_heat_circuit_target_temperature_away_1-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
@@ -546,7 +1764,49 @@
     'state': '18.0',
   })
 # ---
-# name: test_numbers[de][number.keba_keenergy_12345678_heat_circuit_target_temperature_day_1]
+# name: test_numbers[de][number.keba_keenergy_12345678_heat_circuit_target_temperature_day_1-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': dict({
+      <NumberEntityCapabilityAttribute.MAX: 'max'>: 30.0,
+      <NumberEntityCapabilityAttribute.MIN: 'min'>: 10.0,
+      <NumberEntityCapabilityAttribute.MODE: 'mode'>: <NumberMode.AUTO: 'auto'>,
+      <NumberEntityCapabilityAttribute.STEP: 'step'>: 0.5,
+    }),
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'device_class': None,
+    'device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_heat_circuit_1')]>,
+    'disabled_by': None,
+    'domain': 'number',
+    'entity_category': <EntityCategory.CONFIG: 'config'>,
+    'entity_id': 'number.keba_keenergy_12345678_heat_circuit_target_temperature_day_1',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': None,
+    'options': dict({
+    }),
+    'original_device_class': <NumberDeviceClass.TEMPERATURE: 'temperature'>,
+    'original_icon': None,
+    'original_name': 'Soll-Raumtemperatur (Normal)',
+    'platform': 'keba_keenergy',
+    'previous_unique_id': None,
+    'suggested_object_id': 'keba_keenergy_12345678_heat_circuit_target_temperature_day_1',
+    'supported_features': 0,
+    'translation_key': 'heating_circuit_target_room_temperature_day',
+    'unique_id': '12345678_heat_circuit_target_temperature_day_1',
+    'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
+  })
+# ---
+# name: test_numbers[de][number.keba_keenergy_12345678_heat_circuit_target_temperature_day_1-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
@@ -565,7 +1825,49 @@
     'state': '20.5',
   })
 # ---
-# name: test_numbers[de][number.keba_keenergy_12345678_heat_circuit_target_temperature_night_1]
+# name: test_numbers[de][number.keba_keenergy_12345678_heat_circuit_target_temperature_night_1-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': dict({
+      <NumberEntityCapabilityAttribute.MAX: 'max'>: 30.0,
+      <NumberEntityCapabilityAttribute.MIN: 'min'>: 10.0,
+      <NumberEntityCapabilityAttribute.MODE: 'mode'>: <NumberMode.AUTO: 'auto'>,
+      <NumberEntityCapabilityAttribute.STEP: 'step'>: 0.5,
+    }),
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'device_class': None,
+    'device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_heat_circuit_1')]>,
+    'disabled_by': None,
+    'domain': 'number',
+    'entity_category': <EntityCategory.CONFIG: 'config'>,
+    'entity_id': 'number.keba_keenergy_12345678_heat_circuit_target_temperature_night_1',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': None,
+    'options': dict({
+    }),
+    'original_device_class': <NumberDeviceClass.TEMPERATURE: 'temperature'>,
+    'original_icon': None,
+    'original_name': 'Soll-Raumtemperatur (Abgesenkt)',
+    'platform': 'keba_keenergy',
+    'previous_unique_id': None,
+    'suggested_object_id': 'keba_keenergy_12345678_heat_circuit_target_temperature_night_1',
+    'supported_features': 0,
+    'translation_key': 'heating_circuit_target_room_temperature_night',
+    'unique_id': '12345678_heat_circuit_target_temperature_night_1',
+    'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
+  })
+# ---
+# name: test_numbers[de][number.keba_keenergy_12345678_heat_circuit_target_temperature_night_1-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
@@ -584,7 +1886,49 @@
     'state': '20.0',
   })
 # ---
-# name: test_numbers[de][number.keba_keenergy_12345678_heat_circuit_target_temperature_offset_1]
+# name: test_numbers[de][number.keba_keenergy_12345678_heat_circuit_target_temperature_offset_1-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': dict({
+      <NumberEntityCapabilityAttribute.MAX: 'max'>: 2.5,
+      <NumberEntityCapabilityAttribute.MIN: 'min'>: -2.5,
+      <NumberEntityCapabilityAttribute.MODE: 'mode'>: <NumberMode.AUTO: 'auto'>,
+      <NumberEntityCapabilityAttribute.STEP: 'step'>: 0.5,
+    }),
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'device_class': None,
+    'device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_heat_circuit_1')]>,
+    'disabled_by': None,
+    'domain': 'number',
+    'entity_category': <EntityCategory.CONFIG: 'config'>,
+    'entity_id': 'number.keba_keenergy_12345678_heat_circuit_target_temperature_offset_1',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': None,
+    'options': dict({
+    }),
+    'original_device_class': <NumberDeviceClass.TEMPERATURE: 'temperature'>,
+    'original_icon': None,
+    'original_name': 'Raumtemperatur-Offset',
+    'platform': 'keba_keenergy',
+    'previous_unique_id': None,
+    'suggested_object_id': 'keba_keenergy_12345678_heat_circuit_target_temperature_offset_1',
+    'supported_features': 0,
+    'translation_key': 'heating_circuit_target_room_temperature_offset',
+    'unique_id': '12345678_heat_circuit_target_temperature_offset_1',
+    'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
+  })
+# ---
+# name: test_numbers[de][number.keba_keenergy_12345678_heat_circuit_target_temperature_offset_1-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
@@ -603,7 +1947,49 @@
     'state': '1.5',
   })
 # ---
-# name: test_numbers[de][number.keba_keenergy_12345678_heat_circuit_target_temperature_offset_2]
+# name: test_numbers[de][number.keba_keenergy_12345678_heat_circuit_target_temperature_offset_2-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': dict({
+      <NumberEntityCapabilityAttribute.MAX: 'max'>: 2.5,
+      <NumberEntityCapabilityAttribute.MIN: 'min'>: -2.5,
+      <NumberEntityCapabilityAttribute.MODE: 'mode'>: <NumberMode.AUTO: 'auto'>,
+      <NumberEntityCapabilityAttribute.STEP: 'step'>: 0.5,
+    }),
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'device_class': None,
+    'device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_heat_circuit_2')]>,
+    'disabled_by': None,
+    'domain': 'number',
+    'entity_category': <EntityCategory.CONFIG: 'config'>,
+    'entity_id': 'number.keba_keenergy_12345678_heat_circuit_target_temperature_offset_2',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': None,
+    'options': dict({
+    }),
+    'original_device_class': <NumberDeviceClass.TEMPERATURE: 'temperature'>,
+    'original_icon': None,
+    'original_name': 'Raumtemperatur-Offset',
+    'platform': 'keba_keenergy',
+    'previous_unique_id': None,
+    'suggested_object_id': 'keba_keenergy_12345678_heat_circuit_target_temperature_offset_2',
+    'supported_features': 0,
+    'translation_key': 'heating_circuit_target_room_temperature_offset',
+    'unique_id': '12345678_heat_circuit_target_temperature_offset_2',
+    'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
+  })
+# ---
+# name: test_numbers[de][number.keba_keenergy_12345678_heat_circuit_target_temperature_offset_2-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
@@ -622,7 +2008,49 @@
     'state': '0.0',
   })
 # ---
-# name: test_numbers[de][number.keba_keenergy_12345678_heat_pump_compressor_night_speed]
+# name: test_numbers[de][number.keba_keenergy_12345678_heat_pump_compressor_night_speed-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': dict({
+      <NumberEntityCapabilityAttribute.MAX: 'max'>: 100.0,
+      <NumberEntityCapabilityAttribute.MIN: 'min'>: 50.0,
+      <NumberEntityCapabilityAttribute.MODE: 'mode'>: <NumberMode.AUTO: 'auto'>,
+      <NumberEntityCapabilityAttribute.STEP: 'step'>: 1,
+    }),
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'device_class': None,
+    'device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_heat_pump')]>,
+    'disabled_by': None,
+    'domain': 'number',
+    'entity_category': <EntityCategory.CONFIG: 'config'>,
+    'entity_id': 'number.keba_keenergy_12345678_heat_pump_compressor_night_speed',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': None,
+    'options': dict({
+    }),
+    'original_device_class': <NumberDeviceClass.SPEED: 'speed'>,
+    'original_icon': None,
+    'original_name': 'Kompressor-Leistungsbegrenzung (Nacht)',
+    'platform': 'keba_keenergy',
+    'previous_unique_id': None,
+    'suggested_object_id': 'keba_keenergy_12345678_heat_pump_compressor_night_speed',
+    'supported_features': 0,
+    'translation_key': 'heat_pump_compressor_night_speed',
+    'unique_id': '12345678_heat_pump_compressor_night_speed',
+    'unit_of_measurement': '%',
+  })
+# ---
+# name: test_numbers[de][number.keba_keenergy_12345678_heat_pump_compressor_night_speed-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'speed',
@@ -641,7 +2069,49 @@
     'state': '50.0',
   })
 # ---
-# name: test_numbers[de][number.keba_keenergy_12345678_hot_water_tank_excess_energy_target_temperature_1]
+# name: test_numbers[de][number.keba_keenergy_12345678_hot_water_tank_excess_energy_target_temperature_1-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': dict({
+      <NumberEntityCapabilityAttribute.MAX: 'max'>: 95.0,
+      <NumberEntityCapabilityAttribute.MIN: 'min'>: 0.0,
+      <NumberEntityCapabilityAttribute.MODE: 'mode'>: <NumberMode.AUTO: 'auto'>,
+      <NumberEntityCapabilityAttribute.STEP: 'step'>: 0.5,
+    }),
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'device_class': None,
+    'device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_hot_water_tank_1')]>,
+    'disabled_by': None,
+    'domain': 'number',
+    'entity_category': <EntityCategory.CONFIG: 'config'>,
+    'entity_id': 'number.keba_keenergy_12345678_hot_water_tank_excess_energy_target_temperature_1',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': None,
+    'options': dict({
+    }),
+    'original_device_class': <NumberDeviceClass.TEMPERATURE: 'temperature'>,
+    'original_icon': None,
+    'original_name': 'Soll-Temperatur (PV-Überschuss)',
+    'platform': 'keba_keenergy',
+    'previous_unique_id': None,
+    'suggested_object_id': 'keba_keenergy_12345678_hot_water_tank_excess_energy_target_temperature_1',
+    'supported_features': 0,
+    'translation_key': 'dhw_tank_excess_energy_target_temperature',
+    'unique_id': '12345678_hot_water_tank_excess_energy_target_temperature_1',
+    'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
+  })
+# ---
+# name: test_numbers[de][number.keba_keenergy_12345678_hot_water_tank_excess_energy_target_temperature_1-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
@@ -660,7 +2130,49 @@
     'state': '75.0',
   })
 # ---
-# name: test_numbers[de][number.keba_keenergy_12345678_hot_water_tank_excess_energy_target_temperature_2]
+# name: test_numbers[de][number.keba_keenergy_12345678_hot_water_tank_excess_energy_target_temperature_2-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': dict({
+      <NumberEntityCapabilityAttribute.MAX: 'max'>: 95.0,
+      <NumberEntityCapabilityAttribute.MIN: 'min'>: 0.0,
+      <NumberEntityCapabilityAttribute.MODE: 'mode'>: <NumberMode.AUTO: 'auto'>,
+      <NumberEntityCapabilityAttribute.STEP: 'step'>: 0.5,
+    }),
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'device_class': None,
+    'device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_hot_water_tank_2')]>,
+    'disabled_by': None,
+    'domain': 'number',
+    'entity_category': <EntityCategory.CONFIG: 'config'>,
+    'entity_id': 'number.keba_keenergy_12345678_hot_water_tank_excess_energy_target_temperature_2',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': None,
+    'options': dict({
+    }),
+    'original_device_class': <NumberDeviceClass.TEMPERATURE: 'temperature'>,
+    'original_icon': None,
+    'original_name': 'Soll-Temperatur (PV-Überschuss)',
+    'platform': 'keba_keenergy',
+    'previous_unique_id': None,
+    'suggested_object_id': 'keba_keenergy_12345678_hot_water_tank_excess_energy_target_temperature_2',
+    'supported_features': 0,
+    'translation_key': 'dhw_tank_excess_energy_target_temperature',
+    'unique_id': '12345678_hot_water_tank_excess_energy_target_temperature_2',
+    'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
+  })
+# ---
+# name: test_numbers[de][number.keba_keenergy_12345678_hot_water_tank_excess_energy_target_temperature_2-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
@@ -679,7 +2191,49 @@
     'state': '75.0',
   })
 # ---
-# name: test_numbers[de][number.keba_keenergy_12345678_hot_water_tank_excess_energy_target_temperature_hysteresis_1]
+# name: test_numbers[de][number.keba_keenergy_12345678_hot_water_tank_excess_energy_target_temperature_hysteresis_1-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': dict({
+      <NumberEntityCapabilityAttribute.MAX: 'max'>: 5.0,
+      <NumberEntityCapabilityAttribute.MIN: 'min'>: 0.0,
+      <NumberEntityCapabilityAttribute.MODE: 'mode'>: <NumberMode.AUTO: 'auto'>,
+      <NumberEntityCapabilityAttribute.STEP: 'step'>: 0.1,
+    }),
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'device_class': None,
+    'device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_hot_water_tank_1')]>,
+    'disabled_by': None,
+    'domain': 'number',
+    'entity_category': <EntityCategory.CONFIG: 'config'>,
+    'entity_id': 'number.keba_keenergy_12345678_hot_water_tank_excess_energy_target_temperature_hysteresis_1',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': None,
+    'options': dict({
+    }),
+    'original_device_class': <NumberDeviceClass.TEMPERATURE: 'temperature'>,
+    'original_icon': None,
+    'original_name': 'Hysterese Soll-Temperatur (PV-Überschuss)',
+    'platform': 'keba_keenergy',
+    'previous_unique_id': None,
+    'suggested_object_id': 'keba_keenergy_12345678_hot_water_tank_excess_energy_target_temperature_hysteresis_1',
+    'supported_features': 0,
+    'translation_key': 'dhw_tank_excess_energy_target_temperature_hysteresis',
+    'unique_id': '12345678_hot_water_tank_excess_energy_target_temperature_hysteresis_1',
+    'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
+  })
+# ---
+# name: test_numbers[de][number.keba_keenergy_12345678_hot_water_tank_excess_energy_target_temperature_hysteresis_1-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
@@ -698,7 +2252,49 @@
     'state': '4.0',
   })
 # ---
-# name: test_numbers[de][number.keba_keenergy_12345678_hot_water_tank_excess_energy_target_temperature_hysteresis_2]
+# name: test_numbers[de][number.keba_keenergy_12345678_hot_water_tank_excess_energy_target_temperature_hysteresis_2-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': dict({
+      <NumberEntityCapabilityAttribute.MAX: 'max'>: 5.0,
+      <NumberEntityCapabilityAttribute.MIN: 'min'>: 0.0,
+      <NumberEntityCapabilityAttribute.MODE: 'mode'>: <NumberMode.AUTO: 'auto'>,
+      <NumberEntityCapabilityAttribute.STEP: 'step'>: 0.1,
+    }),
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'device_class': None,
+    'device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_hot_water_tank_2')]>,
+    'disabled_by': None,
+    'domain': 'number',
+    'entity_category': <EntityCategory.CONFIG: 'config'>,
+    'entity_id': 'number.keba_keenergy_12345678_hot_water_tank_excess_energy_target_temperature_hysteresis_2',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': None,
+    'options': dict({
+    }),
+    'original_device_class': <NumberDeviceClass.TEMPERATURE: 'temperature'>,
+    'original_icon': None,
+    'original_name': 'Hysterese Soll-Temperatur (PV-Überschuss)',
+    'platform': 'keba_keenergy',
+    'previous_unique_id': None,
+    'suggested_object_id': 'keba_keenergy_12345678_hot_water_tank_excess_energy_target_temperature_hysteresis_2',
+    'supported_features': 0,
+    'translation_key': 'dhw_tank_excess_energy_target_temperature_hysteresis',
+    'unique_id': '12345678_hot_water_tank_excess_energy_target_temperature_hysteresis_2',
+    'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
+  })
+# ---
+# name: test_numbers[de][number.keba_keenergy_12345678_hot_water_tank_excess_energy_target_temperature_hysteresis_2-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
@@ -717,7 +2313,49 @@
     'state': '4.0',
   })
 # ---
-# name: test_numbers[de][number.keba_keenergy_12345678_hot_water_tank_standby_temperature_1]
+# name: test_numbers[de][number.keba_keenergy_12345678_hot_water_tank_standby_temperature_1-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': dict({
+      <NumberEntityCapabilityAttribute.MAX: 'max'>: 52.0,
+      <NumberEntityCapabilityAttribute.MIN: 'min'>: 0.0,
+      <NumberEntityCapabilityAttribute.MODE: 'mode'>: <NumberMode.AUTO: 'auto'>,
+      <NumberEntityCapabilityAttribute.STEP: 'step'>: 0.5,
+    }),
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'device_class': None,
+    'device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_hot_water_tank_1')]>,
+    'disabled_by': None,
+    'domain': 'number',
+    'entity_category': <EntityCategory.CONFIG: 'config'>,
+    'entity_id': 'number.keba_keenergy_12345678_hot_water_tank_standby_temperature_1',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': None,
+    'options': dict({
+    }),
+    'original_device_class': <NumberDeviceClass.TEMPERATURE: 'temperature'>,
+    'original_icon': None,
+    'original_name': 'Stütztemperatur',
+    'platform': 'keba_keenergy',
+    'previous_unique_id': None,
+    'suggested_object_id': 'keba_keenergy_12345678_hot_water_tank_standby_temperature_1',
+    'supported_features': 0,
+    'translation_key': 'dhw_tank_standby_temperature',
+    'unique_id': '12345678_hot_water_tank_standby_temperature_1',
+    'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
+  })
+# ---
+# name: test_numbers[de][number.keba_keenergy_12345678_hot_water_tank_standby_temperature_1-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
@@ -736,7 +2374,49 @@
     'state': '32.5',
   })
 # ---
-# name: test_numbers[de][number.keba_keenergy_12345678_hot_water_tank_standby_temperature_2]
+# name: test_numbers[de][number.keba_keenergy_12345678_hot_water_tank_standby_temperature_2-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': dict({
+      <NumberEntityCapabilityAttribute.MAX: 'max'>: 52.0,
+      <NumberEntityCapabilityAttribute.MIN: 'min'>: 0.0,
+      <NumberEntityCapabilityAttribute.MODE: 'mode'>: <NumberMode.AUTO: 'auto'>,
+      <NumberEntityCapabilityAttribute.STEP: 'step'>: 0.5,
+    }),
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'device_class': None,
+    'device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_hot_water_tank_2')]>,
+    'disabled_by': None,
+    'domain': 'number',
+    'entity_category': <EntityCategory.CONFIG: 'config'>,
+    'entity_id': 'number.keba_keenergy_12345678_hot_water_tank_standby_temperature_2',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': None,
+    'options': dict({
+    }),
+    'original_device_class': <NumberDeviceClass.TEMPERATURE: 'temperature'>,
+    'original_icon': None,
+    'original_name': 'Stütztemperatur',
+    'platform': 'keba_keenergy',
+    'previous_unique_id': None,
+    'suggested_object_id': 'keba_keenergy_12345678_hot_water_tank_standby_temperature_2',
+    'supported_features': 0,
+    'translation_key': 'dhw_tank_standby_temperature',
+    'unique_id': '12345678_hot_water_tank_standby_temperature_2',
+    'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
+  })
+# ---
+# name: test_numbers[de][number.keba_keenergy_12345678_hot_water_tank_standby_temperature_2-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
@@ -755,7 +2435,49 @@
     'state': '32.5',
   })
 # ---
-# name: test_numbers[de][number.keba_keenergy_12345678_hot_water_tank_target_temperature_1]
+# name: test_numbers[de][number.keba_keenergy_12345678_hot_water_tank_target_temperature_1-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': dict({
+      <NumberEntityCapabilityAttribute.MAX: 'max'>: 52.0,
+      <NumberEntityCapabilityAttribute.MIN: 'min'>: 0.0,
+      <NumberEntityCapabilityAttribute.MODE: 'mode'>: <NumberMode.AUTO: 'auto'>,
+      <NumberEntityCapabilityAttribute.STEP: 'step'>: 0.5,
+    }),
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'device_class': None,
+    'device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_hot_water_tank_1')]>,
+    'disabled_by': None,
+    'domain': 'number',
+    'entity_category': <EntityCategory.CONFIG: 'config'>,
+    'entity_id': 'number.keba_keenergy_12345678_hot_water_tank_target_temperature_1',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': None,
+    'options': dict({
+    }),
+    'original_device_class': <NumberDeviceClass.TEMPERATURE: 'temperature'>,
+    'original_icon': 'mdi:thermometer-chevron-up',
+    'original_name': 'Soll-Temperatur',
+    'platform': 'keba_keenergy',
+    'previous_unique_id': None,
+    'suggested_object_id': 'keba_keenergy_12345678_hot_water_tank_target_temperature_1',
+    'supported_features': 0,
+    'translation_key': 'dhw_tank_target_temperature',
+    'unique_id': '12345678_hot_water_tank_target_temperature_1',
+    'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
+  })
+# ---
+# name: test_numbers[de][number.keba_keenergy_12345678_hot_water_tank_target_temperature_1-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
@@ -775,7 +2497,49 @@
     'state': '51.0',
   })
 # ---
-# name: test_numbers[de][number.keba_keenergy_12345678_hot_water_tank_target_temperature_2]
+# name: test_numbers[de][number.keba_keenergy_12345678_hot_water_tank_target_temperature_2-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': dict({
+      <NumberEntityCapabilityAttribute.MAX: 'max'>: 52.0,
+      <NumberEntityCapabilityAttribute.MIN: 'min'>: 0.0,
+      <NumberEntityCapabilityAttribute.MODE: 'mode'>: <NumberMode.AUTO: 'auto'>,
+      <NumberEntityCapabilityAttribute.STEP: 'step'>: 0.5,
+    }),
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'device_class': None,
+    'device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_hot_water_tank_2')]>,
+    'disabled_by': None,
+    'domain': 'number',
+    'entity_category': <EntityCategory.CONFIG: 'config'>,
+    'entity_id': 'number.keba_keenergy_12345678_hot_water_tank_target_temperature_2',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': None,
+    'options': dict({
+    }),
+    'original_device_class': <NumberDeviceClass.TEMPERATURE: 'temperature'>,
+    'original_icon': 'mdi:thermometer-chevron-up',
+    'original_name': 'Soll-Temperatur',
+    'platform': 'keba_keenergy',
+    'previous_unique_id': None,
+    'suggested_object_id': 'keba_keenergy_12345678_hot_water_tank_target_temperature_2',
+    'supported_features': 0,
+    'translation_key': 'dhw_tank_target_temperature',
+    'unique_id': '12345678_hot_water_tank_target_temperature_2',
+    'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
+  })
+# ---
+# name: test_numbers[de][number.keba_keenergy_12345678_hot_water_tank_target_temperature_2-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
@@ -795,7 +2559,49 @@
     'state': '51.0',
   })
 # ---
-# name: test_numbers[de][number.keba_keenergy_12345678_solar_circuit_target_temperature_1_1]
+# name: test_numbers[de][number.keba_keenergy_12345678_solar_circuit_target_temperature_1_1-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': dict({
+      <NumberEntityCapabilityAttribute.MAX: 'max'>: 90.0,
+      <NumberEntityCapabilityAttribute.MIN: 'min'>: 0.0,
+      <NumberEntityCapabilityAttribute.MODE: 'mode'>: <NumberMode.AUTO: 'auto'>,
+      <NumberEntityCapabilityAttribute.STEP: 'step'>: 0.5,
+    }),
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'device_class': None,
+    'device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_solar_circuit_1')]>,
+    'disabled_by': None,
+    'domain': 'number',
+    'entity_category': <EntityCategory.CONFIG: 'config'>,
+    'entity_id': 'number.keba_keenergy_12345678_solar_circuit_target_temperature_1_1',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': None,
+    'options': dict({
+    }),
+    'original_device_class': <NumberDeviceClass.TEMPERATURE: 'temperature'>,
+    'original_icon': 'mdi:thermometer-water',
+    'original_name': 'Soll-Temperatur 1',
+    'platform': 'keba_keenergy',
+    'previous_unique_id': None,
+    'suggested_object_id': 'keba_keenergy_12345678_solar_circuit_target_temperature_1_1',
+    'supported_features': 0,
+    'translation_key': 'solar_circuit_target_temperature',
+    'unique_id': '12345678_solar_circuit_target_temperature_1_1',
+    'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
+  })
+# ---
+# name: test_numbers[de][number.keba_keenergy_12345678_solar_circuit_target_temperature_1_1-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
@@ -815,7 +2621,49 @@
     'state': '55.0',
   })
 # ---
-# name: test_numbers[de][number.keba_keenergy_12345678_solar_circuit_target_temperature_1_2]
+# name: test_numbers[de][number.keba_keenergy_12345678_solar_circuit_target_temperature_1_2-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': dict({
+      <NumberEntityCapabilityAttribute.MAX: 'max'>: 90.0,
+      <NumberEntityCapabilityAttribute.MIN: 'min'>: 0.0,
+      <NumberEntityCapabilityAttribute.MODE: 'mode'>: <NumberMode.AUTO: 'auto'>,
+      <NumberEntityCapabilityAttribute.STEP: 'step'>: 0.5,
+    }),
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'device_class': None,
+    'device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_solar_circuit_2')]>,
+    'disabled_by': None,
+    'domain': 'number',
+    'entity_category': <EntityCategory.CONFIG: 'config'>,
+    'entity_id': 'number.keba_keenergy_12345678_solar_circuit_target_temperature_1_2',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': None,
+    'options': dict({
+    }),
+    'original_device_class': <NumberDeviceClass.TEMPERATURE: 'temperature'>,
+    'original_icon': 'mdi:thermometer-water',
+    'original_name': 'Soll-Temperatur 1',
+    'platform': 'keba_keenergy',
+    'previous_unique_id': None,
+    'suggested_object_id': 'keba_keenergy_12345678_solar_circuit_target_temperature_1_2',
+    'supported_features': 0,
+    'translation_key': 'solar_circuit_target_temperature',
+    'unique_id': '12345678_solar_circuit_target_temperature_1_2',
+    'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
+  })
+# ---
+# name: test_numbers[de][number.keba_keenergy_12345678_solar_circuit_target_temperature_1_2-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
@@ -835,7 +2683,49 @@
     'state': '53.0',
   })
 # ---
-# name: test_numbers[de][number.keba_keenergy_12345678_solar_circuit_target_temperature_2_1]
+# name: test_numbers[de][number.keba_keenergy_12345678_solar_circuit_target_temperature_2_1-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': dict({
+      <NumberEntityCapabilityAttribute.MAX: 'max'>: 90.0,
+      <NumberEntityCapabilityAttribute.MIN: 'min'>: 0.0,
+      <NumberEntityCapabilityAttribute.MODE: 'mode'>: <NumberMode.AUTO: 'auto'>,
+      <NumberEntityCapabilityAttribute.STEP: 'step'>: 0.5,
+    }),
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'device_class': None,
+    'device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_solar_circuit_1')]>,
+    'disabled_by': None,
+    'domain': 'number',
+    'entity_category': <EntityCategory.CONFIG: 'config'>,
+    'entity_id': 'number.keba_keenergy_12345678_solar_circuit_target_temperature_2_1',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': None,
+    'options': dict({
+    }),
+    'original_device_class': <NumberDeviceClass.TEMPERATURE: 'temperature'>,
+    'original_icon': 'mdi:thermometer-water',
+    'original_name': 'Soll-Temperatur 2',
+    'platform': 'keba_keenergy',
+    'previous_unique_id': None,
+    'suggested_object_id': 'keba_keenergy_12345678_solar_circuit_target_temperature_2_1',
+    'supported_features': 0,
+    'translation_key': 'solar_circuit_target_temperature',
+    'unique_id': '12345678_solar_circuit_target_temperature_2_1',
+    'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
+  })
+# ---
+# name: test_numbers[de][number.keba_keenergy_12345678_solar_circuit_target_temperature_2_1-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
@@ -855,7 +2745,49 @@
     'state': '54.0',
   })
 # ---
-# name: test_numbers[de][number.keba_keenergy_12345678_solar_circuit_target_temperature_2_2]
+# name: test_numbers[de][number.keba_keenergy_12345678_solar_circuit_target_temperature_2_2-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': dict({
+      <NumberEntityCapabilityAttribute.MAX: 'max'>: 90.0,
+      <NumberEntityCapabilityAttribute.MIN: 'min'>: 0.0,
+      <NumberEntityCapabilityAttribute.MODE: 'mode'>: <NumberMode.AUTO: 'auto'>,
+      <NumberEntityCapabilityAttribute.STEP: 'step'>: 0.5,
+    }),
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'device_class': None,
+    'device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_solar_circuit_2')]>,
+    'disabled_by': None,
+    'domain': 'number',
+    'entity_category': <EntityCategory.CONFIG: 'config'>,
+    'entity_id': 'number.keba_keenergy_12345678_solar_circuit_target_temperature_2_2',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': None,
+    'options': dict({
+    }),
+    'original_device_class': <NumberDeviceClass.TEMPERATURE: 'temperature'>,
+    'original_icon': 'mdi:thermometer-water',
+    'original_name': 'Soll-Temperatur 2',
+    'platform': 'keba_keenergy',
+    'previous_unique_id': None,
+    'suggested_object_id': 'keba_keenergy_12345678_solar_circuit_target_temperature_2_2',
+    'supported_features': 0,
+    'translation_key': 'solar_circuit_target_temperature',
+    'unique_id': '12345678_solar_circuit_target_temperature_2_2',
+    'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
+  })
+# ---
+# name: test_numbers[de][number.keba_keenergy_12345678_solar_circuit_target_temperature_2_2-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
@@ -875,7 +2807,49 @@
     'state': '52.0',
   })
 # ---
-# name: test_numbers[en][number.keba_keenergy_12345678_buffer_tank_excess_energy_target_temperature_1]
+# name: test_numbers[en][number.keba_keenergy_12345678_buffer_tank_excess_energy_target_temperature_1-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': dict({
+      <NumberEntityCapabilityAttribute.MAX: 'max'>: 95.0,
+      <NumberEntityCapabilityAttribute.MIN: 'min'>: 0.0,
+      <NumberEntityCapabilityAttribute.MODE: 'mode'>: <NumberMode.AUTO: 'auto'>,
+      <NumberEntityCapabilityAttribute.STEP: 'step'>: 0.5,
+    }),
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'device_class': None,
+    'device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_buffer_tank_1')]>,
+    'disabled_by': None,
+    'domain': 'number',
+    'entity_category': <EntityCategory.CONFIG: 'config'>,
+    'entity_id': 'number.keba_keenergy_12345678_buffer_tank_excess_energy_target_temperature_1',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': None,
+    'options': dict({
+    }),
+    'original_device_class': <NumberDeviceClass.TEMPERATURE: 'temperature'>,
+    'original_icon': None,
+    'original_name': 'Target temperature (PV surplus)',
+    'platform': 'keba_keenergy',
+    'previous_unique_id': None,
+    'suggested_object_id': 'keba_keenergy_12345678_buffer_tank_excess_energy_target_temperature_1',
+    'supported_features': 0,
+    'translation_key': 'buffer_tank_excess_energy_target_temperature',
+    'unique_id': '12345678_buffer_tank_excess_energy_target_temperature_1',
+    'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
+  })
+# ---
+# name: test_numbers[en][number.keba_keenergy_12345678_buffer_tank_excess_energy_target_temperature_1-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
@@ -894,7 +2868,49 @@
     'state': '75.0',
   })
 # ---
-# name: test_numbers[en][number.keba_keenergy_12345678_buffer_tank_excess_energy_target_temperature_2]
+# name: test_numbers[en][number.keba_keenergy_12345678_buffer_tank_excess_energy_target_temperature_2-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': dict({
+      <NumberEntityCapabilityAttribute.MAX: 'max'>: 95.0,
+      <NumberEntityCapabilityAttribute.MIN: 'min'>: 0.0,
+      <NumberEntityCapabilityAttribute.MODE: 'mode'>: <NumberMode.AUTO: 'auto'>,
+      <NumberEntityCapabilityAttribute.STEP: 'step'>: 0.5,
+    }),
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'device_class': None,
+    'device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_buffer_tank_2')]>,
+    'disabled_by': None,
+    'domain': 'number',
+    'entity_category': <EntityCategory.CONFIG: 'config'>,
+    'entity_id': 'number.keba_keenergy_12345678_buffer_tank_excess_energy_target_temperature_2',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': None,
+    'options': dict({
+    }),
+    'original_device_class': <NumberDeviceClass.TEMPERATURE: 'temperature'>,
+    'original_icon': None,
+    'original_name': 'Target temperature (PV surplus)',
+    'platform': 'keba_keenergy',
+    'previous_unique_id': None,
+    'suggested_object_id': 'keba_keenergy_12345678_buffer_tank_excess_energy_target_temperature_2',
+    'supported_features': 0,
+    'translation_key': 'buffer_tank_excess_energy_target_temperature',
+    'unique_id': '12345678_buffer_tank_excess_energy_target_temperature_2',
+    'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
+  })
+# ---
+# name: test_numbers[en][number.keba_keenergy_12345678_buffer_tank_excess_energy_target_temperature_2-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
@@ -913,7 +2929,49 @@
     'state': '75.0',
   })
 # ---
-# name: test_numbers[en][number.keba_keenergy_12345678_buffer_tank_excess_energy_target_temperature_hysteresis_1]
+# name: test_numbers[en][number.keba_keenergy_12345678_buffer_tank_excess_energy_target_temperature_hysteresis_1-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': dict({
+      <NumberEntityCapabilityAttribute.MAX: 'max'>: 5.0,
+      <NumberEntityCapabilityAttribute.MIN: 'min'>: 0.0,
+      <NumberEntityCapabilityAttribute.MODE: 'mode'>: <NumberMode.AUTO: 'auto'>,
+      <NumberEntityCapabilityAttribute.STEP: 'step'>: 0.1,
+    }),
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'device_class': None,
+    'device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_buffer_tank_1')]>,
+    'disabled_by': None,
+    'domain': 'number',
+    'entity_category': <EntityCategory.CONFIG: 'config'>,
+    'entity_id': 'number.keba_keenergy_12345678_buffer_tank_excess_energy_target_temperature_hysteresis_1',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': None,
+    'options': dict({
+    }),
+    'original_device_class': <NumberDeviceClass.TEMPERATURE: 'temperature'>,
+    'original_icon': None,
+    'original_name': 'Target temperature hysteresis (PV surplus)',
+    'platform': 'keba_keenergy',
+    'previous_unique_id': None,
+    'suggested_object_id': 'keba_keenergy_12345678_buffer_tank_excess_energy_target_temperature_hysteresis_1',
+    'supported_features': 0,
+    'translation_key': 'buffer_tank_excess_energy_target_temperature_hysteresis',
+    'unique_id': '12345678_buffer_tank_excess_energy_target_temperature_hysteresis_1',
+    'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
+  })
+# ---
+# name: test_numbers[en][number.keba_keenergy_12345678_buffer_tank_excess_energy_target_temperature_hysteresis_1-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
@@ -932,7 +2990,49 @@
     'state': '2.0',
   })
 # ---
-# name: test_numbers[en][number.keba_keenergy_12345678_buffer_tank_excess_energy_target_temperature_hysteresis_2]
+# name: test_numbers[en][number.keba_keenergy_12345678_buffer_tank_excess_energy_target_temperature_hysteresis_2-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': dict({
+      <NumberEntityCapabilityAttribute.MAX: 'max'>: 5.0,
+      <NumberEntityCapabilityAttribute.MIN: 'min'>: 0.0,
+      <NumberEntityCapabilityAttribute.MODE: 'mode'>: <NumberMode.AUTO: 'auto'>,
+      <NumberEntityCapabilityAttribute.STEP: 'step'>: 0.1,
+    }),
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'device_class': None,
+    'device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_buffer_tank_2')]>,
+    'disabled_by': None,
+    'domain': 'number',
+    'entity_category': <EntityCategory.CONFIG: 'config'>,
+    'entity_id': 'number.keba_keenergy_12345678_buffer_tank_excess_energy_target_temperature_hysteresis_2',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': None,
+    'options': dict({
+    }),
+    'original_device_class': <NumberDeviceClass.TEMPERATURE: 'temperature'>,
+    'original_icon': None,
+    'original_name': 'Target temperature hysteresis (PV surplus)',
+    'platform': 'keba_keenergy',
+    'previous_unique_id': None,
+    'suggested_object_id': 'keba_keenergy_12345678_buffer_tank_excess_energy_target_temperature_hysteresis_2',
+    'supported_features': 0,
+    'translation_key': 'buffer_tank_excess_energy_target_temperature_hysteresis',
+    'unique_id': '12345678_buffer_tank_excess_energy_target_temperature_hysteresis_2',
+    'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
+  })
+# ---
+# name: test_numbers[en][number.keba_keenergy_12345678_buffer_tank_excess_energy_target_temperature_hysteresis_2-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
@@ -951,7 +3051,49 @@
     'state': '2.0',
   })
 # ---
-# name: test_numbers[en][number.keba_keenergy_12345678_buffer_tank_outdoor_temperature_excess_energy_limit_1]
+# name: test_numbers[en][number.keba_keenergy_12345678_buffer_tank_outdoor_temperature_excess_energy_limit_1-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': dict({
+      <NumberEntityCapabilityAttribute.MAX: 'max'>: 50.0,
+      <NumberEntityCapabilityAttribute.MIN: 'min'>: 0.0,
+      <NumberEntityCapabilityAttribute.MODE: 'mode'>: <NumberMode.AUTO: 'auto'>,
+      <NumberEntityCapabilityAttribute.STEP: 'step'>: 0.5,
+    }),
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'device_class': None,
+    'device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_buffer_tank_1')]>,
+    'disabled_by': None,
+    'domain': 'number',
+    'entity_category': <EntityCategory.CONFIG: 'config'>,
+    'entity_id': 'number.keba_keenergy_12345678_buffer_tank_outdoor_temperature_excess_energy_limit_1',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': None,
+    'options': dict({
+    }),
+    'original_device_class': <NumberDeviceClass.TEMPERATURE: 'temperature'>,
+    'original_icon': None,
+    'original_name': 'Outdoor temperature limit (PV surplus)',
+    'platform': 'keba_keenergy',
+    'previous_unique_id': None,
+    'suggested_object_id': 'keba_keenergy_12345678_buffer_tank_outdoor_temperature_excess_energy_limit_1',
+    'supported_features': 0,
+    'translation_key': 'buffer_tank_outdoor_temperature_excess_energy_limit',
+    'unique_id': '12345678_buffer_tank_outdoor_temperature_excess_energy_limit_1',
+    'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
+  })
+# ---
+# name: test_numbers[en][number.keba_keenergy_12345678_buffer_tank_outdoor_temperature_excess_energy_limit_1-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
@@ -970,7 +3112,49 @@
     'state': '25.0',
   })
 # ---
-# name: test_numbers[en][number.keba_keenergy_12345678_buffer_tank_outdoor_temperature_excess_energy_limit_2]
+# name: test_numbers[en][number.keba_keenergy_12345678_buffer_tank_outdoor_temperature_excess_energy_limit_2-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': dict({
+      <NumberEntityCapabilityAttribute.MAX: 'max'>: 50.0,
+      <NumberEntityCapabilityAttribute.MIN: 'min'>: 0.0,
+      <NumberEntityCapabilityAttribute.MODE: 'mode'>: <NumberMode.AUTO: 'auto'>,
+      <NumberEntityCapabilityAttribute.STEP: 'step'>: 0.5,
+    }),
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'device_class': None,
+    'device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_buffer_tank_2')]>,
+    'disabled_by': None,
+    'domain': 'number',
+    'entity_category': <EntityCategory.CONFIG: 'config'>,
+    'entity_id': 'number.keba_keenergy_12345678_buffer_tank_outdoor_temperature_excess_energy_limit_2',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': None,
+    'options': dict({
+    }),
+    'original_device_class': <NumberDeviceClass.TEMPERATURE: 'temperature'>,
+    'original_icon': None,
+    'original_name': 'Outdoor temperature limit (PV surplus)',
+    'platform': 'keba_keenergy',
+    'previous_unique_id': None,
+    'suggested_object_id': 'keba_keenergy_12345678_buffer_tank_outdoor_temperature_excess_energy_limit_2',
+    'supported_features': 0,
+    'translation_key': 'buffer_tank_outdoor_temperature_excess_energy_limit',
+    'unique_id': '12345678_buffer_tank_outdoor_temperature_excess_energy_limit_2',
+    'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
+  })
+# ---
+# name: test_numbers[en][number.keba_keenergy_12345678_buffer_tank_outdoor_temperature_excess_energy_limit_2-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
@@ -989,7 +3173,49 @@
     'state': '25.0',
   })
 # ---
-# name: test_numbers[en][number.keba_keenergy_12345678_buffer_tank_standby_temperature_1]
+# name: test_numbers[en][number.keba_keenergy_12345678_buffer_tank_standby_temperature_1-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': dict({
+      <NumberEntityCapabilityAttribute.MAX: 'max'>: 90.0,
+      <NumberEntityCapabilityAttribute.MIN: 'min'>: 0.0,
+      <NumberEntityCapabilityAttribute.MODE: 'mode'>: <NumberMode.AUTO: 'auto'>,
+      <NumberEntityCapabilityAttribute.STEP: 'step'>: 0.5,
+    }),
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'device_class': None,
+    'device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_buffer_tank_1')]>,
+    'disabled_by': None,
+    'domain': 'number',
+    'entity_category': <EntityCategory.CONFIG: 'config'>,
+    'entity_id': 'number.keba_keenergy_12345678_buffer_tank_standby_temperature_1',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': None,
+    'options': dict({
+    }),
+    'original_device_class': <NumberDeviceClass.TEMPERATURE: 'temperature'>,
+    'original_icon': None,
+    'original_name': 'Backup temperature',
+    'platform': 'keba_keenergy',
+    'previous_unique_id': None,
+    'suggested_object_id': 'keba_keenergy_12345678_buffer_tank_standby_temperature_1',
+    'supported_features': 0,
+    'translation_key': 'buffer_tank_standby_temperature',
+    'unique_id': '12345678_buffer_tank_standby_temperature_1',
+    'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
+  })
+# ---
+# name: test_numbers[en][number.keba_keenergy_12345678_buffer_tank_standby_temperature_1-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
@@ -1008,7 +3234,49 @@
     'state': '10.0',
   })
 # ---
-# name: test_numbers[en][number.keba_keenergy_12345678_buffer_tank_standby_temperature_2]
+# name: test_numbers[en][number.keba_keenergy_12345678_buffer_tank_standby_temperature_2-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': dict({
+      <NumberEntityCapabilityAttribute.MAX: 'max'>: 90.0,
+      <NumberEntityCapabilityAttribute.MIN: 'min'>: 0.0,
+      <NumberEntityCapabilityAttribute.MODE: 'mode'>: <NumberMode.AUTO: 'auto'>,
+      <NumberEntityCapabilityAttribute.STEP: 'step'>: 0.5,
+    }),
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'device_class': None,
+    'device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_buffer_tank_2')]>,
+    'disabled_by': None,
+    'domain': 'number',
+    'entity_category': <EntityCategory.CONFIG: 'config'>,
+    'entity_id': 'number.keba_keenergy_12345678_buffer_tank_standby_temperature_2',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': None,
+    'options': dict({
+    }),
+    'original_device_class': <NumberDeviceClass.TEMPERATURE: 'temperature'>,
+    'original_icon': None,
+    'original_name': 'Backup temperature',
+    'platform': 'keba_keenergy',
+    'previous_unique_id': None,
+    'suggested_object_id': 'keba_keenergy_12345678_buffer_tank_standby_temperature_2',
+    'supported_features': 0,
+    'translation_key': 'buffer_tank_standby_temperature',
+    'unique_id': '12345678_buffer_tank_standby_temperature_2',
+    'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
+  })
+# ---
+# name: test_numbers[en][number.keba_keenergy_12345678_buffer_tank_standby_temperature_2-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
@@ -1027,7 +3295,49 @@
     'state': '11.0',
   })
 # ---
-# name: test_numbers[en][number.keba_keenergy_12345678_external_heat_source_min_runtime_excess_energy_1]
+# name: test_numbers[en][number.keba_keenergy_12345678_external_heat_source_min_runtime_excess_energy_1-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': dict({
+      <NumberEntityCapabilityAttribute.MAX: 'max'>: 180.0,
+      <NumberEntityCapabilityAttribute.MIN: 'min'>: 0.0,
+      <NumberEntityCapabilityAttribute.MODE: 'mode'>: <NumberMode.AUTO: 'auto'>,
+      <NumberEntityCapabilityAttribute.STEP: 'step'>: 1,
+    }),
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'device_class': None,
+    'device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_external_heat_source_1')]>,
+    'disabled_by': None,
+    'domain': 'number',
+    'entity_category': <EntityCategory.CONFIG: 'config'>,
+    'entity_id': 'number.keba_keenergy_12345678_external_heat_source_min_runtime_excess_energy_1',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': None,
+    'options': dict({
+    }),
+    'original_device_class': <NumberDeviceClass.DURATION: 'duration'>,
+    'original_icon': None,
+    'original_name': 'Minimum runtime (PV surplus)',
+    'platform': 'keba_keenergy',
+    'previous_unique_id': None,
+    'suggested_object_id': 'keba_keenergy_12345678_external_heat_source_min_runtime_excess_energy_1',
+    'supported_features': 0,
+    'translation_key': 'external_heat_source_min_runtime_excess_energy',
+    'unique_id': '12345678_external_heat_source_min_runtime_excess_energy_1',
+    'unit_of_measurement': <UnitOfTime.MINUTES: 'min'>,
+  })
+# ---
+# name: test_numbers[en][number.keba_keenergy_12345678_external_heat_source_min_runtime_excess_energy_1-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'duration',
@@ -1046,7 +3356,49 @@
     'state': '5.0',
   })
 # ---
-# name: test_numbers[en][number.keba_keenergy_12345678_external_heat_source_min_runtime_excess_energy_2]
+# name: test_numbers[en][number.keba_keenergy_12345678_external_heat_source_min_runtime_excess_energy_2-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': dict({
+      <NumberEntityCapabilityAttribute.MAX: 'max'>: 180.0,
+      <NumberEntityCapabilityAttribute.MIN: 'min'>: 0.0,
+      <NumberEntityCapabilityAttribute.MODE: 'mode'>: <NumberMode.AUTO: 'auto'>,
+      <NumberEntityCapabilityAttribute.STEP: 'step'>: 1,
+    }),
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'device_class': None,
+    'device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_external_heat_source_2')]>,
+    'disabled_by': None,
+    'domain': 'number',
+    'entity_category': <EntityCategory.CONFIG: 'config'>,
+    'entity_id': 'number.keba_keenergy_12345678_external_heat_source_min_runtime_excess_energy_2',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': None,
+    'options': dict({
+    }),
+    'original_device_class': <NumberDeviceClass.DURATION: 'duration'>,
+    'original_icon': None,
+    'original_name': 'Minimum runtime (PV surplus)',
+    'platform': 'keba_keenergy',
+    'previous_unique_id': None,
+    'suggested_object_id': 'keba_keenergy_12345678_external_heat_source_min_runtime_excess_energy_2',
+    'supported_features': 0,
+    'translation_key': 'external_heat_source_min_runtime_excess_energy',
+    'unique_id': '12345678_external_heat_source_min_runtime_excess_energy_2',
+    'unit_of_measurement': <UnitOfTime.MINUTES: 'min'>,
+  })
+# ---
+# name: test_numbers[en][number.keba_keenergy_12345678_external_heat_source_min_runtime_excess_energy_2-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'duration',
@@ -1065,7 +3417,49 @@
     'state': '5.0',
   })
 # ---
-# name: test_numbers[en][number.keba_keenergy_12345678_heat_circuit_cooling_curve_offset_2]
+# name: test_numbers[en][number.keba_keenergy_12345678_heat_circuit_cooling_curve_offset_2-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': dict({
+      <NumberEntityCapabilityAttribute.MAX: 'max'>: 10.0,
+      <NumberEntityCapabilityAttribute.MIN: 'min'>: -10.0,
+      <NumberEntityCapabilityAttribute.MODE: 'mode'>: <NumberMode.AUTO: 'auto'>,
+      <NumberEntityCapabilityAttribute.STEP: 'step'>: 0.1,
+    }),
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'device_class': None,
+    'device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_heat_circuit_2')]>,
+    'disabled_by': None,
+    'domain': 'number',
+    'entity_category': <EntityCategory.CONFIG: 'config'>,
+    'entity_id': 'number.keba_keenergy_12345678_heat_circuit_cooling_curve_offset_2',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': None,
+    'options': dict({
+    }),
+    'original_device_class': <NumberDeviceClass.TEMPERATURE: 'temperature'>,
+    'original_icon': None,
+    'original_name': 'Cooling curve offset',
+    'platform': 'keba_keenergy',
+    'previous_unique_id': None,
+    'suggested_object_id': 'keba_keenergy_12345678_heat_circuit_cooling_curve_offset_2',
+    'supported_features': 0,
+    'translation_key': 'heating_circuit_cooling_curve_offset',
+    'unique_id': '12345678_heat_circuit_cooling_curve_offset_2',
+    'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
+  })
+# ---
+# name: test_numbers[en][number.keba_keenergy_12345678_heat_circuit_cooling_curve_offset_2-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
@@ -1084,7 +3478,49 @@
     'state': '-1.5',
   })
 # ---
-# name: test_numbers[en][number.keba_keenergy_12345678_heat_circuit_cooling_curve_slope_2]
+# name: test_numbers[en][number.keba_keenergy_12345678_heat_circuit_cooling_curve_slope_2-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': dict({
+      <NumberEntityCapabilityAttribute.MAX: 'max'>: 5.0,
+      <NumberEntityCapabilityAttribute.MIN: 'min'>: 0.0,
+      <NumberEntityCapabilityAttribute.MODE: 'mode'>: <NumberMode.AUTO: 'auto'>,
+      <NumberEntityCapabilityAttribute.STEP: 'step'>: 0.01,
+    }),
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'device_class': None,
+    'device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_heat_circuit_2')]>,
+    'disabled_by': None,
+    'domain': 'number',
+    'entity_category': <EntityCategory.CONFIG: 'config'>,
+    'entity_id': 'number.keba_keenergy_12345678_heat_circuit_cooling_curve_slope_2',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': None,
+    'options': dict({
+    }),
+    'original_device_class': None,
+    'original_icon': None,
+    'original_name': 'Cooling curve slope',
+    'platform': 'keba_keenergy',
+    'previous_unique_id': None,
+    'suggested_object_id': 'keba_keenergy_12345678_heat_circuit_cooling_curve_slope_2',
+    'supported_features': 0,
+    'translation_key': 'heating_circuit_cooling_curve_slope',
+    'unique_id': '12345678_heat_circuit_cooling_curve_slope_2',
+    'unit_of_measurement': None,
+  })
+# ---
+# name: test_numbers[en][number.keba_keenergy_12345678_heat_circuit_cooling_curve_slope_2-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Heating circuit 2 Cooling curve slope',
@@ -1101,7 +3537,49 @@
     'state': '0.6',
   })
 # ---
-# name: test_numbers[en][number.keba_keenergy_12345678_heat_circuit_cooling_limit_day_2]
+# name: test_numbers[en][number.keba_keenergy_12345678_heat_circuit_cooling_limit_day_2-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': dict({
+      <NumberEntityCapabilityAttribute.MAX: 'max'>: 100.0,
+      <NumberEntityCapabilityAttribute.MIN: 'min'>: -20.0,
+      <NumberEntityCapabilityAttribute.MODE: 'mode'>: <NumberMode.AUTO: 'auto'>,
+      <NumberEntityCapabilityAttribute.STEP: 'step'>: 0.5,
+    }),
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'device_class': None,
+    'device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_heat_circuit_2')]>,
+    'disabled_by': None,
+    'domain': 'number',
+    'entity_category': <EntityCategory.CONFIG: 'config'>,
+    'entity_id': 'number.keba_keenergy_12345678_heat_circuit_cooling_limit_day_2',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': None,
+    'options': dict({
+    }),
+    'original_device_class': <NumberDeviceClass.TEMPERATURE: 'temperature'>,
+    'original_icon': None,
+    'original_name': 'Cooling limit (normal)',
+    'platform': 'keba_keenergy',
+    'previous_unique_id': None,
+    'suggested_object_id': 'keba_keenergy_12345678_heat_circuit_cooling_limit_day_2',
+    'supported_features': 0,
+    'translation_key': 'heating_circuit_cooling_limit_day',
+    'unique_id': '12345678_heat_circuit_cooling_limit_day_2',
+    'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
+  })
+# ---
+# name: test_numbers[en][number.keba_keenergy_12345678_heat_circuit_cooling_limit_day_2-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
@@ -1120,7 +3598,49 @@
     'state': '20.0',
   })
 # ---
-# name: test_numbers[en][number.keba_keenergy_12345678_heat_circuit_cooling_limit_night_2]
+# name: test_numbers[en][number.keba_keenergy_12345678_heat_circuit_cooling_limit_night_2-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': dict({
+      <NumberEntityCapabilityAttribute.MAX: 'max'>: 40.0,
+      <NumberEntityCapabilityAttribute.MIN: 'min'>: -20.0,
+      <NumberEntityCapabilityAttribute.MODE: 'mode'>: <NumberMode.AUTO: 'auto'>,
+      <NumberEntityCapabilityAttribute.STEP: 'step'>: 0.5,
+    }),
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'device_class': None,
+    'device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_heat_circuit_2')]>,
+    'disabled_by': None,
+    'domain': 'number',
+    'entity_category': <EntityCategory.CONFIG: 'config'>,
+    'entity_id': 'number.keba_keenergy_12345678_heat_circuit_cooling_limit_night_2',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': None,
+    'options': dict({
+    }),
+    'original_device_class': <NumberDeviceClass.TEMPERATURE: 'temperature'>,
+    'original_icon': None,
+    'original_name': 'Cooling limit (reduced)',
+    'platform': 'keba_keenergy',
+    'previous_unique_id': None,
+    'suggested_object_id': 'keba_keenergy_12345678_heat_circuit_cooling_limit_night_2',
+    'supported_features': 0,
+    'translation_key': 'heating_circuit_cooling_limit_night',
+    'unique_id': '12345678_heat_circuit_cooling_limit_night_2',
+    'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
+  })
+# ---
+# name: test_numbers[en][number.keba_keenergy_12345678_heat_circuit_cooling_limit_night_2-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
@@ -1139,7 +3659,49 @@
     'state': '18.0',
   })
 # ---
-# name: test_numbers[en][number.keba_keenergy_12345678_heat_circuit_excess_energy_cooling_limit_day_2]
+# name: test_numbers[en][number.keba_keenergy_12345678_heat_circuit_excess_energy_cooling_limit_day_2-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': dict({
+      <NumberEntityCapabilityAttribute.MAX: 'max'>: 100.0,
+      <NumberEntityCapabilityAttribute.MIN: 'min'>: -20.0,
+      <NumberEntityCapabilityAttribute.MODE: 'mode'>: <NumberMode.AUTO: 'auto'>,
+      <NumberEntityCapabilityAttribute.STEP: 'step'>: 0.5,
+    }),
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'device_class': None,
+    'device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_heat_circuit_2')]>,
+    'disabled_by': None,
+    'domain': 'number',
+    'entity_category': <EntityCategory.CONFIG: 'config'>,
+    'entity_id': 'number.keba_keenergy_12345678_heat_circuit_excess_energy_cooling_limit_day_2',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': None,
+    'options': dict({
+    }),
+    'original_device_class': <NumberDeviceClass.TEMPERATURE: 'temperature'>,
+    'original_icon': None,
+    'original_name': 'Cooling limit (PV surplus, normal)',
+    'platform': 'keba_keenergy',
+    'previous_unique_id': None,
+    'suggested_object_id': 'keba_keenergy_12345678_heat_circuit_excess_energy_cooling_limit_day_2',
+    'supported_features': 0,
+    'translation_key': 'heating_circuit_excess_energy_cooling_limit_day',
+    'unique_id': '12345678_heat_circuit_excess_energy_cooling_limit_day_2',
+    'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
+  })
+# ---
+# name: test_numbers[en][number.keba_keenergy_12345678_heat_circuit_excess_energy_cooling_limit_day_2-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
@@ -1158,7 +3720,49 @@
     'state': '10.0',
   })
 # ---
-# name: test_numbers[en][number.keba_keenergy_12345678_heat_circuit_excess_energy_cooling_limit_night_2]
+# name: test_numbers[en][number.keba_keenergy_12345678_heat_circuit_excess_energy_cooling_limit_night_2-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': dict({
+      <NumberEntityCapabilityAttribute.MAX: 'max'>: 100.0,
+      <NumberEntityCapabilityAttribute.MIN: 'min'>: -20.0,
+      <NumberEntityCapabilityAttribute.MODE: 'mode'>: <NumberMode.AUTO: 'auto'>,
+      <NumberEntityCapabilityAttribute.STEP: 'step'>: 0.5,
+    }),
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'device_class': None,
+    'device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_heat_circuit_2')]>,
+    'disabled_by': None,
+    'domain': 'number',
+    'entity_category': <EntityCategory.CONFIG: 'config'>,
+    'entity_id': 'number.keba_keenergy_12345678_heat_circuit_excess_energy_cooling_limit_night_2',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': None,
+    'options': dict({
+    }),
+    'original_device_class': <NumberDeviceClass.TEMPERATURE: 'temperature'>,
+    'original_icon': None,
+    'original_name': 'Cooling limit (PV surplus, reduced)',
+    'platform': 'keba_keenergy',
+    'previous_unique_id': None,
+    'suggested_object_id': 'keba_keenergy_12345678_heat_circuit_excess_energy_cooling_limit_night_2',
+    'supported_features': 0,
+    'translation_key': 'heating_circuit_excess_energy_cooling_limit_night',
+    'unique_id': '12345678_heat_circuit_excess_energy_cooling_limit_night_2',
+    'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
+  })
+# ---
+# name: test_numbers[en][number.keba_keenergy_12345678_heat_circuit_excess_energy_cooling_limit_night_2-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
@@ -1177,7 +3781,49 @@
     'state': '28.0',
   })
 # ---
-# name: test_numbers[en][number.keba_keenergy_12345678_heat_circuit_excess_energy_heating_limit_day_1]
+# name: test_numbers[en][number.keba_keenergy_12345678_heat_circuit_excess_energy_heating_limit_day_1-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': dict({
+      <NumberEntityCapabilityAttribute.MAX: 'max'>: 100.0,
+      <NumberEntityCapabilityAttribute.MIN: 'min'>: -20.0,
+      <NumberEntityCapabilityAttribute.MODE: 'mode'>: <NumberMode.AUTO: 'auto'>,
+      <NumberEntityCapabilityAttribute.STEP: 'step'>: 0.5,
+    }),
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'device_class': None,
+    'device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_heat_circuit_1')]>,
+    'disabled_by': None,
+    'domain': 'number',
+    'entity_category': <EntityCategory.CONFIG: 'config'>,
+    'entity_id': 'number.keba_keenergy_12345678_heat_circuit_excess_energy_heating_limit_day_1',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': None,
+    'options': dict({
+    }),
+    'original_device_class': <NumberDeviceClass.TEMPERATURE: 'temperature'>,
+    'original_icon': None,
+    'original_name': 'Heating limit (PV surplus, normal)',
+    'platform': 'keba_keenergy',
+    'previous_unique_id': None,
+    'suggested_object_id': 'keba_keenergy_12345678_heat_circuit_excess_energy_heating_limit_day_1',
+    'supported_features': 0,
+    'translation_key': 'heating_circuit_excess_energy_heating_limit_day',
+    'unique_id': '12345678_heat_circuit_excess_energy_heating_limit_day_1',
+    'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
+  })
+# ---
+# name: test_numbers[en][number.keba_keenergy_12345678_heat_circuit_excess_energy_heating_limit_day_1-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
@@ -1196,7 +3842,49 @@
     'state': '30.0',
   })
 # ---
-# name: test_numbers[en][number.keba_keenergy_12345678_heat_circuit_excess_energy_heating_limit_night_1]
+# name: test_numbers[en][number.keba_keenergy_12345678_heat_circuit_excess_energy_heating_limit_night_1-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': dict({
+      <NumberEntityCapabilityAttribute.MAX: 'max'>: 100.0,
+      <NumberEntityCapabilityAttribute.MIN: 'min'>: -20.0,
+      <NumberEntityCapabilityAttribute.MODE: 'mode'>: <NumberMode.AUTO: 'auto'>,
+      <NumberEntityCapabilityAttribute.STEP: 'step'>: 0.5,
+    }),
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'device_class': None,
+    'device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_heat_circuit_1')]>,
+    'disabled_by': None,
+    'domain': 'number',
+    'entity_category': <EntityCategory.CONFIG: 'config'>,
+    'entity_id': 'number.keba_keenergy_12345678_heat_circuit_excess_energy_heating_limit_night_1',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': None,
+    'options': dict({
+    }),
+    'original_device_class': <NumberDeviceClass.TEMPERATURE: 'temperature'>,
+    'original_icon': None,
+    'original_name': 'Heating limit (PV surplus, reduced)',
+    'platform': 'keba_keenergy',
+    'previous_unique_id': None,
+    'suggested_object_id': 'keba_keenergy_12345678_heat_circuit_excess_energy_heating_limit_night_1',
+    'supported_features': 0,
+    'translation_key': 'heating_circuit_excess_energy_heating_limit_night',
+    'unique_id': '12345678_heat_circuit_excess_energy_heating_limit_night_1',
+    'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
+  })
+# ---
+# name: test_numbers[en][number.keba_keenergy_12345678_heat_circuit_excess_energy_heating_limit_night_1-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
@@ -1215,7 +3903,49 @@
     'state': '28.0',
   })
 # ---
-# name: test_numbers[en][number.keba_keenergy_12345678_heat_circuit_excess_energy_target_cooling_temperature_2]
+# name: test_numbers[en][number.keba_keenergy_12345678_heat_circuit_excess_energy_target_cooling_temperature_2-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': dict({
+      <NumberEntityCapabilityAttribute.MAX: 'max'>: 30.0,
+      <NumberEntityCapabilityAttribute.MIN: 'min'>: 10.0,
+      <NumberEntityCapabilityAttribute.MODE: 'mode'>: <NumberMode.AUTO: 'auto'>,
+      <NumberEntityCapabilityAttribute.STEP: 'step'>: 0.5,
+    }),
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'device_class': None,
+    'device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_heat_circuit_2')]>,
+    'disabled_by': None,
+    'domain': 'number',
+    'entity_category': <EntityCategory.CONFIG: 'config'>,
+    'entity_id': 'number.keba_keenergy_12345678_heat_circuit_excess_energy_target_cooling_temperature_2',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': None,
+    'options': dict({
+    }),
+    'original_device_class': <NumberDeviceClass.TEMPERATURE: 'temperature'>,
+    'original_icon': None,
+    'original_name': 'Target room cooling temperature (PV surplus)',
+    'platform': 'keba_keenergy',
+    'previous_unique_id': None,
+    'suggested_object_id': 'keba_keenergy_12345678_heat_circuit_excess_energy_target_cooling_temperature_2',
+    'supported_features': 0,
+    'translation_key': 'heating_circuit_excess_energy_target_room_cooling_temperature',
+    'unique_id': '12345678_heat_circuit_excess_energy_target_cooling_temperature_2',
+    'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
+  })
+# ---
+# name: test_numbers[en][number.keba_keenergy_12345678_heat_circuit_excess_energy_target_cooling_temperature_2-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
@@ -1234,7 +3964,49 @@
     'state': '10.0',
   })
 # ---
-# name: test_numbers[en][number.keba_keenergy_12345678_heat_circuit_excess_energy_target_cooling_temperature_hysteresis_2]
+# name: test_numbers[en][number.keba_keenergy_12345678_heat_circuit_excess_energy_target_cooling_temperature_hysteresis_2-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': dict({
+      <NumberEntityCapabilityAttribute.MAX: 'max'>: 2.0,
+      <NumberEntityCapabilityAttribute.MIN: 'min'>: 0.0,
+      <NumberEntityCapabilityAttribute.MODE: 'mode'>: <NumberMode.AUTO: 'auto'>,
+      <NumberEntityCapabilityAttribute.STEP: 'step'>: 0.1,
+    }),
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'device_class': None,
+    'device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_heat_circuit_2')]>,
+    'disabled_by': None,
+    'domain': 'number',
+    'entity_category': <EntityCategory.CONFIG: 'config'>,
+    'entity_id': 'number.keba_keenergy_12345678_heat_circuit_excess_energy_target_cooling_temperature_hysteresis_2',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': None,
+    'options': dict({
+    }),
+    'original_device_class': <NumberDeviceClass.TEMPERATURE: 'temperature'>,
+    'original_icon': None,
+    'original_name': 'Target room cooling temperature hysteresis (PV surplus)',
+    'platform': 'keba_keenergy',
+    'previous_unique_id': None,
+    'suggested_object_id': 'keba_keenergy_12345678_heat_circuit_excess_energy_target_cooling_temperature_hysteresis_2',
+    'supported_features': 0,
+    'translation_key': 'heating_circuit_excess_energy_target_room_cooling_temperature_hysteresis',
+    'unique_id': '12345678_heat_circuit_excess_energy_target_cooling_temperature_hysteresis_2',
+    'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
+  })
+# ---
+# name: test_numbers[en][number.keba_keenergy_12345678_heat_circuit_excess_energy_target_cooling_temperature_hysteresis_2-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
@@ -1253,7 +4025,49 @@
     'state': '0.7',
   })
 # ---
-# name: test_numbers[en][number.keba_keenergy_12345678_heat_circuit_excess_energy_target_temperature_1]
+# name: test_numbers[en][number.keba_keenergy_12345678_heat_circuit_excess_energy_target_temperature_1-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': dict({
+      <NumberEntityCapabilityAttribute.MAX: 'max'>: 30.0,
+      <NumberEntityCapabilityAttribute.MIN: 'min'>: 10.0,
+      <NumberEntityCapabilityAttribute.MODE: 'mode'>: <NumberMode.AUTO: 'auto'>,
+      <NumberEntityCapabilityAttribute.STEP: 'step'>: 0.5,
+    }),
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'device_class': None,
+    'device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_heat_circuit_1')]>,
+    'disabled_by': None,
+    'domain': 'number',
+    'entity_category': <EntityCategory.CONFIG: 'config'>,
+    'entity_id': 'number.keba_keenergy_12345678_heat_circuit_excess_energy_target_temperature_1',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': None,
+    'options': dict({
+    }),
+    'original_device_class': <NumberDeviceClass.TEMPERATURE: 'temperature'>,
+    'original_icon': None,
+    'original_name': 'Target room temperature (PV surplus)',
+    'platform': 'keba_keenergy',
+    'previous_unique_id': None,
+    'suggested_object_id': 'keba_keenergy_12345678_heat_circuit_excess_energy_target_temperature_1',
+    'supported_features': 0,
+    'translation_key': 'heating_circuit_excess_energy_target_room_temperature',
+    'unique_id': '12345678_heat_circuit_excess_energy_target_temperature_1',
+    'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
+  })
+# ---
+# name: test_numbers[en][number.keba_keenergy_12345678_heat_circuit_excess_energy_target_temperature_1-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
@@ -1272,7 +4086,49 @@
     'state': '30.0',
   })
 # ---
-# name: test_numbers[en][number.keba_keenergy_12345678_heat_circuit_excess_energy_target_temperature_hysteresis_1]
+# name: test_numbers[en][number.keba_keenergy_12345678_heat_circuit_excess_energy_target_temperature_hysteresis_1-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': dict({
+      <NumberEntityCapabilityAttribute.MAX: 'max'>: 2.0,
+      <NumberEntityCapabilityAttribute.MIN: 'min'>: 0.0,
+      <NumberEntityCapabilityAttribute.MODE: 'mode'>: <NumberMode.AUTO: 'auto'>,
+      <NumberEntityCapabilityAttribute.STEP: 'step'>: 0.1,
+    }),
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'device_class': None,
+    'device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_heat_circuit_1')]>,
+    'disabled_by': None,
+    'domain': 'number',
+    'entity_category': <EntityCategory.CONFIG: 'config'>,
+    'entity_id': 'number.keba_keenergy_12345678_heat_circuit_excess_energy_target_temperature_hysteresis_1',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': None,
+    'options': dict({
+    }),
+    'original_device_class': <NumberDeviceClass.TEMPERATURE: 'temperature'>,
+    'original_icon': None,
+    'original_name': 'Target room temperature hysteresis (PV surplus)',
+    'platform': 'keba_keenergy',
+    'previous_unique_id': None,
+    'suggested_object_id': 'keba_keenergy_12345678_heat_circuit_excess_energy_target_temperature_hysteresis_1',
+    'supported_features': 0,
+    'translation_key': 'heating_circuit_excess_energy_target_room_temperature_hysteresis',
+    'unique_id': '12345678_heat_circuit_excess_energy_target_temperature_hysteresis_1',
+    'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
+  })
+# ---
+# name: test_numbers[en][number.keba_keenergy_12345678_heat_circuit_excess_energy_target_temperature_hysteresis_1-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
@@ -1291,7 +4147,49 @@
     'state': '0.7',
   })
 # ---
-# name: test_numbers[en][number.keba_keenergy_12345678_heat_circuit_heating_curve_offset_1]
+# name: test_numbers[en][number.keba_keenergy_12345678_heat_circuit_heating_curve_offset_1-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': dict({
+      <NumberEntityCapabilityAttribute.MAX: 'max'>: 10.0,
+      <NumberEntityCapabilityAttribute.MIN: 'min'>: -10.0,
+      <NumberEntityCapabilityAttribute.MODE: 'mode'>: <NumberMode.AUTO: 'auto'>,
+      <NumberEntityCapabilityAttribute.STEP: 'step'>: 0.1,
+    }),
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'device_class': None,
+    'device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_heat_circuit_1')]>,
+    'disabled_by': None,
+    'domain': 'number',
+    'entity_category': <EntityCategory.CONFIG: 'config'>,
+    'entity_id': 'number.keba_keenergy_12345678_heat_circuit_heating_curve_offset_1',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': None,
+    'options': dict({
+    }),
+    'original_device_class': <NumberDeviceClass.TEMPERATURE: 'temperature'>,
+    'original_icon': None,
+    'original_name': 'Heating curve offset',
+    'platform': 'keba_keenergy',
+    'previous_unique_id': None,
+    'suggested_object_id': 'keba_keenergy_12345678_heat_circuit_heating_curve_offset_1',
+    'supported_features': 0,
+    'translation_key': 'heating_circuit_heating_curve_offset',
+    'unique_id': '12345678_heat_circuit_heating_curve_offset_1',
+    'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
+  })
+# ---
+# name: test_numbers[en][number.keba_keenergy_12345678_heat_circuit_heating_curve_offset_1-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
@@ -1310,7 +4208,49 @@
     'state': '1.5',
   })
 # ---
-# name: test_numbers[en][number.keba_keenergy_12345678_heat_circuit_heating_curve_slope_1]
+# name: test_numbers[en][number.keba_keenergy_12345678_heat_circuit_heating_curve_slope_1-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': dict({
+      <NumberEntityCapabilityAttribute.MAX: 'max'>: 5.0,
+      <NumberEntityCapabilityAttribute.MIN: 'min'>: 0.0,
+      <NumberEntityCapabilityAttribute.MODE: 'mode'>: <NumberMode.AUTO: 'auto'>,
+      <NumberEntityCapabilityAttribute.STEP: 'step'>: 0.01,
+    }),
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'device_class': None,
+    'device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_heat_circuit_1')]>,
+    'disabled_by': None,
+    'domain': 'number',
+    'entity_category': <EntityCategory.CONFIG: 'config'>,
+    'entity_id': 'number.keba_keenergy_12345678_heat_circuit_heating_curve_slope_1',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': None,
+    'options': dict({
+    }),
+    'original_device_class': None,
+    'original_icon': None,
+    'original_name': 'Heating curve slope',
+    'platform': 'keba_keenergy',
+    'previous_unique_id': None,
+    'suggested_object_id': 'keba_keenergy_12345678_heat_circuit_heating_curve_slope_1',
+    'supported_features': 0,
+    'translation_key': 'heating_circuit_heating_curve_slope',
+    'unique_id': '12345678_heat_circuit_heating_curve_slope_1',
+    'unit_of_measurement': None,
+  })
+# ---
+# name: test_numbers[en][number.keba_keenergy_12345678_heat_circuit_heating_curve_slope_1-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Heating circuit 1 Heating curve slope',
@@ -1327,7 +4267,49 @@
     'state': '0.5',
   })
 # ---
-# name: test_numbers[en][number.keba_keenergy_12345678_heat_circuit_heating_limit_day_1]
+# name: test_numbers[en][number.keba_keenergy_12345678_heat_circuit_heating_limit_day_1-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': dict({
+      <NumberEntityCapabilityAttribute.MAX: 'max'>: 100.0,
+      <NumberEntityCapabilityAttribute.MIN: 'min'>: -20.0,
+      <NumberEntityCapabilityAttribute.MODE: 'mode'>: <NumberMode.AUTO: 'auto'>,
+      <NumberEntityCapabilityAttribute.STEP: 'step'>: 0.5,
+    }),
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'device_class': None,
+    'device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_heat_circuit_1')]>,
+    'disabled_by': None,
+    'domain': 'number',
+    'entity_category': <EntityCategory.CONFIG: 'config'>,
+    'entity_id': 'number.keba_keenergy_12345678_heat_circuit_heating_limit_day_1',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': None,
+    'options': dict({
+    }),
+    'original_device_class': <NumberDeviceClass.TEMPERATURE: 'temperature'>,
+    'original_icon': None,
+    'original_name': 'Heating limit (normal)',
+    'platform': 'keba_keenergy',
+    'previous_unique_id': None,
+    'suggested_object_id': 'keba_keenergy_12345678_heat_circuit_heating_limit_day_1',
+    'supported_features': 0,
+    'translation_key': 'heating_circuit_heating_limit_day',
+    'unique_id': '12345678_heat_circuit_heating_limit_day_1',
+    'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
+  })
+# ---
+# name: test_numbers[en][number.keba_keenergy_12345678_heat_circuit_heating_limit_day_1-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
@@ -1346,7 +4328,49 @@
     'state': '20.0',
   })
 # ---
-# name: test_numbers[en][number.keba_keenergy_12345678_heat_circuit_heating_limit_night_1]
+# name: test_numbers[en][number.keba_keenergy_12345678_heat_circuit_heating_limit_night_1-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': dict({
+      <NumberEntityCapabilityAttribute.MAX: 'max'>: 100.0,
+      <NumberEntityCapabilityAttribute.MIN: 'min'>: -20.0,
+      <NumberEntityCapabilityAttribute.MODE: 'mode'>: <NumberMode.AUTO: 'auto'>,
+      <NumberEntityCapabilityAttribute.STEP: 'step'>: 0.5,
+    }),
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'device_class': None,
+    'device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_heat_circuit_1')]>,
+    'disabled_by': None,
+    'domain': 'number',
+    'entity_category': <EntityCategory.CONFIG: 'config'>,
+    'entity_id': 'number.keba_keenergy_12345678_heat_circuit_heating_limit_night_1',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': None,
+    'options': dict({
+    }),
+    'original_device_class': <NumberDeviceClass.TEMPERATURE: 'temperature'>,
+    'original_icon': None,
+    'original_name': 'Heating limit (reduced)',
+    'platform': 'keba_keenergy',
+    'previous_unique_id': None,
+    'suggested_object_id': 'keba_keenergy_12345678_heat_circuit_heating_limit_night_1',
+    'supported_features': 0,
+    'translation_key': 'heating_circuit_heating_limit_night',
+    'unique_id': '12345678_heat_circuit_heating_limit_night_1',
+    'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
+  })
+# ---
+# name: test_numbers[en][number.keba_keenergy_12345678_heat_circuit_heating_limit_night_1-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
@@ -1365,7 +4389,49 @@
     'state': '18.0',
   })
 # ---
-# name: test_numbers[en][number.keba_keenergy_12345678_heat_circuit_target_cooling_temperature_day_2]
+# name: test_numbers[en][number.keba_keenergy_12345678_heat_circuit_target_cooling_temperature_day_2-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': dict({
+      <NumberEntityCapabilityAttribute.MAX: 'max'>: 30.0,
+      <NumberEntityCapabilityAttribute.MIN: 'min'>: 10.0,
+      <NumberEntityCapabilityAttribute.MODE: 'mode'>: <NumberMode.AUTO: 'auto'>,
+      <NumberEntityCapabilityAttribute.STEP: 'step'>: 0.5,
+    }),
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'device_class': None,
+    'device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_heat_circuit_2')]>,
+    'disabled_by': None,
+    'domain': 'number',
+    'entity_category': <EntityCategory.CONFIG: 'config'>,
+    'entity_id': 'number.keba_keenergy_12345678_heat_circuit_target_cooling_temperature_day_2',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': None,
+    'options': dict({
+    }),
+    'original_device_class': <NumberDeviceClass.TEMPERATURE: 'temperature'>,
+    'original_icon': None,
+    'original_name': 'Target room cooling temperature (normal)',
+    'platform': 'keba_keenergy',
+    'previous_unique_id': None,
+    'suggested_object_id': 'keba_keenergy_12345678_heat_circuit_target_cooling_temperature_day_2',
+    'supported_features': 0,
+    'translation_key': 'heating_circuit_target_room_cooling_temperature_day',
+    'unique_id': '12345678_heat_circuit_target_cooling_temperature_day_2',
+    'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
+  })
+# ---
+# name: test_numbers[en][number.keba_keenergy_12345678_heat_circuit_target_cooling_temperature_day_2-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
@@ -1384,7 +4450,49 @@
     'state': '20.5',
   })
 # ---
-# name: test_numbers[en][number.keba_keenergy_12345678_heat_circuit_target_cooling_temperature_night_2]
+# name: test_numbers[en][number.keba_keenergy_12345678_heat_circuit_target_cooling_temperature_night_2-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': dict({
+      <NumberEntityCapabilityAttribute.MAX: 'max'>: 30.0,
+      <NumberEntityCapabilityAttribute.MIN: 'min'>: 10.0,
+      <NumberEntityCapabilityAttribute.MODE: 'mode'>: <NumberMode.AUTO: 'auto'>,
+      <NumberEntityCapabilityAttribute.STEP: 'step'>: 0.5,
+    }),
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'device_class': None,
+    'device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_heat_circuit_2')]>,
+    'disabled_by': None,
+    'domain': 'number',
+    'entity_category': <EntityCategory.CONFIG: 'config'>,
+    'entity_id': 'number.keba_keenergy_12345678_heat_circuit_target_cooling_temperature_night_2',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': None,
+    'options': dict({
+    }),
+    'original_device_class': <NumberDeviceClass.TEMPERATURE: 'temperature'>,
+    'original_icon': None,
+    'original_name': 'Target room cooling temperature (reduced)',
+    'platform': 'keba_keenergy',
+    'previous_unique_id': None,
+    'suggested_object_id': 'keba_keenergy_12345678_heat_circuit_target_cooling_temperature_night_2',
+    'supported_features': 0,
+    'translation_key': 'heating_circuit_target_room_cooling_temperature_night',
+    'unique_id': '12345678_heat_circuit_target_cooling_temperature_night_2',
+    'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
+  })
+# ---
+# name: test_numbers[en][number.keba_keenergy_12345678_heat_circuit_target_cooling_temperature_night_2-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
@@ -1403,7 +4511,49 @@
     'state': '20.0',
   })
 # ---
-# name: test_numbers[en][number.keba_keenergy_12345678_heat_circuit_target_temperature_away_1]
+# name: test_numbers[en][number.keba_keenergy_12345678_heat_circuit_target_temperature_away_1-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': dict({
+      <NumberEntityCapabilityAttribute.MAX: 'max'>: 30.0,
+      <NumberEntityCapabilityAttribute.MIN: 'min'>: 10.0,
+      <NumberEntityCapabilityAttribute.MODE: 'mode'>: <NumberMode.AUTO: 'auto'>,
+      <NumberEntityCapabilityAttribute.STEP: 'step'>: 0.5,
+    }),
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'device_class': None,
+    'device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_heat_circuit_1')]>,
+    'disabled_by': None,
+    'domain': 'number',
+    'entity_category': <EntityCategory.CONFIG: 'config'>,
+    'entity_id': 'number.keba_keenergy_12345678_heat_circuit_target_temperature_away_1',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': None,
+    'options': dict({
+    }),
+    'original_device_class': <NumberDeviceClass.TEMPERATURE: 'temperature'>,
+    'original_icon': None,
+    'original_name': 'Target room temperature (away)',
+    'platform': 'keba_keenergy',
+    'previous_unique_id': None,
+    'suggested_object_id': 'keba_keenergy_12345678_heat_circuit_target_temperature_away_1',
+    'supported_features': 0,
+    'translation_key': 'heating_circuit_target_room_temperature_away',
+    'unique_id': '12345678_heat_circuit_target_temperature_away_1',
+    'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
+  })
+# ---
+# name: test_numbers[en][number.keba_keenergy_12345678_heat_circuit_target_temperature_away_1-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
@@ -1422,7 +4572,49 @@
     'state': '18.0',
   })
 # ---
-# name: test_numbers[en][number.keba_keenergy_12345678_heat_circuit_target_temperature_day_1]
+# name: test_numbers[en][number.keba_keenergy_12345678_heat_circuit_target_temperature_day_1-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': dict({
+      <NumberEntityCapabilityAttribute.MAX: 'max'>: 30.0,
+      <NumberEntityCapabilityAttribute.MIN: 'min'>: 10.0,
+      <NumberEntityCapabilityAttribute.MODE: 'mode'>: <NumberMode.AUTO: 'auto'>,
+      <NumberEntityCapabilityAttribute.STEP: 'step'>: 0.5,
+    }),
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'device_class': None,
+    'device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_heat_circuit_1')]>,
+    'disabled_by': None,
+    'domain': 'number',
+    'entity_category': <EntityCategory.CONFIG: 'config'>,
+    'entity_id': 'number.keba_keenergy_12345678_heat_circuit_target_temperature_day_1',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': None,
+    'options': dict({
+    }),
+    'original_device_class': <NumberDeviceClass.TEMPERATURE: 'temperature'>,
+    'original_icon': None,
+    'original_name': 'Target room temperature (normal)',
+    'platform': 'keba_keenergy',
+    'previous_unique_id': None,
+    'suggested_object_id': 'keba_keenergy_12345678_heat_circuit_target_temperature_day_1',
+    'supported_features': 0,
+    'translation_key': 'heating_circuit_target_room_temperature_day',
+    'unique_id': '12345678_heat_circuit_target_temperature_day_1',
+    'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
+  })
+# ---
+# name: test_numbers[en][number.keba_keenergy_12345678_heat_circuit_target_temperature_day_1-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
@@ -1441,7 +4633,49 @@
     'state': '20.5',
   })
 # ---
-# name: test_numbers[en][number.keba_keenergy_12345678_heat_circuit_target_temperature_night_1]
+# name: test_numbers[en][number.keba_keenergy_12345678_heat_circuit_target_temperature_night_1-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': dict({
+      <NumberEntityCapabilityAttribute.MAX: 'max'>: 30.0,
+      <NumberEntityCapabilityAttribute.MIN: 'min'>: 10.0,
+      <NumberEntityCapabilityAttribute.MODE: 'mode'>: <NumberMode.AUTO: 'auto'>,
+      <NumberEntityCapabilityAttribute.STEP: 'step'>: 0.5,
+    }),
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'device_class': None,
+    'device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_heat_circuit_1')]>,
+    'disabled_by': None,
+    'domain': 'number',
+    'entity_category': <EntityCategory.CONFIG: 'config'>,
+    'entity_id': 'number.keba_keenergy_12345678_heat_circuit_target_temperature_night_1',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': None,
+    'options': dict({
+    }),
+    'original_device_class': <NumberDeviceClass.TEMPERATURE: 'temperature'>,
+    'original_icon': None,
+    'original_name': 'Target room temperature (reduced)',
+    'platform': 'keba_keenergy',
+    'previous_unique_id': None,
+    'suggested_object_id': 'keba_keenergy_12345678_heat_circuit_target_temperature_night_1',
+    'supported_features': 0,
+    'translation_key': 'heating_circuit_target_room_temperature_night',
+    'unique_id': '12345678_heat_circuit_target_temperature_night_1',
+    'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
+  })
+# ---
+# name: test_numbers[en][number.keba_keenergy_12345678_heat_circuit_target_temperature_night_1-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
@@ -1460,7 +4694,49 @@
     'state': '20.0',
   })
 # ---
-# name: test_numbers[en][number.keba_keenergy_12345678_heat_circuit_target_temperature_offset_1]
+# name: test_numbers[en][number.keba_keenergy_12345678_heat_circuit_target_temperature_offset_1-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': dict({
+      <NumberEntityCapabilityAttribute.MAX: 'max'>: 2.5,
+      <NumberEntityCapabilityAttribute.MIN: 'min'>: -2.5,
+      <NumberEntityCapabilityAttribute.MODE: 'mode'>: <NumberMode.AUTO: 'auto'>,
+      <NumberEntityCapabilityAttribute.STEP: 'step'>: 0.5,
+    }),
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'device_class': None,
+    'device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_heat_circuit_1')]>,
+    'disabled_by': None,
+    'domain': 'number',
+    'entity_category': <EntityCategory.CONFIG: 'config'>,
+    'entity_id': 'number.keba_keenergy_12345678_heat_circuit_target_temperature_offset_1',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': None,
+    'options': dict({
+    }),
+    'original_device_class': <NumberDeviceClass.TEMPERATURE: 'temperature'>,
+    'original_icon': None,
+    'original_name': 'Room temperature offset',
+    'platform': 'keba_keenergy',
+    'previous_unique_id': None,
+    'suggested_object_id': 'keba_keenergy_12345678_heat_circuit_target_temperature_offset_1',
+    'supported_features': 0,
+    'translation_key': 'heating_circuit_target_room_temperature_offset',
+    'unique_id': '12345678_heat_circuit_target_temperature_offset_1',
+    'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
+  })
+# ---
+# name: test_numbers[en][number.keba_keenergy_12345678_heat_circuit_target_temperature_offset_1-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
@@ -1479,7 +4755,49 @@
     'state': '1.5',
   })
 # ---
-# name: test_numbers[en][number.keba_keenergy_12345678_heat_circuit_target_temperature_offset_2]
+# name: test_numbers[en][number.keba_keenergy_12345678_heat_circuit_target_temperature_offset_2-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': dict({
+      <NumberEntityCapabilityAttribute.MAX: 'max'>: 2.5,
+      <NumberEntityCapabilityAttribute.MIN: 'min'>: -2.5,
+      <NumberEntityCapabilityAttribute.MODE: 'mode'>: <NumberMode.AUTO: 'auto'>,
+      <NumberEntityCapabilityAttribute.STEP: 'step'>: 0.5,
+    }),
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'device_class': None,
+    'device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_heat_circuit_2')]>,
+    'disabled_by': None,
+    'domain': 'number',
+    'entity_category': <EntityCategory.CONFIG: 'config'>,
+    'entity_id': 'number.keba_keenergy_12345678_heat_circuit_target_temperature_offset_2',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': None,
+    'options': dict({
+    }),
+    'original_device_class': <NumberDeviceClass.TEMPERATURE: 'temperature'>,
+    'original_icon': None,
+    'original_name': 'Room temperature offset',
+    'platform': 'keba_keenergy',
+    'previous_unique_id': None,
+    'suggested_object_id': 'keba_keenergy_12345678_heat_circuit_target_temperature_offset_2',
+    'supported_features': 0,
+    'translation_key': 'heating_circuit_target_room_temperature_offset',
+    'unique_id': '12345678_heat_circuit_target_temperature_offset_2',
+    'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
+  })
+# ---
+# name: test_numbers[en][number.keba_keenergy_12345678_heat_circuit_target_temperature_offset_2-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
@@ -1498,7 +4816,49 @@
     'state': '0.0',
   })
 # ---
-# name: test_numbers[en][number.keba_keenergy_12345678_heat_pump_compressor_night_speed]
+# name: test_numbers[en][number.keba_keenergy_12345678_heat_pump_compressor_night_speed-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': dict({
+      <NumberEntityCapabilityAttribute.MAX: 'max'>: 100.0,
+      <NumberEntityCapabilityAttribute.MIN: 'min'>: 50.0,
+      <NumberEntityCapabilityAttribute.MODE: 'mode'>: <NumberMode.AUTO: 'auto'>,
+      <NumberEntityCapabilityAttribute.STEP: 'step'>: 1,
+    }),
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'device_class': None,
+    'device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_heat_pump')]>,
+    'disabled_by': None,
+    'domain': 'number',
+    'entity_category': <EntityCategory.CONFIG: 'config'>,
+    'entity_id': 'number.keba_keenergy_12345678_heat_pump_compressor_night_speed',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': None,
+    'options': dict({
+    }),
+    'original_device_class': <NumberDeviceClass.SPEED: 'speed'>,
+    'original_icon': None,
+    'original_name': 'Compressor power limit (night)',
+    'platform': 'keba_keenergy',
+    'previous_unique_id': None,
+    'suggested_object_id': 'keba_keenergy_12345678_heat_pump_compressor_night_speed',
+    'supported_features': 0,
+    'translation_key': 'heat_pump_compressor_night_speed',
+    'unique_id': '12345678_heat_pump_compressor_night_speed',
+    'unit_of_measurement': '%',
+  })
+# ---
+# name: test_numbers[en][number.keba_keenergy_12345678_heat_pump_compressor_night_speed-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'speed',
@@ -1517,7 +4877,49 @@
     'state': '50.0',
   })
 # ---
-# name: test_numbers[en][number.keba_keenergy_12345678_hot_water_tank_excess_energy_target_temperature_1]
+# name: test_numbers[en][number.keba_keenergy_12345678_hot_water_tank_excess_energy_target_temperature_1-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': dict({
+      <NumberEntityCapabilityAttribute.MAX: 'max'>: 95.0,
+      <NumberEntityCapabilityAttribute.MIN: 'min'>: 0.0,
+      <NumberEntityCapabilityAttribute.MODE: 'mode'>: <NumberMode.AUTO: 'auto'>,
+      <NumberEntityCapabilityAttribute.STEP: 'step'>: 0.5,
+    }),
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'device_class': None,
+    'device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_hot_water_tank_1')]>,
+    'disabled_by': None,
+    'domain': 'number',
+    'entity_category': <EntityCategory.CONFIG: 'config'>,
+    'entity_id': 'number.keba_keenergy_12345678_hot_water_tank_excess_energy_target_temperature_1',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': None,
+    'options': dict({
+    }),
+    'original_device_class': <NumberDeviceClass.TEMPERATURE: 'temperature'>,
+    'original_icon': None,
+    'original_name': 'Target temperature (PV surplus)',
+    'platform': 'keba_keenergy',
+    'previous_unique_id': None,
+    'suggested_object_id': 'keba_keenergy_12345678_hot_water_tank_excess_energy_target_temperature_1',
+    'supported_features': 0,
+    'translation_key': 'dhw_tank_excess_energy_target_temperature',
+    'unique_id': '12345678_hot_water_tank_excess_energy_target_temperature_1',
+    'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
+  })
+# ---
+# name: test_numbers[en][number.keba_keenergy_12345678_hot_water_tank_excess_energy_target_temperature_1-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
@@ -1536,7 +4938,49 @@
     'state': '75.0',
   })
 # ---
-# name: test_numbers[en][number.keba_keenergy_12345678_hot_water_tank_excess_energy_target_temperature_2]
+# name: test_numbers[en][number.keba_keenergy_12345678_hot_water_tank_excess_energy_target_temperature_2-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': dict({
+      <NumberEntityCapabilityAttribute.MAX: 'max'>: 95.0,
+      <NumberEntityCapabilityAttribute.MIN: 'min'>: 0.0,
+      <NumberEntityCapabilityAttribute.MODE: 'mode'>: <NumberMode.AUTO: 'auto'>,
+      <NumberEntityCapabilityAttribute.STEP: 'step'>: 0.5,
+    }),
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'device_class': None,
+    'device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_hot_water_tank_2')]>,
+    'disabled_by': None,
+    'domain': 'number',
+    'entity_category': <EntityCategory.CONFIG: 'config'>,
+    'entity_id': 'number.keba_keenergy_12345678_hot_water_tank_excess_energy_target_temperature_2',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': None,
+    'options': dict({
+    }),
+    'original_device_class': <NumberDeviceClass.TEMPERATURE: 'temperature'>,
+    'original_icon': None,
+    'original_name': 'Target temperature (PV surplus)',
+    'platform': 'keba_keenergy',
+    'previous_unique_id': None,
+    'suggested_object_id': 'keba_keenergy_12345678_hot_water_tank_excess_energy_target_temperature_2',
+    'supported_features': 0,
+    'translation_key': 'dhw_tank_excess_energy_target_temperature',
+    'unique_id': '12345678_hot_water_tank_excess_energy_target_temperature_2',
+    'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
+  })
+# ---
+# name: test_numbers[en][number.keba_keenergy_12345678_hot_water_tank_excess_energy_target_temperature_2-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
@@ -1555,7 +4999,49 @@
     'state': '75.0',
   })
 # ---
-# name: test_numbers[en][number.keba_keenergy_12345678_hot_water_tank_excess_energy_target_temperature_hysteresis_1]
+# name: test_numbers[en][number.keba_keenergy_12345678_hot_water_tank_excess_energy_target_temperature_hysteresis_1-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': dict({
+      <NumberEntityCapabilityAttribute.MAX: 'max'>: 5.0,
+      <NumberEntityCapabilityAttribute.MIN: 'min'>: 0.0,
+      <NumberEntityCapabilityAttribute.MODE: 'mode'>: <NumberMode.AUTO: 'auto'>,
+      <NumberEntityCapabilityAttribute.STEP: 'step'>: 0.1,
+    }),
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'device_class': None,
+    'device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_hot_water_tank_1')]>,
+    'disabled_by': None,
+    'domain': 'number',
+    'entity_category': <EntityCategory.CONFIG: 'config'>,
+    'entity_id': 'number.keba_keenergy_12345678_hot_water_tank_excess_energy_target_temperature_hysteresis_1',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': None,
+    'options': dict({
+    }),
+    'original_device_class': <NumberDeviceClass.TEMPERATURE: 'temperature'>,
+    'original_icon': None,
+    'original_name': 'Target temperature hysteresis (PV surplus)',
+    'platform': 'keba_keenergy',
+    'previous_unique_id': None,
+    'suggested_object_id': 'keba_keenergy_12345678_hot_water_tank_excess_energy_target_temperature_hysteresis_1',
+    'supported_features': 0,
+    'translation_key': 'dhw_tank_excess_energy_target_temperature_hysteresis',
+    'unique_id': '12345678_hot_water_tank_excess_energy_target_temperature_hysteresis_1',
+    'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
+  })
+# ---
+# name: test_numbers[en][number.keba_keenergy_12345678_hot_water_tank_excess_energy_target_temperature_hysteresis_1-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
@@ -1574,7 +5060,49 @@
     'state': '4.0',
   })
 # ---
-# name: test_numbers[en][number.keba_keenergy_12345678_hot_water_tank_excess_energy_target_temperature_hysteresis_2]
+# name: test_numbers[en][number.keba_keenergy_12345678_hot_water_tank_excess_energy_target_temperature_hysteresis_2-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': dict({
+      <NumberEntityCapabilityAttribute.MAX: 'max'>: 5.0,
+      <NumberEntityCapabilityAttribute.MIN: 'min'>: 0.0,
+      <NumberEntityCapabilityAttribute.MODE: 'mode'>: <NumberMode.AUTO: 'auto'>,
+      <NumberEntityCapabilityAttribute.STEP: 'step'>: 0.1,
+    }),
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'device_class': None,
+    'device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_hot_water_tank_2')]>,
+    'disabled_by': None,
+    'domain': 'number',
+    'entity_category': <EntityCategory.CONFIG: 'config'>,
+    'entity_id': 'number.keba_keenergy_12345678_hot_water_tank_excess_energy_target_temperature_hysteresis_2',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': None,
+    'options': dict({
+    }),
+    'original_device_class': <NumberDeviceClass.TEMPERATURE: 'temperature'>,
+    'original_icon': None,
+    'original_name': 'Target temperature hysteresis (PV surplus)',
+    'platform': 'keba_keenergy',
+    'previous_unique_id': None,
+    'suggested_object_id': 'keba_keenergy_12345678_hot_water_tank_excess_energy_target_temperature_hysteresis_2',
+    'supported_features': 0,
+    'translation_key': 'dhw_tank_excess_energy_target_temperature_hysteresis',
+    'unique_id': '12345678_hot_water_tank_excess_energy_target_temperature_hysteresis_2',
+    'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
+  })
+# ---
+# name: test_numbers[en][number.keba_keenergy_12345678_hot_water_tank_excess_energy_target_temperature_hysteresis_2-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
@@ -1593,7 +5121,49 @@
     'state': '4.0',
   })
 # ---
-# name: test_numbers[en][number.keba_keenergy_12345678_hot_water_tank_standby_temperature_1]
+# name: test_numbers[en][number.keba_keenergy_12345678_hot_water_tank_standby_temperature_1-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': dict({
+      <NumberEntityCapabilityAttribute.MAX: 'max'>: 52.0,
+      <NumberEntityCapabilityAttribute.MIN: 'min'>: 0.0,
+      <NumberEntityCapabilityAttribute.MODE: 'mode'>: <NumberMode.AUTO: 'auto'>,
+      <NumberEntityCapabilityAttribute.STEP: 'step'>: 0.5,
+    }),
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'device_class': None,
+    'device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_hot_water_tank_1')]>,
+    'disabled_by': None,
+    'domain': 'number',
+    'entity_category': <EntityCategory.CONFIG: 'config'>,
+    'entity_id': 'number.keba_keenergy_12345678_hot_water_tank_standby_temperature_1',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': None,
+    'options': dict({
+    }),
+    'original_device_class': <NumberDeviceClass.TEMPERATURE: 'temperature'>,
+    'original_icon': None,
+    'original_name': 'Backup temperature',
+    'platform': 'keba_keenergy',
+    'previous_unique_id': None,
+    'suggested_object_id': 'keba_keenergy_12345678_hot_water_tank_standby_temperature_1',
+    'supported_features': 0,
+    'translation_key': 'dhw_tank_standby_temperature',
+    'unique_id': '12345678_hot_water_tank_standby_temperature_1',
+    'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
+  })
+# ---
+# name: test_numbers[en][number.keba_keenergy_12345678_hot_water_tank_standby_temperature_1-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
@@ -1612,7 +5182,49 @@
     'state': '32.5',
   })
 # ---
-# name: test_numbers[en][number.keba_keenergy_12345678_hot_water_tank_standby_temperature_2]
+# name: test_numbers[en][number.keba_keenergy_12345678_hot_water_tank_standby_temperature_2-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': dict({
+      <NumberEntityCapabilityAttribute.MAX: 'max'>: 52.0,
+      <NumberEntityCapabilityAttribute.MIN: 'min'>: 0.0,
+      <NumberEntityCapabilityAttribute.MODE: 'mode'>: <NumberMode.AUTO: 'auto'>,
+      <NumberEntityCapabilityAttribute.STEP: 'step'>: 0.5,
+    }),
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'device_class': None,
+    'device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_hot_water_tank_2')]>,
+    'disabled_by': None,
+    'domain': 'number',
+    'entity_category': <EntityCategory.CONFIG: 'config'>,
+    'entity_id': 'number.keba_keenergy_12345678_hot_water_tank_standby_temperature_2',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': None,
+    'options': dict({
+    }),
+    'original_device_class': <NumberDeviceClass.TEMPERATURE: 'temperature'>,
+    'original_icon': None,
+    'original_name': 'Backup temperature',
+    'platform': 'keba_keenergy',
+    'previous_unique_id': None,
+    'suggested_object_id': 'keba_keenergy_12345678_hot_water_tank_standby_temperature_2',
+    'supported_features': 0,
+    'translation_key': 'dhw_tank_standby_temperature',
+    'unique_id': '12345678_hot_water_tank_standby_temperature_2',
+    'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
+  })
+# ---
+# name: test_numbers[en][number.keba_keenergy_12345678_hot_water_tank_standby_temperature_2-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
@@ -1631,7 +5243,49 @@
     'state': '32.5',
   })
 # ---
-# name: test_numbers[en][number.keba_keenergy_12345678_hot_water_tank_target_temperature_1]
+# name: test_numbers[en][number.keba_keenergy_12345678_hot_water_tank_target_temperature_1-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': dict({
+      <NumberEntityCapabilityAttribute.MAX: 'max'>: 52.0,
+      <NumberEntityCapabilityAttribute.MIN: 'min'>: 0.0,
+      <NumberEntityCapabilityAttribute.MODE: 'mode'>: <NumberMode.AUTO: 'auto'>,
+      <NumberEntityCapabilityAttribute.STEP: 'step'>: 0.5,
+    }),
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'device_class': None,
+    'device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_hot_water_tank_1')]>,
+    'disabled_by': None,
+    'domain': 'number',
+    'entity_category': <EntityCategory.CONFIG: 'config'>,
+    'entity_id': 'number.keba_keenergy_12345678_hot_water_tank_target_temperature_1',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': None,
+    'options': dict({
+    }),
+    'original_device_class': <NumberDeviceClass.TEMPERATURE: 'temperature'>,
+    'original_icon': 'mdi:thermometer-chevron-up',
+    'original_name': 'Target temperature',
+    'platform': 'keba_keenergy',
+    'previous_unique_id': None,
+    'suggested_object_id': 'keba_keenergy_12345678_hot_water_tank_target_temperature_1',
+    'supported_features': 0,
+    'translation_key': 'dhw_tank_target_temperature',
+    'unique_id': '12345678_hot_water_tank_target_temperature_1',
+    'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
+  })
+# ---
+# name: test_numbers[en][number.keba_keenergy_12345678_hot_water_tank_target_temperature_1-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
@@ -1651,7 +5305,49 @@
     'state': '51.0',
   })
 # ---
-# name: test_numbers[en][number.keba_keenergy_12345678_hot_water_tank_target_temperature_2]
+# name: test_numbers[en][number.keba_keenergy_12345678_hot_water_tank_target_temperature_2-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': dict({
+      <NumberEntityCapabilityAttribute.MAX: 'max'>: 52.0,
+      <NumberEntityCapabilityAttribute.MIN: 'min'>: 0.0,
+      <NumberEntityCapabilityAttribute.MODE: 'mode'>: <NumberMode.AUTO: 'auto'>,
+      <NumberEntityCapabilityAttribute.STEP: 'step'>: 0.5,
+    }),
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'device_class': None,
+    'device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_hot_water_tank_2')]>,
+    'disabled_by': None,
+    'domain': 'number',
+    'entity_category': <EntityCategory.CONFIG: 'config'>,
+    'entity_id': 'number.keba_keenergy_12345678_hot_water_tank_target_temperature_2',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': None,
+    'options': dict({
+    }),
+    'original_device_class': <NumberDeviceClass.TEMPERATURE: 'temperature'>,
+    'original_icon': 'mdi:thermometer-chevron-up',
+    'original_name': 'Target temperature',
+    'platform': 'keba_keenergy',
+    'previous_unique_id': None,
+    'suggested_object_id': 'keba_keenergy_12345678_hot_water_tank_target_temperature_2',
+    'supported_features': 0,
+    'translation_key': 'dhw_tank_target_temperature',
+    'unique_id': '12345678_hot_water_tank_target_temperature_2',
+    'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
+  })
+# ---
+# name: test_numbers[en][number.keba_keenergy_12345678_hot_water_tank_target_temperature_2-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
@@ -1671,7 +5367,49 @@
     'state': '51.0',
   })
 # ---
-# name: test_numbers[en][number.keba_keenergy_12345678_solar_circuit_target_temperature_1_1]
+# name: test_numbers[en][number.keba_keenergy_12345678_solar_circuit_target_temperature_1_1-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': dict({
+      <NumberEntityCapabilityAttribute.MAX: 'max'>: 90.0,
+      <NumberEntityCapabilityAttribute.MIN: 'min'>: 0.0,
+      <NumberEntityCapabilityAttribute.MODE: 'mode'>: <NumberMode.AUTO: 'auto'>,
+      <NumberEntityCapabilityAttribute.STEP: 'step'>: 0.5,
+    }),
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'device_class': None,
+    'device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_solar_circuit_1')]>,
+    'disabled_by': None,
+    'domain': 'number',
+    'entity_category': <EntityCategory.CONFIG: 'config'>,
+    'entity_id': 'number.keba_keenergy_12345678_solar_circuit_target_temperature_1_1',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': None,
+    'options': dict({
+    }),
+    'original_device_class': <NumberDeviceClass.TEMPERATURE: 'temperature'>,
+    'original_icon': 'mdi:thermometer-water',
+    'original_name': 'Target temperature 1',
+    'platform': 'keba_keenergy',
+    'previous_unique_id': None,
+    'suggested_object_id': 'keba_keenergy_12345678_solar_circuit_target_temperature_1_1',
+    'supported_features': 0,
+    'translation_key': 'solar_circuit_target_temperature',
+    'unique_id': '12345678_solar_circuit_target_temperature_1_1',
+    'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
+  })
+# ---
+# name: test_numbers[en][number.keba_keenergy_12345678_solar_circuit_target_temperature_1_1-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
@@ -1691,7 +5429,49 @@
     'state': '55.0',
   })
 # ---
-# name: test_numbers[en][number.keba_keenergy_12345678_solar_circuit_target_temperature_1_2]
+# name: test_numbers[en][number.keba_keenergy_12345678_solar_circuit_target_temperature_1_2-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': dict({
+      <NumberEntityCapabilityAttribute.MAX: 'max'>: 90.0,
+      <NumberEntityCapabilityAttribute.MIN: 'min'>: 0.0,
+      <NumberEntityCapabilityAttribute.MODE: 'mode'>: <NumberMode.AUTO: 'auto'>,
+      <NumberEntityCapabilityAttribute.STEP: 'step'>: 0.5,
+    }),
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'device_class': None,
+    'device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_solar_circuit_2')]>,
+    'disabled_by': None,
+    'domain': 'number',
+    'entity_category': <EntityCategory.CONFIG: 'config'>,
+    'entity_id': 'number.keba_keenergy_12345678_solar_circuit_target_temperature_1_2',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': None,
+    'options': dict({
+    }),
+    'original_device_class': <NumberDeviceClass.TEMPERATURE: 'temperature'>,
+    'original_icon': 'mdi:thermometer-water',
+    'original_name': 'Target temperature 1',
+    'platform': 'keba_keenergy',
+    'previous_unique_id': None,
+    'suggested_object_id': 'keba_keenergy_12345678_solar_circuit_target_temperature_1_2',
+    'supported_features': 0,
+    'translation_key': 'solar_circuit_target_temperature',
+    'unique_id': '12345678_solar_circuit_target_temperature_1_2',
+    'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
+  })
+# ---
+# name: test_numbers[en][number.keba_keenergy_12345678_solar_circuit_target_temperature_1_2-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
@@ -1711,7 +5491,49 @@
     'state': '53.0',
   })
 # ---
-# name: test_numbers[en][number.keba_keenergy_12345678_solar_circuit_target_temperature_2_1]
+# name: test_numbers[en][number.keba_keenergy_12345678_solar_circuit_target_temperature_2_1-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': dict({
+      <NumberEntityCapabilityAttribute.MAX: 'max'>: 90.0,
+      <NumberEntityCapabilityAttribute.MIN: 'min'>: 0.0,
+      <NumberEntityCapabilityAttribute.MODE: 'mode'>: <NumberMode.AUTO: 'auto'>,
+      <NumberEntityCapabilityAttribute.STEP: 'step'>: 0.5,
+    }),
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'device_class': None,
+    'device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_solar_circuit_1')]>,
+    'disabled_by': None,
+    'domain': 'number',
+    'entity_category': <EntityCategory.CONFIG: 'config'>,
+    'entity_id': 'number.keba_keenergy_12345678_solar_circuit_target_temperature_2_1',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': None,
+    'options': dict({
+    }),
+    'original_device_class': <NumberDeviceClass.TEMPERATURE: 'temperature'>,
+    'original_icon': 'mdi:thermometer-water',
+    'original_name': 'Target temperature 2',
+    'platform': 'keba_keenergy',
+    'previous_unique_id': None,
+    'suggested_object_id': 'keba_keenergy_12345678_solar_circuit_target_temperature_2_1',
+    'supported_features': 0,
+    'translation_key': 'solar_circuit_target_temperature',
+    'unique_id': '12345678_solar_circuit_target_temperature_2_1',
+    'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
+  })
+# ---
+# name: test_numbers[en][number.keba_keenergy_12345678_solar_circuit_target_temperature_2_1-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
@@ -1731,7 +5553,49 @@
     'state': '54.0',
   })
 # ---
-# name: test_numbers[en][number.keba_keenergy_12345678_solar_circuit_target_temperature_2_2]
+# name: test_numbers[en][number.keba_keenergy_12345678_solar_circuit_target_temperature_2_2-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': dict({
+      <NumberEntityCapabilityAttribute.MAX: 'max'>: 90.0,
+      <NumberEntityCapabilityAttribute.MIN: 'min'>: 0.0,
+      <NumberEntityCapabilityAttribute.MODE: 'mode'>: <NumberMode.AUTO: 'auto'>,
+      <NumberEntityCapabilityAttribute.STEP: 'step'>: 0.5,
+    }),
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'device_class': None,
+    'device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_solar_circuit_2')]>,
+    'disabled_by': None,
+    'domain': 'number',
+    'entity_category': <EntityCategory.CONFIG: 'config'>,
+    'entity_id': 'number.keba_keenergy_12345678_solar_circuit_target_temperature_2_2',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': None,
+    'options': dict({
+    }),
+    'original_device_class': <NumberDeviceClass.TEMPERATURE: 'temperature'>,
+    'original_icon': 'mdi:thermometer-water',
+    'original_name': 'Target temperature 2',
+    'platform': 'keba_keenergy',
+    'previous_unique_id': None,
+    'suggested_object_id': 'keba_keenergy_12345678_solar_circuit_target_temperature_2_2',
+    'supported_features': 0,
+    'translation_key': 'solar_circuit_target_temperature',
+    'unique_id': '12345678_solar_circuit_target_temperature_2_2',
+    'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
+  })
+# ---
+# name: test_numbers[en][number.keba_keenergy_12345678_solar_circuit_target_temperature_2_2-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',

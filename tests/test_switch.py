@@ -18,14 +18,16 @@ from homeassistant.const import Platform
 from homeassistant.exceptions import HomeAssistantError
 from homeassistant.helpers import entity_registry as er
 from keba_keenergy_api.enums import HeatingCircuitType
+from pytest_homeassistant.common import snapshot_platform
 
-from tests import get_platform_states
 from tests import get_state
 from tests.api_data import ENTITY_UPDATED_DATA_RESPONSE
+from tests.api_data import ENTRY_ID
 from tests.api_data import HEAT_CIRCUIT_MODE
 from tests.api_data import MULTIPLE_DEVICES_DATA_RESPONSE
 from tests.api_data import MULTIPLE_DEVICES_OTHER_MODES_DATA_RESPONSE
 from tests.api_data import MULTIPLE_DEVICES_RESPONSE
+from tests.api_data import NOW
 from tests.api_data import Response
 from tests.api_data import get_multiple_devices_fixed_data_response
 from tests.api_data import get_multiple_devices_responses
@@ -45,19 +47,22 @@ if TYPE_CHECKING:
 
     from tests.conftest import FakeKebaKeEnergyAPI
 
+pytestmark = pytest.mark.freeze_time(NOW)
+
 
 @pytest.mark.usefixtures("entity_registry_enabled_by_default", "language")
 async def test_switches(
     hass: HomeAssistant,
+    entity_registry: er.EntityRegistry,
     fake_api: FakeKebaKeEnergyAPI,
     snapshot: SnapshotAssertion,
 ) -> None:
     """Test the states of all switch entities."""
+    fake_api.platforms = [Platform.SWITCH]
     fake_api.responses = get_multiple_devices_responses(MULTIPLE_DEVICES_DATA_RESPONSE, has_passive_cooling="true")
     await fake_api.setup_integration()
 
-    for state in get_platform_states(hass, fake_api.config_entry, Platform.SWITCH):
-        assert state == snapshot(name=state.entity_id)
+    await snapshot_platform(hass, entity_registry, snapshot, ENTRY_ID)
 
 
 @pytest.mark.parametrize(
@@ -144,7 +149,7 @@ async def test_turn_on_off(
 
 @pytest.mark.usefixtures("entity_registry_enabled_by_default")
 async def test_heating_and_cooling_circuit_has_one_curve_switch(
-    hass: HomeAssistant,
+    entity_registry: er.EntityRegistry,
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
     """Test that a heating and cooling circuit only has the heating curve switch, because both use one setting."""
@@ -160,7 +165,7 @@ async def test_heating_and_cooling_circuit_has_one_curve_switch(
 
     assert sorted(
         entry.unique_id
-        for entry in er.async_entries_for_config_entry(er.async_get(hass), fake_api.config_entry.entry_id)
+        for entry in er.async_entries_for_config_entry(entity_registry, ENTRY_ID)
         if entry.domain == SWITCH_DOMAIN and "_curve_" in entry.unique_id
     ) == [
         "12345678_heat_circuit_use_heating_curve_1",
@@ -191,7 +196,7 @@ async def test_heating_and_cooling_circuit_has_one_curve_switch(
         "remote_maintenance_turn_off_unchanged",
     ],
 )
-@pytest.mark.usefixtures("entity_registry_enabled_by_default")
+@pytest.mark.usefixtures("entity_registry_enabled_by_default", "init_integration")
 async def test_remote_access_turn_on_off(
     hass: HomeAssistant,
     fake_api: FakeKebaKeEnergyAPI,
@@ -200,8 +205,6 @@ async def test_remote_access_turn_on_off(
     expected_state_and_write_count: tuple[str, str],
 ) -> None:
     """Test switching the remote access, only changes are written and remote maintenance reads the values again."""
-    fake_api.responses = get_multiple_devices_responses(MULTIPLE_DEVICES_DATA_RESPONSE)
-    await fake_api.setup_integration()
     setup_request_count: int = len(fake_api.remote_access_requests())
 
     service, entity_id = service_call

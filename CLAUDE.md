@@ -103,7 +103,9 @@ Before finishing a change, run `ruff format`, `lint.sh` and `pytest`, in this or
 
 ## Architecture
 
-- Follow the Home Assistant integration conventions, code in `custom_components/keba_keenergy/`
+- **Always** do it like current Home Assistant core integrations on the platinum quality scale (code, tests,
+  fixtures, file layout), code in `custom_components/keba_keenergy/`
+  - the rules of the `CLAUDE.md` files and the intended deviations take precedence
 - Helpers are `_`-prefixed methods of the class that uses them (`@staticmethod` if they need no `self`)
   - module-level functions only when shared across classes or modules, for Home Assistant callbacks (action
     handlers, validators), as helpers of module-level Home Assistant functions (`async_setup_entry`) or to build
