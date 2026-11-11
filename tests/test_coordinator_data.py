@@ -6,6 +6,7 @@
 from typing import Final
 
 HEAT_CIRCUIT_ENTITY_ID: Final[str] = "sensor.keba_keenergy_12345678_heat_circuit_target_temperature_1"
+OUTDOOR_TEMPERATURE_ENTITY_ID: Final[str] = "sensor.keba_keenergy_12345678_outdoor_temperature"
 # A value of the heating circuits in the body of a read request.
 HEAT_CIRCUIT_VALUE: Final[str] = '"APPL.CtrlAppl.sParam.heatCircuit[0].param.operatingMode"'
 REMOTE_MAINTENANCE_SERVER_ENTITY_ID: Final[str] = (

@@ -24,6 +24,7 @@ from tests import replace_values
 from tests.const import NOW
 from tests.test_coordinator_data import HEAT_CIRCUIT_ENTITY_ID
 from tests.test_coordinator_data import HEAT_CIRCUIT_VALUE
+from tests.test_coordinator_data import OUTDOOR_TEMPERATURE_ENTITY_ID
 from tests.test_coordinator_data import REMOTE_MAINTENANCE_SERVER_ENTITY_ID
 from tests.test_coordinator_data import SOLAR_CIRCUIT_SECTIONS
 from tests.test_coordinator_data import WITHOUT_SOLAR_AND_HEATING_CIRCUITS_VALUES
@@ -36,7 +37,6 @@ from tests.test_switch_data import REMOTE_MAINTENANCE_ENTITY_ID
 if TYPE_CHECKING:
     from freezegun.api import FrozenDateTimeFactory
     from homeassistant.core import HomeAssistant
-    from homeassistant.core import State
     from homeassistant.helpers import entity_registry as er
     from pytest_homeassistant.common import MockConfigEntry
 
@@ -58,7 +58,7 @@ async def test_update_authentication_error(
 
     await next_update(hass, freezer)
 
-    assert get_state(hass, "sensor.keba_keenergy_12345678_outdoor_temperature").state == STATE_UNAVAILABLE
+    assert get_state(hass, OUTDOOR_TEMPERATURE_ENTITY_ID).state == STATE_UNAVAILABLE
     assert get_flows_in_progress(hass) == [("reauth_confirm", DOMAIN, SOURCE_REAUTH, init_integration.entry_id)]
 
 
@@ -69,15 +69,23 @@ async def test_update_api_error(
     hass: HomeAssistant,
     freezer: FrozenDateTimeFactory,
     fake_api: FakeKebaKeEnergyAPI,
+    caplog: pytest.LogCaptureFixture,
     error: Exception | HTTPStatus,
 ) -> None:
-    """Test that the entities are unavailable if an update fails or times out."""
+    """Test that the entities are unavailable if an update fails or times out, and available after the next one."""
     fake_api.responses = [error]
 
     await next_update(hass, freezer)
 
-    state: State = get_state(hass, "sensor.keba_keenergy_12345678_outdoor_temperature")
-    assert state.state == STATE_UNAVAILABLE
+    assert get_state(hass, OUTDOOR_TEMPERATURE_ENTITY_ID).state == STATE_UNAVAILABLE
+    assert "Error fetching keba_keenergy data" in caplog.text
+
+    fake_api.responses = [fake_api.data]
+
+    await next_update(hass, freezer)
+
+    assert get_state(hass, OUTDOOR_TEMPERATURE_ENTITY_ID).state != STATE_UNAVAILABLE
+    assert "Fetching keba_keenergy data recovered" in caplog.text
 
 
 @pytest.mark.no_fail_on_keba_errors
@@ -85,17 +93,26 @@ async def test_update_curves_error(
     hass: HomeAssistant,
     freezer: FrozenDateTimeFactory,
     fake_api: FakeKebaKeEnergyAPI,
+    caplog: pytest.LogCaptureFixture,
 ) -> None:
-    """Test that the update fails if the curves cannot be read after the values."""
+    """Test that the update fails if the curves cannot be read after the values, and recovers with the curves."""
     fake_api.load_device("multiple_devices")
-    fake_api.responses = fake_api.setup_responses(fake_api.data, fake_api.data)
+    fake_api.responses = fake_api.setup_responses(fake_api.data, fake_api.data, fake_api.data)
     await fake_api.setup_integration()
 
     fake_api.curve_error = HTTPStatus.BAD_REQUEST
 
     await next_update(hass, freezer)
 
-    assert get_state(hass, "sensor.keba_keenergy_12345678_outdoor_temperature").state == STATE_UNAVAILABLE
+    assert get_state(hass, OUTDOOR_TEMPERATURE_ENTITY_ID).state == STATE_UNAVAILABLE
+    assert "Error fetching keba_keenergy data" in caplog.text
+
+    fake_api.curve_error = None
+
+    await next_update(hass, freezer)
+
+    assert get_state(hass, OUTDOOR_TEMPERATURE_ENTITY_ID).state != STATE_UNAVAILABLE
+    assert "Fetching keba_keenergy data recovered" in caplog.text
 
 
 @pytest.mark.parametrize(
@@ -261,8 +278,12 @@ async def test_remote_access_update_failed(
     hass: HomeAssistant,
     freezer: FrozenDateTimeFactory,
     fake_api: FakeKebaKeEnergyAPI,
+    caplog: pytest.LogCaptureFixture,
 ) -> None:
-    """Test that only the remote access entities are unavailable if reading the remote access fails."""
+    """Test that only the remote access entities are unavailable if reading the remote access fails.
+
+    They are available again after the next update of the remote access.
+    """
     fake_api.remote_access["isRemoteMServerReachable"] = HTTPStatus.BAD_REQUEST
     # The values are updated as well.
     fake_api.responses = [fake_api.data]
@@ -271,4 +292,14 @@ async def test_remote_access_update_failed(
 
     assert get_state(hass, REMOTE_MAINTENANCE_SERVER_ENTITY_ID).state == STATE_UNAVAILABLE
     assert get_state(hass, REMOTE_MAINTENANCE_ENTITY_ID).state == STATE_UNAVAILABLE
-    assert get_state(hass, "sensor.keba_keenergy_12345678_outdoor_temperature").state != STATE_UNAVAILABLE
+    assert get_state(hass, OUTDOOR_TEMPERATURE_ENTITY_ID).state != STATE_UNAVAILABLE
+    assert "Error fetching keba_keenergy_remote_access data" in caplog.text
+
+    fake_api.remote_access["isRemoteMServerReachable"] = True
+    fake_api.responses = [fake_api.data]
+
+    await next_update(hass, freezer, interval=timedelta(seconds=REMOTE_ACCESS_SCAN_INTERVAL))
+
+    assert get_state(hass, REMOTE_MAINTENANCE_SERVER_ENTITY_ID).state != STATE_UNAVAILABLE
+    assert get_state(hass, REMOTE_MAINTENANCE_ENTITY_ID).state != STATE_UNAVAILABLE
+    assert "Fetching keba_keenergy_remote_access data recovered" in caplog.text

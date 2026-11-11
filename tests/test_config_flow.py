@@ -36,6 +36,7 @@ if TYPE_CHECKING:
     from homeassistant.config_entries import ConfigFlowResult
     from homeassistant.core import HomeAssistant
     from pytest_homeassistant.common import MockConfigEntry
+    from pytest_homeassistant.test_util.aiohttp import AiohttpClientMocker
 
     from tests.conftest import FakeKebaKeEnergyAPI
 
@@ -124,9 +125,11 @@ async def test_user_flow_authentication(
 
 async def test_user_flow_authentication_invalid_auth(
     hass: HomeAssistant,
+    mock_setup_entry: AsyncMock,
+    aioclient_mock: AiohttpClientMocker,
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
-    """Test that the authentication step of the user flow shows an error for invalid credentials."""
+    """Test that the authentication step of the user flow shows an error for invalid credentials, then accepts them."""
     fake_api.register_auth_request(HOST, status=HTTPStatus.UNAUTHORIZED)
     fake_api.register_get_device_info(HOST, ssl=True, status=HTTPStatus.UNAUTHORIZED)
 
@@ -147,6 +150,16 @@ async def test_user_flow_authentication_invalid_auth(
     assert result["type"] is FlowResultType.FORM
     assert result["step_id"] == "auth"
     assert result["errors"] == {"base": "invalid_auth"}
+
+    aioclient_mock.clear_requests()
+    fake_api.register_get_device_info(HOST, ssl=True)
+
+    result = await hass.config_entries.flow.async_configure(result["flow_id"], user_input=CREDENTIALS)
+
+    assert result["type"] is FlowResultType.CREATE_ENTRY
+    assert result["result"].data == {**CREDENTIALS, CONF_HOST: HOST, CONF_SSL: True}
+    assert result["result"].unique_id == "12345678"
+    assert len(mock_setup_entry.mock_calls) == 1
 
 
 async def test_user_flow_authentication_check_failed(
@@ -187,12 +200,14 @@ async def test_user_flow_authentication_check_failed(
 @pytest.mark.no_fail_on_keba_errors
 async def test_user_flow_errors(
     hass: HomeAssistant,
+    mock_setup_entry: AsyncMock,
+    aioclient_mock: AiohttpClientMocker,
     fake_api: FakeKebaKeEnergyAPI,
     status: HTTPStatus,
     exc: Exception | None,
     expected_error: str,
 ) -> None:
-    """Test the errors of the user flow."""
+    """Test the errors of the user flow, the flow creates the entry once the device answers."""
     fake_api.register_auth_request(HOST)
     fake_api.register_get_device_info(HOST, status=status, exc=exc)
 
@@ -204,6 +219,19 @@ async def test_user_flow_errors(
 
     assert result["type"] is FlowResultType.FORM
     assert result["errors"] == {"base": expected_error}
+
+    aioclient_mock.clear_requests()
+    fake_api.register_auth_request(HOST)
+    fake_api.register_get_device_info(HOST)
+
+    result = await hass.config_entries.flow.async_configure(
+        result["flow_id"],
+        user_input={CONF_HOST: HOST, CONF_SSL: False},
+    )
+
+    assert result["type"] is FlowResultType.CREATE_ENTRY
+    assert result["result"].unique_id == "12345678"
+    assert len(mock_setup_entry.mock_calls) == 1
 
 
 @pytest.mark.usefixtures("mock_setup_entry")
@@ -237,6 +265,76 @@ async def test_reconfigure_flow_authentication(
     assert result["reason"] == "reconfigure_successful"
 
 
+@pytest.mark.parametrize(
+    ("status", "exc", "expected_error"),
+    [
+        (HTTPStatus.BAD_REQUEST, None, "cannot_connect"),
+        (HTTPStatus.UNAUTHORIZED, None, "invalid_auth"),
+        (HTTPStatus.OK, ValueError("mocked client error"), "unknown"),
+    ],
+    ids=["cannot_connect", "invalid_auth", "unknown"],
+)
+@pytest.mark.no_fail_on_keba_errors
+@pytest.mark.usefixtures("mock_setup_entry")
+async def test_reconfigure_flow_errors(
+    hass: HomeAssistant,
+    mock_config_entry: MockConfigEntry,
+    aioclient_mock: AiohttpClientMocker,
+    fake_api: FakeKebaKeEnergyAPI,
+    status: HTTPStatus,
+    exc: Exception | None,
+    expected_error: str,
+) -> None:
+    """Test the errors of the reconfiguration flow, the flow updates the entry once the device answers."""
+    fake_api.register_auth_request(RECONFIGURED_HOST)
+    fake_api.register_get_device_info(RECONFIGURED_HOST, status=status, exc=exc)
+    mock_config_entry.add_to_hass(hass)
+
+    result: ConfigFlowResult = await mock_config_entry.start_reconfigure_flow(hass)
+    result = await hass.config_entries.flow.async_configure(
+        result["flow_id"],
+        user_input={CONF_HOST: RECONFIGURED_HOST, CONF_SSL: False},
+    )
+
+    assert result["type"] is FlowResultType.FORM
+    assert result["errors"] == {"base": expected_error}
+
+    aioclient_mock.clear_requests()
+    fake_api.register_auth_request(RECONFIGURED_HOST)
+    fake_api.register_get_device_info(RECONFIGURED_HOST)
+
+    result = await hass.config_entries.flow.async_configure(
+        result["flow_id"],
+        user_input={CONF_HOST: RECONFIGURED_HOST, CONF_SSL: False},
+    )
+
+    assert result["type"] is FlowResultType.ABORT
+    assert result["reason"] == "reconfigure_successful"
+    assert mock_config_entry.data == {CONF_HOST: RECONFIGURED_HOST, CONF_SSL: False}
+
+
+@pytest.mark.usefixtures("mock_setup_entry")
+async def test_reconfigure_flow_wrong_account(
+    hass: HomeAssistant,
+    mock_config_entry: MockConfigEntry,
+    fake_api: FakeKebaKeEnergyAPI,
+) -> None:
+    """Test that the reconfiguration flow aborts for another device."""
+    fake_api.register_auth_request(RECONFIGURED_HOST)
+    fake_api.register_get_device_info(RECONFIGURED_HOST)
+    mock_config_entry.add_to_hass(hass)
+    hass.config_entries.async_update_entry(mock_config_entry, unique_id="12345679")
+
+    result: ConfigFlowResult = await mock_config_entry.start_reconfigure_flow(hass)
+    result = await hass.config_entries.flow.async_configure(
+        result["flow_id"],
+        user_input={CONF_HOST: RECONFIGURED_HOST, CONF_SSL: False},
+    )
+
+    assert result["type"] is FlowResultType.ABORT
+    assert result["reason"] == "wrong_account"
+
+
 @pytest.mark.parametrize("entry_data", [{CONF_HOST: HOST, CONF_SSL: True}], ids=["ssl"])
 @pytest.mark.usefixtures("mock_setup_entry")
 async def test_reauth_flow(
@@ -261,37 +359,51 @@ async def test_reauth_flow(
     assert mock_config_entry.data == {CONF_HOST: HOST, CONF_SSL: True, **CREDENTIALS}
 
 
-@pytest.mark.parametrize(
-    ("unique_id", "device_info_status", "expected"),
-    [
-        ("12345678", HTTPStatus.UNAUTHORIZED, {"type": FlowResultType.FORM, "errors": {"base": "invalid_auth"}}),
-        ("12345679", HTTPStatus.OK, {"type": FlowResultType.ABORT, "reason": "wrong_account"}),
-    ],
-    ids=["invalid_auth", "wrong_account"],
-)
+@pytest.mark.parametrize("entry_data", [{CONF_HOST: HOST, CONF_SSL: True}], ids=["ssl"])
 @pytest.mark.usefixtures("mock_setup_entry")
-async def test_reauth_flow_errors(
+async def test_reauth_flow_invalid_auth(
     hass: HomeAssistant,
     mock_config_entry: MockConfigEntry,
+    aioclient_mock: AiohttpClientMocker,
     fake_api: FakeKebaKeEnergyAPI,
-    unique_id: str,
-    device_info_status: HTTPStatus,
-    expected: dict[str, object],
 ) -> None:
-    """Test that the reauthentication flow shows invalid credentials and aborts for another device."""
-    fake_api.register_get_device_info(HOST, ssl=True, status=device_info_status)
+    """Test that the reauthentication flow shows invalid credentials, then accepts valid ones."""
+    fake_api.register_get_device_info(HOST, ssl=True, status=HTTPStatus.UNAUTHORIZED)
     mock_config_entry.add_to_hass(hass)
-    hass.config_entries.async_update_entry(mock_config_entry, unique_id=unique_id)
 
     result: ConfigFlowResult = await mock_config_entry.start_reauth_flow(hass, data={CONF_HOST: HOST, CONF_SSL: True})
+    result = await hass.config_entries.flow.async_configure(result["flow_id"], user_input=CREDENTIALS)
 
     assert result["type"] is FlowResultType.FORM
     assert result["step_id"] == "reauth_confirm"
-    assert result["errors"] == {}
+    assert result["errors"] == {"base": "invalid_auth"}
+
+    aioclient_mock.clear_requests()
+    fake_api.register_get_device_info(HOST, ssl=True)
 
     result = await hass.config_entries.flow.async_configure(result["flow_id"], user_input=CREDENTIALS)
 
-    assert {key: result.get(key) for key in expected} == expected
+    assert result["type"] is FlowResultType.ABORT
+    assert result["reason"] == "reauth_successful"
+    assert mock_config_entry.data == {CONF_HOST: HOST, CONF_SSL: True, **CREDENTIALS}
+
+
+@pytest.mark.usefixtures("mock_setup_entry")
+async def test_reauth_flow_wrong_account(
+    hass: HomeAssistant,
+    mock_config_entry: MockConfigEntry,
+    fake_api: FakeKebaKeEnergyAPI,
+) -> None:
+    """Test that the reauthentication flow aborts for another device."""
+    fake_api.register_get_device_info(HOST, ssl=True)
+    mock_config_entry.add_to_hass(hass)
+    hass.config_entries.async_update_entry(mock_config_entry, unique_id="12345679")
+
+    result: ConfigFlowResult = await mock_config_entry.start_reauth_flow(hass, data={CONF_HOST: HOST, CONF_SSL: True})
+    result = await hass.config_entries.flow.async_configure(result["flow_id"], user_input=CREDENTIALS)
+
+    assert result["type"] is FlowResultType.ABORT
+    assert result["reason"] == "wrong_account"
 
 
 async def test_zeroconf_flow(
@@ -352,11 +464,12 @@ async def test_zeroconf_flow_authentication(
 
 async def test_zeroconf_flow_authentication_check_failed(
     hass: HomeAssistant,
+    mock_setup_entry: AsyncMock,
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
     """Test that the zeroconf discovery flow asks for confirmation without credentials if the check for them fails."""
     fake_api.register_auth_request(ZEROCONF_HOST, exc=ClientError())
-    fake_api.register_get_device_info(ZEROCONF_HOST, ssl=True)
+    fake_api.register_get_device_info(ZEROCONF_HOST)
 
     result: ConfigFlowResult = await hass.config_entries.flow.async_init(
         DOMAIN,
@@ -366,6 +479,13 @@ async def test_zeroconf_flow_authentication_check_failed(
 
     assert result["type"] is FlowResultType.FORM
     assert result["step_id"] == "discovery_confirm"
+    assert not result["errors"]
+
+    result = await hass.config_entries.flow.async_configure(result["flow_id"], user_input={})
+
+    assert result["type"] is FlowResultType.CREATE_ENTRY
+    assert result["result"].unique_id == "12345678"
+    assert len(mock_setup_entry.mock_calls) == 1
 
 
 @pytest.mark.parametrize(
@@ -380,12 +500,14 @@ async def test_zeroconf_flow_authentication_check_failed(
 @pytest.mark.no_fail_on_keba_errors
 async def test_zeroconf_flow_errors(
     hass: HomeAssistant,
+    mock_setup_entry: AsyncMock,
+    aioclient_mock: AiohttpClientMocker,
     fake_api: FakeKebaKeEnergyAPI,
     status: HTTPStatus,
     exc: Exception | None,
     expected_error: str,
 ) -> None:
-    """Test the errors of the zeroconf discovery flow."""
+    """Test the errors of the zeroconf discovery flow, the flow creates the entry once the device answers."""
     fake_api.register_auth_request(ZEROCONF_HOST)
     fake_api.register_get_device_info(ZEROCONF_HOST, status=status, exc=exc)
 
@@ -398,6 +520,16 @@ async def test_zeroconf_flow_errors(
 
     assert result["type"] is FlowResultType.FORM
     assert result["errors"] == {"base": expected_error}
+
+    aioclient_mock.clear_requests()
+    fake_api.register_auth_request(ZEROCONF_HOST)
+    fake_api.register_get_device_info(ZEROCONF_HOST)
+
+    result = await hass.config_entries.flow.async_configure(result["flow_id"], user_input={})
+
+    assert result["type"] is FlowResultType.CREATE_ENTRY
+    assert result["result"].unique_id == "12345678"
+    assert len(mock_setup_entry.mock_calls) == 1
 
 
 @pytest.mark.usefixtures("mock_setup_entry")

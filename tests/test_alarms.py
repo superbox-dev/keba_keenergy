@@ -267,8 +267,9 @@ async def test_alarm_update_error(
     hass: HomeAssistant,
     freezer: FrozenDateTimeFactory,
     fake_api: FakeKebaKeEnergyAPI,
+    caplog: pytest.LogCaptureFixture,
 ) -> None:
-    """Test that the entities are unavailable if the alarms cannot be read."""
+    """Test that the entities are unavailable if the alarms cannot be read, and available after the next update."""
     fake_api.load_device("single_device")
     fake_api.data = replace_values(fake_api.data, SINGLE_DEVICE_VALUES)
     await fake_api.setup_integration()
@@ -277,6 +278,14 @@ async def test_alarm_update_error(
 
     assert get_state(hass, PENDING_ALARMS_ENTITY_ID).state == STATE_UNAVAILABLE
     assert get_state(hass, ALARM_ENTITY_ID).state == STATE_UNAVAILABLE
+    assert "Error fetching keba_keenergy data" in caplog.text
+
+    fake_api.alarms = []
+    await next_update(hass, freezer)
+
+    assert get_state(hass, PENDING_ALARMS_ENTITY_ID).state != STATE_UNAVAILABLE
+    assert get_state(hass, ALARM_ENTITY_ID).state != STATE_UNAVAILABLE
+    assert "Fetching keba_keenergy data recovered" in caplog.text
 
 
 async def test_unload_entry_deletes_alarm_issues(

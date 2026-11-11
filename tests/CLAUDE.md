@@ -41,6 +41,10 @@
   - assert entity states, `ConfigEntryState`, the registries or the requests (`fake_api.write_requests()`,
     `read_requests()`)
 - Config flows: `FlowResultType` with `is`, no errors on the first form, `unique_id` of the created entry
+  - every error test fixes the cause and finishes the flow (`CREATE_ENTRY`, `reauth_successful`,
+    `reconfigure_successful`)
+- Failed updates: entities unavailable, the outage in the log (`caplog`), after the fix available again and the
+  recovery in the log
 - `pytest.mark.parametrize` with `ids=` naming each case
 - Constants of a test module in a module with its name and `_data.py` (`test_api.py` → `test_api_data.py`)
   - shared by several test modules: `tests/const.py`
