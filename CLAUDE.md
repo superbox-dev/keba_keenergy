@@ -174,6 +174,8 @@ Before finishing a change, run `ruff format`, `lint.sh` and `pytest`, in this or
 - Tickets: create and update them with the `issue` skill
 - Version: only change it when asked, use the `release` skill
 - `keba_keenergy_api` requirement is in `pyproject.toml` and `manifest.json`, run `uv lock` after changing it
+- Minimum Home Assistant version is the same in `hacs.json`, `homeassistant` and `pytest-homeassistant`
+  (`pyproject.toml`) and `website/content/index.md`, run `uv lock` after changing it
 - Work on `develop`
 - Only commit or push when asked
 - Commit message of a change for an issue starts with its number (`#67 Fix sensors that are not in use`)
