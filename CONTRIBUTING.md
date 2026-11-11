@@ -29,7 +29,7 @@ Pull requests are the best way to propose changes to the codebase.
 5. Open the pull request against `develop`.
 
 Never use real credentials, serial numbers or IP addresses of your heat pump in code, tests or issues.
-Use the fake data in `tests/api_data.py`.
+Use the fake data in `tests/fixtures/`.
 
 ## Coding style
 

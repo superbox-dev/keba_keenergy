@@ -26,12 +26,22 @@ from pytest_homeassistant.common import async_fire_time_changed
 from custom_components.keba_keenergy.const import DEFAULT_SCAN_INTERVAL
 from custom_components.keba_keenergy.const import DOMAIN
 from custom_components.keba_keenergy.const import FLASH_WRITE_DELAY
+from tests.const import MULTIPLE_DEVICES_FIXED_DATA_RESPONSE
+from tests.const import MULTIPLE_DEVICES_RESPONSE
+from tests.const import SINGLE_DEVICE_FIXED_DATA_RESPONSE
+from tests.const import SINGLE_DEVICE_RESPONSE
 
 if TYPE_CHECKING:
+    from collections.abc import Mapping
+
     from freezegun.api import FrozenDateTimeFactory
     from homeassistant.const import Platform
     from homeassistant.core import HomeAssistant
     from pytest_homeassistant.common import MockConfigEntry
+
+    from tests.const import Attributes
+    from tests.const import ReadResponse
+    from tests.const import Response
 
 type FlowInProgress = tuple[str, str, str | None, str | None]
 
@@ -41,6 +51,55 @@ def get_flows_in_progress(hass: HomeAssistant, /) -> list[FlowInProgress]:
     return [
         (flow["step_id"], flow["handler"], flow["context"].get("source"), flow["context"].get("entry_id"))
         for flow in hass.config_entries.flow.async_progress()
+    ]
+
+
+def get_single_device_responses(*responses: ReadResponse) -> list[ReadResponse]:
+    """Return the responses of a setup with one device of each type, followed by the responses of the updates."""
+    return [SINGLE_DEVICE_RESPONSE, SINGLE_DEVICE_FIXED_DATA_RESPONSE, *responses]
+
+
+def get_multiple_devices_responses(
+    *responses: ReadResponse,
+    fixed_data: Response = MULTIPLE_DEVICES_FIXED_DATA_RESPONSE,
+) -> list[ReadResponse]:
+    """Return the responses of a setup with several devices of each type, followed by the responses of the updates.
+
+    `fixed_data` are the values read once on setup, e.g. `MULTIPLE_DEVICES_PASSIVE_COOLING_FIXED_DATA_RESPONSE`.
+    """
+    return [MULTIPLE_DEVICES_RESPONSE, fixed_data, *responses]
+
+
+def replace_values(response: Response, values: Mapping[str, str], /) -> Response:
+    """Return a copy of the response with other values, by the name of the value."""
+    assert values.keys() <= {value["name"] for value in response}, "every replaced value is in the response"
+    return [{**value, "value": values.get(value["name"], value["value"])} for value in response]
+
+
+def copy_values(response: Response, old: str, new: str, /) -> Response:
+    """Return the values whose name contains `old`, with `new` instead, e.g. for a second device of the type."""
+    return [{**value, "name": value["name"].replace(old, new)} for value in response if old in value["name"]]
+
+
+def update_response(
+    response: Response,
+    name: str,
+    /,
+    *,
+    value: str | None = None,
+    attributes: Attributes | None = None,
+) -> Response:
+    """Return a copy of the response, in which the value with the name has the other value or attributes."""
+    assert name in {read_value["name"] for read_value in response}, f"{name} is not in the response"
+    return [
+        {
+            **read_value,
+            "value": read_value["value"] if value is None else value,
+            **({} if attributes is None else {"attributes": attributes}),
+        }
+        if read_value["name"] == name
+        else read_value
+        for read_value in response
     ]
 
 

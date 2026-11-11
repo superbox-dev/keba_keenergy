@@ -5,6 +5,10 @@
 
 from typing import Final
 
+from tests import replace_values
+from tests.const import CURVE_POINTS_RESPONSE
+from tests.const import Response
+
 # The away date range from 2025-01-01 to 2025-01-14 in the time zone of the Web HMI.
 AWAY_DATE_RANGE_WRITE: Final[str] = (
     '[{"name": "APPL.CtrlAppl.sParam.heatCircuit[0].param.holiday.start", "value": "1735686000"}, '
@@ -62,4 +66,24 @@ HEATING_CURVE_POINTS_WRITE: Final[str] = (
     '{"name": "APPL.CtrlAppl.sParam.linTabPool[0].points[15].x", "value": "0"}, '
     '{"name": "APPL.CtrlAppl.sParam.linTabPool[0].points[15].y", "value": "0"}, '
     '{"name": "APPL.CtrlAppl.sParam.linTabPool[0].verCnt", "value": "192"}]'
+)
+
+# The values of the curves with three points instead of seven, by the name after the curve.
+THREE_POINTS: Final[dict[str, str]] = {
+    "noOfPoints": "3",
+    "points[0].x": "-20",
+    "points[0].y": "35.299999",
+    "points[1].x": "0",
+    "points[1].y": "29.5",
+    "points[2].x": "20",
+    "points[2].y": "23.9",
+}
+# Every curve (`HC...`) has the three points.
+THREE_POINTS_CURVE_POINTS_RESPONSE: Final[Response] = replace_values(
+    CURVE_POINTS_RESPONSE,
+    {
+        value["name"]: THREE_POINTS[value["name"].split("].", 1)[1]]
+        for value in CURVE_POINTS_RESPONSE
+        if value["name"].split("].", 1)[1] in THREE_POINTS
+    },
 )

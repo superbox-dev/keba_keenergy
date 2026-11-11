@@ -1,0 +1,1250 @@
+[
+  {
+    "name": "APPL.CtrlAppl.sParam.extHeatSource[0].param.operatingMode",
+    "value": "1",
+    "attributes": {
+      "formatId": "fmtExternalSourceType",
+      "longText": "Oper. mode",
+      "unitId": "Enum",
+      "upperLimit": "2",
+      "lowerLimit": "0"
+    }
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.extHeatSource[0].values.setTemp",
+    "value": "23",
+    "attributes": {
+      "formatId": "fmtTemp",
+      "longText": "Temp. nom.",
+      "unitId": "Temp",
+      "upperLimit": "90",
+      "lowerLimit": "20"
+    }
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.extHeatSource[0].DO.values.setValueB",
+    "value": "true"
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.extHeatSource[0].DO.operationalData.operationalTimeS",
+    "value": "812999"
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.extHeatSource[0].DO.operationalData.maxRunTimeS",
+    "value": "8129"
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.extHeatSource[0].DO.operationalData.activationCounter",
+    "value": "812"
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.extHeatSource[0].param.supportExcessEnergy",
+    "value": "true"
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.extHeatSource[0].param.minRunTimeExcessEnergy",
+    "value": "300",
+    "attributes": {
+      "formatId": "fmt3p0",
+      "longText": "Min runtime excess e.",
+      "unitId": "TimeMin",
+      "upperLimit": "10800",
+      "lowerLimit": "0"
+    }
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.extHeatSource[0].values.consumingExcessEnergy",
+    "value": "true"
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.extHeatSource[0].operationalDataExcessEnergy.operationalTimeS",
+    "value": "3600"
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.extHeatSource[0].operationalDataExcessEnergy.maxRunTimeS",
+    "value": "3600"
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.extHeatSource[0].operationalDataExcessEnergy.activationCounter",
+    "value": "23"
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.heatCircuit[0].tempRoom.values.actValue",
+    "value": "22.418831",
+    "attributes": {
+      "formatId": "fmtTemp",
+      "longText": "Room temp. act.",
+      "unitId": "Temp",
+      "upperLimit": "80",
+      "lowerLimit": "0"
+    }
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.heatCircuit[0].humidityRoom.values.actValue",
+    "value": "53",
+    "attributes": {
+      "formatId": "fmt3p0",
+      "longText": "Room humidity act.",
+      "unitId": "Pct",
+      "upperLimit": "100",
+      "lowerLimit": "0"
+    }
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.heatCircuit[0].dewPoint.values.actValue",
+    "value": "13.104257",
+    "attributes": {
+      "formatId": "fmtTemp",
+      "longText": "Dew Point",
+      "unitId": "Temp",
+      "upperLimit": "50.0",
+      "lowerLimit": "-20.0"
+    }
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.heatCircuit[0].values.flowSetTemp",
+    "value": "26.553419",
+    "attributes": {
+      "formatId": "fmtTemp",
+      "longText": "Nominal temp.",
+      "unitId": "Temp",
+      "upperLimit": "100",
+      "lowerLimit": "0"
+    }
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.heatCircuit[0].heatCircuitMixer.flowTemp.values.actValue",
+    "value": "22.200001",
+    "attributes": {
+      "formatId": "fmtTemp",
+      "longText": "Inflow temp. act.",
+      "unitId": "Temp",
+      "upperLimit": "100",
+      "lowerLimit": "0"
+    }
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.heatCircuit[0].heatCircuitMixer.refluxTemp.values.actValue",
+    "value": "20.200001",
+    "attributes": {
+      "formatId": "fmtTemp",
+      "longText": "Reflux temp. act.",
+      "unitId": "Temp",
+      "upperLimit": "100",
+      "lowerLimit": "0"
+    }
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.heatCircuit[0].heatCircuitMixer.mixer.values.setValueScaled",
+    "value": "-1",
+    "attributes": {
+      "formatId": "fmt3p0",
+      "longText": "Mixer nom. value",
+      "unitId": "Pct100",
+      "upperLimit": "1",
+      "lowerLimit": "-1"
+    }
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.heatCircuit[0].pump.values.setValueB",
+    "value": "true"
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.heatCircuit[0].tempReflux.values.actValue",
+    "value": "21.200001"
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.heatCircuit[0].param.normalSetTemp",
+    "value": "20.5",
+    "attributes": {
+      "formatId": "fmtTemp",
+      "longText": "Room temp. Day",
+      "unitId": "Temp",
+      "upperLimit": "30",
+      "lowerLimit": "10"
+    }
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.heatCircuit[0].param.normalCoolSetTemp",
+    "value": "20.5",
+    "attributes": {
+      "formatId": "fmtTemp",
+      "longText": "Room temp. Day",
+      "unitId": "Temp",
+      "upperLimit": "30",
+      "lowerLimit": "10"
+    }
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.heatCircuit[0].param.thresholdDayTemp.value",
+    "value": "20",
+    "attributes": {
+      "formatId": "fmtTemp",
+      "longText": "Heating limit Day",
+      "unitId": "Temp",
+      "upperLimit": "100",
+      "lowerLimit": "-20"
+    }
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.heatCircuit[0].param.thresholdDayCoolTemp.value",
+    "value": "20",
+    "attributes": {
+      "formatId": "fmtTemp",
+      "longText": "Heating limit Day",
+      "lowerLimit": "-20",
+      "unitId": "Temp",
+      "upperLimit": "100"
+    }
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.heatCircuit[0].param.excessEnergy.thresholdDayTemp",
+    "value": "30",
+    "attributes": {
+      "formatId": "fmtTemp",
+      "longText": "Heating limit day",
+      "unitId": "Temp",
+      "upperLimit": "100",
+      "lowerLimit": "-20"
+    }
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.heatCircuit[0].param.excessEnergy.thresholdDayCoolTemp",
+    "value": "10",
+    "attributes": {
+      "formatId": "fmtTemp",
+      "longText": "Cooling limit day",
+      "unitId": "Temp",
+      "upperLimit": "100",
+      "lowerLimit": "-20"
+    }
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.heatCircuit[0].values.heatRequest",
+    "value": "1",
+    "attributes": {
+      "formatId": "fmtReqInfo",
+      "longText": "Heat request",
+      "unitId": "Enum",
+      "upperLimit": "6",
+      "lowerLimit": "0"
+    }
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.heatCircuit[0].values.coolRequest",
+    "value": "1",
+    "attributes": {
+      "formatId": "fmtReqInfo",
+      "longText": "Cool request",
+      "unitId": "Enum",
+      "upperLimit": "6",
+      "lowerLimit": "0"
+    }
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.heatCircuit[0].param.holidaySetTemp",
+    "value": "18",
+    "attributes": {
+      "formatId": "fmtTemp",
+      "longText": "Room temp. Vacation",
+      "unitId": "Temp",
+      "upperLimit": "30",
+      "lowerLimit": "10"
+    }
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.heatCircuit[0].param.reducedSetTemp",
+    "value": "20",
+    "attributes": {
+      "formatId": "fmtTemp",
+      "longText": "Room temp. night",
+      "unitId": "Temp",
+      "upperLimit": "30",
+      "lowerLimit": "10"
+    }
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.heatCircuit[0].param.reducedCoolSetTemp",
+    "value": "20",
+    "attributes": {
+      "formatId": "fmtTemp",
+      "longText": "Room temp. Night",
+      "unitId": "Temp",
+      "upperLimit": "30",
+      "lowerLimit": "10"
+    }
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.heatCircuit[0].param.thresholdNightTemp.value",
+    "value": "18",
+    "attributes": {
+      "formatId": "fmtTemp",
+      "longText": "Heat limit Night",
+      "unitId": "Temp",
+      "upperLimit": "100",
+      "lowerLimit": "-20"
+    }
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.heatCircuit[0].param.thresholdNightCoolTemp.value",
+    "value": "18",
+    "attributes": {
+      "formatId": "fmtTemp",
+      "longText": "Cooling limit night",
+      "unitId": "Temp",
+      "upperLimit": "40",
+      "lowerLimit": "-20"
+    }
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.heatCircuit[0].param.excessEnergy.thresholdNightTemp",
+    "value": "28",
+    "attributes": {
+      "formatId": "fmtTemp",
+      "longText": "Cooling limit night",
+      "unitId": "Temp",
+      "upperLimit": "100",
+      "lowerLimit": "-20"
+    }
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.heatCircuit[0].param.excessEnergy.thresholdNightCoolTemp",
+    "value": "28",
+    "attributes": {
+      "formatId": "fmtTemp",
+      "longText": "Cooling limit night",
+      "unitId": "Temp",
+      "upperLimit": "100",
+      "lowerLimit": "-20"
+    }
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.heatCircuit[0].param.operatingMode",
+    "value": "3",
+    "attributes": {
+      "formatId": "fmtHcMode",
+      "longText": "Operating mode",
+      "unitId": "Enum",
+      "upperLimit": "32767",
+      "lowerLimit": "0"
+    }
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.heatCircuit[0].values.selectedSetTemp",
+    "value": "20"
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.heatCircuit[0].values.setValue",
+    "value": "20.5",
+    "attributes": {
+      "formatId": "fmtTemp",
+      "longText": "Room temp. Nom.",
+      "unitId": "Temp",
+      "upperLimit": "90",
+      "lowerLimit": "10"
+    }
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.heatCircuit[0].param.offsetRoomTemp",
+    "value": "0",
+    "attributes": {
+      "formatId": "fmtTemp",
+      "longText": "Room temp. Offset",
+      "unitId": "TempRel",
+      "upperLimit": "2.5",
+      "lowerLimit": "-2.5"
+    }
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.heatCircuit[0].param.excessEnergy.useExcessEnergy",
+    "value": "true"
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.heatCircuit[0].param.excessEnergyTemp.value",
+    "value": "30",
+    "attributes": {
+      "formatId": "fmtTemp",
+      "longText": "Set heat temp.",
+      "unitId": "Temp",
+      "upperLimit": "30",
+      "lowerLimit": "10"
+    }
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.heatCircuit[0].param.excessEnergyTemp.hyst",
+    "value": "0.69999999",
+    "attributes": {
+      "formatId": "fmtTemp",
+      "longText": "Hyst. heat temp.",
+      "unitId": "TempRel",
+      "upperLimit": "2",
+      "lowerLimit": "0"
+    }
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.heatCircuit[0].param.excessEnergyTempCool.value",
+    "value": "10",
+    "attributes": {
+      "formatId": "fmtTemp",
+      "longText": "Set cool temp.",
+      "unitId": "Temp",
+      "upperLimit": "30",
+      "lowerLimit": "10"
+    }
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.heatCircuit[0].param.excessEnergyTempCool.hyst",
+    "value": "0.69999999",
+    "attributes": {
+      "formatId": "fmtTemp",
+      "longText": "Hyst. cool temp.",
+      "unitId": "TempRel",
+      "upperLimit": "2",
+      "lowerLimit": "0"
+    }
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.heatCircuit[0].values.useExcessEnergy",
+    "value": "1",
+    "attributes": {
+      "formatId": "fmtExcessEnergyInfo",
+      "longText": "Excess energy HC 1",
+      "unitId": "Enum",
+      "upperLimit": "2",
+      "lowerLimit": "0"
+    }
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.heatCircuit[0].param.holiday.start",
+    "value": "1769036400",
+    "attributes": {
+      "formatId": "fmt3p2",
+      "unitId": "TimeHour",
+      "upperLimit": "86400",
+      "lowerLimit": "0"
+    }
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.heatCircuit[0].param.holiday.stop",
+    "value": "1769122799",
+    "attributes": {
+      "formatId": "fmt3p2",
+      "unitId": "TimeHour",
+      "upperLimit": "86400",
+      "lowerLimit": "0"
+    }
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.heatCircuit[0].param.heatCurveOffset",
+    "value": "0.5",
+    "attributes": {
+      "formatId": "fmtTemp",
+      "longText": "Heat curve offset",
+      "unitId": "TempRel",
+      "upperLimit": "10",
+      "lowerLimit": "-10"
+    }
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.heatCircuit[0].param.coolCurveOffset",
+    "value": "0.5",
+    "attributes": {
+      "formatId": "fmtTemp",
+      "longText": "Cool curve offset",
+      "unitId": "TempRel",
+      "upperLimit": "10",
+      "lowerLimit": "-10"
+    }
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.heatCircuit[0].param.heatCurveGradient",
+    "value": "0.40000001",
+    "attributes": {
+      "formatId": "fmt3p2",
+      "longText": "Heat curve grad.",
+      "upperLimit": "5",
+      "lowerLimit": "0"
+    }
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.heatCircuit[0].param.coolCurveGradient",
+    "value": "0.40000001",
+    "attributes": {
+      "formatId": "fmt3p2",
+      "longText": "Cool curve grad.",
+      "upperLimit": "5",
+      "lowerLimit": "0"
+    }
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.heatCircuit[0].param.enableHeatCurveLinTab",
+    "value": "false"
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.heatCircuit[0].param.linTab.fileName",
+    "value": "HC4"
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.heatCircuit[0].param.coollinTab.fileName",
+    "value": "HC2"
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.heatCircuit[0].pumpAO.values.setValueScaled",
+    "value": "0.5",
+    "attributes": {
+      "formatId": "fmt3p0",
+      "longText": "Pump speed",
+      "unitId": "Pct100",
+      "upperLimit": "1",
+      "lowerLimit": "0"
+    }
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.solarCircuit[0].param.operatingMode",
+    "value": "0",
+    "attributes": {
+      "formatId": "fmtSolarOpMode",
+      "longText": "Oper. mode",
+      "unitId": "Enum",
+      "upperLimit": "32767",
+      "lowerLimit": "0"
+    }
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.solarCircuit[0].collectorTemp.values.actValue",
+    "value": "44.400002",
+    "attributes": {
+      "formatId": "fmtTemp",
+      "longText": "Source temp.",
+      "unitId": "Temp",
+      "upperLimit": "90",
+      "lowerLimit": "20"
+    }
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.solarCircuit[0].values.pump1",
+    "value": "0.62941831",
+    "attributes": {
+      "formatId": "fmt3p0",
+      "longText": "Pump 1",
+      "unitId": "Pct100",
+      "upperLimit": "1",
+      "lowerLimit": "0.0"
+    }
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.solarCircuit[0].values.pump2",
+    "value": "0.43000001",
+    "attributes": {
+      "formatId": "fmt3p0",
+      "longText": "Pump 2",
+      "unitId": "Pct100",
+      "upperLimit": "1",
+      "lowerLimit": "0.0"
+    }
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.genericHeat[0].referenceTemp.values.actValue",
+    "value": "36.799999"
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.genericHeat[1].referenceTemp.values.actValue",
+    "value": "26.799999"
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.genericHeat[0].param.setTempMax.value",
+    "value": "55",
+    "attributes": {
+      "formatId": "fmtTemp",
+      "longText": "Temp. nom. 1",
+      "unitId": "Temp",
+      "upperLimit": "90",
+      "lowerLimit": "0"
+    }
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.genericHeat[1].param.setTempMax.value",
+    "value": "55",
+    "attributes": {
+      "formatId": "fmtTemp",
+      "longText": "Temp. nom. 2",
+      "unitId": "Temp",
+      "upperLimit": "90",
+      "lowerLimit": "0"
+    }
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.genericHeat[0].values.heatRequest",
+    "value": "true",
+    "attributes": {
+      "unitId": "Enum",
+      "upperLimit": "6",
+      "lowerLimit": "0"
+    }
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.genericHeat[1].values.heatRequest",
+    "value": "false",
+    "attributes": {
+      "unitId": "Enum",
+      "upperLimit": "6",
+      "lowerLimit": "0"
+    }
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.solarCircuit[0].heatMeter.values.accumulatedHeat",
+    "value": "1.0984564e+09",
+    "attributes": {
+      "formatId": "fmt6p0",
+      "longText": "Heat quantity",
+      "unitId": "kWh",
+      "upperLimit": "900000",
+      "lowerLimit": "0"
+    }
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.solarCircuit[0].heatMeter.values.heatDay",
+    "value": "298018"
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.solarCircuit[0].heatMeter.values.power",
+    "value": "3452"
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.hmiRetainData.consumer1PrioritySolar[0]",
+    "value": "true"
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.heatpump[0].values.consumingExcessEnergy",
+    "value": "true"
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.heatpump[0].operationalDataExcessEnergy.operationalTimeS",
+    "value": "3600"
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.heatpump[0].operationalDataExcessEnergy.maxRunTimeS",
+    "value": "3600"
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.heatpump[0].operationalDataExcessEnergy.activationCounter",
+    "value": "3600"
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.heatpump[0].CircPump.values.setValueScaled",
+    "value": "0",
+    "attributes": {
+      "formatId": "fmt3p0",
+      "longText": "Circulation pump",
+      "unitId": "Pct100",
+      "upperLimit": "1",
+      "lowerLimit": "0.0"
+    }
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.heatpump[0].Source.values.setValueScaled",
+    "value": "0.44875106",
+    "attributes": {
+      "formatId": "fmt3p0",
+      "longText": "Source",
+      "unitId": "Pct100",
+      "upperLimit": "1",
+      "lowerLimit": "0.0"
+    }
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.heatpump[0].Compressor.values.setValueScaled",
+    "value": "0",
+    "attributes": {
+      "formatId": "fmtTemp",
+      "longText": "Compressor",
+      "unitId": "Pct100",
+      "upperLimit": "1",
+      "lowerLimit": "0.0"
+    }
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.heatpump[0].HeatPumpPowerCtrl.param.maxPowerScaledNight",
+    "value": "0.5",
+    "attributes": {
+      "formatId": "fmt3p0",
+      "longText": "Max. pwr. limit night",
+      "unitId": "Pct100",
+      "upperLimit": "1",
+      "lowerLimit": "0.5"
+    }
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.heatpump[0].TempCompressorIn.values.actValue",
+    "value": "27.200001"
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.heatpump[0].TempCompressorOut.values.actValue",
+    "value": "27.200001"
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.heatpump[0].HeatPumpPowerCtrl.param.useDayNightSpeed",
+    "value": "true"
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.heatpump[0].OverHeatCtrl.values.tempCond",
+    "value": "31.514103",
+    "attributes": {
+      "formatId": "fmtTemp",
+      "longText": "Cond. temp.",
+      "unitId": "Temp",
+      "upperLimit": "200",
+      "lowerLimit": "0"
+    }
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.heatpump[0].OverHeatCtrl.values.tempVap",
+    "value": "-4.5617409"
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.heatpump[0].OverHeatCtrl.values.setOH",
+    "value": "5.4999752"
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.heatpump[0].OverHeatCtrl.values.actOH",
+    "value": "18.676249"
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.heatpump[0].OverHeatCtrl.values.stepperPos",
+    "value": "20"
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.heatpump[0].values.request",
+    "value": "false"
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.heatpump[0].HighPressure.values.actValue",
+    "value": "15.61875"
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.heatpump[0].TempHeatFlow.values.actValue",
+    "value": "24.803127"
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.heatpump[0].LowPressure.values.actValue",
+    "value": "15.354687"
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.heatpump[0].param.name",
+    "value": "WPS26"
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.heatpump[0].TempHeatReflux.values.actValue",
+    "value": "23.904211"
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.heatpump[0].TempSourceIn.values.actValue",
+    "value": "25.700001"
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.heatpump[0].TempSourceOut.values.actValue",
+    "value": "24.896341"
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.heatpump[0].values.heatpumpState",
+    "value": "0",
+    "attributes": {
+      "formatId": "fmtHPState",
+      "longText": "State",
+      "unitId": "Enum",
+      "upperLimit": "32767",
+      "lowerLimit": "0"
+    }
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.heatpump[0].values.heatpumpSubState",
+    "value": "1",
+    "attributes": {
+      "formatId": "fmtHPSubState",
+      "longText": "Substate",
+      "unitId": "Enum",
+      "upperLimit": "32767",
+      "lowerLimit": "0"
+    }
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.heatpump[0].ElectricEnergyMeter.values.power",
+    "value": "5.5196772"
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.heatpump[0].HeatMeter.values.power",
+    "value": "3.2187521"
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.heatpump[0].HotWaterMeter.values.power",
+    "value": "2.7713845"
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.heatpump[0].values.COP",
+    "value": "2.5501628"
+  },
+  {
+    "name": "APPL.CtrlAppl.sStatisticalData.heatpump[0].consumption.heating.energy",
+    "value": "8.4317026"
+  },
+  {
+    "name": "APPL.CtrlAppl.sStatisticalData.heatpump[0].consumption.heating.electricalenergy",
+    "value": "7.3290005"
+  },
+  {
+    "name": "APPL.CtrlAppl.sStatisticalData.heatpump[0].EnergyEfficiencyRatioHeat",
+    "value": "3.3184626"
+  },
+  {
+    "name": "APPL.CtrlAppl.sStatisticalData.heatpump[0].consumption.cooling.energy",
+    "value": "7.2140002"
+  },
+  {
+    "name": "APPL.CtrlAppl.sStatisticalData.heatpump[0].consumption.cooling.electricalenergy",
+    "value": "8.7180004"
+  },
+  {
+    "name": "APPL.CtrlAppl.sStatisticalData.heatpump[0].EnergyEfficiencyRatioCool",
+    "value": "4.2206435"
+  },
+  {
+    "name": "APPL.CtrlAppl.sStatisticalData.heatpump[0].consumption.domHotWater.energy",
+    "value": "7.8570004"
+  },
+  {
+    "name": "APPL.CtrlAppl.sStatisticalData.heatpump[0].consumption.domHotWater.electricalenergy",
+    "value": "2.7710001"
+  },
+  {
+    "name": "APPL.CtrlAppl.sStatisticalData.heatpump[0].EnergyEfficiencyRatioDomHotWater",
+    "value": "2.5034916"
+  },
+  {
+    "name": "APPL.CtrlAppl.sStatisticalData.heatpump[0].consumption.energy",
+    "value": "8.2230005"
+  },
+  {
+    "name": "APPL.CtrlAppl.sStatisticalData.heatpump[0].consumption.electricalenergy",
+    "value": "5.2120004"
+  },
+  {
+    "name": "APPL.CtrlAppl.sStatisticalData.heatpump[0].EnergyEfficiencyRatio",
+    "value": "2.4277346"
+  },
+  {
+    "name": "APPL.CtrlAppl.sStatisticalData.heatpump[0].consumption.consumedExcessEnergy",
+    "value": "10.003001"
+  },
+  {
+    "name": "APPL.CtrlAppl.sStatisticalData.heatpump[0].consumption.heating.consumedExcessEnergy",
+    "value": "10.003001"
+  },
+  {
+    "name": "APPL.CtrlAppl.sStatisticalData.heatpump[0].consumption.cooling.consumedExcessEnergy",
+    "value": "10.003001"
+  },
+  {
+    "name": "APPL.CtrlAppl.sStatisticalData.heatpump[0].consumption.domHotWater.consumedExcessEnergy",
+    "value": "10.003001"
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.heatpump[0].operationalData.operationalTimeS",
+    "value": "3809028"
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.heatpump[0].operationalData.maxRunTimeS",
+    "value": "602403"
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.heatpump[0].operationalData.activationCounter",
+    "value": "477"
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.heatpump[0].FailureCompressor.values.actValue",
+    "value": "false"
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.heatpump[0].FailureSource.values.actValue",
+    "value": "false"
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.heatpump[0].FailureActuatorSource.values.actValue",
+    "value": "false"
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.heatpump[0].FailureThreePhase.values.actValue",
+    "value": "false"
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.heatpump[0].FailureSrcPressure.values.actValue",
+    "value": "false"
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.heatpump[0].FailureVFD.values.actValue",
+    "value": "false"
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.passivecooling[0].TempCoolPassive.values.actValue",
+    "value": "22.299999",
+    "attributes": {
+      "formatId": "fmtTemp",
+      "longText": "Temp. passive cool",
+      "unitId": "Temp",
+      "upperLimit": "100",
+      "lowerLimit": "-100"
+    }
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.passivecooling[0].SwitchValvePassiveCool.values.actPosition",
+    "value": "1",
+    "attributes": {
+      "formatId": "fmtSwitchValveState",
+      "longText": "Act. Pos.",
+      "unitId": "Enum",
+      "upperLimit": "2",
+      "lowerLimit": "0"
+    }
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.passivecooling[0].Pump.values.setValueScaled",
+    "value": "0.2314783",
+    "attributes": {
+      "formatId": "fmt3p0",
+      "longText": "CP speed",
+      "unitId": "Pct100",
+      "upperLimit": "1",
+      "lowerLimit": "0.0"
+    }
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.passivecooling[0].Mixer.flowTemp.values.actValue",
+    "value": "24.299999",
+    "attributes": {
+      "formatId": "fmtTemp",
+      "longText": "Inflow temp. act.",
+      "unitId": "Temp",
+      "upperLimit": "100",
+      "lowerLimit": "0"
+    }
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.passivecooling[0].Mixer.values.setValue",
+    "value": "19.218407"
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.passivecooling[0].Mixer.mixer.values.setValueScaled",
+    "value": "-1",
+    "attributes": {
+      "formatId": "fmt3p0",
+      "longText": "Mixer nom. value",
+      "unitId": "Pct100",
+      "upperLimit": "1",
+      "lowerLimit": "-1"
+    }
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.bufferTank[0].topTemp.values.actValue",
+    "value": "45.700001",
+    "attributes": {
+      "formatId": "fmtTemp",
+      "longText": "Temp. top act.",
+      "unitId": "Temp",
+      "upperLimit": "90",
+      "lowerLimit": "5"
+    }
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.bufferTank[0].midTemp.values.actValue",
+    "value": "25.700001",
+    "attributes": {
+      "formatId": "fmtTemp",
+      "longText": "Temp. bottom act.",
+      "unitId": "Temp",
+      "upperLimit": "90",
+      "lowerLimit": "5"
+    }
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.bufferTank[0].param.excessEnergyTemp.value",
+    "value": "75",
+    "attributes": {
+      "formatId": "fmtTemp",
+      "longText": "Set heat temp.",
+      "unitId": "Temp",
+      "upperLimit": "95",
+      "lowerLimit": "0"
+    }
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.bufferTank[0].param.excessEnergyTemp.hyst",
+    "value": "2",
+    "attributes": {
+      "formatId": "fmtTemp",
+      "longText": "Hyst. heat temp.",
+      "unitId": "TempRel",
+      "upperLimit": "5",
+      "lowerLimit": "0"
+    }
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.bufferTank[0].values.useExcessEnergy",
+    "value": "1",
+    "attributes": {
+      "formatId": "fmtExcessEnergyInfo",
+      "longText": "Excess energy buffer 1",
+      "unitId": "Enum",
+      "upperLimit": "2",
+      "lowerLimit": "0"
+    }
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.bufferTank[0].param.operatingMode",
+    "value": "0",
+    "attributes": {
+      "formatId": "fmtBufferMode",
+      "longText": "Oper. mode",
+      "unitId": "Enum",
+      "upperLimit": "32767",
+      "lowerLimit": "0"
+    }
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.bufferTank[0].param.backupTemp",
+    "value": "10",
+    "attributes": {
+      "formatId": "fmtTemp",
+      "longText": "Backup temp.",
+      "unitId": "Temp",
+      "upperLimit": "90",
+      "lowerLimit": "0"
+    }
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.bufferTank[0].values.setTemp",
+    "value": "44",
+    "attributes": {
+      "formatId": "fmtTemp",
+      "longText": "Set temp.",
+      "unitId": "Temp",
+      "upperLimit": "100",
+      "lowerLimit": "0"
+    }
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.bufferTank[0].values.heatRequestTop",
+    "value": "false"
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.bufferTank[0].values.coolRequestBot",
+    "value": "true"
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.bufferTank[0].param.useExcessEnergy",
+    "value": "true"
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.bufferTank[0].param.thresholdOutTempExcessEnergy.value",
+    "value": "25",
+    "attributes": {
+      "formatId": "fmtTemp",
+      "longText": "Außentemp. ÜE Grenze",
+      "unitId": "Temp",
+      "upperLimit": "50.0",
+      "lowerLimit": "0"
+    }
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.hotWaterTank[0].param.useExcessEnergy",
+    "value": "true"
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.hotWaterTank[0].param.excessEnergyTemp.value",
+    "value": "75",
+    "attributes": {
+      "formatId": "fmtTemp",
+      "longText": "Set heat temp.",
+      "unitId": "Temp",
+      "upperLimit": "95",
+      "lowerLimit": "0"
+    }
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.hotWaterTank[0].param.excessEnergyTemp.hyst",
+    "value": "4",
+    "attributes": {
+      "formatId": "fmtTemp",
+      "longText": "Hyst. heat temp.",
+      "unitId": "TempRel",
+      "upperLimit": "5",
+      "lowerLimit": "0"
+    }
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.hotWaterTank[0].values.useExcessEnergy",
+    "value": "1",
+    "attributes": {
+      "formatId": "fmtExcessEnergyInfo",
+      "longText": "Excess energy HWT 1",
+      "unitId": "Enum",
+      "upperLimit": "2",
+      "lowerLimit": "0"
+    }
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.hotWaterTank[0].values.heatRequestTop",
+    "value": "false"
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.hotWaterTank[0].FreshWater.freshWaterFlow.values.actValue",
+    "value": "true"
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.hotWaterTank[0].FreshWater.freshWaterTemp.values.actValue",
+    "value": "51",
+    "attributes": {
+      "formatId": "fmt3p2",
+      "longText": "FWM temp.",
+      "unitId": "Temp",
+      "upperLimit": "100",
+      "lowerLimit": "0"
+    }
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.hotWaterTank[0].param.normalSetTempMax.value",
+    "value": "51",
+    "attributes": {
+      "formatId": "fmtTemp",
+      "longText": "Temp. nom.",
+      "unitId": "Temp",
+      "upperLimit": "52",
+      "lowerLimit": "0",
+      "dynUpperLimit": 1
+    }
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.hotWaterTank[0].param.reducedSetTempMax.value",
+    "value": "32.5",
+    "attributes": {
+      "formatId": "fmtTemp",
+      "longText": "Sup.temp.",
+      "unitId": "Temp",
+      "upperLimit": "52",
+      "lowerLimit": "0",
+      "dynUpperLimit": 1
+    }
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.hotWaterTank[0].param.operatingMode",
+    "value": "3",
+    "attributes": {
+      "formatId": "fmtHotWaterTank",
+      "longText": "Op.mode",
+      "unitId": "Enum",
+      "upperLimit": "32767",
+      "lowerLimit": "0"
+    }
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.hotWaterTank[0].topTemp.values.actValue",
+    "value": "47.700001",
+    "attributes": {
+      "formatId": "fmtTemp",
+      "longText": "Temp. act.",
+      "unitId": "Temp",
+      "upperLimit": "90",
+      "lowerLimit": "20"
+    }
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.hotWaterTank[0].circTemp.values.actValue",
+    "value": "34.5",
+    "attributes": {
+      "formatId": "fmtTemp",
+      "longText": "Circ. reflux temp.",
+      "unitId": "Temp",
+      "upperLimit": "100",
+      "lowerLimit": "-100"
+    }
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.hotWaterTank[0].circPump.pump.values.setValueB",
+    "value": "false"
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.switchvalve[0].values.actPosition",
+    "value": "1",
+    "attributes": {
+      "formatId": "fmtSwitchValveStateV1",
+      "longText": "Valve pos.",
+      "unitId": "Enum",
+      "upperLimit": "2",
+      "lowerLimit": "0"
+    }
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.photovoltaics.values.excessEnergyActive",
+    "value": "true"
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.photovoltaics.ElectricEnergyMeter.values.power",
+    "value": "437.70001"
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.photovoltaics.ElectricEnergyMeter.values.heatDay",
+    "value": "1.5757199e+09"
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.photovoltaics.ElectricEnergyMeter.values.accumulatedHeat",
+    "value": "1.5757199e+09"
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.outdoorTemp.values.actValue",
+    "value": "20.504164",
+    "attributes": {
+      "formatId": "fmtTemp",
+      "longText": "Exterior temp.",
+      "unitId": "Temp",
+      "upperLimit": "100",
+      "lowerLimit": "-100"
+    }
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.param.operatingMode",
+    "value": "2",
+    "attributes": {
+      "formatId": "fmtOperatingMode",
+      "longText": "Operating mode",
+      "lowerLimit": "-1",
+      "unitId": "Enum",
+      "upperLimit": "4"
+    }
+  },
+  {
+    "name": "APPL.CtrlAppl.sProcData.globalCpuTimePercent",
+    "value": "27"
+  },
+  {
+    "name": "APPL.CtrlAppl.sProcData.processStatus[0].cpuTimePercent",
+    "value": "34"
+  },
+  {
+    "name": "APPL.CtrlAppl.sProcData.processStatus[1].cpuTimePercent",
+    "value": "67"
+  },
+  {
+    "name": "APPL.CtrlAppl.sProcData.processStatus[2].cpuTimePercent",
+    "value": "7"
+  },
+  {
+    "name": "APPL.CtrlAppl.sProcData.RAMstatus.tmpfs",
+    "value": "6432"
+  },
+  {
+    "name": "APPL.CtrlAppl.sProcData.totFreeRAM",
+    "value": "100060"
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.values.UBIMaxEraseCounter",
+    "value": "341"
+  }
+]

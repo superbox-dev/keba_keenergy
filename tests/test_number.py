@@ -22,16 +22,18 @@ from pytest_homeassistant.common import snapshot_platform
 
 from custom_components.keba_keenergy.const import FLASH_WRITE_DELAY
 from tests import fire_debounced_writes
+from tests import get_multiple_devices_responses
+from tests import get_single_device_responses
 from tests import get_state
 from tests import next_update
 from tests import set_number_value
-from tests.api_data import MULTIPLE_DEVICES_DATA_RESPONSE
-from tests.api_data import NOW
-from tests.api_data import Response
-from tests.api_data import get_multiple_devices_responses
-from tests.api_data import get_single_device_data_response
-from tests.api_data import get_single_device_responses
-from tests.api_data import update_response
+from tests import update_response
+from tests.const import HEAT_CIRCUIT_TARGET_TEMPERATURE_OFFSET
+from tests.const import MULTIPLE_DEVICES_DATA_RESPONSE
+from tests.const import MULTIPLE_DEVICES_PASSIVE_COOLING_FIXED_DATA_RESPONSE
+from tests.const import NOW
+from tests.const import SINGLE_DEVICE_DEFAULT_DATA_RESPONSE
+from tests.const import Response
 from tests.test_number_data import HEATING_CURVE_SLOPE_ENTITY_ID
 from tests.test_number_data import TARGET_TEMPERATURE_OFFSET_ENTITY_ID
 from tests.test_number_data import TARGET_TEMPERATURE_OFFSET_WRITE
@@ -62,7 +64,9 @@ async def test_numbers(
     """Test the states of all number entities."""
     hass.config.language = language
     fake_api.platforms = [Platform.NUMBER]
-    fake_api.responses = get_multiple_devices_responses(MULTIPLE_DEVICES_DATA_RESPONSE, has_passive_cooling="true")
+    fake_api.responses = get_multiple_devices_responses(
+        MULTIPLE_DEVICES_DATA_RESPONSE, fixed_data=MULTIPLE_DEVICES_PASSIVE_COOLING_FIXED_DATA_RESPONSE
+    )
     await fake_api.setup_integration()
 
     await snapshot_platform(hass, entity_registry, snapshot, mock_config_entry.entry_id)
@@ -274,9 +278,9 @@ async def test_set_value_debounced(
 ) -> None:
     """Test that quick value changes are shown at once and written once, with the last value."""
     fake_api.responses = get_single_device_responses(
-        get_single_device_data_response(heat_circuit_target_temperature_offset="1.5"),
+        update_response(SINGLE_DEVICE_DEFAULT_DATA_RESPONSE, HEAT_CIRCUIT_TARGET_TEMPERATURE_OFFSET, value="1.5"),
         # Read the API after the update of the entity.
-        get_single_device_data_response(heat_circuit_target_temperature_offset="1.5"),
+        update_response(SINGLE_DEVICE_DEFAULT_DATA_RESPONSE, HEAT_CIRCUIT_TARGET_TEMPERATURE_OFFSET, value="1.5"),
     )
     await fake_api.setup_integration()
 
@@ -301,14 +305,14 @@ async def test_set_value_debounced(
     [
         (
             TARGET_TEMPERATURE_OFFSET_ENTITY_ID,
-            get_single_device_data_response(heat_circuit_target_temperature_offset="1.5"),
+            update_response(SINGLE_DEVICE_DEFAULT_DATA_RESPONSE, HEAT_CIRCUIT_TARGET_TEMPERATURE_OFFSET, value="1.5"),
             1.5,
         ),
         # The Web HMI returns `0.8` as Float32 (`0.80000001`).
         (
             HEATING_CURVE_SLOPE_ENTITY_ID,
             update_response(
-                get_single_device_data_response(),
+                SINGLE_DEVICE_DEFAULT_DATA_RESPONSE,
                 "APPL.CtrlAppl.sParam.heatCircuit[0].param.heatCurveGradient",
                 value="0.80000001",
             ),
@@ -344,7 +348,7 @@ async def test_set_value_back_before_write(
 ) -> None:
     """Test that a value set back to the current value before the debounced write is not written."""
     fake_api.responses = get_single_device_responses(
-        get_single_device_data_response(heat_circuit_target_temperature_offset="1.5"),
+        update_response(SINGLE_DEVICE_DEFAULT_DATA_RESPONSE, HEAT_CIRCUIT_TARGET_TEMPERATURE_OFFSET, value="1.5"),
     )
     await fake_api.setup_integration()
 
@@ -365,11 +369,11 @@ async def test_limits_after_update(
     """Test that a number entity uses the default limits until an update provides the limits of the API."""
     fake_api.responses = get_single_device_responses(
         update_response(
-            get_single_device_data_response(),
+            SINGLE_DEVICE_DEFAULT_DATA_RESPONSE,
             "APPL.CtrlAppl.sParam.heatCircuit[0].param.offsetRoomTemp",
             attributes={},
         ),
-        get_single_device_data_response(),
+        SINGLE_DEVICE_DEFAULT_DATA_RESPONSE,
     )
     await fake_api.setup_integration()
 
@@ -390,7 +394,7 @@ async def test_debounced_value_not_written_after_unload(
 ) -> None:
     """Test that a pending debounced value is not written after the integration was unloaded."""
     fake_api.responses = get_single_device_responses(
-        get_single_device_data_response(heat_circuit_target_temperature_offset="1.5"),
+        update_response(SINGLE_DEVICE_DEFAULT_DATA_RESPONSE, HEAT_CIRCUIT_TARGET_TEMPERATURE_OFFSET, value="1.5"),
     )
     await fake_api.setup_integration()
 
@@ -411,7 +415,7 @@ async def test_debounced_write_failed(
 ) -> None:
     """Test that a failed debounced write shows the previous value again and logs a warning, not an error."""
     fake_api.responses = get_single_device_responses(
-        get_single_device_data_response(heat_circuit_target_temperature_offset="1.5"),
+        update_response(SINGLE_DEVICE_DEFAULT_DATA_RESPONSE, HEAT_CIRCUIT_TARGET_TEMPERATURE_OFFSET, value="1.5"),
     )
     await fake_api.setup_integration()
     fake_api.write_status = HTTPStatus.BAD_REQUEST
@@ -437,11 +441,11 @@ async def test_debounced_write_during_update(
 ) -> None:
     """Test that a value written during an update is not replaced by the previous value of the update."""
     fake_api.responses = get_single_device_responses(
-        get_single_device_data_response(heat_circuit_target_temperature_offset="1.5"),
+        update_response(SINGLE_DEVICE_DEFAULT_DATA_RESPONSE, HEAT_CIRCUIT_TARGET_TEMPERATURE_OFFSET, value="1.5"),
         # The update reads the previous value while the value is written.
-        get_single_device_data_response(heat_circuit_target_temperature_offset="1.5"),
+        update_response(SINGLE_DEVICE_DEFAULT_DATA_RESPONSE, HEAT_CIRCUIT_TARGET_TEMPERATURE_OFFSET, value="1.5"),
         # The update reads the values again after the write.
-        get_single_device_data_response(heat_circuit_target_temperature_offset="0.5"),
+        update_response(SINGLE_DEVICE_DEFAULT_DATA_RESPONSE, HEAT_CIRCUIT_TARGET_TEMPERATURE_OFFSET, value="0.5"),
     )
     await fake_api.setup_integration()
 

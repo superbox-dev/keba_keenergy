@@ -43,26 +43,26 @@ from keba_keenergy_api.enums import HeatPumpState
 from pytest_homeassistant.common import snapshot_platform
 
 from tests import fire_debounced_writes
+from tests import get_multiple_devices_responses
+from tests import get_single_device_responses
 from tests import get_state
+from tests import replace_values
 from tests import set_target_temperature
-from tests.api_data import HEAT_CIRCUIT_AWAY_END_DATE
-from tests.api_data import HEAT_CIRCUIT_AWAY_START_DATE
-from tests.api_data import HEAT_CIRCUIT_TARGET_TEMPERATURE_NIGHT
-from tests.api_data import MULTIPLE_DEVICES_DATA_RESPONSE
-from tests.api_data import MULTIPLE_DEVICES_OTHER_MODES_DATA_RESPONSE
-from tests.api_data import NOW
-from tests.api_data import Response
-from tests.api_data import get_multiple_devices_responses
-from tests.api_data import get_single_device_data_response
-from tests.api_data import get_single_device_responses
-from tests.api_data import replace_values
-from tests.api_data import update_response
+from tests import update_response
+from tests.const import HEAT_CIRCUIT_TARGET_TEMPERATURE_OFFSET
+from tests.const import MULTIPLE_DEVICES_DATA_RESPONSE
+from tests.const import MULTIPLE_DEVICES_OTHER_MODES_DATA_RESPONSE
+from tests.const import NOW
+from tests.const import SINGLE_DEVICE_DEFAULT_DATA_RESPONSE
+from tests.const import Response
 from tests.test_climate_data import AUTO_DATA_RESPONSE
 from tests.test_climate_data import AWAY_DATE_RANGE_RESET_WRITE
+from tests.test_climate_data import AWAY_DATE_RANGE_VALUES
 from tests.test_climate_data import AWAY_PRESET_WRITE
 from tests.test_climate_data import HEAT_CIRCUIT_1_ENTITY_ID
 from tests.test_climate_data import HEAT_CIRCUIT_ENTITY_ID
 from tests.test_climate_data import NIGHT
+from tests.test_climate_data import NIGHT_TEMPERATURE_VALUES
 from tests.test_climate_data import OFF_DATA_RESPONSE
 from tests.test_climate_data import PARTY_DATA_RESPONSE
 from tests.test_climate_data import REDUCED_DATA_RESPONSE
@@ -195,10 +195,10 @@ async def test_set_preset_mode_away_of_cooling_circuit(
     ("response", "expected_limits"),
     [
         # The selected target temperature 20.0 plus the limits of the offset (-2.5 and 2.5).
-        (get_single_device_data_response(), (17.5, 22.5)),
+        (SINGLE_DEVICE_DEFAULT_DATA_RESPONSE, (17.5, 22.5)),
         (
             update_response(
-                get_single_device_data_response(),
+                SINGLE_DEVICE_DEFAULT_DATA_RESPONSE,
                 "APPL.CtrlAppl.sParam.heatCircuit[0].param.offsetRoomTemp",
                 attributes={},
             ),
@@ -228,7 +228,7 @@ async def test_set_temperature_out_of_range(
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
     """Test that a target temperature outside of the limits is rejected and not written."""
-    fake_api.responses = get_single_device_responses(get_single_device_data_response())
+    fake_api.responses = get_single_device_responses(SINGLE_DEVICE_DEFAULT_DATA_RESPONSE)
     await fake_api.setup_integration()
 
     with pytest.raises(ServiceValidationError) as error:
@@ -246,7 +246,7 @@ async def test_target_temperature(
 ) -> None:
     """Test that the target temperature is the selected target temperature 20.0 plus the offset 1.5."""
     fake_api.responses = get_single_device_responses(
-        get_single_device_data_response(heat_circuit_target_temperature_offset="1.5"),
+        update_response(SINGLE_DEVICE_DEFAULT_DATA_RESPONSE, HEAT_CIRCUIT_TARGET_TEMPERATURE_OFFSET, value="1.5"),
     )
     await fake_api.setup_integration()
 
@@ -261,9 +261,9 @@ async def test_set_temperature_debounced(
 ) -> None:
     """Test that quick target temperature changes are shown at once and written once, with the last value."""
     fake_api.responses = get_single_device_responses(
-        get_single_device_data_response(heat_circuit_target_temperature_offset="1.5"),
+        update_response(SINGLE_DEVICE_DEFAULT_DATA_RESPONSE, HEAT_CIRCUIT_TARGET_TEMPERATURE_OFFSET, value="1.5"),
         # Read the API after the update of the entity.
-        get_single_device_data_response(heat_circuit_target_temperature_offset="1.5"),
+        update_response(SINGLE_DEVICE_DEFAULT_DATA_RESPONSE, HEAT_CIRCUIT_TARGET_TEMPERATURE_OFFSET, value="1.5"),
     )
     await fake_api.setup_integration()
 
@@ -399,13 +399,9 @@ async def test_set_preset_mode_shows_target_temperature_of_mode(
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
     """Test that the night temperature 19.5 plus the offset 1.5 is shown, not the selected target temperature 20.0."""
-    night_data_response: Response = replace_values(
-        REDUCED_DATA_RESPONSE,
-        *HEAT_CIRCUIT_TARGET_TEMPERATURE_NIGHT.read_all("19.5", "19.5"),
-    )
     fake_api.responses = get_multiple_devices_responses(
-        replace_values(MULTIPLE_DEVICES_DATA_RESPONSE, *HEAT_CIRCUIT_TARGET_TEMPERATURE_NIGHT.read_all("19.5", "19.5")),
-        night_data_response,
+        replace_values(MULTIPLE_DEVICES_DATA_RESPONSE, NIGHT_TEMPERATURE_VALUES),
+        replace_values(REDUCED_DATA_RESPONSE, NIGHT_TEMPERATURE_VALUES),
     )
     await fake_api.setup_integration()
 
@@ -481,11 +477,7 @@ async def test_set_preset_mode_ends_away_with_unchanged_operating_mode(
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
     """Test that the end of away only resets the date range if the operating mode below it is the new one."""
-    away_data_response: Response = replace_values(
-        MULTIPLE_DEVICES_DATA_RESPONSE,
-        *HEAT_CIRCUIT_AWAY_START_DATE.read_all("1769209200", "1769209200"),
-        *HEAT_CIRCUIT_AWAY_END_DATE.read_all("1800831599", "1800831599"),
-    )
+    away_data_response: Response = replace_values(MULTIPLE_DEVICES_DATA_RESPONSE, AWAY_DATE_RANGE_VALUES)
     fake_api.responses = get_multiple_devices_responses(away_data_response)
     await fake_api.setup_integration()
 
@@ -685,11 +677,7 @@ async def test_set_preset_mode_away_keeps_preset_until_operating_mode_changes(
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
     """Test that the away preset stays while the control unit still reports the old operating mode."""
-    away_data_response: Response = replace_values(
-        MULTIPLE_DEVICES_DATA_RESPONSE,
-        *HEAT_CIRCUIT_AWAY_START_DATE.read_all("1769209200", "1769209200"),
-        *HEAT_CIRCUIT_AWAY_END_DATE.read_all("1800831599", "1800831599"),
-    )
+    away_data_response: Response = replace_values(MULTIPLE_DEVICES_DATA_RESPONSE, AWAY_DATE_RANGE_VALUES)
     fake_api.responses = get_multiple_devices_responses(MULTIPLE_DEVICES_DATA_RESPONSE, away_data_response)
     await fake_api.setup_integration()
 
@@ -766,7 +754,7 @@ async def test_operating_mode_without_preset(
     """Test that a heating circuit in an operating mode without a preset has no preset."""
     fake_api.responses = get_single_device_responses(
         update_response(
-            get_single_device_data_response(),
+            SINGLE_DEVICE_DEFAULT_DATA_RESPONSE,
             "APPL.CtrlAppl.sParam.heatCircuit[0].param.operatingMode",
             value=str(operating_mode.value),
         ),

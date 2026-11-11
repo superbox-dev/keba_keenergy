@@ -16,12 +16,12 @@ from homeassistant.helpers import device_registry as dr
 from homeassistant.setup import async_setup_component
 
 from custom_components.keba_keenergy.const import DOMAIN
+from tests import get_multiple_devices_responses
 from tests import get_state
 from tests import select_option
-from tests.api_data import ENTITY_UPDATED_DATA_RESPONSE
-from tests.api_data import MULTIPLE_DEVICES_DATA_RESPONSE
-from tests.api_data import NOW
-from tests.api_data import get_multiple_devices_responses
+from tests.const import ENTITY_UPDATED_DATA_RESPONSE
+from tests.const import MULTIPLE_DEVICES_DATA_RESPONSE
+from tests.const import NOW
 from tests.test_entity_data import REMOTE_MAINTENANCE_CONNECTED_ENTITY_ID
 from tests.test_issues_data import WRITE_COUNT_ENTITY_ID
 

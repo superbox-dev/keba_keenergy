@@ -17,20 +17,18 @@ from homeassistant.const import STATE_UNKNOWN
 from custom_components.keba_keenergy.const import DOMAIN
 from custom_components.keba_keenergy.const import REMOTE_ACCESS_SCAN_INTERVAL
 from tests import get_flows_in_progress
+from tests import get_multiple_devices_responses
 from tests import get_state
 from tests import next_update
-from tests.api_data import MULTIPLE_DEVICES_DATA_RESPONSE
-from tests.api_data import MULTIPLE_DEVICES_RESPONSE
-from tests.api_data import MULTIPLE_DEVICES_WITHOUT_SOLAR_AND_HEATING_CIRCUITS_DATA_RESPONSE
-from tests.api_data import MULTIPLE_DEVICES_WITHOUT_SOLAR_CIRCUITS_DATA_RESPONSE
-from tests.api_data import NOW
-from tests.api_data import SYSTEM_SOLAR_CIRCUIT_NUMBERS
-from tests.api_data import get_multiple_devices_fixed_data_response
-from tests.api_data import get_multiple_devices_responses
-from tests.api_data import replace_values
+from tests.const import MULTIPLE_DEVICES_DATA_RESPONSE
+from tests.const import MULTIPLE_DEVICES_FIXED_DATA_RESPONSE
+from tests.const import NOW
 from tests.test_coordinator_data import HEAT_CIRCUIT_ENTITY_ID
 from tests.test_coordinator_data import HEAT_CIRCUIT_VALUE
 from tests.test_coordinator_data import REMOTE_MAINTENANCE_SERVER_ENTITY_ID
+from tests.test_coordinator_data import WITHOUT_SOLAR_AND_HEATING_CIRCUITS_DATA_RESPONSE
+from tests.test_coordinator_data import WITHOUT_SOLAR_CIRCUITS_DATA_RESPONSE
+from tests.test_coordinator_data import WITHOUT_SOLAR_CIRCUITS_RESPONSE
 from tests.test_switch_data import MODBUS_ENTITY_ID
 from tests.test_switch_data import REMOTE_ACCESS_UPDATE_REQUESTS
 from tests.test_switch_data import REMOTE_MAINTENANCE_ENTITY_ID
@@ -113,12 +111,12 @@ async def test_update_interval_ticks(
     A skipped endpoint keeps its values, the other endpoints are updated.
     """
     fake_api.responses = [
-        replace_values(MULTIPLE_DEVICES_RESPONSE, SYSTEM_SOLAR_CIRCUIT_NUMBERS.read("0")),
-        get_multiple_devices_fixed_data_response(),
-        MULTIPLE_DEVICES_WITHOUT_SOLAR_CIRCUITS_DATA_RESPONSE,
-        MULTIPLE_DEVICES_WITHOUT_SOLAR_CIRCUITS_DATA_RESPONSE,
+        WITHOUT_SOLAR_CIRCUITS_RESPONSE,
+        MULTIPLE_DEVICES_FIXED_DATA_RESPONSE,
+        WITHOUT_SOLAR_CIRCUITS_DATA_RESPONSE,
+        WITHOUT_SOLAR_CIRCUITS_DATA_RESPONSE,
         # The values of the heating circuits are skipped on this refresh.
-        MULTIPLE_DEVICES_WITHOUT_SOLAR_AND_HEATING_CIRCUITS_DATA_RESPONSE,
+        WITHOUT_SOLAR_AND_HEATING_CIRCUITS_DATA_RESPONSE,
     ]
     await fake_api.setup_integration()
 
@@ -154,13 +152,13 @@ async def test_update_interval_ticks_keep_message_ids(
     entity_id: str = "sensor.keba_keenergy_12345678_heat_circuit_room_temperature_1"
     fake_api.message_ids = {"APPL.CtrlAppl.sParam.heatCircuit[0].tempRoom.state.msgId": 50}
     fake_api.responses = [
-        replace_values(MULTIPLE_DEVICES_RESPONSE, SYSTEM_SOLAR_CIRCUIT_NUMBERS.read("0")),
-        get_multiple_devices_fixed_data_response(),
-        MULTIPLE_DEVICES_WITHOUT_SOLAR_CIRCUITS_DATA_RESPONSE,
-        MULTIPLE_DEVICES_WITHOUT_SOLAR_CIRCUITS_DATA_RESPONSE,
+        WITHOUT_SOLAR_CIRCUITS_RESPONSE,
+        MULTIPLE_DEVICES_FIXED_DATA_RESPONSE,
+        WITHOUT_SOLAR_CIRCUITS_DATA_RESPONSE,
+        WITHOUT_SOLAR_CIRCUITS_DATA_RESPONSE,
         # The values of the heating circuits are skipped on this refresh.
-        MULTIPLE_DEVICES_WITHOUT_SOLAR_AND_HEATING_CIRCUITS_DATA_RESPONSE,
-        MULTIPLE_DEVICES_WITHOUT_SOLAR_CIRCUITS_DATA_RESPONSE,
+        WITHOUT_SOLAR_AND_HEATING_CIRCUITS_DATA_RESPONSE,
+        WITHOUT_SOLAR_CIRCUITS_DATA_RESPONSE,
     ]
     await fake_api.setup_integration()
 

@@ -15,23 +15,25 @@ from homeassistant.exceptions import ServiceValidationError
 from keba_keenergy_api.enums import HeatingCircuitOperatingMode
 from pytest_homeassistant.common import snapshot_platform
 
+from tests import get_multiple_devices_responses
 from tests import get_option_translations
 from tests import get_platform_states
+from tests import get_single_device_responses
 from tests import get_state
 from tests import next_update
 from tests import select_option
-from tests.api_data import CURVES_RENAMED_RESPONSE
-from tests.api_data import MULTIPLE_DEVICES_DATA_RESPONSE
-from tests.api_data import NOW
-from tests.api_data import get_multiple_devices_responses
-from tests.api_data import get_single_device_data_response
-from tests.api_data import get_single_device_responses
-from tests.api_data import update_response
+from tests import update_response
+from tests.const import CURVES_RENAMED_RESPONSE
+from tests.const import MULTIPLE_DEVICES_DATA_RESPONSE
+from tests.const import MULTIPLE_DEVICES_PASSIVE_COOLING_FIXED_DATA_RESPONSE
+from tests.const import NOW
+from tests.const import SINGLE_DEVICE_DEFAULT_DATA_RESPONSE
 from tests.test_select_data import CURVE_SELECTS
 from tests.test_select_data import HEATING_CURVE_ENTITY_ID
 from tests.test_select_data import TWO_HEAT_PUMPS_DATA_RESPONSE
 from tests.test_select_data import TWO_HEAT_PUMPS_RESPONSE
 from tests.test_select_data import TWO_HEAT_PUMPS_SECOND_PASSIVE_COOLING_FIXED_DATA_RESPONSE
+from tests.test_select_data import WITHOUT_COOLING_FIXED_DATA_RESPONSE
 
 if TYPE_CHECKING:
     from freezegun.api import FrozenDateTimeFactory
@@ -59,7 +61,9 @@ async def test_selects(
     """Test the states and the translated options of all select entities, with cooling."""
     hass.config.language = language
     fake_api.platforms = [Platform.SELECT]
-    fake_api.responses = get_multiple_devices_responses(MULTIPLE_DEVICES_DATA_RESPONSE, has_passive_cooling="true")
+    fake_api.responses = get_multiple_devices_responses(
+        MULTIPLE_DEVICES_DATA_RESPONSE, fixed_data=MULTIPLE_DEVICES_PASSIVE_COOLING_FIXED_DATA_RESPONSE
+    )
     await fake_api.setup_integration()
 
     await snapshot_platform(hass, entity_registry, snapshot, mock_config_entry.entry_id)
@@ -95,8 +99,7 @@ async def test_selects_without_cooling(
     hass.config.language = language
     fake_api.responses = get_multiple_devices_responses(
         MULTIPLE_DEVICES_DATA_RESPONSE,
-        has_passive_cooling="false",
-        has_cooling_circuits=False,
+        fixed_data=WITHOUT_COOLING_FIXED_DATA_RESPONSE,
     )
     await fake_api.setup_integration()
 
@@ -179,7 +182,9 @@ async def test_select_option(
     expected: str,
 ) -> None:
     """Test selecting an option of a select entity."""
-    fake_api.responses = get_multiple_devices_responses(MULTIPLE_DEVICES_DATA_RESPONSE, has_passive_cooling="true")
+    fake_api.responses = get_multiple_devices_responses(
+        MULTIPLE_DEVICES_DATA_RESPONSE, fixed_data=MULTIPLE_DEVICES_PASSIVE_COOLING_FIXED_DATA_RESPONSE
+    )
     await fake_api.setup_integration()
 
     await select_option(hass, entity_id, option)
@@ -194,8 +199,7 @@ async def test_select_invalid_option(
     """Test that the system operating mode rejects a cooling mode without a device that can cool."""
     fake_api.responses = get_multiple_devices_responses(
         MULTIPLE_DEVICES_DATA_RESPONSE,
-        has_passive_cooling="false",
-        has_cooling_circuits=False,
+        fixed_data=WITHOUT_COOLING_FIXED_DATA_RESPONSE,
     )
     await fake_api.setup_integration()
 
@@ -220,7 +224,7 @@ async def test_select_current_option_not_offered(
     """Test that a select is unknown if the control unit is in a mode that the select does not offer."""
     fake_api.responses = get_single_device_responses(
         update_response(
-            get_single_device_data_response(),
+            SINGLE_DEVICE_DEFAULT_DATA_RESPONSE,
             "APPL.CtrlAppl.sParam.heatCircuit[0].param.operatingMode",
             value=str(HeatingCircuitOperatingMode.EXTERNAL.value),
         ),

@@ -24,15 +24,15 @@ from custom_components.keba_keenergy.const import DOMAIN
 from custom_components.keba_keenergy.const import SERVICE_SET_AWAY_DATE_RANGE
 from custom_components.keba_keenergy.const import SERVICE_SET_HEATING_CURVE_POINTS
 from tests import get_state
-from tests.api_data import CURVE_NAMES_RESPONSE
-from tests.api_data import CURVES_RENAMED_RESPONSE
-from tests.api_data import CURVES_RESPONSE
-from tests.api_data import NOW
-from tests.api_data import Response
-from tests.api_data import get_curve_points_response
+from tests.const import CURVE_NAMES_RESPONSE
+from tests.const import CURVES_RENAMED_RESPONSE
+from tests.const import CURVES_RESPONSE
+from tests.const import NOW
+from tests.const import Response
 from tests.test_services_data import AWAY_DATE_RANGE_WRITE
 from tests.test_services_data import HEATING_CURVE_POINTS
 from tests.test_services_data import HEATING_CURVE_POINTS_WRITE
+from tests.test_services_data import THREE_POINTS_CURVE_POINTS_RESPONSE
 
 if TYPE_CHECKING:
     from homeassistant.core import HomeAssistant
@@ -379,7 +379,7 @@ async def test_set_unchanged_heating_curve_points(
     """Test that the action does not write the points if the heating curve already has them (flash writes)."""
     fake_api.curves = [
         CURVE_NAMES_RESPONSE,
-        get_curve_points_response(points=(("-20", "35.299999"), ("0", "29.5"), ("20", "23.9"))),
+        THREE_POINTS_CURVE_POINTS_RESPONSE,
     ]
 
     await hass.services.async_call(

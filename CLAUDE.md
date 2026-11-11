@@ -89,7 +89,7 @@ Before finishing a change, run `ruff format`, `lint.sh` and `pytest`, in this or
 
 - No inline lint/type suppressions, no new ones in the config, no `# pragma: no cover`, fix or test the code
   - only exception: `# noqa: ARG00x` in required signatures
-- No real credentials, serial numbers or IP addresses, use the fake data in `tests/api_data.py`
+- No real credentials, serial numbers or IP addresses, use the fake data in `tests/fixtures/`
 - Missing device endpoints or values belong in `keba_keenergy_api`, stop and ask how to proceed
   - values calculated from existing ones are fine in the integration
 - Limited flash writes: write only changed values, only via `coordinator.async_write_data()`, debounce

@@ -15,7 +15,7 @@ from homeassistant.const import CONF_SSL
 from homeassistant.const import CONF_USERNAME
 from pytest_homeassistant.components.diagnostics import get_diagnostics_for_config_entry
 
-from tests.api_data import NOW
+from tests.const import NOW
 
 if TYPE_CHECKING:
     from homeassistant.core import HomeAssistant

@@ -21,14 +21,15 @@ from pytest_homeassistant.common import snapshot_platform
 
 from custom_components.keba_keenergy.const import ATTR_POINTS
 from custom_components.keba_keenergy.const import DOMAIN
+from tests import get_multiple_devices_responses
 from tests import get_option_translations
 from tests import get_platform_states
 from tests import get_state
-from tests.api_data import CURVES_WITHOUT_NAMES_RESPONSE
-from tests.api_data import MULTIPLE_DEVICES_DATA_RESPONSE
-from tests.api_data import NOW
-from tests.api_data import get_multiple_devices_responses
-from tests.api_data import update_response
+from tests import update_response
+from tests.const import MULTIPLE_DEVICES_DATA_RESPONSE
+from tests.const import MULTIPLE_DEVICES_PASSIVE_COOLING_FIXED_DATA_RESPONSE
+from tests.const import NOW
+from tests.test_sensor_data import CURVES_WITHOUT_NAMES_RESPONSE
 
 if TYPE_CHECKING:
     from homeassistant.core import HomeAssistant
@@ -55,7 +56,9 @@ async def test_sensors(
     """Test the states of all sensors, their displayed values and the translated options of the enum sensors."""
     hass.config.language = language
     fake_api.platforms = [Platform.SENSOR]
-    fake_api.responses = get_multiple_devices_responses(MULTIPLE_DEVICES_DATA_RESPONSE, has_passive_cooling="true")
+    fake_api.responses = get_multiple_devices_responses(
+        MULTIPLE_DEVICES_DATA_RESPONSE, fixed_data=MULTIPLE_DEVICES_PASSIVE_COOLING_FIXED_DATA_RESPONSE
+    )
     await fake_api.setup_integration()
 
     await snapshot_platform(hass, entity_registry, snapshot, mock_config_entry.entry_id)

@@ -12,11 +12,12 @@ from homeassistant.const import STATE_UNKNOWN
 from homeassistant.const import Platform
 from pytest_homeassistant.common import snapshot_platform
 
+from tests import get_multiple_devices_responses
 from tests import get_state
 from tests import next_update
-from tests.api_data import MULTIPLE_DEVICES_DATA_RESPONSE
-from tests.api_data import NOW
-from tests.api_data import get_multiple_devices_responses
+from tests.const import MULTIPLE_DEVICES_DATA_RESPONSE
+from tests.const import MULTIPLE_DEVICES_PASSIVE_COOLING_FIXED_DATA_RESPONSE
+from tests.const import NOW
 from tests.test_binary_sensor_data import COMPRESSOR_FAILURE_ENTITY_ID
 from tests.test_binary_sensor_data import COMPRESSOR_FAILURE_MESSAGE_ID
 
@@ -46,7 +47,9 @@ async def test_binary_sensors(
     """Test the states of all binary sensors."""
     hass.config.language = language
     fake_api.platforms = [Platform.BINARY_SENSOR]
-    fake_api.responses = get_multiple_devices_responses(MULTIPLE_DEVICES_DATA_RESPONSE, has_passive_cooling="true")
+    fake_api.responses = get_multiple_devices_responses(
+        MULTIPLE_DEVICES_DATA_RESPONSE, fixed_data=MULTIPLE_DEVICES_PASSIVE_COOLING_FIXED_DATA_RESPONSE
+    )
     await fake_api.setup_integration()
 
     await snapshot_platform(hass, entity_registry, snapshot, mock_config_entry.entry_id)

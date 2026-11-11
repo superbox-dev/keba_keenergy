@@ -20,17 +20,17 @@ from homeassistant.helpers import entity_registry as er
 from keba_keenergy_api.enums import HeatingCircuitType
 from pytest_homeassistant.common import snapshot_platform
 
+from tests import get_multiple_devices_responses
 from tests import get_state
-from tests.api_data import ENTITY_UPDATED_DATA_RESPONSE
-from tests.api_data import HEAT_CIRCUIT_MODE
-from tests.api_data import MULTIPLE_DEVICES_DATA_RESPONSE
-from tests.api_data import MULTIPLE_DEVICES_OTHER_MODES_DATA_RESPONSE
-from tests.api_data import MULTIPLE_DEVICES_RESPONSE
-from tests.api_data import NOW
-from tests.api_data import Response
-from tests.api_data import get_multiple_devices_fixed_data_response
-from tests.api_data import get_multiple_devices_responses
-from tests.api_data import replace_values
+from tests import replace_values
+from tests.const import ENTITY_UPDATED_DATA_RESPONSE
+from tests.const import MULTIPLE_DEVICES_DATA_RESPONSE
+from tests.const import MULTIPLE_DEVICES_FIXED_DATA_RESPONSE
+from tests.const import MULTIPLE_DEVICES_OTHER_MODES_DATA_RESPONSE
+from tests.const import MULTIPLE_DEVICES_PASSIVE_COOLING_FIXED_DATA_RESPONSE
+from tests.const import MULTIPLE_DEVICES_RESPONSE
+from tests.const import NOW
+from tests.const import Response
 from tests.test_issues_data import WRITE_COUNT_ENTITY_ID
 from tests.test_switch_data import COMPRESSOR_USE_NIGHT_SPEED_ENTITY_ID
 from tests.test_switch_data import MODBUS_ENTITY_ID
@@ -63,7 +63,9 @@ async def test_switches(
     """Test the states of all switch entities."""
     hass.config.language = language
     fake_api.platforms = [Platform.SWITCH]
-    fake_api.responses = get_multiple_devices_responses(MULTIPLE_DEVICES_DATA_RESPONSE, has_passive_cooling="true")
+    fake_api.responses = get_multiple_devices_responses(
+        MULTIPLE_DEVICES_DATA_RESPONSE, fixed_data=MULTIPLE_DEVICES_PASSIVE_COOLING_FIXED_DATA_RESPONSE
+    )
     await fake_api.setup_integration()
 
     await snapshot_platform(hass, entity_registry, snapshot, mock_config_entry.entry_id)
@@ -161,8 +163,8 @@ async def test_heating_and_cooling_circuit_has_one_curve_switch(
     fake_api.responses = [
         MULTIPLE_DEVICES_RESPONSE,
         replace_values(
-            get_multiple_devices_fixed_data_response(),
-            HEAT_CIRCUIT_MODE.read(str(HeatingCircuitType.HEATING_AND_COOLING.value), index=1),
+            MULTIPLE_DEVICES_FIXED_DATA_RESPONSE,
+            {"APPL.CtrlAppl.sParam.options.heatCircuit[1].type": str(HeatingCircuitType.HEATING_AND_COOLING.value)},
         ),
         MULTIPLE_DEVICES_DATA_RESPONSE,
     ]

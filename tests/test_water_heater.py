@@ -26,17 +26,17 @@ from homeassistant.helpers.entity_component import async_update_entity
 from pytest_homeassistant.common import snapshot_platform
 
 from tests import fire_debounced_writes
+from tests import get_multiple_devices_responses
+from tests import get_single_device_responses
 from tests import get_state
 from tests import next_update
 from tests import set_target_temperature
-from tests.api_data import MULTIPLE_DEVICES_DATA_RESPONSE
-from tests.api_data import MULTIPLE_DEVICES_OTHER_MODES_DATA_RESPONSE
-from tests.api_data import NOW
-from tests.api_data import Response
-from tests.api_data import get_multiple_devices_responses
-from tests.api_data import get_single_device_data_response
-from tests.api_data import get_single_device_responses
-from tests.api_data import update_response
+from tests import update_response
+from tests.const import MULTIPLE_DEVICES_DATA_RESPONSE
+from tests.const import MULTIPLE_DEVICES_OTHER_MODES_DATA_RESPONSE
+from tests.const import NOW
+from tests.const import SINGLE_DEVICE_DEFAULT_DATA_RESPONSE
+from tests.const import Response
 from tests.test_water_heater_data import BUFFER_TANK
 from tests.test_water_heater_data import BUFFER_TANK_1_ENTITY_ID
 from tests.test_water_heater_data import DEFAULT_LIMITS
@@ -220,9 +220,9 @@ async def test_set_temperature_debounced(
 ) -> None:
     """Test that quick target temperature changes are shown at once and written once, with the last value."""
     fake_api.responses = get_single_device_responses(
-        get_single_device_data_response(hot_water_tank_target_temperature="51"),
+        SINGLE_DEVICE_DEFAULT_DATA_RESPONSE,
         # Read the API after the update of the entity.
-        get_single_device_data_response(hot_water_tank_target_temperature="51"),
+        SINGLE_DEVICE_DEFAULT_DATA_RESPONSE,
     )
     await fake_api.setup_integration()
 
@@ -251,7 +251,7 @@ async def test_set_unchanged_target_temperature(
 ) -> None:
     """Test that the current target temperature of a hot water tank is not written again."""
     fake_api.responses = get_single_device_responses(
-        get_single_device_data_response(hot_water_tank_target_temperature="51"),
+        SINGLE_DEVICE_DEFAULT_DATA_RESPONSE,
     )
     await fake_api.setup_integration()
 
@@ -270,11 +270,11 @@ async def test_limits_after_update(
     """Test that a hot water tank uses the limits from the API once an update provides them."""
     fake_api.responses = get_single_device_responses(
         update_response(
-            get_single_device_data_response(),
+            SINGLE_DEVICE_DEFAULT_DATA_RESPONSE,
             "APPL.CtrlAppl.sParam.hotWaterTank[0].param.normalSetTempMax.value",
             attributes={},
         ),
-        get_single_device_data_response(),
+        SINGLE_DEVICE_DEFAULT_DATA_RESPONSE,
     )
     await fake_api.setup_integration()
 

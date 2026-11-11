@@ -10,8 +10,8 @@ import pytest
 from homeassistant.const import Platform
 from pytest_homeassistant.common import snapshot_platform
 
-from tests.api_data import NOW
-from tests.api_data import get_single_device_responses
+from tests import get_single_device_responses
+from tests.const import NOW
 
 if TYPE_CHECKING:
     from homeassistant.core import HomeAssistant

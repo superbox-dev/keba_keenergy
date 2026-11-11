@@ -20,15 +20,15 @@ from pytest_homeassistant.common import async_capture_events
 
 from custom_components.keba_keenergy.const import ATTR_ALARMS
 from custom_components.keba_keenergy.const import DOMAIN
+from tests import get_single_device_responses
 from tests import get_state
 from tests import init_translations
 from tests import next_update
-from tests.api_data import HIGH_PRESSURE_ALARM
-from tests.api_data import NOW
-from tests.api_data import SENSOR_BREAK_ALARM
-from tests.api_data import SINGLE_DEVICE_DATA_RESPONSE
-from tests.api_data import AlarmValue
-from tests.api_data import get_single_device_responses
+from tests.const import HIGH_PRESSURE_ALARM
+from tests.const import NOW
+from tests.const import SENSOR_BREAK_ALARM
+from tests.const import SINGLE_DEVICE_DATA_RESPONSE
+from tests.const import AlarmValue
 from tests.test_alarms_data import ALARM_ENTITY_ID
 from tests.test_alarms_data import HIGH_PRESSURE_ATTRIBUTES
 from tests.test_alarms_data import PENDING_ALARMS

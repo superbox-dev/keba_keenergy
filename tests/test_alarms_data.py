@@ -12,7 +12,7 @@ from custom_components.keba_keenergy.const import ALARM_ISSUE_ID
 from custom_components.keba_keenergy.const import DOMAIN
 
 if TYPE_CHECKING:
-    from tests.api_data import AlarmValue
+    from tests.const import AlarmValue
 
 # The attributes of an alarm event, also the stored alarms.
 type AlarmAttributes = dict[str, bool | int | str]

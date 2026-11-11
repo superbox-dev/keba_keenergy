@@ -18,12 +18,13 @@ from homeassistant.helpers import entity_registry as er
 
 from custom_components.keba_keenergy.const import DOMAIN
 from tests import get_flows_in_progress
-from tests.api_data import MULTIPLE_DEVICES_DATA_RESPONSE
-from tests.api_data import NOW
-from tests.api_data import SINGLE_DEVICE_DATA_RESPONSE
-from tests.api_data import ReadResponse
-from tests.api_data import get_multiple_devices_responses
-from tests.api_data import get_single_device_responses
+from tests import get_multiple_devices_responses
+from tests import get_single_device_responses
+from tests.const import MULTIPLE_DEVICES_DATA_RESPONSE
+from tests.const import MULTIPLE_DEVICES_PASSIVE_COOLING_FIXED_DATA_RESPONSE
+from tests.const import NOW
+from tests.const import SINGLE_DEVICE_DATA_RESPONSE
+from tests.const import ReadResponse
 
 if TYPE_CHECKING:
     from homeassistant.core import HomeAssistant
@@ -43,7 +44,9 @@ async def test_load_entry(
     snapshot: SnapshotAssertion,
 ) -> None:
     """Test setting up the integration."""
-    fake_api.responses = get_multiple_devices_responses(MULTIPLE_DEVICES_DATA_RESPONSE, has_passive_cooling="true")
+    fake_api.responses = get_multiple_devices_responses(
+        MULTIPLE_DEVICES_DATA_RESPONSE, fixed_data=MULTIPLE_DEVICES_PASSIVE_COOLING_FIXED_DATA_RESPONSE
+    )
     await fake_api.setup_integration()
 
     assert mock_config_entry.state is ConfigEntryState.LOADED
@@ -72,7 +75,9 @@ async def test_entities_disabled_by_default(
     snapshot: SnapshotAssertion,
 ) -> None:
     """Test the entities that the integration disables by default, they have no state."""
-    fake_api.responses = get_multiple_devices_responses(MULTIPLE_DEVICES_DATA_RESPONSE, has_passive_cooling="true")
+    fake_api.responses = get_multiple_devices_responses(
+        MULTIPLE_DEVICES_DATA_RESPONSE, fixed_data=MULTIPLE_DEVICES_PASSIVE_COOLING_FIXED_DATA_RESPONSE
+    )
     await fake_api.setup_integration()
 
     disabled_entity_ids: list[str] = sorted(
@@ -88,7 +93,9 @@ async def test_entities_disabled_by_default(
 @pytest.mark.parametrize(
     "responses",
     [
-        get_multiple_devices_responses(MULTIPLE_DEVICES_DATA_RESPONSE, has_passive_cooling="true"),
+        get_multiple_devices_responses(
+            MULTIPLE_DEVICES_DATA_RESPONSE, fixed_data=MULTIPLE_DEVICES_PASSIVE_COOLING_FIXED_DATA_RESPONSE
+        ),
         get_single_device_responses(SINGLE_DEVICE_DATA_RESPONSE),
     ],
     ids=["multiple_devices", "single_device"],

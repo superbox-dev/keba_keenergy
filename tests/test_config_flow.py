@@ -19,9 +19,11 @@ from homeassistant.const import CONF_SSL
 from homeassistant.data_entry_flow import FlowResultType
 
 from custom_components.keba_keenergy.const import DOMAIN
-from tests.api_data import MULTIPLE_DEVICES_DATA_RESPONSE
-from tests.api_data import NOW
-from tests.api_data import get_multiple_devices_responses
+from tests import get_multiple_devices_responses
+from tests import replace_values
+from tests.const import MULTIPLE_DEVICES_DATA_RESPONSE
+from tests.const import MULTIPLE_DEVICES_FIXED_DATA_RESPONSE
+from tests.const import NOW
 from tests.test_config_flow_data import CREDENTIALS
 from tests.test_config_flow_data import HOST
 from tests.test_config_flow_data import OPTION_KEYS
@@ -576,7 +578,10 @@ async def test_options_flow_without_photovoltaics(
     """Test that the options flow hides the photovoltaics multiplier without photovoltaics."""
     fake_api.responses = get_multiple_devices_responses(
         [value for value in MULTIPLE_DEVICES_DATA_RESPONSE if ".photovoltaics." not in value["name"]],
-        has_photovoltaics="false",
+        fixed_data=replace_values(
+            MULTIPLE_DEVICES_FIXED_DATA_RESPONSE,
+            {"APPL.CtrlAppl.sParam.options.hasPhotovoltaics": "false"},
+        ),
     )
     await fake_api.setup_integration()
 

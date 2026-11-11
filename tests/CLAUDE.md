@@ -1,7 +1,10 @@
 # Tests
 
 - Every new code path needs a test
-- Mock HTTP with the `fake_api` fixture (`tests/conftest.py`), responses in `tests/api_data.py`
+- Mock HTTP with the `fake_api` fixture (`tests/conftest.py`)
+  - responses in `tests/fixtures/` as JSON, exactly as the Web HMI returns them, loaded in `tests/const.py`
+    - `common/` for every setup, `single_device/` and `multiple_devices/` per setup
+    - variants derived in the tests with `replace_values()` / `update_response()`, never as another JSON file
   - set `fake_api.responses` (`get_single_device_responses()`, `get_multiple_devices_responses()`), then
     `fake_api.setup_integration()`, every response must be read
   - `init_integration` for the setup with `get_multiple_devices_responses(MULTIPLE_DEVICES_DATA_RESPONSE)`
@@ -13,7 +16,7 @@
 - Translated texts in both languages: `pytest.mark.parametrize("language", ["de", "en"])`, the test sets
   `hass.config.language` before the setup
 - New entity:
-  - add the values to the responses in `tests/api_data.py`
+  - add the values to the responses in `tests/fixtures/`
   - regenerate the snapshots and review the new entities
 - Registries with the `entity_registry`, `device_registry` and `issue_registry` fixtures, never `er.async_get()`,
   `dr.async_get()` or `ir.async_get()`
@@ -35,7 +38,7 @@
 - Config flows: `FlowResultType` with `is`, no errors on the first form, `unique_id` of the created entry
 - `pytest.mark.parametrize` with `ids=` naming each case
 - Constants of a test module in a module with its name and `_data.py` (`test_api.py` → `test_api_data.py`)
-  - shared by several test modules: `tests/api_data.py`
+  - shared by several test modules: `tests/const.py`
 - Helper functions that only check (no return value) start with `assert_`
   - helpers that return a value and only assert to narrow types keep their name
   - shared by several test modules: `tests/__init__.py`

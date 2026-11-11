@@ -22,24 +22,24 @@ from pytest_homeassistant.test_util.aiohttp import AiohttpClientMockResponse
 
 from custom_components.keba_keenergy.const import DOMAIN
 from custom_components.keba_keenergy.const import PLATFORMS
-from tests.api_data import CURVES_RESPONSE
-from tests.api_data import DEACTIVATED_MESSAGE_IDS
-from tests.api_data import DEVICE_INFO_RESPONSE
-from tests.api_data import HMI_RESPONSE
-from tests.api_data import MESSAGE_ID_SUFFIX
-from tests.api_data import MULTIPLE_DEVICES_DATA_RESPONSE
-from tests.api_data import REMOTE_ACCESS
-from tests.api_data import REMOTE_ACCESS_ACTIVATIONS
-from tests.api_data import REMOTE_ACCESS_RESPONSE_KEYS
-from tests.api_data import SYSTEM_RESPONSE
-from tests.api_data import TIMEZONE_RESPONSE
-from tests.api_data import WEEK_TIMER_DAY_START_SECONDS
-from tests.api_data import WEEK_TIMER_DAY_STOP_SECONDS
-from tests.api_data import AlarmValue
-from tests.api_data import ReadResponse
-from tests.api_data import ReadValue
-from tests.api_data import Response
-from tests.api_data import get_multiple_devices_responses
+from tests import get_multiple_devices_responses
+from tests.const import CURVES_RESPONSE
+from tests.const import DEACTIVATED_MESSAGE_IDS
+from tests.const import DEVICE_INFO_RESPONSE
+from tests.const import HMI_RESPONSE
+from tests.const import MESSAGE_ID_SUFFIX
+from tests.const import MULTIPLE_DEVICES_DATA_RESPONSE
+from tests.const import REMOTE_ACCESS
+from tests.const import REMOTE_ACCESS_ACTIVATIONS
+from tests.const import REMOTE_ACCESS_RESPONSE_KEYS
+from tests.const import SYSTEM_RESPONSE
+from tests.const import TIMEZONE_RESPONSE
+from tests.const import WEEK_TIMER_DAY_START_SECONDS
+from tests.const import WEEK_TIMER_DAY_STOP_SECONDS
+from tests.const import AlarmValue
+from tests.const import ReadResponse
+from tests.const import ReadValue
+from tests.const import Response
 
 if TYPE_CHECKING:
     from collections.abc import AsyncGenerator

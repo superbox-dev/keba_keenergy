@@ -1,0 +1,122 @@
+[
+  {
+    "name": "APPL.CtrlAppl.sParam.linTabPool[0].name",
+    "value": "HC1"
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.linTabPool[1].name",
+    "value": "HC2"
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.linTabPool[2].name",
+    "value": "HC3"
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.linTabPool[3].name",
+    "value": "HC4"
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.linTabPool[4].name",
+    "value": "HC5"
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.linTabPool[5].name",
+    "value": "HC6"
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.linTabPool[6].name",
+    "value": "HC7"
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.linTabPool[7].name",
+    "value": "HC8"
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.linTabPool[8].name",
+    "value": "ValveOffset"
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.linTabPool[9].name",
+    "value": "VFS5-100"
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.linTabPool[10].name",
+    "value": "Fan"
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.linTabPool[11].name",
+    "value": "PowerLimit"
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.linTabPool[12].name",
+    "value": "HC FBH"
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.linTabPool[13].name",
+    "value": "HC HK"
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.linTabPool[14].name",
+    "value": "ValveOffsetAT"
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.linTabPool[15].name",
+    "value": "Fan WPLK412"
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.linTabPool[16].name",
+    "value": ""
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.linTabPool[17].name",
+    "value": ""
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.linTabPool[18].name",
+    "value": ""
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.linTabPool[19].name",
+    "value": ""
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.linTabPool[20].name",
+    "value": ""
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.linTabPool[21].name",
+    "value": ""
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.linTabPool[22].name",
+    "value": ""
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.linTabPool[23].name",
+    "value": ""
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.linTabPool[24].name",
+    "value": ""
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.linTabPool[25].name",
+    "value": ""
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.linTabPool[26].name",
+    "value": ""
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.linTabPool[27].name",
+    "value": ""
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.linTabPool[28].name",
+    "value": ""
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.linTabPool[29].name",
+    "value": ""
+  }
+]

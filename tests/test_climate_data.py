@@ -12,21 +12,15 @@ from keba_keenergy_api.enums import HeatingCircuitRequest
 from keba_keenergy_api.enums import HeatingCircuitType
 from keba_keenergy_api.enums import HeatPumpState
 
-from tests.api_data import HEAT_CIRCUIT_COOL_REQUEST
-from tests.api_data import HEAT_CIRCUIT_HEAT_REQUEST
-from tests.api_data import HEAT_CIRCUIT_MODE
-from tests.api_data import HEAT_CIRCUIT_OPERATION_MODE
-from tests.api_data import HEAT_CIRCUIT_TARGET_COOLING_TEMPERATURE_DAY
-from tests.api_data import HEAT_CIRCUIT_TARGET_COOLING_TEMPERATURE_NIGHT
-from tests.api_data import MULTIPLE_DEVICES_DATA_RESPONSE
-from tests.api_data import SINGLE_DEVICE_DATA_RESPONSE
-from tests.api_data import SINGLE_DEVICE_FIXED_DATA_RESPONSE
-from tests.api_data import SINGLE_DEVICE_RESPONSE
-from tests.api_data import ReadResponse
-from tests.api_data import Response
-from tests.api_data import get_single_device_data_response
-from tests.api_data import replace_values
-from tests.api_data import update_response
+from tests import replace_values
+from tests import update_response
+from tests.const import MULTIPLE_DEVICES_DATA_RESPONSE
+from tests.const import SINGLE_DEVICE_DATA_RESPONSE
+from tests.const import SINGLE_DEVICE_DEFAULT_DATA_RESPONSE
+from tests.const import SINGLE_DEVICE_FIXED_DATA_RESPONSE
+from tests.const import SINGLE_DEVICE_RESPONSE
+from tests.const import ReadResponse
+from tests.const import Response
 
 # The heating circuit of the setup with one device of each type and the first one of the setup with several.
 HEAT_CIRCUIT_ENTITY_ID: Final[str] = "climate.keba_keenergy_12345678"
@@ -36,23 +30,39 @@ SELECTED_TARGET_TEMPERATURE: Final[float] = 20.0
 # The selected target temperature 20.0 plus the offset 1.5.
 TARGET_TEMPERATURE_WITH_OFFSET: Final[float] = 21.5
 
+# The values of the first heating circuit.
+HEAT_CIRCUIT_MODE: Final[str] = "APPL.CtrlAppl.sParam.options.heatCircuit[0].type"
+HEAT_CIRCUIT_OPERATION_MODE: Final[str] = "APPL.CtrlAppl.sParam.heatCircuit[0].param.operatingMode"
+# The night temperature 19.5 of both heating circuits.
+NIGHT_TEMPERATURE_VALUES: Final[dict[str, str]] = {
+    "APPL.CtrlAppl.sParam.heatCircuit[0].param.reducedSetTemp": "19.5",
+    "APPL.CtrlAppl.sParam.heatCircuit[1].param.reducedSetTemp": "19.5",
+}
+# The away date range of one year from today of both heating circuits.
+AWAY_DATE_RANGE_VALUES: Final[dict[str, str]] = {
+    "APPL.CtrlAppl.sParam.heatCircuit[0].param.holiday.start": "1769209200",
+    "APPL.CtrlAppl.sParam.heatCircuit[1].param.holiday.start": "1769209200",
+    "APPL.CtrlAppl.sParam.heatCircuit[0].param.holiday.stop": "1800831599",
+    "APPL.CtrlAppl.sParam.heatCircuit[1].param.holiday.stop": "1800831599",
+}
+
 # The first heating circuit heats with the presets sleep and boost.
 REDUCED_DATA_RESPONSE: Final[Response] = replace_values(
     MULTIPLE_DEVICES_DATA_RESPONSE,
-    HEAT_CIRCUIT_OPERATION_MODE.read(str(HeatingCircuitOperatingMode.REDUCED.value)),
+    {HEAT_CIRCUIT_OPERATION_MODE: str(HeatingCircuitOperatingMode.REDUCED.value)},
 )
 PARTY_DATA_RESPONSE: Final[Response] = replace_values(
     MULTIPLE_DEVICES_DATA_RESPONSE,
-    HEAT_CIRCUIT_OPERATION_MODE.read(str(HeatingCircuitOperatingMode.PARTY.value)),
+    {HEAT_CIRCUIT_OPERATION_MODE: str(HeatingCircuitOperatingMode.PARTY.value)},
 )
 # The first heating circuit follows the schedule or is off.
 AUTO_DATA_RESPONSE: Final[Response] = replace_values(
     MULTIPLE_DEVICES_DATA_RESPONSE,
-    HEAT_CIRCUIT_OPERATION_MODE.read(str(HeatingCircuitOperatingMode.AUTO.value)),
+    {HEAT_CIRCUIT_OPERATION_MODE: str(HeatingCircuitOperatingMode.AUTO.value)},
 )
 OFF_DATA_RESPONSE: Final[Response] = replace_values(
     MULTIPLE_DEVICES_DATA_RESPONSE,
-    HEAT_CIRCUIT_OPERATION_MODE.read(str(HeatingCircuitOperatingMode.OFF.value)),
+    {HEAT_CIRCUIT_OPERATION_MODE: str(HeatingCircuitOperatingMode.OFF.value)},
 )
 
 
@@ -67,9 +77,11 @@ def get_hvac_action_data_response(
     return update_response(
         replace_values(
             SINGLE_DEVICE_DATA_RESPONSE,
-            HEAT_CIRCUIT_OPERATION_MODE.read(str(operating_mode.value)),
-            HEAT_CIRCUIT_HEAT_REQUEST.read(str(heat_request.value)),
-            HEAT_CIRCUIT_COOL_REQUEST.read(str(cool_request.value)),
+            {
+                HEAT_CIRCUIT_OPERATION_MODE: str(operating_mode.value),
+                "APPL.CtrlAppl.sParam.heatCircuit[0].values.heatRequest": str(heat_request.value),
+                "APPL.CtrlAppl.sParam.heatCircuit[0].values.coolRequest": str(cool_request.value),
+            },
         ),
         "APPL.CtrlAppl.sParam.heatpump[0].values.heatpumpState",
         value=str(heat_pump_state.value),
@@ -112,8 +124,10 @@ def get_cooling_schedule_responses() -> list[ReadResponse]:
         *responses[:-1],
         replace_values(
             data_response,
-            HEAT_CIRCUIT_TARGET_COOLING_TEMPERATURE_DAY.read("25"),
-            HEAT_CIRCUIT_TARGET_COOLING_TEMPERATURE_NIGHT.read("24"),
+            {
+                "APPL.CtrlAppl.sParam.heatCircuit[0].param.normalCoolSetTemp": "25",
+                "APPL.CtrlAppl.sParam.heatCircuit[0].param.reducedCoolSetTemp": "24",
+            },
         ),
     ]
 
@@ -130,6 +144,6 @@ def get_circuit_type_responses(
     """
     return [
         SINGLE_DEVICE_RESPONSE,
-        replace_values(SINGLE_DEVICE_FIXED_DATA_RESPONSE, HEAT_CIRCUIT_MODE.read(str(circuit_type.value))),
-        replace_values(get_single_device_data_response(), HEAT_CIRCUIT_OPERATION_MODE.read(operating_mode)),
+        replace_values(SINGLE_DEVICE_FIXED_DATA_RESPONSE, {HEAT_CIRCUIT_MODE: str(circuit_type.value)}),
+        replace_values(SINGLE_DEVICE_DEFAULT_DATA_RESPONSE, {HEAT_CIRCUIT_OPERATION_MODE: operating_mode}),
     ]
