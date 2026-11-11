@@ -51,7 +51,7 @@ setup. All devices are linked to the control unit.
 
 ## Prerequisites
 
-- Home Assistant 2026.9.4 or newer.
+- Home Assistant 2026.11.0 or newer.
 - Network access from Home Assistant to the Web HMI of the control unit.
 - The username and password of the Web HMI, if the Web HMI requires a login (newer software versions).
 

@@ -21,7 +21,7 @@ from tests.test_binary_sensor_data import COMPRESSOR_FAILURE_MESSAGE_ID
 if TYPE_CHECKING:
     from homeassistant.core import HomeAssistant
     from homeassistant.core import State
-    from pytest_homeassistant_custom_component.common import MockConfigEntry
+    from pytest_homeassistant.common import MockConfigEntry
     from syrupy.assertion import SnapshotAssertion
 
     from tests.conftest import FakeKebaKeEnergyAPI

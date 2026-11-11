@@ -17,7 +17,7 @@ from homeassistant.components.water_heater.const import STATE_PERFORMANCE
 from homeassistant.const import ATTR_ENTITY_ID
 from homeassistant.helpers import issue_registry as ir
 from homeassistant.util import dt as dt_util
-from pytest_homeassistant_custom_component.common import async_fire_time_changed
+from pytest_homeassistant.common import async_fire_time_changed
 
 from custom_components.keba_keenergy.const import ATTR_CONFIG_ENTRY
 from custom_components.keba_keenergy.const import ATTR_END_DATE
@@ -52,7 +52,7 @@ if TYPE_CHECKING:
     from freezegun.api import FrozenDateTimeFactory
     from homeassistant.core import HomeAssistant
     from homeassistant.core import State
-    from pytest_homeassistant_custom_component.common import MockConfigEntry
+    from pytest_homeassistant.common import MockConfigEntry
     from syrupy.assertion import SnapshotAssertion
 
     from tests.conftest import FakeKebaKeEnergyAPI

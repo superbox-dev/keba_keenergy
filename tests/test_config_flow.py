@@ -33,7 +33,7 @@ from tests.test_config_flow_data import ZEROCONF_HOST
 if TYPE_CHECKING:
     from homeassistant.config_entries import ConfigFlowResult
     from homeassistant.core import HomeAssistant
-    from pytest_homeassistant_custom_component.common import MockConfigEntry
+    from pytest_homeassistant.common import MockConfigEntry
 
     from tests.conftest import FakeKebaKeEnergyAPI
 

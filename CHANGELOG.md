@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Required Home Assistant 2026.11.0 or newer. ([Issue #90][issue-90])
 - Grouped the options into the sections update multipliers and display.
 - Changed the requirement to `keba_keenergy_api` 3.0, an update reads all values with one request, the curves of
   the heating circuits separately and only those in use. ([Issue #77][issue-77])
@@ -74,6 +75,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Stored the scan interval and the update multipliers of the options as integers, not as decimal numbers.
 - Counted only successful writes in the sensor `weekly_write_count`.
 - Showed the repair issue for frequent writes again after a restart if the weekly limit is still exceeded.
+- Fixed the deprecation warnings of the climate and water heater entities in Home Assistant 2026.11.
+  ([Issue #90][issue-90])
 
 [issue-74]: https://github.com/superbox-dev/keba_keenergy/issues/74
 [issue-76]: https://github.com/superbox-dev/keba_keenergy/issues/76
@@ -82,6 +85,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [issue-85]: https://github.com/superbox-dev/keba_keenergy/issues/85
 [issue-87]: https://github.com/superbox-dev/keba_keenergy/issues/87
 [issue-89]: https://github.com/superbox-dev/keba_keenergy/issues/89
+[issue-90]: https://github.com/superbox-dev/keba_keenergy/issues/90
 
 ## [1.11.0] - 2026-10-28
 

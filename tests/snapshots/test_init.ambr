@@ -3,7 +3,7 @@
   DeviceRegistryEntrySnapshot({
     'area_id': None,
     'config_entry_id': <ANY>,
-    'config_subentry_id': <ANY>,
+    'config_subentry_id': None,
     'configuration_url': 'http://10.0.0.100',
     'connections': set({
     }),
@@ -26,14 +26,14 @@
     'name_by_user': None,
     'serial_number': None,
     'sw_version': None,
-    'via_device_id': <ANY>,
+    'via_device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_keba_keenergy')]>,
   })
 # ---
 # name: test_devices[de-multiple_devices][12345678_buffer_tank_2]
   DeviceRegistryEntrySnapshot({
     'area_id': None,
     'config_entry_id': <ANY>,
-    'config_subentry_id': <ANY>,
+    'config_subentry_id': None,
     'configuration_url': 'http://10.0.0.100',
     'connections': set({
     }),
@@ -56,14 +56,14 @@
     'name_by_user': None,
     'serial_number': None,
     'sw_version': None,
-    'via_device_id': <ANY>,
+    'via_device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_keba_keenergy')]>,
   })
 # ---
 # name: test_devices[de-multiple_devices][12345678_external_heat_source_1]
   DeviceRegistryEntrySnapshot({
     'area_id': None,
     'config_entry_id': <ANY>,
-    'config_subentry_id': <ANY>,
+    'config_subentry_id': None,
     'configuration_url': 'http://10.0.0.100',
     'connections': set({
     }),
@@ -86,14 +86,14 @@
     'name_by_user': None,
     'serial_number': None,
     'sw_version': None,
-    'via_device_id': <ANY>,
+    'via_device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_keba_keenergy')]>,
   })
 # ---
 # name: test_devices[de-multiple_devices][12345678_external_heat_source_2]
   DeviceRegistryEntrySnapshot({
     'area_id': None,
     'config_entry_id': <ANY>,
-    'config_subentry_id': <ANY>,
+    'config_subentry_id': None,
     'configuration_url': 'http://10.0.0.100',
     'connections': set({
     }),
@@ -116,14 +116,14 @@
     'name_by_user': None,
     'serial_number': None,
     'sw_version': None,
-    'via_device_id': <ANY>,
+    'via_device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_keba_keenergy')]>,
   })
 # ---
 # name: test_devices[de-multiple_devices][12345678_heat_circuit_1]
   DeviceRegistryEntrySnapshot({
     'area_id': None,
     'config_entry_id': <ANY>,
-    'config_subentry_id': <ANY>,
+    'config_subentry_id': None,
     'configuration_url': 'http://10.0.0.100',
     'connections': set({
     }),
@@ -146,14 +146,14 @@
     'name_by_user': None,
     'serial_number': None,
     'sw_version': None,
-    'via_device_id': <ANY>,
+    'via_device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_keba_keenergy')]>,
   })
 # ---
 # name: test_devices[de-multiple_devices][12345678_heat_circuit_2]
   DeviceRegistryEntrySnapshot({
     'area_id': None,
     'config_entry_id': <ANY>,
-    'config_subentry_id': <ANY>,
+    'config_subentry_id': None,
     'configuration_url': 'http://10.0.0.100',
     'connections': set({
     }),
@@ -176,14 +176,14 @@
     'name_by_user': None,
     'serial_number': None,
     'sw_version': None,
-    'via_device_id': <ANY>,
+    'via_device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_keba_keenergy')]>,
   })
 # ---
 # name: test_devices[de-multiple_devices][12345678_heat_pump]
   DeviceRegistryEntrySnapshot({
     'area_id': None,
     'config_entry_id': <ANY>,
-    'config_subentry_id': <ANY>,
+    'config_subentry_id': None,
     'configuration_url': 'http://10.0.0.100',
     'connections': set({
     }),
@@ -206,14 +206,14 @@
     'name_by_user': None,
     'serial_number': None,
     'sw_version': None,
-    'via_device_id': <ANY>,
+    'via_device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_keba_keenergy')]>,
   })
 # ---
 # name: test_devices[de-multiple_devices][12345678_hot_water_tank_1]
   DeviceRegistryEntrySnapshot({
     'area_id': None,
     'config_entry_id': <ANY>,
-    'config_subentry_id': <ANY>,
+    'config_subentry_id': None,
     'configuration_url': 'http://10.0.0.100',
     'connections': set({
     }),
@@ -236,14 +236,14 @@
     'name_by_user': None,
     'serial_number': None,
     'sw_version': None,
-    'via_device_id': <ANY>,
+    'via_device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_keba_keenergy')]>,
   })
 # ---
 # name: test_devices[de-multiple_devices][12345678_hot_water_tank_2]
   DeviceRegistryEntrySnapshot({
     'area_id': None,
     'config_entry_id': <ANY>,
-    'config_subentry_id': <ANY>,
+    'config_subentry_id': None,
     'configuration_url': 'http://10.0.0.100',
     'connections': set({
     }),
@@ -266,14 +266,14 @@
     'name_by_user': None,
     'serial_number': None,
     'sw_version': None,
-    'via_device_id': <ANY>,
+    'via_device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_keba_keenergy')]>,
   })
 # ---
 # name: test_devices[de-multiple_devices][12345678_keba_keenergy]
   DeviceRegistryEntrySnapshot({
     'area_id': None,
     'config_entry_id': <ANY>,
-    'config_subentry_id': <ANY>,
+    'config_subentry_id': None,
     'configuration_url': 'http://10.0.0.100',
     'connections': set({
     }),
@@ -303,7 +303,7 @@
   DeviceRegistryEntrySnapshot({
     'area_id': None,
     'config_entry_id': <ANY>,
-    'config_subentry_id': <ANY>,
+    'config_subentry_id': None,
     'configuration_url': 'http://10.0.0.100',
     'connections': set({
     }),
@@ -326,14 +326,14 @@
     'name_by_user': None,
     'serial_number': None,
     'sw_version': None,
-    'via_device_id': <ANY>,
+    'via_device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_keba_keenergy')]>,
   })
 # ---
 # name: test_devices[de-multiple_devices][12345678_photovoltaics]
   DeviceRegistryEntrySnapshot({
     'area_id': None,
     'config_entry_id': <ANY>,
-    'config_subentry_id': <ANY>,
+    'config_subentry_id': None,
     'configuration_url': 'http://10.0.0.100',
     'connections': set({
     }),
@@ -356,14 +356,14 @@
     'name_by_user': None,
     'serial_number': None,
     'sw_version': None,
-    'via_device_id': <ANY>,
+    'via_device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_keba_keenergy')]>,
   })
 # ---
 # name: test_devices[de-multiple_devices][12345678_solar_circuit_1]
   DeviceRegistryEntrySnapshot({
     'area_id': None,
     'config_entry_id': <ANY>,
-    'config_subentry_id': <ANY>,
+    'config_subentry_id': None,
     'configuration_url': 'http://10.0.0.100',
     'connections': set({
     }),
@@ -386,14 +386,14 @@
     'name_by_user': None,
     'serial_number': None,
     'sw_version': None,
-    'via_device_id': <ANY>,
+    'via_device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_keba_keenergy')]>,
   })
 # ---
 # name: test_devices[de-multiple_devices][12345678_solar_circuit_2]
   DeviceRegistryEntrySnapshot({
     'area_id': None,
     'config_entry_id': <ANY>,
-    'config_subentry_id': <ANY>,
+    'config_subentry_id': None,
     'configuration_url': 'http://10.0.0.100',
     'connections': set({
     }),
@@ -416,14 +416,14 @@
     'name_by_user': None,
     'serial_number': None,
     'sw_version': None,
-    'via_device_id': <ANY>,
+    'via_device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_keba_keenergy')]>,
   })
 # ---
 # name: test_devices[de-multiple_devices][12345678_switch_valve_1]
   DeviceRegistryEntrySnapshot({
     'area_id': None,
     'config_entry_id': <ANY>,
-    'config_subentry_id': <ANY>,
+    'config_subentry_id': None,
     'configuration_url': 'http://10.0.0.100',
     'connections': set({
     }),
@@ -446,14 +446,14 @@
     'name_by_user': None,
     'serial_number': None,
     'sw_version': None,
-    'via_device_id': <ANY>,
+    'via_device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_keba_keenergy')]>,
   })
 # ---
 # name: test_devices[de-multiple_devices][12345678_switch_valve_2]
   DeviceRegistryEntrySnapshot({
     'area_id': None,
     'config_entry_id': <ANY>,
-    'config_subentry_id': <ANY>,
+    'config_subentry_id': None,
     'configuration_url': 'http://10.0.0.100',
     'connections': set({
     }),
@@ -476,7 +476,7 @@
     'name_by_user': None,
     'serial_number': None,
     'sw_version': None,
-    'via_device_id': <ANY>,
+    'via_device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_keba_keenergy')]>,
   })
 # ---
 # name: test_devices[de-multiple_devices][identifiers]
@@ -523,7 +523,7 @@
   DeviceRegistryEntrySnapshot({
     'area_id': None,
     'config_entry_id': <ANY>,
-    'config_subentry_id': <ANY>,
+    'config_subentry_id': None,
     'configuration_url': 'http://10.0.0.100',
     'connections': set({
     }),
@@ -546,14 +546,14 @@
     'name_by_user': None,
     'serial_number': None,
     'sw_version': None,
-    'via_device_id': <ANY>,
+    'via_device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_keba_keenergy')]>,
   })
 # ---
 # name: test_devices[de-single_device][12345678_external_heat_source]
   DeviceRegistryEntrySnapshot({
     'area_id': None,
     'config_entry_id': <ANY>,
-    'config_subentry_id': <ANY>,
+    'config_subentry_id': None,
     'configuration_url': 'http://10.0.0.100',
     'connections': set({
     }),
@@ -576,14 +576,14 @@
     'name_by_user': None,
     'serial_number': None,
     'sw_version': None,
-    'via_device_id': <ANY>,
+    'via_device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_keba_keenergy')]>,
   })
 # ---
 # name: test_devices[de-single_device][12345678_heat_circuit]
   DeviceRegistryEntrySnapshot({
     'area_id': None,
     'config_entry_id': <ANY>,
-    'config_subentry_id': <ANY>,
+    'config_subentry_id': None,
     'configuration_url': 'http://10.0.0.100',
     'connections': set({
     }),
@@ -606,14 +606,14 @@
     'name_by_user': None,
     'serial_number': None,
     'sw_version': None,
-    'via_device_id': <ANY>,
+    'via_device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_keba_keenergy')]>,
   })
 # ---
 # name: test_devices[de-single_device][12345678_heat_pump]
   DeviceRegistryEntrySnapshot({
     'area_id': None,
     'config_entry_id': <ANY>,
-    'config_subentry_id': <ANY>,
+    'config_subentry_id': None,
     'configuration_url': 'http://10.0.0.100',
     'connections': set({
     }),
@@ -636,14 +636,14 @@
     'name_by_user': None,
     'serial_number': None,
     'sw_version': None,
-    'via_device_id': <ANY>,
+    'via_device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_keba_keenergy')]>,
   })
 # ---
 # name: test_devices[de-single_device][12345678_hot_water_tank]
   DeviceRegistryEntrySnapshot({
     'area_id': None,
     'config_entry_id': <ANY>,
-    'config_subentry_id': <ANY>,
+    'config_subentry_id': None,
     'configuration_url': 'http://10.0.0.100',
     'connections': set({
     }),
@@ -666,14 +666,14 @@
     'name_by_user': None,
     'serial_number': None,
     'sw_version': None,
-    'via_device_id': <ANY>,
+    'via_device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_keba_keenergy')]>,
   })
 # ---
 # name: test_devices[de-single_device][12345678_keba_keenergy]
   DeviceRegistryEntrySnapshot({
     'area_id': None,
     'config_entry_id': <ANY>,
-    'config_subentry_id': <ANY>,
+    'config_subentry_id': None,
     'configuration_url': 'http://10.0.0.100',
     'connections': set({
     }),
@@ -703,7 +703,7 @@
   DeviceRegistryEntrySnapshot({
     'area_id': None,
     'config_entry_id': <ANY>,
-    'config_subentry_id': <ANY>,
+    'config_subentry_id': None,
     'configuration_url': 'http://10.0.0.100',
     'connections': set({
     }),
@@ -726,14 +726,14 @@
     'name_by_user': None,
     'serial_number': None,
     'sw_version': None,
-    'via_device_id': <ANY>,
+    'via_device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_keba_keenergy')]>,
   })
 # ---
 # name: test_devices[de-single_device][12345678_photovoltaics]
   DeviceRegistryEntrySnapshot({
     'area_id': None,
     'config_entry_id': <ANY>,
-    'config_subentry_id': <ANY>,
+    'config_subentry_id': None,
     'configuration_url': 'http://10.0.0.100',
     'connections': set({
     }),
@@ -756,14 +756,14 @@
     'name_by_user': None,
     'serial_number': None,
     'sw_version': None,
-    'via_device_id': <ANY>,
+    'via_device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_keba_keenergy')]>,
   })
 # ---
 # name: test_devices[de-single_device][12345678_solar_circuit]
   DeviceRegistryEntrySnapshot({
     'area_id': None,
     'config_entry_id': <ANY>,
-    'config_subentry_id': <ANY>,
+    'config_subentry_id': None,
     'configuration_url': 'http://10.0.0.100',
     'connections': set({
     }),
@@ -786,14 +786,14 @@
     'name_by_user': None,
     'serial_number': None,
     'sw_version': None,
-    'via_device_id': <ANY>,
+    'via_device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_keba_keenergy')]>,
   })
 # ---
 # name: test_devices[de-single_device][12345678_switch_valve]
   DeviceRegistryEntrySnapshot({
     'area_id': None,
     'config_entry_id': <ANY>,
-    'config_subentry_id': <ANY>,
+    'config_subentry_id': None,
     'configuration_url': 'http://10.0.0.100',
     'connections': set({
     }),
@@ -816,7 +816,7 @@
     'name_by_user': None,
     'serial_number': None,
     'sw_version': None,
-    'via_device_id': <ANY>,
+    'via_device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_keba_keenergy')]>,
   })
 # ---
 # name: test_devices[de-single_device][identifiers]
@@ -851,7 +851,7 @@
   DeviceRegistryEntrySnapshot({
     'area_id': None,
     'config_entry_id': <ANY>,
-    'config_subentry_id': <ANY>,
+    'config_subentry_id': None,
     'configuration_url': 'http://10.0.0.100',
     'connections': set({
     }),
@@ -874,14 +874,14 @@
     'name_by_user': None,
     'serial_number': None,
     'sw_version': None,
-    'via_device_id': <ANY>,
+    'via_device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_keba_keenergy')]>,
   })
 # ---
 # name: test_devices[en-multiple_devices][12345678_buffer_tank_2]
   DeviceRegistryEntrySnapshot({
     'area_id': None,
     'config_entry_id': <ANY>,
-    'config_subentry_id': <ANY>,
+    'config_subentry_id': None,
     'configuration_url': 'http://10.0.0.100',
     'connections': set({
     }),
@@ -904,14 +904,14 @@
     'name_by_user': None,
     'serial_number': None,
     'sw_version': None,
-    'via_device_id': <ANY>,
+    'via_device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_keba_keenergy')]>,
   })
 # ---
 # name: test_devices[en-multiple_devices][12345678_external_heat_source_1]
   DeviceRegistryEntrySnapshot({
     'area_id': None,
     'config_entry_id': <ANY>,
-    'config_subentry_id': <ANY>,
+    'config_subentry_id': None,
     'configuration_url': 'http://10.0.0.100',
     'connections': set({
     }),
@@ -934,14 +934,14 @@
     'name_by_user': None,
     'serial_number': None,
     'sw_version': None,
-    'via_device_id': <ANY>,
+    'via_device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_keba_keenergy')]>,
   })
 # ---
 # name: test_devices[en-multiple_devices][12345678_external_heat_source_2]
   DeviceRegistryEntrySnapshot({
     'area_id': None,
     'config_entry_id': <ANY>,
-    'config_subentry_id': <ANY>,
+    'config_subentry_id': None,
     'configuration_url': 'http://10.0.0.100',
     'connections': set({
     }),
@@ -964,14 +964,14 @@
     'name_by_user': None,
     'serial_number': None,
     'sw_version': None,
-    'via_device_id': <ANY>,
+    'via_device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_keba_keenergy')]>,
   })
 # ---
 # name: test_devices[en-multiple_devices][12345678_heat_circuit_1]
   DeviceRegistryEntrySnapshot({
     'area_id': None,
     'config_entry_id': <ANY>,
-    'config_subentry_id': <ANY>,
+    'config_subentry_id': None,
     'configuration_url': 'http://10.0.0.100',
     'connections': set({
     }),
@@ -994,14 +994,14 @@
     'name_by_user': None,
     'serial_number': None,
     'sw_version': None,
-    'via_device_id': <ANY>,
+    'via_device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_keba_keenergy')]>,
   })
 # ---
 # name: test_devices[en-multiple_devices][12345678_heat_circuit_2]
   DeviceRegistryEntrySnapshot({
     'area_id': None,
     'config_entry_id': <ANY>,
-    'config_subentry_id': <ANY>,
+    'config_subentry_id': None,
     'configuration_url': 'http://10.0.0.100',
     'connections': set({
     }),
@@ -1024,14 +1024,14 @@
     'name_by_user': None,
     'serial_number': None,
     'sw_version': None,
-    'via_device_id': <ANY>,
+    'via_device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_keba_keenergy')]>,
   })
 # ---
 # name: test_devices[en-multiple_devices][12345678_heat_pump]
   DeviceRegistryEntrySnapshot({
     'area_id': None,
     'config_entry_id': <ANY>,
-    'config_subentry_id': <ANY>,
+    'config_subentry_id': None,
     'configuration_url': 'http://10.0.0.100',
     'connections': set({
     }),
@@ -1054,14 +1054,14 @@
     'name_by_user': None,
     'serial_number': None,
     'sw_version': None,
-    'via_device_id': <ANY>,
+    'via_device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_keba_keenergy')]>,
   })
 # ---
 # name: test_devices[en-multiple_devices][12345678_hot_water_tank_1]
   DeviceRegistryEntrySnapshot({
     'area_id': None,
     'config_entry_id': <ANY>,
-    'config_subentry_id': <ANY>,
+    'config_subentry_id': None,
     'configuration_url': 'http://10.0.0.100',
     'connections': set({
     }),
@@ -1084,14 +1084,14 @@
     'name_by_user': None,
     'serial_number': None,
     'sw_version': None,
-    'via_device_id': <ANY>,
+    'via_device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_keba_keenergy')]>,
   })
 # ---
 # name: test_devices[en-multiple_devices][12345678_hot_water_tank_2]
   DeviceRegistryEntrySnapshot({
     'area_id': None,
     'config_entry_id': <ANY>,
-    'config_subentry_id': <ANY>,
+    'config_subentry_id': None,
     'configuration_url': 'http://10.0.0.100',
     'connections': set({
     }),
@@ -1114,14 +1114,14 @@
     'name_by_user': None,
     'serial_number': None,
     'sw_version': None,
-    'via_device_id': <ANY>,
+    'via_device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_keba_keenergy')]>,
   })
 # ---
 # name: test_devices[en-multiple_devices][12345678_keba_keenergy]
   DeviceRegistryEntrySnapshot({
     'area_id': None,
     'config_entry_id': <ANY>,
-    'config_subentry_id': <ANY>,
+    'config_subentry_id': None,
     'configuration_url': 'http://10.0.0.100',
     'connections': set({
     }),
@@ -1151,7 +1151,7 @@
   DeviceRegistryEntrySnapshot({
     'area_id': None,
     'config_entry_id': <ANY>,
-    'config_subentry_id': <ANY>,
+    'config_subentry_id': None,
     'configuration_url': 'http://10.0.0.100',
     'connections': set({
     }),
@@ -1174,14 +1174,14 @@
     'name_by_user': None,
     'serial_number': None,
     'sw_version': None,
-    'via_device_id': <ANY>,
+    'via_device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_keba_keenergy')]>,
   })
 # ---
 # name: test_devices[en-multiple_devices][12345678_photovoltaics]
   DeviceRegistryEntrySnapshot({
     'area_id': None,
     'config_entry_id': <ANY>,
-    'config_subentry_id': <ANY>,
+    'config_subentry_id': None,
     'configuration_url': 'http://10.0.0.100',
     'connections': set({
     }),
@@ -1204,14 +1204,14 @@
     'name_by_user': None,
     'serial_number': None,
     'sw_version': None,
-    'via_device_id': <ANY>,
+    'via_device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_keba_keenergy')]>,
   })
 # ---
 # name: test_devices[en-multiple_devices][12345678_solar_circuit_1]
   DeviceRegistryEntrySnapshot({
     'area_id': None,
     'config_entry_id': <ANY>,
-    'config_subentry_id': <ANY>,
+    'config_subentry_id': None,
     'configuration_url': 'http://10.0.0.100',
     'connections': set({
     }),
@@ -1234,14 +1234,14 @@
     'name_by_user': None,
     'serial_number': None,
     'sw_version': None,
-    'via_device_id': <ANY>,
+    'via_device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_keba_keenergy')]>,
   })
 # ---
 # name: test_devices[en-multiple_devices][12345678_solar_circuit_2]
   DeviceRegistryEntrySnapshot({
     'area_id': None,
     'config_entry_id': <ANY>,
-    'config_subentry_id': <ANY>,
+    'config_subentry_id': None,
     'configuration_url': 'http://10.0.0.100',
     'connections': set({
     }),
@@ -1264,14 +1264,14 @@
     'name_by_user': None,
     'serial_number': None,
     'sw_version': None,
-    'via_device_id': <ANY>,
+    'via_device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_keba_keenergy')]>,
   })
 # ---
 # name: test_devices[en-multiple_devices][12345678_switch_valve_1]
   DeviceRegistryEntrySnapshot({
     'area_id': None,
     'config_entry_id': <ANY>,
-    'config_subentry_id': <ANY>,
+    'config_subentry_id': None,
     'configuration_url': 'http://10.0.0.100',
     'connections': set({
     }),
@@ -1294,14 +1294,14 @@
     'name_by_user': None,
     'serial_number': None,
     'sw_version': None,
-    'via_device_id': <ANY>,
+    'via_device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_keba_keenergy')]>,
   })
 # ---
 # name: test_devices[en-multiple_devices][12345678_switch_valve_2]
   DeviceRegistryEntrySnapshot({
     'area_id': None,
     'config_entry_id': <ANY>,
-    'config_subentry_id': <ANY>,
+    'config_subentry_id': None,
     'configuration_url': 'http://10.0.0.100',
     'connections': set({
     }),
@@ -1324,7 +1324,7 @@
     'name_by_user': None,
     'serial_number': None,
     'sw_version': None,
-    'via_device_id': <ANY>,
+    'via_device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_keba_keenergy')]>,
   })
 # ---
 # name: test_devices[en-multiple_devices][identifiers]
@@ -1371,7 +1371,7 @@
   DeviceRegistryEntrySnapshot({
     'area_id': None,
     'config_entry_id': <ANY>,
-    'config_subentry_id': <ANY>,
+    'config_subentry_id': None,
     'configuration_url': 'http://10.0.0.100',
     'connections': set({
     }),
@@ -1394,14 +1394,14 @@
     'name_by_user': None,
     'serial_number': None,
     'sw_version': None,
-    'via_device_id': <ANY>,
+    'via_device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_keba_keenergy')]>,
   })
 # ---
 # name: test_devices[en-single_device][12345678_external_heat_source]
   DeviceRegistryEntrySnapshot({
     'area_id': None,
     'config_entry_id': <ANY>,
-    'config_subentry_id': <ANY>,
+    'config_subentry_id': None,
     'configuration_url': 'http://10.0.0.100',
     'connections': set({
     }),
@@ -1424,14 +1424,14 @@
     'name_by_user': None,
     'serial_number': None,
     'sw_version': None,
-    'via_device_id': <ANY>,
+    'via_device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_keba_keenergy')]>,
   })
 # ---
 # name: test_devices[en-single_device][12345678_heat_circuit]
   DeviceRegistryEntrySnapshot({
     'area_id': None,
     'config_entry_id': <ANY>,
-    'config_subentry_id': <ANY>,
+    'config_subentry_id': None,
     'configuration_url': 'http://10.0.0.100',
     'connections': set({
     }),
@@ -1454,14 +1454,14 @@
     'name_by_user': None,
     'serial_number': None,
     'sw_version': None,
-    'via_device_id': <ANY>,
+    'via_device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_keba_keenergy')]>,
   })
 # ---
 # name: test_devices[en-single_device][12345678_heat_pump]
   DeviceRegistryEntrySnapshot({
     'area_id': None,
     'config_entry_id': <ANY>,
-    'config_subentry_id': <ANY>,
+    'config_subentry_id': None,
     'configuration_url': 'http://10.0.0.100',
     'connections': set({
     }),
@@ -1484,14 +1484,14 @@
     'name_by_user': None,
     'serial_number': None,
     'sw_version': None,
-    'via_device_id': <ANY>,
+    'via_device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_keba_keenergy')]>,
   })
 # ---
 # name: test_devices[en-single_device][12345678_hot_water_tank]
   DeviceRegistryEntrySnapshot({
     'area_id': None,
     'config_entry_id': <ANY>,
-    'config_subentry_id': <ANY>,
+    'config_subentry_id': None,
     'configuration_url': 'http://10.0.0.100',
     'connections': set({
     }),
@@ -1514,14 +1514,14 @@
     'name_by_user': None,
     'serial_number': None,
     'sw_version': None,
-    'via_device_id': <ANY>,
+    'via_device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_keba_keenergy')]>,
   })
 # ---
 # name: test_devices[en-single_device][12345678_keba_keenergy]
   DeviceRegistryEntrySnapshot({
     'area_id': None,
     'config_entry_id': <ANY>,
-    'config_subentry_id': <ANY>,
+    'config_subentry_id': None,
     'configuration_url': 'http://10.0.0.100',
     'connections': set({
     }),
@@ -1551,7 +1551,7 @@
   DeviceRegistryEntrySnapshot({
     'area_id': None,
     'config_entry_id': <ANY>,
-    'config_subentry_id': <ANY>,
+    'config_subentry_id': None,
     'configuration_url': 'http://10.0.0.100',
     'connections': set({
     }),
@@ -1574,14 +1574,14 @@
     'name_by_user': None,
     'serial_number': None,
     'sw_version': None,
-    'via_device_id': <ANY>,
+    'via_device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_keba_keenergy')]>,
   })
 # ---
 # name: test_devices[en-single_device][12345678_photovoltaics]
   DeviceRegistryEntrySnapshot({
     'area_id': None,
     'config_entry_id': <ANY>,
-    'config_subentry_id': <ANY>,
+    'config_subentry_id': None,
     'configuration_url': 'http://10.0.0.100',
     'connections': set({
     }),
@@ -1604,14 +1604,14 @@
     'name_by_user': None,
     'serial_number': None,
     'sw_version': None,
-    'via_device_id': <ANY>,
+    'via_device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_keba_keenergy')]>,
   })
 # ---
 # name: test_devices[en-single_device][12345678_solar_circuit]
   DeviceRegistryEntrySnapshot({
     'area_id': None,
     'config_entry_id': <ANY>,
-    'config_subentry_id': <ANY>,
+    'config_subentry_id': None,
     'configuration_url': 'http://10.0.0.100',
     'connections': set({
     }),
@@ -1634,14 +1634,14 @@
     'name_by_user': None,
     'serial_number': None,
     'sw_version': None,
-    'via_device_id': <ANY>,
+    'via_device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_keba_keenergy')]>,
   })
 # ---
 # name: test_devices[en-single_device][12345678_switch_valve]
   DeviceRegistryEntrySnapshot({
     'area_id': None,
     'config_entry_id': <ANY>,
-    'config_subentry_id': <ANY>,
+    'config_subentry_id': None,
     'configuration_url': 'http://10.0.0.100',
     'connections': set({
     }),
@@ -1664,7 +1664,7 @@
     'name_by_user': None,
     'serial_number': None,
     'sw_version': None,
-    'via_device_id': <ANY>,
+    'via_device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_keba_keenergy')]>,
   })
 # ---
 # name: test_devices[en-single_device][identifiers]

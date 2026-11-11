@@ -33,7 +33,7 @@ from tests.test_select_data import TWO_HEAT_PUMPS_SECOND_PASSIVE_COOLING_FIXED_D
 if TYPE_CHECKING:
     from homeassistant.core import HomeAssistant
     from homeassistant.core import State
-    from pytest_homeassistant_custom_component.common import MockConfigEntry
+    from pytest_homeassistant.common import MockConfigEntry
     from syrupy.assertion import SnapshotAssertion
 
     from tests.conftest import FakeKebaKeEnergyAPI

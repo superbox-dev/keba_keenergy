@@ -43,7 +43,7 @@ class KebaKeEnergyWaterHeaterEntity[M: BufferTankOperatingMode | DHWTankOperatin
 ):
     """KEBA KeEnergy water heater entity of a tank."""
 
-    _attr_temperature_unit: str = UnitOfTemperature.CELSIUS
+    _attr_native_temperature_unit: str = UnitOfTemperature.CELSIUS
     _attr_name = None
     _platform_domain: str = WATER_HEATER_DOMAIN
 
@@ -68,12 +68,12 @@ class KebaKeEnergyWaterHeaterEntity[M: BufferTankOperatingMode | DHWTankOperatin
         self._attr_operation_list: list[str] = list(self._operating_mode_to_ha.values())
 
     @property
-    def target_temperature_low(self) -> float | None:
+    def native_target_temperature_low(self) -> float | None:
         """Return the standby temperature, the lower bound of the target temperature."""
         return self.get_float("standby_temperature")
 
     @property
-    def target_temperature_high(self) -> float | None:
+    def native_target_temperature_high(self) -> float | None:
         """Return the target temperature, the upper bound of the target temperature."""
         return self.get_float("target_temperature")
 
@@ -124,12 +124,12 @@ class KebaKeEnergyDHWTankEntity(
         return "target_temperature"
 
     @property
-    def current_temperature(self) -> float | None:
+    def native_current_temperature(self) -> float | None:
         """Return the temperature at the top of the tank."""
         return self.get_float("current_temperature")
 
     @property
-    def target_temperature(self) -> float | None:
+    def native_target_temperature(self) -> float | None:
         """Return the target temperature, a value that waits for its debounced write before the current value."""
         return self._get_debounced_value()
 
@@ -166,7 +166,7 @@ class KebaKeEnergyBufferTankEntity(KebaKeEnergyWaterHeaterEntity[BufferTankOpera
         return (self.device_type,)
 
     @property
-    def current_temperature(self) -> float | None:
+    def native_current_temperature(self) -> float | None:
         """Return the higher one of the top and bottom temperatures."""
         values: list[float] = [
             value
@@ -180,7 +180,7 @@ class KebaKeEnergyBufferTankEntity(KebaKeEnergyWaterHeaterEntity[BufferTankOpera
         return max(values) if values else None
 
     @property
-    def target_temperature(self) -> float | None:
+    def native_target_temperature(self) -> float | None:
         """Return the target temperature."""
         return self.get_float("target_temperature")
 

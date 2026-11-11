@@ -13,15 +13,15 @@ from homeassistant.const import CONF_HOST
 from homeassistant.const import CONF_PASSWORD
 from homeassistant.const import CONF_SSL
 from homeassistant.const import CONF_USERNAME
-from pytest_homeassistant_custom_component.components.diagnostics import get_diagnostics_for_config_entry
+from pytest_homeassistant.components.diagnostics import get_diagnostics_for_config_entry
 
 from tests.api_data import MULTIPLE_DEVICES_DATA_RESPONSE
 from tests.api_data import get_multiple_devices_responses
 
 if TYPE_CHECKING:
     from homeassistant.core import HomeAssistant
-    from pytest_homeassistant_custom_component.common import MockConfigEntry
-    from pytest_homeassistant_custom_component.typing import ClientSessionGenerator
+    from pytest_homeassistant.common import MockConfigEntry
+    from pytest_homeassistant.typing import ClientSessionGenerator
     from syrupy.assertion import SnapshotAssertion
 
     from tests.conftest import FakeKebaKeEnergyAPI

@@ -22,7 +22,7 @@ from homeassistant.core import split_entity_id
 from homeassistant.helpers import entity_registry as er
 from homeassistant.helpers.translation import async_get_translations
 from homeassistant.util import dt as dt_util
-from pytest_homeassistant_custom_component.common import async_fire_time_changed
+from pytest_homeassistant.common import async_fire_time_changed
 
 from custom_components.keba_keenergy.const import DOMAIN
 from custom_components.keba_keenergy.const import FLASH_WRITE_DELAY
@@ -30,7 +30,7 @@ from custom_components.keba_keenergy.const import FLASH_WRITE_DELAY
 if TYPE_CHECKING:
     from homeassistant.const import Platform
     from homeassistant.core import HomeAssistant
-    from pytest_homeassistant_custom_component.common import MockConfigEntry
+    from pytest_homeassistant.common import MockConfigEntry
 
 
 async def init_translations(hass: HomeAssistant, /, *, category: str) -> dict[str, str]:

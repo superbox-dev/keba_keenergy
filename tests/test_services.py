@@ -13,7 +13,7 @@ import pytest
 from homeassistant.config_entries import ConfigEntryState
 from homeassistant.exceptions import HomeAssistantError
 from homeassistant.exceptions import ServiceValidationError
-from pytest_homeassistant_custom_component.common import MockConfigEntry
+from pytest_homeassistant.common import MockConfigEntry
 
 from custom_components.keba_keenergy.const import ATTR_CONFIG_ENTRY
 from custom_components.keba_keenergy.const import ATTR_END_DATE

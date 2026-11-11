@@ -27,7 +27,7 @@ from tests.test_issues_data import WRITE_COUNT_ENTITY_ID
 if TYPE_CHECKING:
     from homeassistant.core import HomeAssistant
     from homeassistant.core import State
-    from pytest_homeassistant_custom_component.common import MockConfigEntry
+    from pytest_homeassistant.common import MockConfigEntry
 
     from tests.conftest import FakeKebaKeEnergyAPI
 

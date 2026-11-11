@@ -17,7 +17,7 @@ from homeassistant.const import STATE_UNAVAILABLE
 from homeassistant.const import STATE_UNKNOWN
 from homeassistant.helpers import issue_registry as ir
 from homeassistant.helpers.update_coordinator import UpdateFailed
-from pytest_homeassistant_custom_component.common import async_capture_events
+from pytest_homeassistant.common import async_capture_events
 
 from custom_components.keba_keenergy.const import ATTR_ALARMS
 from custom_components.keba_keenergy.const import DOMAIN
@@ -43,7 +43,7 @@ if TYPE_CHECKING:
     from homeassistant.core import EventStateChangedData
     from homeassistant.core import HomeAssistant
     from homeassistant.core import State
-    from pytest_homeassistant_custom_component.common import MockConfigEntry
+    from pytest_homeassistant.common import MockConfigEntry
     from syrupy.assertion import SnapshotAssertion
 
     from custom_components.keba_keenergy.coordinator import KebaKeEnergyDataUpdateCoordinator

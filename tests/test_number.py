@@ -18,7 +18,7 @@ from homeassistant.const import Platform
 from homeassistant.exceptions import ServiceValidationError
 from homeassistant.helpers.entity_component import async_update_entity
 from homeassistant.util import dt as dt_util
-from pytest_homeassistant_custom_component.common import async_fire_time_changed
+from pytest_homeassistant.common import async_fire_time_changed
 
 from custom_components.keba_keenergy.const import FLASH_WRITE_DELAY
 from tests import fire_debounced_writes
@@ -38,7 +38,7 @@ from tests.test_number_data import TARGET_TEMPERATURE_OFFSET_WRITE
 if TYPE_CHECKING:
     from homeassistant.core import HomeAssistant
     from homeassistant.core import State
-    from pytest_homeassistant_custom_component.common import MockConfigEntry
+    from pytest_homeassistant.common import MockConfigEntry
     from syrupy.assertion import SnapshotAssertion
 
     from tests.conftest import FakeKebaKeEnergyAPI
