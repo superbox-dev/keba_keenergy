@@ -29,7 +29,7 @@ if TYPE_CHECKING:
     from collections.abc import Mapping
 
     from homeassistant.core import HomeAssistant
-    from homeassistant.helpers.entity_platform import AddEntitiesCallback
+    from homeassistant.helpers.entity_platform import AddConfigEntryEntitiesCallback
 
     from .coordinator import KebaKeEnergyConfigEntry
     from .coordinator import KebaKeEnergyDataUpdateCoordinator
@@ -188,7 +188,7 @@ class KebaKeEnergyBufferTankEntity(KebaKeEnergyWaterHeaterEntity[BufferTankOpera
 async def async_setup_entry(
     hass: HomeAssistant,  # noqa: ARG001
     entry: KebaKeEnergyConfigEntry,
-    async_add_entities: AddEntitiesCallback,
+    async_add_entities: AddConfigEntryEntitiesCallback,
 ) -> None:
     """Set up KEBA KeEnergy water heaters from a config entry."""
     coordinator: KebaKeEnergyDataUpdateCoordinator = entry.runtime_data.data_coordinator

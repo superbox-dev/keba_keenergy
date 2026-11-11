@@ -46,7 +46,7 @@ if TYPE_CHECKING:
     from datetime import datetime
 
     from homeassistant.core import CALLBACK_TYPE
-    from homeassistant.helpers.entity_platform import AddEntitiesCallback
+    from homeassistant.helpers.entity_platform import AddConfigEntryEntitiesCallback
     from keba_keenergy_api.endpoints import EndpointType
     from keba_keenergy_api.models import Reading
     from keba_keenergy_api.models import Value
@@ -412,7 +412,7 @@ class KebaKeEnergyRemoteAccessEntity(KebaKeEnergyCoordinatorEntity[KebaKeEnergyR
 @callback
 def async_setup_remote_access_entities(
     entry: KebaKeEnergyConfigEntry,
-    async_add_entities: AddEntitiesCallback,
+    async_add_entities: AddConfigEntryEntitiesCallback,
     descriptions: tuple[EntityDescription, ...],
     entity_class: type[KebaKeEnergyRemoteAccessEntity],
 ) -> None:
@@ -427,7 +427,7 @@ def async_setup_remote_access_entities(
 @callback
 def async_setup_data_entities(
     entry: KebaKeEnergyConfigEntry,
-    async_add_entities: AddEntitiesCallback,
+    async_add_entities: AddConfigEntryEntitiesCallback,
     entity_types: Mapping[SectionPrefix, tuple[KebaKeEnergyEntityDescription, ...]],
     default_entity_class: type[KebaKeEnergyEntity],
     platform_name: str,

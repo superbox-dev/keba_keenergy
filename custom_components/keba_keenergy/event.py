@@ -18,7 +18,7 @@ from .entity import KebaKeEnergyBaseEntity
 
 if TYPE_CHECKING:
     from homeassistant.core import HomeAssistant
-    from homeassistant.helpers.entity_platform import AddEntitiesCallback
+    from homeassistant.helpers.entity_platform import AddConfigEntryEntitiesCallback
     from keba_keenergy_api.models import Alarm
 
     from .coordinator import KebaKeEnergyConfigEntry
@@ -82,7 +82,7 @@ ALARM_EVENT_TYPE: Final[EventEntityDescription] = EventEntityDescription(
 async def async_setup_entry(
     hass: HomeAssistant,  # noqa: ARG001
     entry: KebaKeEnergyConfigEntry,
-    async_add_entities: AddEntitiesCallback,
+    async_add_entities: AddConfigEntryEntitiesCallback,
 ) -> None:
     """Set up KEBA KeEnergy events from a config entry."""
     async_add_entities([KebaKeEnergyAlarmEventEntity(entry.runtime_data.data_coordinator, ALARM_EVENT_TYPE)])

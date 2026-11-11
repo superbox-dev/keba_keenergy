@@ -34,7 +34,7 @@ from .legacy import get_states
 
 if TYPE_CHECKING:
     from homeassistant.core import HomeAssistant
-    from homeassistant.helpers.entity_platform import AddEntitiesCallback
+    from homeassistant.helpers.entity_platform import AddConfigEntryEntitiesCallback
     from keba_keenergy_api.models import Value
     from keba_keenergy_api.models import WriteValue
 
@@ -245,7 +245,7 @@ SELECT_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergySelectEntityDescriptio
 async def async_setup_entry(
     hass: HomeAssistant,  # noqa: ARG001
     entry: KebaKeEnergyConfigEntry,
-    async_add_entities: AddEntitiesCallback,
+    async_add_entities: AddConfigEntryEntitiesCallback,
 ) -> None:
     """Set up KEBA KeEnergy selects from a config entry."""
     async_setup_data_entities(

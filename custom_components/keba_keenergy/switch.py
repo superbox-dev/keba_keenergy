@@ -28,7 +28,7 @@ from .entity import is_heating_circuit
 
 if TYPE_CHECKING:
     from homeassistant.core import HomeAssistant
-    from homeassistant.helpers.entity_platform import AddEntitiesCallback
+    from homeassistant.helpers.entity_platform import AddConfigEntryEntitiesCallback
 
     from .coordinator import KebaKeEnergyConfigEntry
 
@@ -186,7 +186,7 @@ REMOTE_ACCESS_SWITCH_TYPES: Final[tuple[SwitchEntityDescription, ...]] = (
 async def async_setup_entry(
     hass: HomeAssistant,  # noqa: ARG001
     entry: KebaKeEnergyConfigEntry,
-    async_add_entities: AddEntitiesCallback,
+    async_add_entities: AddConfigEntryEntitiesCallback,
 ) -> None:
     """Set up KEBA KeEnergy switches from a config entry."""
     async_setup_data_entities(

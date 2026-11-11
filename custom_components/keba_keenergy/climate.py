@@ -41,7 +41,7 @@ if TYPE_CHECKING:
     from zoneinfo import ZoneInfo
 
     from homeassistant.core import HomeAssistant
-    from homeassistant.helpers.entity_platform import AddEntitiesCallback
+    from homeassistant.helpers.entity_platform import AddConfigEntryEntitiesCallback
     from keba_keenergy_api.enums import HeatPumpState
 
     from .coordinator import KebaKeEnergyConfigEntry
@@ -393,7 +393,7 @@ def _climate_entity_class(
 async def async_setup_entry(
     hass: HomeAssistant,  # noqa: ARG001
     entry: KebaKeEnergyConfigEntry,
-    async_add_entities: AddEntitiesCallback,
+    async_add_entities: AddConfigEntryEntitiesCallback,
 ) -> None:
     """Set up KEBA KeEnergy climates from a config entry."""
     coordinator: KebaKeEnergyDataUpdateCoordinator = entry.runtime_data.data_coordinator

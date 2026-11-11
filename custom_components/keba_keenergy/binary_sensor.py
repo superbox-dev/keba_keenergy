@@ -26,7 +26,7 @@ from .entity import has_photovoltaics
 
 if TYPE_CHECKING:
     from homeassistant.core import HomeAssistant
-    from homeassistant.helpers.entity_platform import AddEntitiesCallback
+    from homeassistant.helpers.entity_platform import AddConfigEntryEntitiesCallback
 
     from .coordinator import KebaKeEnergyConfigEntry
 
@@ -222,7 +222,7 @@ REMOTE_ACCESS_BINARY_SENSOR_TYPES: Final[tuple[BinarySensorEntityDescription, ..
 async def async_setup_entry(
     hass: HomeAssistant,  # noqa: ARG001
     entry: KebaKeEnergyConfigEntry,
-    async_add_entities: AddEntitiesCallback,
+    async_add_entities: AddConfigEntryEntitiesCallback,
 ) -> None:
     """Set up KEBA KeEnergy binary sensors from a config entry."""
     async_setup_data_entities(
