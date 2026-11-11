@@ -13,6 +13,8 @@ ignore = [
 
 [lint.per-file-ignores]
 "tests/*" = [
+  "PLR0913", # too-many-arguments, pytest passes the fixtures and parameters as arguments
+  "PLR0917", # too-many-positional-arguments, same reason
   "S101",    # assert, pytest checks results with assert
 ]
 

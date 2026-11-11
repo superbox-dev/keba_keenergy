@@ -25,7 +25,6 @@ from custom_components.keba_keenergy.const import PLATFORMS
 from tests.api_data import CURVES_RESPONSE
 from tests.api_data import DEACTIVATED_MESSAGE_IDS
 from tests.api_data import DEVICE_INFO_RESPONSE
-from tests.api_data import ENTRY_ID
 from tests.api_data import HMI_RESPONSE
 from tests.api_data import MESSAGE_ID_SUFFIX
 from tests.api_data import MULTIPLE_DEVICES_DATA_RESPONSE
@@ -48,7 +47,6 @@ if TYPE_CHECKING:
     from collections.abc import Callable
     from collections.abc import Generator
 
-    from _pytest.fixtures import SubRequest
     from homeassistant.const import Platform
     from homeassistant.core import HomeAssistant
     from yarl import URL
@@ -484,13 +482,6 @@ def fake_api(
     assert not api.responses, "every response is read"
 
 
-@pytest.fixture(params=["en", "de"], ids=["en", "de"])
-def language(hass: HomeAssistant, request: SubRequest) -> str:
-    """Set the language of Home Assistant, every language or parametrized indirectly."""
-    hass.config.language = request.param
-    return request.param
-
-
 @pytest.fixture
 def entry_data() -> dict[str, Any]:
     """Return the data of the config entry, overridden by `parametrize`."""
@@ -525,7 +516,7 @@ def mock_config_entry(entry_data: dict[str, Any], entry_options: dict[str, Any])
         domain=DOMAIN,
         title="KEBA KeEnergy (ap4400.local)",
         data=entry_data,
-        entry_id=ENTRY_ID,
+        entry_id="01KEBAKEENERGY0000000000000",
         unique_id="12345678",
         options=entry_options,
     )

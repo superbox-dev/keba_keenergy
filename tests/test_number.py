@@ -25,7 +25,6 @@ from tests import fire_debounced_writes
 from tests import get_state
 from tests import next_update
 from tests import set_number_value
-from tests.api_data import ENTRY_ID
 from tests.api_data import MULTIPLE_DEVICES_DATA_RESPONSE
 from tests.api_data import NOW
 from tests.api_data import Response
@@ -42,6 +41,7 @@ if TYPE_CHECKING:
     from homeassistant.core import HomeAssistant
     from homeassistant.core import State
     from homeassistant.helpers import entity_registry as er
+    from pytest_homeassistant.common import MockConfigEntry
     from syrupy.assertion import SnapshotAssertion
 
     from tests.conftest import FakeKebaKeEnergyAPI
@@ -49,71 +49,87 @@ if TYPE_CHECKING:
 pytestmark = pytest.mark.freeze_time(NOW)
 
 
-@pytest.mark.usefixtures("entity_registry_enabled_by_default", "language")
+@pytest.mark.parametrize("language", ["de", "en"], ids=["de", "en"])
+@pytest.mark.usefixtures("entity_registry_enabled_by_default")
 async def test_numbers(
     hass: HomeAssistant,
+    mock_config_entry: MockConfigEntry,
     entity_registry: er.EntityRegistry,
     fake_api: FakeKebaKeEnergyAPI,
     snapshot: SnapshotAssertion,
+    language: str,
 ) -> None:
     """Test the states of all number entities."""
+    hass.config.language = language
     fake_api.platforms = [Platform.NUMBER]
     fake_api.responses = get_multiple_devices_responses(MULTIPLE_DEVICES_DATA_RESPONSE, has_passive_cooling="true")
     await fake_api.setup_integration()
 
-    await snapshot_platform(hass, entity_registry, snapshot, ENTRY_ID)
+    await snapshot_platform(hass, entity_registry, snapshot, mock_config_entry.entry_id)
 
 
 @pytest.mark.parametrize(
-    ("entity_id", "write"),
+    ("entity_id", "value", "expected"),
     [
         (
             "number.keba_keenergy_12345678_solar_circuit_target_temperature_1_2",
-            (18, '[{"name": "APPL.CtrlAppl.sParam.genericHeat[2].param.setTempMax.value", "value": "18.0"}]'),
+            18,
+            '[{"name": "APPL.CtrlAppl.sParam.genericHeat[2].param.setTempMax.value", "value": "18.0"}]',
         ),
         (
             "number.keba_keenergy_12345678_solar_circuit_target_temperature_2_2",
-            (22, '[{"name": "APPL.CtrlAppl.sParam.genericHeat[3].param.setTempMax.value", "value": "22.0"}]'),
+            22,
+            '[{"name": "APPL.CtrlAppl.sParam.genericHeat[3].param.setTempMax.value", "value": "22.0"}]',
         ),
         (
             "number.keba_keenergy_12345678_buffer_tank_standby_temperature_1",
-            (11, '[{"name": "APPL.CtrlAppl.sParam.bufferTank[0].param.backupTemp", "value": "11.0"}]'),
+            11,
+            '[{"name": "APPL.CtrlAppl.sParam.bufferTank[0].param.backupTemp", "value": "11.0"}]',
         ),
         (
             "number.keba_keenergy_12345678_hot_water_tank_standby_temperature_2",
-            (18, '[{"name": "APPL.CtrlAppl.sParam.hotWaterTank[1].param.reducedSetTempMax.value", "value": "18.0"}]'),
+            18,
+            '[{"name": "APPL.CtrlAppl.sParam.hotWaterTank[1].param.reducedSetTempMax.value", "value": "18.0"}]',
         ),
         (
             "number.keba_keenergy_12345678_hot_water_tank_target_temperature_1",
-            (44, '[{"name": "APPL.CtrlAppl.sParam.hotWaterTank[0].param.normalSetTempMax.value", "value": "44.0"}]'),
+            44,
+            '[{"name": "APPL.CtrlAppl.sParam.hotWaterTank[0].param.normalSetTempMax.value", "value": "44.0"}]',
         ),
         (
             "number.keba_keenergy_12345678_heat_circuit_target_temperature_day_1",
-            (22, '[{"name": "APPL.CtrlAppl.sParam.heatCircuit[0].param.normalSetTemp", "value": "22.0"}]'),
+            22,
+            '[{"name": "APPL.CtrlAppl.sParam.heatCircuit[0].param.normalSetTemp", "value": "22.0"}]',
         ),
         (
             "number.keba_keenergy_12345678_heat_circuit_target_temperature_night_1",
-            (16, '[{"name": "APPL.CtrlAppl.sParam.heatCircuit[0].param.reducedSetTemp", "value": "16.0"}]'),
+            16,
+            '[{"name": "APPL.CtrlAppl.sParam.heatCircuit[0].param.reducedSetTemp", "value": "16.0"}]',
         ),
         (
             "number.keba_keenergy_12345678_heat_circuit_target_temperature_away_1",
-            (14, '[{"name": "APPL.CtrlAppl.sParam.heatCircuit[0].param.holidaySetTemp", "value": "14.0"}]'),
+            14,
+            '[{"name": "APPL.CtrlAppl.sParam.heatCircuit[0].param.holidaySetTemp", "value": "14.0"}]',
         ),
         (
             "number.keba_keenergy_12345678_heat_circuit_target_temperature_offset_1",
-            (0.5, '[{"name": "APPL.CtrlAppl.sParam.heatCircuit[0].param.offsetRoomTemp", "value": "0.5"}]'),
+            0.5,
+            '[{"name": "APPL.CtrlAppl.sParam.heatCircuit[0].param.offsetRoomTemp", "value": "0.5"}]',
         ),
         (
             "number.keba_keenergy_12345678_heat_circuit_heating_curve_offset_1",
-            (5.5, '[{"name": "APPL.CtrlAppl.sParam.heatCircuit[0].param.heatCurveOffset", "value": "5.5"}]'),
+            5.5,
+            '[{"name": "APPL.CtrlAppl.sParam.heatCircuit[0].param.heatCurveOffset", "value": "5.5"}]',
         ),
         (
             "number.keba_keenergy_12345678_heat_circuit_heating_curve_slope_1",
-            (0.3, '[{"name": "APPL.CtrlAppl.sParam.heatCircuit[0].param.heatCurveGradient", "value": "0.3"}]'),
+            0.3,
+            '[{"name": "APPL.CtrlAppl.sParam.heatCircuit[0].param.heatCurveGradient", "value": "0.3"}]',
         ),
         (
             "number.keba_keenergy_12345678_external_heat_source_min_runtime_excess_energy_1",
-            (30, '[{"name": "APPL.CtrlAppl.sParam.extHeatSource[0].param.minRunTimeExcessEnergy", "value": "1800"}]'),
+            30,
+            '[{"name": "APPL.CtrlAppl.sParam.extHeatSource[0].param.minRunTimeExcessEnergy", "value": "1800"}]',
         ),
     ],
     ids=[
@@ -137,10 +153,10 @@ async def test_set_value(
     freezer: FrozenDateTimeFactory,
     fake_api: FakeKebaKeEnergyAPI,
     entity_id: str,
-    write: tuple[float, str],
+    value: float,
+    expected: str,
 ) -> None:
-    """Test setting the value of a number entity, `write` is the value and its write request."""
-    value, expected = write
+    """Test setting the value of a number entity."""
     await set_number_value(hass, entity_id, value)
 
     await fire_debounced_writes(hass, freezer)
@@ -281,20 +297,22 @@ async def test_set_value_debounced(
 
 
 @pytest.mark.parametrize(
-    ("response", "entity_value"),
+    ("entity_id", "response", "value"),
     [
         (
+            TARGET_TEMPERATURE_OFFSET_ENTITY_ID,
             get_single_device_data_response(heat_circuit_target_temperature_offset="1.5"),
-            (TARGET_TEMPERATURE_OFFSET_ENTITY_ID, 1.5),
+            1.5,
         ),
         # The Web HMI returns `0.8` as Float32 (`0.80000001`).
         (
+            HEATING_CURVE_SLOPE_ENTITY_ID,
             update_response(
                 get_single_device_data_response(),
                 "APPL.CtrlAppl.sParam.heatCircuit[0].param.heatCurveGradient",
                 value="0.80000001",
             ),
-            (HEATING_CURVE_SLOPE_ENTITY_ID, 0.8),
+            0.8,
         ),
     ],
     ids=["value", "float32_value"],
@@ -304,11 +322,11 @@ async def test_set_unchanged_value(
     hass: HomeAssistant,
     freezer: FrozenDateTimeFactory,
     fake_api: FakeKebaKeEnergyAPI,
+    entity_id: str,
     response: Response,
-    entity_value: tuple[str, float],
+    value: float,
 ) -> None:
     """Test that the current value of a number entity is not written again."""
-    entity_id, value = entity_value
     fake_api.responses = get_single_device_responses(response)
     await fake_api.setup_integration()
 
@@ -366,6 +384,7 @@ async def test_limits_after_update(
 
 async def test_debounced_value_not_written_after_unload(
     hass: HomeAssistant,
+    mock_config_entry: MockConfigEntry,
     freezer: FrozenDateTimeFactory,
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
@@ -377,7 +396,7 @@ async def test_debounced_value_not_written_after_unload(
 
     await set_number_value(hass, TARGET_TEMPERATURE_OFFSET_ENTITY_ID, 0.5)
 
-    await hass.config_entries.async_unload(ENTRY_ID)
+    await hass.config_entries.async_unload(mock_config_entry.entry_id)
 
     await fire_debounced_writes(hass, freezer)
 

@@ -19,7 +19,6 @@ from custom_components.keba_keenergy.const import REMOTE_ACCESS_SCAN_INTERVAL
 from tests import get_flows_in_progress
 from tests import get_state
 from tests import next_update
-from tests.api_data import ENTRY_ID
 from tests.api_data import MULTIPLE_DEVICES_DATA_RESPONSE
 from tests.api_data import MULTIPLE_DEVICES_RESPONSE
 from tests.api_data import MULTIPLE_DEVICES_WITHOUT_SOLAR_AND_HEATING_CIRCUITS_DATA_RESPONSE
@@ -49,9 +48,9 @@ pytestmark = pytest.mark.freeze_time(NOW)
 
 
 @pytest.mark.no_fail_on_keba_errors
-@pytest.mark.usefixtures("init_integration")
 async def test_update_authentication_error(
     hass: HomeAssistant,
+    init_integration: MockConfigEntry,
     freezer: FrozenDateTimeFactory,
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
@@ -61,7 +60,7 @@ async def test_update_authentication_error(
     await next_update(hass, freezer)
 
     assert get_state(hass, "sensor.keba_keenergy_12345678_outdoor_temperature").state == STATE_UNAVAILABLE
-    assert get_flows_in_progress(hass) == [("reauth_confirm", DOMAIN, SOURCE_REAUTH, ENTRY_ID)]
+    assert get_flows_in_progress(hass) == [("reauth_confirm", DOMAIN, SOURCE_REAUTH, init_integration.entry_id)]
 
 
 @pytest.mark.parametrize("error", [HTTPStatus.BAD_REQUEST, TimeoutError()], ids=["http_error", "timeout"])

@@ -15,8 +15,6 @@ from typing import TypedDict
 
 # The time of the tests, 2026-01-24 13:00 in the time zone of the Web HMI, in the day block of the week timers.
 NOW: Final[datetime] = datetime(2026, 1, 24, 12, 0, tzinfo=UTC)
-# The ID of the config entry of the `mock_config_entry` fixture.
-ENTRY_ID: Final[str] = "01KEBAKEENERGY0000000000000"
 
 
 class Attributes(TypedDict):

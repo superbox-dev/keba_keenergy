@@ -5,15 +5,13 @@
   - set `fake_api.responses` (`get_single_device_responses()`, `get_multiple_devices_responses()`), then
     `fake_api.setup_integration()`, every response must be read
   - `init_integration` for the setup with `get_multiple_devices_responses(MULTIPLE_DEVICES_DATA_RESPONSE)`
-- Config entry: `mock_config_entry`, or `init_integration` after its setup
-  - only as an argument when the test needs the entry itself (`add_to_hass()`, `state`, `data`), otherwise
-    `usefixtures`
-  - its ID always as `ENTRY_ID` (`tests/api_data.py`)
+- Config entry and its ID from `mock_config_entry`, or from `init_integration` after its setup
 - Variants as fixtures with a default value, overridden by `parametrize` (`entry_data`, `entry_options`)
-  - `indirect` for fixtures with `params`, e.g. a single language (`language`)
 - Assert entities, devices and issues with snapshots in `tests/snapshots/`
   - entities of a platform with `snapshot_platform()`, only this platform set up (`fake_api.platforms`), with
-    `entity_registry_enabled_by_default` and `language` (EN and DE)
+    `entity_registry_enabled_by_default`
+- Translated texts in both languages: `pytest.mark.parametrize("language", ["de", "en"])`, the test sets
+  `hass.config.language` before the setup
 - New entity:
   - add the values to the responses in `tests/api_data.py`
   - regenerate the snapshots and review the new entities

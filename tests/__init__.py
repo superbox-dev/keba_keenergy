@@ -26,12 +26,12 @@ from pytest_homeassistant.common import async_fire_time_changed
 from custom_components.keba_keenergy.const import DEFAULT_SCAN_INTERVAL
 from custom_components.keba_keenergy.const import DOMAIN
 from custom_components.keba_keenergy.const import FLASH_WRITE_DELAY
-from tests.api_data import ENTRY_ID
 
 if TYPE_CHECKING:
     from freezegun.api import FrozenDateTimeFactory
     from homeassistant.const import Platform
     from homeassistant.core import HomeAssistant
+    from pytest_homeassistant.common import MockConfigEntry
 
 type FlowInProgress = tuple[str, str, str | None, str | None]
 
@@ -56,9 +56,15 @@ async def init_translations(hass: HomeAssistant, /, *, category: str) -> dict[st
     return translations
 
 
-def get_platform_states(hass: HomeAssistant, entity_registry: er.EntityRegistry, platform: Platform, /) -> list[State]:
+def get_platform_states(
+    hass: HomeAssistant,
+    entity_registry: er.EntityRegistry,
+    config_entry: MockConfigEntry,
+    platform: Platform,
+    /,
+) -> list[State]:
     """Return the states of all entities of the platform of the config entry, sorted by entity ID."""
-    entries: list[er.RegistryEntry] = er.async_entries_for_config_entry(entity_registry, ENTRY_ID)
+    entries: list[er.RegistryEntry] = er.async_entries_for_config_entry(entity_registry, config_entry.entry_id)
     states: list[State | None] = [
         hass.states.get(entry.entity_id)
         for entry in sorted(entries, key=lambda entry: entry.entity_id)

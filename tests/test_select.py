@@ -21,7 +21,6 @@ from tests import get_state
 from tests import next_update
 from tests import select_option
 from tests.api_data import CURVES_RENAMED_RESPONSE
-from tests.api_data import ENTRY_ID
 from tests.api_data import MULTIPLE_DEVICES_DATA_RESPONSE
 from tests.api_data import NOW
 from tests.api_data import get_multiple_devices_responses
@@ -39,6 +38,7 @@ if TYPE_CHECKING:
     from homeassistant.core import HomeAssistant
     from homeassistant.core import State
     from homeassistant.helpers import entity_registry as er
+    from pytest_homeassistant.common import MockConfigEntry
     from syrupy.assertion import SnapshotAssertion
 
     from tests.conftest import FakeKebaKeEnergyAPI
@@ -46,21 +46,25 @@ if TYPE_CHECKING:
 pytestmark = pytest.mark.freeze_time(NOW)
 
 
-@pytest.mark.usefixtures("entity_registry_enabled_by_default", "language")
+@pytest.mark.parametrize("language", ["de", "en"], ids=["de", "en"])
+@pytest.mark.usefixtures("entity_registry_enabled_by_default")
 async def test_selects(
     hass: HomeAssistant,
+    mock_config_entry: MockConfigEntry,
     entity_registry: er.EntityRegistry,
     fake_api: FakeKebaKeEnergyAPI,
     snapshot: SnapshotAssertion,
+    language: str,
 ) -> None:
     """Test the states and the translated options of all select entities, with cooling."""
+    hass.config.language = language
     fake_api.platforms = [Platform.SELECT]
     fake_api.responses = get_multiple_devices_responses(MULTIPLE_DEVICES_DATA_RESPONSE, has_passive_cooling="true")
     await fake_api.setup_integration()
 
-    await snapshot_platform(hass, entity_registry, snapshot, ENTRY_ID)
+    await snapshot_platform(hass, entity_registry, snapshot, mock_config_entry.entry_id)
 
-    states: list[State] = get_platform_states(hass, entity_registry, Platform.SELECT)
+    states: list[State] = get_platform_states(hass, entity_registry, mock_config_entry, Platform.SELECT)
     translated_states: list[State] = [state for state in states if state.entity_id not in CURVE_SELECTS]
 
     for state in translated_states:
@@ -78,15 +82,17 @@ async def test_selects(
     ],
     ids=["operating_mode", "heat_circuit_operating_mode_1", "heat_circuit_operating_mode_2"],
 )
-@pytest.mark.usefixtures("language")
+@pytest.mark.parametrize("language", ["de", "en"], ids=["de", "en"])
 async def test_selects_without_cooling(
     hass: HomeAssistant,
     entity_registry: er.EntityRegistry,
     fake_api: FakeKebaKeEnergyAPI,
     snapshot: SnapshotAssertion,
     entity_id: str,
+    language: str,
 ) -> None:
     """Test the operating mode selects of a setup without cooling."""
+    hass.config.language = language
     fake_api.responses = get_multiple_devices_responses(
         MULTIPLE_DEVICES_DATA_RESPONSE,
         has_passive_cooling="false",

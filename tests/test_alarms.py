@@ -23,7 +23,6 @@ from custom_components.keba_keenergy.const import DOMAIN
 from tests import get_state
 from tests import init_translations
 from tests import next_update
-from tests.api_data import ENTRY_ID
 from tests.api_data import HIGH_PRESSURE_ALARM
 from tests.api_data import NOW
 from tests.api_data import SENSOR_BREAK_ALARM
@@ -46,6 +45,7 @@ if TYPE_CHECKING:
     from homeassistant.core import EventStateChangedData
     from homeassistant.core import HomeAssistant
     from homeassistant.core import State
+    from pytest_homeassistant.common import MockConfigEntry
     from syrupy.assertion import SnapshotAssertion
 
     from tests.conftest import FakeKebaKeEnergyAPI
@@ -75,21 +75,26 @@ def get_alarm_events(events: list[Event[EventStateChangedData]], /) -> list[tupl
 
 
 @pytest.mark.parametrize("alarm", [SENSOR_BREAK_ALARM, HIGH_PRESSURE_ALARM], ids=["sensor_break", "acknowledgeable"])
-@pytest.mark.usefixtures("language")
+@pytest.mark.parametrize("language", ["de", "en"], ids=["de", "en"])
 async def test_alarm_issue(
     hass: HomeAssistant,
+    mock_config_entry: MockConfigEntry,
     fake_api: FakeKebaKeEnergyAPI,
     issue_registry: ir.IssueRegistry,
     snapshot: SnapshotAssertion,
     alarm: AlarmValue,
+    language: str,
 ) -> None:
     """Test the repair issue of a pending alarm, with its translated texts."""
+    hass.config.language = language
     fake_api.responses = get_single_device_responses()
     fake_api.alarms = [alarm]
     await fake_api.setup_integration()
     translations: dict[str, str] = await init_translations(hass, category="issues")
 
-    issue: ir.IssueEntry | None = issue_registry.async_get_issue(DOMAIN, get_alarm_issue_id(ENTRY_ID, alarm))
+    issue: ir.IssueEntry | None = issue_registry.async_get_issue(
+        DOMAIN, get_alarm_issue_id(mock_config_entry.entry_id, alarm)
+    )
     assert issue is not None
 
     translation_key: str = f"component.keba_keenergy.issues.{issue.translation_key}"
@@ -115,6 +120,7 @@ async def test_alarm_issue(
     ids=["emergency", "error", "warning", "info", "unknown"],
 )
 async def test_alarm_issue_severity(
+    mock_config_entry: MockConfigEntry,
     fake_api: FakeKebaKeEnergyAPI,
     issue_registry: ir.IssueRegistry,
     priority: int,
@@ -126,7 +132,7 @@ async def test_alarm_issue_severity(
     await fake_api.setup_integration()
 
     issue: ir.IssueEntry | None = issue_registry.async_get_issue(
-        DOMAIN, get_alarm_issue_id(ENTRY_ID, SENSOR_BREAK_ALARM)
+        DOMAIN, get_alarm_issue_id(mock_config_entry.entry_id, SENSOR_BREAK_ALARM)
     )
 
     assert issue is not None
@@ -135,6 +141,7 @@ async def test_alarm_issue_severity(
 
 async def test_alarm_raised_and_cleared(
     hass: HomeAssistant,
+    mock_config_entry: MockConfigEntry,
     freezer: FrozenDateTimeFactory,
     fake_api: FakeKebaKeEnergyAPI,
     hass_storage: dict[str, Any],
@@ -143,7 +150,7 @@ async def test_alarm_raised_and_cleared(
     """Test the events, the repair issues, the sensor and the store when alarms are raised and cleared."""
     fake_api.responses = get_single_device_responses(SINGLE_DEVICE_DATA_RESPONSE, SINGLE_DEVICE_DATA_RESPONSE)
     await fake_api.setup_integration()
-    entry_id: str = ENTRY_ID
+    entry_id: str = mock_config_entry.entry_id
     key: str = get_alarm_store_key(entry_id)
     events: list[Event[EventStateChangedData]] = async_capture_events(hass, EVENT_STATE_CHANGED)
 
@@ -196,6 +203,7 @@ async def test_alarm_raised_and_cleared(
     ids=["raised", "cleared", "cleared_and_raised", "still_pending", "raised_again"],
 )
 async def test_alarm_events_after_restart(
+    mock_config_entry: MockConfigEntry,
     fake_api: FakeKebaKeEnergyAPI,
     hass_storage: dict[str, Any],
     stored: list[AlarmAttributes],
@@ -203,7 +211,7 @@ async def test_alarm_events_after_restart(
     expected_events: list[tuple[str, AlarmAttributes]],
 ) -> None:
     """Test that the alarms raised or cleared while Home Assistant was not running are reported once after the start."""
-    key: str = get_alarm_store_key(ENTRY_ID)
+    key: str = get_alarm_store_key(mock_config_entry.entry_id)
     hass_storage[key] = get_alarm_store(key, stored)
     fake_api.responses = get_single_device_responses()
     fake_api.alarms = alarms
@@ -221,15 +229,16 @@ async def test_alarm_events_after_restart(
         ("de-CH", [SENSOR_BREAK_ALARM], ["action=getCount", "action=getAll&languageCode=de"]),
     ],
     ids=["without_alarms", "with_alarms", "language_with_region"],
-    indirect=["language"],
 )
-@pytest.mark.usefixtures("language")
 async def test_alarm_requests(
+    hass: HomeAssistant,
     fake_api: FakeKebaKeEnergyAPI,
+    language: str,
     alarms: list[AlarmValue],
     expected_requests: list[str],
 ) -> None:
     """Test that the alarms are only read while there are any, in the language of Home Assistant."""
+    hass.config.language = language
     fake_api.responses = get_single_device_responses()
     fake_api.alarms = alarms
     await fake_api.setup_integration()
@@ -268,6 +277,7 @@ async def test_alarm_update_error(
 
 async def test_unload_entry_deletes_alarm_issues(
     hass: HomeAssistant,
+    mock_config_entry: MockConfigEntry,
     fake_api: FakeKebaKeEnergyAPI,
     issue_registry: ir.IssueRegistry,
 ) -> None:
@@ -276,25 +286,29 @@ async def test_unload_entry_deletes_alarm_issues(
     fake_api.alarms = [SENSOR_BREAK_ALARM]
     await fake_api.setup_integration()
 
-    assert await hass.config_entries.async_unload(ENTRY_ID)
+    assert await hass.config_entries.async_unload(mock_config_entry.entry_id)
     await hass.async_block_till_done()
 
-    assert issue_registry.async_get_issue(DOMAIN, get_alarm_issue_id(ENTRY_ID, SENSOR_BREAK_ALARM)) is None
+    assert (
+        issue_registry.async_get_issue(DOMAIN, get_alarm_issue_id(mock_config_entry.entry_id, SENSOR_BREAK_ALARM))
+        is None
+    )
 
 
 async def test_remove_entry_removes_alarms(
     hass: HomeAssistant,
+    mock_config_entry: MockConfigEntry,
     fake_api: FakeKebaKeEnergyAPI,
     hass_storage: dict[str, Any],
 ) -> None:
     """Test that removing a config entry removes its stored alarms."""
-    key: str = get_alarm_store_key(ENTRY_ID)
+    key: str = get_alarm_store_key(mock_config_entry.entry_id)
     hass_storage[key] = get_alarm_store(key, [SENSOR_BREAK_ATTRIBUTES])
     fake_api.responses = get_single_device_responses()
     fake_api.alarms = [SENSOR_BREAK_ALARM]
     await fake_api.setup_integration()
 
-    await hass.config_entries.async_remove(ENTRY_ID)
+    await hass.config_entries.async_remove(mock_config_entry.entry_id)
     await hass.async_block_till_done()
 
     assert key not in hass_storage

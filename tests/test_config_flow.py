@@ -19,7 +19,6 @@ from homeassistant.const import CONF_SSL
 from homeassistant.data_entry_flow import FlowResultType
 
 from custom_components.keba_keenergy.const import DOMAIN
-from tests.api_data import ENTRY_ID
 from tests.api_data import MULTIPLE_DEVICES_DATA_RESPONSE
 from tests.api_data import NOW
 from tests.api_data import get_multiple_devices_responses
@@ -264,10 +263,10 @@ async def test_reauth_flow(
 
 
 @pytest.mark.parametrize(
-    ("device", "expected"),
+    ("unique_id", "device_info_status", "expected"),
     [
-        (("12345678", HTTPStatus.UNAUTHORIZED), {"type": FlowResultType.FORM, "errors": {"base": "invalid_auth"}}),
-        (("12345679", HTTPStatus.OK), {"type": FlowResultType.ABORT, "reason": "wrong_account"}),
+        ("12345678", HTTPStatus.UNAUTHORIZED, {"type": FlowResultType.FORM, "errors": {"base": "invalid_auth"}}),
+        ("12345679", HTTPStatus.OK, {"type": FlowResultType.ABORT, "reason": "wrong_account"}),
     ],
     ids=["invalid_auth", "wrong_account"],
 )
@@ -276,14 +275,11 @@ async def test_reauth_flow_errors(
     hass: HomeAssistant,
     mock_config_entry: MockConfigEntry,
     fake_api: FakeKebaKeEnergyAPI,
-    device: tuple[str, HTTPStatus],
+    unique_id: str,
+    device_info_status: HTTPStatus,
     expected: dict[str, object],
 ) -> None:
-    """Test that the reauthentication flow shows invalid credentials and aborts for another device.
-
-    `device` is the unique ID of the config entry and the status of the device info.
-    """
-    unique_id, device_info_status = device
+    """Test that the reauthentication flow shows invalid credentials and aborts for another device."""
     fake_api.register_get_device_info(HOST, ssl=True, status=device_info_status)
     mock_config_entry.add_to_hass(hass)
     hass.config_entries.async_update_entry(mock_config_entry, unique_id=unique_id)
@@ -542,6 +538,7 @@ async def test_zeroconf_flow_keeps_ip_address_for_ipv6(
 )
 async def test_options_flow(
     hass: HomeAssistant,
+    mock_config_entry: MockConfigEntry,
     fake_api: FakeKebaKeEnergyAPI,
     user_input: dict[str, Any],
     expected: dict[str, bool | int],
@@ -555,7 +552,7 @@ async def test_options_flow(
     ]
     await fake_api.setup_integration()
 
-    result: ConfigFlowResult = await hass.config_entries.options.async_init(ENTRY_ID)
+    result: ConfigFlowResult = await hass.config_entries.options.async_init(mock_config_entry.entry_id)
 
     assert result["type"] is FlowResultType.FORM
     assert result["step_id"] == "init"
@@ -573,6 +570,7 @@ async def test_options_flow(
 
 async def test_options_flow_without_photovoltaics(
     hass: HomeAssistant,
+    mock_config_entry: MockConfigEntry,
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
     """Test that the options flow hides the photovoltaics multiplier without photovoltaics."""
@@ -582,7 +580,7 @@ async def test_options_flow_without_photovoltaics(
     )
     await fake_api.setup_integration()
 
-    result: ConfigFlowResult = await hass.config_entries.options.async_init(ENTRY_ID)
+    result: ConfigFlowResult = await hass.config_entries.options.async_init(mock_config_entry.entry_id)
 
     assert result["type"] is FlowResultType.FORM
     assert result["step_id"] == "init"
@@ -597,11 +595,11 @@ async def test_options_flow_when_integration_unloaded(
     init_integration: MockConfigEntry,
 ) -> None:
     """Test that the options flow aborts if the integration was unloaded."""
-    await hass.config_entries.async_unload(ENTRY_ID)
+    await hass.config_entries.async_unload(init_integration.entry_id)
 
     assert init_integration.state is ConfigEntryState.NOT_LOADED
 
-    result: ConfigFlowResult = await hass.config_entries.options.async_init(ENTRY_ID)
+    result: ConfigFlowResult = await hass.config_entries.options.async_init(init_integration.entry_id)
 
     assert result["type"] is FlowResultType.ABORT
     assert result["reason"] == "options_not_ready"
@@ -619,11 +617,11 @@ async def test_options_flow_when_integration_reload_failed(
         HTTPStatus.BAD_REQUEST,
     ]
     await fake_api.setup_integration()
-    await hass.config_entries.async_reload(ENTRY_ID)
+    await hass.config_entries.async_reload(mock_config_entry.entry_id)
 
     assert mock_config_entry.state is ConfigEntryState.SETUP_RETRY
 
-    result: ConfigFlowResult = await hass.config_entries.options.async_init(ENTRY_ID)
+    result: ConfigFlowResult = await hass.config_entries.options.async_init(mock_config_entry.entry_id)
 
     assert result["type"] is FlowResultType.ABORT
     assert result["reason"] == "options_not_ready"

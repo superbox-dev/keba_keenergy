@@ -29,7 +29,6 @@ from tests import fire_debounced_writes
 from tests import get_state
 from tests import next_update
 from tests import set_target_temperature
-from tests.api_data import ENTRY_ID
 from tests.api_data import MULTIPLE_DEVICES_DATA_RESPONSE
 from tests.api_data import MULTIPLE_DEVICES_OTHER_MODES_DATA_RESPONSE
 from tests.api_data import NOW
@@ -52,6 +51,7 @@ if TYPE_CHECKING:
     from homeassistant.core import HomeAssistant
     from homeassistant.core import State
     from homeassistant.helpers import entity_registry as er
+    from pytest_homeassistant.common import MockConfigEntry
     from syrupy.assertion import SnapshotAssertion
 
     from tests.conftest import FakeKebaKeEnergyAPI
@@ -59,19 +59,23 @@ if TYPE_CHECKING:
 pytestmark = pytest.mark.freeze_time(NOW)
 
 
-@pytest.mark.usefixtures("entity_registry_enabled_by_default", "language")
+@pytest.mark.parametrize("language", ["de", "en"], ids=["de", "en"])
+@pytest.mark.usefixtures("entity_registry_enabled_by_default")
 async def test_water_heater(
     hass: HomeAssistant,
+    mock_config_entry: MockConfigEntry,
     entity_registry: er.EntityRegistry,
     fake_api: FakeKebaKeEnergyAPI,
     snapshot: SnapshotAssertion,
+    language: str,
 ) -> None:
     """Test the states of all water heater entities."""
+    hass.config.language = language
     fake_api.platforms = [Platform.WATER_HEATER]
     fake_api.responses = get_multiple_devices_responses(MULTIPLE_DEVICES_DATA_RESPONSE)
     await fake_api.setup_integration()
 
-    await snapshot_platform(hass, entity_registry, snapshot, ENTRY_ID)
+    await snapshot_platform(hass, entity_registry, snapshot, mock_config_entry.entry_id)
 
 
 @pytest.mark.parametrize(

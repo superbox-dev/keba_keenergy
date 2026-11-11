@@ -19,7 +19,6 @@ from custom_components.keba_keenergy.const import DOMAIN
 from tests import get_state
 from tests import select_option
 from tests.api_data import ENTITY_UPDATED_DATA_RESPONSE
-from tests.api_data import ENTRY_ID
 from tests.api_data import MULTIPLE_DEVICES_DATA_RESPONSE
 from tests.api_data import NOW
 from tests.api_data import get_multiple_devices_responses
@@ -29,6 +28,7 @@ from tests.test_issues_data import WRITE_COUNT_ENTITY_ID
 if TYPE_CHECKING:
     from homeassistant.core import HomeAssistant
     from homeassistant.core import State
+    from pytest_homeassistant.common import MockConfigEntry
 
     from tests.conftest import FakeKebaKeEnergyAPI
 
@@ -100,6 +100,7 @@ async def test_entity_update_failed(
     ids=["m_tec", "ino", "unknown"],
 )
 async def test_heat_pump_manufacturer(
+    mock_config_entry: MockConfigEntry,
     device_registry: dr.DeviceRegistry,
     fake_api: FakeKebaKeEnergyAPI,
     system_name: str,
@@ -112,7 +113,7 @@ async def test_heat_pump_manufacturer(
 
     manufacturers: list[str | None] = [
         device.manufacturer
-        for device in dr.async_entries_for_config_entry(device_registry, ENTRY_ID)
+        for device in dr.async_entries_for_config_entry(device_registry, mock_config_entry.entry_id)
         if (DOMAIN, "12345678_heat_pump") in device.identifiers
     ]
     assert manufacturers == [expected_manufacturer]

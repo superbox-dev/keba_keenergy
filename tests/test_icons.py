@@ -12,13 +12,13 @@ from homeassistant.helpers import entity_registry as er
 from homeassistant.helpers.icon import async_get_icons
 
 from custom_components.keba_keenergy.const import DOMAIN
-from tests.api_data import ENTRY_ID
 from tests.api_data import MULTIPLE_DEVICES_DATA_RESPONSE
 from tests.api_data import NOW
 from tests.api_data import get_multiple_devices_responses
 
 if TYPE_CHECKING:
     from homeassistant.core import HomeAssistant
+    from pytest_homeassistant.common import MockConfigEntry
     from syrupy.assertion import SnapshotAssertion
 
     from tests.conftest import FakeKebaKeEnergyAPI
@@ -29,6 +29,7 @@ pytestmark = pytest.mark.freeze_time(NOW)
 @pytest.mark.usefixtures("entity_registry_enabled_by_default")
 async def test_icons(
     hass: HomeAssistant,
+    mock_config_entry: MockConfigEntry,
     entity_registry: er.EntityRegistry,
     fake_api: FakeKebaKeEnergyAPI,
     snapshot: SnapshotAssertion,
@@ -40,7 +41,7 @@ async def test_icons(
     icons: dict[str, dict[str, Any]] = (await async_get_icons(hass, "entity", [DOMAIN]))[DOMAIN]
     entries: list[er.RegistryEntry] = er.async_entries_for_config_entry(
         entity_registry,
-        ENTRY_ID,
+        mock_config_entry.entry_id,
     )
 
     used: set[tuple[str, str | None]] = {(entry.domain, entry.translation_key) for entry in entries}

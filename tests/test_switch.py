@@ -22,7 +22,6 @@ from pytest_homeassistant.common import snapshot_platform
 
 from tests import get_state
 from tests.api_data import ENTITY_UPDATED_DATA_RESPONSE
-from tests.api_data import ENTRY_ID
 from tests.api_data import HEAT_CIRCUIT_MODE
 from tests.api_data import MULTIPLE_DEVICES_DATA_RESPONSE
 from tests.api_data import MULTIPLE_DEVICES_OTHER_MODES_DATA_RESPONSE
@@ -43,6 +42,7 @@ from tests.test_switch_data import USE_HEATING_CURVE_ENTITY_ID
 
 if TYPE_CHECKING:
     from homeassistant.core import HomeAssistant
+    from pytest_homeassistant.common import MockConfigEntry
     from syrupy.assertion import SnapshotAssertion
 
     from tests.conftest import FakeKebaKeEnergyAPI
@@ -50,19 +50,23 @@ if TYPE_CHECKING:
 pytestmark = pytest.mark.freeze_time(NOW)
 
 
-@pytest.mark.usefixtures("entity_registry_enabled_by_default", "language")
+@pytest.mark.parametrize("language", ["de", "en"], ids=["de", "en"])
+@pytest.mark.usefixtures("entity_registry_enabled_by_default")
 async def test_switches(
     hass: HomeAssistant,
+    mock_config_entry: MockConfigEntry,
     entity_registry: er.EntityRegistry,
     fake_api: FakeKebaKeEnergyAPI,
     snapshot: SnapshotAssertion,
+    language: str,
 ) -> None:
     """Test the states of all switch entities."""
+    hass.config.language = language
     fake_api.platforms = [Platform.SWITCH]
     fake_api.responses = get_multiple_devices_responses(MULTIPLE_DEVICES_DATA_RESPONSE, has_passive_cooling="true")
     await fake_api.setup_integration()
 
-    await snapshot_platform(hass, entity_registry, snapshot, ENTRY_ID)
+    await snapshot_platform(hass, entity_registry, snapshot, mock_config_entry.entry_id)
 
 
 @pytest.mark.parametrize(
@@ -149,6 +153,7 @@ async def test_turn_on_off(
 
 @pytest.mark.usefixtures("entity_registry_enabled_by_default")
 async def test_heating_and_cooling_circuit_has_one_curve_switch(
+    mock_config_entry: MockConfigEntry,
     entity_registry: er.EntityRegistry,
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
@@ -165,7 +170,7 @@ async def test_heating_and_cooling_circuit_has_one_curve_switch(
 
     assert sorted(
         entry.unique_id
-        for entry in er.async_entries_for_config_entry(entity_registry, ENTRY_ID)
+        for entry in er.async_entries_for_config_entry(entity_registry, mock_config_entry.entry_id)
         if entry.domain == SWITCH_DOMAIN and "_curve_" in entry.unique_id
     ) == [
         "12345678_heat_circuit_use_heating_curve_1",
