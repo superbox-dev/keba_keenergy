@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!--start-->
 
+## [1.12.0] - 2026-11-12
+
 ### Added
 
 - Added the HVAC actions `defrosting` and `preheating` to the heating circuits, shown while a heat pump defrosts or
@@ -568,7 +570,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added the sensors for the outdoor temperature, the operating modes, the heat pump state, temperatures, pressures
   and compressor, and the binary sensor for the heat request.
 
-[Unreleased]: https://github.com/superbox-dev/keba_keenergy/compare/v1.11.0...HEAD
+[Unreleased]: https://github.com/superbox-dev/keba_keenergy/compare/v1.12.0...HEAD
+[1.12.0]: https://github.com/superbox-dev/keba_keenergy/compare/v1.11.0...v1.12.0
 [1.11.0]: https://github.com/superbox-dev/keba_keenergy/compare/v1.10.4...v1.11.0
 [1.10.4]: https://github.com/superbox-dev/keba_keenergy/compare/v1.10.3...v1.10.4
 [1.10.3]: https://github.com/superbox-dev/keba_keenergy/compare/v1.10.2...v1.10.3
