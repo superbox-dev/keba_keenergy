@@ -20,6 +20,8 @@ Always this order. Omit empty sections, never reorder or rename them.
 
 ## Architecture
 
+## Domain
+
 ## Quality scale
 
 ## Documentation
@@ -27,6 +29,7 @@ Always this order. Omit empty sections, never reorder or rename them.
 ## Changelog, versions and git
 ```
 
+- `Domain`: behavior of the device and the integration that the code does not show (mappings, definitions)
 - Folder-only rules go to `<folder>/CLAUDE.md` (H1 with the area, then bullets)
 - Task-specific workflows go to skills
 
@@ -36,6 +39,7 @@ Always this order. Omit empty sections, never reorder or rename them.
 - Prefer enforcing a rule via linter/config over writing it down
 - Bullets, max. 2 nesting levels, exceptions nested under their rule
 - Fragments, not sentences, no trailing periods, no filler
+- As short as possible, few adjectives and adverbs, no digressions
 - General rules over single cases
 - Short reason only if a rule seems arbitrary
 - **never**, **always**, **only** for strength, bold only for critical rules

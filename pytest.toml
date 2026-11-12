@@ -2,11 +2,16 @@
 testpaths = [
     "tests",
 ]
+pythonpath = [
+    ".",
+]
 log_cli = true
 log_cli_level = "INFO"
 log_cli_format = "%(levelname)-8s | %(asctime)s | [%(name)s] %(message)s"
 # https://docs.pytest.org/en/latest/reference/reference.html#ini-options-ref
 addopts = [
+    # Let Home Assistant install its httpx alias before respx is imported.
+    "-p no:respx",
     "--cov",
     "--cov-report=term-missing",
     "--cov-report=xml:coverage.xml",
@@ -22,6 +27,10 @@ filterwarnings = [
     "error",
     # Raised by the http component of Home Assistant itself (used by diagnostics), not by this integration.
     "ignore::aiohttp.web_exceptions.NotAppKeyWarning",
+    # Raised by the http component of Home Assistant itself, also ignored by Home Assistant.
+    "ignore:Inheritance class HomeAssistantApplication from web.Application is discouraged:DeprecationWarning",
+    # Raised by backoff (a dependency of Home Assistant), also ignored by Home Assistant.
+    "ignore:'asyncio.iscoroutinefunction' is deprecated and slated for removal in Python 3.16:DeprecationWarning:(backoff._decorator|backoff._async)",
 ]
 asyncio_default_fixture_loop_scope = "function"
 markers = [

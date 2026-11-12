@@ -10,25 +10,33 @@ import logging
 from http import HTTPStatus
 from typing import TYPE_CHECKING
 from typing import Any
+from typing import Literal
+from typing import TypeIs
+from unittest.mock import AsyncMock
 from unittest.mock import patch
 
 import pytest
 from homeassistant.const import CONF_HOST
 from homeassistant.const import CONF_SSL
-from keba_keenergy_api.constants import MESSAGE_ID_SUFFIX
-from pytest_homeassistant_custom_component.common import MockConfigEntry
-from pytest_homeassistant_custom_component.syrupy import HomeAssistantSnapshotExtension
-from pytest_homeassistant_custom_component.test_util.aiohttp import AiohttpClientMocker
-from pytest_homeassistant_custom_component.test_util.aiohttp import AiohttpClientMockResponse
-from yarl import URL
+from pytest_homeassistant.common import MockConfigEntry
+from pytest_homeassistant.common import load_json_array_fixture
+from pytest_homeassistant.common import load_json_object_fixture
+from pytest_homeassistant.test_util.aiohttp import AiohttpClientMocker
+from pytest_homeassistant.test_util.aiohttp import AiohttpClientMockResponse
 
 from custom_components.keba_keenergy.const import DOMAIN
 from custom_components.keba_keenergy.const import PLATFORMS
-from tests.api_data import DEVICE_INFO_RESPONSE
-from tests.api_data import HEATING_CURVES_RESPONSE
-from tests.api_data import HMI_RESPONSE
-from tests.api_data import SYSTEM_RESPONSE
-from tests.api_data import TIMEZONE_RESPONSE
+from tests.const import DEACTIVATED_MESSAGE_IDS
+from tests.const import MESSAGE_ID_SUFFIX
+from tests.const import REMOTE_ACCESS
+from tests.const import REMOTE_ACCESS_ACTIVATIONS
+from tests.const import REMOTE_ACCESS_RESPONSE_KEYS
+from tests.const import WEEK_TIMER_DAY_START_SECONDS
+from tests.const import WEEK_TIMER_DAY_STOP_SECONDS
+from tests.const import AlarmValue
+from tests.const import ReadResponse
+from tests.const import ReadValue
+from tests.const import Response
 
 if TYPE_CHECKING:
     from collections.abc import AsyncGenerator
@@ -36,20 +44,9 @@ if TYPE_CHECKING:
     from collections.abc import Callable
     from collections.abc import Generator
 
-    from _pytest.fixtures import SubRequest
+    from homeassistant.const import Platform
     from homeassistant.core import HomeAssistant
-    from syrupy.assertion import SnapshotAssertion
-
-
-@pytest.fixture
-def snapshot(snapshot: SnapshotAssertion) -> SnapshotAssertion:
-    """Return snapshot assertion fixture with the Home Assistant extension."""
-    return snapshot.use_extension(HomeAssistantSnapshotExtension)
-
-
-@pytest.fixture(autouse=True)
-def auto_enable_custom_integrations(enable_custom_integrations: None) -> None:
-    """Enable the custom integrations in Home Assistant."""
+    from yarl import URL
 
 
 @pytest.fixture(autouse=True)
@@ -121,13 +118,52 @@ class FakeKebaKeEnergyAPI:
         self.hass: HomeAssistant = hass
         self.aioclient_mock: AiohttpClientMocker = aioclient_mock
         self.config_entry: MockConfigEntry = config_entry
-        self.responses: list[Exception | HTTPStatus | list[dict[str, Any]]] = []
-        self.heating_curves: HTTPStatus | list[list[dict[str, Any]]] = HEATING_CURVES_RESPONSE
-        self.system_name: str = SYSTEM_RESPONSE["name"]
+        # The platforms that `setup_integration()` sets up, one for `snapshot_platform()`.
+        self.platforms: list[Platform] = list(PLATFORMS)
+        # The responses of the device of `load_device()`, read on setup, `setup_integration()` uses them without own
+        # `responses`.
+        self.device_numbers: Response = []
+        self.fixed_data: Response = []
+        self.data: Response = []
+        self.responses: list[ReadResponse] = []
+        # The responses that are the same for every setup, the time zone is read once on setup.
+        self.device_info: dict[str, Any] = load_json_object_fixture("common/device_info.json", DOMAIN)
+        self.system: dict[str, Any] = load_json_object_fixture("common/system.json", DOMAIN)
+        self.hmi: dict[str, Any] = load_json_object_fixture("common/hmi.json", DOMAIN)
+        self.timezone: dict[str, Any] = load_json_object_fixture("common/timezone.json", DOMAIN)
+        # `get_curve_tables()` reads the names alone, then the points with the name of their curve, like the Web HMI
+        # may return different names. An `HTTPStatus` in `curve_error` fails both.
+        self.curve_names: Response = self._load_response("common/curve_names.json")
+        self.curve_points: Response = self._load_response("common/curve_points.json")
+        self.curve_error: HTTPStatus | None = None
         self.write_status: HTTPStatus = HTTPStatus.OK
         self.unsupported_variables: set[str] = set()
+        # The week timer variables that have no day block, e.g. of the cooling timer.
+        self.week_timer_without_day_block: str | None = None
         self.message_ids: dict[str, int] = {}
+        # The remote access of the Web HMI by the action that reads it, an `HTTPStatus` fails the action (also of an
+        # activation, e.g. `activateModbus`).
+        self.remote_access: dict[str, bool | HTTPStatus] = dict(REMOTE_ACCESS)
+        # The pending alarms of the control unit, an `HTTPStatus` fails the requests of the alarms.
+        self.alarms: HTTPStatus | list[AlarmValue] = []
         self.during_read: Callable[[], Awaitable[None]] | None = None
+        self._values: dict[str, ReadValue] = {}
+        self._read_requests: list[str] = []
+        self._setup_time_zone_request_count: int = 0
+
+    @staticmethod
+    def _load_response(filename: str, /) -> Response:
+        """Load a read response of the Web HMI from `tests/fixtures/`."""
+        data: object = load_json_array_fixture(filename, DOMAIN)
+        assert FakeKebaKeEnergyAPI._is_response(data), f"{filename} is a read response"
+        return data
+
+    @staticmethod
+    def _is_response(data: object, /) -> TypeIs[Response]:
+        return isinstance(data, list) and all(
+            isinstance(value, dict) and isinstance(value.get("name"), str) and isinstance(value.get("value"), str)
+            for value in data
+        )
 
     def register_auth_request(self, host: str, /, *, status: int = 200, exc: Exception | None = None) -> None:
         """Register the request that checks if the Web HMI requires authentication."""
@@ -147,7 +183,7 @@ class FakeKebaKeEnergyAPI:
 
         self.aioclient_mock.post(
             f"{schema}://{host}/deviceControl?action=getDeviceInfo",
-            text=json.dumps(DEVICE_INFO_RESPONSE),
+            text=json.dumps(self.device_info),
             headers={"Content-Type": "application/json;charset=utf-8"},
             status=status,
             exc=exc,
@@ -156,15 +192,18 @@ class FakeKebaKeEnergyAPI:
     def register_requests(self, host: str, /, *, ssl: bool = False) -> None:
         """Register all requests of the setup and the updates.
 
-        The read requests return the `responses` in order, an `HTTPStatus` returns an empty response with this status
-        and an exception (e.g. `TimeoutError`) is raised by the request.
-        The message ids of the sensors come from `message_ids` (variable name to id, 0 if not given).
+        The Web HMI keeps the values of the `responses`, a read of only the names of the next response takes it (the
+        device counts, the configuration and the values of each update), the other reads (e.g. of `filter_supported()`)
+        return the values it already has. An `HTTPStatus` returns an empty response with this status and an exception
+        (e.g. `TimeoutError`) is raised by the next read.
+        The message ids of the sensors come from `message_ids` (variable name to id), otherwise from
+        `DEACTIVATED_MESSAGE_IDS`, 0 if not given.
         The next read of the `responses` awaits `during_read` once before it responds, e.g. to set a value during an
         update.
-        The requests of `filter_request()` succeed, except for the `unsupported_variables`, which the Web HMI does not
-        know and which are also left out of the responses. The values of the heating curves come from `heating_curves`
-        (an `HTTPStatus` fails them). The system name and the status of the write requests can be changed with
-        `system_name` and `write_status`.
+        A read of an unknown value or of one of the `unsupported_variables` fails like the Web HMI rejects it. The
+        values of the curves come from `curve_names` and `curve_points`, `curve_error` fails them. The responses of
+        `system`, `hmi` and `timezone` (before the setup) and the status of the write requests (`write_status`) can be
+        changed. The pending alarms come from `alarms`.
         """
         schema: str = "https" if ssl else "http"
 
@@ -172,20 +211,31 @@ class FakeKebaKeEnergyAPI:
 
         self.aioclient_mock.post(
             f"{schema}://{host}/swupdate?action=getSystemInstalled",
-            text=json.dumps({**SYSTEM_RESPONSE, "name": self.system_name}),
+            text=json.dumps(self.system),
             headers={"Content-Type": "application/json;charset=utf-8"},
         )
 
         self.aioclient_mock.post(
             f"{schema}://{host}/swupdate?action=getHmiInstalled",
-            text=json.dumps(HMI_RESPONSE),
+            text=json.dumps(self.hmi),
             headers={"Content-Type": "application/json;charset=utf-8"},
         )
 
         self.aioclient_mock.post(
             f"{schema}://{host}/dateTime?action=getTimeZone",
-            text=json.dumps(TIMEZONE_RESPONSE),
+            text=json.dumps(self.timezone),
             headers={"Content-Type": "application/json;charset=utf-8"},
+        )
+
+        for action in (*REMOTE_ACCESS_RESPONSE_KEYS, *REMOTE_ACCESS_ACTIVATIONS):
+            self.aioclient_mock.post(
+                f"{schema}://{host}/deviceControl?action={action}",
+                side_effect=self._remote_access_side_effect,
+            )
+
+        self.aioclient_mock.post(
+            f"{schema}://{host}/alarm",
+            side_effect=self._alarm_side_effect,
         )
 
         self.aioclient_mock.post(
@@ -197,6 +247,53 @@ class FakeKebaKeEnergyAPI:
         self.aioclient_mock.post(
             f"{schema}://{host}/var/readWriteVars",
             side_effect=self._read_side_effect,
+        )
+
+    async def _remote_access_side_effect(
+        self,
+        method: str,
+        url: URL,
+        data: object,
+        *_: object,
+    ) -> AiohttpClientMockResponse:
+        """Return the remote access of the read action, an activation sets the value it reads.
+
+        An `HTTPStatus` in `remote_access` fails the action, also an activation.
+        """
+        action: str = url.query["action"]
+        value: bool | HTTPStatus | None = self.remote_access.get(action)
+
+        if isinstance(value, HTTPStatus):
+            return self._error_response(method, url, value)
+
+        response: dict[str, bool | str] = {"ret": "OK"}
+
+        if action in REMOTE_ACCESS_ACTIVATIONS:
+            self.remote_access[REMOTE_ACCESS_ACTIVATIONS[action]] = bool(json.loads(str(data))["activate"])
+        else:
+            response[REMOTE_ACCESS_RESPONSE_KEYS[action]] = bool(value)
+
+        return AiohttpClientMockResponse(
+            method,
+            url=url,
+            text=json.dumps(response),
+            headers={"Content-Type": "application/json;charset=utf-8"},
+        )
+
+    async def _alarm_side_effect(self, method: str, url: URL, *_: object) -> AiohttpClientMockResponse:
+        """Return the number of the pending `alarms` or the alarms, an `HTTPStatus` fails the request."""
+        if isinstance(self.alarms, HTTPStatus):
+            return self._error_response(method, url, self.alarms)
+
+        response: dict[str, int | list[AlarmValue]] = (
+            {"value": len(self.alarms)} if url.query["action"] == "getCount" else {"alarms": self.alarms}
+        )
+
+        return AiohttpClientMockResponse(
+            method,
+            url=url,
+            text=json.dumps(response),
+            headers={"Content-Type": "application/json;charset=utf-8"},
         )
 
     async def _write_side_effect(self, method: str, url: URL, *_: object) -> AiohttpClientMockResponse:
@@ -213,12 +310,43 @@ class FakeKebaKeEnergyAPI:
 
     async def _read_side_effect(self, method: str, url: URL, data: object, *_: object) -> AiohttpClientMockResponse:
         payload: list[dict[str, str]] = json.loads(str(data))
-        response: Exception | HTTPStatus | list[dict[str, Any]]
+        names: list[str] = [item["name"] for item in payload]
+        response: ReadResponse
 
-        if all(item["name"].endswith(MESSAGE_ID_SUFFIX) for item in payload):
-            response = [{"name": item["name"], "value": str(self.message_ids.get(item["name"], 0))} for item in payload]
-        elif self.is_filter_request(data):
-            unknown: list[str] = [item["name"] for item in payload if item["name"] in self.unsupported_variables]
+        if all(".linTabPool[" in name for name in names):
+            response = self._curve_response(payload)
+        elif all(".weekTimer" in name for name in names):
+            response = self._week_timer_response(names)
+        else:
+            if self._takes_next_response(names):
+                self._read_requests.append(str(data))
+                next_response: ReadResponse = self.responses.pop(0)
+
+                if self.during_read:
+                    during_read: Callable[[], Awaitable[None]] = self.during_read
+                    self.during_read = None
+                    await during_read()
+
+                if not isinstance(next_response, list):
+                    return self._error_response(method, url, next_response)
+
+                self._values.update({value["name"]: value for value in next_response})
+
+            # The values of the next responses are known as well, e.g. for the checks of `filter_supported()`.
+            values: dict[str, ReadValue] = {
+                **{
+                    value["name"]: value
+                    for queued in reversed(self.responses)
+                    if isinstance(queued, list)
+                    for value in queued
+                },
+                **self._values,
+            }
+            unknown: list[str] = [
+                name
+                for name in names
+                if name in self.unsupported_variables or (name not in values and not self._is_message_id(name))
+            ]
 
             if unknown:
                 # The Web HMI rejects the whole request and names the first unknown variable.
@@ -229,27 +357,19 @@ class FakeKebaKeEnergyAPI:
                     text=f"Reading variable: {unknown[0]} failed",
                 )
 
-            response = []
-        elif all(".linTabPool[" in item["name"] for item in payload):
-            response = self._heating_curve_response(payload)
-        elif not self.responses:
-            return AiohttpClientMockResponse(method, url=url)
-        else:
-            response = self.responses.pop(0)
+            message_ids: dict[str, int] = {**DEACTIVATED_MESSAGE_IDS, **self.message_ids}
+            # Like the Web HMI, only a read with `attr` "1" returns the attributes, e.g. the limits.
+            response = [
+                {"name": item["name"], "value": str(message_ids.get(item["name"], 0))}
+                if self._is_message_id(item["name"])
+                else values[item["name"]]
+                if item["attr"] == "1"
+                else {"name": item["name"], "value": values[item["name"]]["value"]}
+                for item in payload
+            ]
 
-            if self.during_read:
-                during_read: Callable[[], Awaitable[None]] = self.during_read
-                self.during_read = None
-                await during_read()
-
-            if isinstance(response, list):
-                response = [value for value in response if value["name"] not in self.unsupported_variables]
-
-        if isinstance(response, Exception):
-            raise response
-
-        if isinstance(response, HTTPStatus):
-            return AiohttpClientMockResponse(method, url=url, status=response)
+        if not isinstance(response, list):
+            return self._error_response(method, url, response)
 
         return AiohttpClientMockResponse(
             method,
@@ -258,119 +378,199 @@ class FakeKebaKeEnergyAPI:
             headers={"Content-Type": "application/json;charset=utf-8"},
         )
 
-    def _heating_curve_response(self, payload: list[dict[str, str]], /) -> HTTPStatus | list[dict[str, Any]]:
-        """Return the requested values of the heating curves.
+    def _takes_next_response(self, names: list[str], /) -> bool:
+        """Return True if a read takes the next of the `responses`.
 
-        The names are read alone (`get_available_heating_curves()`), the points with the name of their heating curve,
-        so `heating_curves` holds the names and the points separately, like the Web HMI may return different names.
+        An error is taken by the next read, values by the next read of only their names (and message ids), e.g. not
+        by the checks of `filter_supported()`, which read the values of several responses at once.
         """
-        if isinstance(self.heating_curves, HTTPStatus):
-            return self.heating_curves
+        if not self.responses:
+            return False
 
-        names, points = self.heating_curves
-        is_names_request: bool = all(item["name"].endswith(".name") for item in payload)
-        values: dict[str, dict[str, Any]] = {value["name"]: value for value in (names if is_names_request else points)}
-        return [values[item["name"]] for item in payload]
+        next_response: ReadResponse = self.responses[0]
 
-    async def setup_integration(self) -> None:
-        """Register all requests for the host of the config entry and set up the integration."""
-        self.register_requests(self.config_entry.data[CONF_HOST], ssl=self.config_entry.data[CONF_SSL])
-        self.config_entry.add_to_hass(self.hass)
+        if not isinstance(next_response, list):
+            return True
 
-        assert await self.hass.config_entries.async_setup(self.config_entry.entry_id)
-        await self.hass.async_block_till_done()
+        response_names: set[str] = {value["name"] for value in next_response}
+        return all(
+            name in response_names or name in self.unsupported_variables or self._is_message_id(name) for name in names
+        )
 
     @staticmethod
-    def is_filter_request(data: object, /) -> bool:
-        """Return True for a request of `filter_request()`, which reads all values without attributes.
+    def _is_message_id(name: str, /) -> bool:
+        return name.endswith(MESSAGE_ID_SUFFIX)
 
-        The values of the heating curves are also read without attributes, but never by `filter_request()`.
-        """
-        payload: list[dict[str, str]] = json.loads(str(data))
-        return all(item["attr"] == "0" and ".linTabPool[" not in item["name"] for item in payload)
+    @staticmethod
+    def _error_response(method: str, url: URL, error: Exception | HTTPStatus, /) -> AiohttpClientMockResponse:
+        """Return an empty response with the status, or raise the exception."""
+        if isinstance(error, Exception):
+            raise error
 
-    def read_requests(self) -> list[str]:
-        """Return the bodies of all read requests, in order."""
+        return AiohttpClientMockResponse(method, url=url, status=error)
+
+    def _curve_response(self, payload: list[dict[str, str]], /) -> HTTPStatus | Response:
+        """Return the requested names or points of the curves, or the `curve_error`."""
+        if self.curve_error:
+            return self.curve_error
+
+        is_names_request: bool = all(item["name"].endswith(".name") for item in payload)
+        values: dict[str, ReadValue] = {
+            value["name"]: value for value in (self.curve_names if is_names_request else self.curve_points)
+        }
+        return [values[item["name"]] for item in payload]
+
+    def _week_timer_response(self, names: list[str], /) -> Response:
+        """Return the seconds of the requested week timer variables, one block from 06:00 to 22:00 every day."""
         return [
-            str(data)
-            for method, url, data, _ in self.aioclient_mock.mock_calls
-            if method == "POST"
-            and url.path == "/var/readWriteVars"
-            and "action" not in url.query
-            and not self.is_filter_request(data)
+            {
+                "name": name,
+                "value": str(
+                    0
+                    if self.week_timer_without_day_block and self.week_timer_without_day_block in name
+                    else WEEK_TIMER_DAY_STOP_SECONDS
+                    if name.endswith(".enableTime[0].stop")
+                    else WEEK_TIMER_DAY_START_SECONDS
+                    if name.endswith(".enableTime[0].start")
+                    else 0,
+                ),
+            }
+            for name in names
         ]
 
-    def assert_called_write_with(self, data: str, /) -> None:
-        """Assert that the data was written to the Web HMI."""
-        assert data in self.write_requests()
+    def load_device(self, device: Literal["multiple_devices", "single_device"], /) -> None:
+        """Load the responses of the device from its folder in `tests/fixtures/`, every test does it before the setup.
+
+        `multiple_devices` has several devices of each type, `single_device` one.
+        """
+        self.device_numbers = self._load_response(f"{device}/device_numbers.json")
+        self.fixed_data = self._load_response(f"{device}/fixed_data.json")
+        self.data = self._load_response(f"{device}/data.json")
+
+    def setup_responses(self, *responses: ReadResponse) -> list[ReadResponse]:
+        """Return the responses of the setup of the device, followed by the responses of the updates."""
+        assert self.device_numbers, "the test loads its device with `load_device()`"
+        return [self.device_numbers, self.fixed_data, *responses]
+
+    async def setup_integration(self) -> None:
+        """Register all requests for the host of the config entry and set up the integration.
+
+        Without own `responses`, the device is set up with its `data`. The config entry is added to Home Assistant if
+        a test has not added it yet, e.g. to register entities before.
+        """
+        if not self.responses:
+            self.responses = self.setup_responses(self.data)
+
+        self.register_requests(self.config_entry.data[CONF_HOST], ssl=self.config_entry.data[CONF_SSL])
+
+        if self.hass.config_entries.async_get_entry(self.config_entry.entry_id) is None:
+            self.config_entry.add_to_hass(self.hass)
+
+        with patch("custom_components.keba_keenergy.PLATFORMS", self.platforms):
+            assert await self.hass.config_entries.async_setup(self.config_entry.entry_id)
+        # The remote access is read in the background after the setup.
+        await self.hass.async_block_till_done(wait_background_tasks=True)
+        self._setup_time_zone_request_count = self._time_zone_requests()
+
+    def read_requests(self) -> list[str]:
+        """Return the bodies of the read requests that took one of the `responses`, in order."""
+        return list(self._read_requests)
+
+    def time_zone_request_count(self) -> int:
+        """Return the number of requests of the time zone after the setup, it reads the time zone once."""
+        return self._time_zone_requests() - self._setup_time_zone_request_count
+
+    def _time_zone_requests(self) -> int:
+        return len([url for _, url, *_ in self.aioclient_mock.mock_calls if url.path == "/dateTime"])
+
+    def remote_access_requests(self) -> list[str]:
+        """Return the actions and bodies of all requests of the remote access, in order."""
+        return [
+            f"{url.query['action']} {data}" if data else url.query["action"]
+            for method, url, data, _ in self.aioclient_mock.mock_calls
+            if method == "POST" and url.path == "/deviceControl" and url.query["action"] != "getDeviceInfo"
+        ]
+
+    def alarm_requests(self) -> list[str]:
+        """Return the actions of all requests of the alarms with their query, in order."""
+        return [
+            str(url.relative().query_string)
+            for method, url, *_ in self.aioclient_mock.mock_calls
+            if method == "POST" and url.path == "/alarm"
+        ]
 
     def write_requests(self) -> list[str]:
         """Return the bodies of all write requests, in order."""
         return [
             str(data)
             for method, url, data, _ in self.aioclient_mock.mock_calls
-            if method == "POST" and url == URL("http://10.0.0.100/var/readWriteVars?action=set")
+            if method == "POST" and url.path == "/var/readWriteVars" and url.query.get("action") == "set"
         ]
 
 
 @pytest.fixture
-async def fake_api(
+def fake_api(
     hass: HomeAssistant,
     aioclient_mock: AiohttpClientMocker,
-    config_entry: MockConfigEntry,
-) -> FakeKebaKeEnergyAPI:
-    """Return the fake Web HMI."""
-    return FakeKebaKeEnergyAPI(hass, aioclient_mock, config_entry)
+    mock_config_entry: MockConfigEntry,
+) -> Generator[FakeKebaKeEnergyAPI]:
+    """Return the fake Web HMI, every response of a test must be read."""
+    api: FakeKebaKeEnergyAPI = FakeKebaKeEnergyAPI(hass, aioclient_mock, mock_config_entry)
+    yield api
+    assert not api.responses, "every response is read"
 
 
 @pytest.fixture
-def language(hass: HomeAssistant, request: SubRequest) -> str:
-    """Set the language of Home Assistant, parametrized indirectly."""
-    hass.config.language = request.param
-    return request.param
-
-
-@pytest.fixture
-def config_entry(request: SubRequest) -> MockConfigEntry:
-    """Return the config entry, parametrized indirectly with `data` and `options` to update."""
-    mock_config_entry_data: dict[str, Any] = {
-        "title": "KEBA KeEnergy (ap4400.local)",
-        "data": {
-            CONF_HOST: "10.0.0.100",
-            CONF_SSL: False,
-        },
-        "unique_id": "12345678",
-        "options": {
-            "scan_interval": 20,
-            "scan_interval_tick_system": 1,
-            "scan_interval_tick_heat_pump": 1,
-            "scan_interval_tick_heat_circuit": 1,
-            "scan_interval_tick_solar_circuit": 1,
-            "scan_interval_tick_hot_water_tank": 1,
-            "scan_interval_tick_buffer_tank": 1,
-            "scan_interval_tick_switch_valve": 1,
-            "scan_interval_tick_passive_cooling": 1,
-            "scan_interval_tick_external_heat_source": 1,
-            "scan_interval_tick_photovoltaics": 1,
-        },
+def entry_data() -> dict[str, Any]:
+    """Return the data of the config entry, overridden by `parametrize`."""
+    return {
+        CONF_HOST: "10.0.0.100",
+        CONF_SSL: False,
     }
 
-    if hasattr(request, "param"):
-        mock_config_entry_data.update(request.param)
 
+@pytest.fixture
+def entry_options() -> dict[str, Any]:
+    """Return the options of the config entry, overridden by `parametrize`, missing ones keep their defaults."""
+    return {
+        "scan_interval": 20,
+        "scan_interval_tick_system": 1,
+        "scan_interval_tick_heat_pump": 1,
+        "scan_interval_tick_heat_circuit": 1,
+        "scan_interval_tick_solar_circuit": 1,
+        "scan_interval_tick_hot_water_tank": 1,
+        "scan_interval_tick_buffer_tank": 1,
+        "scan_interval_tick_switch_valve": 1,
+        "scan_interval_tick_passive_cooling": 1,
+        "scan_interval_tick_external_heat_source": 1,
+        "scan_interval_tick_photovoltaics": 1,
+    }
+
+
+@pytest.fixture
+def mock_config_entry(entry_data: dict[str, Any], entry_options: dict[str, Any]) -> MockConfigEntry:
+    """Return the config entry with the data and the options."""
     return MockConfigEntry(
         domain=DOMAIN,
-        **mock_config_entry_data,
+        title="KEBA KeEnergy (ap4400.local)",
+        data=entry_data,
+        entry_id="01KEBAKEENERGY0000000000000",
+        unique_id="12345678",
+        options=entry_options,
     )
 
 
 @pytest.fixture
-def entity_registry_enabled_by_default() -> Generator[None]:
-    """Test fixture that ensures all entities are enabled in the registry."""
-    with (
-        patch(
-            "homeassistant.helpers.entity.Entity.entity_registry_enabled_default",
-            return_value=True,
-        ),
-    ):
-        yield
+async def init_integration(mock_config_entry: MockConfigEntry, fake_api: FakeKebaKeEnergyAPI) -> MockConfigEntry:
+    """Set up the integration with several devices of each type and return its config entry."""
+    fake_api.load_device("multiple_devices")
+    await fake_api.setup_integration()
+
+    return mock_config_entry
+
+
+@pytest.fixture
+def mock_setup_entry() -> Generator[AsyncMock]:
+    """Replace the setup of the config entry, the config flow tests only test the flow."""
+    with patch("custom_components.keba_keenergy.async_setup_entry", return_value=True) as setup_entry:
+        yield setup_entry

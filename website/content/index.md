@@ -51,7 +51,7 @@ setup. All devices are linked to the control unit.
 
 ## Prerequisites
 
-- Home Assistant 2026.9.4 or newer.
+- Home Assistant 2026.11.0 or newer.
 - Network access from Home Assistant to the Web HMI of the control unit.
 - The username and password of the Web HMI, if the Web HMI requires a login (newer software versions).
 
@@ -59,13 +59,9 @@ setup. All devices are linked to the control unit.
 
 [![Open the repository in the Marketplace of your Home Assistant](https://my.home-assistant.io/badges/hacs_repository.svg)][redirect-hacs]
 
-1. Go to **Settings** → **Marketplace**, search for **KEBA KeEnergy** and select **Install**.
-2. Follow the setup that starts after the installation.
-
-For a manual installation, copy the `custom_components/keba_keenergy` directory of the
-[latest release](https://github.com/superbox-dev/keba_keenergy/releases/latest) into the `custom_components`
-directory of your Home Assistant configuration, restart Home Assistant and add the integration under
-**Settings** → **Devices & services** → **+ Add integration**.
+1. Go to **Settings** → **Marketplace**.
+2. Search for **KEBA KeEnergy** and select **Install**.
+3. Follow the setup that starts after the installation.
 
 [redirect-hacs]: https://my.home-assistant.io/redirect/hacs_repository/?owner=superbox-dev&repository=keba_keenergy&category=integration
 
@@ -85,9 +81,8 @@ Or go to **Settings** → **Devices & services**, select **+ Add integration** a
 | Username                | The username of the Web HMI. Only asked if the Web HMI requires a login.                                     |
 | Password                | The password of the Web HMI. Only asked if the Web HMI requires a login.                                     |
 
-To change the host or the credentials later, select **Reconfigure** in the menu of the integration entry. If the
-Web HMI rejects the credentials, Home Assistant asks you to enter them again. If a configured control unit is
-discovered with a new IP address, Home Assistant updates the host automatically. A configured hostname is kept.
+To change the host or the credentials later, select **Reconfigure** in the menu of the integration entry. A new IP
+address of a discovered control unit is updated automatically.
 
 [redirect-config-flow]: https://my.home-assistant.io/redirect/config_flow_start/?domain=keba_keenergy
 
@@ -97,13 +92,22 @@ To change the options, go to **Settings** → **Devices & services** → **KEBA 
 
 | Option                            | Default | Description                                                                         |
 |-----------------------------------|---------|-------------------------------------------------------------------------------------|
-| Scan interval                     | 20      | Time in seconds between two updates, at least 20.                                   |
-| Control unit update multiplier    | 1       | Update the values of the control unit only every n-th scan interval (1 to 180).     |
-| `<Device>` update multiplier      | 1       | Same for each device type of your setup, e.g. heat pump or hot water tank.          |
+| Scan interval                     | 20 s    | Time between two updates, at least 20 seconds.                                      |
 
-The update multipliers are only shown for the device types of your setup. If all multipliers have a common divisor,
-the integration multiplies the scan interval by it and divides the multipliers, e.g. a scan interval of 20 with the
-multipliers 2 and 4 is saved as a scan interval of 40 with the multipliers 1 and 2.
+**Update multipliers** (collapsed): one multiplier per device type of your setup, e.g. control unit, heat pump or
+hot water tank. A device type with the multiplier n is only updated every n-th scan interval (1 to 180, default 1).
+
+**Display**:
+
+| Option                            | Default | Description                                                                         |
+|-----------------------------------|---------|-------------------------------------------------------------------------------------|
+| Mixer position as percentage      | Off     | Show the mixers of the heating circuits and passive cooling as percentage.          |
+
+The mixer sensors show `Open`, `Off` or `Closed` by default, and the position in percent as attribute
+`position_percent`. With the option **Mixer position as percentage**, the same sensors show the position from
+`-100` to `100` % as state, so that Home Assistant draws a graph and keeps long-term statistics. After a change of
+the option, adapt your automations to the new states. When you turn it off again, Home Assistant reports the
+missing state class under **Developer tools** → **Statistics**, where you can delete or keep the old statistics.
 
 ## Supported functionality
 
@@ -112,60 +116,103 @@ provide are not created. Changes are written to the control unit, see [Known lim
 
 ### Control unit
 
-- **Select**: operating mode
-- **Sensors**: outdoor temperature, operating mode, CPU and temporary memory usage (diagnostic), write operations
-  this week (diagnostic), flash erase counter (diagnostic)
+| Type                        | Entities                                                                        |
+|-----------------------------|---------------------------------------------------------------------------------|
+| Select                      | Operating mode                                                                  |
+| Sensors                     | Outdoor temperature, operating mode, pending alarms                             |
+| Sensors (diagnostic)        | CPU and temporary memory usage, write operations this week, flash erase counter |
+| Event                       | Alarm, see [Alarms](#alarms)                                                    |
+| Switches                    | Remote maintenance, Modbus server (disabled by default)                         |
+| Binary sensors (diagnostic) | Remote maintenance connection, remote maintenance server (disabled by default)  |
+
+#### Remote access
+
+The switch **Remote maintenance** grants KEBA or your installer remote access to the control unit, also when an
+automation enables it. Only enable it when you want remote support. The switch **Modbus server** enables or disables the
+Modbus TCP server of the control unit, disabling it disconnects other Modbus clients (e.g. an energy manager) at once.
+
+The binary sensor **Remote maintenance connection** shows whether the control unit is connected to the remote
+maintenance server, **Remote maintenance server** whether the control unit reaches it. Whether the connection also
+shows an open remote session is not known yet.
+
+These entities are updated every minute, independent of the scan interval, and only while at least one of them is
+enabled. Switching them counts as a write operation.
+
+#### Alarms
+
+The integration shows the pending alarms of the control unit, the same list as on its display and in the Web HMI:
+
+- **Repair issues**: one per pending alarm, with the number, the time and the text of the control unit in the language
+  of Home Assistant, if the control unit provides it. Emergencies and errors are errors, warnings and infos are
+  warnings. An issue disappears as soon as the alarm is no longer pending. Alarms that must be acknowledged are
+  acknowledged on the control unit.
+- **Pending alarms** sensor: the number of pending alarms, the attribute `alarms` lists them with `number`, `text`,
+  `priority` and `time`.
+- **Alarm** event: the event types `raised` and `cleared` with the attributes `number`, `component`, `instance`,
+  `priority` (`emergency`, `error`, `warning` or `info`), `acknowledgeable`, `short_text`, `long_text` and
+  `timestamp`. Alarms raised or cleared while Home Assistant was not running are reported once after the start.
+
+The time of an alarm is the local time of the control unit. The alarms are read with every update, their texts only
+while alarms are pending.
 
 ### Heat pump
 
-- **Sensors**: state and substate, temperatures of flow, return flow, source inlet and
-  outlet, compressor inlet and outlet, condensation and evaporation, superheat, expansion valve position, pressures,
-  pump, fan and compressor speeds
-- **Energy sensors**: electrical, heating and hot water power, coefficient of performance, thermal energy and
-  electricity consumption of heating, cooling and hot water, seasonal performance factor (SPF), consumption from
-  PV surplus
-- **Statistics**: operating hours, maximum runtime and activation counter, also for PV surplus
-- **Binary sensors**: compressor, heat request, source, source actuator, source pressure, three-phase, frequency
-  inverter, using PV surplus
-- **Number and switch**: compressor power limit at night
+| Type                | Entities                                                                                                                              |
+|---------------------|---------------------------------------------------------------------------------------------------------------------------------------|
+| Sensors             | State and substate, expansion valve position, pressures, pump, fan and compressor speeds                                              |
+| Temperature sensors | Flow, return flow, source inlet and outlet, compressor inlet and outlet, condensation and evaporation, superheat                      |
+| Power sensors       | Electrical, heating and hot water power, coefficient of performance (COP)                                                             |
+| Energy sensors      | Thermal and electrical energy of heating, cooling and hot water, seasonal performance factor (SPF), electrical energy from PV surplus |
+| Statistics          | Operating hours, maximum runtime and activation counter, also for PV surplus                                                          |
+| Binary sensors      | Compressor, request, source, source actuator, source pressure, three-phase, frequency inverter, PV surplus                            |
+| Number and switch   | Compressor power limit at night                                                                                                       |
 
 ### Heating circuit
 
-- **Climate**: HVAC mode (auto, heat or cool, off), target room temperature (changes the offset) and the presets
-  auto, day, night, party and, for heating circuits, away
-- **Numbers**: target room temperatures (day, night, away, offset, PV surplus), heating and cooling limits,
-  heating and cooling curve offset and slope
-- **Selects**: operating mode, heating curve, cooling curve
-- **Switches**: use PV surplus, use heating curve table, use cooling curve table (only for cooling circuits, a
-  heating and cooling circuit uses one setting for both and only has **Use heating curve table**)
-- **Sensors**: room temperature and humidity, dew point, flow and return flow temperatures, mixer, pump speed,
-  heat and cool request, the current setpoints
-- **Binary sensor**: pump
+| Type                | Entities                                                                                                                                |
+|---------------------|-----------------------------------------------------------------------------------------------------------------------------------------|
+| Climate             | HVAC mode (auto, heat or cool, off), target room temperature, HVAC action, presets, see [Climate](#climate)                             |
+| Numbers             | Target room temperatures (day, night, away, offset, PV surplus), heating and cooling limits, heating and cooling curve offset and slope |
+| Selects             | Operating mode, heating curve, cooling curve                                                                                            |
+| Switches            | Use PV surplus, use heating and cooling curve table                                                                                     |
+| Temperature sensors | Room temperature, dew point, flow and return flow temperatures, current setpoints                                                       |
+| Sensors             | Room humidity, mixer, pump speed, heat and cool request, heating and cooling curve in use with its points                               |
+| Binary sensor       | Pump                                                                                                                                    |
+
+#### Climate
+
+- The presets are auto, day, night, party and, for heating circuits, away.
+- Auto follows the schedule. Day, night and party set the HVAC mode heat, party heats with the day temperature.
+- Away sets the away date range of all heating circuits and the HVAC mode heat, the away temperature applies.
+- The target room temperature is the one of the operating mode, a change of the preset shows it right away. Auto uses
+  the day or night temperature of the week timer of the heating or cooling circuit. A heating circuit that heats and
+  cools shows the new temperature after the next update.
 
 ### Hot water tank and buffer tank
 
-- **Water heater**: operating mode (off, on, heat up and, for the hot water tank, schedule) and target temperature
-- **Numbers**: target and standby temperatures, PV surplus target temperature and hysteresis
-- **Select and switch**: operating mode, use PV surplus
-- **Sensors**: current temperatures, fresh water module and circulation return temperature
-- **Binary sensors**: heat request, cool request, hot water flow, circulation pump
+| Type              | Entities                                                                     |
+|-------------------|------------------------------------------------------------------------------|
+| Water heater      | Operating mode, target temperature                                           |
+| Numbers           | Target and backup temperatures, PV surplus target temperature and hysteresis |
+| Select and switch | Operating mode, use PV surplus                                               |
+| Sensors           | Current temperatures, fresh water module and circulation return temperature  |
+| Binary sensors    | Heat request, cool request, hot water flow, circulation pump                 |
 
 ### Solar circuit, external heat source, passive cooling, switch valve and photovoltaics
 
-- **Solar circuit**: collector and consumer temperatures, pump speeds, power and energy, target temperatures,
-  operating mode, priority switch
-- **External heat source**: operating mode (off, on and, for an external heat source with emissions, flue), target
-  temperature, statistics, use PV surplus and minimum runtime
-- **Passive cooling**: temperature, switch valve position, mixer and circulation pump
-- **Switch valve**: position
-- **Photovoltaics**: excess power, daily and total energy, PV surplus
+| Component            | Entities                                                                                                                 |
+|----------------------|--------------------------------------------------------------------------------------------------------------------------|
+| Solar circuit        | Collector and consumer temperatures, pump speeds, power and energy, target temperatures, operating mode, priority switch |
+| External heat source | Operating mode, target temperature, statistics, use PV surplus and minimum runtime                                       |
+| Passive cooling      | Temperature, switch valve position, mixer and circulation pump                                                           |
+| Switch valve         | Position                                                                                                                 |
+| Photovoltaics        | Excess power, daily and total energy, PV surplus                                                                         |
 
 ## Actions
 
 ### `keba_keenergy.set_away_date_range`
 
-Sets the away period of all heating circuits. During the away period, the heating circuits use the target room
-temperature (away).
+Sets the away period of all heating circuits.
 
 | Field          | Description                                         |
 |----------------|-----------------------------------------------------|
@@ -173,16 +220,14 @@ temperature (away).
 | `start_date`   | First day of the away period, e.g. `2026-01-01`.    |
 | `end_date`     | Last day of the away period, e.g. `2026-01-14`.     |
 
-A date with time, e.g. `2026-01-01T08:00:00`, is accepted too, only the date is used.
-
 ### `keba_keenergy.set_heating_curve_points`
 
-Sets the points of a heating curve. If the heating curve already has these points, nothing is written.
+Sets the points of a heating or cooling curve.
 
 | Field           | Description                                                                                        |
 |-----------------|----------------------------------------------------------------------------------------------------|
 | `config_entry`  | The KEBA KeEnergy integration entry.                                                               |
-| `heating_curve` | The name of the heating curve as shown in the heating curve select, e.g. `HC1` or `HC FBH`.        |
+| `heating_curve` | The name of the curve as shown in the heating or cooling curve select, e.g. `HC1` or `HC FBH`.     |
 | `points`        | 1 to 16 points, each with an `outdoor` (-40 to 40 °C) and a `flow` (10 to 90 °C) temperature.      |
 
 ```yaml
@@ -250,6 +295,26 @@ template:
         state_class: measurement
 ```
 
+### Notify about alarms
+
+A notification for every raised alarm of the control unit:
+
+```yaml
+automation:
+  - alias: Notify about heat pump alarms
+    triggers:
+      - trigger: event.received
+        target:
+          entity_id: event.keba_keenergy_12345678_alarm
+        options:
+          event_type: raised
+    actions:
+      - action: notify.notify
+        data:
+          title: "Heat pump alarm {{ trigger.to_state.attributes.number }}"
+          message: "{{ trigger.to_state.attributes.long_text }}"
+```
+
 ### Outdoor temperature chart
 
 A chart of the outdoor temperature with the [Mini Graph Card](https://github.com/kalkih/mini-graph-card). The color
@@ -295,34 +360,17 @@ The devices and entities are detected when the integration is set up. After you 
 reload the integration. Devices that the control unit no longer provides, e.g. a removed buffer tank, are removed
 with their entities.
 
-With every update, the integration also reads whether the control unit uses the sensors (the message ID of a sensor).
-The sensors and binary sensors have the message ID as attribute `message_id`, `0` means the sensor is in use. Like
-the Web HMI, the integration distinguishes two cases of sensors that are not in use:
-
-- **Not configured** (message ID `10`): the Web HMI hides the sensor. Its entity is not created, an existing entity is
-  removed when the integration is set up. After you configure the sensor, reload the integration.
-- **Invalid value** (any other message ID), e.g. a sensor that is not connected: the Web HMI shows `-`. The sensor is
-  unknown and has a value again with the next update after the sensor is connected.
-
-The climate and water heater entities are still created, but leave out the current temperature and humidity (e.g.
-`current_temperature`) if their sensor is not in use.
+Like the Web HMI, the integration does not create sensors that are not configured on the control unit, and shows
+sensors with an invalid value (e.g. not connected) as unknown.
 
 ## Known limitations
 
 - The control unit stores every change in its flash memory, which only allows a limited number of write operations.
-  Avoid automations that change values very often. If more than 30 changes are written to a control unit in a week,
-  Home Assistant shows a repair issue for this control unit. See
-  [Issue #23](https://github.com/superbox-dev/keba_keenergy/issues/23).
-- The diagnostic sensor **Write operations this week** of the control unit counts the write operations since Monday.
-  Its attribute `writes` shows how often each value was written, e.g. `heat_circuit_1.target_temperature_offset`,
-  `system.operating_mode` or `heating_curve_points.HC1`. A change of several values at once (e.g. the away date range
-  of all heating circuits) counts once in the sensor, but once for each value in `writes`. Switching a hot water tank
-  to heat up is not counted.
-- The diagnostic sensor **Flash erase counter** of the control unit (disabled by default) shows the long-term wear of
-  the flash memory, also from changes in the Web HMI or on the display. It is the highest erase count of a flash
-  block and rises slowly, not with every write operation.
-- Changes of numbers, target temperatures and the climate entity are written after a short delay, so several quick
-  changes result in one write operation.
+  Avoid automations that change values very often. Only changed values are written, quick changes of numbers and
+  target temperatures once. The sensor **Write operations this week** shows what was written, above 30 writes a week
+  Home Assistant shows a repair issue. See [Issue #23](https://github.com/superbox-dev/keba_keenergy/issues/23).
+- The HVAC action of a heating circuit follows the heat pumps, the control unit does not provide which heat pump
+  supplies it. A heating circuit supplied by a buffer tank shows idle while the heat pumps are in standby.
 - Only values that the Web HMI provides are supported. Missing values have to be added to the
   [KEBA KeEnergy API](https://github.com/superbox-dev/keba_keenergy_api) first.
 
@@ -335,10 +383,7 @@ The climate and water heater entities are still created, but leave out the curre
   password.
 - **Missing entities**: entities are only created for values that your control unit provides. Reload the integration
   after a change of your heat pump setup.
-- **Unknown sensors**: if the attribute `message_id` is not `0`, the control unit reports the value of the sensor as
-  not valid, e.g. it is not connected. The Web HMI shows `-` instead of a value.
-- **Missing sensors**: sensors that are not configured on the control unit (message ID `10`) are not created, the
-  Web HMI hides them as well.
+- **Unknown sensors**: the sensor has no valid value, e.g. it is not connected. The Web HMI shows `-` as well.
 
 If the problem persists, [enable debug logging][debug-logs], reproduce the problem and open an
 [issue](https://github.com/superbox-dev/keba_keenergy/issues/new/choose) with the log, the

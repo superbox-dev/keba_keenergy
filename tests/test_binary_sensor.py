@@ -10,40 +10,47 @@ import pytest
 from homeassistant.const import STATE_OFF
 from homeassistant.const import STATE_UNKNOWN
 from homeassistant.const import Platform
-from homeassistant.core import State
+from pytest_homeassistant.common import snapshot_platform
 
-from tests import get_platform_states
-from tests.api_data import MULTIPLE_POSITION_DATA_RESPONSE
-from tests.api_data import MULTIPLE_POSITIONS_RESPONSE
-from tests.api_data import get_multiple_position_fixed_data_response
+from tests import get_state
+from tests import next_update
+from tests import replace_values
+from tests.const import NOW
+from tests.const import PASSIVE_COOLING_VALUES
 from tests.test_binary_sensor_data import COMPRESSOR_FAILURE_ENTITY_ID
 from tests.test_binary_sensor_data import COMPRESSOR_FAILURE_MESSAGE_ID
 
 if TYPE_CHECKING:
+    from freezegun.api import FrozenDateTimeFactory
     from homeassistant.core import HomeAssistant
+    from homeassistant.core import State
+    from homeassistant.helpers import entity_registry as er
+    from pytest_homeassistant.common import MockConfigEntry
     from syrupy.assertion import SnapshotAssertion
 
-    from custom_components.keba_keenergy.coordinator import KebaKeEnergyDataUpdateCoordinator
     from tests.conftest import FakeKebaKeEnergyAPI
 
+pytestmark = pytest.mark.freeze_time(NOW)
 
-@pytest.mark.parametrize("language", ["en", "de"], indirect=True, ids=["en", "de"])
-@pytest.mark.usefixtures("entity_registry_enabled_by_default", "language")
+
+@pytest.mark.parametrize("language", ["de", "en"], ids=["de", "en"])
+@pytest.mark.usefixtures("entity_registry_enabled_by_default")
 async def test_binary_sensors(
     hass: HomeAssistant,
+    mock_config_entry: MockConfigEntry,
+    entity_registry: er.EntityRegistry,
     fake_api: FakeKebaKeEnergyAPI,
     snapshot: SnapshotAssertion,
+    language: str,
 ) -> None:
     """Test the states of all binary sensors."""
-    fake_api.responses = [
-        MULTIPLE_POSITIONS_RESPONSE,
-        get_multiple_position_fixed_data_response(has_passive_cooling="true"),
-        MULTIPLE_POSITION_DATA_RESPONSE,
-    ]
+    hass.config.language = language
+    fake_api.load_device("multiple_devices")
+    fake_api.platforms = [Platform.BINARY_SENSOR]
+    fake_api.fixed_data = replace_values(fake_api.fixed_data, PASSIVE_COOLING_VALUES)
     await fake_api.setup_integration()
 
-    for state in get_platform_states(hass, fake_api.config_entry, Platform.BINARY_SENSOR):
-        assert state == snapshot(name=state.entity_id)
+    await snapshot_platform(hass, entity_registry, snapshot, mock_config_entry.entry_id)
 
 
 @pytest.mark.parametrize(
@@ -56,38 +63,27 @@ async def test_failure_input_not_in_use(
     expected: str,
 ) -> None:
     """Test that a failure input is unknown if the control unit reports it as not in use (message id not 0)."""
+    fake_api.load_device("multiple_devices")
     fake_api.message_ids = {COMPRESSOR_FAILURE_MESSAGE_ID: message_id}
-    fake_api.responses = [
-        MULTIPLE_POSITIONS_RESPONSE,
-        get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITION_DATA_RESPONSE,
-    ]
     await fake_api.setup_integration()
 
-    state: State | None = hass.states.get(COMPRESSOR_FAILURE_ENTITY_ID)
-    assert isinstance(state, State)
-    assert (state.state, state.attributes["message_id"]) == (expected, message_id)
+    state: State = get_state(hass, COMPRESSOR_FAILURE_ENTITY_ID)
+    assert state.state == expected
 
 
 async def test_failure_input_in_use_again(
     hass: HomeAssistant,
+    freezer: FrozenDateTimeFactory,
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
     """Test that a failure input has a state again after the next update, once the control unit reports it in use."""
+    fake_api.load_device("multiple_devices")
     fake_api.message_ids = {COMPRESSOR_FAILURE_MESSAGE_ID: 50}
-    fake_api.responses = [
-        MULTIPLE_POSITIONS_RESPONSE,
-        get_multiple_position_fixed_data_response(),
-        MULTIPLE_POSITION_DATA_RESPONSE,
-        MULTIPLE_POSITION_DATA_RESPONSE,
-    ]
+    fake_api.responses = fake_api.setup_responses(fake_api.data, fake_api.data)
     await fake_api.setup_integration()
 
     fake_api.message_ids = {}
-    coordinator: KebaKeEnergyDataUpdateCoordinator = fake_api.config_entry.runtime_data
-    await coordinator.async_refresh()
-    await hass.async_block_till_done()
+    await next_update(hass, freezer)
 
-    state: State | None = hass.states.get(COMPRESSOR_FAILURE_ENTITY_ID)
-    assert isinstance(state, State)
-    assert (state.state, state.attributes["message_id"]) == (STATE_OFF, 0)
+    state: State = get_state(hass, COMPRESSOR_FAILURE_ENTITY_ID)
+    assert state.state == STATE_OFF

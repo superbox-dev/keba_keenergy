@@ -1,5 +1,6 @@
 # Website
 
+- Texts: short sentences, few adjectives and adverbs, no filler and no digressions
 - Never edit `website/docs/`, `scripts/generate-docs.py` generates it from `website/content/` and the markers in
   `README.md`, `CONTRIBUTING.md` and `CHANGELOG.md`
 - Pages in `website/content/`: `sidebar_position` but no `title` in the front matter, the title comes from the `#`
@@ -8,6 +9,7 @@
   - sections in the order of the home-assistant.io integration pages
   - covers installation parameters, options, removal, supported devices, entities, actions, data updates, use cases,
     examples, known limitations, troubleshooting
+  - compact: general behavior, no single cases, nothing the UI, the changelog or another section shows
 - Examples only with test data or placeholders, never real credentials, serial numbers or meter point numbers
 - Preview image for shared links: `website/static/img/social-card.png` (1200 × 630, same layout in all projects)
 - Design after home-assistant.io:

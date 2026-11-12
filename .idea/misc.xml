@@ -5,4 +5,7 @@
     <option name="sdkName" value="uv (keba_keenergy)" />
   </component>
   <component name="ProjectRootManager" version="2" project-jdk-name="uv (keba_keenergy)" project-jdk-type="Python SDK" />
+  <component name="PythonCompatibilityInspectionAdvertiser">
+    <option name="version" value="3" />
+  </component>
 </project>

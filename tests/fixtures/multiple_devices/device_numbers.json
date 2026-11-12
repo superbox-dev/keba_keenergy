@@ -1,0 +1,84 @@
+[
+  {
+    "name": "APPL.CtrlAppl.sParam.options.systemNumberOfHeatPumps",
+    "value": "1",
+    "attributes": {
+      "formatId": "fmt2p0",
+      "longText": "Qty heat pumps",
+      "upperLimit": "4",
+      "lowerLimit": "0",
+      "dynLowerLimit": 1,
+      "dynUpperLimit": 1
+    }
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.options.systemNumberOfHeatingCircuits",
+    "value": "2",
+    "attributes": {
+      "formatId": "fmt2p0",
+      "longText": "Qty HC",
+      "upperLimit": "8",
+      "lowerLimit": "0",
+      "dynLowerLimit": 1,
+      "dynUpperLimit": 1
+    }
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.options.systemNumberOfSolarCircuits",
+    "value": "2",
+    "attributes": {
+      "dynLowerLimit": 1,
+      "dynUpperLimit": 1,
+      "formatId": "fmt2p0",
+      "longText": "Qty solar",
+      "upperLimit": "4",
+      "lowerLimit": "0"
+    }
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.options.systemNumberOfBuffers",
+    "value": "2",
+    "attributes": {
+      "formatId": "fmt2p0",
+      "longText": "Qty buffers",
+      "upperLimit": "0",
+      "lowerLimit": "0",
+      "dynLowerLimit": 1,
+      "dynUpperLimit": 1
+    }
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.options.systemNumberOfHotWaterTanks",
+    "value": "2",
+    "attributes": {
+      "formatId": "fmt2p0",
+      "longText": "Qty HW tank",
+      "upperLimit": "4",
+      "lowerLimit": "0",
+      "dynLowerLimit": 1,
+      "dynUpperLimit": 1
+    }
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.options.systemNumberOfExtHeatSources",
+    "value": "2",
+    "attributes": {
+      "formatId": "fmt2p0",
+      "longText": "Qty ext. heat sources",
+      "upperLimit": "1",
+      "lowerLimit": "0"
+    }
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.options.systemNumberOfSwitchValves",
+    "value": "2",
+    "attributes": {
+      "formatId": "fmt2p0",
+      "longText": "Qty switch valves",
+      "upperLimit": "0",
+      "lowerLimit": "0",
+      "dynLowerLimit": 1,
+      "dynUpperLimit": 1
+    }
+  }
+]

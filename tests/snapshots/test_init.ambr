@@ -1,19 +1,485 @@
 # serializer version: 1
-# name: test_devices[default_position]
-  list([
-    '12345678_buffer_tank',
-    '12345678_external_heat_source',
-    '12345678_heat_circuit',
-    '12345678_heat_pump',
-    '12345678_hot_water_tank',
-    '12345678_keba_keenergy',
-    '12345678_passive_cooling',
-    '12345678_photovoltaics',
-    '12345678_solar_circuit',
-    '12345678_switch_valve',
-  ])
+# name: test_devices[de-multiple_devices][12345678_buffer_tank_1]
+  DeviceRegistryEntrySnapshot({
+    'area_id': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'configuration_url': 'http://10.0.0.100',
+    'connections': set({
+    }),
+    'disabled_by': None,
+    'entry_type': None,
+    'hw_version': None,
+    'id': <ANY>,
+    'identifiers': set({
+      tuple(
+        'keba_keenergy',
+        '12345678_buffer_tank_1',
+      ),
+    }),
+    'labels': set({
+    }),
+    'manufacturer': None,
+    'model': None,
+    'model_id': None,
+    'name': 'Pufferspeicher 1',
+    'name_by_user': None,
+    'serial_number': None,
+    'sw_version': None,
+    'via_device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_keba_keenergy')]>,
+  })
 # ---
-# name: test_devices[multiple_positions]
+# name: test_devices[de-multiple_devices][12345678_buffer_tank_2]
+  DeviceRegistryEntrySnapshot({
+    'area_id': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'configuration_url': 'http://10.0.0.100',
+    'connections': set({
+    }),
+    'disabled_by': None,
+    'entry_type': None,
+    'hw_version': None,
+    'id': <ANY>,
+    'identifiers': set({
+      tuple(
+        'keba_keenergy',
+        '12345678_buffer_tank_2',
+      ),
+    }),
+    'labels': set({
+    }),
+    'manufacturer': None,
+    'model': None,
+    'model_id': None,
+    'name': 'Pufferspeicher 2',
+    'name_by_user': None,
+    'serial_number': None,
+    'sw_version': None,
+    'via_device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_keba_keenergy')]>,
+  })
+# ---
+# name: test_devices[de-multiple_devices][12345678_external_heat_source_1]
+  DeviceRegistryEntrySnapshot({
+    'area_id': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'configuration_url': 'http://10.0.0.100',
+    'connections': set({
+    }),
+    'disabled_by': None,
+    'entry_type': None,
+    'hw_version': None,
+    'id': <ANY>,
+    'identifiers': set({
+      tuple(
+        'keba_keenergy',
+        '12345678_external_heat_source_1',
+      ),
+    }),
+    'labels': set({
+    }),
+    'manufacturer': None,
+    'model': None,
+    'model_id': None,
+    'name': 'Externe Wärmequelle 1',
+    'name_by_user': None,
+    'serial_number': None,
+    'sw_version': None,
+    'via_device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_keba_keenergy')]>,
+  })
+# ---
+# name: test_devices[de-multiple_devices][12345678_external_heat_source_2]
+  DeviceRegistryEntrySnapshot({
+    'area_id': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'configuration_url': 'http://10.0.0.100',
+    'connections': set({
+    }),
+    'disabled_by': None,
+    'entry_type': None,
+    'hw_version': None,
+    'id': <ANY>,
+    'identifiers': set({
+      tuple(
+        'keba_keenergy',
+        '12345678_external_heat_source_2',
+      ),
+    }),
+    'labels': set({
+    }),
+    'manufacturer': None,
+    'model': None,
+    'model_id': None,
+    'name': 'Externe Wärmequelle 2',
+    'name_by_user': None,
+    'serial_number': None,
+    'sw_version': None,
+    'via_device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_keba_keenergy')]>,
+  })
+# ---
+# name: test_devices[de-multiple_devices][12345678_heat_circuit_1]
+  DeviceRegistryEntrySnapshot({
+    'area_id': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'configuration_url': 'http://10.0.0.100',
+    'connections': set({
+    }),
+    'disabled_by': None,
+    'entry_type': None,
+    'hw_version': None,
+    'id': <ANY>,
+    'identifiers': set({
+      tuple(
+        'keba_keenergy',
+        '12345678_heat_circuit_1',
+      ),
+    }),
+    'labels': set({
+    }),
+    'manufacturer': None,
+    'model': None,
+    'model_id': None,
+    'name': 'Heizkreis 1',
+    'name_by_user': None,
+    'serial_number': None,
+    'sw_version': None,
+    'via_device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_keba_keenergy')]>,
+  })
+# ---
+# name: test_devices[de-multiple_devices][12345678_heat_circuit_2]
+  DeviceRegistryEntrySnapshot({
+    'area_id': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'configuration_url': 'http://10.0.0.100',
+    'connections': set({
+    }),
+    'disabled_by': None,
+    'entry_type': None,
+    'hw_version': None,
+    'id': <ANY>,
+    'identifiers': set({
+      tuple(
+        'keba_keenergy',
+        '12345678_heat_circuit_2',
+      ),
+    }),
+    'labels': set({
+    }),
+    'manufacturer': None,
+    'model': None,
+    'model_id': None,
+    'name': 'Heizkreis 2',
+    'name_by_user': None,
+    'serial_number': None,
+    'sw_version': None,
+    'via_device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_keba_keenergy')]>,
+  })
+# ---
+# name: test_devices[de-multiple_devices][12345678_heat_pump]
+  DeviceRegistryEntrySnapshot({
+    'area_id': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'configuration_url': 'http://10.0.0.100',
+    'connections': set({
+    }),
+    'disabled_by': None,
+    'entry_type': None,
+    'hw_version': None,
+    'id': <ANY>,
+    'identifiers': set({
+      tuple(
+        'keba_keenergy',
+        '12345678_heat_pump',
+      ),
+    }),
+    'labels': set({
+    }),
+    'manufacturer': 'M-TEC',
+    'model': 'WPS26',
+    'model_id': None,
+    'name': 'Wärmepumpe',
+    'name_by_user': None,
+    'serial_number': None,
+    'sw_version': None,
+    'via_device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_keba_keenergy')]>,
+  })
+# ---
+# name: test_devices[de-multiple_devices][12345678_hot_water_tank_1]
+  DeviceRegistryEntrySnapshot({
+    'area_id': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'configuration_url': 'http://10.0.0.100',
+    'connections': set({
+    }),
+    'disabled_by': None,
+    'entry_type': None,
+    'hw_version': None,
+    'id': <ANY>,
+    'identifiers': set({
+      tuple(
+        'keba_keenergy',
+        '12345678_hot_water_tank_1',
+      ),
+    }),
+    'labels': set({
+    }),
+    'manufacturer': None,
+    'model': None,
+    'model_id': None,
+    'name': 'Warmwasserspeicher 1',
+    'name_by_user': None,
+    'serial_number': None,
+    'sw_version': None,
+    'via_device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_keba_keenergy')]>,
+  })
+# ---
+# name: test_devices[de-multiple_devices][12345678_hot_water_tank_2]
+  DeviceRegistryEntrySnapshot({
+    'area_id': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'configuration_url': 'http://10.0.0.100',
+    'connections': set({
+    }),
+    'disabled_by': None,
+    'entry_type': None,
+    'hw_version': None,
+    'id': <ANY>,
+    'identifiers': set({
+      tuple(
+        'keba_keenergy',
+        '12345678_hot_water_tank_2',
+      ),
+    }),
+    'labels': set({
+    }),
+    'manufacturer': None,
+    'model': None,
+    'model_id': None,
+    'name': 'Warmwasserspeicher 2',
+    'name_by_user': None,
+    'serial_number': None,
+    'sw_version': None,
+    'via_device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_keba_keenergy')]>,
+  })
+# ---
+# name: test_devices[de-multiple_devices][12345678_keba_keenergy]
+  DeviceRegistryEntrySnapshot({
+    'area_id': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'configuration_url': 'http://10.0.0.100',
+    'connections': set({
+    }),
+    'disabled_by': None,
+    'entry_type': None,
+    'hw_version': None,
+    'id': <ANY>,
+    'identifiers': set({
+      tuple(
+        'keba_keenergy',
+        '12345678_keba_keenergy',
+      ),
+    }),
+    'labels': set({
+    }),
+    'manufacturer': 'KEBA',
+    'model': 'AP 440/H-A',
+    'model_id': None,
+    'name': 'Bedieneinheit',
+    'name_by_user': None,
+    'serial_number': '12345678',
+    'sw_version': '2.2.0.0',
+    'via_device_id': None,
+  })
+# ---
+# name: test_devices[de-multiple_devices][12345678_passive_cooling]
+  DeviceRegistryEntrySnapshot({
+    'area_id': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'configuration_url': 'http://10.0.0.100',
+    'connections': set({
+    }),
+    'disabled_by': None,
+    'entry_type': None,
+    'hw_version': None,
+    'id': <ANY>,
+    'identifiers': set({
+      tuple(
+        'keba_keenergy',
+        '12345678_passive_cooling',
+      ),
+    }),
+    'labels': set({
+    }),
+    'manufacturer': None,
+    'model': None,
+    'model_id': None,
+    'name': 'Passivkühlung',
+    'name_by_user': None,
+    'serial_number': None,
+    'sw_version': None,
+    'via_device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_keba_keenergy')]>,
+  })
+# ---
+# name: test_devices[de-multiple_devices][12345678_photovoltaics]
+  DeviceRegistryEntrySnapshot({
+    'area_id': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'configuration_url': 'http://10.0.0.100',
+    'connections': set({
+    }),
+    'disabled_by': None,
+    'entry_type': None,
+    'hw_version': None,
+    'id': <ANY>,
+    'identifiers': set({
+      tuple(
+        'keba_keenergy',
+        '12345678_photovoltaics',
+      ),
+    }),
+    'labels': set({
+    }),
+    'manufacturer': None,
+    'model': None,
+    'model_id': None,
+    'name': 'Photovoltaik',
+    'name_by_user': None,
+    'serial_number': None,
+    'sw_version': None,
+    'via_device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_keba_keenergy')]>,
+  })
+# ---
+# name: test_devices[de-multiple_devices][12345678_solar_circuit_1]
+  DeviceRegistryEntrySnapshot({
+    'area_id': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'configuration_url': 'http://10.0.0.100',
+    'connections': set({
+    }),
+    'disabled_by': None,
+    'entry_type': None,
+    'hw_version': None,
+    'id': <ANY>,
+    'identifiers': set({
+      tuple(
+        'keba_keenergy',
+        '12345678_solar_circuit_1',
+      ),
+    }),
+    'labels': set({
+    }),
+    'manufacturer': None,
+    'model': None,
+    'model_id': None,
+    'name': 'Solarkreis 1',
+    'name_by_user': None,
+    'serial_number': None,
+    'sw_version': None,
+    'via_device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_keba_keenergy')]>,
+  })
+# ---
+# name: test_devices[de-multiple_devices][12345678_solar_circuit_2]
+  DeviceRegistryEntrySnapshot({
+    'area_id': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'configuration_url': 'http://10.0.0.100',
+    'connections': set({
+    }),
+    'disabled_by': None,
+    'entry_type': None,
+    'hw_version': None,
+    'id': <ANY>,
+    'identifiers': set({
+      tuple(
+        'keba_keenergy',
+        '12345678_solar_circuit_2',
+      ),
+    }),
+    'labels': set({
+    }),
+    'manufacturer': None,
+    'model': None,
+    'model_id': None,
+    'name': 'Solarkreis 2',
+    'name_by_user': None,
+    'serial_number': None,
+    'sw_version': None,
+    'via_device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_keba_keenergy')]>,
+  })
+# ---
+# name: test_devices[de-multiple_devices][12345678_switch_valve_1]
+  DeviceRegistryEntrySnapshot({
+    'area_id': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'configuration_url': 'http://10.0.0.100',
+    'connections': set({
+    }),
+    'disabled_by': None,
+    'entry_type': None,
+    'hw_version': None,
+    'id': <ANY>,
+    'identifiers': set({
+      tuple(
+        'keba_keenergy',
+        '12345678_switch_valve_1',
+      ),
+    }),
+    'labels': set({
+    }),
+    'manufacturer': None,
+    'model': None,
+    'model_id': None,
+    'name': 'Umschaltventil 1',
+    'name_by_user': None,
+    'serial_number': None,
+    'sw_version': None,
+    'via_device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_keba_keenergy')]>,
+  })
+# ---
+# name: test_devices[de-multiple_devices][12345678_switch_valve_2]
+  DeviceRegistryEntrySnapshot({
+    'area_id': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'configuration_url': 'http://10.0.0.100',
+    'connections': set({
+    }),
+    'disabled_by': None,
+    'entry_type': None,
+    'hw_version': None,
+    'id': <ANY>,
+    'identifiers': set({
+      tuple(
+        'keba_keenergy',
+        '12345678_switch_valve_2',
+      ),
+    }),
+    'labels': set({
+    }),
+    'manufacturer': None,
+    'model': None,
+    'model_id': None,
+    'name': 'Umschaltventil 2',
+    'name_by_user': None,
+    'serial_number': None,
+    'sw_version': None,
+    'via_device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_keba_keenergy')]>,
+  })
+# ---
+# name: test_devices[de-multiple_devices][identifiers]
   list([
     '12345678_buffer_tank_1',
     '12345678_buffer_tank_2',
@@ -31,6 +497,1333 @@
     '12345678_solar_circuit_2',
     '12345678_switch_valve_1',
     '12345678_switch_valve_2',
+  ])
+# ---
+# name: test_devices[de-multiple_devices][via_devices]
+  dict({
+    '12345678_buffer_tank_1': '12345678_keba_keenergy',
+    '12345678_buffer_tank_2': '12345678_keba_keenergy',
+    '12345678_external_heat_source_1': '12345678_keba_keenergy',
+    '12345678_external_heat_source_2': '12345678_keba_keenergy',
+    '12345678_heat_circuit_1': '12345678_keba_keenergy',
+    '12345678_heat_circuit_2': '12345678_keba_keenergy',
+    '12345678_heat_pump': '12345678_keba_keenergy',
+    '12345678_hot_water_tank_1': '12345678_keba_keenergy',
+    '12345678_hot_water_tank_2': '12345678_keba_keenergy',
+    '12345678_keba_keenergy': None,
+    '12345678_passive_cooling': '12345678_keba_keenergy',
+    '12345678_photovoltaics': '12345678_keba_keenergy',
+    '12345678_solar_circuit_1': '12345678_keba_keenergy',
+    '12345678_solar_circuit_2': '12345678_keba_keenergy',
+    '12345678_switch_valve_1': '12345678_keba_keenergy',
+    '12345678_switch_valve_2': '12345678_keba_keenergy',
+  })
+# ---
+# name: test_devices[de-single_device][12345678_buffer_tank]
+  DeviceRegistryEntrySnapshot({
+    'area_id': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'configuration_url': 'http://10.0.0.100',
+    'connections': set({
+    }),
+    'disabled_by': None,
+    'entry_type': None,
+    'hw_version': None,
+    'id': <ANY>,
+    'identifiers': set({
+      tuple(
+        'keba_keenergy',
+        '12345678_buffer_tank',
+      ),
+    }),
+    'labels': set({
+    }),
+    'manufacturer': None,
+    'model': None,
+    'model_id': None,
+    'name': 'Pufferspeicher',
+    'name_by_user': None,
+    'serial_number': None,
+    'sw_version': None,
+    'via_device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_keba_keenergy')]>,
+  })
+# ---
+# name: test_devices[de-single_device][12345678_external_heat_source]
+  DeviceRegistryEntrySnapshot({
+    'area_id': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'configuration_url': 'http://10.0.0.100',
+    'connections': set({
+    }),
+    'disabled_by': None,
+    'entry_type': None,
+    'hw_version': None,
+    'id': <ANY>,
+    'identifiers': set({
+      tuple(
+        'keba_keenergy',
+        '12345678_external_heat_source',
+      ),
+    }),
+    'labels': set({
+    }),
+    'manufacturer': None,
+    'model': None,
+    'model_id': None,
+    'name': 'Externe Wärmequelle',
+    'name_by_user': None,
+    'serial_number': None,
+    'sw_version': None,
+    'via_device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_keba_keenergy')]>,
+  })
+# ---
+# name: test_devices[de-single_device][12345678_heat_circuit]
+  DeviceRegistryEntrySnapshot({
+    'area_id': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'configuration_url': 'http://10.0.0.100',
+    'connections': set({
+    }),
+    'disabled_by': None,
+    'entry_type': None,
+    'hw_version': None,
+    'id': <ANY>,
+    'identifiers': set({
+      tuple(
+        'keba_keenergy',
+        '12345678_heat_circuit',
+      ),
+    }),
+    'labels': set({
+    }),
+    'manufacturer': None,
+    'model': None,
+    'model_id': None,
+    'name': 'Heizkreis',
+    'name_by_user': None,
+    'serial_number': None,
+    'sw_version': None,
+    'via_device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_keba_keenergy')]>,
+  })
+# ---
+# name: test_devices[de-single_device][12345678_heat_pump]
+  DeviceRegistryEntrySnapshot({
+    'area_id': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'configuration_url': 'http://10.0.0.100',
+    'connections': set({
+    }),
+    'disabled_by': None,
+    'entry_type': None,
+    'hw_version': None,
+    'id': <ANY>,
+    'identifiers': set({
+      tuple(
+        'keba_keenergy',
+        '12345678_heat_pump',
+      ),
+    }),
+    'labels': set({
+    }),
+    'manufacturer': 'M-TEC',
+    'model': 'WPS26',
+    'model_id': None,
+    'name': 'Wärmepumpe',
+    'name_by_user': None,
+    'serial_number': None,
+    'sw_version': None,
+    'via_device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_keba_keenergy')]>,
+  })
+# ---
+# name: test_devices[de-single_device][12345678_hot_water_tank]
+  DeviceRegistryEntrySnapshot({
+    'area_id': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'configuration_url': 'http://10.0.0.100',
+    'connections': set({
+    }),
+    'disabled_by': None,
+    'entry_type': None,
+    'hw_version': None,
+    'id': <ANY>,
+    'identifiers': set({
+      tuple(
+        'keba_keenergy',
+        '12345678_hot_water_tank',
+      ),
+    }),
+    'labels': set({
+    }),
+    'manufacturer': None,
+    'model': None,
+    'model_id': None,
+    'name': 'Warmwasserspeicher',
+    'name_by_user': None,
+    'serial_number': None,
+    'sw_version': None,
+    'via_device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_keba_keenergy')]>,
+  })
+# ---
+# name: test_devices[de-single_device][12345678_keba_keenergy]
+  DeviceRegistryEntrySnapshot({
+    'area_id': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'configuration_url': 'http://10.0.0.100',
+    'connections': set({
+    }),
+    'disabled_by': None,
+    'entry_type': None,
+    'hw_version': None,
+    'id': <ANY>,
+    'identifiers': set({
+      tuple(
+        'keba_keenergy',
+        '12345678_keba_keenergy',
+      ),
+    }),
+    'labels': set({
+    }),
+    'manufacturer': 'KEBA',
+    'model': 'AP 440/H-A',
+    'model_id': None,
+    'name': 'Bedieneinheit',
+    'name_by_user': None,
+    'serial_number': '12345678',
+    'sw_version': '2.2.0.0',
+    'via_device_id': None,
+  })
+# ---
+# name: test_devices[de-single_device][12345678_passive_cooling]
+  DeviceRegistryEntrySnapshot({
+    'area_id': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'configuration_url': 'http://10.0.0.100',
+    'connections': set({
+    }),
+    'disabled_by': None,
+    'entry_type': None,
+    'hw_version': None,
+    'id': <ANY>,
+    'identifiers': set({
+      tuple(
+        'keba_keenergy',
+        '12345678_passive_cooling',
+      ),
+    }),
+    'labels': set({
+    }),
+    'manufacturer': None,
+    'model': None,
+    'model_id': None,
+    'name': 'Passivkühlung',
+    'name_by_user': None,
+    'serial_number': None,
+    'sw_version': None,
+    'via_device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_keba_keenergy')]>,
+  })
+# ---
+# name: test_devices[de-single_device][12345678_photovoltaics]
+  DeviceRegistryEntrySnapshot({
+    'area_id': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'configuration_url': 'http://10.0.0.100',
+    'connections': set({
+    }),
+    'disabled_by': None,
+    'entry_type': None,
+    'hw_version': None,
+    'id': <ANY>,
+    'identifiers': set({
+      tuple(
+        'keba_keenergy',
+        '12345678_photovoltaics',
+      ),
+    }),
+    'labels': set({
+    }),
+    'manufacturer': None,
+    'model': None,
+    'model_id': None,
+    'name': 'Photovoltaik',
+    'name_by_user': None,
+    'serial_number': None,
+    'sw_version': None,
+    'via_device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_keba_keenergy')]>,
+  })
+# ---
+# name: test_devices[de-single_device][12345678_solar_circuit]
+  DeviceRegistryEntrySnapshot({
+    'area_id': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'configuration_url': 'http://10.0.0.100',
+    'connections': set({
+    }),
+    'disabled_by': None,
+    'entry_type': None,
+    'hw_version': None,
+    'id': <ANY>,
+    'identifiers': set({
+      tuple(
+        'keba_keenergy',
+        '12345678_solar_circuit',
+      ),
+    }),
+    'labels': set({
+    }),
+    'manufacturer': None,
+    'model': None,
+    'model_id': None,
+    'name': 'Solarkreis',
+    'name_by_user': None,
+    'serial_number': None,
+    'sw_version': None,
+    'via_device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_keba_keenergy')]>,
+  })
+# ---
+# name: test_devices[de-single_device][12345678_switch_valve]
+  DeviceRegistryEntrySnapshot({
+    'area_id': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'configuration_url': 'http://10.0.0.100',
+    'connections': set({
+    }),
+    'disabled_by': None,
+    'entry_type': None,
+    'hw_version': None,
+    'id': <ANY>,
+    'identifiers': set({
+      tuple(
+        'keba_keenergy',
+        '12345678_switch_valve',
+      ),
+    }),
+    'labels': set({
+    }),
+    'manufacturer': None,
+    'model': None,
+    'model_id': None,
+    'name': 'Umschaltventil',
+    'name_by_user': None,
+    'serial_number': None,
+    'sw_version': None,
+    'via_device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_keba_keenergy')]>,
+  })
+# ---
+# name: test_devices[de-single_device][identifiers]
+  list([
+    '12345678_buffer_tank',
+    '12345678_external_heat_source',
+    '12345678_heat_circuit',
+    '12345678_heat_pump',
+    '12345678_hot_water_tank',
+    '12345678_keba_keenergy',
+    '12345678_passive_cooling',
+    '12345678_photovoltaics',
+    '12345678_solar_circuit',
+    '12345678_switch_valve',
+  ])
+# ---
+# name: test_devices[de-single_device][via_devices]
+  dict({
+    '12345678_buffer_tank': '12345678_keba_keenergy',
+    '12345678_external_heat_source': '12345678_keba_keenergy',
+    '12345678_heat_circuit': '12345678_keba_keenergy',
+    '12345678_heat_pump': '12345678_keba_keenergy',
+    '12345678_hot_water_tank': '12345678_keba_keenergy',
+    '12345678_keba_keenergy': None,
+    '12345678_passive_cooling': '12345678_keba_keenergy',
+    '12345678_photovoltaics': '12345678_keba_keenergy',
+    '12345678_solar_circuit': '12345678_keba_keenergy',
+    '12345678_switch_valve': '12345678_keba_keenergy',
+  })
+# ---
+# name: test_devices[en-multiple_devices][12345678_buffer_tank_1]
+  DeviceRegistryEntrySnapshot({
+    'area_id': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'configuration_url': 'http://10.0.0.100',
+    'connections': set({
+    }),
+    'disabled_by': None,
+    'entry_type': None,
+    'hw_version': None,
+    'id': <ANY>,
+    'identifiers': set({
+      tuple(
+        'keba_keenergy',
+        '12345678_buffer_tank_1',
+      ),
+    }),
+    'labels': set({
+    }),
+    'manufacturer': None,
+    'model': None,
+    'model_id': None,
+    'name': 'Buffer tank 1',
+    'name_by_user': None,
+    'serial_number': None,
+    'sw_version': None,
+    'via_device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_keba_keenergy')]>,
+  })
+# ---
+# name: test_devices[en-multiple_devices][12345678_buffer_tank_2]
+  DeviceRegistryEntrySnapshot({
+    'area_id': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'configuration_url': 'http://10.0.0.100',
+    'connections': set({
+    }),
+    'disabled_by': None,
+    'entry_type': None,
+    'hw_version': None,
+    'id': <ANY>,
+    'identifiers': set({
+      tuple(
+        'keba_keenergy',
+        '12345678_buffer_tank_2',
+      ),
+    }),
+    'labels': set({
+    }),
+    'manufacturer': None,
+    'model': None,
+    'model_id': None,
+    'name': 'Buffer tank 2',
+    'name_by_user': None,
+    'serial_number': None,
+    'sw_version': None,
+    'via_device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_keba_keenergy')]>,
+  })
+# ---
+# name: test_devices[en-multiple_devices][12345678_external_heat_source_1]
+  DeviceRegistryEntrySnapshot({
+    'area_id': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'configuration_url': 'http://10.0.0.100',
+    'connections': set({
+    }),
+    'disabled_by': None,
+    'entry_type': None,
+    'hw_version': None,
+    'id': <ANY>,
+    'identifiers': set({
+      tuple(
+        'keba_keenergy',
+        '12345678_external_heat_source_1',
+      ),
+    }),
+    'labels': set({
+    }),
+    'manufacturer': None,
+    'model': None,
+    'model_id': None,
+    'name': 'External heat source 1',
+    'name_by_user': None,
+    'serial_number': None,
+    'sw_version': None,
+    'via_device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_keba_keenergy')]>,
+  })
+# ---
+# name: test_devices[en-multiple_devices][12345678_external_heat_source_2]
+  DeviceRegistryEntrySnapshot({
+    'area_id': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'configuration_url': 'http://10.0.0.100',
+    'connections': set({
+    }),
+    'disabled_by': None,
+    'entry_type': None,
+    'hw_version': None,
+    'id': <ANY>,
+    'identifiers': set({
+      tuple(
+        'keba_keenergy',
+        '12345678_external_heat_source_2',
+      ),
+    }),
+    'labels': set({
+    }),
+    'manufacturer': None,
+    'model': None,
+    'model_id': None,
+    'name': 'External heat source 2',
+    'name_by_user': None,
+    'serial_number': None,
+    'sw_version': None,
+    'via_device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_keba_keenergy')]>,
+  })
+# ---
+# name: test_devices[en-multiple_devices][12345678_heat_circuit_1]
+  DeviceRegistryEntrySnapshot({
+    'area_id': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'configuration_url': 'http://10.0.0.100',
+    'connections': set({
+    }),
+    'disabled_by': None,
+    'entry_type': None,
+    'hw_version': None,
+    'id': <ANY>,
+    'identifiers': set({
+      tuple(
+        'keba_keenergy',
+        '12345678_heat_circuit_1',
+      ),
+    }),
+    'labels': set({
+    }),
+    'manufacturer': None,
+    'model': None,
+    'model_id': None,
+    'name': 'Heating circuit 1',
+    'name_by_user': None,
+    'serial_number': None,
+    'sw_version': None,
+    'via_device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_keba_keenergy')]>,
+  })
+# ---
+# name: test_devices[en-multiple_devices][12345678_heat_circuit_2]
+  DeviceRegistryEntrySnapshot({
+    'area_id': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'configuration_url': 'http://10.0.0.100',
+    'connections': set({
+    }),
+    'disabled_by': None,
+    'entry_type': None,
+    'hw_version': None,
+    'id': <ANY>,
+    'identifiers': set({
+      tuple(
+        'keba_keenergy',
+        '12345678_heat_circuit_2',
+      ),
+    }),
+    'labels': set({
+    }),
+    'manufacturer': None,
+    'model': None,
+    'model_id': None,
+    'name': 'Heating circuit 2',
+    'name_by_user': None,
+    'serial_number': None,
+    'sw_version': None,
+    'via_device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_keba_keenergy')]>,
+  })
+# ---
+# name: test_devices[en-multiple_devices][12345678_heat_pump]
+  DeviceRegistryEntrySnapshot({
+    'area_id': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'configuration_url': 'http://10.0.0.100',
+    'connections': set({
+    }),
+    'disabled_by': None,
+    'entry_type': None,
+    'hw_version': None,
+    'id': <ANY>,
+    'identifiers': set({
+      tuple(
+        'keba_keenergy',
+        '12345678_heat_pump',
+      ),
+    }),
+    'labels': set({
+    }),
+    'manufacturer': 'M-TEC',
+    'model': 'WPS26',
+    'model_id': None,
+    'name': 'Heat pump',
+    'name_by_user': None,
+    'serial_number': None,
+    'sw_version': None,
+    'via_device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_keba_keenergy')]>,
+  })
+# ---
+# name: test_devices[en-multiple_devices][12345678_hot_water_tank_1]
+  DeviceRegistryEntrySnapshot({
+    'area_id': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'configuration_url': 'http://10.0.0.100',
+    'connections': set({
+    }),
+    'disabled_by': None,
+    'entry_type': None,
+    'hw_version': None,
+    'id': <ANY>,
+    'identifiers': set({
+      tuple(
+        'keba_keenergy',
+        '12345678_hot_water_tank_1',
+      ),
+    }),
+    'labels': set({
+    }),
+    'manufacturer': None,
+    'model': None,
+    'model_id': None,
+    'name': 'Hot water tank 1',
+    'name_by_user': None,
+    'serial_number': None,
+    'sw_version': None,
+    'via_device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_keba_keenergy')]>,
+  })
+# ---
+# name: test_devices[en-multiple_devices][12345678_hot_water_tank_2]
+  DeviceRegistryEntrySnapshot({
+    'area_id': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'configuration_url': 'http://10.0.0.100',
+    'connections': set({
+    }),
+    'disabled_by': None,
+    'entry_type': None,
+    'hw_version': None,
+    'id': <ANY>,
+    'identifiers': set({
+      tuple(
+        'keba_keenergy',
+        '12345678_hot_water_tank_2',
+      ),
+    }),
+    'labels': set({
+    }),
+    'manufacturer': None,
+    'model': None,
+    'model_id': None,
+    'name': 'Hot water tank 2',
+    'name_by_user': None,
+    'serial_number': None,
+    'sw_version': None,
+    'via_device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_keba_keenergy')]>,
+  })
+# ---
+# name: test_devices[en-multiple_devices][12345678_keba_keenergy]
+  DeviceRegistryEntrySnapshot({
+    'area_id': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'configuration_url': 'http://10.0.0.100',
+    'connections': set({
+    }),
+    'disabled_by': None,
+    'entry_type': None,
+    'hw_version': None,
+    'id': <ANY>,
+    'identifiers': set({
+      tuple(
+        'keba_keenergy',
+        '12345678_keba_keenergy',
+      ),
+    }),
+    'labels': set({
+    }),
+    'manufacturer': 'KEBA',
+    'model': 'AP 440/H-A',
+    'model_id': None,
+    'name': 'Control unit',
+    'name_by_user': None,
+    'serial_number': '12345678',
+    'sw_version': '2.2.0.0',
+    'via_device_id': None,
+  })
+# ---
+# name: test_devices[en-multiple_devices][12345678_passive_cooling]
+  DeviceRegistryEntrySnapshot({
+    'area_id': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'configuration_url': 'http://10.0.0.100',
+    'connections': set({
+    }),
+    'disabled_by': None,
+    'entry_type': None,
+    'hw_version': None,
+    'id': <ANY>,
+    'identifiers': set({
+      tuple(
+        'keba_keenergy',
+        '12345678_passive_cooling',
+      ),
+    }),
+    'labels': set({
+    }),
+    'manufacturer': None,
+    'model': None,
+    'model_id': None,
+    'name': 'Passive cooling',
+    'name_by_user': None,
+    'serial_number': None,
+    'sw_version': None,
+    'via_device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_keba_keenergy')]>,
+  })
+# ---
+# name: test_devices[en-multiple_devices][12345678_photovoltaics]
+  DeviceRegistryEntrySnapshot({
+    'area_id': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'configuration_url': 'http://10.0.0.100',
+    'connections': set({
+    }),
+    'disabled_by': None,
+    'entry_type': None,
+    'hw_version': None,
+    'id': <ANY>,
+    'identifiers': set({
+      tuple(
+        'keba_keenergy',
+        '12345678_photovoltaics',
+      ),
+    }),
+    'labels': set({
+    }),
+    'manufacturer': None,
+    'model': None,
+    'model_id': None,
+    'name': 'Photovoltaics',
+    'name_by_user': None,
+    'serial_number': None,
+    'sw_version': None,
+    'via_device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_keba_keenergy')]>,
+  })
+# ---
+# name: test_devices[en-multiple_devices][12345678_solar_circuit_1]
+  DeviceRegistryEntrySnapshot({
+    'area_id': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'configuration_url': 'http://10.0.0.100',
+    'connections': set({
+    }),
+    'disabled_by': None,
+    'entry_type': None,
+    'hw_version': None,
+    'id': <ANY>,
+    'identifiers': set({
+      tuple(
+        'keba_keenergy',
+        '12345678_solar_circuit_1',
+      ),
+    }),
+    'labels': set({
+    }),
+    'manufacturer': None,
+    'model': None,
+    'model_id': None,
+    'name': 'Solar circuit 1',
+    'name_by_user': None,
+    'serial_number': None,
+    'sw_version': None,
+    'via_device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_keba_keenergy')]>,
+  })
+# ---
+# name: test_devices[en-multiple_devices][12345678_solar_circuit_2]
+  DeviceRegistryEntrySnapshot({
+    'area_id': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'configuration_url': 'http://10.0.0.100',
+    'connections': set({
+    }),
+    'disabled_by': None,
+    'entry_type': None,
+    'hw_version': None,
+    'id': <ANY>,
+    'identifiers': set({
+      tuple(
+        'keba_keenergy',
+        '12345678_solar_circuit_2',
+      ),
+    }),
+    'labels': set({
+    }),
+    'manufacturer': None,
+    'model': None,
+    'model_id': None,
+    'name': 'Solar circuit 2',
+    'name_by_user': None,
+    'serial_number': None,
+    'sw_version': None,
+    'via_device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_keba_keenergy')]>,
+  })
+# ---
+# name: test_devices[en-multiple_devices][12345678_switch_valve_1]
+  DeviceRegistryEntrySnapshot({
+    'area_id': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'configuration_url': 'http://10.0.0.100',
+    'connections': set({
+    }),
+    'disabled_by': None,
+    'entry_type': None,
+    'hw_version': None,
+    'id': <ANY>,
+    'identifiers': set({
+      tuple(
+        'keba_keenergy',
+        '12345678_switch_valve_1',
+      ),
+    }),
+    'labels': set({
+    }),
+    'manufacturer': None,
+    'model': None,
+    'model_id': None,
+    'name': 'Switch valve 1',
+    'name_by_user': None,
+    'serial_number': None,
+    'sw_version': None,
+    'via_device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_keba_keenergy')]>,
+  })
+# ---
+# name: test_devices[en-multiple_devices][12345678_switch_valve_2]
+  DeviceRegistryEntrySnapshot({
+    'area_id': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'configuration_url': 'http://10.0.0.100',
+    'connections': set({
+    }),
+    'disabled_by': None,
+    'entry_type': None,
+    'hw_version': None,
+    'id': <ANY>,
+    'identifiers': set({
+      tuple(
+        'keba_keenergy',
+        '12345678_switch_valve_2',
+      ),
+    }),
+    'labels': set({
+    }),
+    'manufacturer': None,
+    'model': None,
+    'model_id': None,
+    'name': 'Switch valve 2',
+    'name_by_user': None,
+    'serial_number': None,
+    'sw_version': None,
+    'via_device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_keba_keenergy')]>,
+  })
+# ---
+# name: test_devices[en-multiple_devices][identifiers]
+  list([
+    '12345678_buffer_tank_1',
+    '12345678_buffer_tank_2',
+    '12345678_external_heat_source_1',
+    '12345678_external_heat_source_2',
+    '12345678_heat_circuit_1',
+    '12345678_heat_circuit_2',
+    '12345678_heat_pump',
+    '12345678_hot_water_tank_1',
+    '12345678_hot_water_tank_2',
+    '12345678_keba_keenergy',
+    '12345678_passive_cooling',
+    '12345678_photovoltaics',
+    '12345678_solar_circuit_1',
+    '12345678_solar_circuit_2',
+    '12345678_switch_valve_1',
+    '12345678_switch_valve_2',
+  ])
+# ---
+# name: test_devices[en-multiple_devices][via_devices]
+  dict({
+    '12345678_buffer_tank_1': '12345678_keba_keenergy',
+    '12345678_buffer_tank_2': '12345678_keba_keenergy',
+    '12345678_external_heat_source_1': '12345678_keba_keenergy',
+    '12345678_external_heat_source_2': '12345678_keba_keenergy',
+    '12345678_heat_circuit_1': '12345678_keba_keenergy',
+    '12345678_heat_circuit_2': '12345678_keba_keenergy',
+    '12345678_heat_pump': '12345678_keba_keenergy',
+    '12345678_hot_water_tank_1': '12345678_keba_keenergy',
+    '12345678_hot_water_tank_2': '12345678_keba_keenergy',
+    '12345678_keba_keenergy': None,
+    '12345678_passive_cooling': '12345678_keba_keenergy',
+    '12345678_photovoltaics': '12345678_keba_keenergy',
+    '12345678_solar_circuit_1': '12345678_keba_keenergy',
+    '12345678_solar_circuit_2': '12345678_keba_keenergy',
+    '12345678_switch_valve_1': '12345678_keba_keenergy',
+    '12345678_switch_valve_2': '12345678_keba_keenergy',
+  })
+# ---
+# name: test_devices[en-single_device][12345678_buffer_tank]
+  DeviceRegistryEntrySnapshot({
+    'area_id': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'configuration_url': 'http://10.0.0.100',
+    'connections': set({
+    }),
+    'disabled_by': None,
+    'entry_type': None,
+    'hw_version': None,
+    'id': <ANY>,
+    'identifiers': set({
+      tuple(
+        'keba_keenergy',
+        '12345678_buffer_tank',
+      ),
+    }),
+    'labels': set({
+    }),
+    'manufacturer': None,
+    'model': None,
+    'model_id': None,
+    'name': 'Buffer tank',
+    'name_by_user': None,
+    'serial_number': None,
+    'sw_version': None,
+    'via_device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_keba_keenergy')]>,
+  })
+# ---
+# name: test_devices[en-single_device][12345678_external_heat_source]
+  DeviceRegistryEntrySnapshot({
+    'area_id': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'configuration_url': 'http://10.0.0.100',
+    'connections': set({
+    }),
+    'disabled_by': None,
+    'entry_type': None,
+    'hw_version': None,
+    'id': <ANY>,
+    'identifiers': set({
+      tuple(
+        'keba_keenergy',
+        '12345678_external_heat_source',
+      ),
+    }),
+    'labels': set({
+    }),
+    'manufacturer': None,
+    'model': None,
+    'model_id': None,
+    'name': 'External heat source',
+    'name_by_user': None,
+    'serial_number': None,
+    'sw_version': None,
+    'via_device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_keba_keenergy')]>,
+  })
+# ---
+# name: test_devices[en-single_device][12345678_heat_circuit]
+  DeviceRegistryEntrySnapshot({
+    'area_id': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'configuration_url': 'http://10.0.0.100',
+    'connections': set({
+    }),
+    'disabled_by': None,
+    'entry_type': None,
+    'hw_version': None,
+    'id': <ANY>,
+    'identifiers': set({
+      tuple(
+        'keba_keenergy',
+        '12345678_heat_circuit',
+      ),
+    }),
+    'labels': set({
+    }),
+    'manufacturer': None,
+    'model': None,
+    'model_id': None,
+    'name': 'Heating circuit',
+    'name_by_user': None,
+    'serial_number': None,
+    'sw_version': None,
+    'via_device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_keba_keenergy')]>,
+  })
+# ---
+# name: test_devices[en-single_device][12345678_heat_pump]
+  DeviceRegistryEntrySnapshot({
+    'area_id': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'configuration_url': 'http://10.0.0.100',
+    'connections': set({
+    }),
+    'disabled_by': None,
+    'entry_type': None,
+    'hw_version': None,
+    'id': <ANY>,
+    'identifiers': set({
+      tuple(
+        'keba_keenergy',
+        '12345678_heat_pump',
+      ),
+    }),
+    'labels': set({
+    }),
+    'manufacturer': 'M-TEC',
+    'model': 'WPS26',
+    'model_id': None,
+    'name': 'Heat pump',
+    'name_by_user': None,
+    'serial_number': None,
+    'sw_version': None,
+    'via_device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_keba_keenergy')]>,
+  })
+# ---
+# name: test_devices[en-single_device][12345678_hot_water_tank]
+  DeviceRegistryEntrySnapshot({
+    'area_id': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'configuration_url': 'http://10.0.0.100',
+    'connections': set({
+    }),
+    'disabled_by': None,
+    'entry_type': None,
+    'hw_version': None,
+    'id': <ANY>,
+    'identifiers': set({
+      tuple(
+        'keba_keenergy',
+        '12345678_hot_water_tank',
+      ),
+    }),
+    'labels': set({
+    }),
+    'manufacturer': None,
+    'model': None,
+    'model_id': None,
+    'name': 'Hot water tank',
+    'name_by_user': None,
+    'serial_number': None,
+    'sw_version': None,
+    'via_device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_keba_keenergy')]>,
+  })
+# ---
+# name: test_devices[en-single_device][12345678_keba_keenergy]
+  DeviceRegistryEntrySnapshot({
+    'area_id': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'configuration_url': 'http://10.0.0.100',
+    'connections': set({
+    }),
+    'disabled_by': None,
+    'entry_type': None,
+    'hw_version': None,
+    'id': <ANY>,
+    'identifiers': set({
+      tuple(
+        'keba_keenergy',
+        '12345678_keba_keenergy',
+      ),
+    }),
+    'labels': set({
+    }),
+    'manufacturer': 'KEBA',
+    'model': 'AP 440/H-A',
+    'model_id': None,
+    'name': 'Control unit',
+    'name_by_user': None,
+    'serial_number': '12345678',
+    'sw_version': '2.2.0.0',
+    'via_device_id': None,
+  })
+# ---
+# name: test_devices[en-single_device][12345678_passive_cooling]
+  DeviceRegistryEntrySnapshot({
+    'area_id': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'configuration_url': 'http://10.0.0.100',
+    'connections': set({
+    }),
+    'disabled_by': None,
+    'entry_type': None,
+    'hw_version': None,
+    'id': <ANY>,
+    'identifiers': set({
+      tuple(
+        'keba_keenergy',
+        '12345678_passive_cooling',
+      ),
+    }),
+    'labels': set({
+    }),
+    'manufacturer': None,
+    'model': None,
+    'model_id': None,
+    'name': 'Passive cooling',
+    'name_by_user': None,
+    'serial_number': None,
+    'sw_version': None,
+    'via_device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_keba_keenergy')]>,
+  })
+# ---
+# name: test_devices[en-single_device][12345678_photovoltaics]
+  DeviceRegistryEntrySnapshot({
+    'area_id': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'configuration_url': 'http://10.0.0.100',
+    'connections': set({
+    }),
+    'disabled_by': None,
+    'entry_type': None,
+    'hw_version': None,
+    'id': <ANY>,
+    'identifiers': set({
+      tuple(
+        'keba_keenergy',
+        '12345678_photovoltaics',
+      ),
+    }),
+    'labels': set({
+    }),
+    'manufacturer': None,
+    'model': None,
+    'model_id': None,
+    'name': 'Photovoltaics',
+    'name_by_user': None,
+    'serial_number': None,
+    'sw_version': None,
+    'via_device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_keba_keenergy')]>,
+  })
+# ---
+# name: test_devices[en-single_device][12345678_solar_circuit]
+  DeviceRegistryEntrySnapshot({
+    'area_id': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'configuration_url': 'http://10.0.0.100',
+    'connections': set({
+    }),
+    'disabled_by': None,
+    'entry_type': None,
+    'hw_version': None,
+    'id': <ANY>,
+    'identifiers': set({
+      tuple(
+        'keba_keenergy',
+        '12345678_solar_circuit',
+      ),
+    }),
+    'labels': set({
+    }),
+    'manufacturer': None,
+    'model': None,
+    'model_id': None,
+    'name': 'Solar circuit',
+    'name_by_user': None,
+    'serial_number': None,
+    'sw_version': None,
+    'via_device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_keba_keenergy')]>,
+  })
+# ---
+# name: test_devices[en-single_device][12345678_switch_valve]
+  DeviceRegistryEntrySnapshot({
+    'area_id': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'configuration_url': 'http://10.0.0.100',
+    'connections': set({
+    }),
+    'disabled_by': None,
+    'entry_type': None,
+    'hw_version': None,
+    'id': <ANY>,
+    'identifiers': set({
+      tuple(
+        'keba_keenergy',
+        '12345678_switch_valve',
+      ),
+    }),
+    'labels': set({
+    }),
+    'manufacturer': None,
+    'model': None,
+    'model_id': None,
+    'name': 'Switch valve',
+    'name_by_user': None,
+    'serial_number': None,
+    'sw_version': None,
+    'via_device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_keba_keenergy')]>,
+  })
+# ---
+# name: test_devices[en-single_device][identifiers]
+  list([
+    '12345678_buffer_tank',
+    '12345678_external_heat_source',
+    '12345678_heat_circuit',
+    '12345678_heat_pump',
+    '12345678_hot_water_tank',
+    '12345678_keba_keenergy',
+    '12345678_passive_cooling',
+    '12345678_photovoltaics',
+    '12345678_solar_circuit',
+    '12345678_switch_valve',
+  ])
+# ---
+# name: test_devices[en-single_device][via_devices]
+  dict({
+    '12345678_buffer_tank': '12345678_keba_keenergy',
+    '12345678_external_heat_source': '12345678_keba_keenergy',
+    '12345678_heat_circuit': '12345678_keba_keenergy',
+    '12345678_heat_pump': '12345678_keba_keenergy',
+    '12345678_hot_water_tank': '12345678_keba_keenergy',
+    '12345678_keba_keenergy': None,
+    '12345678_passive_cooling': '12345678_keba_keenergy',
+    '12345678_photovoltaics': '12345678_keba_keenergy',
+    '12345678_solar_circuit': '12345678_keba_keenergy',
+    '12345678_switch_valve': '12345678_keba_keenergy',
+  })
+# ---
+# name: test_entities_disabled_by_default
+  list([
+    'binary_sensor.keba_keenergy_12345678_buffer_tank_cool_request_1',
+    'binary_sensor.keba_keenergy_12345678_buffer_tank_cool_request_2',
+    'binary_sensor.keba_keenergy_12345678_heat_circuit_pump_state_1',
+    'binary_sensor.keba_keenergy_12345678_hot_water_tank_circulation_pump_state_1',
+    'binary_sensor.keba_keenergy_12345678_hot_water_tank_circulation_pump_state_2',
+    'binary_sensor.keba_keenergy_12345678_hot_water_tank_hot_water_flow_1',
+    'binary_sensor.keba_keenergy_12345678_remote_maintenance_connected',
+    'binary_sensor.keba_keenergy_12345678_remote_maintenance_server_reachable',
+    'number.keba_keenergy_12345678_buffer_tank_excess_energy_target_temperature_1',
+    'number.keba_keenergy_12345678_buffer_tank_excess_energy_target_temperature_2',
+    'number.keba_keenergy_12345678_buffer_tank_excess_energy_target_temperature_hysteresis_1',
+    'number.keba_keenergy_12345678_buffer_tank_excess_energy_target_temperature_hysteresis_2',
+    'number.keba_keenergy_12345678_buffer_tank_outdoor_temperature_excess_energy_limit_1',
+    'number.keba_keenergy_12345678_buffer_tank_outdoor_temperature_excess_energy_limit_2',
+    'number.keba_keenergy_12345678_heat_circuit_cooling_curve_offset_2',
+    'number.keba_keenergy_12345678_heat_circuit_cooling_curve_slope_2',
+    'number.keba_keenergy_12345678_heat_circuit_cooling_limit_day_2',
+    'number.keba_keenergy_12345678_heat_circuit_cooling_limit_night_2',
+    'number.keba_keenergy_12345678_heat_circuit_excess_energy_cooling_limit_day_2',
+    'number.keba_keenergy_12345678_heat_circuit_excess_energy_cooling_limit_night_2',
+    'number.keba_keenergy_12345678_heat_circuit_excess_energy_heating_limit_day_1',
+    'number.keba_keenergy_12345678_heat_circuit_excess_energy_heating_limit_night_1',
+    'number.keba_keenergy_12345678_heat_circuit_excess_energy_target_cooling_temperature_2',
+    'number.keba_keenergy_12345678_heat_circuit_excess_energy_target_cooling_temperature_hysteresis_2',
+    'number.keba_keenergy_12345678_heat_circuit_excess_energy_target_temperature_1',
+    'number.keba_keenergy_12345678_heat_circuit_excess_energy_target_temperature_hysteresis_1',
+    'number.keba_keenergy_12345678_heat_circuit_heating_curve_offset_1',
+    'number.keba_keenergy_12345678_heat_circuit_heating_curve_slope_1',
+    'number.keba_keenergy_12345678_heat_circuit_heating_limit_day_1',
+    'number.keba_keenergy_12345678_heat_circuit_heating_limit_night_1',
+    'number.keba_keenergy_12345678_heat_circuit_target_cooling_temperature_day_2',
+    'number.keba_keenergy_12345678_heat_circuit_target_cooling_temperature_night_2',
+    'number.keba_keenergy_12345678_heat_circuit_target_temperature_away_1',
+    'number.keba_keenergy_12345678_heat_circuit_target_temperature_day_1',
+    'number.keba_keenergy_12345678_heat_circuit_target_temperature_night_1',
+    'number.keba_keenergy_12345678_heat_pump_compressor_night_speed',
+    'number.keba_keenergy_12345678_hot_water_tank_excess_energy_target_temperature_1',
+    'number.keba_keenergy_12345678_hot_water_tank_excess_energy_target_temperature_2',
+    'number.keba_keenergy_12345678_hot_water_tank_excess_energy_target_temperature_hysteresis_1',
+    'number.keba_keenergy_12345678_hot_water_tank_excess_energy_target_temperature_hysteresis_2',
+    'select.keba_keenergy_12345678_external_heat_source_operating_mode_1',
+    'select.keba_keenergy_12345678_external_heat_source_operating_mode_2',
+    'select.keba_keenergy_12345678_heat_circuit_cooling_curve_2',
+    'select.keba_keenergy_12345678_heat_circuit_heating_curve_1',
+    'sensor.keba_keenergy_12345678_control_cpu_usage',
+    'sensor.keba_keenergy_12345678_cpu_usage',
+    'sensor.keba_keenergy_12345678_external_heat_source_activation_counter_1',
+    'sensor.keba_keenergy_12345678_external_heat_source_activation_counter_2',
+    'sensor.keba_keenergy_12345678_external_heat_source_excess_energy_activation_counter_1',
+    'sensor.keba_keenergy_12345678_external_heat_source_excess_energy_activation_counter_2',
+    'sensor.keba_keenergy_12345678_external_heat_source_excess_energy_max_runtime_1',
+    'sensor.keba_keenergy_12345678_external_heat_source_excess_energy_max_runtime_2',
+    'sensor.keba_keenergy_12345678_external_heat_source_excess_energy_operating_time_1',
+    'sensor.keba_keenergy_12345678_external_heat_source_excess_energy_operating_time_2',
+    'sensor.keba_keenergy_12345678_external_heat_source_max_runtime_1',
+    'sensor.keba_keenergy_12345678_external_heat_source_max_runtime_2',
+    'sensor.keba_keenergy_12345678_flash_erase_counter',
+    'sensor.keba_keenergy_12345678_free_ram',
+    'sensor.keba_keenergy_12345678_heat_circuit_cool_request_2',
+    'sensor.keba_keenergy_12345678_heat_circuit_cooling_limit_day_2',
+    'sensor.keba_keenergy_12345678_heat_circuit_cooling_limit_night_2',
+    'sensor.keba_keenergy_12345678_heat_circuit_dew_point_1',
+    'sensor.keba_keenergy_12345678_heat_circuit_excess_energy_cooling_limit_day_2',
+    'sensor.keba_keenergy_12345678_heat_circuit_excess_energy_cooling_limit_night_2',
+    'sensor.keba_keenergy_12345678_heat_circuit_excess_energy_heating_limit_day_1',
+    'sensor.keba_keenergy_12345678_heat_circuit_excess_energy_heating_limit_night_1',
+    'sensor.keba_keenergy_12345678_heat_circuit_flow_temperature_1',
+    'sensor.keba_keenergy_12345678_heat_circuit_flow_temperature_setpoint_1',
+    'sensor.keba_keenergy_12345678_heat_circuit_flow_temperature_setpoint_2',
+    'sensor.keba_keenergy_12345678_heat_circuit_heating_limit_day_1',
+    'sensor.keba_keenergy_12345678_heat_circuit_heating_limit_night_1',
+    'sensor.keba_keenergy_12345678_heat_circuit_mixer_position_1',
+    'sensor.keba_keenergy_12345678_heat_circuit_mixer_return_flow_temperature_1',
+    'sensor.keba_keenergy_12345678_heat_circuit_pump_speed_1',
+    'sensor.keba_keenergy_12345678_heat_circuit_return_flow_temperature_1',
+    'sensor.keba_keenergy_12345678_heat_circuit_room_humidity_1',
+    'sensor.keba_keenergy_12345678_heat_circuit_room_temperature_1',
+    'sensor.keba_keenergy_12345678_heat_pump_activation_counter',
+    'sensor.keba_keenergy_12345678_heat_pump_compressor_power',
+    'sensor.keba_keenergy_12345678_heat_pump_cooling_energy',
+    'sensor.keba_keenergy_12345678_heat_pump_cooling_energy_consumption',
+    'sensor.keba_keenergy_12345678_heat_pump_cooling_excess_energy_consumption',
+    'sensor.keba_keenergy_12345678_heat_pump_cooling_spf',
+    'sensor.keba_keenergy_12345678_heat_pump_cop',
+    'sensor.keba_keenergy_12345678_heat_pump_excess_energy_activation_counter',
+    'sensor.keba_keenergy_12345678_heat_pump_excess_energy_consumption',
+    'sensor.keba_keenergy_12345678_heat_pump_excess_energy_max_runtime',
+    'sensor.keba_keenergy_12345678_heat_pump_excess_energy_operating_time',
+    'sensor.keba_keenergy_12345678_heat_pump_heating_energy',
+    'sensor.keba_keenergy_12345678_heat_pump_heating_energy_consumption',
+    'sensor.keba_keenergy_12345678_heat_pump_heating_excess_energy_consumption',
+    'sensor.keba_keenergy_12345678_heat_pump_heating_power',
+    'sensor.keba_keenergy_12345678_heat_pump_heating_spf',
+    'sensor.keba_keenergy_12345678_heat_pump_hot_water_energy',
+    'sensor.keba_keenergy_12345678_heat_pump_hot_water_energy_consumption',
+    'sensor.keba_keenergy_12345678_heat_pump_hot_water_excess_energy_consumption',
+    'sensor.keba_keenergy_12345678_heat_pump_hot_water_power',
+    'sensor.keba_keenergy_12345678_heat_pump_hot_water_spf',
+    'sensor.keba_keenergy_12345678_heat_pump_max_runtime',
+    'sensor.keba_keenergy_12345678_heat_pump_total_energy_consumption',
+    'sensor.keba_keenergy_12345678_heat_pump_total_spf',
+    'sensor.keba_keenergy_12345678_heat_pump_total_thermal_energy',
+    'sensor.keba_keenergy_12345678_hot_water_tank_circulation_return_temperature_1',
+    'sensor.keba_keenergy_12345678_hot_water_tank_circulation_return_temperature_2',
+    'sensor.keba_keenergy_12345678_hot_water_tank_fresh_water_module_temperature_1',
+    'sensor.keba_keenergy_12345678_ram_usage',
+    'sensor.keba_keenergy_12345678_solar_circuit_actual_power_1',
+    'sensor.keba_keenergy_12345678_solar_circuit_actual_power_2',
+    'sensor.keba_keenergy_12345678_solar_circuit_daily_energy_1',
+    'sensor.keba_keenergy_12345678_solar_circuit_daily_energy_2',
+    'sensor.keba_keenergy_12345678_solar_circuit_heating_energy_1',
+    'sensor.keba_keenergy_12345678_solar_circuit_heating_energy_2',
+    'sensor.keba_keenergy_12345678_webserver_cpu_usage',
+    'sensor.keba_keenergy_12345678_webview_cpu_usage',
+    'switch.keba_keenergy_12345678_buffer_tank_use_excess_energy_1',
+    'switch.keba_keenergy_12345678_buffer_tank_use_excess_energy_2',
+    'switch.keba_keenergy_12345678_external_heat_source_use_excess_energy_1',
+    'switch.keba_keenergy_12345678_external_heat_source_use_excess_energy_2',
+    'switch.keba_keenergy_12345678_heat_circuit_use_cooling_curve_2',
+    'switch.keba_keenergy_12345678_heat_circuit_use_excess_energy_1',
+    'switch.keba_keenergy_12345678_heat_circuit_use_excess_energy_2',
+    'switch.keba_keenergy_12345678_heat_circuit_use_heating_curve_1',
+    'switch.keba_keenergy_12345678_heat_pump_compressor_use_night_speed',
+    'switch.keba_keenergy_12345678_hot_water_tank_use_excess_energy_1',
+    'switch.keba_keenergy_12345678_hot_water_tank_use_excess_energy_2',
+    'switch.keba_keenergy_12345678_modbus_active',
+    'switch.keba_keenergy_12345678_remote_maintenance_active',
   ])
 # ---
 # name: test_load_entry
@@ -58,12 +1851,15 @@
     'binary_sensor.keba_keenergy_12345678_hot_water_tank_heat_request_2',
     'binary_sensor.keba_keenergy_12345678_hot_water_tank_hot_water_flow_1',
     'binary_sensor.keba_keenergy_12345678_photovoltaics_excess_energy_active',
+    'binary_sensor.keba_keenergy_12345678_remote_maintenance_connected',
+    'binary_sensor.keba_keenergy_12345678_remote_maintenance_server_reachable',
     'binary_sensor.keba_keenergy_12345678_solar_circuit_heat_request_1_1',
     'binary_sensor.keba_keenergy_12345678_solar_circuit_heat_request_1_2',
     'binary_sensor.keba_keenergy_12345678_solar_circuit_heat_request_2_1',
     'binary_sensor.keba_keenergy_12345678_solar_circuit_heat_request_2_2',
     'climate.keba_keenergy_12345678_1',
     'climate.keba_keenergy_12345678_2',
+    'event.keba_keenergy_12345678_alarm',
     'number.keba_keenergy_12345678_buffer_tank_excess_energy_target_temperature_1',
     'number.keba_keenergy_12345678_buffer_tank_excess_energy_target_temperature_2',
     'number.keba_keenergy_12345678_buffer_tank_excess_energy_target_temperature_hysteresis_1',
@@ -263,6 +2059,7 @@
     'sensor.keba_keenergy_12345678_passive_cooling_mixer_target_temperature',
     'sensor.keba_keenergy_12345678_passive_cooling_switch_valve_position',
     'sensor.keba_keenergy_12345678_passive_cooling_temperature',
+    'sensor.keba_keenergy_12345678_pending_alarms',
     'sensor.keba_keenergy_12345678_photovoltaics_daily_energy',
     'sensor.keba_keenergy_12345678_photovoltaics_excess_power',
     'sensor.keba_keenergy_12345678_photovoltaics_total_energy',
@@ -303,6 +2100,8 @@
     'switch.keba_keenergy_12345678_heat_pump_compressor_use_night_speed',
     'switch.keba_keenergy_12345678_hot_water_tank_use_excess_energy_1',
     'switch.keba_keenergy_12345678_hot_water_tank_use_excess_energy_2',
+    'switch.keba_keenergy_12345678_modbus_active',
+    'switch.keba_keenergy_12345678_remote_maintenance_active',
     'switch.keba_keenergy_12345678_solar_circuit_priority_1_before_2_1',
     'switch.keba_keenergy_12345678_solar_circuit_priority_1_before_2_2',
     'water_heater.keba_keenergy_12345678_1',

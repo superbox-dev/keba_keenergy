@@ -1,6 +1,7 @@
 {
   "domain": "keba_keenergy",
   "name": "KEBA KeEnergy",
+  "categories": ["climate.heat_pumps_air_conditioning"],
   "codeowners": ["@mh-superbox"],
   "config_flow": true,
   "documentation": "https://superbox-dev.github.io/keba_keenergy/",
@@ -8,8 +9,8 @@
   "iot_class": "local_polling",
   "issue_tracker": "https://github.com/superbox-dev/keba_keenergy/issues",
   "loggers": ["keba_keenergy_api"],
-  "requirements": ["keba_keenergy_api~=2.14.0"],
-  "version": "1.11.0",
+  "requirements": ["keba_keenergy_api~=3.0.0"],
+  "version": "1.12.0",
   "zeroconf": [
     {
       "type": "_keba-device._tcp.local.",

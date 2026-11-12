@@ -1,0 +1,143 @@
+# serializer version: 1
+# name: test_alarm_issue[de-acknowledgeable][issue]
+  IssueRegistryItemSnapshot({
+    'active': True,
+    'breaks_in_ha_version': None,
+    'config_entry_id': None,
+    'created': <ANY>,
+    'data': None,
+    'dismissed_version': None,
+    'domain': 'keba_keenergy',
+    'is_fixable': False,
+    'is_persistent': False,
+    'issue_domain': None,
+    'issue_id': 'alarm_01KEBAKEENERGY0000000000000_200_12_2',
+    'learn_more_url': None,
+    'severity': <IssueSeverity.ERROR: 'error'>,
+    'translation_key': 'alarm_acknowledgeable',
+    'translation_placeholders': dict({
+      'long_text': 'Heat pump 2 Wärmepumpe 2: High pressure switch tripped',
+      'name': 'KEBA KeEnergy (ap4400.local)',
+      'number': '12',
+      'short_text': 'High pressure switch',
+      'time': '2026-10-29 07:05',
+    }),
+  })
+# ---
+# name: test_alarm_issue[de-acknowledgeable][translations]
+  dict({
+    'description': list([
+      'Alarm 12 steht seit 2026-10-29 07:05 an KEBA KeEnergy (ap4400.local) an:',
+      '> Heat pump 2 Wärmepumpe 2: High pressure switch tripped',
+      'Der Text des Alarms kommt von der Steuerung. Dieser Hinweis verschwindet, sobald der Alarm nicht mehr ansteht.',
+      'Quittiere den Alarm an der Steuerung (Display oder Web HMI).',
+    ]),
+    'title': 'KEBA KeEnergy (ap4400.local): High pressure switch',
+  })
+# ---
+# name: test_alarm_issue[de-sensor_break][issue]
+  IssueRegistryItemSnapshot({
+    'active': True,
+    'breaks_in_ha_version': None,
+    'config_entry_id': None,
+    'created': <ANY>,
+    'data': None,
+    'dismissed_version': None,
+    'domain': 'keba_keenergy',
+    'is_fixable': False,
+    'is_persistent': False,
+    'issue_domain': None,
+    'issue_id': 'alarm_01KEBAKEENERGY0000000000000_100_700_1',
+    'learn_more_url': None,
+    'severity': <IssueSeverity.ERROR: 'error'>,
+    'translation_key': 'alarm',
+    'translation_placeholders': dict({
+      'long_text': 'Differential control 1 Diff. Regler 1: Sensor source temperature broken (53 - Sensor break)',
+      'name': 'KEBA KeEnergy (ap4400.local)',
+      'number': '700',
+      'short_text': 'Sensor source temperature',
+      'time': '2026-10-28 16:53',
+    }),
+  })
+# ---
+# name: test_alarm_issue[de-sensor_break][translations]
+  dict({
+    'description': list([
+      'Alarm 700 steht seit 2026-10-28 16:53 an KEBA KeEnergy (ap4400.local) an:',
+      '> Differential control 1 Diff. Regler 1: Sensor source temperature broken (53 - Sensor break)',
+      'Der Text des Alarms kommt von der Steuerung. Dieser Hinweis verschwindet, sobald der Alarm nicht mehr ansteht.',
+    ]),
+    'title': 'KEBA KeEnergy (ap4400.local): Sensor source temperature',
+  })
+# ---
+# name: test_alarm_issue[en-acknowledgeable][issue]
+  IssueRegistryItemSnapshot({
+    'active': True,
+    'breaks_in_ha_version': None,
+    'config_entry_id': None,
+    'created': <ANY>,
+    'data': None,
+    'dismissed_version': None,
+    'domain': 'keba_keenergy',
+    'is_fixable': False,
+    'is_persistent': False,
+    'issue_domain': None,
+    'issue_id': 'alarm_01KEBAKEENERGY0000000000000_200_12_2',
+    'learn_more_url': None,
+    'severity': <IssueSeverity.ERROR: 'error'>,
+    'translation_key': 'alarm_acknowledgeable',
+    'translation_placeholders': dict({
+      'long_text': 'Heat pump 2 Wärmepumpe 2: High pressure switch tripped',
+      'name': 'KEBA KeEnergy (ap4400.local)',
+      'number': '12',
+      'short_text': 'High pressure switch',
+      'time': '2026-10-29 07:05',
+    }),
+  })
+# ---
+# name: test_alarm_issue[en-acknowledgeable][translations]
+  dict({
+    'description': list([
+      'Alarm 12 has been pending on KEBA KeEnergy (ap4400.local) since 2026-10-29 07:05:',
+      '> Heat pump 2 Wärmepumpe 2: High pressure switch tripped',
+      'The text of the alarm comes from the control unit. This issue is removed as soon as the alarm is no longer pending.',
+      'Acknowledge the alarm on the control unit (display or Web HMI).',
+    ]),
+    'title': 'KEBA KeEnergy (ap4400.local): High pressure switch',
+  })
+# ---
+# name: test_alarm_issue[en-sensor_break][issue]
+  IssueRegistryItemSnapshot({
+    'active': True,
+    'breaks_in_ha_version': None,
+    'config_entry_id': None,
+    'created': <ANY>,
+    'data': None,
+    'dismissed_version': None,
+    'domain': 'keba_keenergy',
+    'is_fixable': False,
+    'is_persistent': False,
+    'issue_domain': None,
+    'issue_id': 'alarm_01KEBAKEENERGY0000000000000_100_700_1',
+    'learn_more_url': None,
+    'severity': <IssueSeverity.ERROR: 'error'>,
+    'translation_key': 'alarm',
+    'translation_placeholders': dict({
+      'long_text': 'Differential control 1 Diff. Regler 1: Sensor source temperature broken (53 - Sensor break)',
+      'name': 'KEBA KeEnergy (ap4400.local)',
+      'number': '700',
+      'short_text': 'Sensor source temperature',
+      'time': '2026-10-28 16:53',
+    }),
+  })
+# ---
+# name: test_alarm_issue[en-sensor_break][translations]
+  dict({
+    'description': list([
+      'Alarm 700 has been pending on KEBA KeEnergy (ap4400.local) since 2026-10-28 16:53:',
+      '> Differential control 1 Diff. Regler 1: Sensor source temperature broken (53 - Sensor break)',
+      'The text of the alarm comes from the control unit. This issue is removed as soon as the alarm is no longer pending.',
+    ]),
+    'title': 'KEBA KeEnergy (ap4400.local): Sensor source temperature',
+  })
+# ---

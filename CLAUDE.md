@@ -1,7 +1,7 @@
 # CLAUDE.md
 
-Home Assistant custom integration (HACS) for heat pumps with a KEBA KeEnergy control unit (Web HMI, local polling),
-with all device access going through the separate PyPI library `keba_keenergy_api`.
+Home Assistant custom integration (HACS) for KEBA KeEnergy heat pumps (Web HMI, local polling), device access only
+via the PyPI library `keba_keenergy_api`.
 
 ## Commands
 
@@ -38,6 +38,7 @@ Before finishing a change, run `ruff format`, `lint.sh` and `pytest`, in this or
   - type alias for complex annotations (nested or repeated unions)
 - Module-level constants with `Final` (`NAME: Final = ...`)
 - Comments as complete sentences with a trailing period
+  - planned cleanups as `# TODO: …`, without author or issue link
 - `TypedDict` only for JSON data from or to the Web HMI (optional keys as `NotRequired`), `NamedTuple` only for
   small values that are unpacked (points, pairs), otherwise `@dataclass(frozen=True, kw_only=True)`, mutable only
   when needed
@@ -48,7 +49,34 @@ Before finishing a change, run `ruff format`, `lint.sh` and `pytest`, in this or
 - Credentials, tokens and serial numbers never in log or exception messages, dumps of device or portal data only
   redacted (`async_redact_data(data, TO_REDACT)`)
 - New texts in `strings.json`, `translations/en.json` and `translations/de.json`, keys sorted
+- Entity names (EN / DE), Home Assistant adds the device name
+  - readable `keba_keenergy_api` 3.0 endpoint name, no device name, unit or state
+    (`RETURN_TEMPERATURE`: `Return temperature` / `Rücklauftemperatur`)
+  - mode before the quantity in EN, after it in DE (`Heating power` / `Leistung Heizen`), sum of all modes
+    `Total …` / `… gesamt`
+  - qualifiers in parentheses at the end, comma-separated: `(PV surplus)` / `(PV-Überschuss)`, `(normal)` /
+    `(Normal)`, `(reduced)` / `(Abgesenkt)`, `(away)` / `(Urlaub)` (like the climate preset), `(mixer)` /
+    `(Mischer)`, daily meter values `(today)` / `(heute)`
+  - `Target …` / `Soll-…`, actual values without `Current` / `Ist-`
+  - thermal energy `… energy` / `Wärmemenge …` (`Kältemenge` for cooling), electrical `… electrical energy` /
+    `Elektrische Energie …`
+  - `sStatisticalData` operating times `… operating time` / `Laufzeit …`, `operationalData` `Operating hours` /
+    `Betriebsstunden`
+  - binary sensors only the component or condition, the device class shows the state (`Compressor` / `Kompressor`,
+    `PV surplus` / `PV-Überschuss`)
+  - DHW as `Hot water` / `Warmwasser`, abbreviations only when common (`COP`, `SPF` / `JAZ`, `PF` / `AZ`, `PV`),
+    not those of the Web HMI
+  - DE compounds of at most two parts, longer ones as `<quantity> <component>` (`Drehzahl Umwälzpumpe`,
+    `Eintrittstemperatur Kompressor`), established terms one word (`Vorlauftemperatur`, `Hochdruckschalter`)
+- Energy entities like the energy monitor of the Web HMI: accumulated energies from `sStatisticalData`, meters
+  (`*_METER_*`) only for power, daily energy and mass flow
+  - exception: meters without a usable statistic (`HeatPump` source, `SolarCircuit`, `Photovoltaics`)
+  - thermal statistics (`*_THERMAL_ENERGY`, `*_SPF`, `*_PF`) only when the meter of the mode is not deactivated,
+    otherwise they are always `0`
 - Log messages start with a capital letter, no trailing period, values as `%s` arguments
+- Debug logs only for events and decisions the diagnostics do not show (writes, skipped or removed entities and
+  devices, read retries), never for data the diagnostics contain (device counts, options, values, message IDs), at
+  most one line per update
 - Every file follows `.editorconfig`, whether a linter checks it or not
 - Style rules apply to new and changed code, existing code only adapted when asked
 - Every `.py` file starts with (after the shebang of an executable script, update the end year when editing a
@@ -61,30 +89,62 @@ Before finishing a change, run `ruff format`, `lint.sh` and `pytest`, in this or
 
 - No inline lint/type suppressions, no new ones in the config, no `# pragma: no cover`, fix or test the code
   - only exception: `# noqa: ARG00x` in required signatures
-- No real credentials, serial numbers or IP addresses, use the fake data in `tests/api_data.py`
+- No real credentials, serial numbers or IP addresses, use the fake data in `tests/fixtures/`
 - Missing device endpoints or values belong in `keba_keenergy_api`, stop and ask how to proceed
   - values calculated from existing ones are fine in the integration
-- Limited flash writes: write only changed values, only via the coordinator write methods, debounce fast-changing
-  values (e.g. temperatures set with a slider)
+- Limited flash writes: write only changed values, only via `coordinator.async_write_data()`, debounce
+  fast-changing values (e.g. sliders) with `KebaKeEnergyDebouncedEntity`
 - No new dependencies (`pyproject.toml`, `manifest.json`, also dev dependencies) without asking first
 - `git add` new files, the pre-commit hooks only check tracked files
-- Never edit generated files (`coverage-badge.svg`) or `config/` (except `config/configuration.yaml`)
+- Never edit generated files (`coverage-badge.svg`, `website/docs/`) or `config/` (except
+  `config/configuration.yaml`)
 - **Never edit `CLAUDE.md` files or `.claude/skills/` on your own**, only when asked
   - if a change conflicts with them, stop and ask
 
 ## Architecture
 
-- Follow the Home Assistant integration conventions, code in `custom_components/keba_keenergy/`
+- **Always** do it like current Home Assistant core integrations on the platinum quality scale (code, tests,
+  fixtures, file layout), code in `custom_components/keba_keenergy/`
+  - the rules of the `CLAUDE.md` files and the intended deviations take precedence
 - Helpers are `_`-prefixed methods of the class that uses them (`@staticmethod` if they need no `self`)
   - module-level functions only when shared across classes or modules, for Home Assistant callbacks (action
     handlers, validators), as helpers of module-level Home Assistant functions (`async_setup_entry`) or to build
     the entity descriptions of a platform
+- `condition` of entity descriptions as named predicates in `entity.py` (`has_…`, `is_…`), no lambdas
 - Constants always in `const.py`
   - except what Home Assistant reads from the module itself (`_LOGGER`, `PARALLEL_UPDATES`, `CONFIG_SCHEMA`) and
     the entity descriptions of a platform (`SENSOR_TYPES`, ...)
+- Code only needed to keep the keys and states of `keba_keenergy_api` 2.x (no breaking changes) in `legacy.py`,
+  also its constants (`ENDPOINTS`, `LEGACY_STATES`, `get_state()`, `new_key` via `get_data_key()`)
 - Class member order: `__init__`, dunder methods, properties, public methods (also Home Assistant overrides)
   grouped by topic, helpers directly below their first caller
   - applies to new methods, existing ones only moved when asked
+
+## Domain
+
+- Heating circuit operating modes of the Web HMI map to Home Assistant (`HEATING_CIRCUIT_PRESET_TO_HA`)
+  - off: HVAC `off`, no preset
+  - schedule (`AUTO`): HVAC `auto`, preset `home`
+  - day (`NORMAL`), night (`REDUCED`), party: HVAC `heat` (`cool` or `heat_cool` by circuit type), presets `comfort`,
+    `sleep`, `boost`
+  - `EXTERNAL`, `ROOM_CONTROL`: HVAC `off`, no preset
+- Away is a date range, not an operating mode
+  - global for all heating circuits, set by the preset `away`, the action `set_away_date_range` or the blueprint
+  - the preset writes the range (today until +365 days, time zone of the control unit) and `NORMAL` unless a manual
+    mode is active, every other HVAC mode or preset ends it (range of yesterday)
+  - shown at once while active, the control unit takes it over later
+  - circuits that only cool have no away
+- Target temperature is the value of the effective operating mode, shown at once after a change
+  - day and party `target_temperature_day`, night `target_temperature_night`, away `target_temperature_away`,
+    circuits that only cool use the cooling variants
+  - schedule: day or night of the week timer now (`coordinator.get_scheduled_operating_mode()`)
+  - circuits that heat and cool: `selected_target_temperature` of the control unit, the season is unknown, so it is
+    shown after the next update
+  - the user changes only the offset (`target_temperature_offset`, debounced), a pending offset is discarded if the
+    mode changes
+- Week timers: blocks are day, outside of them night, the week starts with Sunday, read with the heating circuits,
+  the time zone once on setup
+- `_async_write_value()` sets the local value at once, new writes keep that, otherwise the UI flickers
 
 ## Quality scale
 
@@ -97,14 +157,14 @@ Before finishing a change, run `ruff format`, `lint.sh` and `pytest`, in this or
   only for diagnosis or service, or entities only useful for rare setups
 - `log-when-unavailable`: failed updates raise `UpdateFailed`, the coordinator logs the outage once
 - `parallel-updates`: every platform sets `PARALLEL_UPDATES`
-- `stale-devices`: device identifiers always come from `get_device_identifier()`, otherwise devices with entities
-  are removed
+- `stale-devices`: device identifiers always come from `coordinator.device_identifier()`, otherwise devices with
+  entities are removed
 - The coordinator gets `config_entry` explicitly
 - The options flow aborts while the integration is not loaded (`options_not_ready`), it needs the detected devices
 
 ## Documentation
 
-- Update `website/content/index.md` when entities, options, actions or behaviour change
+- Update `website/content/index.md` when entities, options, actions or behavior change
 - Keep the `<!--start-…-->` / `<!--end-…-->` markers in `README.md`, `CONTRIBUTING.md` and `CHANGELOG.md`
 - Keep `README.md` short (install, links to the sections), details go to `website/content/index.md`
 - Images are in `assets/` (also used by `README.md`)
@@ -113,8 +173,11 @@ Before finishing a change, run `ruff format`, `lint.sh` and `pytest`, in this or
 
 - Every change users notice gets an entry under `## [Unreleased]` in `CHANGELOG.md` (not refactorings, tests, CI,
   `CLAUDE.md` or skills), use the `changelog` skill
+- Tickets: create and update them with the `issue` skill
 - Version: only change it when asked, use the `release` skill
 - `keba_keenergy_api` requirement is in `pyproject.toml` and `manifest.json`, run `uv lock` after changing it
+- Minimum Home Assistant version is the same in `hacs.json`, `homeassistant` and `pytest-homeassistant`
+  (`pyproject.toml`) and `website/content/index.md`, run `uv lock` after changing it
 - Work on `develop`
 - Only commit or push when asked
 - Commit message of a change for an issue starts with its number (`#67 Fix sensors that are not in use`)

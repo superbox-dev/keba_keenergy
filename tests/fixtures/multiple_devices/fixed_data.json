@@ -1,0 +1,66 @@
+[
+  {
+    "name": "APPL.CtrlAppl.sParam.options.hasPhotovoltaics",
+    "value": "true"
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.options.heatCircuit[0].type",
+    "value": "0",
+    "attributes": {
+      "formatId": "fmtHeatCircuitMode",
+      "longText": "Mode",
+      "unitId": "Enum",
+      "upperLimit": "3",
+      "lowerLimit": "0"
+    }
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.options.heatCircuit[1].type",
+    "value": "1",
+    "attributes": {
+      "formatId": "fmtHeatCircuitMode",
+      "longText": "Mode",
+      "unitId": "Enum",
+      "upperLimit": "3",
+      "lowerLimit": "0"
+    }
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.options.heatpump[0].hasActiveCooling",
+    "value": "false"
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.options.heatpump[0].hasPassiveCooling",
+    "value": "false"
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.options.heatpump[0].ElectricEnergyMeter.type",
+    "value": "2",
+    "attributes": {
+      "formatId": "fmtElMeterType",
+      "longText": "El. energy meter",
+      "unitId": "Enum",
+      "upperLimit": "4",
+      "lowerLimit": "0"
+    }
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.options.heatpump[0].HeatMeter.type",
+    "value": "2",
+    "attributes": {
+      "formatId": "fmtHeatMeterType",
+      "longText": "Heat meter",
+      "unitId": "Enum",
+      "upperLimit": "4",
+      "lowerLimit": "0"
+    }
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.extHeatSource[0].param.hasEmmission",
+    "value": "true"
+  },
+  {
+    "name": "APPL.CtrlAppl.sParam.extHeatSource[1].param.hasEmmission",
+    "value": "false"
+  }
+]

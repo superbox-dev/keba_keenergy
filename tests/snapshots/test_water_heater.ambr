@@ -1,5 +1,51 @@
 # serializer version: 1
-# name: test_water_heater[de][water_heater.keba_keenergy_12345678_1]
+# name: test_water_heater[de][water_heater.keba_keenergy_12345678_1-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': dict({
+      <WaterHeaterCapabilityAttribute.MAX_TEMP: 'max_temp'>: 52.0,
+      <WaterHeaterCapabilityAttribute.MIN_TEMP: 'min_temp'>: 0.0,
+      <WaterHeaterCapabilityAttribute.OPERATION_LIST: 'operation_list'>: list([
+        'eco',
+        'performance',
+        'off',
+        'heat_pump',
+      ]),
+    }),
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'device_class': None,
+    'device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_hot_water_tank_1')]>,
+    'disabled_by': None,
+    'domain': 'water_heater',
+    'entity_category': None,
+    'entity_id': 'water_heater.keba_keenergy_12345678_1',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': None,
+    'options': dict({
+    }),
+    'original_device_class': None,
+    'original_icon': None,
+    'original_name': None,
+    'platform': 'keba_keenergy',
+    'previous_unique_id': None,
+    'suggested_object_id': 'keba_keenergy_12345678_1',
+    'supported_features': <WaterHeaterEntityFeature: 11>,
+    'translation_key': 'dhw_tank',
+    'unique_id': '12345678_1',
+    'unit_of_measurement': None,
+  })
+# ---
+# name: test_water_heater[de][water_heater.keba_keenergy_12345678_1-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <WaterHeaterStateAttribute.CURRENT_TEMPERATURE: 'current_temperature'>: 47.7,
@@ -17,6 +63,7 @@
       <WaterHeaterStateAttribute.TARGET_TEMP_HIGH: 'target_temp_high'>: 51.0,
       <WaterHeaterStateAttribute.TARGET_TEMP_LOW: 'target_temp_low'>: 32.5,
       <WaterHeaterStateAttribute.TARGET_TEMPERATURE: 'temperature'>: 51.0,
+      <WaterHeaterStateAttribute.TEMPERATURE_UNIT: 'temperature_unit'>: <UnitOfTemperature.CELSIUS: '°C'>,
     }),
     'context': <ANY>,
     'entity_id': 'water_heater.keba_keenergy_12345678_1',
@@ -26,7 +73,53 @@
     'state': 'performance',
   })
 # ---
-# name: test_water_heater[de][water_heater.keba_keenergy_12345678_2]
+# name: test_water_heater[de][water_heater.keba_keenergy_12345678_2-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': dict({
+      <WaterHeaterCapabilityAttribute.MAX_TEMP: 'max_temp'>: 52.0,
+      <WaterHeaterCapabilityAttribute.MIN_TEMP: 'min_temp'>: 0.0,
+      <WaterHeaterCapabilityAttribute.OPERATION_LIST: 'operation_list'>: list([
+        'eco',
+        'performance',
+        'off',
+        'heat_pump',
+      ]),
+    }),
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'device_class': None,
+    'device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_hot_water_tank_2')]>,
+    'disabled_by': None,
+    'domain': 'water_heater',
+    'entity_category': None,
+    'entity_id': 'water_heater.keba_keenergy_12345678_2',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': None,
+    'options': dict({
+    }),
+    'original_device_class': None,
+    'original_icon': None,
+    'original_name': None,
+    'platform': 'keba_keenergy',
+    'previous_unique_id': None,
+    'suggested_object_id': 'keba_keenergy_12345678_2',
+    'supported_features': <WaterHeaterEntityFeature: 11>,
+    'translation_key': 'dhw_tank',
+    'unique_id': '12345678_2',
+    'unit_of_measurement': None,
+  })
+# ---
+# name: test_water_heater[de][water_heater.keba_keenergy_12345678_2-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <WaterHeaterStateAttribute.CURRENT_TEMPERATURE: 'current_temperature'>: 47.7,
@@ -44,6 +137,7 @@
       <WaterHeaterStateAttribute.TARGET_TEMP_HIGH: 'target_temp_high'>: 51.0,
       <WaterHeaterStateAttribute.TARGET_TEMP_LOW: 'target_temp_low'>: 32.5,
       <WaterHeaterStateAttribute.TARGET_TEMPERATURE: 'temperature'>: 51.0,
+      <WaterHeaterStateAttribute.TEMPERATURE_UNIT: 'temperature_unit'>: <UnitOfTemperature.CELSIUS: '°C'>,
     }),
     'context': <ANY>,
     'entity_id': 'water_heater.keba_keenergy_12345678_2',
@@ -53,7 +147,52 @@
     'state': 'off',
   })
 # ---
-# name: test_water_heater[de][water_heater.keba_keenergy_12345678_buffer_tank_1]
+# name: test_water_heater[de][water_heater.keba_keenergy_12345678_buffer_tank_1-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': dict({
+      <WaterHeaterCapabilityAttribute.MAX_TEMP: 'max_temp'>: 60.0,
+      <WaterHeaterCapabilityAttribute.MIN_TEMP: 'min_temp'>: 43.3,
+      <WaterHeaterCapabilityAttribute.OPERATION_LIST: 'operation_list'>: list([
+        'performance',
+        'off',
+        'heat_pump',
+      ]),
+    }),
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'device_class': None,
+    'device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_buffer_tank_1')]>,
+    'disabled_by': None,
+    'domain': 'water_heater',
+    'entity_category': None,
+    'entity_id': 'water_heater.keba_keenergy_12345678_buffer_tank_1',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': None,
+    'options': dict({
+    }),
+    'original_device_class': None,
+    'original_icon': None,
+    'original_name': None,
+    'platform': 'keba_keenergy',
+    'previous_unique_id': None,
+    'suggested_object_id': 'keba_keenergy_12345678_buffer_tank_1',
+    'supported_features': <WaterHeaterEntityFeature: 10>,
+    'translation_key': 'buffer_tank',
+    'unique_id': '12345678_buffer_tank_1',
+    'unit_of_measurement': None,
+  })
+# ---
+# name: test_water_heater[de][water_heater.keba_keenergy_12345678_buffer_tank_1-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <WaterHeaterStateAttribute.CURRENT_TEMPERATURE: 'current_temperature'>: 45.7,
@@ -70,6 +209,7 @@
       <WaterHeaterStateAttribute.TARGET_TEMP_HIGH: 'target_temp_high'>: 44.0,
       <WaterHeaterStateAttribute.TARGET_TEMP_LOW: 'target_temp_low'>: 10.0,
       <WaterHeaterStateAttribute.TARGET_TEMPERATURE: 'temperature'>: 44.0,
+      <WaterHeaterStateAttribute.TEMPERATURE_UNIT: 'temperature_unit'>: <UnitOfTemperature.CELSIUS: '°C'>,
     }),
     'context': <ANY>,
     'entity_id': 'water_heater.keba_keenergy_12345678_buffer_tank_1',
@@ -79,7 +219,52 @@
     'state': 'off',
   })
 # ---
-# name: test_water_heater[de][water_heater.keba_keenergy_12345678_buffer_tank_2]
+# name: test_water_heater[de][water_heater.keba_keenergy_12345678_buffer_tank_2-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': dict({
+      <WaterHeaterCapabilityAttribute.MAX_TEMP: 'max_temp'>: 60.0,
+      <WaterHeaterCapabilityAttribute.MIN_TEMP: 'min_temp'>: 43.3,
+      <WaterHeaterCapabilityAttribute.OPERATION_LIST: 'operation_list'>: list([
+        'performance',
+        'off',
+        'heat_pump',
+      ]),
+    }),
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'device_class': None,
+    'device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_buffer_tank_2')]>,
+    'disabled_by': None,
+    'domain': 'water_heater',
+    'entity_category': None,
+    'entity_id': 'water_heater.keba_keenergy_12345678_buffer_tank_2',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': None,
+    'options': dict({
+    }),
+    'original_device_class': None,
+    'original_icon': None,
+    'original_name': None,
+    'platform': 'keba_keenergy',
+    'previous_unique_id': None,
+    'suggested_object_id': 'keba_keenergy_12345678_buffer_tank_2',
+    'supported_features': <WaterHeaterEntityFeature: 10>,
+    'translation_key': 'buffer_tank',
+    'unique_id': '12345678_buffer_tank_2',
+    'unit_of_measurement': None,
+  })
+# ---
+# name: test_water_heater[de][water_heater.keba_keenergy_12345678_buffer_tank_2-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <WaterHeaterStateAttribute.CURRENT_TEMPERATURE: 'current_temperature'>: 35.7,
@@ -96,6 +281,7 @@
       <WaterHeaterStateAttribute.TARGET_TEMP_HIGH: 'target_temp_high'>: 43.0,
       <WaterHeaterStateAttribute.TARGET_TEMP_LOW: 'target_temp_low'>: 11.0,
       <WaterHeaterStateAttribute.TARGET_TEMPERATURE: 'temperature'>: 43.0,
+      <WaterHeaterStateAttribute.TEMPERATURE_UNIT: 'temperature_unit'>: <UnitOfTemperature.CELSIUS: '°C'>,
     }),
     'context': <ANY>,
     'entity_id': 'water_heater.keba_keenergy_12345678_buffer_tank_2',
@@ -105,7 +291,53 @@
     'state': 'heat_pump',
   })
 # ---
-# name: test_water_heater[en][water_heater.keba_keenergy_12345678_1]
+# name: test_water_heater[en][water_heater.keba_keenergy_12345678_1-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': dict({
+      <WaterHeaterCapabilityAttribute.MAX_TEMP: 'max_temp'>: 52.0,
+      <WaterHeaterCapabilityAttribute.MIN_TEMP: 'min_temp'>: 0.0,
+      <WaterHeaterCapabilityAttribute.OPERATION_LIST: 'operation_list'>: list([
+        'eco',
+        'performance',
+        'off',
+        'heat_pump',
+      ]),
+    }),
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'device_class': None,
+    'device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_hot_water_tank_1')]>,
+    'disabled_by': None,
+    'domain': 'water_heater',
+    'entity_category': None,
+    'entity_id': 'water_heater.keba_keenergy_12345678_1',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': None,
+    'options': dict({
+    }),
+    'original_device_class': None,
+    'original_icon': None,
+    'original_name': None,
+    'platform': 'keba_keenergy',
+    'previous_unique_id': None,
+    'suggested_object_id': 'keba_keenergy_12345678_1',
+    'supported_features': <WaterHeaterEntityFeature: 11>,
+    'translation_key': 'dhw_tank',
+    'unique_id': '12345678_1',
+    'unit_of_measurement': None,
+  })
+# ---
+# name: test_water_heater[en][water_heater.keba_keenergy_12345678_1-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <WaterHeaterStateAttribute.CURRENT_TEMPERATURE: 'current_temperature'>: 47.7,
@@ -123,6 +355,7 @@
       <WaterHeaterStateAttribute.TARGET_TEMP_HIGH: 'target_temp_high'>: 51.0,
       <WaterHeaterStateAttribute.TARGET_TEMP_LOW: 'target_temp_low'>: 32.5,
       <WaterHeaterStateAttribute.TARGET_TEMPERATURE: 'temperature'>: 51.0,
+      <WaterHeaterStateAttribute.TEMPERATURE_UNIT: 'temperature_unit'>: <UnitOfTemperature.CELSIUS: '°C'>,
     }),
     'context': <ANY>,
     'entity_id': 'water_heater.keba_keenergy_12345678_1',
@@ -132,7 +365,53 @@
     'state': 'performance',
   })
 # ---
-# name: test_water_heater[en][water_heater.keba_keenergy_12345678_2]
+# name: test_water_heater[en][water_heater.keba_keenergy_12345678_2-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': dict({
+      <WaterHeaterCapabilityAttribute.MAX_TEMP: 'max_temp'>: 52.0,
+      <WaterHeaterCapabilityAttribute.MIN_TEMP: 'min_temp'>: 0.0,
+      <WaterHeaterCapabilityAttribute.OPERATION_LIST: 'operation_list'>: list([
+        'eco',
+        'performance',
+        'off',
+        'heat_pump',
+      ]),
+    }),
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'device_class': None,
+    'device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_hot_water_tank_2')]>,
+    'disabled_by': None,
+    'domain': 'water_heater',
+    'entity_category': None,
+    'entity_id': 'water_heater.keba_keenergy_12345678_2',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': None,
+    'options': dict({
+    }),
+    'original_device_class': None,
+    'original_icon': None,
+    'original_name': None,
+    'platform': 'keba_keenergy',
+    'previous_unique_id': None,
+    'suggested_object_id': 'keba_keenergy_12345678_2',
+    'supported_features': <WaterHeaterEntityFeature: 11>,
+    'translation_key': 'dhw_tank',
+    'unique_id': '12345678_2',
+    'unit_of_measurement': None,
+  })
+# ---
+# name: test_water_heater[en][water_heater.keba_keenergy_12345678_2-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <WaterHeaterStateAttribute.CURRENT_TEMPERATURE: 'current_temperature'>: 47.7,
@@ -150,6 +429,7 @@
       <WaterHeaterStateAttribute.TARGET_TEMP_HIGH: 'target_temp_high'>: 51.0,
       <WaterHeaterStateAttribute.TARGET_TEMP_LOW: 'target_temp_low'>: 32.5,
       <WaterHeaterStateAttribute.TARGET_TEMPERATURE: 'temperature'>: 51.0,
+      <WaterHeaterStateAttribute.TEMPERATURE_UNIT: 'temperature_unit'>: <UnitOfTemperature.CELSIUS: '°C'>,
     }),
     'context': <ANY>,
     'entity_id': 'water_heater.keba_keenergy_12345678_2',
@@ -159,7 +439,52 @@
     'state': 'off',
   })
 # ---
-# name: test_water_heater[en][water_heater.keba_keenergy_12345678_buffer_tank_1]
+# name: test_water_heater[en][water_heater.keba_keenergy_12345678_buffer_tank_1-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': dict({
+      <WaterHeaterCapabilityAttribute.MAX_TEMP: 'max_temp'>: 60.0,
+      <WaterHeaterCapabilityAttribute.MIN_TEMP: 'min_temp'>: 43.3,
+      <WaterHeaterCapabilityAttribute.OPERATION_LIST: 'operation_list'>: list([
+        'performance',
+        'off',
+        'heat_pump',
+      ]),
+    }),
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'device_class': None,
+    'device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_buffer_tank_1')]>,
+    'disabled_by': None,
+    'domain': 'water_heater',
+    'entity_category': None,
+    'entity_id': 'water_heater.keba_keenergy_12345678_buffer_tank_1',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': None,
+    'options': dict({
+    }),
+    'original_device_class': None,
+    'original_icon': None,
+    'original_name': None,
+    'platform': 'keba_keenergy',
+    'previous_unique_id': None,
+    'suggested_object_id': 'keba_keenergy_12345678_buffer_tank_1',
+    'supported_features': <WaterHeaterEntityFeature: 10>,
+    'translation_key': 'buffer_tank',
+    'unique_id': '12345678_buffer_tank_1',
+    'unit_of_measurement': None,
+  })
+# ---
+# name: test_water_heater[en][water_heater.keba_keenergy_12345678_buffer_tank_1-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <WaterHeaterStateAttribute.CURRENT_TEMPERATURE: 'current_temperature'>: 45.7,
@@ -176,6 +501,7 @@
       <WaterHeaterStateAttribute.TARGET_TEMP_HIGH: 'target_temp_high'>: 44.0,
       <WaterHeaterStateAttribute.TARGET_TEMP_LOW: 'target_temp_low'>: 10.0,
       <WaterHeaterStateAttribute.TARGET_TEMPERATURE: 'temperature'>: 44.0,
+      <WaterHeaterStateAttribute.TEMPERATURE_UNIT: 'temperature_unit'>: <UnitOfTemperature.CELSIUS: '°C'>,
     }),
     'context': <ANY>,
     'entity_id': 'water_heater.keba_keenergy_12345678_buffer_tank_1',
@@ -185,7 +511,52 @@
     'state': 'off',
   })
 # ---
-# name: test_water_heater[en][water_heater.keba_keenergy_12345678_buffer_tank_2]
+# name: test_water_heater[en][water_heater.keba_keenergy_12345678_buffer_tank_2-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': dict({
+      <WaterHeaterCapabilityAttribute.MAX_TEMP: 'max_temp'>: 60.0,
+      <WaterHeaterCapabilityAttribute.MIN_TEMP: 'min_temp'>: 43.3,
+      <WaterHeaterCapabilityAttribute.OPERATION_LIST: 'operation_list'>: list([
+        'performance',
+        'off',
+        'heat_pump',
+      ]),
+    }),
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'device_class': None,
+    'device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_buffer_tank_2')]>,
+    'disabled_by': None,
+    'domain': 'water_heater',
+    'entity_category': None,
+    'entity_id': 'water_heater.keba_keenergy_12345678_buffer_tank_2',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': None,
+    'options': dict({
+    }),
+    'original_device_class': None,
+    'original_icon': None,
+    'original_name': None,
+    'platform': 'keba_keenergy',
+    'previous_unique_id': None,
+    'suggested_object_id': 'keba_keenergy_12345678_buffer_tank_2',
+    'supported_features': <WaterHeaterEntityFeature: 10>,
+    'translation_key': 'buffer_tank',
+    'unique_id': '12345678_buffer_tank_2',
+    'unit_of_measurement': None,
+  })
+# ---
+# name: test_water_heater[en][water_heater.keba_keenergy_12345678_buffer_tank_2-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <WaterHeaterStateAttribute.CURRENT_TEMPERATURE: 'current_temperature'>: 35.7,
@@ -202,6 +573,7 @@
       <WaterHeaterStateAttribute.TARGET_TEMP_HIGH: 'target_temp_high'>: 43.0,
       <WaterHeaterStateAttribute.TARGET_TEMP_LOW: 'target_temp_low'>: 11.0,
       <WaterHeaterStateAttribute.TARGET_TEMPERATURE: 'temperature'>: 43.0,
+      <WaterHeaterStateAttribute.TEMPERATURE_UNIT: 'temperature_unit'>: <UnitOfTemperature.CELSIUS: '°C'>,
     }),
     'context': <ANY>,
     'entity_id': 'water_heater.keba_keenergy_12345678_buffer_tank_2',

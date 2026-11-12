@@ -4,228 +4,244 @@
 
 from __future__ import annotations
 
+from http import HTTPStatus
 from typing import TYPE_CHECKING
-from typing import Any
 
 import pytest
 from homeassistant.components.switch.const import DOMAIN as SWITCH_DOMAIN
 from homeassistant.const import ATTR_ENTITY_ID
 from homeassistant.const import SERVICE_TURN_OFF
 from homeassistant.const import SERVICE_TURN_ON
+from homeassistant.const import STATE_OFF
+from homeassistant.const import STATE_ON
 from homeassistant.const import Platform
-from homeassistant.core import HomeAssistant
-from homeassistant.core import State
+from homeassistant.exceptions import HomeAssistantError
 from homeassistant.helpers import entity_registry as er
-from keba_keenergy_api.constants import HeatCircuitMode
+from keba_keenergy_api.enums import HeatingCircuitType
+from pytest_homeassistant.common import snapshot_platform
 
-from tests import get_platform_states
-from tests.api_data import ENTITY_UPDATED_DATA_RESPONSE
-from tests.api_data import MULTIPLE_POSITION_DATA_RESPONSE
-from tests.api_data import MULTIPLE_POSITION_OTHER_MODES_DATA_RESPONSE
-from tests.api_data import MULTIPLE_POSITIONS_RESPONSE
-from tests.api_data import get_multiple_position_fixed_data_response
-from tests.api_data import update_response
+from tests import get_state
+from tests import replace_values
+from tests.const import ENTITY_UPDATED_VALUES
+from tests.const import NOW
+from tests.const import OTHER_MODES_VALUES
+from tests.const import PASSIVE_COOLING_VALUES
+from tests.test_issues_data import WRITE_COUNT_ENTITY_ID
+from tests.test_switch_data import COMPRESSOR_USE_NIGHT_SPEED_ENTITY_ID
+from tests.test_switch_data import MODBUS_ENTITY_ID
+from tests.test_switch_data import REMOTE_ACCESS_UPDATE_REQUESTS
+from tests.test_switch_data import REMOTE_MAINTENANCE_ENTITY_ID
+from tests.test_switch_data import SOLAR_PRIORITY_ENTITY_ID
+from tests.test_switch_data import USE_COOLING_CURVE_ENTITY_ID
+from tests.test_switch_data import USE_HEATING_CURVE_ENTITY_ID
 
 if TYPE_CHECKING:
+    from homeassistant.core import HomeAssistant
+    from pytest_homeassistant.common import MockConfigEntry
     from syrupy.assertion import SnapshotAssertion
 
     from tests.conftest import FakeKebaKeEnergyAPI
 
+pytestmark = pytest.mark.freeze_time(NOW)
 
-@pytest.mark.parametrize("language", ["en", "de"], indirect=True, ids=["en", "de"])
-@pytest.mark.usefixtures("entity_registry_enabled_by_default", "language")
+
+@pytest.mark.parametrize("language", ["de", "en"], ids=["de", "en"])
+@pytest.mark.usefixtures("entity_registry_enabled_by_default")
 async def test_switches(
     hass: HomeAssistant,
+    mock_config_entry: MockConfigEntry,
+    entity_registry: er.EntityRegistry,
     fake_api: FakeKebaKeEnergyAPI,
     snapshot: SnapshotAssertion,
+    language: str,
 ) -> None:
     """Test the states of all switch entities."""
-    fake_api.responses = [
-        MULTIPLE_POSITIONS_RESPONSE,
-        get_multiple_position_fixed_data_response(has_passive_cooling="true"),
-        MULTIPLE_POSITION_DATA_RESPONSE,
-    ]
+    hass.config.language = language
+    fake_api.load_device("multiple_devices")
+    fake_api.platforms = [Platform.SWITCH]
+    fake_api.fixed_data = replace_values(fake_api.fixed_data, PASSIVE_COOLING_VALUES)
     await fake_api.setup_integration()
 
-    for state in get_platform_states(hass, fake_api.config_entry, Platform.SWITCH):
-        assert state == snapshot(name=state.entity_id)
+    await snapshot_platform(hass, entity_registry, snapshot, mock_config_entry.entry_id)
 
 
 @pytest.mark.parametrize(
-    ("entity_id", "response", "expected"),
+    ("service_call", "values", "expected_writes"),
     [
         (
-            "switch.keba_keenergy_12345678_heat_pump_compressor_use_night_speed",
-            MULTIPLE_POSITION_OTHER_MODES_DATA_RESPONSE,
-            '[{"name": "APPL.CtrlAppl.sParam.heatpump[0].HeatPumpPowerCtrl.param.useDayNightSpeed", "value": "1"}]',
+            (SERVICE_TURN_ON, COMPRESSOR_USE_NIGHT_SPEED_ENTITY_ID),
+            OTHER_MODES_VALUES,
+            ['[{"name": "APPL.CtrlAppl.sParam.heatpump[0].HeatPumpPowerCtrl.param.useDayNightSpeed", "value": "1"}]'],
         ),
         (
-            "switch.keba_keenergy_12345678_solar_circuit_priority_1_before_2_2",
-            MULTIPLE_POSITION_OTHER_MODES_DATA_RESPONSE,
-            (
-                '[{"name": "APPL.CtrlAppl.sParam.hmiRetainData.consumer1PrioritySolar[1]", "value": "1"}, '
-                '{"name": "APPL.CtrlAppl.sParam.genericHeat[2].param.priority", "value": "14"}]'
-            ),
+            (SERVICE_TURN_OFF, COMPRESSOR_USE_NIGHT_SPEED_ENTITY_ID),
+            {},
+            ['[{"name": "APPL.CtrlAppl.sParam.heatpump[0].HeatPumpPowerCtrl.param.useDayNightSpeed", "value": "0"}]'],
         ),
         (
-            "switch.keba_keenergy_12345678_heat_circuit_use_heating_curve_1",
-            MULTIPLE_POSITION_DATA_RESPONSE,
-            '[{"name": "APPL.CtrlAppl.sParam.heatCircuit[0].param.enableHeatCurveLinTab", "value": "1"}]',
+            (SERVICE_TURN_ON, SOLAR_PRIORITY_ENTITY_ID),
+            OTHER_MODES_VALUES,
+            [
+                (
+                    '[{"name": "APPL.CtrlAppl.sParam.hmiRetainData.consumer1PrioritySolar[1]", "value": "1"}, '
+                    '{"name": "APPL.CtrlAppl.sParam.genericHeat[2].param.priority", "value": "14"}]'
+                ),
+            ],
         ),
         (
-            "switch.keba_keenergy_12345678_heat_circuit_use_cooling_curve_2",
-            ENTITY_UPDATED_DATA_RESPONSE,
-            '[{"name": "APPL.CtrlAppl.sParam.heatCircuit[1].param.enableHeatCurveLinTab", "value": "1"}]',
+            (SERVICE_TURN_OFF, SOLAR_PRIORITY_ENTITY_ID),
+            {},
+            [
+                (
+                    '[{"name": "APPL.CtrlAppl.sParam.hmiRetainData.consumer1PrioritySolar[1]", "value": "0"}, '
+                    '{"name": "APPL.CtrlAppl.sParam.genericHeat[2].param.priority", "value": "15"}]'
+                ),
+            ],
+        ),
+        ((SERVICE_TURN_ON, SOLAR_PRIORITY_ENTITY_ID), {}, []),
+        ((SERVICE_TURN_OFF, SOLAR_PRIORITY_ENTITY_ID), OTHER_MODES_VALUES, []),
+        (
+            (SERVICE_TURN_ON, USE_HEATING_CURVE_ENTITY_ID),
+            {},
+            ['[{"name": "APPL.CtrlAppl.sParam.heatCircuit[0].param.enableHeatCurveLinTab", "value": "1"}]'],
+        ),
+        (
+            (SERVICE_TURN_ON, USE_COOLING_CURVE_ENTITY_ID),
+            ENTITY_UPDATED_VALUES,
+            ['[{"name": "APPL.CtrlAppl.sParam.heatCircuit[1].param.enableHeatCurveLinTab", "value": "1"}]'],
         ),
     ],
     ids=[
-        "heat_pump_compressor_use_night_speed",
-        "solar_circuit_priority_1_before_2",
-        "heat_circuit_use_heating_curve",
-        "heat_circuit_use_cooling_curve",
+        "compressor_use_night_speed_turn_on",
+        "compressor_use_night_speed_turn_off",
+        "solar_circuit_priority_turn_on",
+        "solar_circuit_priority_turn_off",
+        "solar_circuit_priority_turn_on_unchanged",
+        "solar_circuit_priority_turn_off_unchanged",
+        "heat_circuit_use_heating_curve_turn_on",
+        "heat_circuit_use_cooling_curve_turn_on",
     ],
 )
 @pytest.mark.usefixtures("entity_registry_enabled_by_default")
-async def test_turn_on(
+async def test_turn_on_off(
     hass: HomeAssistant,
     fake_api: FakeKebaKeEnergyAPI,
-    entity_id: str,
-    response: list[dict[str, Any]],
-    expected: str,
+    service_call: tuple[str, str],
+    values: dict[str, str],
+    expected_writes: list[str],
 ) -> None:
-    """Test turning on a switch."""
-    fake_api.responses = [
-        MULTIPLE_POSITIONS_RESPONSE,
-        get_multiple_position_fixed_data_response(),
-        response,
-        # Read the API after the action call.
-        response,
-    ]
+    """Test turning on and off a switch, a switch that already has the state is not written."""
+    fake_api.load_device("multiple_devices")
+    fake_api.data = replace_values(fake_api.data, values)
     await fake_api.setup_integration()
 
-    state: State | None = hass.states.get(entity_id)
-    assert isinstance(state, State)
-
-    await hass.services.async_call(
-        domain=SWITCH_DOMAIN,
-        service=SERVICE_TURN_ON,
-        service_data={
-            ATTR_ENTITY_ID: entity_id,
-        },
-        blocking=True,
-    )
-
-    fake_api.assert_called_write_with(expected)
-
-
-@pytest.mark.parametrize(
-    ("entity_id", "response", "expected"),
-    [
-        (
-            "switch.keba_keenergy_12345678_heat_pump_compressor_use_night_speed",
-            MULTIPLE_POSITION_DATA_RESPONSE,
-            '[{"name": "APPL.CtrlAppl.sParam.heatpump[0].HeatPumpPowerCtrl.param.useDayNightSpeed", "value": "0"}]',
-        ),
-        (
-            "switch.keba_keenergy_12345678_solar_circuit_priority_1_before_2_2",
-            MULTIPLE_POSITION_DATA_RESPONSE,
-            (
-                '[{"name": "APPL.CtrlAppl.sParam.hmiRetainData.consumer1PrioritySolar[1]", "value": "0"}, '
-                '{"name": "APPL.CtrlAppl.sParam.genericHeat[2].param.priority", "value": "15"}]'
-            ),
-        ),
-    ],
-    ids=["heat_pump_compressor_use_night_speed", "solar_circuit_priority_1_before_2"],
-)
-@pytest.mark.usefixtures("entity_registry_enabled_by_default")
-async def test_turn_off(
-    hass: HomeAssistant,
-    fake_api: FakeKebaKeEnergyAPI,
-    entity_id: str,
-    response: list[dict[str, Any]],
-    expected: str,
-) -> None:
-    """Test turning off a switch."""
-    fake_api.responses = [
-        MULTIPLE_POSITIONS_RESPONSE,
-        get_multiple_position_fixed_data_response(),
-        response,
-        # Read the API after the action call.
-        response,
-    ]
-    await fake_api.setup_integration()
-
-    state: State | None = hass.states.get(entity_id)
-    assert isinstance(state, State)
-
-    await hass.services.async_call(
-        domain=SWITCH_DOMAIN,
-        service=SERVICE_TURN_OFF,
-        service_data={
-            ATTR_ENTITY_ID: entity_id,
-        },
-        blocking=True,
-    )
-
-    fake_api.assert_called_write_with(expected)
-
-
-@pytest.mark.parametrize(
-    ("service", "response"),
-    [
-        (SERVICE_TURN_ON, MULTIPLE_POSITION_DATA_RESPONSE),
-        (SERVICE_TURN_OFF, MULTIPLE_POSITION_OTHER_MODES_DATA_RESPONSE),
-    ],
-    ids=["turn_on", "turn_off"],
-)
-async def test_unchanged_state(
-    hass: HomeAssistant,
-    fake_api: FakeKebaKeEnergyAPI,
-    service: str,
-    response: list[dict[str, Any]],
-) -> None:
-    """Test that a switch is not written if it already has the state."""
-    fake_api.responses = [
-        MULTIPLE_POSITIONS_RESPONSE,
-        get_multiple_position_fixed_data_response(),
-        response,
-    ]
-    await fake_api.setup_integration()
-
+    service, entity_id = service_call
     await hass.services.async_call(
         domain=SWITCH_DOMAIN,
         service=service,
         service_data={
-            ATTR_ENTITY_ID: "switch.keba_keenergy_12345678_solar_circuit_priority_1_before_2_2",
+            ATTR_ENTITY_ID: entity_id,
         },
         blocking=True,
     )
 
-    assert fake_api.write_requests() == []
+    assert fake_api.write_requests() == expected_writes
 
 
 @pytest.mark.usefixtures("entity_registry_enabled_by_default")
 async def test_heating_and_cooling_circuit_has_one_curve_switch(
-    hass: HomeAssistant,
+    mock_config_entry: MockConfigEntry,
+    entity_registry: er.EntityRegistry,
     fake_api: FakeKebaKeEnergyAPI,
 ) -> None:
     """Test that a heating and cooling circuit only has the heating curve switch, because both use one setting."""
-    fake_api.responses = [
-        MULTIPLE_POSITIONS_RESPONSE,
-        update_response(
-            get_multiple_position_fixed_data_response(),
-            "APPL.CtrlAppl.sParam.options.heatCircuit[1].type",
-            value=str(HeatCircuitMode.HEATING_AND_COOLING.value),
-        ),
-        MULTIPLE_POSITION_DATA_RESPONSE,
-    ]
+    fake_api.load_device("multiple_devices")
+    fake_api.fixed_data = replace_values(
+        fake_api.fixed_data,
+        {"APPL.CtrlAppl.sParam.options.heatCircuit[1].type": str(HeatingCircuitType.HEATING_AND_COOLING.value)},
+    )
     await fake_api.setup_integration()
 
     assert sorted(
         entry.unique_id
-        for entry in er.async_entries_for_config_entry(er.async_get(hass), fake_api.config_entry.entry_id)
+        for entry in er.async_entries_for_config_entry(entity_registry, mock_config_entry.entry_id)
         if entry.domain == SWITCH_DOMAIN and "_curve_" in entry.unique_id
     ) == [
         "12345678_heat_circuit_use_heating_curve_1",
         "12345678_heat_circuit_use_heating_curve_2",
     ]
+
+
+@pytest.mark.parametrize(
+    ("service_call", "expected_requests", "expected_state_and_write_count"),
+    [
+        (
+            (SERVICE_TURN_OFF, MODBUS_ENTITY_ID),
+            ['activateModbus {"activate": false}'],
+            (STATE_OFF, "1"),
+        ),
+        (
+            (SERVICE_TURN_ON, REMOTE_MAINTENANCE_ENTITY_ID),
+            ['activateRemoteM {"activate": true}', *REMOTE_ACCESS_UPDATE_REQUESTS],
+            (STATE_ON, "1"),
+        ),
+        ((SERVICE_TURN_ON, MODBUS_ENTITY_ID), [], (STATE_ON, "0")),
+        ((SERVICE_TURN_OFF, REMOTE_MAINTENANCE_ENTITY_ID), [], (STATE_OFF, "0")),
+    ],
+    ids=[
+        "modbus_turn_off",
+        "remote_maintenance_turn_on_and_refresh",
+        "modbus_turn_on_unchanged",
+        "remote_maintenance_turn_off_unchanged",
+    ],
+)
+@pytest.mark.usefixtures("entity_registry_enabled_by_default", "init_integration")
+async def test_remote_access_turn_on_off(
+    hass: HomeAssistant,
+    fake_api: FakeKebaKeEnergyAPI,
+    service_call: tuple[str, str],
+    expected_requests: list[str],
+    expected_state_and_write_count: tuple[str, str],
+) -> None:
+    """Test switching the remote access, only changes are written and remote maintenance reads the values again."""
+    setup_request_count: int = len(fake_api.remote_access_requests())
+
+    service, entity_id = service_call
+    await hass.services.async_call(
+        domain=SWITCH_DOMAIN,
+        service=service,
+        service_data={
+            ATTR_ENTITY_ID: entity_id,
+        },
+        blocking=True,
+    )
+
+    assert fake_api.remote_access_requests()[setup_request_count:] == expected_requests
+    assert (get_state(hass, entity_id).state, get_state(hass, WRITE_COUNT_ENTITY_ID).state) == (
+        expected_state_and_write_count
+    )
+
+
+@pytest.mark.usefixtures("entity_registry_enabled_by_default")
+async def test_remote_access_turn_on_failed(
+    hass: HomeAssistant,
+    fake_api: FakeKebaKeEnergyAPI,
+) -> None:
+    """Test that a remote access switch shows its previous state again if switching fails, uncounted."""
+    fake_api.load_device("multiple_devices")
+    fake_api.remote_access["activateRemoteM"] = HTTPStatus.BAD_REQUEST
+    await fake_api.setup_integration()
+
+    with pytest.raises(HomeAssistantError, match="An error occurred while communicating with the API: ") as error:
+        await hass.services.async_call(
+            domain=SWITCH_DOMAIN,
+            service=SERVICE_TURN_ON,
+            service_data={
+                ATTR_ENTITY_ID: REMOTE_MAINTENANCE_ENTITY_ID,
+            },
+            blocking=True,
+        )
+
+    assert error.value.translation_key == "communication_error"
+    assert get_state(hass, REMOTE_MAINTENANCE_ENTITY_ID).state == STATE_OFF
+    assert get_state(hass, WRITE_COUNT_ENTITY_ID).state == "0"

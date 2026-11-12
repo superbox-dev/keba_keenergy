@@ -6,6 +6,7 @@ from __future__ import annotations
 
 import logging
 from dataclasses import dataclass
+from enum import Enum
 from typing import TYPE_CHECKING
 from typing import Any
 from typing import Final
@@ -23,37 +24,50 @@ from homeassistant.const import UnitOfPower
 from homeassistant.const import UnitOfPressure
 from homeassistant.const import UnitOfTemperature
 from homeassistant.const import UnitOfTime
-from keba_keenergy_api.constants import BufferTankExcessEnergyMode
-from keba_keenergy_api.constants import BufferTankOperatingMode
-from keba_keenergy_api.constants import ExternalHeatSourceOperatingMode
-from keba_keenergy_api.constants import HeatCircuitCoolRequest
-from keba_keenergy_api.constants import HeatCircuitExcessEnergyMode
-from keba_keenergy_api.constants import HeatCircuitHeatRequest
-from keba_keenergy_api.constants import HeatCircuitOperatingMode
-from keba_keenergy_api.constants import HeatPumpState
-from keba_keenergy_api.constants import HeatPumpSubState
-from keba_keenergy_api.constants import HotWaterTankExcessEnergyMode
-from keba_keenergy_api.constants import HotWaterTankOperatingMode
-from keba_keenergy_api.constants import MixerSwitchValvePosition
-from keba_keenergy_api.constants import SectionPrefix
-from keba_keenergy_api.constants import SwitchValvePosition
-from keba_keenergy_api.constants import SystemOperatingMode
+from keba_keenergy_api.enums import BufferTankOperatingMode
+from keba_keenergy_api.enums import DHWTankOperatingMode
+from keba_keenergy_api.enums import ExcessEnergyState
+from keba_keenergy_api.enums import ExternalHeatSourceOperatingMode
+from keba_keenergy_api.enums import HeatingCircuitOperatingMode
+from keba_keenergy_api.enums import HeatingCircuitRequest
+from keba_keenergy_api.enums import HeatPumpState
+from keba_keenergy_api.enums import HeatPumpSubState
+from keba_keenergy_api.enums import SwitchValvePosition
+from keba_keenergy_api.enums import SystemOperatingMode
 
+from .const import ATTR_ALARMS
 from .const import ATTR_WRITES
-from .const import DOMAIN
+from .const import CURVE_KEYS
+from .const import MixerPosition
+from .const import SectionPrefix
 from .entity import KebaKeEnergyBaseEntity
 from .entity import KebaKeEnergyEntity
 from .entity import KebaKeEnergyEntityDescription
-from .entity import _async_setup_entities
+from .entity import async_setup_data_entities
+from .entity import has_both_meters
+from .entity import has_electrical_energy_meter
+from .entity import has_electrical_energy_meter_and_cooling
+from .entity import has_heat_meter
+from .entity import has_photovoltaics
+from .entity import is_cooling_circuit
+from .entity import is_cooling_circuit_with_photovoltaics
+from .entity import is_heating_circuit
+from .entity import is_heating_circuit_with_photovoltaics
+from .entity import is_mixer_position_percent
+from .entity import is_mixer_position_state
+from .legacy import get_state
+from .legacy import get_states
 
 if TYPE_CHECKING:
     from collections.abc import Callable
     from collections.abc import Mapping
 
     from homeassistant.core import HomeAssistant
-    from homeassistant.helpers.entity_platform import AddEntitiesCallback
+    from homeassistant.helpers.entity_platform import AddConfigEntryEntitiesCallback
     from homeassistant.helpers.typing import StateType
-    from keba_keenergy_api.endpoints import Value
+    from keba_keenergy_api.models import CurveTable
+    from keba_keenergy_api.models import Reading
+    from keba_keenergy_api.models import Value
 
     from .coordinator import KebaKeEnergyConfigEntry
     from .coordinator import KebaKeEnergyDataUpdateCoordinator
@@ -61,6 +75,9 @@ if TYPE_CHECKING:
 
 PARALLEL_UPDATES: Final[int] = 0
 _LOGGER: Final = logging.getLogger(__name__)
+
+# The extra state attributes of a sensor.
+type Attributes = Mapping[str, Any]
 
 
 @dataclass(frozen=True, kw_only=True)
@@ -70,53 +87,67 @@ class KebaKeEnergySensorEntityDescription[T: StateType](
 ):
     """Class describing KEBA KeEnergy sensor entities."""
 
-    value: Callable[[T], StateType] = lambda data: data
-    attributes: Callable[[Mapping[str, Any]], Mapping[str, Any]] = lambda data: data
+    # Converts the value of the API to the state, enum members are always shown by their state.
+    value_fn: Callable[[T], StateType] = lambda data: data
+    # Adds or changes the attributes, which are empty if the sensor is not in use.
+    attributes_fn: Callable[[Attributes], Attributes] = lambda data: data
 
 
 class KebaKeEnergySensorEntity(KebaKeEnergyEntity, SensorEntity):
     """KEBA KeEnergy sensor entity."""
 
     entity_description: KebaKeEnergySensorEntityDescription[StateType]
-
-    def __init__(
-        self,
-        coordinator: KebaKeEnergyDataUpdateCoordinator,
-        description: KebaKeEnergySensorEntityDescription[StateType],
-        entry: KebaKeEnergyConfigEntry,
-        section_id: str,
-        index: int | None,
-    ) -> None:
-        """Initialize the entity."""
-        self.entity_description = description
-
-        super().__init__(
-            coordinator,
-            entry=entry,
-            section_id=section_id,
-            index=index,
-            key_index=self.entity_description.key_index,
-        )
-
-        self.entity_id: str = f"{SENSOR_DOMAIN}.{DOMAIN}_{self._attr_unique_id}"
+    _platform_domain: str = SENSOR_DOMAIN
 
     @property
     def native_value(self) -> StateType:
-        """Return the state of the sensor."""
-        value: StateType = self.get_value(self._data_key)
-        return None if value is None else self.entity_description.value(value)
+        """Return the state of the sensor, None if the value is missing or the sensor is not in use."""
+        value: Value | None = self.get_value(self._data_key)
+
+        if isinstance(value, Enum):
+            return get_state(value)
+
+        return None if value is None or isinstance(value, bool) else self.entity_description.value_fn(value)
 
     @property
-    def _data_key(self) -> str:
-        """Return the key of the value in the coordinator data, the new key if the API renamed it."""
-        return self.entity_description.new_key or self.entity_description.key
+    def extra_state_attributes(self) -> Attributes:
+        """Return the limits of the value, the raw value of an enum and the points of a curve."""
+        return self.entity_description.attributes_fn(self._get_attributes(self.get_reading(self._data_key)))
 
-    @property
-    def extra_state_attributes(self) -> Mapping[str, Any] | None:
-        """Return extra state attributes."""
-        entity_data: Value | None = self.get_entity_data(self._data_key)
-        attributes: Mapping[str, Any] = entity_data.get("attributes", {}) if entity_data else {}
-        return {**self.entity_description.attributes(attributes), **self._message_id_attributes(self._data_key)}
+    def _get_attributes(self, reading: Reading | None, /) -> dict[str, Any]:
+        """Return the limits of the value, the raw value of an enum and the points of the curve, if any."""
+        if reading is None:
+            return {}
+
+        attributes: dict[str, Any] = {
+            attr: limit
+            for attr, limit in (("lower_limit", reading.lower_limit), ("upper_limit", reading.upper_limit))
+            if limit is not None
+        }
+
+        # An enum sensor of a number (e.g. the mixer position) shows the number as raw value.
+        raw_value: float | int | None = None
+
+        if (
+            self.device_class == SensorDeviceClass.ENUM
+            and isinstance(reading.value, float | int)
+            and not isinstance(reading.value, bool)
+        ):
+            raw_value = reading.value
+        elif isinstance(reading.value, Enum):
+            raw_value = int(reading.raw_value)
+
+        if raw_value is not None:
+            attributes["raw_value"] = raw_value
+
+        if self._data_key in CURVE_KEYS and isinstance(reading.value, str):
+            curve_table: CurveTable | None = self.coordinator.curve_tables.get(reading.value)
+            attributes["points"] = [
+                {"outdoor": point.outdoor, "flow": round(point.flow, 2)}
+                for point in (curve_table.points if curve_table else ())
+            ]
+
+        return attributes
 
 
 class KebaKeEnergyWriteCountSensorEntity(KebaKeEnergyBaseEntity, SensorEntity):
@@ -124,30 +155,95 @@ class KebaKeEnergyWriteCountSensorEntity(KebaKeEnergyBaseEntity, SensorEntity):
 
     # The writes per value change with every write, they are not needed in the history.
     _unrecorded_attributes: frozenset[str] = frozenset({ATTR_WRITES})
+    _platform_domain: str = SENSOR_DOMAIN
 
     def __init__(
         self,
         coordinator: KebaKeEnergyDataUpdateCoordinator,
         description: SensorEntityDescription,
-        entry: KebaKeEnergyConfigEntry,
+        /,
     ) -> None:
-        """Initialize the entity."""
-        self.entity_description = description
+        """Initialize the write count sensor of the control unit."""
+        self.entity_description: SensorEntityDescription = description
 
-        super().__init__(coordinator, entry=entry, section_id=SectionPrefix.SYSTEM, index=None)
+        super().__init__(coordinator, device_type=SectionPrefix.SYSTEM, index=None)
 
-        self._attr_unique_id = self._build_unique_id(description.key)
-        self.entity_id: str = f"{SENSOR_DOMAIN}.{DOMAIN}_{self._attr_unique_id}"
+    @property
+    def _unique_id_parts(self) -> tuple[str, ...]:
+        """Return the key of the entity description."""
+        return (self.entity_description.key,)
 
     @property
     def native_value(self) -> int:
         """Return the number of write operations of the current week."""
-        return self.coordinator.weekly_write_count
+        return self.coordinator.write_counter.weekly_count
 
     @property
-    def extra_state_attributes(self) -> Mapping[str, Any]:
+    def extra_state_attributes(self) -> Attributes:
         """Return how often each value was written in the current week."""
-        return {ATTR_WRITES: self.coordinator.weekly_writes}
+        return {ATTR_WRITES: self.coordinator.write_counter.weekly_writes}
+
+
+class KebaKeEnergyPendingAlarmsSensorEntity(KebaKeEnergyBaseEntity, SensorEntity):
+    """KEBA KeEnergy sensor of the number of pending alarms of the control unit, with the alarms as attribute."""
+
+    # The alarms are shown by the repair issues and the alarm events, they are not needed in the history.
+    _unrecorded_attributes: frozenset[str] = frozenset({ATTR_ALARMS})
+    _platform_domain: str = SENSOR_DOMAIN
+
+    def __init__(
+        self,
+        coordinator: KebaKeEnergyDataUpdateCoordinator,
+        description: SensorEntityDescription,
+        /,
+    ) -> None:
+        """Initialize the pending alarms sensor of the control unit."""
+        self.entity_description: SensorEntityDescription = description
+
+        super().__init__(coordinator, device_type=SectionPrefix.SYSTEM, index=None)
+
+    @property
+    def _unique_id_parts(self) -> tuple[str, ...]:
+        """Return the key of the entity description."""
+        return (self.entity_description.key,)
+
+    @property
+    def native_value(self) -> int:
+        """Return the number of pending alarms."""
+        return len(self.coordinator.alarms.pending_alarms)
+
+    @property
+    def extra_state_attributes(self) -> Attributes:
+        """Return the number, text, priority and time of every pending alarm."""
+        return {
+            ATTR_ALARMS: [
+                {
+                    "number": alarm.number,
+                    "text": alarm.long_text,
+                    "priority": alarm.priority.name.lower(),
+                    "time": alarm.timestamp.isoformat(),
+                }
+                for alarm in self.coordinator.alarms.pending_alarms
+            ],
+        }
+
+
+def get_mixer_position(setpoint: float, /) -> str:
+    """Return the position of a mixer from its setpoint (`-1..1`), open or closed only if it is fully open or closed."""
+    return get_state(MixerPosition((setpoint >= 1) - (setpoint <= -1)))
+
+
+def get_mixer_position_percent(setpoint: float, /) -> float:
+    """Return the position of a mixer as percentage from its setpoint (`-1..1`)."""
+    return setpoint * 100
+
+
+def get_mixer_attributes(attributes: Attributes, /) -> Attributes:
+    """Return the attributes of a mixer position with the setpoint as percentage, unchanged without a setpoint."""
+    if "raw_value" not in attributes:
+        return attributes
+
+    return {**attributes, "position_percent": round(attributes["raw_value"] * 100, 2)}
 
 
 WRITE_COUNT_SENSOR_TYPE: Final[SensorEntityDescription] = SensorEntityDescription(
@@ -157,22 +253,30 @@ WRITE_COUNT_SENSOR_TYPE: Final[SensorEntityDescription] = SensorEntityDescriptio
     translation_key="weekly_write_count",
 )
 
-SENSOR_TYPES: Final[dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ...]]] = {
+PENDING_ALARMS_SENSOR_TYPE: Final[SensorEntityDescription] = SensorEntityDescription(
+    entity_category=EntityCategory.DIAGNOSTIC,
+    key="pending_alarms",
+    state_class=SensorStateClass.MEASUREMENT,
+    translation_key="pending_alarms",
+)
+
+SENSOR_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergySensorEntityDescription[Any], ...]]] = {
     SectionPrefix.SYSTEM: (
         KebaKeEnergySensorEntityDescription[float](
             device_class=SensorDeviceClass.TEMPERATURE,
             key="outdoor_temperature",
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             state_class=SensorStateClass.MEASUREMENT,
-            translation_key="outdoor_temperature",
-            value=lambda data: data,
+            suggested_display_precision=1,
+            translation_key="system_outdoor_temperature",
+            value_fn=lambda data: data,
         ),
         KebaKeEnergySensorEntityDescription[str](
             device_class=SensorDeviceClass.ENUM,
             key="operating_mode",
-            options=[_.name.lower() for _ in SystemOperatingMode],
+            options=get_states(SystemOperatingMode),
             translation_key="system_operating_mode",
-            value=lambda data: data,
+            value_fn=lambda data: data,
         ),
         KebaKeEnergySensorEntityDescription[float](
             entity_category=EntityCategory.DIAGNOSTIC,
@@ -180,8 +284,9 @@ SENSOR_TYPES: Final[dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ..
             key="cpu_usage",
             native_unit_of_measurement=PERCENTAGE,
             state_class=SensorStateClass.MEASUREMENT,
-            translation_key="cpu_usage",
-            value=lambda data: data / 10,
+            suggested_display_precision=1,
+            translation_key="system_cpu_usage",
+            value_fn=lambda data: data / 10,
         ),
         KebaKeEnergySensorEntityDescription[float](
             entity_category=EntityCategory.DIAGNOSTIC,
@@ -189,8 +294,9 @@ SENSOR_TYPES: Final[dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ..
             key="webview_cpu_usage",
             native_unit_of_measurement=PERCENTAGE,
             state_class=SensorStateClass.MEASUREMENT,
-            translation_key="webview_cpu_usage",
-            value=lambda data: data / 10,
+            suggested_display_precision=1,
+            translation_key="system_webview_cpu_usage",
+            value_fn=lambda data: data / 10,
         ),
         KebaKeEnergySensorEntityDescription[float](
             entity_category=EntityCategory.DIAGNOSTIC,
@@ -198,8 +304,9 @@ SENSOR_TYPES: Final[dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ..
             key="webserver_cpu_usage",
             native_unit_of_measurement=PERCENTAGE,
             state_class=SensorStateClass.MEASUREMENT,
-            translation_key="webserver_cpu_usage",
-            value=lambda data: data / 10,
+            suggested_display_precision=1,
+            translation_key="system_webserver_cpu_usage",
+            value_fn=lambda data: data / 10,
         ),
         KebaKeEnergySensorEntityDescription[float](
             entity_category=EntityCategory.DIAGNOSTIC,
@@ -207,8 +314,9 @@ SENSOR_TYPES: Final[dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ..
             key="control_cpu_usage",
             native_unit_of_measurement=PERCENTAGE,
             state_class=SensorStateClass.MEASUREMENT,
-            translation_key="control_cpu_usage",
-            value=lambda data: data / 10,
+            suggested_display_precision=1,
+            translation_key="system_control_cpu_usage",
+            value_fn=lambda data: data / 10,
         ),
         KebaKeEnergySensorEntityDescription[int](
             entity_category=EntityCategory.DIAGNOSTIC,
@@ -216,8 +324,9 @@ SENSOR_TYPES: Final[dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ..
             key="ram_usage",
             native_unit_of_measurement=UnitOfInformation.KILOBYTES,
             state_class=SensorStateClass.MEASUREMENT,
-            translation_key="ram_usage",
-            value=lambda data: data,
+            suggested_display_precision=0,
+            translation_key="system_ram_usage",
+            value_fn=lambda data: data,
         ),
         KebaKeEnergySensorEntityDescription[int](
             entity_category=EntityCategory.DIAGNOSTIC,
@@ -225,49 +334,47 @@ SENSOR_TYPES: Final[dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ..
             key="free_ram",
             native_unit_of_measurement=UnitOfInformation.KILOBYTES,
             state_class=SensorStateClass.MEASUREMENT,
-            translation_key="free_ram",
-            value=lambda data: data,
+            suggested_display_precision=0,
+            translation_key="system_free_ram",
+            value_fn=lambda data: data,
         ),
         KebaKeEnergySensorEntityDescription[int](
             entity_category=EntityCategory.DIAGNOSTIC,
             entity_registry_enabled_default=False,
             key="flash_erase_counter",
             state_class=SensorStateClass.TOTAL_INCREASING,
-            translation_key="flash_erase_counter",
-            value=lambda data: data,
+            suggested_display_precision=0,
+            translation_key="system_flash_erase_counter",
+            value_fn=lambda data: data,
         ),
     ),
-    SectionPrefix.HEAT_CIRCUIT: (
+    SectionPrefix.HEATING_CIRCUIT: (
         KebaKeEnergySensorEntityDescription[float](
-            condition=lambda coordinator, index: coordinator.has_room_temperature(index=index),
             device_class=SensorDeviceClass.TEMPERATURE,
             entity_registry_enabled_default=False,
             key="room_temperature",
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             state_class=SensorStateClass.MEASUREMENT,
-            translation_key="room_temperature",
+            suggested_display_precision=1,
+            translation_key="heating_circuit_room_temperature",
         ),
         KebaKeEnergySensorEntityDescription[float](
-            condition=lambda coordinator, index: coordinator.has_room_humidity(index=index),
             device_class=SensorDeviceClass.HUMIDITY,
             entity_registry_enabled_default=False,
             key="room_humidity",
             native_unit_of_measurement=PERCENTAGE,
             state_class=SensorStateClass.MEASUREMENT,
-            translation_key="room_humidity",
+            suggested_display_precision=2,
+            translation_key="heating_circuit_room_humidity",
         ),
         KebaKeEnergySensorEntityDescription[float](
-            condition=(
-                lambda coordinator, index: (
-                    coordinator.has_room_temperature(index=index) and coordinator.has_room_humidity(index=index)
-                )
-            ),
             device_class=SensorDeviceClass.TEMPERATURE,
             entity_registry_enabled_default=False,
             key="dew_point",
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             state_class=SensorStateClass.MEASUREMENT,
-            translation_key="dew_point",
+            suggested_display_precision=1,
+            translation_key="heating_circuit_dew_point",
         ),
         KebaKeEnergySensorEntityDescription[float](
             device_class=SensorDeviceClass.TEMPERATURE,
@@ -275,264 +382,272 @@ SENSOR_TYPES: Final[dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ..
             key="flow_temperature_setpoint",
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             state_class=SensorStateClass.MEASUREMENT,
-            translation_key="flow_temperature_setpoint",
+            suggested_display_precision=1,
+            translation_key="heating_circuit_flow_temperature_setpoint",
         ),
         KebaKeEnergySensorEntityDescription[float](
-            condition=lambda coordinator, index: coordinator.has_mixer(index=index),
             device_class=SensorDeviceClass.TEMPERATURE,
             entity_registry_enabled_default=False,
             key="flow_temperature",
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             new_key="mixer_flow_temperature",
             state_class=SensorStateClass.MEASUREMENT,
-            translation_key="mixer_flow_temperature",
+            suggested_display_precision=1,
+            translation_key="heating_circuit_mixer_flow_temperature",
         ),
         KebaKeEnergySensorEntityDescription[float](
-            condition=lambda coordinator, index: coordinator.has_mixer(index=index),
             device_class=SensorDeviceClass.TEMPERATURE,
             entity_registry_enabled_default=False,
             key="mixer_return_flow_temperature",
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             state_class=SensorStateClass.MEASUREMENT,
-            translation_key="mixer_return_flow_temperature",
+            suggested_display_precision=1,
+            translation_key="heating_circuit_mixer_return_flow_temperature",
         ),
-        KebaKeEnergySensorEntityDescription[str](
-            condition=lambda coordinator, index: coordinator.has_mixer(index=index),
+        KebaKeEnergySensorEntityDescription[float](
+            condition=is_mixer_position_state,
             device_class=SensorDeviceClass.ENUM,
             entity_registry_enabled_default=False,
             key="mixer_position",
-            options=[_.name.lower() for _ in MixerSwitchValvePosition],
-            translation_key="mixer_position",
-            attributes=lambda attributes: {**attributes, "position_percent": attributes["raw_value"] * 100},
+            options=get_states(MixerPosition),
+            suggested_display_precision=2,
+            translation_key="heating_circuit_mixer_position",
+            value_fn=get_mixer_position,
+            attributes_fn=get_mixer_attributes,
+        ),
+        # The same entity as percentage if the option is set, the unique ID stays the same.
+        KebaKeEnergySensorEntityDescription[float](
+            condition=is_mixer_position_percent,
+            entity_registry_enabled_default=False,
+            key="mixer_position",
+            native_unit_of_measurement=PERCENTAGE,
+            state_class=SensorStateClass.MEASUREMENT,
+            suggested_display_precision=2,
+            translation_key="heating_circuit_mixer_position",
+            value_fn=get_mixer_position_percent,
         ),
         KebaKeEnergySensorEntityDescription[float](
-            condition=lambda coordinator, index: coordinator.has_return_flow_temperature(index=index),
             device_class=SensorDeviceClass.TEMPERATURE,
             entity_registry_enabled_default=False,
             key="return_flow_temperature",
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             state_class=SensorStateClass.MEASUREMENT,
-            translation_key="return_flow_temperature",
+            suggested_display_precision=1,
+            translation_key="heating_circuit_return_flow_temperature",
         ),
         KebaKeEnergySensorEntityDescription[float](
             device_class=SensorDeviceClass.TEMPERATURE,
             key="selected_target_temperature",
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             state_class=SensorStateClass.MEASUREMENT,
-            translation_key="selected_target_room_temperature",
+            suggested_display_precision=1,
+            translation_key="heating_circuit_selected_target_room_temperature",
         ),
         KebaKeEnergySensorEntityDescription[float](
             device_class=SensorDeviceClass.TEMPERATURE,
             key="target_temperature",
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             state_class=SensorStateClass.MEASUREMENT,
-            translation_key="target_room_temperature",
+            suggested_display_precision=1,
+            translation_key="heating_circuit_target_room_temperature",
         ),
         KebaKeEnergySensorEntityDescription[float](
-            condition=lambda coordinator, index: coordinator.is_heating_circuit(index=index),
+            condition=is_heating_circuit,
             device_class=SensorDeviceClass.TEMPERATURE,
             key="target_temperature_day",
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             state_class=SensorStateClass.MEASUREMENT,
-            translation_key="target_room_temperature_day",
+            suggested_display_precision=1,
+            translation_key="heating_circuit_target_room_temperature_day",
         ),
         KebaKeEnergySensorEntityDescription[float](
-            condition=lambda coordinator, index: coordinator.is_cooling_circuit(index=index),
+            condition=is_cooling_circuit,
             device_class=SensorDeviceClass.TEMPERATURE,
             key="target_cooling_temperature_day",
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             state_class=SensorStateClass.MEASUREMENT,
-            translation_key="target_room_cooling_temperature_day",
+            suggested_display_precision=1,
+            translation_key="heating_circuit_target_room_cooling_temperature_day",
         ),
         KebaKeEnergySensorEntityDescription[float](
-            condition=lambda coordinator, index: coordinator.is_heating_circuit(index=index),
+            condition=is_heating_circuit,
             device_class=SensorDeviceClass.TEMPERATURE,
             entity_registry_enabled_default=False,
             key="heating_limit_day",
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             state_class=SensorStateClass.MEASUREMENT,
-            translation_key="heating_limit_day",
+            suggested_display_precision=1,
+            translation_key="heating_circuit_heating_limit_day",
         ),
         KebaKeEnergySensorEntityDescription[float](
-            condition=lambda coordinator, index: coordinator.is_cooling_circuit(index=index),
+            condition=is_cooling_circuit,
             device_class=SensorDeviceClass.TEMPERATURE,
             entity_registry_enabled_default=False,
             key="cooling_limit_day",
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             state_class=SensorStateClass.MEASUREMENT,
-            translation_key="cooling_limit_day",
+            suggested_display_precision=1,
+            translation_key="heating_circuit_cooling_limit_day",
         ),
         KebaKeEnergySensorEntityDescription[float](
-            condition=(
-                lambda coordinator, index: (
-                    coordinator.is_heating_circuit(index=index) and coordinator.has_photovoltaics()
-                )
-            ),
+            condition=is_heating_circuit_with_photovoltaics,
             device_class=SensorDeviceClass.TEMPERATURE,
             entity_registry_enabled_default=False,
             key="excess_energy_heating_limit_day",
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             state_class=SensorStateClass.MEASUREMENT,
-            translation_key="excess_energy_heating_limit_day",
+            suggested_display_precision=1,
+            translation_key="heating_circuit_excess_energy_heating_limit_day",
         ),
         KebaKeEnergySensorEntityDescription[float](
-            condition=(
-                lambda coordinator, index: (
-                    coordinator.is_cooling_circuit(index=index) and coordinator.has_photovoltaics()
-                )
-            ),
+            condition=is_cooling_circuit_with_photovoltaics,
             device_class=SensorDeviceClass.TEMPERATURE,
             entity_registry_enabled_default=False,
             key="excess_energy_cooling_limit_day",
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             state_class=SensorStateClass.MEASUREMENT,
-            translation_key="excess_energy_cooling_limit_day",
+            suggested_display_precision=1,
+            translation_key="heating_circuit_excess_energy_cooling_limit_day",
         ),
         KebaKeEnergySensorEntityDescription[float](
-            condition=lambda coordinator, index: coordinator.is_heating_circuit(index=index),
+            condition=is_heating_circuit,
             device_class=SensorDeviceClass.TEMPERATURE,
             key="target_temperature_night",
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             state_class=SensorStateClass.MEASUREMENT,
-            translation_key="target_room_temperature_night",
+            suggested_display_precision=1,
+            translation_key="heating_circuit_target_room_temperature_night",
         ),
         KebaKeEnergySensorEntityDescription[float](
-            condition=lambda coordinator, index: coordinator.is_cooling_circuit(index=index),
+            condition=is_cooling_circuit,
             device_class=SensorDeviceClass.TEMPERATURE,
             key="target_cooling_temperature_night",
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             state_class=SensorStateClass.MEASUREMENT,
-            translation_key="target_room_cooling_temperature_night",
+            suggested_display_precision=1,
+            translation_key="heating_circuit_target_room_cooling_temperature_night",
         ),
         KebaKeEnergySensorEntityDescription[float](
-            condition=lambda coordinator, index: coordinator.is_heating_circuit(index=index),
+            condition=is_heating_circuit,
             device_class=SensorDeviceClass.TEMPERATURE,
             entity_registry_enabled_default=False,
             key="heating_limit_night",
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             state_class=SensorStateClass.MEASUREMENT,
-            translation_key="heating_limit_night",
+            suggested_display_precision=1,
+            translation_key="heating_circuit_heating_limit_night",
         ),
         KebaKeEnergySensorEntityDescription[float](
-            condition=lambda coordinator, index: coordinator.is_cooling_circuit(index=index),
+            condition=is_cooling_circuit,
             device_class=SensorDeviceClass.TEMPERATURE,
             entity_registry_enabled_default=False,
             key="cooling_limit_night",
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             state_class=SensorStateClass.MEASUREMENT,
-            translation_key="cooling_limit_night",
+            suggested_display_precision=1,
+            translation_key="heating_circuit_cooling_limit_night",
         ),
         KebaKeEnergySensorEntityDescription[float](
-            condition=(
-                lambda coordinator, index: (
-                    coordinator.is_heating_circuit(index=index) and coordinator.has_photovoltaics()
-                )
-            ),
+            condition=is_heating_circuit_with_photovoltaics,
             device_class=SensorDeviceClass.TEMPERATURE,
             entity_registry_enabled_default=False,
             key="excess_energy_heating_limit_night",
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             state_class=SensorStateClass.MEASUREMENT,
-            translation_key="excess_energy_heating_limit_night",
+            suggested_display_precision=1,
+            translation_key="heating_circuit_excess_energy_heating_limit_night",
         ),
         KebaKeEnergySensorEntityDescription[float](
-            condition=(
-                lambda coordinator, index: (
-                    coordinator.is_cooling_circuit(index=index) and coordinator.has_photovoltaics()
-                )
-            ),
+            condition=is_cooling_circuit_with_photovoltaics,
             device_class=SensorDeviceClass.TEMPERATURE,
             entity_registry_enabled_default=False,
             key="excess_energy_cooling_limit_night",
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             state_class=SensorStateClass.MEASUREMENT,
-            translation_key="excess_energy_cooling_limit_night",
+            suggested_display_precision=1,
+            translation_key="heating_circuit_excess_energy_cooling_limit_night",
         ),
         KebaKeEnergySensorEntityDescription[float](
-            condition=lambda coordinator, index: coordinator.is_heating_circuit(index=index),
+            condition=is_heating_circuit,
             device_class=SensorDeviceClass.TEMPERATURE,
             key="target_temperature_away",
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             state_class=SensorStateClass.MEASUREMENT,
-            translation_key="target_room_temperature_away",
+            suggested_display_precision=1,
+            translation_key="heating_circuit_target_room_temperature_away",
         ),
         KebaKeEnergySensorEntityDescription[float](
             device_class=SensorDeviceClass.TEMPERATURE,
             key="target_temperature_offset",
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             state_class=SensorStateClass.MEASUREMENT,
-            translation_key="target_room_temperature_offset",
+            suggested_display_precision=1,
+            translation_key="heating_circuit_target_room_temperature_offset",
         ),
         KebaKeEnergySensorEntityDescription[float](
-            condition=(
-                lambda coordinator, index: (
-                    coordinator.is_heating_circuit(index=index) and coordinator.has_photovoltaics()
-                )
-            ),
+            condition=is_heating_circuit_with_photovoltaics,
             device_class=SensorDeviceClass.TEMPERATURE,
             key="excess_energy_target_temperature",
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             state_class=SensorStateClass.MEASUREMENT,
-            translation_key="excess_energy_target_room_temperature",
+            suggested_display_precision=1,
+            translation_key="heating_circuit_excess_energy_target_room_temperature",
         ),
         KebaKeEnergySensorEntityDescription[float](
-            condition=(
-                lambda coordinator, index: (
-                    coordinator.is_cooling_circuit(index=index) and coordinator.has_photovoltaics()
-                )
-            ),
+            condition=is_cooling_circuit_with_photovoltaics,
             device_class=SensorDeviceClass.TEMPERATURE,
             key="excess_energy_target_cooling_temperature",
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             state_class=SensorStateClass.MEASUREMENT,
-            translation_key="excess_energy_target_room_cooling_temperature",
+            suggested_display_precision=1,
+            translation_key="heating_circuit_excess_energy_target_room_cooling_temperature",
         ),
         KebaKeEnergySensorEntityDescription[str](
-            condition=lambda coordinator, _: coordinator.has_photovoltaics(),
+            condition=has_photovoltaics,
             device_class=SensorDeviceClass.ENUM,
             key="excess_energy_mode",
-            options=[_.name.lower() for _ in HeatCircuitExcessEnergyMode],
-            translation_key="excess_energy_mode",
+            options=get_states(ExcessEnergyState),
+            translation_key="heating_circuit_excess_energy_mode",
         ),
         KebaKeEnergySensorEntityDescription[str](
             device_class=SensorDeviceClass.ENUM,
             key="operating_mode",
-            options=[_.name.lower() for _ in HeatCircuitOperatingMode],
-            translation_key="heat_circuit_operating_mode",
+            options=get_states(HeatingCircuitOperatingMode),
+            translation_key="heating_circuit_operating_mode",
         ),
         KebaKeEnergySensorEntityDescription[str](
-            condition=lambda coordinator, index: coordinator.is_heating_circuit(index=index),
+            condition=is_heating_circuit,
             device_class=SensorDeviceClass.ENUM,
             key="heat_request",
-            options=[_.name.lower() for _ in HeatCircuitHeatRequest],
-            translation_key="heat_request",
+            options=get_states(HeatingCircuitRequest),
+            translation_key="heating_circuit_heat_request",
         ),
         KebaKeEnergySensorEntityDescription[str](
-            condition=lambda coordinator, index: coordinator.is_cooling_circuit(index=index),
+            condition=is_cooling_circuit,
             device_class=SensorDeviceClass.ENUM,
             entity_registry_enabled_default=False,
             key="cool_request",
-            options=[_.name.lower() for _ in HeatCircuitCoolRequest],
-            translation_key="cool_request",
+            options=get_states(HeatingCircuitRequest),
+            translation_key="heating_circuit_cool_request",
         ),
         KebaKeEnergySensorEntityDescription[str](
-            condition=lambda coordinator, index: coordinator.is_heating_circuit(index=index),
+            condition=is_heating_circuit,
             key="heating_curve",
-            translation_key="heating_curve",
+            translation_key="heating_circuit_heating_curve",
         ),
         KebaKeEnergySensorEntityDescription[str](
-            condition=lambda coordinator, index: coordinator.is_cooling_circuit(index=index),
+            condition=is_cooling_circuit,
             key="cooling_curve",
-            translation_key="cooling_curve",
+            translation_key="heating_circuit_cooling_curve",
         ),
         KebaKeEnergySensorEntityDescription[float](
-            condition=lambda coordinator, index: coordinator.has_var_speed_pump(index=index),
             entity_registry_enabled_default=False,
             key="pump_speed",
             native_unit_of_measurement=PERCENTAGE,
             state_class=SensorStateClass.MEASUREMENT,
-            translation_key="pump_speed",
-            value=lambda data: data * 100,
+            suggested_display_precision=2,
+            translation_key="heating_circuit_pump_speed",
+            value_fn=lambda data: data * 100,
         ),
     ),
     SectionPrefix.SOLAR_CIRCUIT: (
@@ -541,29 +656,33 @@ SENSOR_TYPES: Final[dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ..
             key="source_temperature",
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             state_class=SensorStateClass.MEASUREMENT,
-            translation_key="source_temperature",
+            suggested_display_precision=1,
+            translation_key="solar_circuit_source_temperature",
         ),
         KebaKeEnergySensorEntityDescription[float](
             key="pump_1",
             native_unit_of_measurement=PERCENTAGE,
             state_class=SensorStateClass.MEASUREMENT,
+            suggested_display_precision=2,
             translation_key="solar_circuit_pump_1",
-            value=lambda data: data * 100,
+            value_fn=lambda data: data * 100,
         ),
         KebaKeEnergySensorEntityDescription[float](
             key="pump_2",
             native_unit_of_measurement=PERCENTAGE,
             state_class=SensorStateClass.MEASUREMENT,
+            suggested_display_precision=2,
             translation_key="solar_circuit_pump_2",
-            value=lambda data: data * 100,
+            value_fn=lambda data: data * 100,
         ),
         KebaKeEnergySensorEntityDescription[float](
             device_class=SensorDeviceClass.TEMPERATURE,
             key="current_temperature",
-            key_index=0,
+            value_index=0,
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             state_class=SensorStateClass.MEASUREMENT,
-            translation_key="consumer_temperature",
+            suggested_display_precision=1,
+            translation_key="solar_circuit_consumer_temperature",
             translation_placeholders={
                 "counter": " 1",
             },
@@ -571,10 +690,11 @@ SENSOR_TYPES: Final[dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ..
         KebaKeEnergySensorEntityDescription[float](
             device_class=SensorDeviceClass.TEMPERATURE,
             key="current_temperature",
-            key_index=1,
+            value_index=1,
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             state_class=SensorStateClass.MEASUREMENT,
-            translation_key="consumer_temperature",
+            suggested_display_precision=1,
+            translation_key="solar_circuit_consumer_temperature",
             translation_placeholders={
                 "counter": " 2",
             },
@@ -582,10 +702,11 @@ SENSOR_TYPES: Final[dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ..
         KebaKeEnergySensorEntityDescription[float](
             device_class=SensorDeviceClass.TEMPERATURE,
             key="target_temperature",
-            key_index=0,
+            value_index=0,
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             state_class=SensorStateClass.MEASUREMENT,
-            translation_key="target_temperature",
+            suggested_display_precision=1,
+            translation_key="solar_circuit_target_temperature",
             translation_placeholders={
                 "counter": " 1",
             },
@@ -594,10 +715,11 @@ SENSOR_TYPES: Final[dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ..
         KebaKeEnergySensorEntityDescription[float](
             device_class=SensorDeviceClass.TEMPERATURE,
             key="target_temperature",
-            key_index=1,
+            value_index=1,
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             state_class=SensorStateClass.MEASUREMENT,
-            translation_key="target_temperature",
+            suggested_display_precision=1,
+            translation_key="solar_circuit_target_temperature",
             translation_placeholders={
                 "counter": " 2",
             },
@@ -607,21 +729,21 @@ SENSOR_TYPES: Final[dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ..
             device_class=SensorDeviceClass.ENERGY,
             entity_registry_enabled_default=False,
             key="heating_energy",
-            native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
+            native_unit_of_measurement=UnitOfEnergy.JOULE,
             state_class=SensorStateClass.TOTAL,
             suggested_display_precision=2,
-            translation_key="heating_energy",
-            value=lambda data: data / 3_600_000,  # Convert joule to kWh.
+            suggested_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
+            translation_key="solar_circuit_energy",
         ),
         KebaKeEnergySensorEntityDescription[float](
             device_class=SensorDeviceClass.ENERGY,
             entity_registry_enabled_default=False,
             key="daily_energy",
-            native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
+            native_unit_of_measurement=UnitOfEnergy.JOULE,
             state_class=SensorStateClass.TOTAL,
             suggested_display_precision=2,
-            translation_key="daily_energy",
-            value=lambda data: data / 3_600_000,  # Convert joule to kWh.
+            suggested_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
+            translation_key="solar_circuit_daily_energy",
         ),
         KebaKeEnergySensorEntityDescription[float](
             device_class=SensorDeviceClass.POWER,
@@ -629,359 +751,364 @@ SENSOR_TYPES: Final[dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ..
             key="actual_power",
             native_unit_of_measurement=UnitOfPower.WATT,
             state_class=SensorStateClass.MEASUREMENT,
-            translation_key="actual_power",
+            suggested_display_precision=0,
+            translation_key="solar_circuit_actual_power",
         ),
     ),
     SectionPrefix.HEAT_PUMP: (
         KebaKeEnergySensorEntityDescription[str](
             device_class=SensorDeviceClass.ENUM,
             key="state",
-            options=[_.name.lower() for _ in HeatPumpState],
-            translation_key="state",
+            options=get_states(HeatPumpState),
+            translation_key="heat_pump_state",
         ),
         KebaKeEnergySensorEntityDescription[str](
             device_class=SensorDeviceClass.ENUM,
             key="substate",
-            options=[_.name.lower() for _ in HeatPumpSubState],
-            translation_key="substate",
+            options=get_states(HeatPumpSubState),
+            translation_key="heat_pump_substate",
         ),
         KebaKeEnergySensorEntityDescription[float](
             key="circulation_pump",
             native_unit_of_measurement=PERCENTAGE,
             new_key="circulation_pump_speed",
             state_class=SensorStateClass.MEASUREMENT,
-            translation_key="circulation_pump_speed",
-            value=lambda data: data * 100,
+            suggested_display_precision=2,
+            translation_key="heat_pump_circulation_pump_speed",
+            value_fn=lambda data: data * 100,
         ),
         KebaKeEnergySensorEntityDescription[float](
             key="source_pump_speed",
             native_unit_of_measurement=PERCENTAGE,
             state_class=SensorStateClass.MEASUREMENT,
-            translation_key="source_pump_speed",
-            value=lambda data: data * 100,
+            suggested_display_precision=2,
+            translation_key="heat_pump_source_pump_speed",
+            value_fn=lambda data: data * 100,
         ),
         KebaKeEnergySensorEntityDescription[float](
             device_class=SensorDeviceClass.TEMPERATURE,
             key="flow_temperature",
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             state_class=SensorStateClass.MEASUREMENT,
-            translation_key="flow_temperature",
+            suggested_display_precision=1,
+            translation_key="heat_pump_flow_temperature",
         ),
         KebaKeEnergySensorEntityDescription[float](
             device_class=SensorDeviceClass.TEMPERATURE,
             key="return_flow_temperature",
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             state_class=SensorStateClass.MEASUREMENT,
-            translation_key="return_flow_temperature",
+            suggested_display_precision=1,
+            translation_key="heat_pump_return_flow_temperature",
         ),
         KebaKeEnergySensorEntityDescription[float](
             device_class=SensorDeviceClass.TEMPERATURE,
             key="source_input_temperature",
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             state_class=SensorStateClass.MEASUREMENT,
-            translation_key="source_input_temperature",
+            suggested_display_precision=1,
+            translation_key="heat_pump_source_input_temperature",
         ),
         KebaKeEnergySensorEntityDescription[float](
             device_class=SensorDeviceClass.TEMPERATURE,
             key="source_output_temperature",
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             state_class=SensorStateClass.MEASUREMENT,
-            translation_key="source_output_temperature",
+            suggested_display_precision=1,
+            translation_key="heat_pump_source_output_temperature",
         ),
         KebaKeEnergySensorEntityDescription[float](
             device_class=SensorDeviceClass.TEMPERATURE,
             key="compressor_input_temperature",
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             state_class=SensorStateClass.MEASUREMENT,
-            translation_key="compressor_input_temperature",
+            suggested_display_precision=1,
+            translation_key="heat_pump_compressor_input_temperature",
         ),
         KebaKeEnergySensorEntityDescription[float](
             device_class=SensorDeviceClass.TEMPERATURE,
             key="compressor_output_temperature",
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             state_class=SensorStateClass.MEASUREMENT,
-            translation_key="compressor_output_temperature",
+            suggested_display_precision=1,
+            translation_key="heat_pump_compressor_output_temperature",
         ),
         KebaKeEnergySensorEntityDescription[float](
             device_class=SensorDeviceClass.TEMPERATURE,
             key="condenser_temperature",
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             state_class=SensorStateClass.MEASUREMENT,
-            translation_key="condenser_temperature",
+            suggested_display_precision=1,
+            translation_key="heat_pump_condenser_temperature",
         ),
         KebaKeEnergySensorEntityDescription[float](
             device_class=SensorDeviceClass.TEMPERATURE,
             key="vaporizer_temperature",
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             state_class=SensorStateClass.MEASUREMENT,
-            translation_key="vaporizer_temperature",
+            suggested_display_precision=1,
+            translation_key="heat_pump_vaporizer_temperature",
         ),
         KebaKeEnergySensorEntityDescription[float](
             device_class=SensorDeviceClass.TEMPERATURE,
             key="target_overheating",
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             state_class=SensorStateClass.MEASUREMENT,
-            translation_key="target_overheating",
+            suggested_display_precision=1,
+            translation_key="heat_pump_target_overheating",
         ),
         KebaKeEnergySensorEntityDescription[float](
             device_class=SensorDeviceClass.TEMPERATURE,
             key="current_overheating",
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             state_class=SensorStateClass.MEASUREMENT,
-            translation_key="current_overheating",
+            suggested_display_precision=1,
+            translation_key="heat_pump_current_overheating",
         ),
         KebaKeEnergySensorEntityDescription[str](
             key="expansion_valve_position",
-            translation_key="expansion_valve_position",
+            translation_key="heat_pump_expansion_valve_position",
             suggested_display_precision=0,
         ),
         KebaKeEnergySensorEntityDescription[float](
             key="compressor",
             native_unit_of_measurement=PERCENTAGE,
             state_class=SensorStateClass.MEASUREMENT,
-            translation_key="compressor",
-            value=lambda data: data * 100,
+            suggested_display_precision=2,
+            translation_key="heat_pump_compressor",
+            value_fn=lambda data: data * 100,
         ),
         KebaKeEnergySensorEntityDescription[float](
             device_class=SensorDeviceClass.PRESSURE,
             key="high_pressure",
             native_unit_of_measurement=UnitOfPressure.BAR,
             state_class=SensorStateClass.MEASUREMENT,
-            translation_key="high_pressure",
+            suggested_display_precision=2,
+            translation_key="heat_pump_high_pressure",
         ),
         KebaKeEnergySensorEntityDescription[float](
             device_class=SensorDeviceClass.PRESSURE,
             key="low_pressure",
             native_unit_of_measurement=UnitOfPressure.BAR,
             state_class=SensorStateClass.MEASUREMENT,
-            translation_key="low_pressure",
+            suggested_display_precision=2,
+            translation_key="heat_pump_low_pressure",
         ),
         KebaKeEnergySensorEntityDescription[float](
-            condition=lambda coordinator, index: coordinator.has_electrical_energy_meter(index=index),
+            condition=has_electrical_energy_meter,
             device_class=SensorDeviceClass.POWER,
             entity_registry_enabled_default=False,
             key="compressor_power",
             native_unit_of_measurement=UnitOfPower.WATT,
             state_class=SensorStateClass.MEASUREMENT,
-            translation_key="compressor_power",
+            suggested_display_precision=0,
+            translation_key="heat_pump_compressor_power",
         ),
         KebaKeEnergySensorEntityDescription[float](
-            condition=lambda coordinator, index: coordinator.has_heat_meter(index=index),
+            condition=has_heat_meter,
             device_class=SensorDeviceClass.POWER,
             entity_registry_enabled_default=False,
             key="heating_power",
             native_unit_of_measurement=UnitOfPower.WATT,
             state_class=SensorStateClass.MEASUREMENT,
-            translation_key="heating_power",
+            suggested_display_precision=0,
+            translation_key="heat_pump_heating_power",
         ),
         KebaKeEnergySensorEntityDescription[float](
-            condition=lambda coordinator, index: coordinator.has_heat_meter(index=index),
+            condition=has_heat_meter,
             device_class=SensorDeviceClass.POWER,
             entity_registry_enabled_default=False,
             key="hot_water_power",
             native_unit_of_measurement=UnitOfPower.WATT,
             state_class=SensorStateClass.MEASUREMENT,
-            translation_key="hot_water_power",
+            suggested_display_precision=0,
+            translation_key="heat_pump_hot_water_power",
         ),
         KebaKeEnergySensorEntityDescription[float](
-            condition=(
-                lambda coordinator, index: (
-                    coordinator.has_electrical_energy_meter(index=index) and coordinator.has_heat_meter(index=index)
-                )
-            ),
+            condition=has_both_meters,
             entity_category=EntityCategory.DIAGNOSTIC,
             entity_registry_enabled_default=False,
             key="cop",
             state_class=SensorStateClass.MEASUREMENT,
             suggested_display_precision=2,
-            translation_key="cop",
+            translation_key="heat_pump_cop",
         ),
         KebaKeEnergySensorEntityDescription[float](
-            condition=lambda coordinator, index: coordinator.has_heat_meter(index=index),
+            condition=has_heat_meter,
             device_class=SensorDeviceClass.ENERGY,
             entity_registry_enabled_default=False,
             key="heating_energy",
             native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
             state_class=SensorStateClass.TOTAL,
-            translation_key="heating_energy",
+            suggested_display_precision=2,
+            translation_key="heat_pump_heating_energy",
         ),
         KebaKeEnergySensorEntityDescription[float](
-            condition=lambda coordinator, index: coordinator.has_electrical_energy_meter(index=index),
+            condition=has_electrical_energy_meter,
             device_class=SensorDeviceClass.ENERGY,
             entity_registry_enabled_default=False,
             key="heating_energy_consumption",
             native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
             state_class=SensorStateClass.TOTAL,
-            translation_key="heating_energy_consumption",
+            suggested_display_precision=2,
+            translation_key="heat_pump_heating_energy_consumption",
         ),
         KebaKeEnergySensorEntityDescription[float](
-            condition=(
-                lambda coordinator, index: (
-                    coordinator.has_electrical_energy_meter(index=index) and coordinator.has_heat_meter(index=index)
-                )
-            ),
+            condition=has_both_meters,
             entity_category=EntityCategory.DIAGNOSTIC,
             entity_registry_enabled_default=False,
             key="heating_spf",
             state_class=SensorStateClass.MEASUREMENT,
             suggested_display_precision=2,
-            translation_key="heating_spf",
+            translation_key="heat_pump_heating_spf",
         ),
         KebaKeEnergySensorEntityDescription[float](
-            condition=lambda coordinator, index: coordinator.has_heat_meter(index=index),
+            condition=has_heat_meter,
             device_class=SensorDeviceClass.ENERGY,
             entity_registry_enabled_default=False,
             key="cooling_energy",
             native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
             state_class=SensorStateClass.TOTAL,
-            translation_key="cooling_energy",
+            suggested_display_precision=2,
+            translation_key="heat_pump_cooling_energy",
         ),
         KebaKeEnergySensorEntityDescription[float](
-            condition=(
-                lambda coordinator, index: (
-                    coordinator.has_electrical_energy_meter(index=index)
-                    and (coordinator.has_active_cooling(index=index) or coordinator.has_passive_cooling(index=index))
-                )
-            ),
+            condition=has_electrical_energy_meter_and_cooling,
             device_class=SensorDeviceClass.ENERGY,
             entity_registry_enabled_default=False,
             key="cooling_energy_consumption",
             native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
             state_class=SensorStateClass.TOTAL,
-            translation_key="cooling_energy_consumption",
+            suggested_display_precision=2,
+            translation_key="heat_pump_cooling_energy_consumption",
         ),
         KebaKeEnergySensorEntityDescription[float](
-            condition=(
-                lambda coordinator, index: (
-                    coordinator.has_electrical_energy_meter(index=index) and coordinator.has_heat_meter(index=index)
-                )
-            ),
+            condition=has_both_meters,
             entity_category=EntityCategory.DIAGNOSTIC,
             entity_registry_enabled_default=False,
             key="cooling_spf",
             state_class=SensorStateClass.MEASUREMENT,
             suggested_display_precision=2,
-            translation_key="cooling_spf",
+            translation_key="heat_pump_cooling_spf",
         ),
         KebaKeEnergySensorEntityDescription[float](
-            condition=(lambda coordinator, index: coordinator.has_heat_meter(index=index)),
+            condition=has_heat_meter,
             device_class=SensorDeviceClass.ENERGY,
             entity_registry_enabled_default=False,
             key="hot_water_energy",
             native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
             state_class=SensorStateClass.TOTAL,
-            translation_key="hot_water_energy",
+            suggested_display_precision=2,
+            translation_key="heat_pump_hot_water_energy",
         ),
         KebaKeEnergySensorEntityDescription[float](
-            condition=lambda coordinator, index: coordinator.has_electrical_energy_meter(index=index),
+            condition=has_electrical_energy_meter,
             device_class=SensorDeviceClass.ENERGY,
             entity_registry_enabled_default=False,
             key="hot_water_energy_consumption",
             native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
             state_class=SensorStateClass.TOTAL,
-            translation_key="hot_water_energy_consumption",
+            suggested_display_precision=2,
+            translation_key="heat_pump_hot_water_energy_consumption",
         ),
         KebaKeEnergySensorEntityDescription[float](
-            condition=(
-                lambda coordinator, index: (
-                    coordinator.has_electrical_energy_meter(index=index) and coordinator.has_heat_meter(index=index)
-                )
-            ),
+            condition=has_both_meters,
             entity_category=EntityCategory.DIAGNOSTIC,
             entity_registry_enabled_default=False,
             key="hot_water_spf",
             state_class=SensorStateClass.MEASUREMENT,
             suggested_display_precision=2,
-            translation_key="hot_water_spf",
+            translation_key="heat_pump_hot_water_spf",
         ),
         KebaKeEnergySensorEntityDescription[float](
-            condition=lambda coordinator, index: coordinator.has_heat_meter(index=index),
+            condition=has_heat_meter,
             device_class=SensorDeviceClass.ENERGY,
             entity_registry_enabled_default=False,
             key="total_thermal_energy",
             native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
             state_class=SensorStateClass.TOTAL,
-            translation_key="total_thermal_energy",
+            suggested_display_precision=2,
+            translation_key="heat_pump_total_thermal_energy",
         ),
         KebaKeEnergySensorEntityDescription[float](
-            condition=lambda coordinator, index: coordinator.has_electrical_energy_meter(index=index),
+            condition=has_electrical_energy_meter,
             device_class=SensorDeviceClass.ENERGY,
             entity_registry_enabled_default=False,
             key="total_energy_consumption",
             native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
             state_class=SensorStateClass.TOTAL,
-            translation_key="total_energy_consumption",
+            suggested_display_precision=2,
+            translation_key="heat_pump_total_energy_consumption",
         ),
         KebaKeEnergySensorEntityDescription[float](
-            condition=(
-                lambda coordinator, index: (
-                    coordinator.has_electrical_energy_meter(index=index)
-                    and (coordinator.has_heat_meter(index=index) or coordinator.has_heat_meter(index=index))
-                )
-            ),
+            condition=has_both_meters,
             entity_category=EntityCategory.DIAGNOSTIC,
             entity_registry_enabled_default=False,
             key="total_spf",
             state_class=SensorStateClass.MEASUREMENT,
             suggested_display_precision=2,
-            translation_key="total_spf",
+            translation_key="heat_pump_total_spf",
         ),
         KebaKeEnergySensorEntityDescription[float](
-            condition=lambda coordinator, _: coordinator.has_photovoltaics(),
+            condition=has_photovoltaics,
             device_class=SensorDeviceClass.ENERGY,
             entity_registry_enabled_default=False,
             key="excess_energy_consumption",
             native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
             state_class=SensorStateClass.TOTAL,
-            translation_key="excess_energy_consumption",
+            suggested_display_precision=2,
+            translation_key="heat_pump_excess_energy_consumption",
         ),
         KebaKeEnergySensorEntityDescription[float](
-            condition=lambda coordinator, _: coordinator.has_photovoltaics(),
+            condition=has_photovoltaics,
             device_class=SensorDeviceClass.ENERGY,
             entity_registry_enabled_default=False,
             key="heating_excess_energy_consumption",
             native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
             state_class=SensorStateClass.TOTAL,
-            translation_key="heating_excess_energy_consumption",
+            suggested_display_precision=2,
+            translation_key="heat_pump_heating_excess_energy_consumption",
         ),
         KebaKeEnergySensorEntityDescription[float](
-            condition=(lambda coordinator, _: coordinator.has_photovoltaics()),
+            condition=has_photovoltaics,
             device_class=SensorDeviceClass.ENERGY,
             entity_registry_enabled_default=False,
             key="cooling_excess_energy_consumption",
             native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
             state_class=SensorStateClass.TOTAL,
-            translation_key="cooling_excess_energy_consumption",
+            suggested_display_precision=2,
+            translation_key="heat_pump_cooling_excess_energy_consumption",
         ),
         KebaKeEnergySensorEntityDescription[float](
-            condition=lambda coordinator, _: coordinator.has_photovoltaics(),
+            condition=has_photovoltaics,
             device_class=SensorDeviceClass.ENERGY,
             entity_registry_enabled_default=False,
             key="hot_water_excess_energy_consumption",
             native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
             state_class=SensorStateClass.TOTAL,
-            translation_key="hot_water_excess_energy_consumption",
+            suggested_display_precision=2,
+            translation_key="heat_pump_hot_water_excess_energy_consumption",
         ),
         KebaKeEnergySensorEntityDescription[int](
             device_class=SensorDeviceClass.DURATION,
             entity_category=EntityCategory.DIAGNOSTIC,
             key="operating_time",
-            native_unit_of_measurement=UnitOfTime.HOURS,
+            native_unit_of_measurement=UnitOfTime.SECONDS,
             state_class=SensorStateClass.TOTAL_INCREASING,
             suggested_display_precision=2,
-            translation_key="operating_time",
-            value=lambda data: data / 3600,
+            suggested_unit_of_measurement=UnitOfTime.HOURS,
+            translation_key="heat_pump_operating_time",
         ),
         KebaKeEnergySensorEntityDescription[int](
             device_class=SensorDeviceClass.DURATION,
             entity_category=EntityCategory.DIAGNOSTIC,
             entity_registry_enabled_default=False,
             key="max_runtime",
-            native_unit_of_measurement=UnitOfTime.HOURS,
+            native_unit_of_measurement=UnitOfTime.SECONDS,
             state_class=SensorStateClass.MEASUREMENT,
             suggested_display_precision=2,
-            translation_key="max_runtime",
-            value=lambda data: data / 3600,
+            suggested_unit_of_measurement=UnitOfTime.HOURS,
+            translation_key="heat_pump_max_runtime",
         ),
         KebaKeEnergySensorEntityDescription[int](
             entity_category=EntityCategory.DIAGNOSTIC,
@@ -989,89 +1116,100 @@ SENSOR_TYPES: Final[dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ..
             key="activation_counter",
             state_class=SensorStateClass.TOTAL_INCREASING,
             suggested_display_precision=0,
-            translation_key="activation_counter",
+            translation_key="heat_pump_activation_counter",
         ),
         KebaKeEnergySensorEntityDescription[int](
-            condition=lambda coordinator, _: coordinator.has_photovoltaics(),
+            condition=has_photovoltaics,
             device_class=SensorDeviceClass.DURATION,
             entity_category=EntityCategory.DIAGNOSTIC,
             entity_registry_enabled_default=False,
             key="excess_energy_operating_time",
-            native_unit_of_measurement=UnitOfTime.HOURS,
+            native_unit_of_measurement=UnitOfTime.SECONDS,
             state_class=SensorStateClass.TOTAL_INCREASING,
             suggested_display_precision=2,
-            translation_key="excess_energy_operating_time",
-            value=lambda data: data / 3600,
+            suggested_unit_of_measurement=UnitOfTime.HOURS,
+            translation_key="heat_pump_excess_energy_operating_time",
         ),
         KebaKeEnergySensorEntityDescription[int](
-            condition=lambda coordinator, _: coordinator.has_photovoltaics(),
+            condition=has_photovoltaics,
             device_class=SensorDeviceClass.DURATION,
             entity_category=EntityCategory.DIAGNOSTIC,
             entity_registry_enabled_default=False,
             key="excess_energy_max_runtime",
-            native_unit_of_measurement=UnitOfTime.HOURS,
+            native_unit_of_measurement=UnitOfTime.SECONDS,
             state_class=SensorStateClass.MEASUREMENT,
             suggested_display_precision=2,
-            translation_key="excess_energy_max_runtime",
-            value=lambda data: data / 3600,
+            suggested_unit_of_measurement=UnitOfTime.HOURS,
+            translation_key="heat_pump_excess_energy_max_runtime",
         ),
         KebaKeEnergySensorEntityDescription[int](
-            condition=lambda coordinator, _: coordinator.has_photovoltaics(),
+            condition=has_photovoltaics,
             entity_registry_enabled_default=False,
             entity_category=EntityCategory.DIAGNOSTIC,
             key="excess_energy_activation_counter",
             state_class=SensorStateClass.TOTAL_INCREASING,
             suggested_display_precision=0,
-            translation_key="excess_energy_activation_counter",
+            translation_key="heat_pump_excess_energy_activation_counter",
         ),
     ),
     SectionPrefix.PASSIVE_COOLING: (
         KebaKeEnergySensorEntityDescription[float](
-            condition=lambda coordinator, index: coordinator.has_passive_cooling(index=index),
             device_class=SensorDeviceClass.TEMPERATURE,
             key="temperature",
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             state_class=SensorStateClass.MEASUREMENT,
-            translation_key="temperature",
+            suggested_display_precision=1,
+            translation_key="passive_cooling_temperature",
         ),
         KebaKeEnergySensorEntityDescription[str](
-            condition=lambda coordinator, index: coordinator.has_passive_cooling(index=index),
             device_class=SensorDeviceClass.ENUM,
             key="switch_valve_position",
-            options=[_.name.lower() for _ in SwitchValvePosition],
+            options=get_states(SwitchValvePosition),
             translation_key="passive_cooling_valve_position",
         ),
         KebaKeEnergySensorEntityDescription[float](
-            condition=lambda coordinator, index: coordinator.has_passive_cooling(index=index),
             key="circulation_pump_speed",
             native_unit_of_measurement=PERCENTAGE,
             state_class=SensorStateClass.MEASUREMENT,
-            translation_key="circulation_pump_speed",
-            value=lambda data: data * 100,
+            suggested_display_precision=2,
+            translation_key="passive_cooling_circulation_pump_speed",
+            value_fn=lambda data: data * 100,
         ),
         KebaKeEnergySensorEntityDescription[float](
-            condition=lambda coordinator, index: coordinator.has_passive_cooling(index=index),
             device_class=SensorDeviceClass.TEMPERATURE,
             key="mixer_flow_temperature",
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
-            translation_key="mixer_flow_temperature",
+            suggested_display_precision=1,
+            translation_key="passive_cooling_mixer_flow_temperature",
             icon="mdi:snowflake-thermometer",
         ),
         KebaKeEnergySensorEntityDescription[float](
-            condition=lambda coordinator, index: coordinator.has_passive_cooling(index=index),
             device_class=SensorDeviceClass.TEMPERATURE,
             key="mixer_target_temperature",
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             state_class=SensorStateClass.MEASUREMENT,
-            translation_key="mixer_target_temperature",
+            suggested_display_precision=1,
+            translation_key="passive_cooling_mixer_target_temperature",
         ),
-        KebaKeEnergySensorEntityDescription[str](
-            condition=lambda coordinator, index: coordinator.has_passive_cooling(index=index),
+        KebaKeEnergySensorEntityDescription[float](
+            condition=is_mixer_position_state,
             device_class=SensorDeviceClass.ENUM,
             key="mixer_position",
-            options=[_.name.lower() for _ in MixerSwitchValvePosition],
-            translation_key="mixer_position",
-            attributes=lambda attributes: {**attributes, "position_percent": attributes["raw_value"] * 100},
+            options=get_states(MixerPosition),
+            suggested_display_precision=2,
+            translation_key="passive_cooling_mixer_position",
+            value_fn=get_mixer_position,
+            attributes_fn=get_mixer_attributes,
+        ),
+        # The same entity as percentage if the option is set, the unique ID stays the same.
+        KebaKeEnergySensorEntityDescription[float](
+            condition=is_mixer_position_percent,
+            key="mixer_position",
+            native_unit_of_measurement=PERCENTAGE,
+            state_class=SensorStateClass.MEASUREMENT,
+            suggested_display_precision=2,
+            translation_key="passive_cooling_mixer_position",
+            value_fn=get_mixer_position_percent,
         ),
     ),
     SectionPrefix.BUFFER_TANK: (
@@ -1080,40 +1218,37 @@ SENSOR_TYPES: Final[dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ..
             key="current_top_temperature",
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             state_class=SensorStateClass.MEASUREMENT,
-            translation_key="current_top_temperature",
-            translation_placeholders={
-                "counter": "",
-            },
+            suggested_display_precision=1,
+            translation_key="buffer_tank_current_top_temperature",
         ),
         KebaKeEnergySensorEntityDescription[float](
             device_class=SensorDeviceClass.TEMPERATURE,
             key="current_bottom_temperature",
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             state_class=SensorStateClass.MEASUREMENT,
-            translation_key="current_bottom_temperature",
-            translation_placeholders={
-                "counter": "",
-            },
+            suggested_display_precision=1,
+            translation_key="buffer_tank_current_bottom_temperature",
         ),
         KebaKeEnergySensorEntityDescription[float](
-            condition=lambda coordinator, _: coordinator.has_photovoltaics(),
+            condition=has_photovoltaics,
             device_class=SensorDeviceClass.TEMPERATURE,
             key="excess_energy_target_temperature",
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             state_class=SensorStateClass.MEASUREMENT,
-            translation_key="excess_energy_target_temperature",
+            suggested_display_precision=1,
+            translation_key="buffer_tank_excess_energy_target_temperature",
         ),
         KebaKeEnergySensorEntityDescription[str](
-            condition=lambda coordinator, _: coordinator.has_photovoltaics(),
+            condition=has_photovoltaics,
             device_class=SensorDeviceClass.ENUM,
             key="excess_energy_mode",
-            options=[_.name.lower() for _ in BufferTankExcessEnergyMode],
-            translation_key="excess_energy_mode",
+            options=get_states(ExcessEnergyState),
+            translation_key="buffer_tank_excess_energy_mode",
         ),
         KebaKeEnergySensorEntityDescription[str](
             device_class=SensorDeviceClass.ENUM,
             key="operating_mode",
-            options=[_.name.lower() for _ in BufferTankOperatingMode],
+            options=get_states(BufferTankOperatingMode),
             translation_key="buffer_tank_operating_mode",
         ),
         KebaKeEnergySensorEntityDescription[float](
@@ -1121,78 +1256,81 @@ SENSOR_TYPES: Final[dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ..
             key="standby_temperature",
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             state_class=SensorStateClass.MEASUREMENT,
-            translation_key="standby_temperature",
+            suggested_display_precision=1,
+            translation_key="buffer_tank_standby_temperature",
         ),
         KebaKeEnergySensorEntityDescription[float](
             device_class=SensorDeviceClass.TEMPERATURE,
             key="target_temperature",
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             state_class=SensorStateClass.MEASUREMENT,
-            translation_key="target_temperature",
+            suggested_display_precision=1,
+            translation_key="buffer_tank_target_temperature",
             translation_placeholders={
                 "counter": "",
             },
             icon="mdi:thermometer-chevron-up",
         ),
     ),
-    SectionPrefix.HOT_WATER_TANK: (
+    SectionPrefix.DHW_TANK: (
         KebaKeEnergySensorEntityDescription[float](
             device_class=SensorDeviceClass.TEMPERATURE,
             key="current_temperature",
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             state_class=SensorStateClass.MEASUREMENT,
-            translation_key="current_temperature",
-            translation_placeholders={
-                "counter": "",
-            },
+            suggested_display_precision=1,
+            translation_key="dhw_tank_current_temperature",
         ),
         KebaKeEnergySensorEntityDescription[str](
             device_class=SensorDeviceClass.ENUM,
             key="operating_mode",
-            options=[_.name.lower() for _ in HotWaterTankOperatingMode],
-            translation_key="hot_water_tank_operating_mode",
+            options=get_states(DHWTankOperatingMode),
+            translation_key="dhw_tank_operating_mode",
         ),
         KebaKeEnergySensorEntityDescription[float](
             device_class=SensorDeviceClass.TEMPERATURE,
             key="standby_temperature",
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             state_class=SensorStateClass.MEASUREMENT,
-            translation_key="standby_temperature",
+            suggested_display_precision=1,
+            translation_key="dhw_tank_standby_temperature",
         ),
         KebaKeEnergySensorEntityDescription[float](
-            condition=lambda coordinator, index: coordinator.has_fresh_water_module(index=index),
             device_class=SensorDeviceClass.TEMPERATURE,
             entity_registry_enabled_default=False,
             key="fresh_water_module_temperature",
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             state_class=SensorStateClass.MEASUREMENT,
-            translation_key="fresh_water_module_temperature",
+            suggested_display_precision=1,
+            translation_key="dhw_tank_fresh_water_module_temperature",
         ),
         KebaKeEnergySensorEntityDescription[float](
             device_class=SensorDeviceClass.TEMPERATURE,
             key="target_temperature",
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             state_class=SensorStateClass.MEASUREMENT,
-            translation_key="target_temperature",
+            suggested_display_precision=1,
+            translation_key="dhw_tank_target_temperature",
             translation_placeholders={
                 "counter": "",
             },
             icon="mdi:thermometer-chevron-up",
         ),
         KebaKeEnergySensorEntityDescription[float](
-            condition=lambda coordinator, _: coordinator.has_photovoltaics(),
+            condition=has_photovoltaics,
             device_class=SensorDeviceClass.TEMPERATURE,
             key="excess_energy_target_temperature",
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             state_class=SensorStateClass.MEASUREMENT,
-            translation_key="excess_energy_target_temperature",
+            suggested_display_precision=1,
+            translation_key="dhw_tank_excess_energy_target_temperature",
         ),
         KebaKeEnergySensorEntityDescription[str](
-            condition=lambda coordinator, _: coordinator.has_photovoltaics(),
+            condition=has_photovoltaics,
             device_class=SensorDeviceClass.ENUM,
             key="excess_energy_mode",
-            options=[_.name.lower() for _ in HotWaterTankExcessEnergyMode],
-            translation_key="excess_energy_mode",
+            options=get_states(ExcessEnergyState),
+            translation_key="dhw_tank_excess_energy_mode",
         ),
         KebaKeEnergySensorEntityDescription[float](
             device_class=SensorDeviceClass.TEMPERATURE,
@@ -1200,14 +1338,15 @@ SENSOR_TYPES: Final[dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ..
             key="circulation_return_temperature",
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             state_class=SensorStateClass.MEASUREMENT,
-            translation_key="circulation_return_temperature",
+            suggested_display_precision=1,
+            translation_key="dhw_tank_circulation_return_temperature",
         ),
     ),
     SectionPrefix.EXTERNAL_HEAT_SOURCE: (
         KebaKeEnergySensorEntityDescription[str](
             device_class=SensorDeviceClass.ENUM,
             key="operating_mode",
-            options=[_.name.lower() for _ in ExternalHeatSourceOperatingMode],
+            options=get_states(ExternalHeatSourceOperatingMode),
             translation_key="external_heat_source_operating_mode",
         ),
         KebaKeEnergySensorEntityDescription[float](
@@ -1215,7 +1354,8 @@ SENSOR_TYPES: Final[dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ..
             key="target_temperature",
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             state_class=SensorStateClass.MEASUREMENT,
-            translation_key="target_temperature",
+            suggested_display_precision=1,
+            translation_key="external_heat_source_target_temperature",
             translation_placeholders={
                 "counter": "",
             },
@@ -1223,23 +1363,23 @@ SENSOR_TYPES: Final[dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ..
         KebaKeEnergySensorEntityDescription[int](
             entity_category=EntityCategory.DIAGNOSTIC,
             key="operating_time",
-            native_unit_of_measurement=UnitOfTime.HOURS,
             device_class=SensorDeviceClass.DURATION,
+            native_unit_of_measurement=UnitOfTime.SECONDS,
             state_class=SensorStateClass.TOTAL_INCREASING,
             suggested_display_precision=2,
-            translation_key="operating_time",
-            value=lambda data: data / 3600,
+            suggested_unit_of_measurement=UnitOfTime.HOURS,
+            translation_key="external_heat_source_operating_time",
         ),
         KebaKeEnergySensorEntityDescription[int](
             entity_category=EntityCategory.DIAGNOSTIC,
             entity_registry_enabled_default=False,
             key="max_runtime",
-            native_unit_of_measurement=UnitOfTime.HOURS,
             device_class=SensorDeviceClass.DURATION,
+            native_unit_of_measurement=UnitOfTime.SECONDS,
             state_class=SensorStateClass.MEASUREMENT,
             suggested_display_precision=2,
-            translation_key="max_runtime",
-            value=lambda data: data / 3600,
+            suggested_unit_of_measurement=UnitOfTime.HOURS,
+            translation_key="external_heat_source_max_runtime",
         ),
         KebaKeEnergySensorEntityDescription[int](
             entity_category=EntityCategory.DIAGNOSTIC,
@@ -1247,47 +1387,47 @@ SENSOR_TYPES: Final[dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ..
             key="activation_counter",
             state_class=SensorStateClass.TOTAL_INCREASING,
             suggested_display_precision=0,
-            translation_key="activation_counter",
+            translation_key="external_heat_source_activation_counter",
         ),
         KebaKeEnergySensorEntityDescription[int](
-            condition=lambda coordinator, _: coordinator.has_photovoltaics(),
+            condition=has_photovoltaics,
             device_class=SensorDeviceClass.DURATION,
             entity_category=EntityCategory.DIAGNOSTIC,
             entity_registry_enabled_default=False,
             key="excess_energy_operating_time",
-            native_unit_of_measurement=UnitOfTime.HOURS,
+            native_unit_of_measurement=UnitOfTime.SECONDS,
             state_class=SensorStateClass.TOTAL_INCREASING,
             suggested_display_precision=2,
-            translation_key="excess_energy_operating_time",
-            value=lambda data: data / 3600,
+            suggested_unit_of_measurement=UnitOfTime.HOURS,
+            translation_key="external_heat_source_excess_energy_operating_time",
         ),
         KebaKeEnergySensorEntityDescription[int](
-            condition=lambda coordinator, _: coordinator.has_photovoltaics(),
+            condition=has_photovoltaics,
             device_class=SensorDeviceClass.DURATION,
             entity_category=EntityCategory.DIAGNOSTIC,
             entity_registry_enabled_default=False,
             key="excess_energy_max_runtime",
-            native_unit_of_measurement=UnitOfTime.HOURS,
+            native_unit_of_measurement=UnitOfTime.SECONDS,
             state_class=SensorStateClass.MEASUREMENT,
             suggested_display_precision=2,
-            translation_key="excess_energy_max_runtime",
-            value=lambda data: data / 3600,
+            suggested_unit_of_measurement=UnitOfTime.HOURS,
+            translation_key="external_heat_source_excess_energy_max_runtime",
         ),
         KebaKeEnergySensorEntityDescription[int](
-            condition=lambda coordinator, _: coordinator.has_photovoltaics(),
+            condition=has_photovoltaics,
             entity_category=EntityCategory.DIAGNOSTIC,
             entity_registry_enabled_default=False,
             key="excess_energy_activation_counter",
             state_class=SensorStateClass.TOTAL_INCREASING,
             suggested_display_precision=0,
-            translation_key="excess_energy_activation_counter",
+            translation_key="external_heat_source_excess_energy_activation_counter",
         ),
     ),
     SectionPrefix.SWITCH_VALVE: (
         KebaKeEnergySensorEntityDescription[str](
             device_class=SensorDeviceClass.ENUM,
             key="position",
-            options=[_.name.lower() for _ in SwitchValvePosition],
+            options=get_states(SwitchValvePosition),
             translation_key="switch_valve_position",
         ),
     ),
@@ -1297,25 +1437,26 @@ SENSOR_TYPES: Final[dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ..
             key="excess_power",
             native_unit_of_measurement=UnitOfPower.WATT,
             state_class=SensorStateClass.MEASUREMENT,
-            translation_key="excess_power",
+            suggested_display_precision=0,
+            translation_key="photovoltaics_excess_power",
         ),
         KebaKeEnergySensorEntityDescription[float](
             device_class=SensorDeviceClass.ENERGY,
             key="daily_energy",
-            native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
+            native_unit_of_measurement=UnitOfEnergy.JOULE,
             state_class=SensorStateClass.TOTAL,
             suggested_display_precision=2,
-            translation_key="daily_energy",
-            value=lambda data: data / 3_600_000,  # Convert joule to kWh.
+            suggested_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
+            translation_key="photovoltaics_daily_energy",
         ),
         KebaKeEnergySensorEntityDescription[float](
             device_class=SensorDeviceClass.ENERGY,
             key="total_energy",
-            native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
+            native_unit_of_measurement=UnitOfEnergy.JOULE,
             state_class=SensorStateClass.TOTAL_INCREASING,
             suggested_display_precision=2,
-            translation_key="total_energy",
-            value=lambda data: data / 3_600_000,  # Convert joule to kWh.
+            suggested_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
+            translation_key="photovoltaics_total_energy",
         ),
     ),
 }
@@ -1324,10 +1465,10 @@ SENSOR_TYPES: Final[dict[str, tuple[KebaKeEnergySensorEntityDescription[Any], ..
 async def async_setup_entry(
     hass: HomeAssistant,  # noqa: ARG001
     entry: KebaKeEnergyConfigEntry,
-    async_add_entities: AddEntitiesCallback,
+    async_add_entities: AddConfigEntryEntitiesCallback,
 ) -> None:
     """Set up KEBA KeEnergy sensors from a config entry."""
-    _async_setup_entities(
+    async_setup_data_entities(
         entry,
         async_add_entities,
         SENSOR_TYPES,
@@ -1335,5 +1476,8 @@ async def async_setup_entry(
         "sensor",
     )
     async_add_entities(
-        [KebaKeEnergyWriteCountSensorEntity(entry.runtime_data, WRITE_COUNT_SENSOR_TYPE, entry)],
+        [
+            KebaKeEnergyWriteCountSensorEntity(entry.runtime_data.data_coordinator, WRITE_COUNT_SENSOR_TYPE),
+            KebaKeEnergyPendingAlarmsSensorEntity(entry.runtime_data.data_coordinator, PENDING_ALARMS_SENSOR_TYPE),
+        ],
     )

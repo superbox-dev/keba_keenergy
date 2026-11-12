@@ -1,18 +1,71 @@
 # serializer version: 1
-# name: test_climate[de][climate.keba_keenergy_12345678_1]
-  StateSnapshot({
-    'attributes': ReadOnlyDict({
-      <ClimateEntityStateAttribute.CURRENT_HUMIDITY: 'current_humidity'>: 53.0,
-      <ClimateEntityStateAttribute.CURRENT_TEMPERATURE: 'current_temperature'>: 22.4,
-      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Heizkreis 1',
-      <ClimateEntityStateAttribute.HVAC_ACTION: 'hvac_action'>: <HVACAction.HEATING: 'heating'>,
+# name: test_climate[de][climate.keba_keenergy_12345678_1-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': dict({
       <ClimateEntityCapabilityAttribute.HVAC_MODES: 'hvac_modes'>: list([
         <HVACMode.AUTO: 'auto'>,
         <HVACMode.HEAT: 'heat'>,
         <HVACMode.OFF: 'off'>,
       ]),
-      <ClimateEntityCapabilityAttribute.MAX_TEMP: 'max_temp'>: 22.5,
-      <ClimateEntityCapabilityAttribute.MIN_TEMP: 'min_temp'>: 17.5,
+      <ClimateEntityCapabilityAttribute.MAX_TEMP: 'max_temp'>: 23.0,
+      <ClimateEntityCapabilityAttribute.MIN_TEMP: 'min_temp'>: 18.0,
+      <ClimateEntityCapabilityAttribute.PRESET_MODES: 'preset_modes'>: list([
+        'home',
+        'away',
+        'comfort',
+        'sleep',
+        'boost',
+      ]),
+      <ClimateEntityCapabilityAttribute.TARGET_TEMP_STEP: 'target_temp_step'>: 0.5,
+    }),
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'device_class': None,
+    'device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_heat_circuit_1')]>,
+    'disabled_by': None,
+    'domain': 'climate',
+    'entity_category': None,
+    'entity_id': 'climate.keba_keenergy_12345678_1',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': None,
+    'options': dict({
+    }),
+    'original_device_class': None,
+    'original_icon': None,
+    'original_name': None,
+    'platform': 'keba_keenergy',
+    'previous_unique_id': None,
+    'suggested_object_id': 'keba_keenergy_12345678_1',
+    'supported_features': <ClimateEntityFeature: 401>,
+    'translation_key': 'heating_circuit',
+    'unique_id': '12345678_1',
+    'unit_of_measurement': None,
+  })
+# ---
+# name: test_climate[de][climate.keba_keenergy_12345678_1-state]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      <ClimateEntityStateAttribute.CURRENT_HUMIDITY: 'current_humidity'>: 53.0,
+      <ClimateEntityStateAttribute.CURRENT_TEMPERATURE: 'current_temperature'>: 22.4,
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Heizkreis 1',
+      <ClimateEntityStateAttribute.HVAC_ACTION: 'hvac_action'>: <HVACAction.IDLE: 'idle'>,
+      <ClimateEntityCapabilityAttribute.HVAC_MODES: 'hvac_modes'>: list([
+        <HVACMode.AUTO: 'auto'>,
+        <HVACMode.HEAT: 'heat'>,
+        <HVACMode.OFF: 'off'>,
+      ]),
+      <ClimateEntityCapabilityAttribute.MAX_TEMP: 'max_temp'>: 23.0,
+      <ClimateEntityCapabilityAttribute.MIN_TEMP: 'min_temp'>: 18.0,
       <ClimateEntityStateAttribute.PRESET_MODE: 'preset_mode'>: 'comfort',
       <ClimateEntityCapabilityAttribute.PRESET_MODES: 'preset_modes'>: list([
         'home',
@@ -23,7 +76,8 @@
       ]),
       <EntityStateAttribute.SUPPORTED_FEATURES: 'supported_features'>: <ClimateEntityFeature: 401>,
       <ClimateEntityCapabilityAttribute.TARGET_TEMP_STEP: 'target_temp_step'>: 0.5,
-      <ClimateEntityStateAttribute.TARGET_TEMPERATURE: 'temperature'>: 21.5,
+      <ClimateEntityStateAttribute.TARGET_TEMPERATURE: 'temperature'>: 22.0,
+      <ClimateEntityStateAttribute.TEMPERATURE_UNIT: 'temperature_unit'>: <UnitOfTemperature.CELSIUS: '°C'>,
     }),
     'context': <ANY>,
     'entity_id': 'climate.keba_keenergy_12345678_1',
@@ -33,7 +87,59 @@
     'state': 'heat',
   })
 # ---
-# name: test_climate[de][climate.keba_keenergy_12345678_2]
+# name: test_climate[de][climate.keba_keenergy_12345678_2-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': dict({
+      <ClimateEntityCapabilityAttribute.HVAC_MODES: 'hvac_modes'>: list([
+        <HVACMode.AUTO: 'auto'>,
+        <HVACMode.COOL: 'cool'>,
+        <HVACMode.OFF: 'off'>,
+      ]),
+      <ClimateEntityCapabilityAttribute.MAX_TEMP: 'max_temp'>: 23.0,
+      <ClimateEntityCapabilityAttribute.MIN_TEMP: 'min_temp'>: 18.0,
+      <ClimateEntityCapabilityAttribute.PRESET_MODES: 'preset_modes'>: list([
+        'home',
+        'comfort',
+        'sleep',
+        'boost',
+      ]),
+      <ClimateEntityCapabilityAttribute.TARGET_TEMP_STEP: 'target_temp_step'>: 0.5,
+    }),
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'device_class': None,
+    'device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_heat_circuit_2')]>,
+    'disabled_by': None,
+    'domain': 'climate',
+    'entity_category': None,
+    'entity_id': 'climate.keba_keenergy_12345678_2',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': None,
+    'options': dict({
+    }),
+    'original_device_class': None,
+    'original_icon': None,
+    'original_name': None,
+    'platform': 'keba_keenergy',
+    'previous_unique_id': None,
+    'suggested_object_id': 'keba_keenergy_12345678_2',
+    'supported_features': <ClimateEntityFeature: 401>,
+    'translation_key': 'heating_circuit',
+    'unique_id': '12345678_2',
+    'unit_of_measurement': None,
+  })
+# ---
+# name: test_climate[de][climate.keba_keenergy_12345678_2-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <ClimateEntityStateAttribute.CURRENT_TEMPERATURE: 'current_temperature'>: None,
@@ -44,8 +150,8 @@
         <HVACMode.COOL: 'cool'>,
         <HVACMode.OFF: 'off'>,
       ]),
-      <ClimateEntityCapabilityAttribute.MAX_TEMP: 'max_temp'>: 22.5,
-      <ClimateEntityCapabilityAttribute.MIN_TEMP: 'min_temp'>: 17.5,
+      <ClimateEntityCapabilityAttribute.MAX_TEMP: 'max_temp'>: 23.0,
+      <ClimateEntityCapabilityAttribute.MIN_TEMP: 'min_temp'>: 18.0,
       <ClimateEntityStateAttribute.PRESET_MODE: 'preset_mode'>: 'home',
       <ClimateEntityCapabilityAttribute.PRESET_MODES: 'preset_modes'>: list([
         'home',
@@ -55,7 +161,8 @@
       ]),
       <EntityStateAttribute.SUPPORTED_FEATURES: 'supported_features'>: <ClimateEntityFeature: 401>,
       <ClimateEntityCapabilityAttribute.TARGET_TEMP_STEP: 'target_temp_step'>: 0.5,
-      <ClimateEntityStateAttribute.TARGET_TEMPERATURE: 'temperature'>: 20.0,
+      <ClimateEntityStateAttribute.TARGET_TEMPERATURE: 'temperature'>: 20.5,
+      <ClimateEntityStateAttribute.TEMPERATURE_UNIT: 'temperature_unit'>: <UnitOfTemperature.CELSIUS: '°C'>,
     }),
     'context': <ANY>,
     'entity_id': 'climate.keba_keenergy_12345678_2',
@@ -65,20 +172,73 @@
     'state': 'auto',
   })
 # ---
-# name: test_climate[en][climate.keba_keenergy_12345678_1]
-  StateSnapshot({
-    'attributes': ReadOnlyDict({
-      <ClimateEntityStateAttribute.CURRENT_HUMIDITY: 'current_humidity'>: 53.0,
-      <ClimateEntityStateAttribute.CURRENT_TEMPERATURE: 'current_temperature'>: 22.4,
-      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Heating circuit 1',
-      <ClimateEntityStateAttribute.HVAC_ACTION: 'hvac_action'>: <HVACAction.HEATING: 'heating'>,
+# name: test_climate[en][climate.keba_keenergy_12345678_1-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': dict({
       <ClimateEntityCapabilityAttribute.HVAC_MODES: 'hvac_modes'>: list([
         <HVACMode.AUTO: 'auto'>,
         <HVACMode.HEAT: 'heat'>,
         <HVACMode.OFF: 'off'>,
       ]),
-      <ClimateEntityCapabilityAttribute.MAX_TEMP: 'max_temp'>: 22.5,
-      <ClimateEntityCapabilityAttribute.MIN_TEMP: 'min_temp'>: 17.5,
+      <ClimateEntityCapabilityAttribute.MAX_TEMP: 'max_temp'>: 23.0,
+      <ClimateEntityCapabilityAttribute.MIN_TEMP: 'min_temp'>: 18.0,
+      <ClimateEntityCapabilityAttribute.PRESET_MODES: 'preset_modes'>: list([
+        'home',
+        'away',
+        'comfort',
+        'sleep',
+        'boost',
+      ]),
+      <ClimateEntityCapabilityAttribute.TARGET_TEMP_STEP: 'target_temp_step'>: 0.5,
+    }),
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'device_class': None,
+    'device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_heat_circuit_1')]>,
+    'disabled_by': None,
+    'domain': 'climate',
+    'entity_category': None,
+    'entity_id': 'climate.keba_keenergy_12345678_1',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': None,
+    'options': dict({
+    }),
+    'original_device_class': None,
+    'original_icon': None,
+    'original_name': None,
+    'platform': 'keba_keenergy',
+    'previous_unique_id': None,
+    'suggested_object_id': 'keba_keenergy_12345678_1',
+    'supported_features': <ClimateEntityFeature: 401>,
+    'translation_key': 'heating_circuit',
+    'unique_id': '12345678_1',
+    'unit_of_measurement': None,
+  })
+# ---
+# name: test_climate[en][climate.keba_keenergy_12345678_1-state]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      <ClimateEntityStateAttribute.CURRENT_HUMIDITY: 'current_humidity'>: 53.0,
+      <ClimateEntityStateAttribute.CURRENT_TEMPERATURE: 'current_temperature'>: 22.4,
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Heating circuit 1',
+      <ClimateEntityStateAttribute.HVAC_ACTION: 'hvac_action'>: <HVACAction.IDLE: 'idle'>,
+      <ClimateEntityCapabilityAttribute.HVAC_MODES: 'hvac_modes'>: list([
+        <HVACMode.AUTO: 'auto'>,
+        <HVACMode.HEAT: 'heat'>,
+        <HVACMode.OFF: 'off'>,
+      ]),
+      <ClimateEntityCapabilityAttribute.MAX_TEMP: 'max_temp'>: 23.0,
+      <ClimateEntityCapabilityAttribute.MIN_TEMP: 'min_temp'>: 18.0,
       <ClimateEntityStateAttribute.PRESET_MODE: 'preset_mode'>: 'comfort',
       <ClimateEntityCapabilityAttribute.PRESET_MODES: 'preset_modes'>: list([
         'home',
@@ -89,7 +249,8 @@
       ]),
       <EntityStateAttribute.SUPPORTED_FEATURES: 'supported_features'>: <ClimateEntityFeature: 401>,
       <ClimateEntityCapabilityAttribute.TARGET_TEMP_STEP: 'target_temp_step'>: 0.5,
-      <ClimateEntityStateAttribute.TARGET_TEMPERATURE: 'temperature'>: 21.5,
+      <ClimateEntityStateAttribute.TARGET_TEMPERATURE: 'temperature'>: 22.0,
+      <ClimateEntityStateAttribute.TEMPERATURE_UNIT: 'temperature_unit'>: <UnitOfTemperature.CELSIUS: '°C'>,
     }),
     'context': <ANY>,
     'entity_id': 'climate.keba_keenergy_12345678_1',
@@ -99,7 +260,59 @@
     'state': 'heat',
   })
 # ---
-# name: test_climate[en][climate.keba_keenergy_12345678_2]
+# name: test_climate[en][climate.keba_keenergy_12345678_2-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': dict({
+      <ClimateEntityCapabilityAttribute.HVAC_MODES: 'hvac_modes'>: list([
+        <HVACMode.AUTO: 'auto'>,
+        <HVACMode.COOL: 'cool'>,
+        <HVACMode.OFF: 'off'>,
+      ]),
+      <ClimateEntityCapabilityAttribute.MAX_TEMP: 'max_temp'>: 23.0,
+      <ClimateEntityCapabilityAttribute.MIN_TEMP: 'min_temp'>: 18.0,
+      <ClimateEntityCapabilityAttribute.PRESET_MODES: 'preset_modes'>: list([
+        'home',
+        'comfort',
+        'sleep',
+        'boost',
+      ]),
+      <ClimateEntityCapabilityAttribute.TARGET_TEMP_STEP: 'target_temp_step'>: 0.5,
+    }),
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'device_class': None,
+    'device_id': <DeviceEntry identifiers=[('keba_keenergy', '12345678_heat_circuit_2')]>,
+    'disabled_by': None,
+    'domain': 'climate',
+    'entity_category': None,
+    'entity_id': 'climate.keba_keenergy_12345678_2',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': None,
+    'options': dict({
+    }),
+    'original_device_class': None,
+    'original_icon': None,
+    'original_name': None,
+    'platform': 'keba_keenergy',
+    'previous_unique_id': None,
+    'suggested_object_id': 'keba_keenergy_12345678_2',
+    'supported_features': <ClimateEntityFeature: 401>,
+    'translation_key': 'heating_circuit',
+    'unique_id': '12345678_2',
+    'unit_of_measurement': None,
+  })
+# ---
+# name: test_climate[en][climate.keba_keenergy_12345678_2-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <ClimateEntityStateAttribute.CURRENT_TEMPERATURE: 'current_temperature'>: None,
@@ -110,8 +323,8 @@
         <HVACMode.COOL: 'cool'>,
         <HVACMode.OFF: 'off'>,
       ]),
-      <ClimateEntityCapabilityAttribute.MAX_TEMP: 'max_temp'>: 22.5,
-      <ClimateEntityCapabilityAttribute.MIN_TEMP: 'min_temp'>: 17.5,
+      <ClimateEntityCapabilityAttribute.MAX_TEMP: 'max_temp'>: 23.0,
+      <ClimateEntityCapabilityAttribute.MIN_TEMP: 'min_temp'>: 18.0,
       <ClimateEntityStateAttribute.PRESET_MODE: 'preset_mode'>: 'home',
       <ClimateEntityCapabilityAttribute.PRESET_MODES: 'preset_modes'>: list([
         'home',
@@ -121,7 +334,8 @@
       ]),
       <EntityStateAttribute.SUPPORTED_FEATURES: 'supported_features'>: <ClimateEntityFeature: 401>,
       <ClimateEntityCapabilityAttribute.TARGET_TEMP_STEP: 'target_temp_step'>: 0.5,
-      <ClimateEntityStateAttribute.TARGET_TEMPERATURE: 'temperature'>: 20.0,
+      <ClimateEntityStateAttribute.TARGET_TEMPERATURE: 'temperature'>: 20.5,
+      <ClimateEntityStateAttribute.TEMPERATURE_UNIT: 'temperature_unit'>: <UnitOfTemperature.CELSIUS: '°C'>,
     }),
     'context': <ANY>,
     'entity_id': 'climate.keba_keenergy_12345678_2',
