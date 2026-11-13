@@ -1,8 +1,8 @@
 {
   "config": {
     "abort": {
-      "already_configured": "Das Gerät ist bereits konfiguriert",
-      "already_in_progress": "Konfigurationsvorgang läuft bereits",
+      "already_configured": "Gerät ist bereits konfiguriert",
+      "already_in_progress": "Die Konfiguration läuft bereits. Schließe die bestehende Konfiguration ab, bevor du erneut beginnst.",
       "reauth_successful": "Die erneute Authentifizierung war erfolgreich",
       "reconfigure_successful": "Die Neukonfiguration war erfolgreich",
       "wrong_account": "Die angegebenen Benutzer-Anmeldedaten passen nicht zu diesem {name}-Gerät"
@@ -27,7 +27,7 @@
       },
       "discovery_confirm": {
         "description": "Möchtest du {name} ({host}) zu Home Assistant hinzufügen?",
-        "title": "Discovered {name}"
+        "title": "{name} gefunden"
       },
       "reauth_confirm": {
         "data": {
@@ -43,10 +43,10 @@
       "user": {
         "data": {
           "host": "Host",
-          "ssl": "SSL-Zertifikat verwenden"
+          "ssl": "Verwendet ein SSL-Zertifikat"
         },
         "data_description": {
-          "host": "The hostname or IP address of your {name} device."
+          "host": "Der Hostname oder die IP-Adresse deines {name}-Geräts."
         },
         "description": "Konfiguriere dein {name}-Gerät."
       }
@@ -697,7 +697,7 @@
         "state": {
           "closed": "Geschlossen",
           "off": "Aus",
-          "open": "Offen"
+          "open": "Geöffnet"
         }
       },
       "heating_circuit_mixer_return_flow_temperature": {
@@ -763,7 +763,7 @@
         "state": {
           "closed": "Geschlossen",
           "off": "Aus",
-          "open": "Offen"
+          "open": "Geöffnet"
         }
       },
       "passive_cooling_mixer_target_temperature": {
@@ -988,7 +988,7 @@
               "mixer_position_percent": "Mischerposition in Prozent"
             },
             "data_description": {
-              "mixer_position_percent": "Zeigt die Mischerposition in Prozent statt Offen, Aus oder Geschlossen"
+              "mixer_position_percent": "Zeigt die Mischerposition in Prozent statt Geöffnet, Aus oder Geschlossen"
             },
             "name": "Anzeige"
           },

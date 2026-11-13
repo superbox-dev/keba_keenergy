@@ -3571,7 +3571,7 @@
   dict({
     'closed': 'Geschlossen',
     'off': 'Aus',
-    'open': 'Offen',
+    'open': 'Geöffnet',
   })
 # ---
 # name: test_sensors[de][sensor.keba_keenergy_12345678_heat_circuit_mixer_return_flow_temperature_1-entry]
@@ -8841,7 +8841,7 @@
   dict({
     'closed': 'Geschlossen',
     'off': 'Aus',
-    'open': 'Offen',
+    'open': 'Geöffnet',
   })
 # ---
 # name: test_sensors[de][sensor.keba_keenergy_12345678_passive_cooling_mixer_target_temperature-entry]
