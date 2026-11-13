@@ -9,6 +9,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!--start-->
 
+### Fixed
+
+- Fixed failing updates on values the integration doesn't know. ([Issue #102][issue-102], [Issue #103][issue-103])
+
+[issue-102]: https://github.com/superbox-dev/keba_keenergy/issues/102
+[issue-103]: https://github.com/superbox-dev/keba_keenergy/issues/103
+
 ## [1.12.0] - 2026-11-12
 
 ### Added

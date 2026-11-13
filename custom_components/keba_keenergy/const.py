@@ -110,6 +110,8 @@ DOMAIN: Final[str] = "keba_keenergy"
 FLASH_WRITE_ISSUE_ID: Final[str] = "frequent_flash_writes"
 FLASH_WRITE_LIMIT_PER_WEEK: Final[int] = 30
 FLASH_WRITE_DELAY: Final[float] = 1
+# New issues of the integration, linked by the warning of an unknown value.
+ISSUE_TRACKER_URL: Final = "https://github.com/superbox-dev/keba_keenergy/issues/new/choose"
 # Significant digits of a Float32, the Web HMI returns 8 digits (`0.8` as `0.80000001`).
 FLOAT32_SIGNIFICANT_DIGITS: Final[int] = 7
 MANUFACTURER: Final[str] = "KEBA"
