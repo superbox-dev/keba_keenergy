@@ -121,6 +121,9 @@
       "dhw_tank_standby_temperature": {
         "default": "mdi:thermometer-chevron-down"
       },
+      "heat_pump_compressor_night_speed": {
+        "default": "mdi:speedometer-medium"
+      },
       "heating_circuit_cooling_curve_slope": {
         "default": "mdi:slope-uphill"
       },

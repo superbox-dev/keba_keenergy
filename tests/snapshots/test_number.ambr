@@ -2038,7 +2038,7 @@
     'object_id_base': None,
     'options': dict({
     }),
-    'original_device_class': <NumberDeviceClass.SPEED: 'speed'>,
+    'original_device_class': None,
     'original_icon': None,
     'original_name': 'Kompressor-Leistungsbegrenzung (Nacht)',
     'platform': 'keba_keenergy',
@@ -2053,7 +2053,6 @@
 # name: test_numbers[de][number.keba_keenergy_12345678_heat_pump_compressor_night_speed-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'speed',
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Wärmepumpe Kompressor-Leistungsbegrenzung (Nacht)',
       <NumberEntityCapabilityAttribute.MAX: 'max'>: 100.0,
       <NumberEntityCapabilityAttribute.MIN: 'min'>: 50.0,
@@ -4846,7 +4845,7 @@
     'object_id_base': None,
     'options': dict({
     }),
-    'original_device_class': <NumberDeviceClass.SPEED: 'speed'>,
+    'original_device_class': None,
     'original_icon': None,
     'original_name': 'Compressor power limit (night)',
     'platform': 'keba_keenergy',
@@ -4861,7 +4860,6 @@
 # name: test_numbers[en][number.keba_keenergy_12345678_heat_pump_compressor_night_speed-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'speed',
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Heat pump Compressor power limit (night)',
       <NumberEntityCapabilityAttribute.MAX: 'max'>: 100.0,
       <NumberEntityCapabilityAttribute.MIN: 'min'>: 50.0,

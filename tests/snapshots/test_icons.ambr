@@ -216,7 +216,9 @@
     'number.keba_keenergy_12345678_heat_circuit_target_temperature_night_1': None,
     'number.keba_keenergy_12345678_heat_circuit_target_temperature_offset_1': None,
     'number.keba_keenergy_12345678_heat_circuit_target_temperature_offset_2': None,
-    'number.keba_keenergy_12345678_heat_pump_compressor_night_speed': None,
+    'number.keba_keenergy_12345678_heat_pump_compressor_night_speed': dict({
+      'default': 'mdi:speedometer-medium',
+    }),
     'number.keba_keenergy_12345678_hot_water_tank_excess_energy_target_temperature_1': dict({
       'default': 'mdi:sun-thermometer',
     }),

@@ -334,7 +334,6 @@ NUMBER_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergyNumberEntityDescriptio
     SectionPrefix.HEAT_PUMP: (
         KebaKeEnergyNumberEntityDescription(
             entity_category=EntityCategory.CONFIG,
-            device_class=NumberDeviceClass.SPEED,
             entity_registry_enabled_default=False,
             key="compressor_night_speed",
             native_unit_of_measurement=PERCENTAGE,
