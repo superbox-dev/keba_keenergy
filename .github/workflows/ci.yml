@@ -2,7 +2,6 @@ name: CI/CD
 
 permissions:
   contents: read
-  pull-requests: write
 
 on:
   workflow_dispatch:
@@ -87,6 +86,9 @@ jobs:
         uses: ./.github/actions/setup-project
       - name: Audit python packages
         run: uv audit
+      - name: Audit npm packages
+        working-directory: website
+        run: npm audit --omit=dev --audit-level=high
 
   tests:
     name: Tests
@@ -129,24 +131,18 @@ jobs:
           path: .
       - name: Create coverage badge
         run: uv run genbadge coverage --input-file coverage.xml
-      - name: Verify coverage badge changed
-        uses: tj-actions/verify-changed-files@a1c6acee9df209257a246f2cc6ae8cb6581c1edf  # v20.0.4
-        id: changed-files
-        with:
-          files: coverage-badge.svg
-      - name: Commit coverage badge
-        if: steps.changed-files.outputs.files_changed == 'true'
+      - name: Commit and push coverage badge
         run: |
+          if git diff --quiet -- coverage-badge.svg; then
+            echo "Coverage badge unchanged"
+            exit 0
+          fi
+
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
           git add coverage-badge.svg
           git commit -m "Updated coverage-badge.svg"
-      - name: Push changes
-        if: steps.changed-files.outputs.files_changed == 'true'
-        uses: ad-m/github-push-action@881a6320fdb16eb5318c5054f31c218aec2b324c  # v1.3.0
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          branch: ${{ github.ref }}
+          git push origin "HEAD:${GITHUB_REF_NAME}"
 
   release:
     name: Release on GitHub
@@ -199,8 +195,8 @@ jobs:
           cat release-notes.md
       - name: Create ZIP file
         run: |
-          cd ${{ github.workspace }}/custom_components/keba_keenergy
-          zip -r ${{ github.workspace }}/keba_keenergy.zip ./
+          cd "${GITHUB_WORKSPACE}/custom_components/keba_keenergy"
+          zip -r "${GITHUB_WORKSPACE}/keba_keenergy.zip" ./
       - name: Release on GitHub
         uses: softprops/action-gh-release@8a0cd651e5b2365bd640854a3fa5dfc70e4875f3  # v3.0.4
         with:
