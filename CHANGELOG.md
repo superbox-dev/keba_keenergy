@@ -9,8 +9,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!--start-->
 
+### Added
+
+- Added descriptions to the SSL field and the update multipliers.
+
+### Changed
+
+- Changed the RAM sensors to the device class `data_size`.
+
 ### Fixed
 
+- Fixed the missing long-term statistics of the mixer flow temperature of the passive cooling.
+- Fixed the missing host in the title of discovered devices.
 - Fixed failing updates on values the integration doesn't know. ([Issue #102][issue-102], [Issue #103][issue-103])
 - Fixed the Home Assistant warning about the unit of the compressor power limit at night. ([Issue #104][issue-104])
 - Fixed missing heat meter sensors of heat pumps that calculate the heat. ([Issue #102][issue-102])

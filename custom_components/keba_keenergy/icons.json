@@ -31,6 +31,9 @@
           "on": "mdi:water"
         }
       },
+      "external_heat_source_consuming_excess_energy": {
+        "default": "mdi:solar-power"
+      },
       "external_heat_source_heat_request": {
         "state": {
           "off": "mdi:power-off",
@@ -42,6 +45,9 @@
           "off": "mdi:check-circle",
           "on": "mdi:alert-circle"
         }
+      },
+      "heat_pump_consuming_excess_energy": {
+        "default": "mdi:solar-power"
       },
       "heat_pump_request": {
         "state": {
@@ -121,6 +127,9 @@
       "dhw_tank_standby_temperature": {
         "default": "mdi:thermometer-chevron-down"
       },
+      "dhw_tank_target_temperature": {
+        "default": "mdi:thermometer-chevron-up"
+      },
       "heat_pump_compressor_night_speed": {
         "default": "mdi:speedometer-medium"
       },
@@ -141,6 +150,9 @@
       },
       "heating_circuit_heating_curve_slope": {
         "default": "mdi:slope-uphill"
+      },
+      "solar_circuit_target_temperature": {
+        "default": "mdi:thermometer-water"
       }
     },
     "select": {
@@ -197,6 +209,9 @@
       "buffer_tank_standby_temperature": {
         "default": "mdi:thermometer-chevron-down"
       },
+      "buffer_tank_target_temperature": {
+        "default": "mdi:thermometer-chevron-up"
+      },
       "dhw_tank_current_temperature": {
         "default": "mdi:thermometer-water"
       },
@@ -224,6 +239,9 @@
       },
       "dhw_tank_standby_temperature": {
         "default": "mdi:thermometer-chevron-down"
+      },
+      "dhw_tank_target_temperature": {
+        "default": "mdi:thermometer-chevron-up"
       },
       "external_heat_source_operating_mode": {
         "state": {
@@ -340,6 +358,9 @@
           "75": "mdi:speedometer"
         }
       },
+      "passive_cooling_mixer_flow_temperature": {
+        "default": "mdi:snowflake-thermometer"
+      },
       "passive_cooling_temperature": {
         "default": "mdi:snowflake-thermometer"
       },
@@ -367,6 +388,9 @@
       },
       "solar_circuit_source_temperature": {
         "default": "mdi:sun-thermometer"
+      },
+      "solar_circuit_target_temperature": {
+        "default": "mdi:thermometer-water"
       },
       "system_flash_erase_counter": {
         "default": "mdi:memory"

@@ -319,6 +319,7 @@ SENSOR_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergySensorEntityDescriptio
             value_fn=lambda data: data / 10,
         ),
         KebaKeEnergySensorEntityDescription[int](
+            device_class=SensorDeviceClass.DATA_SIZE,
             entity_category=EntityCategory.DIAGNOSTIC,
             entity_registry_enabled_default=False,
             key="ram_usage",
@@ -329,6 +330,7 @@ SENSOR_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergySensorEntityDescriptio
             value_fn=lambda data: data,
         ),
         KebaKeEnergySensorEntityDescription[int](
+            device_class=SensorDeviceClass.DATA_SIZE,
             entity_category=EntityCategory.DIAGNOSTIC,
             entity_registry_enabled_default=False,
             key="free_ram",
@@ -710,7 +712,6 @@ SENSOR_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergySensorEntityDescriptio
             translation_placeholders={
                 "counter": " 1",
             },
-            icon="mdi:thermometer-water",
         ),
         KebaKeEnergySensorEntityDescription[float](
             device_class=SensorDeviceClass.TEMPERATURE,
@@ -723,7 +724,6 @@ SENSOR_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergySensorEntityDescriptio
             translation_placeholders={
                 "counter": " 2",
             },
-            icon="mdi:thermometer-water",
         ),
         KebaKeEnergySensorEntityDescription[float](
             device_class=SensorDeviceClass.ENERGY,
@@ -1179,9 +1179,9 @@ SENSOR_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergySensorEntityDescriptio
             device_class=SensorDeviceClass.TEMPERATURE,
             key="mixer_flow_temperature",
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
+            state_class=SensorStateClass.MEASUREMENT,
             suggested_display_precision=1,
             translation_key="passive_cooling_mixer_flow_temperature",
-            icon="mdi:snowflake-thermometer",
         ),
         KebaKeEnergySensorEntityDescription[float](
             device_class=SensorDeviceClass.TEMPERATURE,
@@ -1269,7 +1269,6 @@ SENSOR_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergySensorEntityDescriptio
             translation_placeholders={
                 "counter": "",
             },
-            icon="mdi:thermometer-chevron-up",
         ),
     ),
     SectionPrefix.DHW_TANK: (
@@ -1314,7 +1313,6 @@ SENSOR_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergySensorEntityDescriptio
             translation_placeholders={
                 "counter": "",
             },
-            icon="mdi:thermometer-chevron-up",
         ),
         KebaKeEnergySensorEntityDescription[float](
             condition=has_photovoltaics,
