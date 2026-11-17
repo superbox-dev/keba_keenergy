@@ -2,7 +2,7 @@
   "config": {
     "abort": {
       "already_configured": "Device is already configured",
-      "already_in_progress": "Configuration flow is already in progress",
+      "already_in_progress": "This is already being configured. Finish the existing configuration before starting again.",
       "reauth_successful": "Re-authentication was successful",
       "reconfigure_successful": "Re-configuration was successful",
       "wrong_account": "The user credentials provided do not match this {name} device"
@@ -46,7 +46,8 @@
           "ssl": "Uses an SSL certificate"
         },
         "data_description": {
-          "host": "The hostname or IP address of your {name} device."
+          "host": "The hostname or IP address of your {name} device.",
+          "ssl": "Enable this if the Web HMI is only reachable via `https://`."
         },
         "description": "Configure your {name} device."
       }
@@ -1003,6 +1004,17 @@
               "scan_interval_tick_solar_circuit": "Solar circuit",
               "scan_interval_tick_switch_valve": "Switch valve",
               "scan_interval_tick_system": "Control unit"
+            },
+            "data_description": {
+              "scan_interval_tick_buffer_tank": "Updates the values of the buffer tanks only every n-th scan interval",
+              "scan_interval_tick_external_heat_source": "Updates the values of the external heat sources only every n-th scan interval",
+              "scan_interval_tick_heat_circuit": "Updates the values of the heating circuits only every n-th scan interval",
+              "scan_interval_tick_heat_pump": "Updates the values of the heat pumps only every n-th scan interval",
+              "scan_interval_tick_hot_water_tank": "Updates the values of the hot water tanks only every n-th scan interval",
+              "scan_interval_tick_photovoltaics": "Updates the values of the photovoltaics only every n-th scan interval",
+              "scan_interval_tick_solar_circuit": "Updates the values of the solar circuits only every n-th scan interval",
+              "scan_interval_tick_switch_valve": "Updates the values of the switch valves only every n-th scan interval",
+              "scan_interval_tick_system": "Updates the values of the control unit only every n-th scan interval"
             },
             "description": "Updates the values of a device type only every n-th scan interval",
             "name": "Update multipliers"

@@ -41,6 +41,7 @@ from .const import CURVE_KEYS
 from .const import DEFAULT_SCAN_INTERVAL
 from .const import DEVICE_TYPES
 from .const import DOMAIN
+from .const import ISSUE_TRACKER_URL
 from .const import REMOTE_ACCESS_SCAN_INTERVAL
 from .const import REQUEST_REFRESH_COOLDOWN
 from .const import SCAN_INTERVAL_DEVICE_TYPES
@@ -150,6 +151,10 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[CoordinatorData]):
         # The configuration of the control unit, read once on setup.
         self.configuration: CoordinatorData = {}
 
+        # The values the API can't convert (endpoint and raw value), e.g. enum values of a newer firmware, each logged
+        # once.
+        self._unknown_values: set[tuple[str, str]] = set()
+
         # The number of updates, for the scan interval multipliers of the device types.
         self._tick_counter: int = 0
 
@@ -229,7 +234,10 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[CoordinatorData]):
         )
 
         configuration_request: ReadRequest = self._get_request(CONFIGURATION_ENDPOINTS, supported)
-        readings: Readings = await self._api.read(configuration_request, counts=self.device_counts, limits="none")
+        readings: Readings = await self._api.read(
+            configuration_request, counts=self.device_counts, limits="none", strict=False
+        )
+        self._log_unknown_values(readings)
         self.configuration = self._group_readings(readings, configuration_request)
 
         # Group the polled values by device but only add the values that are available for the heat pump setup.
@@ -238,6 +246,20 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[CoordinatorData]):
             for device_type, endpoints in ENDPOINTS.items()
             if self.has_device(device_type)
         }
+
+    def _log_unknown_values(self, readings: Readings, /) -> None:
+        """Log the values the API can't convert, each once, with the link to report them."""
+        unknown_values: set[tuple[str, str]] = {
+            (str(endpoint), reading.raw_value)
+            for endpoint, endpoint_readings in readings.items()
+            for reading in endpoint_readings
+            if reading.value is None
+        } - self._unknown_values
+
+        for endpoint, raw_value in sorted(unknown_values):
+            _LOGGER.warning("Unknown value %s of %s, please report it at %s", raw_value, endpoint, ISSUE_TRACKER_URL)
+
+        self._unknown_values |= unknown_values
 
     @staticmethod
     def _get_request(
@@ -384,9 +406,12 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[CoordinatorData]):
     async def _async_read(self, request: Iterable[Endpoint], /) -> Readings:
         # The read waits for a running write, so it gets the written value.
         async with self._write_lock:
-            return await _api_call_for_update(
-                self._api.read(request, counts=self.device_counts, limits="writable", message_ids=True),
+            readings: Readings = await _api_call_for_update(
+                self._api.read(request, counts=self.device_counts, limits="writable", message_ids=True, strict=False),
             )
+
+        self._log_unknown_values(readings)
+        return readings
 
     @staticmethod
     def get_endpoint(device_type: SectionPrefix, key: str, /) -> Endpoint:
@@ -412,18 +437,18 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[CoordinatorData]):
 
     def async_set_local_value(
         self,
-        value: Value,
+        value: Value | None,
         /,
         *,
         device_type: SectionPrefix,
         key: str,
         index: int | None,
         value_index: int | None,
-    ) -> Value:
+    ) -> Value | None:
         """Set a single value in the coordinator data, without writing it, and return the replaced value."""
         readings: list[Reading] = self.data[device_type][key]
         reading_index: int = self.reading_index(device_type, key, index=index, value_index=value_index)
-        previous_value: Value = readings[reading_index].value
+        previous_value: Value | None = readings[reading_index].value
 
         # Only copy the changed values, the other values are shared with the previous data.
         data: CoordinatorData = {
@@ -545,7 +570,7 @@ class KebaKeEnergyDataUpdateCoordinator(DataUpdateCoordinator[CoordinatorData]):
                         value_index=None,
                     )
 
-    def _heating_circuit_values(self, key: str, /) -> list[Value]:
+    def _heating_circuit_values(self, key: str, /) -> list[Value | None]:
         """Return the values of all heating circuits."""
         return [reading.value for reading in self.data[SectionPrefix.HEATING_CIRCUIT].get(key, [])]
 

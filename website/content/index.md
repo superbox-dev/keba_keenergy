@@ -363,6 +363,9 @@ with their entities.
 Like the Web HMI, the integration does not create sensors that are not configured on the control unit, and shows
 sensors with an invalid value (e.g. not connected) as unknown.
 
+A value the integration doesn't know yet, e.g. a new state of a newer firmware, is shown as unknown as well. All other
+entities keep working, a warning in the log names the value, please report it.
+
 ## Known limitations
 
 - The control unit stores every change in its flash memory, which only allows a limited number of write operations.

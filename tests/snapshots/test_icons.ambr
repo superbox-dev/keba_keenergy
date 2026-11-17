@@ -25,8 +25,12 @@
         'on': 'mdi:fire',
       }),
     }),
-    'binary_sensor.keba_keenergy_12345678_external_heat_source_consuming_excess_energy_1': 'mdi:solar-power',
-    'binary_sensor.keba_keenergy_12345678_external_heat_source_consuming_excess_energy_2': 'mdi:solar-power',
+    'binary_sensor.keba_keenergy_12345678_external_heat_source_consuming_excess_energy_1': dict({
+      'default': 'mdi:solar-power',
+    }),
+    'binary_sensor.keba_keenergy_12345678_external_heat_source_consuming_excess_energy_2': dict({
+      'default': 'mdi:solar-power',
+    }),
     'binary_sensor.keba_keenergy_12345678_external_heat_source_heat_request_1': dict({
       'state': dict({
         'off': 'mdi:power-off',
@@ -40,7 +44,9 @@
       }),
     }),
     'binary_sensor.keba_keenergy_12345678_heat_circuit_pump_state_1': None,
-    'binary_sensor.keba_keenergy_12345678_heat_pump_consuming_excess_energy': 'mdi:solar-power',
+    'binary_sensor.keba_keenergy_12345678_heat_pump_consuming_excess_energy': dict({
+      'default': 'mdi:solar-power',
+    }),
     'binary_sensor.keba_keenergy_12345678_heat_pump_has_compressor_failure': dict({
       'state': dict({
         'off': 'mdi:check-circle',
@@ -216,7 +222,9 @@
     'number.keba_keenergy_12345678_heat_circuit_target_temperature_night_1': None,
     'number.keba_keenergy_12345678_heat_circuit_target_temperature_offset_1': None,
     'number.keba_keenergy_12345678_heat_circuit_target_temperature_offset_2': None,
-    'number.keba_keenergy_12345678_heat_pump_compressor_night_speed': None,
+    'number.keba_keenergy_12345678_heat_pump_compressor_night_speed': dict({
+      'default': 'mdi:speedometer-medium',
+    }),
     'number.keba_keenergy_12345678_hot_water_tank_excess_energy_target_temperature_1': dict({
       'default': 'mdi:sun-thermometer',
     }),
@@ -235,12 +243,24 @@
     'number.keba_keenergy_12345678_hot_water_tank_standby_temperature_2': dict({
       'default': 'mdi:thermometer-chevron-down',
     }),
-    'number.keba_keenergy_12345678_hot_water_tank_target_temperature_1': 'mdi:thermometer-chevron-up',
-    'number.keba_keenergy_12345678_hot_water_tank_target_temperature_2': 'mdi:thermometer-chevron-up',
-    'number.keba_keenergy_12345678_solar_circuit_target_temperature_1_1': 'mdi:thermometer-water',
-    'number.keba_keenergy_12345678_solar_circuit_target_temperature_1_2': 'mdi:thermometer-water',
-    'number.keba_keenergy_12345678_solar_circuit_target_temperature_2_1': 'mdi:thermometer-water',
-    'number.keba_keenergy_12345678_solar_circuit_target_temperature_2_2': 'mdi:thermometer-water',
+    'number.keba_keenergy_12345678_hot_water_tank_target_temperature_1': dict({
+      'default': 'mdi:thermometer-chevron-up',
+    }),
+    'number.keba_keenergy_12345678_hot_water_tank_target_temperature_2': dict({
+      'default': 'mdi:thermometer-chevron-up',
+    }),
+    'number.keba_keenergy_12345678_solar_circuit_target_temperature_1_1': dict({
+      'default': 'mdi:thermometer-water',
+    }),
+    'number.keba_keenergy_12345678_solar_circuit_target_temperature_1_2': dict({
+      'default': 'mdi:thermometer-water',
+    }),
+    'number.keba_keenergy_12345678_solar_circuit_target_temperature_2_1': dict({
+      'default': 'mdi:thermometer-water',
+    }),
+    'number.keba_keenergy_12345678_solar_circuit_target_temperature_2_2': dict({
+      'default': 'mdi:thermometer-water',
+    }),
     'select.keba_keenergy_12345678_buffer_tank_operating_mode_1': dict({
       'default': 'mdi:cog',
     }),
@@ -334,8 +354,12 @@
     'sensor.keba_keenergy_12345678_buffer_tank_standby_temperature_2': dict({
       'default': 'mdi:thermometer-chevron-down',
     }),
-    'sensor.keba_keenergy_12345678_buffer_tank_target_temperature_1': 'mdi:thermometer-chevron-up',
-    'sensor.keba_keenergy_12345678_buffer_tank_target_temperature_2': 'mdi:thermometer-chevron-up',
+    'sensor.keba_keenergy_12345678_buffer_tank_target_temperature_1': dict({
+      'default': 'mdi:thermometer-chevron-up',
+    }),
+    'sensor.keba_keenergy_12345678_buffer_tank_target_temperature_2': dict({
+      'default': 'mdi:thermometer-chevron-up',
+    }),
     'sensor.keba_keenergy_12345678_control_cpu_usage': None,
     'sensor.keba_keenergy_12345678_cpu_usage': None,
     'sensor.keba_keenergy_12345678_external_heat_source_activation_counter_1': None,
@@ -610,8 +634,12 @@
     'sensor.keba_keenergy_12345678_hot_water_tank_standby_temperature_2': dict({
       'default': 'mdi:thermometer-chevron-down',
     }),
-    'sensor.keba_keenergy_12345678_hot_water_tank_target_temperature_1': 'mdi:thermometer-chevron-up',
-    'sensor.keba_keenergy_12345678_hot_water_tank_target_temperature_2': 'mdi:thermometer-chevron-up',
+    'sensor.keba_keenergy_12345678_hot_water_tank_target_temperature_1': dict({
+      'default': 'mdi:thermometer-chevron-up',
+    }),
+    'sensor.keba_keenergy_12345678_hot_water_tank_target_temperature_2': dict({
+      'default': 'mdi:thermometer-chevron-up',
+    }),
     'sensor.keba_keenergy_12345678_operating_mode': dict({
       'default': 'mdi:cog',
       'state': dict({
@@ -638,7 +666,9 @@
         '75': 'mdi:speedometer',
       }),
     }),
-    'sensor.keba_keenergy_12345678_passive_cooling_mixer_flow_temperature': 'mdi:snowflake-thermometer',
+    'sensor.keba_keenergy_12345678_passive_cooling_mixer_flow_temperature': dict({
+      'default': 'mdi:snowflake-thermometer',
+    }),
     'sensor.keba_keenergy_12345678_passive_cooling_mixer_position': None,
     'sensor.keba_keenergy_12345678_passive_cooling_mixer_target_temperature': None,
     'sensor.keba_keenergy_12345678_passive_cooling_switch_valve_position': None,
@@ -708,10 +738,18 @@
     'sensor.keba_keenergy_12345678_solar_circuit_source_temperature_2': dict({
       'default': 'mdi:sun-thermometer',
     }),
-    'sensor.keba_keenergy_12345678_solar_circuit_target_temperature_1_1': 'mdi:thermometer-water',
-    'sensor.keba_keenergy_12345678_solar_circuit_target_temperature_1_2': 'mdi:thermometer-water',
-    'sensor.keba_keenergy_12345678_solar_circuit_target_temperature_2_1': 'mdi:thermometer-water',
-    'sensor.keba_keenergy_12345678_solar_circuit_target_temperature_2_2': 'mdi:thermometer-water',
+    'sensor.keba_keenergy_12345678_solar_circuit_target_temperature_1_1': dict({
+      'default': 'mdi:thermometer-water',
+    }),
+    'sensor.keba_keenergy_12345678_solar_circuit_target_temperature_1_2': dict({
+      'default': 'mdi:thermometer-water',
+    }),
+    'sensor.keba_keenergy_12345678_solar_circuit_target_temperature_2_1': dict({
+      'default': 'mdi:thermometer-water',
+    }),
+    'sensor.keba_keenergy_12345678_solar_circuit_target_temperature_2_2': dict({
+      'default': 'mdi:thermometer-water',
+    }),
     'sensor.keba_keenergy_12345678_switch_valve_position_1': None,
     'sensor.keba_keenergy_12345678_switch_valve_position_2': None,
     'sensor.keba_keenergy_12345678_webserver_cpu_usage': None,

@@ -2038,7 +2038,7 @@
     'object_id_base': None,
     'options': dict({
     }),
-    'original_device_class': <NumberDeviceClass.SPEED: 'speed'>,
+    'original_device_class': None,
     'original_icon': None,
     'original_name': 'Kompressor-Leistungsbegrenzung (Nacht)',
     'platform': 'keba_keenergy',
@@ -2053,7 +2053,6 @@
 # name: test_numbers[de][number.keba_keenergy_12345678_heat_pump_compressor_night_speed-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'speed',
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Wärmepumpe Kompressor-Leistungsbegrenzung (Nacht)',
       <NumberEntityCapabilityAttribute.MAX: 'max'>: 100.0,
       <NumberEntityCapabilityAttribute.MIN: 'min'>: 50.0,
@@ -2466,7 +2465,7 @@
     'options': dict({
     }),
     'original_device_class': <NumberDeviceClass.TEMPERATURE: 'temperature'>,
-    'original_icon': 'mdi:thermometer-chevron-up',
+    'original_icon': None,
     'original_name': 'Soll-Temperatur',
     'platform': 'keba_keenergy',
     'previous_unique_id': None,
@@ -2482,7 +2481,6 @@
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Warmwasserspeicher 1 Soll-Temperatur',
-      <EntityStateAttribute.ICON: 'icon'>: 'mdi:thermometer-chevron-up',
       <NumberEntityCapabilityAttribute.MAX: 'max'>: 52.0,
       <NumberEntityCapabilityAttribute.MIN: 'min'>: 0.0,
       <NumberEntityCapabilityAttribute.MODE: 'mode'>: <NumberMode.AUTO: 'auto'>,
@@ -2528,7 +2526,7 @@
     'options': dict({
     }),
     'original_device_class': <NumberDeviceClass.TEMPERATURE: 'temperature'>,
-    'original_icon': 'mdi:thermometer-chevron-up',
+    'original_icon': None,
     'original_name': 'Soll-Temperatur',
     'platform': 'keba_keenergy',
     'previous_unique_id': None,
@@ -2544,7 +2542,6 @@
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Warmwasserspeicher 2 Soll-Temperatur',
-      <EntityStateAttribute.ICON: 'icon'>: 'mdi:thermometer-chevron-up',
       <NumberEntityCapabilityAttribute.MAX: 'max'>: 52.0,
       <NumberEntityCapabilityAttribute.MIN: 'min'>: 0.0,
       <NumberEntityCapabilityAttribute.MODE: 'mode'>: <NumberMode.AUTO: 'auto'>,
@@ -2590,7 +2587,7 @@
     'options': dict({
     }),
     'original_device_class': <NumberDeviceClass.TEMPERATURE: 'temperature'>,
-    'original_icon': 'mdi:thermometer-water',
+    'original_icon': None,
     'original_name': 'Soll-Temperatur 1',
     'platform': 'keba_keenergy',
     'previous_unique_id': None,
@@ -2606,7 +2603,6 @@
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Solarkreis 1 Soll-Temperatur 1',
-      <EntityStateAttribute.ICON: 'icon'>: 'mdi:thermometer-water',
       <NumberEntityCapabilityAttribute.MAX: 'max'>: 90.0,
       <NumberEntityCapabilityAttribute.MIN: 'min'>: 0.0,
       <NumberEntityCapabilityAttribute.MODE: 'mode'>: <NumberMode.AUTO: 'auto'>,
@@ -2652,7 +2648,7 @@
     'options': dict({
     }),
     'original_device_class': <NumberDeviceClass.TEMPERATURE: 'temperature'>,
-    'original_icon': 'mdi:thermometer-water',
+    'original_icon': None,
     'original_name': 'Soll-Temperatur 1',
     'platform': 'keba_keenergy',
     'previous_unique_id': None,
@@ -2668,7 +2664,6 @@
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Solarkreis 2 Soll-Temperatur 1',
-      <EntityStateAttribute.ICON: 'icon'>: 'mdi:thermometer-water',
       <NumberEntityCapabilityAttribute.MAX: 'max'>: 90.0,
       <NumberEntityCapabilityAttribute.MIN: 'min'>: 0.0,
       <NumberEntityCapabilityAttribute.MODE: 'mode'>: <NumberMode.AUTO: 'auto'>,
@@ -2714,7 +2709,7 @@
     'options': dict({
     }),
     'original_device_class': <NumberDeviceClass.TEMPERATURE: 'temperature'>,
-    'original_icon': 'mdi:thermometer-water',
+    'original_icon': None,
     'original_name': 'Soll-Temperatur 2',
     'platform': 'keba_keenergy',
     'previous_unique_id': None,
@@ -2730,7 +2725,6 @@
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Solarkreis 1 Soll-Temperatur 2',
-      <EntityStateAttribute.ICON: 'icon'>: 'mdi:thermometer-water',
       <NumberEntityCapabilityAttribute.MAX: 'max'>: 90.0,
       <NumberEntityCapabilityAttribute.MIN: 'min'>: 0.0,
       <NumberEntityCapabilityAttribute.MODE: 'mode'>: <NumberMode.AUTO: 'auto'>,
@@ -2776,7 +2770,7 @@
     'options': dict({
     }),
     'original_device_class': <NumberDeviceClass.TEMPERATURE: 'temperature'>,
-    'original_icon': 'mdi:thermometer-water',
+    'original_icon': None,
     'original_name': 'Soll-Temperatur 2',
     'platform': 'keba_keenergy',
     'previous_unique_id': None,
@@ -2792,7 +2786,6 @@
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Solarkreis 2 Soll-Temperatur 2',
-      <EntityStateAttribute.ICON: 'icon'>: 'mdi:thermometer-water',
       <NumberEntityCapabilityAttribute.MAX: 'max'>: 90.0,
       <NumberEntityCapabilityAttribute.MIN: 'min'>: 0.0,
       <NumberEntityCapabilityAttribute.MODE: 'mode'>: <NumberMode.AUTO: 'auto'>,
@@ -4846,7 +4839,7 @@
     'object_id_base': None,
     'options': dict({
     }),
-    'original_device_class': <NumberDeviceClass.SPEED: 'speed'>,
+    'original_device_class': None,
     'original_icon': None,
     'original_name': 'Compressor power limit (night)',
     'platform': 'keba_keenergy',
@@ -4861,7 +4854,6 @@
 # name: test_numbers[en][number.keba_keenergy_12345678_heat_pump_compressor_night_speed-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'speed',
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Heat pump Compressor power limit (night)',
       <NumberEntityCapabilityAttribute.MAX: 'max'>: 100.0,
       <NumberEntityCapabilityAttribute.MIN: 'min'>: 50.0,
@@ -5274,7 +5266,7 @@
     'options': dict({
     }),
     'original_device_class': <NumberDeviceClass.TEMPERATURE: 'temperature'>,
-    'original_icon': 'mdi:thermometer-chevron-up',
+    'original_icon': None,
     'original_name': 'Target temperature',
     'platform': 'keba_keenergy',
     'previous_unique_id': None,
@@ -5290,7 +5282,6 @@
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Hot water tank 1 Target temperature',
-      <EntityStateAttribute.ICON: 'icon'>: 'mdi:thermometer-chevron-up',
       <NumberEntityCapabilityAttribute.MAX: 'max'>: 52.0,
       <NumberEntityCapabilityAttribute.MIN: 'min'>: 0.0,
       <NumberEntityCapabilityAttribute.MODE: 'mode'>: <NumberMode.AUTO: 'auto'>,
@@ -5336,7 +5327,7 @@
     'options': dict({
     }),
     'original_device_class': <NumberDeviceClass.TEMPERATURE: 'temperature'>,
-    'original_icon': 'mdi:thermometer-chevron-up',
+    'original_icon': None,
     'original_name': 'Target temperature',
     'platform': 'keba_keenergy',
     'previous_unique_id': None,
@@ -5352,7 +5343,6 @@
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Hot water tank 2 Target temperature',
-      <EntityStateAttribute.ICON: 'icon'>: 'mdi:thermometer-chevron-up',
       <NumberEntityCapabilityAttribute.MAX: 'max'>: 52.0,
       <NumberEntityCapabilityAttribute.MIN: 'min'>: 0.0,
       <NumberEntityCapabilityAttribute.MODE: 'mode'>: <NumberMode.AUTO: 'auto'>,
@@ -5398,7 +5388,7 @@
     'options': dict({
     }),
     'original_device_class': <NumberDeviceClass.TEMPERATURE: 'temperature'>,
-    'original_icon': 'mdi:thermometer-water',
+    'original_icon': None,
     'original_name': 'Target temperature 1',
     'platform': 'keba_keenergy',
     'previous_unique_id': None,
@@ -5414,7 +5404,6 @@
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Solar circuit 1 Target temperature 1',
-      <EntityStateAttribute.ICON: 'icon'>: 'mdi:thermometer-water',
       <NumberEntityCapabilityAttribute.MAX: 'max'>: 90.0,
       <NumberEntityCapabilityAttribute.MIN: 'min'>: 0.0,
       <NumberEntityCapabilityAttribute.MODE: 'mode'>: <NumberMode.AUTO: 'auto'>,
@@ -5460,7 +5449,7 @@
     'options': dict({
     }),
     'original_device_class': <NumberDeviceClass.TEMPERATURE: 'temperature'>,
-    'original_icon': 'mdi:thermometer-water',
+    'original_icon': None,
     'original_name': 'Target temperature 1',
     'platform': 'keba_keenergy',
     'previous_unique_id': None,
@@ -5476,7 +5465,6 @@
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Solar circuit 2 Target temperature 1',
-      <EntityStateAttribute.ICON: 'icon'>: 'mdi:thermometer-water',
       <NumberEntityCapabilityAttribute.MAX: 'max'>: 90.0,
       <NumberEntityCapabilityAttribute.MIN: 'min'>: 0.0,
       <NumberEntityCapabilityAttribute.MODE: 'mode'>: <NumberMode.AUTO: 'auto'>,
@@ -5522,7 +5510,7 @@
     'options': dict({
     }),
     'original_device_class': <NumberDeviceClass.TEMPERATURE: 'temperature'>,
-    'original_icon': 'mdi:thermometer-water',
+    'original_icon': None,
     'original_name': 'Target temperature 2',
     'platform': 'keba_keenergy',
     'previous_unique_id': None,
@@ -5538,7 +5526,6 @@
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Solar circuit 1 Target temperature 2',
-      <EntityStateAttribute.ICON: 'icon'>: 'mdi:thermometer-water',
       <NumberEntityCapabilityAttribute.MAX: 'max'>: 90.0,
       <NumberEntityCapabilityAttribute.MIN: 'min'>: 0.0,
       <NumberEntityCapabilityAttribute.MODE: 'mode'>: <NumberMode.AUTO: 'auto'>,
@@ -5584,7 +5571,7 @@
     'options': dict({
     }),
     'original_device_class': <NumberDeviceClass.TEMPERATURE: 'temperature'>,
-    'original_icon': 'mdi:thermometer-water',
+    'original_icon': None,
     'original_name': 'Target temperature 2',
     'platform': 'keba_keenergy',
     'previous_unique_id': None,
@@ -5600,7 +5587,6 @@
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'temperature',
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Solar circuit 2 Target temperature 2',
-      <EntityStateAttribute.ICON: 'icon'>: 'mdi:thermometer-water',
       <NumberEntityCapabilityAttribute.MAX: 'max'>: 90.0,
       <NumberEntityCapabilityAttribute.MIN: 'min'>: 0.0,
       <NumberEntityCapabilityAttribute.MODE: 'mode'>: <NumberMode.AUTO: 'auto'>,

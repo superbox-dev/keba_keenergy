@@ -2,7 +2,6 @@ name: CI/CD
 
 permissions:
   contents: read
-  pull-requests: write
 
 on:
   workflow_dispatch:
@@ -13,7 +12,6 @@ on:
     branches:
       - main
       - develop
-      - develop-*
     tags:
       - v*
 
@@ -24,7 +22,9 @@ jobs:
     if: github.event_name != 'schedule'
     steps:
       - name: Check out repository
-        uses: actions/checkout@v7
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+        with:
+          persist-credentials: False
       - name: Set up project
         uses: ./.github/actions/setup-project
       - name: Format check python files with ruff
@@ -44,11 +44,13 @@ jobs:
     if: github.event_name != 'schedule'
     steps:
       - name: Check out repository
-        uses: actions/checkout@v7
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+        with:
+          persist-credentials: False
       - name: Set up project
         uses: ./.github/actions/setup-project
       - name: Set up Node.js
-        uses: actions/setup-node@v7
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1  # v7.1.0
         with:
           node-version: lts/*
           cache: npm
@@ -62,25 +64,31 @@ jobs:
     if: github.event_name != 'schedule'
     steps:
       - name: Check out repository
-        uses: actions/checkout@v7
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+        with:
+          persist-credentials: False
       - name: Run hassfest validation
-        uses: home-assistant/actions/hassfest@master
+        uses: home-assistant/actions/hassfest@86d4564712fa02543c808e3a693dd04f9d3f8361  # master
       - name: Run HACS validation
-        uses: hacs/action@22.5.0
+        uses: hacs/action@d556e736723344f83838d08488c983a15381059a  # 22.5.0
         with:
           category: integration
 
   security:
     name: Audit packages
     runs-on: ubuntu-latest
-    continue-on-error: True
     steps:
       - name: Check out repository
-        uses: actions/checkout@v7
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+        with:
+          persist-credentials: False
       - name: Set up project
         uses: ./.github/actions/setup-project
       - name: Audit python packages
         run: uv audit
+      - name: Audit npm packages
+        working-directory: website
+        run: npm audit --omit=dev --audit-level=high
 
   tests:
     name: Tests
@@ -88,16 +96,20 @@ jobs:
     if: github.event_name != 'schedule'
     steps:
       - name: Check out repository
-        uses: actions/checkout@v7
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+        with:
+          persist-credentials: False
       - name: Set up project
         uses: ./.github/actions/setup-project
       - name: Run tests
         run: uv run pytest -n auto
-      - name: Upload coverage
-        uses: actions/upload-artifact@v7
+      - name: Create coverage badge
+        run: uv run genbadge coverage --input-file coverage.xml
+      - name: Upload coverage badge
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9  # v7.0.2
         with:
-          name: coverage-xml
-          path: coverage.xml
+          name: coverage-badge
+          path: coverage-badge.svg
           if-no-files-found: error
           overwrite: True
 
@@ -110,35 +122,26 @@ jobs:
     permissions:
       contents: write
     steps:
+      # This job has write access to the repository, so it installs and runs no dependencies.
       - name: Check out repository
-        uses: actions/checkout@v7
-      - name: Set up project
-        uses: ./.github/actions/setup-project
-      - name: Download coverage
-        uses: actions/download-artifact@v8
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+      - name: Download coverage badge
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333  # v8.0.2
         with:
-          name: coverage-xml
+          name: coverage-badge
           path: .
-      - name: Create coverage badge
-        run: uv run genbadge coverage --input-file coverage.xml
-      - name: Verify coverage badge changed
-        uses: tj-actions/verify-changed-files@v20
-        id: changed-files
-        with:
-          files: coverage-badge.svg
-      - name: Commit coverage badge
-        if: steps.changed-files.outputs.files_changed == 'true'
+      - name: Commit and push coverage badge
         run: |
+          if git diff --quiet -- coverage-badge.svg; then
+            echo "Coverage badge unchanged"
+            exit 0
+          fi
+
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
           git add coverage-badge.svg
           git commit -m "Updated coverage-badge.svg"
-      - name: Push changes
-        if: steps.changed-files.outputs.files_changed == 'true'
-        uses: ad-m/github-push-action@master
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          branch: ${{ github.ref }}
+          git push origin "HEAD:${GITHUB_REF_NAME}"
 
   release:
     name: Release on GitHub
@@ -147,15 +150,14 @@ jobs:
     needs:
       - code-analysis
       - validation
-      - security
       - tests
     permissions:
       contents: write
     steps:
       - name: Check out repository
-        uses: actions/checkout@v7
-      - name: Set up project
-        uses: ./.github/actions/setup-project
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+        with:
+          persist-credentials: False
       - name: Check if prerelease
         id: check_prerelease
         run: |
@@ -192,10 +194,10 @@ jobs:
           cat release-notes.md
       - name: Create ZIP file
         run: |
-          cd ${{ github.workspace }}/custom_components/keba_keenergy
-          zip -r ${{ github.workspace }}/keba_keenergy.zip ./
+          cd "${GITHUB_WORKSPACE}/custom_components/keba_keenergy"
+          zip -r "${GITHUB_WORKSPACE}/keba_keenergy.zip" ./
       - name: Release on GitHub
-        uses: softprops/action-gh-release@v3
+        uses: softprops/action-gh-release@8a0cd651e5b2365bd640854a3fa5dfc70e4875f3  # v3.0.4
         with:
           prerelease: ${{ steps.check_prerelease.outputs.prerelease }}
           body_path: release-notes.md

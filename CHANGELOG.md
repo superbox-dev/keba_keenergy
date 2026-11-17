@@ -9,6 +9,30 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!--start-->
 
+## [1.12.1] - 2026-11-17
+
+### Added
+
+- Added descriptions to the SSL field and the update multipliers.
+
+### Changed
+
+- Changed the RAM sensors to the device class `data_size`.
+
+### Fixed
+
+- Fixed the missing long-term statistics of the mixer flow temperature of the passive cooling.
+- Fixed the missing host in the title of discovered devices.
+- Fixed failing updates on values the integration doesn't know. ([Issue #102][issue-102], [Issue #103][issue-103])
+- Fixed the Home Assistant warning about the unit of the compressor power limit at night. ([Issue #104][issue-104])
+- Fixed missing heat meter sensors of heat pumps that calculate the heat. ([Issue #102][issue-102])
+- Fixed untranslated German texts and texts that differed from Home Assistant. ([Issue #106][issue-106])
+
+[issue-102]: https://github.com/superbox-dev/keba_keenergy/issues/102
+[issue-103]: https://github.com/superbox-dev/keba_keenergy/issues/103
+[issue-104]: https://github.com/superbox-dev/keba_keenergy/issues/104
+[issue-106]: https://github.com/superbox-dev/keba_keenergy/issues/106
+
 ## [1.12.0] - 2026-11-12
 
 ### Added

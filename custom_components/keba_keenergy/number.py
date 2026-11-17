@@ -315,7 +315,6 @@ NUMBER_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergyNumberEntityDescriptio
             translation_placeholders={
                 "counter": " 1",
             },
-            icon="mdi:thermometer-water",
         ),
         KebaKeEnergyNumberEntityDescription(
             entity_category=EntityCategory.CONFIG,
@@ -328,13 +327,11 @@ NUMBER_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergyNumberEntityDescriptio
             translation_placeholders={
                 "counter": " 2",
             },
-            icon="mdi:thermometer-water",
         ),
     ),
     SectionPrefix.HEAT_PUMP: (
         KebaKeEnergyNumberEntityDescription(
             entity_category=EntityCategory.CONFIG,
-            device_class=NumberDeviceClass.SPEED,
             entity_registry_enabled_default=False,
             key="compressor_night_speed",
             native_unit_of_measurement=PERCENTAGE,
@@ -402,7 +399,6 @@ NUMBER_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergyNumberEntityDescriptio
             translation_placeholders={
                 "counter": "",
             },
-            icon="mdi:thermometer-chevron-up",
         ),
         KebaKeEnergyNumberEntityDescription(
             condition=has_photovoltaics,

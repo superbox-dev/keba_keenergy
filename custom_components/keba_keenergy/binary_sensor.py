@@ -94,7 +94,6 @@ BINARY_SENSOR_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergyBinarySensorEnt
             condition=has_photovoltaics,
             key="consuming_excess_energy",
             translation_key="heat_pump_consuming_excess_energy",
-            icon="mdi:solar-power",
         ),
         KebaKeEnergyBinarySensorEntityDescription(
             key="heat_request",
@@ -183,7 +182,6 @@ BINARY_SENSOR_TYPES: Final[dict[SectionPrefix, tuple[KebaKeEnergyBinarySensorEnt
             condition=has_photovoltaics,
             key="consuming_excess_energy",
             translation_key="external_heat_source_consuming_excess_energy",
-            icon="mdi:solar-power",
         ),
         KebaKeEnergyBinarySensorEntityDescription(
             key="heat_request",

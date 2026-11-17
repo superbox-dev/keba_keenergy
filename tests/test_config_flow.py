@@ -425,6 +425,9 @@ async def test_zeroconf_flow(
     assert result["step_id"] == "discovery_confirm"
     assert result["description_placeholders"] == {"name": "KEBA KeEnergy", "host": ZEROCONF_HOST}
     assert not result["errors"]
+    assert hass.config_entries.flow.async_progress()[0]["context"]["title_placeholders"] == {
+        "name": "KEBA KeEnergy (ap4400.local)",
+    }
 
     result = await hass.config_entries.flow.async_configure(result["flow_id"], user_input={})
 

@@ -11,10 +11,12 @@ from typing import TYPE_CHECKING
 import pytest
 from homeassistant.components.switch.const import DOMAIN as SWITCH_DOMAIN
 from homeassistant.config_entries import SOURCE_REAUTH
+from homeassistant.config_entries import ConfigEntryState
 from homeassistant.const import STATE_UNAVAILABLE
 from homeassistant.const import STATE_UNKNOWN
 
 from custom_components.keba_keenergy.const import DOMAIN
+from custom_components.keba_keenergy.const import ISSUE_TRACKER_URL
 from custom_components.keba_keenergy.const import REMOTE_ACCESS_SCAN_INTERVAL
 from tests import get_flows_in_progress
 from tests import get_state
@@ -22,11 +24,18 @@ from tests import next_update
 from tests import remove_values
 from tests import replace_values
 from tests.const import NOW
+from tests.test_coordinator_data import COMPRESSOR_POLYNOMIAL_HEAT_METER_TYPE
+from tests.test_coordinator_data import ESTIMATED_FLOW_HEAT_METER_TYPE
 from tests.test_coordinator_data import HEAT_CIRCUIT_ENTITY_ID
 from tests.test_coordinator_data import HEAT_CIRCUIT_VALUE
+from tests.test_coordinator_data import HEAT_METER_ENTITY_ID
+from tests.test_coordinator_data import HEAT_PUMP_STATE_ENTITY_ID
+from tests.test_coordinator_data import NO_HEAT_METER_TYPE
 from tests.test_coordinator_data import OUTDOOR_TEMPERATURE_ENTITY_ID
 from tests.test_coordinator_data import REMOTE_MAINTENANCE_SERVER_ENTITY_ID
 from tests.test_coordinator_data import SOLAR_CIRCUIT_SECTIONS
+from tests.test_coordinator_data import UNKNOWN_HEAT_METER_TYPE
+from tests.test_coordinator_data import UNKNOWN_HEAT_PUMP_STATE
 from tests.test_coordinator_data import WITHOUT_SOLAR_AND_HEATING_CIRCUITS_VALUES
 from tests.test_coordinator_data import WITHOUT_SOLAR_CIRCUITS_DEVICE_NUMBERS_VALUES
 from tests.test_coordinator_data import WITHOUT_SOLAR_CIRCUITS_VALUES
@@ -303,3 +312,63 @@ async def test_remote_access_update_failed(
     assert get_state(hass, REMOTE_MAINTENANCE_SERVER_ENTITY_ID).state != STATE_UNAVAILABLE
     assert get_state(hass, REMOTE_MAINTENANCE_ENTITY_ID).state != STATE_UNAVAILABLE
     assert "Fetching keba_keenergy_remote_access data recovered" in caplog.text
+
+
+async def test_update_unknown_value(
+    hass: HomeAssistant,
+    mock_config_entry: MockConfigEntry,
+    fake_api: FakeKebaKeEnergyAPI,
+    freezer: FrozenDateTimeFactory,
+    entity_registry: er.EntityRegistry,
+    caplog: pytest.LogCaptureFixture,
+) -> None:
+    """Test that values the API doesn't know are unknown and logged once with the link to report them."""
+    fake_api.load_device("multiple_devices")
+    fake_api.fixed_data = replace_values(fake_api.fixed_data, UNKNOWN_HEAT_METER_TYPE)
+    data: Response = replace_values(fake_api.data, UNKNOWN_HEAT_PUMP_STATE)
+    fake_api.responses = fake_api.setup_responses(data, data)
+    await fake_api.setup_integration()
+
+    await next_update(hass, freezer)
+
+    assert not fake_api.responses
+    assert mock_config_entry.state is ConfigEntryState.LOADED
+    assert get_state(hass, HEAT_PUMP_STATE_ENTITY_ID).state == STATE_UNKNOWN
+    # An unknown heat meter type is no heat meter.
+    assert entity_registry.async_get(HEAT_METER_ENTITY_ID) is None
+    assert (
+        caplog.text.count(f"Unknown value 9 of HeatPump.HEAT_METER_TYPE, please report it at {ISSUE_TRACKER_URL}") == 1
+    )
+    assert caplog.text.count(f"Unknown value 99 of HeatPump.STATE, please report it at {ISSUE_TRACKER_URL}") == 1
+
+
+@pytest.mark.parametrize(
+    "heat_meter_type",
+    [ESTIMATED_FLOW_HEAT_METER_TYPE, COMPRESSOR_POLYNOMIAL_HEAT_METER_TYPE],
+    ids=["estimated_flow", "compressor_polynomial"],
+)
+async def test_setup_calculated_heat_meter(
+    fake_api: FakeKebaKeEnergyAPI,
+    entity_registry: er.EntityRegistry,
+    caplog: pytest.LogCaptureFixture,
+    heat_meter_type: dict[str, str],
+) -> None:
+    """Test that a heat calculated by the control unit without a heat meter has the heat meter entities."""
+    fake_api.load_device("multiple_devices")
+    fake_api.fixed_data = replace_values(fake_api.fixed_data, heat_meter_type)
+    await fake_api.setup_integration()
+
+    assert entity_registry.async_get(HEAT_METER_ENTITY_ID) is not None
+    assert "Unknown value" not in caplog.text
+
+
+async def test_setup_no_heat_meter(
+    fake_api: FakeKebaKeEnergyAPI,
+    entity_registry: er.EntityRegistry,
+) -> None:
+    """Test that a heat pump without a heat meter has no heat meter entities."""
+    fake_api.load_device("multiple_devices")
+    fake_api.fixed_data = replace_values(fake_api.fixed_data, NO_HEAT_METER_TYPE)
+    await fake_api.setup_integration()
+
+    assert entity_registry.async_get(HEAT_METER_ENTITY_ID) is None

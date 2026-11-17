@@ -246,6 +246,10 @@ class KebaKeEnergyConfigFlow(ConfigFlow, domain=DOMAIN):
         await self.async_set_unique_id(self.serial_number)
         self._abort_if_unique_id_configured(updates=self._discovery_updates(discovery_info))
 
+        self.context["title_placeholders"] = {
+            "name": f"{MANUFACTURER} {NAME} ({self.host})",
+        }
+
         return await self.async_step_discovery_confirm()
 
     def _discovery_updates(self, discovery_info: ZeroconfServiceInfo, /) -> dict[str, str] | None:
@@ -396,8 +400,6 @@ class KebaKeEnergyOptionsFlow(OptionsFlowWithReload):
 
         options[CONF_SCAN_INTERVAL] = scan_interval * gcd
         options.update({key: tick // gcd for key, tick in ticks.items()})
-
-        _LOGGER.debug("Tick normalization: %s -> gcd=%s", options, gcd)
 
         return options
 

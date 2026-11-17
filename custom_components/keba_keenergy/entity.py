@@ -246,7 +246,7 @@ class KebaKeEnergyBaseEntity(KebaKeEnergyCoordinatorEntity[KebaKeEnergyDataUpdat
         reading_count: int = (self.coordinator.device_count(self.device_type) or 1) * quantity
         values: list[WriteValue | None] = [value if index == reading_index else None for index in range(reading_count)]
 
-        previous_value: Value = self.coordinator.async_set_local_value(
+        previous_value: Value | None = self.coordinator.async_set_local_value(
             value,
             device_type=self.device_type,
             key=key,

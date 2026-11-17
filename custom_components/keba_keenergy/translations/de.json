@@ -1,8 +1,8 @@
 {
   "config": {
     "abort": {
-      "already_configured": "Das Gerät ist bereits konfiguriert",
-      "already_in_progress": "Konfigurationsvorgang läuft bereits",
+      "already_configured": "Gerät ist bereits konfiguriert",
+      "already_in_progress": "Die Konfiguration läuft bereits. Schließe die bestehende Konfiguration ab, bevor du erneut beginnst.",
       "reauth_successful": "Die erneute Authentifizierung war erfolgreich",
       "reconfigure_successful": "Die Neukonfiguration war erfolgreich",
       "wrong_account": "Die angegebenen Benutzer-Anmeldedaten passen nicht zu diesem {name}-Gerät"
@@ -27,7 +27,7 @@
       },
       "discovery_confirm": {
         "description": "Möchtest du {name} ({host}) zu Home Assistant hinzufügen?",
-        "title": "Discovered {name}"
+        "title": "{name} gefunden"
       },
       "reauth_confirm": {
         "data": {
@@ -43,10 +43,11 @@
       "user": {
         "data": {
           "host": "Host",
-          "ssl": "SSL-Zertifikat verwenden"
+          "ssl": "Verwendet ein SSL-Zertifikat"
         },
         "data_description": {
-          "host": "The hostname or IP address of your {name} device."
+          "host": "Der Hostname oder die IP-Adresse deines {name}-Geräts.",
+          "ssl": "Aktiviere dies, wenn das Web HMI nur über `https://` erreichbar ist."
         },
         "description": "Konfiguriere dein {name}-Gerät."
       }
@@ -697,7 +698,7 @@
         "state": {
           "closed": "Geschlossen",
           "off": "Aus",
-          "open": "Offen"
+          "open": "Geöffnet"
         }
       },
       "heating_circuit_mixer_return_flow_temperature": {
@@ -763,7 +764,7 @@
         "state": {
           "closed": "Geschlossen",
           "off": "Aus",
-          "open": "Offen"
+          "open": "Geöffnet"
         }
       },
       "passive_cooling_mixer_target_temperature": {
@@ -988,7 +989,7 @@
               "mixer_position_percent": "Mischerposition in Prozent"
             },
             "data_description": {
-              "mixer_position_percent": "Zeigt die Mischerposition in Prozent statt Offen, Aus oder Geschlossen"
+              "mixer_position_percent": "Zeigt die Mischerposition in Prozent statt Geöffnet, Aus oder Geschlossen"
             },
             "name": "Anzeige"
           },
@@ -1003,6 +1004,17 @@
               "scan_interval_tick_solar_circuit": "Solarkreis",
               "scan_interval_tick_switch_valve": "Umschaltventil",
               "scan_interval_tick_system": "Bedieneinheit"
+            },
+            "data_description": {
+              "scan_interval_tick_buffer_tank": "Aktualisiert die Werte der Pufferspeicher nur bei jedem n-ten Scan-Intervall",
+              "scan_interval_tick_external_heat_source": "Aktualisiert die Werte der externen Wärmequellen nur bei jedem n-ten Scan-Intervall",
+              "scan_interval_tick_heat_circuit": "Aktualisiert die Werte der Heizkreise nur bei jedem n-ten Scan-Intervall",
+              "scan_interval_tick_heat_pump": "Aktualisiert die Werte der Wärmepumpen nur bei jedem n-ten Scan-Intervall",
+              "scan_interval_tick_hot_water_tank": "Aktualisiert die Werte der Warmwasserspeicher nur bei jedem n-ten Scan-Intervall",
+              "scan_interval_tick_photovoltaics": "Aktualisiert die Werte der Photovoltaik nur bei jedem n-ten Scan-Intervall",
+              "scan_interval_tick_solar_circuit": "Aktualisiert die Werte der Solarkreise nur bei jedem n-ten Scan-Intervall",
+              "scan_interval_tick_switch_valve": "Aktualisiert die Werte der Umschaltventile nur bei jedem n-ten Scan-Intervall",
+              "scan_interval_tick_system": "Aktualisiert die Werte der Bedieneinheit nur bei jedem n-ten Scan-Intervall"
             },
             "description": "Aktualisiert die Werte eines Gerätetyps nur bei jedem n-ten Scan-Intervall",
             "name": "Update-Multiplikatoren"
