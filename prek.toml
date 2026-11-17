@@ -1,4 +1,6 @@
 exclude = '^\.venv/'
+default_install_hook_types = ["pre-commit", "pre-push"]
+default_stages = ["pre-commit"]
 
 [[repos]]
 repo = "https://github.com/pre-commit/pre-commit-hooks"
@@ -55,3 +57,12 @@ name = "yamllint"
 entry = "uv run yamllint"
 language = "system"
 files = '\.ya?ml$'
+
+[[repos.hooks]]
+id = "check-release"
+name = "check release"
+entry = "./scripts/check-release.sh --tag-only"
+language = "system"
+pass_filenames = false
+always_run = true
+stages = ["pre-push"]
