@@ -13,8 +13,8 @@ Contributing to this project should be as easy and transparent as possible, whet
 
 The project uses [uv](https://docs.astral.sh/uv/).
 
-1. Set up the project with `./scripts/setup.sh`. This installs the dependencies and the [prek](https://prek.j178.dev)
-   hooks.
+1. Set up the project with `./scripts/setup.sh`. This installs the dependencies, the [prek](https://prek.j178.dev)
+   hooks and a git `pre-push` hook that validates release tags.
 2. Start Home Assistant with `./scripts/develop.sh`.
 3. Open <http://127.0.0.1:8123> in your browser.
 
@@ -58,6 +58,23 @@ Tests use [pytest](https://docs.pytest.org). **100% test coverage is enforced**,
 ```bash
 uv run pytest
 ```
+
+## Releases
+
+Only maintainers create releases. Tags cannot be deleted, so a release must be correct before the tag is pushed.
+
+1. Set the same version in `pyproject.toml` and `custom_components/keba_keenergy/manifest.json`.
+   Use `X.Y.Z` for a stable release or `X.Y.ZbN` for a pre-release.
+2. Rename `## [Unreleased]` in [CHANGELOG.md](CHANGELOG.md) to `## [X.Y.Z] - YYYY-MM-DD` and add a new empty
+   `## [Unreleased]` section above it. Pre-releases don't need a changelog section.
+3. Merge the changes into `main`. Pre-releases are tagged on `develop` instead.
+4. Run `./scripts/release.sh vX.Y.Z` from `main`, or `./scripts/release.sh vX.Y.ZbN` from `develop`.
+
+`./scripts/release.sh` creates and pushes the tag only if `./scripts/check-release.sh` passes. The check verifies that
+the tag, `pyproject.toml` and `manifest.json` have the same version and that stable releases have a changelog entry.
+The same check runs again in the release workflow before anything is published.
+
+Don't create tags manually and don't use `git push --no-verify` for tags.
 
 ## Report bugs
 

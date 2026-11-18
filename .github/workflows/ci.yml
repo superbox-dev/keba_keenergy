@@ -158,6 +158,8 @@ jobs:
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
         with:
           persist-credentials: False
+      - name: Check release metadata
+        run: ./scripts/check-release.sh "${GITHUB_REF_NAME}"
       - name: Check if prerelease
         id: check_prerelease
         run: |
