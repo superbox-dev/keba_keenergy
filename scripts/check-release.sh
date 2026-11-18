@@ -14,14 +14,8 @@ for arg in "$@"; do
   esac
 done
 
-# Tag from argument, GitHub Actions or the prek pre-push hook
-if [[ -z "$tag" ]]; then
-  for ref in "$GITHUB_REF" "$PRE_COMMIT_LOCAL_BRANCH"; do
-    if [[ "$ref" == refs/tags/* ]]; then
-      tag="$ref"
-      break
-    fi
-  done
+if [[ -z "$tag" && "$GITHUB_REF" == refs/tags/* ]]; then
+  tag="$GITHUB_REF"
 fi
 
 tag="${tag#refs/tags/}"

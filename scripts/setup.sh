@@ -6,3 +6,4 @@ cd "$(dirname "$0")/.."
 
 uv sync --locked --all-extras --dev
 uv run prek install --force
+ln -sf ../../scripts/pre-push.sh .git/hooks/pre-push
