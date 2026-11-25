@@ -5,9 +5,9 @@
 The responses are in `tests/fixtures/`, `fake_api` loads them:
 
 - `common/`: the responses that are the same for every setup (device info, system, HMI, time zone, curves)
-- `single_device/`, `multiple_devices/`: the responses of a setup with one or several devices of each type, the
-  numbers of the devices (`device_numbers.json`), the values read once on setup (`fixed_data.json`) and the values
-  of each update (`data.json`)
+- `single_device/`, `multiple_devices/`: the responses of a setup with one or several devices of each type, the numbers
+    of the devices (`device_numbers.json`), the values read once on setup (`fixed_data.json`) and the values of each
+    update (`data.json`)
 """
 
 from __future__ import annotations

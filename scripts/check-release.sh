@@ -4,15 +4,7 @@ set -e
 
 cd "$(dirname "$0")/.."
 
-tag_only=false
-tag=""
-
-for arg in "$@"; do
-  case "$arg" in
-    --tag-only) tag_only=true ;;
-    *) tag="$arg" ;;
-  esac
-done
+tag="$1"
 
 if [[ -z "$tag" && "$GITHUB_REF" == refs/tags/* ]]; then
   tag="$GITHUB_REF"
@@ -21,16 +13,16 @@ fi
 tag="${tag#refs/tags/}"
 tag="${tag#v}"
 
-if [[ "$tag_only" == true && -z "$tag" ]]; then
-  exit 0
-fi
-
 manifest="custom_components/keba_keenergy/manifest.json"
 errors=0
 
 fail() {
   echo "Error: $1" >&2
   errors=$((errors + 1))
+}
+
+is_release() {
+  [[ "$1" =~ ^[0-9]+\.[0-9]+\.[0-9]+(b[0-9]+)?$ ]]
 }
 
 is_stable() {
@@ -52,19 +44,20 @@ if [[ "$pyproject_version" != "$manifest_version" ]]; then
   fail "pyproject.toml ($pyproject_version) does not match manifest.json ($manifest_version)"
 fi
 
-if [[ -n "$pyproject_version" ]] && ! is_stable "$pyproject_version"; then
-  fail "Version '$pyproject_version' is not a stable release (expected X.Y.Z)"
+if [[ -n "$pyproject_version" ]] && ! is_release "$pyproject_version"; then
+  fail "Version '$pyproject_version' is not a release (expected X.Y.Z or X.Y.ZbN)"
 fi
 
 if [[ -n "$tag" ]]; then
-  if ! is_stable "$tag"; then
-    fail "Tag '$tag' is not a stable release (expected vX.Y.Z)"
+  if ! is_release "$tag"; then
+    fail "Tag 'v$tag' is not a release (expected vX.Y.Z or vX.Y.ZbN)"
   elif [[ "$tag" != "$pyproject_version" ]]; then
     fail "Tag ($tag) does not match pyproject.toml ($pyproject_version)"
   fi
 fi
 
-if [[ -n "$pyproject_version" ]] && ! grep -Eq "^## \[?${pyproject_version//./\\.}\]?( |$)" CHANGELOG.md; then
+if is_stable "$pyproject_version" \
+  && ! grep -Eq "^## \[${pyproject_version//./\\.}\] - [0-9]{4}-[0-9]{2}-[0-9]{2}$" CHANGELOG.md; then
   fail "CHANGELOG.md has no entry for $pyproject_version"
 fi
 

@@ -2,6 +2,8 @@
 
 <!--start-contributing-->
 
+## Guidelines
+
 Contributing to this project should be as easy and transparent as possible, whether it's:
 
 - Reporting a bug
