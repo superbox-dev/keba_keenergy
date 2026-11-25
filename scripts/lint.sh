@@ -9,3 +9,4 @@ uv run ruff check
 uv run ty check
 uv run yamllint .
 uv run rumdl check
+uv run prek run editorconfig-checker --all-files

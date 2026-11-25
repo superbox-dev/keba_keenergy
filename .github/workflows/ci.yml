@@ -37,6 +37,8 @@ jobs:
         run: uv run yamllint $(git ls-files '*.yml' '*.yaml')
       - name: Lint Markdown files
         run: uv run rumdl check $(git ls-files '*.md')
+      - name: Check files against .editorconfig
+        run: uv run prek run editorconfig-checker --all-files
 
   documentation:
     name: Documentation

@@ -36,7 +36,8 @@ Use the fake data in `tests/fixtures/`.
 ## Coding style
 
 `./scripts/lint.sh` runs [ruff](https://docs.astral.sh/ruff/) (format and lint), [ty](https://docs.astral.sh/ty/),
-yamllint and [rumdl](https://github.com/rvben/rumdl). See [CLAUDE.md](CLAUDE.md) for the project rules.
+yamllint, [rumdl](https://github.com/rvben/rumdl) and [editorconfig-checker](https://editorconfig-checker.github.io). See [CLAUDE.md](CLAUDE.md) for the
+project rules.
 
 ## AI assistant
 
