@@ -71,10 +71,6 @@ jobs:
           persist-credentials: False
       - name: Run hassfest validation
         uses: home-assistant/actions/hassfest@86d4564712fa02543c808e3a693dd04f9d3f8361  # master
-      - name: Run HACS validation
-        uses: hacs/action@d556e736723344f83838d08488c983a15381059a  # 22.5.0
-        with:
-          category: integration
 
   security:
     name: Audit packages
@@ -91,6 +87,18 @@ jobs:
       - name: Audit npm packages
         working-directory: website
         run: npm audit --omit=dev --audit-level=high
+
+  hacs-validation:
+    name: HACS validation
+    runs-on: ubuntu-latest
+    # HACS checks the repository on GitHub and the asset of the latest release, not a build of this run.
+    # It runs nightly like the audit, a new release is checked in the next night.
+    if: github.event_name == 'schedule'
+    steps:
+      - name: Run HACS validation
+        uses: hacs/action@d556e736723344f83838d08488c983a15381059a  # 22.5.0
+        with:
+          category: integration
 
   tests:
     name: Tests
