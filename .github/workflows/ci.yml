@@ -60,8 +60,8 @@ jobs:
       - name: Build website
         run: ./scripts/docs.sh
 
-  validation:
-    name: Validation
+  hassfest-validation:
+    name: Hassfest validation
     runs-on: ubuntu-latest
     if: github.event_name != 'schedule'
     steps:
@@ -159,7 +159,7 @@ jobs:
     if: github.ref_type == 'tag'
     needs:
       - code-analysis
-      - validation
+      - hassfest-validation
       - tests
     permissions:
       contents: write
